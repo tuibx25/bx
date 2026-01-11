@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc Nghiệm Online Vật Lý 11 - Bài 16</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .timer {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .quiz-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 30px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eee;
+            flex-wrap: wrap;
+        }
+        
+        .info-item {
+            text-align: center;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .info-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .info-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .questions-container {
+            padding: 25px 30px;
+        }
+        
+        .question {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .question:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .question-number {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .question-number:before {
+            content: "Câu";
+            margin-right: 8px;
+        }
+        
+        .question-number span {
+            background-color: #3498db;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+        
+        .question-text {
+            margin-bottom: 18px;
+            font-weight: 500;
+            line-height: 1.7;
+        }
+        
+        .options {
+            padding-left: 5px;
+        }
+        
+        .option {
+            margin-bottom: 12px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+        }
+        
+        .option:hover {
+            background-color: #e8f4fc;
+            border-color: #b3d7f5;
+        }
+        
+        .option input {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+        
+        .option.selected {
+            background-color: #e1f0ff;
+            border-color: #3498db;
+        }
+        
+        .option.correct {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        
+        .option.incorrect {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 30px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #eee;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+        
+        .btn-prev {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .btn-prev:hover {
+            background-color: #5a6268;
+        }
+        
+        .btn-next {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .btn-next:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-submit {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .btn-submit:hover {
+            background-color: #219653;
+        }
+        
+        .btn-restart {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .btn-restart:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .btn-disabled:hover {
+            background-color: #bdc3c7;
+        }
+        
+        .progress-container {
+            padding: 0 30px 20px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .results-container {
+            padding: 30px;
+            text-align: center;
+            display: none;
+        }
+        
+        .results-title {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            margin: 0 auto 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .score-value {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        
+        .score-label {
+            font-size: 1.1rem;
+        }
+        
+        .results-details {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        
+        .result-item {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px;
+            min-width: 150px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .result-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .result-label {
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .result-correct {
+            border-top: 4px solid #27ae60;
+        }
+        
+        .result-incorrect {
+            border-top: 4px solid #e74c3c;
+        }
+        
+        .result-time {
+            border-top: 4px solid #3498db;
+        }
+        
+        .question-review {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 30px;
+            text-align: left;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        
+        .review-title {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .review-item {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .review-question {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .review-answer {
+            color: #27ae60;
+            font-weight: 600;
+        }
+        
+        .review-user-answer {
+            color: #e74c3c;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+        }
+        
+        /* Thêm CSS cho phân trang xem lại */
+        .review-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .review-page-btn {
+            padding: 8px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .review-page-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .review-page-btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .review-page-info {
+            text-align: center;
+            color: #666;
+            margin: 10px 0;
+        }
+        
+        .show-all-btn {
+            background-color: #9b59b6;
+            margin-top: 10px;
+        }
+        
+        .show-all-btn:hover {
+            background-color: #8e44ad;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 0;
+            }
+            
+            .controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            button {
+                width: 100%;
+            }
+            
+            .quiz-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .info-item {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>TRẮC NGHIỆM ONLINE VẬT LÝ 11</h1>
+            <p class="subtitle">Bài 16: Lực hút và lực đẩy giữa các điện tích</p>
+            <p class="subtitle">Chương 3: Điện trường - Sách Kết nối tri thức</p>
+            <div class="timer" id="timer">Thời gian: 00:00</div>
+        </header>
+        
+        <div class="quiz-info">
+            <div class="info-item">
+                <div class="info-label">Câu hỏi</div>
+                <div class="info-value" id="current-question">1/45</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Đã trả lời</div>
+                <div class="info-value" id="answered-count">0/45</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Thời gian</div>
+                <div class="info-value" id="time-elapsed">00:00</div>
+            </div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="progress-text">
+                <span>Bắt đầu</span>
+                <span>Hoàn thành</span>
+            </div>
+        </div>
+        
+        <div class="questions-container" id="questions-container">
+            <!-- Câu hỏi sẽ được tạo bằng JavaScript -->
+        </div>
+        
+        <div class="controls">
+            <button class="btn-prev" id="prev-btn">Câu trước</button>
+            <button class="btn-next" id="next-btn">Câu tiếp theo</button>
+            <button class="btn-submit" id="submit-btn" style="display: none;">Nộp bài</button>
+        </div>
+        
+        <div class="results-container" id="results-container">
+            <h2 class="results-title">KẾT QUẢ BÀI LÀM</h2>
+            
+            <div class="score-circle">
+                <div class="score-value" id="score-value">0</div>
+                <div class="score-label">điểm</div>
+            </div>
+            
+            <div class="results-details">
+                <div class="result-item result-correct">
+                    <div class="result-value" id="correct-count">0</div>
+                    <div class="result-label">Câu đúng</div>
+                </div>
+                <div class="result-item result-incorrect">
+                    <div class="result-value" id="incorrect-count">0</div>
+                    <div class="result-label">Câu sai</div>
+                </div>
+                <div class="result-item result-time">
+                    <div class="result-value" id="final-time">00:00</div>
+                    <div class="result-label">Thời gian</div>
+                </div>
+            </div>
+            
+            <div class="question-review" id="question-review">
+                <!-- Xem lại câu hỏi sẽ được thêm ở đây -->
+            </div>
+            
+            <button class="btn-restart" id="restart-btn" style="margin-top: 30px;">Làm lại bài trắc nghiệm</button>
+        </div>
+        
+        <div class="footer">
+            <p>Trắc nghiệm Vật Lý 11 - Bài 16: Lực hút và lực đẩy giữa các điện tích</p>
+            <p>Nguồn: Sách Kết nối tri thức - NXB Giáo dục Việt Nam</p>
+            <p>© 2023 - Tài liệu học tập Vật Lý 11</p>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu câu hỏi và đáp án (45 câu hoàn chỉnh)
+        const quizData = [
+            {
+                question: "Hiện tượng nào sau đây là biểu hiện của tương tác điện?",
+                options: [
+                    "A. Nam châm hút đinh sắt.",
+                    "B. Thanh thủy tinh cọ xát vào lụa hút các vụn giấy.",
+                    "C. Trái Đất hút các vật về phía nó.",
+                    "D. Lò xo bị nén sinh ra lực đẩy."
+                ],
+                correct: 1
+            },
+            {
+                question: "Có mấy loại điện tích tồn tại trong tự nhiên?",
+                options: [
+                    "A. 1",
+                    "B. 2",
+                    "C. 3",
+                    "D. 4"
+                ],
+                correct: 1
+            },
+            {
+                question: "Phát biểu nào sau đây về sự tương tác điện là đúng?",
+                options: [
+                    "A. Các điện tích cùng dấu thì đẩy nhau.",
+                    "B. Các điện tích khác dấu thì đẩy nhau.",
+                    "C. Các điện tích luôn hút nhau.",
+                    "D. Các điện tích không tương tác khi ở xa nhau."
+                ],
+                correct: 0
+            },
+            {
+                question: "Định luật Coulomb chỉ áp dụng được cho trường hợp",
+                options: [
+                    "A. các điện tích điểm.",
+                    "B. các điện tích dịch chuyển.",
+                    "C. các vật tích điện có kích thước lớn.",
+                    "D. các vật nhiễm điện do cọ xát."
+                ],
+                correct: 0
+            },
+            {
+                question: "Trong công thức định luật Coulomb F = k|q₁q₂|/r², hằng số điện môi ε của môi trường được đưa vào như thế nào khi tính toán trong môi trường không phải chân không?",
+                options: [
+                    "A. F = k|q₁q₂|/(εr²)",
+                    "B. F = k|q₁q₂|/(ε²r²)",
+                    "C. F = k|q₁q₂|ε/r²",
+                    "D. F = εk|q₁q₂|/r²"
+                ],
+                correct: 0
+            },
+            {
+                question: "Khi khoảng cách giữa hai điện tích điểm tăng lên gấp đôi trong chân không, độ lớn lực tương tác tĩnh điện giữa chúng sẽ",
+                options: [
+                    "A. tăng 4 lần.",
+                    "B. giảm 4 lần.",
+                    "C. tăng 2 lần.",
+                    "D. giảm 2 lần."
+                ],
+                correct: 1
+            },
+            {
+                question: "Nếu độ lớn của hai điện tích điểm cùng dấu tăng lên gấp đôi, đồng thời khoảng cách giữa chúng cũng tăng gấp đôi (trong cùng môi trường), thì lực tương tác giữa chúng so với ban đầu sẽ",
+                options: [
+                    "A. không đổi.",
+                    "B. tăng 2 lần.",
+                    "C. giảm 2 lần.",
+                    "D. giảm 4 lần."
+                ],
+                correct: 0
+            },
+            {
+                question: "Hằng số điện môi của một chất cho biết",
+                options: [
+                    "A. lực tương tác giữa các điện tích trong chất đó lớn hơn trong chân không bao nhiêu lần.",
+                    "B. lực tương tác giữa các điện tích trong chất đó nhỏ hơn trong chân không bao nhiêu lần.",
+                    "C. khả năng dẫn điện của chất đó.",
+                    "D. khả năng tích điện của chất đó."
+                ],
+                correct: 1
+            },
+            {
+                question: "Hai quả cầu nhỏ tích điện đặt trong không khí cách nhau một khoảng r. Đưa chúng vào trong dầu hỏa có hằng số điện môi ε = 2 và giữ nguyên khoảng cách r. Lực tương tác điện giữa chúng sẽ",
+                options: [
+                    "A. tăng 2 lần.",
+                    "B. giảm 2 lần.",
+                    "C. tăng 4 lần.",
+                    "D. không thay đổi."
+                ],
+                correct: 1
+            },
+            {
+                question: "Lực tương tác tĩnh điện Coulomb và lực hấp dẫn Newton giữa hai electron (đặt trong chân không) đều",
+                options: [
+                    "A. là lực đẩy.",
+                    "B. là lực hút.",
+                    "C. tỉ lệ nghịch với bình phương khoảng cách.",
+                    "D. có cùng độ lớn."
+                ],
+                correct: 2
+            },
+            {
+                question: "Hai điện tích điểm q₁ và q₂ đẩy nhau. Khẳng định nào sau đây là đúng?",
+                options: [
+                    "A. q₁ > 0 và q₂ > 0.",
+                    "B. q₁ < 0 và q₂ < 0.",
+                    "C. q₁.q₂ > 0.",
+                    "D. Cả A, B và C đều có thể đúng."
+                ],
+                correct: 3
+            },
+            {
+                question: "Đơn vị nào sau đây là đơn vị của điện tích?",
+                options: [
+                    "A. Niutơn (N)",
+                    "B. Culông (C)",
+                    "C. Vôn (V)",
+                    "D. Fara (F)"
+                ],
+                correct: 1
+            },
+            {
+                question: "Véctơ lực tương tác giữa hai điện tích điểm",
+                options: [
+                    "A. nằm trên đường thẳng nối hai điện tích.",
+                    "B. có phương vuông góc với đường thẳng nối hai điện tích.",
+                    "C. có phương phụ thuộc vào dấu của hai điện tích.",
+                    "D. có chiều từ điện tích lớn sang điện tích nhỏ."
+                ],
+                correct: 0
+            },
+            {
+                question: "Cho hai điện tích điểm q₁ và q₂ đặt cách nhau một khoảng trong chân không. Nếu q₁' = 2q₁ và q₂' = -0.5q₂ (giữ nguyên khoảng cách), thì lực tương tác giữa chúng so với lực tương tác ban đầu F sẽ là",
+                options: [
+                    "A. bằng F.",
+                    "B. bằng -F.",
+                    "C. độ lớn bằng F, chiều ngược lại.",
+                    "D. độ lớn bằng F, chiều giữ nguyên."
+                ],
+                correct: 2
+            },
+            {
+                question: "Trong các môi trường sau, hằng số điện môi của môi trường nào lớn nhất?",
+                options: [
+                    "A. Chân không.",
+                    "B. Không khí.",
+                    "C. Nước tinh khiết.",
+                    "D. Thủy tinh."
+                ],
+                correct: 3
+            },
+            {
+                question: "Hai quả cầu nhỏ giống nhau, mang điện tích q₁ = 2×10⁻⁹ C và q₂ = -8×10⁻⁹ C, đặt trong không khí cách nhau 3 cm. Lực tương tác giữa chúng có độ lớn là (lấy k = 9×10⁹ Nm²/C²)",
+                options: [
+                    "A. 1,6×10⁻⁴ N",
+                    "B. 1,6×10⁻⁵ N",
+                    "C. 1,6×10⁻³ N",
+                    "D. 16×10⁻⁴ N"
+                ],
+                correct: 0
+            },
+            {
+                question: "Hai điện tích điểm bằng nhau, đặt trong chân không cách nhau một khoảng r₁ = 2 cm. Lực đẩy giữa chúng là F₁ = 1,6×10⁻⁴ N. Để lực tương tác giữa chúng là F₂ = 2,5×10⁻⁴ N thì khoảng cách r₂ giữa chúng là",
+                options: [
+                    "A. 1,6 cm.",
+                    "B. 1,28 cm.",
+                    "C. 2,5 cm.",
+                    "D. 3,2 cm."
+                ],
+                correct: 0
+            },
+            {
+                question: "Hai điện tích điểm đặt cách nhau 1 m trong không khí thì đẩy nhau một lực bằng 1,8 N. Điện tích tổng cộng của chúng là 3×10⁻⁵ C. Điện tích của mỗi vật là (Hai điện tích cùng dấu)",
+                options: [
+                    "A. 1,5×10⁻⁵ C và 1,5×10⁻⁵ C.",
+                    "B. 2×10⁻⁵ C và 1×10⁻⁵ C.",
+                    "C. 2,5×10⁻⁵ C và 0,5×10⁻⁵ C.",
+                    "D. 2,6×10⁻⁵ C và 0,4×10⁻⁵ C."
+                ],
+                correct: 1
+            },
+            {
+                question: "Hai điện tích điểm q₁ = 4×10⁻⁸ C và q₂ = -4×10⁻⁸ C đặt tại hai điểm A và B cách nhau 4 cm trong không khí. Lực tác dụng lên điện tích q = 2×10⁻⁹ C đặt tại điểm M cách A 4 cm, cách B 8 cm là",
+                options: [
+                    "A. 3,375×10⁻⁴ N.",
+                    "B. 1,125×10⁻⁴ N.",
+                    "C. 4,5×10⁻⁴ N.",
+                    "D. 0 N."
+                ],
+                correct: 0
+            },
+            {
+                question: "Hai điện tích điểm q₁ = +3×10⁻⁸ C và q₂ = -4×10⁻⁸ C đặt cách nhau 10 cm trong chân không. Lực tương tác giữa chúng có độ lớn và tính chất là",
+                options: [
+                    "A. 1,08×10⁻³ N, lực hút.",
+                    "B. 1,08×10⁻⁴ N, lực hút.",
+                    "C. 1,08×10⁻³ N, lực đẩy.",
+                    "D. 1,08×10⁻⁴ N, lực đẩy."
+                ],
+                correct: 0
+            },
+            {
+                question: "Hai quả cầu nhỏ tích điện có độ lớn bằng nhau, đặt cách nhau 5 cm trong chân không thì hút nhau bằng một lực 0,9 N. Xác định điện tích của mỗi quả cầu. (Chúng tích điện trái dấu)",
+                options: [
+                    "A. ±5×10⁻⁷ C",
+                    "B. ±5×10⁻⁶ C",
+                    "C. ±2,5×10⁻⁷ C",
+                    "D. ±2,5×10⁻⁶ C"
+                ],
+                correct: 0
+            },
+            {
+                question: "Một hệ gồm ba điện tích điểm nằm cân bằng. Phát biểu nào sau đây đúng?",
+                options: [
+                    "A. Cả ba điện tích phải cùng dấu.",
+                    "B. Cả ba điện tích không thể cùng dấu.",
+                    "C. Cả ba điện tích phải có độ lớn bằng nhau.",
+                    "D. Cả ba điện tích phải thẳng hàng."
+                ],
+                correct: 1
+            },
+            {
+                question: "Hai điện tích điểm đặt trong không khí tại A và B. Biết AB = 10 cm. Cường độ điện trường tổng hợp tại trung điểm M của AB bằng 0. Kết luận nào sau đây đúng?",
+                options: [
+                    "A. Hai điện tích cùng dấu, cùng độ lớn.",
+                    "B. Hai điện tích khác dấu, cùng độ lớn.",
+                    "C. Hai điện tích cùng dấu, khác độ lớn.",
+                    "D. Hai điện tích khác dấu, khác độ lớn."
+                ],
+                correct: 1
+            },
+            {
+                question: "Hai quả cầu nhỏ giống hệt nhau bằng kim loại, tích điện lần lượt là 3×10⁻⁸ C và -5×10⁻⁸ C, cho chúng tiếp xúc với nhau rồi đặt cách nhau 2 cm trong không khí. Lực tương tác điện giữa chúng sau khi tiếp xúc là",
+                options: [
+                    "A. 4,5×10⁻³ N, lực hút.",
+                    "B. 4,5×10⁻³ N, lực đẩy.",
+                    "C. 2,25×10⁻³ N, lực đẩy.",
+                    "D. 2,25×10⁻³ N, lực hút."
+                ],
+                correct: 2
+            },
+            {
+                question: "Đặt hai điện tích q₁ và q₂ tại A và B (AB = 12 cm) trong không khí. Lực tương tác giữa chúng là F. Đặt thêm điện tích q₃ tại C là trung điểm của AB. Lực tương tác giữa q₁ và q₂ bây giờ là",
+                options: [
+                    "A. F.",
+                    "B. 2F.",
+                    "C. 4F.",
+                    "D. F/2."
+                ],
+                correct: 0
+            },
+            {
+                question: "Hai điện tích điểm đặt cố định trong không khí. Khi đặt thêm một điện tích điểm thứ ba vào vùng không gian xung quanh chúng, điều gì xảy ra với lực tương tác giữa hai điện tích ban đầu?",
+                options: [
+                    "A. Độ lớn thay đổi, phương chiều không đổi.",
+                    "B. Độ lớn và chiều thay đổi.",
+                    "C. Không thay đổi vì lực tương tác chỉ phụ thuộc vào hai điện tích đó.",
+                    "D. Có thể thay đổi nếu điện tích thứ ba nằm trên đường nối hai điện tích."
+                ],
+                correct: 2
+            },
+            {
+                question: "Trong công thức định luật Coulomb, k là hằng số tỉ lệ. Giá trị của k trong hệ SI là",
+                options: [
+                    "A. 9×10⁻⁹ Nm²/C²",
+                    "B. 9×10⁹ Nm²/C²",
+                    "C. 9×10⁹ C²/Nm²",
+                    "D. 9×10⁻⁹ C²/Nm²"
+                ],
+                correct: 1
+            },
+            {
+                question: "Hai điện tích điểm q₁ = 2 μC và q₂ = -8 μC đặt trong dầu (ε = 2) cách nhau 4 cm. Lực hút giữa chúng có độ lớn là",
+                options: [
+                    "A. 45 N.",
+                    "B. 90 N.",
+                    "C. 22,5 N.",
+                    "D. 180 N."
+                ],
+                correct: 0
+            },
+            {
+                question: "Một điện tích thử q đặt trong điện trường của một điện tích điểm Q chịu tác dụng của lực F. Nếu giảm khoảng cách giữa q và Q đi một nửa, đồng thời giảm độ lớn điện tích q đi 2 lần thì độ lớn của lực F sẽ",
+                options: [
+                    "A. tăng 2 lần.",
+                    "B. giảm 2 lần.",
+                    "C. tăng 4 lần.",
+                    "D. không đổi."
+                ],
+                correct: 0
+            },
+            {
+                question: "Tại ba đỉnh của một tam giác đều cạnh a đặt ba điện tích điểm giống nhau q. Lực tác dụng lên mỗi điện tích có độ lớn bằng",
+                options: [
+                    "A. kq²/a²",
+                    "B. √3kq²/a²",
+                    "C. 3kq²/a²",
+                    "D. (√3/2)kq²/a²"
+                ],
+                correct: 1
+            },
+            {
+                question: "Hai quả cầu nhỏ mang điện tích có độ lớn bằng nhau, đặt cách nhau 10 cm trong chân không thì tác dụng lên nhau một lực 36×10⁻³ N. Xác định độ lớn điện tích của mỗi quả cầu.",
+                options: [
+                    "A. 2×10⁻⁷ C",
+                    "B. ±2×10⁻⁷ C",
+                    "C. 4×10⁻⁷ C",
+                    "D. ±4×10⁻⁷ C"
+                ],
+                correct: 1
+            },
+            {
+                question: "Một thanh nhựa trung hòa điện sau khi cọ xát trở thành nhiễm điện âm. Nguyên nhân là do",
+                options: [
+                    "A. thanh nhựa mất bớt điện tích dương.",
+                    "B. thanh nhựa nhận thêm electron.",
+                    "C. thanh nhựa nhận thêm điện tích dương.",
+                    "D. thanh nhựa mất bớt electron."
+                ],
+                correct: 1
+            },
+            {
+                question: "Lực tương tác giữa hai điện tích điểm đặt trong dầu (ε = 4) là 5 N. Nếu đặt chúng trong không khí (ε ≈ 1) với khoảng cách như cũ thì lực tương tác giữa chúng là",
+                options: [
+                    "A. 1,25 N.",
+                    "B. 5 N.",
+                    "C. 10 N.",
+                    "D. 20 N."
+                ],
+                correct: 3
+            },
+            {
+                question: "Hai điện tích điểm q₁ = 10⁻⁸ C, q₂ = -3×10⁻⁸ C đặt tại hai điểm A, B trong không khí cách nhau 6 cm. Điểm M tại đó cường độ điện trường tổng hợp bằng 0 nằm",
+                options: [
+                    "A. trên AB, ngoài đoạn AB, gần A hơn.",
+                    "B. trên AB, ngoài đoạn AB, gần B hơn.",
+                    "C. trên đoạn AB, cách A 3 cm.",
+                    "D. trên đoạn AB, cách A 2 cm."
+                ],
+                correct: 1
+            },
+            {
+                question: "Hai điện tích điểm cùng độ lớn q, trái dấu, đặt tại 2 đỉnh A và B của một tam giác đều ABC cạnh a. Lực điện tổng hợp tác dụng lên điện tích điểm Q đặt tại đỉnh C có độ lớn là",
+                options: [
+                    "A. k|qQ|/a²",
+                    "B. √3k|qQ|/a²",
+                    "C. 2k|qQ|/a²",
+                    "D. 0."
+                ],
+                correct: 0
+            },
+            {
+                question: "Hai quả cầu kim loại nhỏ giống nhau, mỗi quả có điện tích q, khối lượng m = 10g, được treo vào cùng một điểm bằng hai sợi dây mảnh, cách điện, không dãn, dài bằng nhau. Do lực đẩy tĩnh điện, chúng cách nhau một khoảng r (r << chiều dài dây). Góc lệch của mỗi dây so với phương thẳng đứng là 30⁰. Lấy g = 10 m/s². Giá trị của q gần nhất với giá trị nào sau đây? (Cho k = 9×10⁹ Nm²/C²)",
+                options: [
+                    "A. 1,0×10⁻⁶ C",
+                    "B. 1,4×10⁻⁶ C",
+                    "C. 1,7×10⁻⁶ C",
+                    "D. 2,0×10⁻⁶ C"
+                ],
+                correct: 2
+            },
+            {
+                question: "Tại ba đỉnh A, B, C của một hình vuông ABCD cạnh a = 6 cm, lần lượt đặt các điện tích điểm q₁ = q₂ = q₃ = 2×10⁻⁸ C. Điện tích q₄ = -4×10⁻⁸ C đặt tại đỉnh D. Lực điện tổng hợp tác dụng lên q₄ có độ lớn là",
+                options: [
+                    "A. 2,3×10⁻³ N.",
+                    "B. 3,2×10⁻³ N.",
+                    "C. 1,7×10⁻³ N.",
+                    "D. 4,6×10⁻³ N."
+                ],
+                correct: 0
+            },
+            {
+                question: "Hai điện tích điểm q₁ = 4×10⁻⁶ C và q₂ = -9×10⁻⁶ C đặt cố định tại hai điểm A và B cách nhau 20 cm trong không khí. Điểm M trên đường thẳng AB mà tại đó cường độ điện trường bằng 0 cách B một khoảng là",
+                options: [
+                    "A. 10 cm.",
+                    "B. 30 cm.",
+                    "C. 40 cm.",
+                    "D. 50 cm."
+                ],
+                correct: 2
+            },
+            {
+                question: "Hai quả cầu kim loại nhỏ giống hệt nhau, tích điện q₁ và q₂, đặt cách nhau một khoảng r trong không khí thì chúng hút nhau với lực có độ lớn F. Cho hai quả cầu tiếp xúc với nhau rồi đưa về vị trí cũ thì chúng đẩy nhau với lực có độ lớn 2F. Tỉ số q₁/q₂ là",
+                options: [
+                    "A. -1/3.",
+                    "B. -3.",
+                    "C. 1/3.",
+                    "D. 3."
+                ],
+                correct: 1
+            },
+            {
+                question: "Bốn điện tích điểm q giống nhau đặt tại bốn đỉnh của một hình vuông cạnh a. Lực điện tác dụng lên mỗi điện tích có độ lớn bằng",
+                options: [
+                    "A. kq²/a²(2√2+1)/2",
+                    "B. kq²/a²(2√2+1)",
+                    "C. kq²/a²(√2+1)/2",
+                    "D. kq²/a²(√2+1/4)"
+                ],
+                correct: 0
+            },
+            {
+                question: "Hai quả cầu nhỏ giống nhau, cùng khối lượng m, điện tích q, được treo tại cùng một điểm bằng hai sợi dây mảnh. Do lực đẩy tĩnh điện, mỗi dây lệch một góc α so với phương thẳng đứng. Nhúng cả hệ vào một chất lỏng có hằng số điện môi ε, góc lệch của mỗi dây bây giờ là α'. Biểu thức liên hệ giữa α và α' là (bỏ qua lực đẩy Acsimet)",
+                options: [
+                    "A. tan α' = ε tan α.",
+                    "B. tan α' = tan α/ε.",
+                    "C. sin α' = ε sin α.",
+                    "D. α' = α."
+                ],
+                correct: 1
+            },
+            {
+                question: "Đặt hai điện tích điểm q₁ = 2×10⁻⁶ C và q₂ = -8×10⁻⁶ C tại A và B với AB = 10 cm. Điểm M trên đường thẳng AB, ngoài đoạn AB, có cường độ điện trường tổng hợp bằng 0 cách A một khoảng",
+                options: [
+                    "A. 5 cm.",
+                    "B. 10 cm.",
+                    "C. 15 cm.",
+                    "D. 20 cm."
+                ],
+                correct: 1
+            },
+            {
+                question: "Hai điện tích điểm q₁ = 10⁻⁸ C và q₂ = 4×10⁻⁸ C đặt cách nhau 9 cm trong không khí. Điểm có cường độ điện trường bằng 0 trên đường thẳng nối hai điện tích đó cách q₁ một khoảng",
+                options: [
+                    "A. 3 cm.",
+                    "B. 4,5 cm.",
+                    "C. 6 cm.",
+                    "D. 9 cm."
+                ],
+                correct: 0
+            },
+            {
+                question: "Hai quả cầu nhỏ tích điện, có khối lượng bằng nhau, được treo vào một điểm bằng hai sợi dây mảnh, cách điện, dài bằng nhau. Khi hệ cân bằng, hai dây treo hợp với nhau một góc 60⁰. Nhúng cả hệ vào trong rượu có hằng số điện môi ε = 27, bỏ qua lực đẩy Acsimet và khối lượng riêng của rượu. Để góc giữa hai dây treo vẫn là 60⁰ thì khối lượng riêng của các quả cầu phải thay đổi như thế nào so với ban đầu?",
+                options: [
+                    "A. Giảm 26 lần.",
+                    "B. Tăng 26 lần.",
+                    "C. Giảm 27 lần.",
+                    "D. Tăng 27 lần."
+                ],
+                correct: 0
+            },
+            {
+                question: "Hai điện tích điểm q₁ = 2×10⁻⁸ C và q₂ = -10⁻⁸ C đặt tại hai điểm A và B cách nhau 6 cm trong không khí. Đặt điện tích q₃ tại điểm M trên đường trung trực của AB, cách AB một khoảng 4 cm. Để lực điện tổng hợp tác dụng lên q₃ song song với AB thì q₃ phải có dấu và độ lớn là",
+                options: [
+                    "A. q₃ > 0, |q₃| = 2,5×10⁻⁸ C.",
+                    "B. q₃ < 0, |q₃| = 2,5×10⁻⁸ C.",
+                    "C. q₃ > 0, |q₃| = 1,25×10⁻⁸ C.",
+                    "D. q₃ < 0, |q₃| = 1,25×10⁻⁸ C."
+                ],
+                correct: 3
+            }
+        ];
+
+        // Biến lưu trữ trạng thái bài trắc nghiệm
+        let currentQuestion = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let score = 0;
+        let startTime;
+        let timerInterval;
+        let timeElapsed = 0;
+        let reviewPage = 0;
+        const REVIEW_PER_PAGE = 10;
+
+        // Khởi tạo trang
+        document.addEventListener('DOMContentLoaded', function() {
+            initQuiz();
+            startTimer();
+            
+            // Gán sự kiện cho các nút
+            document.getElementById('prev-btn').addEventListener('click', prevQuestion);
+            document.getElementById('next-btn').addEventListener('click', nextQuestion);
+            document.getElementById('submit-btn').addEventListener('click', submitQuiz);
+            document.getElementById('restart-btn').addEventListener('click', restartQuiz);
+        });
+
+        function initQuiz() {
+            // Hiển thị câu hỏi đầu tiên
+            showQuestion();
+            
+            // Cập nhật số câu đã trả lời
+            updateAnsweredCount();
+            
+            // Cập nhật thanh tiến trình
+            updateProgressBar();
+            
+            // Ẩn nút "Câu trước" cho câu đầu tiên
+            document.getElementById('prev-btn').classList.add('btn-disabled');
+            
+            // Hiển thị nút "Nộp bài" nếu đã đến câu cuối
+            if (currentQuestion === quizData.length - 1) {
+                document.getElementById('next-btn').style.display = 'none';
+                document.getElementById('submit-btn').style.display = 'block';
+            } else {
+                document.getElementById('next-btn').style.display = 'block';
+                document.getElementById('submit-btn').style.display = 'none';
+            }
+        }
+
+        function showQuestion() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+            
+            const questionData = quizData[currentQuestion];
+            
+            const questionElement = document.createElement('div');
+            questionElement.className = 'question';
+            
+            let optionsHTML = '';
+            questionData.options.forEach((option, index) => {
+                const isSelected = userAnswers[currentQuestion] === index;
+                const optionClass = isSelected ? 'option selected' : 'option';
+                
+                optionsHTML += `
+                    <div class="${optionClass}" onclick="selectOption(${index})">
+                        <input type="radio" name="option" id="option${index}" ${isSelected ? 'checked' : ''}>
+                        <label for="option${index}">${option}</label>
+                    </div>
+                `;
+            });
+            
+            questionElement.innerHTML = `
+                <div class="question-number"><span>${currentQuestion + 1}</span> ${questionData.question}</div>
+                <div class="options">${optionsHTML}</div>
+            `;
+            
+            container.appendChild(questionElement);
+            
+            // Cập nhật thông tin câu hỏi hiện tại
+            document.getElementById('current-question').textContent = `${currentQuestion + 1}/${quizData.length}`;
+        }
+
+        function selectOption(optionIndex) {
+            // Lưu câu trả lời của người dùng
+            userAnswers[currentQuestion] = optionIndex;
+            
+            // Cập nhật giao diện
+            showQuestion();
+            
+            // Cập nhật số câu đã trả lời
+            updateAnsweredCount();
+            
+            // Cập nhật thanh tiến trình
+            updateProgressBar();
+        }
+
+        function updateAnsweredCount() {
+            const answered = userAnswers.filter(answer => answer !== null).length;
+            document.getElementById('answered-count').textContent = `${answered}/${quizData.length}`;
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentQuestion + 1) / quizData.length) * 100;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                showQuestion();
+                updateProgressBar();
+                
+                // Hiển thị nút "Câu trước"
+                document.getElementById('prev-btn').classList.remove('btn-disabled');
+                
+                // Ẩn nút "Nộp bài" nếu chưa phải câu cuối
+                if (currentQuestion !== quizData.length - 1) {
+                    document.getElementById('submit-btn').style.display = 'none';
+                    document.getElementById('next-btn').style.display = 'block';
+                } else {
+                    // Hiển thị nút "Nộp bài" cho câu cuối
+                    document.getElementById('next-btn').style.display = 'none';
+                    document.getElementById('submit-btn').style.display = 'block';
+                }
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+                updateProgressBar();
+                
+                // Ẩn nút "Câu trước" nếu đang ở câu đầu
+                if (currentQuestion === 0) {
+                    document.getElementById('prev-btn').classList.add('btn-disabled');
+                }
+                
+                // Hiển thị nút "Câu tiếp theo" và ẩn nút "Nộp bài"
+                document.getElementById('next-btn').style.display = 'block';
+                document.getElementById('submit-btn').style.display = 'none';
+            }
+        }
+
+        function startTimer() {
+            startTime = new Date();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            const now = new Date();
+            timeElapsed = Math.floor((now - startTime) / 1000);
+            
+            const minutes = Math.floor(timeElapsed / 60);
+            const seconds = timeElapsed % 60;
+            
+            const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            document.getElementById('timer').textContent = `Thời gian: ${timeString}`;
+            document.getElementById('time-elapsed').textContent = timeString;
+        }
+
+        function submitQuiz() {
+            // Dừng đồng hồ
+            clearInterval(timerInterval);
+            
+            // Tính điểm
+            calculateScore();
+            
+            // Hiển thị kết quả
+            showResults();
+        }
+
+        function calculateScore() {
+            let correctCount = 0;
+            
+            for (let i = 0; i < quizData.length; i++) {
+                if (userAnswers[i] === quizData[i].correct) {
+                    correctCount++;
+                }
+            }
+            
+            score = Math.round((correctCount / quizData.length) * 100);
+            
+            // Cập nhật kết quả
+            document.getElementById('score-value').textContent = score;
+            document.getElementById('correct-count').textContent = correctCount;
+            document.getElementById('incorrect-count').textContent = quizData.length - correctCount;
+            
+            const minutes = Math.floor(timeElapsed / 60);
+            const seconds = timeElapsed % 60;
+            const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('final-time').textContent = timeString;
+            
+            // Hiển thị xem lại câu hỏi
+            showQuestionReview(correctCount);
+        }
+
+        function showQuestionReview(correctCount) {
+            const reviewContainer = document.getElementById('question-review');
+            reviewContainer.innerHTML = `
+                <h3 class="review-title">Chi tiết bài làm (${correctCount}/${quizData.length} câu đúng)</h3>
+                <div class="review-controls">
+                    <button class="review-page-btn" id="prev-review-btn">Trang trước</button>
+                    <button class="review-page-btn" id="next-review-btn">Trang sau</button>
+                </div>
+                <div class="review-page-info" id="review-page-info">Trang 1/${Math.ceil(quizData.length/REVIEW_PER_PAGE)}</div>
+                <div id="review-items-container"></div>
+                <div class="review-controls">
+                    <button class="review-page-btn show-all-btn" id="show-all-btn">Xem tất cả câu hỏi</button>
+                </div>
+            `;
+            
+            // Gán sự kiện cho các nút phân trang
+            document.getElementById('prev-review-btn').addEventListener('click', function() {
+                changeReviewPage(-1);
+            });
+            
+            document.getElementById('next-review-btn').addEventListener('click', function() {
+                changeReviewPage(1);
+            });
+            
+            document.getElementById('show-all-btn').addEventListener('click', showAllQuestions);
+            
+            updateReviewPage();
+        }
+
+        function updateReviewPage() {
+            const container = document.getElementById('review-items-container');
+            container.innerHTML = '';
+            
+            const startIndex = reviewPage * REVIEW_PER_PAGE;
+            const endIndex = Math.min(startIndex + REVIEW_PER_PAGE, quizData.length);
+            
+            for (let i = startIndex; i < endIndex; i++) {
+                const questionData = quizData[i];
+                const userAnswer = userAnswers[i];
+                const correctAnswer = questionData.correct;
+                
+                const reviewItem = document.createElement('div');
+                reviewItem.className = 'review-item';
+                
+                let answerStatus = '';
+                if (userAnswer === correctAnswer) {
+                    answerStatus = '<span class="review-answer">✓ ĐÚNG</span>';
+                } else {
+                    answerStatus = `
+                        <div><span class="review-user-answer">✗ Bạn chọn: ${questionData.options[userAnswer] || "Không trả lời"}</span></div>
+                        <div><span class="review-answer">✓ Đáp án đúng: ${questionData.options[correctAnswer]}</span></div>
+                    `;
+                }
+                
+                reviewItem.innerHTML = `
+                    <div class="review-question"><strong>Câu ${i + 1}:</strong> ${questionData.question}</div>
+                    <div>${answerStatus}</div>
+                `;
+                
+                container.appendChild(reviewItem);
+            }
+            
+            // Cập nhật thông tin trang
+            document.getElementById('review-page-info').textContent = 
+                `Trang ${reviewPage + 1}/${Math.ceil(quizData.length/REVIEW_PER_PAGE)}`;
+            
+            // Cập nhật trạng thái nút
+            document.getElementById('prev-review-btn').disabled = reviewPage === 0;
+            document.getElementById('next-review-btn').disabled = 
+                reviewPage >= Math.ceil(quizData.length / REVIEW_PER_PAGE) - 1;
+        }
+
+        function changeReviewPage(delta) {
+            const newPage = reviewPage + delta;
+            const maxPage = Math.ceil(quizData.length / REVIEW_PER_PAGE) - 1;
+            
+            if (newPage >= 0 && newPage <= maxPage) {
+                reviewPage = newPage;
+                updateReviewPage();
+            }
+        }
+
+        function showAllQuestions() {
+            const container = document.getElementById('review-items-container');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < quizData.length; i++) {
+                const questionData = quizData[i];
+                const userAnswer = userAnswers[i];
+                const correctAnswer = questionData.correct;
+                
+                const reviewItem = document.createElement('div');
+                reviewItem.className = 'review-item';
+                
+                let answerStatus = '';
+                if (userAnswer === correctAnswer) {
+                    answerStatus = '<span class="review-answer">✓ ĐÚNG</span>';
+                } else {
+                    answerStatus = `
+                        <div><span class="review-user-answer">✗ Bạn chọn: ${questionData.options[userAnswer] || "Không trả lời"}</span></div>
+                        <div><span class="review-answer">✓ Đáp án đúng: ${questionData.options[correctAnswer]}</span></div>
+                    `;
+                }
+                
+                reviewItem.innerHTML = `
+                    <div class="review-question"><strong>Câu ${i + 1}:</strong> ${questionData.question}</div>
+                    <div>${answerStatus}</div>
+                `;
+                
+                container.appendChild(reviewItem);
+            }
+            
+            // Ẩn điều khiển phân trang khi xem tất cả
+            document.querySelector('.review-controls').style.display = 'none';
+            document.getElementById('review-page-info').style.display = 'none';
+        }
+
+        function showResults() {
+            // Ẩn phần câu hỏi và điều khiển
+            document.getElementById('questions-container').style.display = 'none';
+            document.querySelector('.progress-container').style.display = 'none';
+            document.querySelector('.controls').style.display = 'none';
+            document.querySelector('.quiz-info').style.display = 'none';
+            
+            // Hiển thị kết quả
+            document.getElementById('results-container').style.display = 'block';
+            
+            // Reset trang xem lại về trang đầu
+            reviewPage = 0;
+        }
+
+        function restartQuiz() {
+            // Đặt lại tất cả biến
+            currentQuestion = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            score = 0;
+            timeElapsed = 0;
+            reviewPage = 0;
+            
+            // Đặt lại giao diện
+            document.getElementById('questions-container').style.display = 'block';
+            document.querySelector('.progress-container').style.display = 'block';
+            document.querySelector('.controls').style.display = 'flex';
+            document.querySelector('.quiz-info').style.display = 'flex';
+            document.getElementById('results-container').style.display = 'none';
+            
+            // Đặt lại đồng hồ
+            clearInterval(timerInterval);
+            startTimer();
+            
+            // Khởi tạo lại bài trắc nghiệm
+            initQuiz();
+            
+            // Cuộn lên đầu trang
+            window.scrollTo(0, 0);
+        }
+
+        // Gán các hàm vào global scope để có thể gọi từ HTML
+        window.selectOption = selectOption;
+        window.nextQuestion = nextQuestion;
+        window.prevQuestion = prevQuestion;
+        window.submitQuiz = submitQuiz;
+        window.restartQuiz = restartQuiz;
+    </script>
+</body>
+</html>

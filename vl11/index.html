@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vật Lý 11 KNTT</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #1e5799;
+            border-radius: 10px;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .chapters {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .chapter-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #3498db;
+        }
+        
+        .chapter-card:nth-child(2) {
+            border-left-color: #2ecc71;
+        }
+        
+        .chapter-card:nth-child(3) {
+            border-left-color: #9b59b6;
+        }
+        
+        .chapter-card:nth-child(4) {
+            border-left-color: #e74c3c;
+        }
+        
+        .chapter-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .lesson-list {
+            list-style-type: none;
+        }
+        
+        .lesson-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .lesson-item:last-child {
+            border-bottom: none;
+        }
+        
+        .lesson-link {
+            text-decoration: none;
+            color: #2c3e50;
+            display: block;
+            padding: 8px 5px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        
+        .lesson-link:hover {
+            background-color: #f0f7ff;
+            color: #1e5799;
+        }
+        
+        .lesson-number {
+            display: inline-block;
+            width: 40px;
+            font-weight: bold;
+            color: #1e5799;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #ddd;
+        }
+        
+        @media (max-width: 768px) {
+            .chapters {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Vật Lý 11 - KNTT</h1>
+        </header>
+        
+        <div class="chapters" id="chapters-container">
+            <!-- Nội dung sẽ được tạo tự động bằng JavaScript -->
+        </div>
+        
+        <footer>
+            <p>Vật Lý 11 - Kết Nối Tri Thức</p>
+        </footer>
+    </div>
+
+    <script>
+        const physicsChapters = [
+            {
+                title: "Chương 1. DAO ĐỘNG",
+                lessons: [
+                    "Bài 1. Dao động điều hoà",
+                    "Bài 2. Mô tả dao động điều hoà",
+                    "Bài 3. Vận tốc, gia tốc trong dao động điều hoà",
+                    "Bài 4. Bài tập về dao động điều hoà",
+                    "Bài 5. Động năng. Thế năng. Sự chuyển hoá giữa động năng và thế năng trong dao động điều hoà",
+                    "Bài 6. Dao động tắt dần. Dao động cưỡng bức. Hiện tượng cộng hưởng",
+                    "Bài 7. Bài tập về sự chuyển năng lượng trong dao động điều hoà"
+                ]
+            },
+            {
+                title: "Chương 2. SÓNG",
+                lessons: [
+                    "Bài 8. Mô tả sóng",
+                    "Bài 9. Sóng ngang, sóng dọc, sự truyền năng lượng của sóng cơ",
+                    "Bài 10. Thực hành: Đo tần số của sóng âm",
+                    "Bài 11. Sóng điện từ",
+                    "Bài 12. Giao thoa sóng",
+                    "Bài 13. Sóng dừng",
+                    "Bài 14. Bài tập về sóng",
+                    "Bài 15. Thực hành: Đo tốc độ truyền âm"
+                ]
+            },
+            {
+                title: "Chương 3. ĐIỆN TRƯỜNG",
+                lessons: [
+                    "Bài 16. Lực tương tác giữa hai điện tích",
+                    "Bài 17. Khái niệm điện trường",
+                    "Bài 18. Điện trường đều",
+                    "Bài 19. Thế năng điện",
+                    "Bài 20. Điện thế",
+                    "Bài 21. Tụ điện"
+                ]
+            },
+            {
+                title: "Chương 4. DÒNG ĐIỆN. MẠCH ĐIỆN",
+                lessons: [
+                    "Bài 22. Cường độ dòng điện",
+                    "Bài 23. Điện trở. Định luật Ohm",
+                    "Bài 24. Nguồn điện",
+                    "Bài 25. Năng lượng điện và công suất điện",
+                    "Bài 26. Thực hành: Đo suất điện động và điện trở trong của pin điện hoá",
+                    "Bài 27. Giải thích một số thuật ngữ dùng trong sách"
+                ]
+            }
+        ];
+
+        function generateLessonLink(lessonIndex) {
+            const lessonNumber = (lessonIndex + 1).toString().padStart(2, '0');
+            return `https://tuibx25.github.io/bx/vl11/${lessonNumber}/`;
+        }
+
+        function renderChapters() {
+            const container = document.getElementById('chapters-container');
+            let lessonCounter = 0;
+            
+            physicsChapters.forEach((chapter, chapterIndex) => {
+                const chapterCard = document.createElement('div');
+                chapterCard.className = 'chapter-card';
+                
+                const chapterTitle = document.createElement('h3');
+                chapterTitle.textContent = chapter.title;
+                
+                const lessonList = document.createElement('ul');
+                lessonList.className = 'lesson-list';
+                
+                chapter.lessons.forEach((lesson) => {
+                    const lessonItem = document.createElement('li');
+                    lessonItem.className = 'lesson-item';
+                    
+                    const lessonLink = document.createElement('a');
+                    lessonLink.className = 'lesson-link';
+                    lessonLink.href = generateLessonLink(lessonCounter);
+                    lessonLink.target = "_blank";
+                    lessonLink.rel = "noopener noreferrer";
+                    
+                    // Tạo nội dung với số bài học
+                    const lessonNumberSpan = document.createElement('span');
+                    lessonNumberSpan.className = 'lesson-number';
+                    lessonNumberSpan.textContent = `Bài ${(lessonCounter + 1).toString().padStart(2, '0')}`;
+                    
+                    const lessonTitleSpan = document.createElement('span');
+                    lessonTitleSpan.textContent = lesson.replace(`Bài ${lessonCounter + 1}. `, '');
+                    
+                    lessonLink.appendChild(lessonNumberSpan);
+                    lessonLink.appendChild(document.createTextNode('. '));
+                    lessonLink.appendChild(lessonTitleSpan);
+                    
+                    lessonLink.addEventListener('click', function(e) {
+                        // Cho phép chuyển hướng bình thường
+                        const lessonNum = (lessonCounter + 1).toString().padStart(2, '0');
+                        console.log(`Chuyển đến bài ${lessonNum}: ${generateLessonLink(lessonCounter)}`);
+                    });
+                    
+                    lessonItem.appendChild(lessonLink);
+                    lessonList.appendChild(lessonItem);
+                    lessonCounter++;
+                });
+                
+                chapterCard.appendChild(chapterTitle);
+                chapterCard.appendChild(lessonList);
+                container.appendChild(chapterCard);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderChapters);
+    </script>
+</body>
+</html>
