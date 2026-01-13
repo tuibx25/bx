@@ -1,0 +1,1173 @@
+## **Đề 1: Khái niệm cơ bản về điện trường**
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề 1: Khái niệm cơ bản về điện trường</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px solid #4a69bd; }
+        .header h1 { color: #2c3e50; margin-bottom: 10px; font-size: 28px; }
+        .header h2 { color: #3498db; font-size: 20px; font-weight: normal; }
+        .question { margin: 25px 0; padding: 20px; border: 2px solid #e0e0e0; border-radius: 10px; background: #f8f9fa; transition: all 0.3s; }
+        .question:hover { border-color: #3498db; background: #f1f8ff; }
+        .question-number { display: inline-block; background: #3498db; color: white; width: 30px; height: 30px; text-align: center; line-height: 30px; border-radius: 50%; margin-right: 10px; font-weight: bold; }
+        .question-text { display: inline; font-weight: bold; color: #2c3e50; }
+        .options { margin: 15px 0 0 40px; }
+        .option { margin: 10px 0; padding: 10px 15px; background: white; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; transition: all 0.2s; }
+        .option:hover { background: #e3f2fd; border-color: #3498db; }
+        .option input { margin-right: 10px; }
+        button { background: linear-gradient(to right, #3498db, #2ecc71); color: white; border: none; padding: 15px 40px; border-radius: 50px; cursor: pointer; font-size: 18px; font-weight: bold; display: block; margin: 40px auto; transition: all 0.3s; box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4); }
+        button:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(52, 152, 219, 0.6); }
+        #result { display: none; margin-top: 40px; padding: 25px; border-radius: 10px; background: linear-gradient(to right, #74b9ff, #0984e3); color: white; }
+        .score { font-size: 28px; font-weight: bold; text-align: center; margin-bottom: 20px; }
+        .feedback { font-size: 20px; text-align: center; margin-bottom: 25px; }
+        .answer-details { background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; }
+        .answer-item { margin: 10px 0; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .correct-answer { color: #55efc4; font-weight: bold; }
+        .wrong-answer { color: #ff7675; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ĐỀ KIỂM TRA SỐ 1</h1>
+            <h2>KHÁI NIỆM CƠ BẢN VỀ ĐIỆN TRƯỜNG</h2>
+            <p>Thời gian: 15 phút | Số câu: 10</p>
+        </div>
+        
+        <form id="quizForm">
+            <div class="question">
+                <div class="question-number">1</div>
+                <div class="question-text">Điện trường là gì?</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q1" value="A"> A. Lực tác dụng giữa hai điện tích điểm</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="B"> B. Dạng vật chất tồn tại xung quanh điện tích và truyền tương tác điện</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="C"> C. Môi trường không khí xung quanh điện tích</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="D"> D. Năng lượng của điện tích</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">2</div>
+                <div class="question-text">Tại sao hai quả cầu tích điện cùng dấu không tiếp xúc nhưng vẫn đẩy nhau?</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q2" value="A"> A. Do lực hấp dẫn giữa chúng</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="B"> B. Do điện trường xung quanh mỗi điện tích tác dụng lên điện tích kia</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="C"> C. Do không khí truyền lực đẩy</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="D"> D. Do hiện tượng cảm ứng điện</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">3</div>
+                <div class="question-text">Công thức tính cường độ điện trường tại một điểm là:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q3" value="A"> A. E = q/F</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="B"> B. E = F/q</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="C"> C. E = Fq</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="D"> D. E = F²/q</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">4</div>
+                <div class="question-text">Đơn vị của cường độ điện trường là:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q4" value="A"> A. Newton (N)</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="B"> B. Vôn trên mét (V/m)</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="C"> C. Culông (C)</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="D"> D. Tesla (T)</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">5</div>
+                <div class="question-text">Vectơ cường độ điện trường tại một điểm có:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q5" value="A"> A. Phương vuông góc với lực điện tác dụng lên điện tích thử</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="B"> B. Phương trùng với phương của lực điện tác dụng lên điện tích thử dương</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="C"> C. Chiều ngược với chiều của lực điện khi q > 0</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="D"> D. Độ lớn tỉ lệ nghịch với bình phương điện tích thử</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">6</div>
+                <div class="question-text">Điện trường tĩnh là điện trường:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q6" value="A"> A. Được tạo bởi các điện tích chuyển động</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="B"> B. Không thay đổi theo thời gian</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="C"> C. Có các đường sức khép kín</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="D"> D. Chỉ tồn tại trong chất dẫn điện</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">7</div>
+                <div class="question-text">Khi điện tích thử q < 0, vectơ cường độ điện trường và vectơ lực điện tác dụng lên nó có:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q7" value="A"> A. Cùng phương, cùng chiều</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="B"> B. Cùng phương, ngược chiều</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="C"> C. Vuông góc với nhau</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="D"> D. Tạo với nhau góc 45°</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">8</div>
+                <div class="question-text">Để phát hiện sự tồn tại của điện trường tại một điểm, ta dùng:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q8" value="A"> A. Nam châm</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="B"> B. Điện tích thử</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="C"> C. Sợi dây dẫn</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="D"> D. Ống dây điện</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">9</div>
+                <div class="question-text">Công thức tính cường độ điện trường do điện tích điểm Q gây ra tại điểm cách nó khoảng r trong chân không là:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q9" value="A"> A. E = kQ/r</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="B"> B. E = k|Q|/r²</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="C"> C. E = kQ/r²</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="D"> D. E = k|Q|/r</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">10</div>
+                <div class="question-text">Hiện tượng sét là kết quả của:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q10" value="A"> A. Sự phóng điện giữa các đám mây tích điện trái dấu</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="B"> B. Sự phóng điện từ đám mây tích điện xuống đất</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="C"> C. Cả A và B đều đúng</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="D"> D. Sự nhiễm điện do cọ xát giữa các đám mây</label></div>
+                </div>
+            </div>
+            
+            <button type="button" onclick="submitQuiz()">NỘP BÀI LÀM</button>
+        </form>
+        
+        <div id="result">
+            <div class="score">Điểm số: <span id="score">0</span>/10</div>
+            <div class="feedback" id="feedback"></div>
+            <div class="answer-details" id="answerDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'B', q2: 'B', q3: 'B', q4: 'B', q5: 'B',
+            q6: 'B', q7: 'B', q8: 'B', q9: 'B', q10: 'C'
+        };
+        
+        const explanations = {
+            q1: "Điện trường là dạng vật chất tồn tại xung quanh điện tích và truyền tương tác điện giữa các điện tích.",
+            q2: "Điện trường xung quanh mỗi điện tích tác dụng lực lên điện tích kia, truyền tương tác mà không cần tiếp xúc.",
+            q3: "Theo định nghĩa: E = F/q, với F là lực điện tác dụng lên điện tích thử q.",
+            q4: "Trong hệ SI, cường độ điện trường có đơn vị là V/m (vôn trên mét).",
+            q5: "Vectơ cường độ điện trường có phương trùng với phương của lực điện tác dụng lên điện tích thử dương.",
+            q6: "Điện trường tĩnh là điện trường không thay đổi theo thời gian, được tạo bởi các điện tích đứng yên.",
+            q7: "Khi q < 0, vectơ cường độ điện trường và vectơ lực điện cùng phương nhưng ngược chiều (do F = qE).",
+            q8: "Điện tích thử được dùng để phát hiện lực điện, từ đó nhận biết được sự tồn tại của điện trường.",
+            q9: "E = k|Q|/r² với k = 1/(4πε₀). Dấu giá trị tuyệt đối vì cường độ điện trường là đại lượng không âm.",
+            q10: "Sét có thể xảy ra giữa các đám mây tích điện trái dấu hoặc giữa đám mây và mặt đất."
+        };
+        
+        function submitQuiz() {
+            let score = 0;
+            let answerDetailsHTML = "<h3>Chi tiết đáp án:</h3>";
+            
+            // Kiểm tra từng câu
+            for (let i = 1; i <= 10; i++) {
+                const questionName = 'q' + i;
+                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+                const questionDiv = document.querySelector(`input[name="${questionName}"]`).closest('.question');
+                
+                // Reset màu nền câu hỏi
+                questionDiv.style.borderColor = '#e0e0e0';
+                questionDiv.style.background = '#f8f9fa';
+                
+                if (selectedOption) {
+                    const isCorrect = selectedOption.value === correctAnswers[questionName];
+                    
+                    if (isCorrect) {
+                        score++;
+                        questionDiv.style.borderColor = '#2ecc71';
+                        questionDiv.style.background = '#d5f4e6';
+                        answerDetailsHTML += `<div class="answer-item"><strong>Câu ${i}:</strong> ✅ Đúng. Đáp án của bạn: ${selectedOption.value}. ${explanations[questionName]}</div>`;
+                    } else {
+                        questionDiv.style.borderColor = '#e74c3c';
+                        questionDiv.style.background = '#fadbd8';
+                        answerDetailsHTML += `<div class="answer-item"><strong>Câu ${i}:</strong> ❌ Sai. Đáp án của bạn: ${selectedOption.value}. Đáp án đúng: ${correctAnswers[questionName]}. ${explanations[questionName]}</div>`;
+                    }
+                } else {
+                    questionDiv.style.borderColor = '#f39c12';
+                    questionDiv.style.background = '#fef9e7';
+                    answerDetailsHTML += `<div class="answer-item"><strong>Câu ${i}:</strong> ⚠ Chưa trả lời. Đáp án đúng: ${correctAnswers[questionName]}. ${explanations[questionName]}</div>`;
+                }
+            }
+            
+            // Hiển thị kết quả
+            document.getElementById('score').textContent = score;
+            document.getElementById('answerDetails').innerHTML = answerDetailsHTML;
+            
+            // Đánh giá kết quả
+            let feedback = "";
+            if (score >= 9) {
+                feedback = "Xuất sắc! Bạn nắm vững kiến thức cơ bản về điện trường.";
+            } else if (score >= 7) {
+                feedback = "Tốt! Bạn hiểu khá rõ về điện trường.";
+            } else if (score >= 5) {
+                feedback = "Khá! Bạn cần ôn tập thêm một số khái niệm.";
+            } else {
+                feedback = "Cần cố gắng hơn! Hãy xem lại bài học về điện trường.";
+            }
+            
+            document.getElementById('feedback').textContent = feedback;
+            document.getElementById('result').style.display = 'block';
+            
+            // Cuộn đến kết quả
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
+
+
+## **Đề 2: Cường độ điện trường và tính toán cơ bản**
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề 2: Cường độ điện trường và tính toán cơ bản</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; margin: 0; padding: 20px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); min-height: 100vh; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px solid #e74c3c; }
+        .header h1 { color: #2c3e50; margin-bottom: 10px; font-size: 28px; }
+        .header h2 { color: #e74c3c; font-size: 20px; font-weight: normal; }
+        .question { margin: 25px 0; padding: 20px; border: 2px solid #e0e0e0; border-radius: 10px; background: #f8f9fa; transition: all 0.3s; }
+        .question:hover { border-color: #e74c3c; background: #fff5f5; }
+        .question-number { display: inline-block; background: #e74c3c; color: white; width: 30px; height: 30px; text-align: center; line-height: 30px; border-radius: 50%; margin-right: 10px; font-weight: bold; }
+        .question-text { display: inline; font-weight: bold; color: #2c3e50; }
+        .options { margin: 15px 0 0 40px; }
+        .option { margin: 10px 0; padding: 10px 15px; background: white; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; transition: all 0.2s; }
+        .option:hover { background: #ffeaea; border-color: #e74c3c; }
+        .option input { margin-right: 10px; }
+        button { background: linear-gradient(to right, #e74c3c, #f39c12); color: white; border: none; padding: 15px 40px; border-radius: 50px; cursor: pointer; font-size: 18px; font-weight: bold; display: block; margin: 40px auto; transition: all 0.3s; box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4); }
+        button:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(231, 76, 60, 0.6); }
+        #result { display: none; margin-top: 40px; padding: 25px; border-radius: 10px; background: linear-gradient(to right, #ff7675, #e74c3c); color: white; }
+        .score { font-size: 28px; font-weight: bold; text-align: center; margin-bottom: 20px; }
+        .feedback { font-size: 20px; text-align: center; margin-bottom: 25px; }
+        .answer-details { background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; }
+        .answer-item { margin: 10px 0; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .correct-answer { color: #55efc4; font-weight: bold; }
+        .wrong-answer { color: #ffeb3b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ĐỀ KIỂM TRA SỐ 2</h1>
+            <h2>CƯỜNG ĐỘ ĐIỆN TRƯỜNG VÀ TÍNH TOÁN CƠ BẢN</h2>
+            <p>Thời gian: 15 phút | Số câu: 10</p>
+        </div>
+        
+        <form id="quizForm">
+            <div class="question">
+                <div class="question-number">1</div>
+                <div class="question-text">Một điện tích điểm Q = 3×10⁻⁸ C đặt trong chân không. Cường độ điện trường tại điểm cách nó 0.1 m là:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q1" value="A"> A. 2.7×10⁴ V/m</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="B"> B. 2.7×10³ V/m</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="C"> C. 2.7×10⁵ V/m</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="D"> D. 2.7×10² V/m</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">2</div>
+                <div class="question-text">Một điện tích thử q = 2×10⁻⁹ C đặt trong điện trường có cường độ E = 500 V/m. Lực điện tác dụng lên điện tích là:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q2" value="A"> A. 10⁻⁶ N</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="B"> B. 2×10⁻⁶ N</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="C"> C. 10⁻⁹ N</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="D"> D. 2.5×10⁻⁶ N</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">3</div>
+                <div class="question-text">Khi khoảng cách từ điểm khảo sát đến điện tích điểm tăng gấp 3 lần, cường độ điện trường sẽ:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q3" value="A"> A. Tăng 9 lần</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="B"> B. Giảm 9 lần</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="C"> C. Tăng 3 lần</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="D"> D. Giảm 3 lần</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">4</div>
+                <div class="question-text">Một điện tích điểm Q gây ra tại điểm M cách nó 5 cm một điện trường có cường độ 3600 V/m. Điện tích Q có độ lớn là:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q4" value="A"> A. 10⁻⁹ C</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="B"> B. 10⁻⁸ C</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="C"> C. 10⁻¹⁰ C</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="D"> D. 10⁻⁷ C</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">5</div>
+                <div class="question-text">Một electron (e = -1.6×10⁻¹⁹ C) được thả trong điện trường đều E = 1000 V/m. Lực điện tác dụng lên electron là:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q5" value="A"> A. 1.6×10⁻¹⁶ N, cùng chiều với E</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="B"> B. 1.6×10⁻¹⁶ N, ngược chiều với E</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="C"> C. 1.6×10⁻²² N, cùng chiều với E</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="D"> D. 1.6×10⁻²² N, ngược chiều với E</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">6</div>
+                <div class="question-text">Điện trường do điện tích dương gây ra tại một điểm có:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q6" value="A"> A. Phương hướng về phía điện tích</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="B"> B. Phương hướng ra xa điện tích</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="C"> C. Phương vuông góc với đường nối</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="D"> D. Phương bất kỳ</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">7</div>
+                <div class="question-text">Hai điện tích điểm cùng độ lớn q đặt tại A và B. Tại trung điểm M của AB, cường độ điện trường:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q7" value="A"> A. Luôn bằng 0</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="B"> B. Luôn khác 0</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="C"> C. Bằng 0 nếu hai điện tích cùng dấu</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="D"> D. Bằng 0 nếu hai điện tích trái dấu</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">8</div>
+                <div class="question-text">Một điện tích điểm Q = -4×10⁻⁸ C. Tại điểm cách nó 0.2 m, cường độ điện trường có độ lớn và hướng là:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q8" value="A"> A. 9×10³ V/m, hướng về Q</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="B"> B. 9×10³ V/m, hướng ra xa Q</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="C"> C. 9×10² V/m, hướng về Q</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="D"> D. 9×10² V/m, hướng ra xa Q</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">9</div>
+                <div class="question-text">Một hạt bụi có điện tích 3.2×10⁻¹⁹ C nằm trong điện trường đều 150 V/m. Lực điện tác dụng lên hạt bụi là:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q9" value="A"> A. 4.8×10⁻¹⁷ N</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="B"> B. 4.8×10⁻¹⁹ N</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="C"> C. 4.8×10⁻²¹ N</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="D"> D. 4.8×10⁻¹⁵ N</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">10</div>
+                <div class="question-text">So sánh cường độ điện trường tại các điểm gần và xa điện tích điểm:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q10" value="A"> A. Càng gần điện tích, cường độ điện trường càng nhỏ</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="B"> B. Càng xa điện tích, cường độ điện trường càng lớn</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="C"> C. Càng gần điện tích, cường độ điện trường càng lớn</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="D"> D. Cường độ điện trường không phụ thuộc khoảng cách</label></div>
+                </div>
+            </div>
+            
+            <button type="button" onclick="submitQuiz()">NỘP BÀI LÀM</button>
+        </form>
+        
+        <div id="result">
+            <div class="score">Điểm số: <span id="score">0</span>/10</div>
+            <div class="feedback" id="feedback"></div>
+            <div class="answer-details" id="answerDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'A', q2: 'A', q3: 'B', q4: 'C', q5: 'B',
+            q6: 'B', q7: 'D', q8: 'A', q9: 'A', q10: 'C'
+        };
+        
+        const explanations = {
+            q1: "E = k|Q|/r² = (9×10⁹ × 3×10⁻⁸)/(0.1)² = 2.7×10⁴ V/m",
+            q2: "F = qE = 2×10⁻⁹ × 500 = 10⁻⁶ N",
+            q3: "E tỉ lệ nghịch với r², nên khi r tăng 3 lần thì E giảm 9 lần",
+            q4: "Từ E = k|Q|/r² ⇒ |Q| = Er²/k = 3600×(0.05)²/(9×10⁹) = 10⁻¹⁰ C",
+            q5: "F = |q|E = 1.6×10⁻¹⁹ × 1000 = 1.6×10⁻¹⁶ N. Do electron tích âm, lực ngược chiều điện trường",
+            q6: "Điện trường do điện tích dương gây ra có phương hướng ra xa điện tích",
+            q7: "Tại trung điểm, điện trường do hai điện tích trái dấu cùng độ lớn sẽ triệt tiêu nhau",
+            q8: "E = k|Q|/r² = (9×10⁹ × 4×10⁻⁸)/(0.2)² = 9×10³ V/m. Do Q âm nên E hướng về Q",
+            q9: "F = qE = 3.2×10⁻¹⁹ × 150 = 4.8×10⁻¹⁷ N",
+            q10: "Cường độ điện trường E = k|Q|/r² tỉ lệ nghịch với bình phương khoảng cách"
+        };
+        
+        function submitQuiz() {
+            let score = 0;
+            let answerDetailsHTML = "<h3>Chi tiết đáp án:</h3>";
+            
+            for (let i = 1; i <= 10; i++) {
+                const questionName = 'q' + i;
+                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+                const questionDiv = document.querySelector(`input[name="${questionName}"]`).closest('.question');
+                
+                questionDiv.style.borderColor = '#e0e0e0';
+                questionDiv.style.background = '#f8f9fa';
+                
+                if (selectedOption) {
+                    const isCorrect = selectedOption.value === correctAnswers[questionName];
+                    
+                    if (isCorrect) {
+                        score++;
+                        questionDiv.style.borderColor = '#2ecc71';
+                        questionDiv.style.background = '#d5f4e6';
+                        answerDetailsHTML += `<div class="answer-item"><strong>Câu ${i}:</strong> ✅ Đúng. Đáp án của bạn: ${selectedOption.value}. ${explanations[questionName]}</div>`;
+                    } else {
+                        questionDiv.style.borderColor = '#e74c3c';
+                        questionDiv.style.background = '#fadbd8';
+                        answerDetailsHTML += `<div class="answer-item"><strong>Câu ${i}:</strong> ❌ Sai. Đáp án của bạn: ${selectedOption.value}. Đáp án đúng: ${correctAnswers[questionName]}. ${explanations[questionName]}</div>`;
+                    }
+                } else {
+                    questionDiv.style.borderColor = '#f39c12';
+                    questionDiv.style.background = '#fef9e7';
+                    answerDetailsHTML += `<div class="answer-item"><strong>Câu ${i}:</strong> ⚠ Chưa trả lời. Đáp án đúng: ${correctAnswers[questionName]}. ${explanations[questionName]}</div>`;
+                }
+            }
+            
+            document.getElementById('score').textContent = score;
+            document.getElementById('answerDetails').innerHTML = answerDetailsHTML;
+            
+            let feedback = "";
+            if (score >= 9) {
+                feedback = "Xuất sắc! Bạn tính toán rất chính xác.";
+            } else if (score >= 7) {
+                feedback = "Tốt! Bạn nắm vững các công thức tính toán.";
+            } else if (score >= 5) {
+                feedback = "Khá! Cần luyện tập thêm các bài tính toán.";
+            } else {
+                feedback = "Cần ôn lại các công thức và cách tính toán.";
+            }
+            
+            document.getElementById('feedback').textContent = feedback;
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
+
+
+## **Đề 3: Nguyên lý chồng chất điện trường**
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề 3: Nguyên lý chồng chất điện trường</title>
+    <style>
+        body { font-family: 'Roboto', sans-serif; margin: 0; padding: 20px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); min-height: 100vh; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px solid #3498db; }
+        .header h1 { color: #2c3e50; margin-bottom: 10px; font-size: 28px; }
+        .header h2 { color: #3498db; font-size: 20px; font-weight: normal; }
+        .question { margin: 25px 0; padding: 20px; border: 2px solid #e0e0e0; border-radius: 10px; background: #f8f9fa; transition: all 0.3s; }
+        .question:hover { border-color: #3498db; background: #f0f8ff; }
+        .question-number { display: inline-block; background: #3498db; color: white; width: 30px; height: 30px; text-align: center; line-height: 30px; border-radius: 50%; margin-right: 10px; font-weight: bold; }
+        .question-text { display: inline; font-weight: bold; color: #2c3e50; }
+        .options { margin: 15px 0 0 40px; }
+        .option { margin: 10px 0; padding: 10px 15px; background: white; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; transition: all 0.2s; }
+        .option:hover { background: #e3f2fd; border-color: #3498db; }
+        .option input { margin-right: 10px; }
+        button { background: linear-gradient(to right, #3498db, #00b894); color: white; border: none; padding: 15px 40px; border-radius: 50px; cursor: pointer; font-size: 18px; font-weight: bold; display: block; margin: 40px auto; transition: all 0.3s; box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4); }
+        button:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(52, 152, 219, 0.6); }
+        #result { display: none; margin-top: 40px; padding: 25px; border-radius: 10px; background: linear-gradient(to right, #74b9ff, #0984e3); color: white; }
+        .score { font-size: 28px; font-weight: bold; text-align: center; margin-bottom: 20px; }
+        .feedback { font-size: 20px; text-align: center; margin-bottom: 25px; }
+        .answer-details { background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; }
+        .answer-item { margin: 10px 0; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ĐỀ KIỂM TRA SỐ 3</h1>
+            <h2>NGUYÊN LÝ CHỒNG CHẤT ĐIỆN TRƯỜNG</h2>
+            <p>Thời gian: 15 phút | Số câu: 10</p>
+        </div>
+        
+        <form id="quizForm">
+            <div class="question">
+                <div class="question-number">1</div>
+                <div class="question-text">Nguyên lý chồng chất điện trường phát biểu rằng:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q1" value="A"> A. Điện trường tổng hợp bằng tổng các điện trường thành phần</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="B"> B. Điện trường tổng hợp bằng tích các điện trường thành phần</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="C"> C. Điện trường tổng hợp luôn bằng 0</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="D"> D. Điện trường không tuân theo nguyên lý chồng chất</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">2</div>
+                <div class="question-text">Hai điện tích Q₁ = 3×10⁻⁸ C và Q₂ = 4×10⁻⁸ C đặt tại hai điểm A và B cách nhau 10 cm. Cường độ điện trường tại trung điểm M của AB là:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q2" value="A"> A. 2.52×10⁵ V/m, hướng từ A đến B</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="B"> B. 2.52×10⁵ V/m, hướng từ B đến A</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="C"> C. 1.08×10⁵ V/m, hướng từ A đến B</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="D"> D. 1.08×10⁵ V/m, hướng từ B đến A</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">3</div>
+                <div class="question-text">Tại ba đỉnh của tam giác đều cạnh a, đặt ba điện tích dương bằng nhau q. Cường độ điện trường tại tâm tam giác:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q3" value="A"> A. Bằng 0</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="B"> B. Có độ lớn 3kq/a²</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="C"> C. Có độ lớn √3kq/a²</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="D"> D. Có độ lớn kq/a²</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">4</div>
+                <div class="question-text">Hai điện tích điểm Q₁ = 2×10⁻⁸ C và Q₂ = -8×10⁻⁸ C đặt tại A và B cách nhau 12 cm. Điểm M trên AB có cường độ điện trường bằng 0 cách A:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q4" value="A"> A. 4 cm</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="B"> B. 6 cm</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="C"> C. 8 cm</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="D"> D. 9 cm</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">5</div>
+                <div class="question-text">Điện trường của hệ nhiều điện tích điểm được xác định bằng:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q5" value="A"> A. Tổng vectơ các điện trường do từng điện tích gây ra</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="B"> B. Tổng đại số các điện trường do từng điện tích gây ra</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="C"> C. Điện trường của điện tích lớn nhất</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="D"> D. Trung bình cộng các điện trường</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">6</div>
+                <div class="question-text">Tại đỉnh A của hình vuông ABCD cạnh a, đặt điện tích q. Tại đỉnh C đặt điện tích -q. Cường độ điện trường tại tâm O của hình vuông có độ lớn:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q6" value="A"> A. 0</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="B"> B. kq/a²</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="C"> C. 2kq/a²</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="D"> D. 4kq/a²</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">7</div>
+                <div class="question-text">Hai điện tích Q₁ = Q₂ = Q > 0 đặt tại A và B. Tại điểm M nằm trên đường trung trực của AB, điện trường tổng hợp có phương:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q7" value="A"> A. Song song với AB</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="B"> B. Vuông góc với AB</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="C"> C. Hợp với AB góc 45°</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="D"> D. Phụ thuộc vào vị trí của M</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">8</div>
+                <div class="question-text">Cho tam giác ABC vuông tại A có AB = 3 cm, AC = 4 cm. Tại B đặt Q₁ = 4.5×10⁻⁸ C, tại C đặt Q₂ = 2×10⁻⁸ C. Cường độ điện trường tại A có độ lớn khoảng:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q8" value="A"> A. 45×10⁴ V/m</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="B"> B. 50×10⁴ V/m</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="C"> C. 55×10⁴ V/m</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="D"> D. 60×10⁴ V/m</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">9</div>
+                <div class="question-text">Điện trường bên ngoài quả cầu tích điện đều tương đương với điện trường của:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q9" value="A"> A. Điện tích điểm đặt tại tâm quả cầu</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="B"> B. Điện tích điểm đặt tại bề mặt quả cầu</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="C"> C. Nhiều điện tích phân bố đều</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="D"> D. Không tương đương với điện tích điểm</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">10</div>
+                <div class="question-text">Hai điện tích q₁ = 10⁻⁸ C và q₂ = -4×10⁻⁸ C đặt tại hai điểm A và B cách nhau 20 cm. Điểm M trên đường thẳng AB, ngoài đoạn AB, gần A hơn có điện trường tổng hợp bằng 0 cách A:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q10" value="A"> A. 10 cm</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="B"> B. 20 cm</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="C"> C. 30 cm</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="D"> D. 40 cm</label></div>
+                </div>
+            </div>
+            
+            <button type="button" onclick="submitQuiz()">NỘP BÀI LÀM</button>
+        </form>
+        
+        <div id="result">
+            <div class="score">Điểm số: <span id="score">0</span>/10</div>
+            <div class="feedback" id="feedback"></div>
+            <div class="answer-details" id="answerDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'A', q2: 'A', q3: 'A', q4: 'A', q5: 'A',
+            q6: 'C', q7: 'B', q8: 'A', q9: 'A', q10: 'B'
+        };
+        
+        const explanations = {
+            q1: "Nguyên lý chồng chất: Điện trường tổng hợp bằng tổng vectơ các điện trường thành phần.",
+            q2: "E₁ = kQ₁/(0.05)² = 1.08×10⁵ V/m (hướng từ M ra xa Q₁). E₂ = kQ₂/(0.05)² = 1.44×10⁵ V/m (hướng từ M ra xa Q₂). Tổng hợp: E = E₁ + E₂ = 2.52×10⁵ V/m, hướng từ A đến B.",
+            q3: "Do tính đối xứng, ba vectơ điện trường tại tâm có tổng bằng 0.",
+            q4: "Đặt AM = x. E₁ = E₂ ⇒ k|Q₁|/x² = k|Q₂|/(0.12-x)² ⇒ 2/x² = 8/(0.12-x)² ⇒ x = 0.04 m = 4 cm.",
+            q5: "Điện trường là đại lượng vectơ nên tổng hợp theo quy tắc hình bình hành.",
+            q6: "E_A = kq/(a√2/2)² = 2kq/a² (hướng từ A đến O). E_C = kq/(a√2/2)² = 2kq/a² (hướng từ O đến C). Tổng hợp: E = 4kq/a².",
+            q7: "Do tính đối xứng, điện trường tổng hợp tại M vuông góc với AB.",
+            q8: "E₁ = kQ₁/AB² = 4.5×10⁵ V/m. E₂ = kQ₂/AC² = 1.125×10⁵ V/m. E = √(E₁² + E₂²) ≈ 45×10⁴ V/m.",
+            q9: "Điện trường bên ngoài quả cầu tích điện đều tương đương với điện trường của điện tích điểm đặt tại tâm.",
+            q10: "Đặt AM = x > 0. E₁ = E₂ ⇒ 10⁻⁸/x² = 4×10⁻⁸/(x+0.2)² ⇒ x = 0.2 m = 20 cm."
+        };
+        
+        function submitQuiz() {
+            let score = 0;
+            let answerDetailsHTML = "<h3>Chi tiết đáp án:</h3>";
+            
+            for (let i = 1; i <= 10; i++) {
+                const questionName = 'q' + i;
+                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+                const questionDiv = document.querySelector(`input[name="${questionName}"]`).closest('.question');
+                
+                questionDiv.style.borderColor = '#e0e0e0';
+                questionDiv.style.background = '#f8f9fa';
+                
+                if (selectedOption) {
+                    const isCorrect = selectedOption.value === correctAnswers[questionName];
+                    
+                    if (isCorrect) {
+                        score++;
+                        questionDiv.style.borderColor = '#2ecc71';
+                        questionDiv.style.background = '#d5f4e6';
+                        answerDetailsHTML += `<div class="answer-item"><strong>Câu ${i}:</strong> ✅ Đúng. Đáp án của bạn: ${selectedOption.value}. ${explanations[questionName]}</div>`;
+                    } else {
+                        questionDiv.style.borderColor = '#e74c3c';
+                        questionDiv.style.background = '#fadbd8';
+                        answerDetailsHTML += `<div class="answer-item"><strong>Câu ${i}:</strong> ❌ Sai. Đáp án của bạn: ${selectedOption.value}. Đáp án đúng: ${correctAnswers[questionName]}. ${explanations[questionName]}</div>`;
+                    }
+                } else {
+                    questionDiv.style.borderColor = '#f39c12';
+                    questionDiv.style.background = '#fef9e7';
+                    answerDetailsHTML += `<div class="answer-item"><strong>Câu ${i}:</strong> ⚠ Chưa trả lời. Đáp án đúng: ${correctAnswers[questionName]}. ${explanations[questionName]}</div>`;
+                }
+            }
+            
+            document.getElementById('score').textContent = score;
+            document.getElementById('answerDetails').innerHTML = answerDetailsHTML;
+            
+            let feedback = "";
+            if (score >= 9) {
+                feedback = "Xuất sắc! Bạn hiểu rõ nguyên lý chồng chất điện trường.";
+            } else if (score >= 7) {
+                feedback = "Tốt! Bạn nắm vững cách tổng hợp điện trường.";
+            } else if (score >= 5) {
+                feedback = "Khá! Cần luyện tập thêm bài toán tổng hợp vectơ.";
+            } else {
+                feedback = "Cần ôn lại nguyên lý chồng chất và cách tổng hợp vectơ.";
+            }
+            
+            document.getElementById('feedback').textContent = feedback;
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
+
+
+## **Đề 4: Ứng dụng và hiện tượng thực tế**
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề 4: Ứng dụng và hiện tượng thực tế</title>
+    <style>
+        body { font-family: 'Verdana', sans-serif; margin: 0; padding: 20px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); min-height: 100vh; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px solid #2ecc71; }
+        .header h1 { color: #2c3e50; margin-bottom: 10px; font-size: 28px; }
+        .header h2 { color: #2ecc71; font-size: 20px; font-weight: normal; }
+        .question { margin: 25px 0; padding: 20px; border: 2px solid #e0e0e0; border-radius: 10px; background: #f8f9fa; transition: all 0.3s; }
+        .question:hover { border-color: #2ecc71; background: #f0fff4; }
+        .question-number { display: inline-block; background: #2ecc71; color: white; width: 30px; height: 30px; text-align: center; line-height: 30px; border-radius: 50%; margin-right: 10px; font-weight: bold; }
+        .question-text { display: inline; font-weight: bold; color: #2c3e50; }
+        .options { margin: 15px 0 0 40px; }
+        .option { margin: 10px 0; padding: 10px 15px; background: white; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; transition: all 0.2s; }
+        .option:hover { background: #e8f8ef; border-color: #2ecc71; }
+        .option input { margin-right: 10px; }
+        button { background: linear-gradient(to right, #2ecc71, #1abc9c); color: white; border: none; padding: 15px 40px; border-radius: 50px; cursor: pointer; font-size: 18px; font-weight: bold; display: block; margin: 40px auto; transition: all 0.3s; box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4); }
+        button:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(46, 204, 113, 0.6); }
+        #result { display: none; margin-top: 40px; padding: 25px; border-radius: 10px; background: linear-gradient(to right, #2ecc71, #27ae60); color: white; }
+        .score { font-size: 28px; font-weight: bold; text-align: center; margin-bottom: 20px; }
+        .feedback { font-size: 20px; text-align: center; margin-bottom: 25px; }
+        .answer-details { background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; }
+        .answer-item { margin: 10px 0; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ĐỀ KIỂM TRA SỐ 4</h1>
+            <h2>ỨNG DỤNG VÀ HIỆN TƯỢNG THỰC TẾ</h2>
+            <p>Thời gian: 15 phút | Số câu: 10</p>
+        </div>
+        
+        <form id="quizForm">
+            <div class="question">
+                <div class="question-number">1</div>
+                <div class="question-text">Điện trường của Trái Đất có đặc điểm:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q1" value="A"> A. Phương thẳng đứng, hướng từ dưới lên</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="B"> B. Phương thẳng đứng, hướng từ trên xuống</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="C"> C. Phương nằm ngang, hướng từ Bắc đến Nam</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="D"> D. Phương nằm ngang, hướng từ Đông sang Tây</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">2</div>
+                <div class="question-text">Hạt bụi mịn PM2.5 thường lơ lửng trong không khí vì:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q2" value="A"> A. Chúng tích điện dương và bị điện trường Trái Đất giữ lại</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="B"> B. Chúng quá nhẹ nên không bị trọng lực kéo xuống</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="C"> C. Chúng tích điện âm và đẩy nhau</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="D"> D. Chúng bị lực đẩy Archimedes nâng lên</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">3</div>
+                <div class="question-text">Trong thí nghiệm về điện trường, người ta thường dùng quả cầu tích điện vì:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q3" value="A"> A. Điện trường bên ngoài quả cầu tương đương với điện trường của điện tích điểm</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="B"> B. Quả cầu dễ tích điện hơn các vật khác</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="C"> C. Quả cầu có điện trường mạnh hơn</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="D"> D. Quả cầu không bị nhiễm điện do cảm ứng</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">4</div>
+                <div class="question-text">Cường độ điện trường của Trái Đất tại mặt đất vào khoảng:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q4" value="A"> A. 10-50 V/m</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="B"> B. 100-200 V/m</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="C"> C. 500-1000 V/m</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="D"> D. 1000-5000 V/m</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">5</div>
+                <div class="question-text">Khi các đám mây tích điện trái dấu đến gần nhau, có thể xảy ra hiện tượng:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q5" value="A"> A. Sét</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="B"> B. Mưa đá</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="C"> C. Cầu vồng</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="D"> D. Gió xoáy</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">6</div>
+                <div class="question-text">Một hạt bụi có điện tích 3.2×10⁻¹⁹ C lơ lửng trong điện trường Trái Đất 150 V/m. Lực điện tác dụng lên hạt bụi cân bằng với trọng lực. Khối lượng hạt bụi khoảng:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q6" value="A"> A. 4.9×10⁻¹⁸ kg</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="B"> B. 4.9×10⁻¹⁵ kg</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="C"> C. 4.9×10⁻¹² kg</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="D"> D. 4.9×10⁻⁹ kg</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">7</div>
+                <div class="question-text">Trong y học, điện trường được ứng dụng để:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q7" value="A"> A. Chụp X-quang</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="B"> B. Điều trị bằng sóng radio</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="C"> C. Điện tâm đồ (ECG)</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="D"> D. Tất cả đều đúng</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">8</div>
+                <div class="question-text">Các hạt bụi mịn PM2.5 có đường kính tối đa:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q8" value="A"> A. 1.0 μm</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="B"> B. 2.5 μm</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="C"> C. 5.0 μm</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="D"> D. 10 μm</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">9</div>
+                <div class="question-text">Trong công nghiệp, điện trường được dùng để:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q9" value="A"> A. Lọc bụi bằng điện</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="B"> B. Sơn tĩnh điện</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="C"> C. In phun</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="D"> D. Tất cả đều đúng</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">10</div>
+                <div class="question-text">Khi một vật dẫn điện được tích điện, điện tích phân bố chủ yếu ở:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q10" value="A"> A. Bề mặt vật dẫn</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="B"> B. Bên trong vật dẫn</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="C"> C. Đều cả bề mặt và bên trong</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="D"> D. Các cạnh và góc nhọn</label></div>
+                </div>
+            </div>
+            
+            <button type="button" onclick="submitQuiz()">NỘP BÀI LÀM</button>
+        </form>
+        
+        <div id="result">
+            <div class="score">Điểm số: <span id="score">0</span>/10</div>
+            <div class="feedback" id="feedback"></div>
+            <div class="answer-details" id="answerDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'B', q2: 'A', q3: 'A', q4: 'B', q5: 'A',
+            q6: 'B', q7: 'D', q8: 'B', q9: 'D', q10: 'A'
+        };
+        
+        const explanations = {
+            q1: "Điện trường Trái Đất có phương thẳng đứng, hướng từ trên xuống dưới.",
+            q2: "Hạt bụi PM2.5 tích điện dương bị điện trường Trái Đất hướng xuống giữ lại, không bay lên cao được.",
+            q3: "Điện trường bên ngoài quả cầu tích điện đều tương đương với điện trường của điện tích điểm đặt tại tâm, thuận tiện cho tính toán.",
+            q4: "Cường độ điện trường Trái Đất tại mặt đất khoảng 100-200 V/m.",
+            q5: "Sét là hiện tượng phóng điện giữa các đám mây tích điện trái dấu hoặc giữa mây và đất.",
+            q6: "F = qE = mg ⇒ m = qE/g = (3.2×10⁻¹⁹ × 150)/9.8 ≈ 4.9×10⁻¹⁸ kg.",
+            q7: "Điện trường có nhiều ứng dụng trong y học: chụp X-quang (dùng điện trường để tia X), điều trị sóng radio, điện tâm đồ (ghi lại điện trường tim).",
+            q8: "PM2.5 là hạt bụi có đường kính ≤ 2.5 μm.",
+            q9: "Điện trường có nhiều ứng dụng trong công nghiệp: lọc bụi tĩnh điện, sơn tĩnh điện, in phun (điều khiển giọt mực).",
+            q10: "Khi vật dẫn tích điện, điện tích chỉ phân bố trên bề mặt vật dẫn."
+        };
+        
+        function submitQuiz() {
+            let score = 0;
+            let answerDetailsHTML = "<h3>Chi tiết đáp án:</h3>";
+            
+            for (let i = 1; i <= 10; i++) {
+                const questionName = 'q' + i;
+                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+                const questionDiv = document.querySelector(`input[name="${questionName}"]`).closest('.question');
+                
+                questionDiv.style.borderColor = '#e0e0e0';
+                questionDiv.style.background = '#f8f9fa';
+                
+                if (selectedOption) {
+                    const isCorrect = selectedOption.value === correctAnswers[questionName];
+                    
+                    if (isCorrect) {
+                        score++;
+                        questionDiv.style.borderColor = '#2ecc71';
+                        questionDiv.style.background = '#d5f4e6';
+                        answerDetailsHTML += `<div class="answer-item"><strong>Câu ${i}:</strong> ✅ Đúng. Đáp án của bạn: ${selectedOption.value}. ${explanations[questionName]}</div>`;
+                    } else {
+                        questionDiv.style.borderColor = '#e74c3c';
+                        questionDiv.style.background = '#fadbd8';
+                        answerDetailsHTML += `<div class="answer-item"><strong>Câu ${i}:</strong> ❌ Sai. Đáp án của bạn: ${selectedOption.value}. Đáp án đúng: ${correctAnswers[questionName]}. ${explanations[questionName]}</div>`;
+                    }
+                } else {
+                    questionDiv.style.borderColor = '#f39c12';
+                    questionDiv.style.background = '#fef9e7';
+                    answerDetailsHTML += `<div class="answer-item"><strong>Câu ${i}:</strong> ⚠ Chưa trả lời. Đáp án đúng: ${correctAnswers[questionName]}. ${explanations[questionName]}</div>`;
+                }
+            }
+            
+            document.getElementById('score').textContent = score;
+            document.getElementById('answerDetails').innerHTML = answerDetailsHTML;
+            
+            let feedback = "";
+            if (score >= 9) {
+                feedback = "Xuất sắc! Bạn hiểu rõ ứng dụng thực tế của điện trường.";
+            } else if (score >= 7) {
+                feedback = "Tốt! Bạn có kiến thức tốt về ứng dụng điện trường.";
+            } else if (score >= 5) {
+                feedback = "Khá! Cần tìm hiểu thêm về ứng dụng thực tế.";
+            } else {
+                feedback = "Cần quan tâm hơn đến ứng dụng của điện trường trong đời sống.";
+            }
+            
+            document.getElementById('feedback').textContent = feedback;
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
+
+
+## **Đề 5: Tổng hợp kiến thức nâng cao**
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề 5: Tổng hợp kiến thức nâng cao</title>
+    <style>
+        body { font-family: 'Georgia', serif; margin: 0; padding: 20px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); min-height: 100vh; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px solid #9b59b6; }
+        .header h1 { color: #2c3e50; margin-bottom: 10px; font-size: 28px; }
+        .header h2 { color: #9b59b6; font-size: 20px; font-weight: normal; }
+        .question { margin: 25px 0; padding: 20px; border: 2px solid #e0e0e0; border-radius: 10px; background: #f8f9fa; transition: all 0.3s; }
+        .question:hover { border-color: #9b59b6; background: #f9f0ff; }
+        .question-number { display: inline-block; background: #9b59b6; color: white; width: 30px; height: 30px; text-align: center; line-height: 30px; border-radius: 50%; margin-right: 10px; font-weight: bold; }
+        .question-text { display: inline; font-weight: bold; color: #2c3e50; }
+        .options { margin: 15px 0 0 40px; }
+        .option { margin: 10px 0; padding: 10px 15px; background: white; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; transition: all 0.2s; }
+        .option:hover { background: #f3e6f8; border-color: #9b59b6; }
+        .option input { margin-right: 10px; }
+        button { background: linear-gradient(to right, #9b59b6, #8e44ad); color: white; border: none; padding: 15px 40px; border-radius: 50px; cursor: pointer; font-size: 18px; font-weight: bold; display: block; margin: 40px auto; transition: all 0.3s; box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4); }
+        button:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(155, 89, 182, 0.6); }
+        #result { display: none; margin-top: 40px; padding: 25px; border-radius: 10px; background: linear-gradient(to right, #9b59b6, #8e44ad); color: white; }
+        .score { font-size: 28px; font-weight: bold; text-align: center; margin-bottom: 20px; }
+        .feedback { font-size: 20px; text-align: center; margin-bottom: 25px; }
+        .answer-details { background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; }
+        .answer-item { margin: 10px 0; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ĐỀ KIỂM TRA SỐ 5</h1>
+            <h2>TỔNG HỢP KIẾN THỨC NÂNG CAO</h2>
+            <p>Thời gian: 20 phút | Số câu: 10</p>
+        </div>
+        
+        <form id="quizForm">
+            <div class="question">
+                <div class="question-number">1</div>
+                <div class="question-text">Cho hai điện tích Q₁ = 6×10⁻⁸ C và Q₂ = -2×10⁻⁸ C đặt tại A và B cách nhau 3 cm. Điểm M có cường độ điện trường bằng 0 nằm:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q1" value="A"> A. Trong đoạn AB, cách A 1.5 cm</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="B"> B. Trong đoạn AB, cách A 2 cm</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="C"> C. Ngoài đoạn AB, về phía A, cách A 3 cm</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="D"> D. Ngoài đoạn AB, về phía B, cách B 3 cm</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">2</div>
+                <div class="question-text">Một electron chuyển động trong điện trường đều từ bản âm sang bản dương. Vận tốc của electron sẽ:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q2" value="A"> A. Tăng dần</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="B"> B. Giảm dần</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="C"> C. Không đổi</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="D"> D. Tăng rồi giảm</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">3</div>
+                <div class="question-text">Một điện tích điểm Q = 5×10⁻⁹ C đặt tại O. Công của lực điện khi dịch chuyển điện tích q = -10⁻¹⁰ C từ điểm M cách O 10 cm đến điểm N cách O 20 cm là:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q3" value="A"> A. -2.25×10⁻⁸ J</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="B"> B. 2.25×10⁻⁸ J</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="C"> C. -4.5×10⁻⁸ J</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="D"> D. 4.5×10⁻⁸ J</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">4</div>
+                <div class="question-text">Tại bốn đỉnh của hình vuông cạnh a, đặt bốn điện tích dương bằng nhau q. Cường độ điện trường tại tâm hình vuông có độ lớn:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q4" value="A"> A. 0</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="B"> B. 4kq/a²</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="C"> C. 2√2kq/a²</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="D"> D. 4√2kq/a²</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">5</div>
+                <div class="question-text">Một hạt bụi khối lượng 10⁻¹⁰ kg mang điện tích 10⁻¹² C được treo trong điện trường đều có vectơ cường độ điện trường nằm ngang. Khi dây treo hợp với phương thẳng đứng góc 45°, cường độ điện trường có độ lớn:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q5" value="A"> A. 1000 V/m</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="B"> B. 100 V/m</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="C"> C. 10 V/m</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="D"> D. 1 V/m</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">6</div>
+                <div class="question-text">Một tụ điện phẳng có hai bản song song cách nhau 2 cm, hiệu điện thế giữa hai bản là 200 V. Cường độ điện trường trong khoảng giữa hai bản là:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q6" value="A"> A. 100 V/m</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="B"> B. 1000 V/m</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="C"> C. 10000 V/m</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="D"> D. 400 V/m</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">7</div>
+                <div class="question-text">Đường sức điện của điện trường tĩnh có đặc điểm:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q7" value="A"> A. Là đường cong khép kín</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="B"> B. Xuất phát từ điện tích âm, kết thúc ở điện tích dương</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="C"> C. Không cắt nhau</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="D"> D. Cả B và C đều đúng</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">8</div>
+                <div class="question-text">Một điện tích điểm Q gây ra tại điểm A cách nó 5 cm một điện trường có cường độ 1800 V/m. Tại điểm B cách Q 15 cm, cường độ điện trường là:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q8" value="A"> A. 200 V/m</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="B"> B. 600 V/m</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="C"> C. 5400 V/m</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="D"> D. 16200 V/m</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">9</div>
+                <div class="question-text">Hai điện tích điểm q₁ = 4q và q₂ = q đặt tại A và B. Điểm M trên đường thẳng AB, ngoài đoạn AB, gần B hơn có điện trường bằng 0. Tỉ số AM/AB là:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q9" value="A"> A. 2</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="B"> B. 3</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="C"> C. 4</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="D"> D. 5</label></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">10</div>
+                <div class="question-text">Một hạt α (q = +3.2×10⁻¹⁹ C, m = 6.64×10⁻²⁷ kg) được gia tốc trong điện trường đều 10⁶ V/m từ trạng thái nghỉ. Quãng đường nó đi được sau 10⁻⁸ s là:</div>
+                <div class="options">
+                    <div class="option"><label><input type="radio" name="q10" value="A"> A. 2.4 mm</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="B"> B. 4.8 mm</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="C"> C. 9.6 mm</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="D"> D. 19.2 mm</label></div>
+                </div>
+            </div>
+            
+            <button type="button" onclick="submitQuiz()">NỘP BÀI LÀM</button>
+        </form>
+        
+        <div id="result">
+            <div class="score">Điểm số: <span id="score">0</span>/10</div>
+            <div class="feedback" id="feedback"></div>
+            <div class="answer-details" id="answerDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'C', q2: 'A', q3: 'B', q4: 'A', q5: 'A',
+            q6: 'C', q7: 'D', q8: 'A', q9: 'A', q10: 'A'
+        };
+        
+        const explanations = {
+            q1: "Đặt AM = x. E₁ = E₂ ⇒ 6×10⁻⁸/x² = 2×10⁻⁸/(x-0.03)² ⇒ x = 0.09 m = 9 cm (ngoài AB về phía A).",
+            q2: "Electron tích âm chuyển động từ bản âm sang bản dương ngược chiều điện trường, nên lực điện cùng chiều chuyển động → vận tốc tăng.",
+            q3: "A = q(V_M - V_N) = q(kQ/0.1 - kQ/0.2) = -10⁻¹⁰ × (9×10⁹×5×10⁻⁹)×(10 - 5) = 2.25×10⁻⁸ J.",
+            q4: "Do tính đối xứng, bốn vectơ điện trường tại tâm có tổng bằng 0.",
+            q5: "tan45° = Fđ/P = qE/mg ⇒ E = mg/q = (10⁻¹⁰×9.8)/10⁻¹² ≈ 1000 V/m.",
+            q6: "E = U/d = 200/0.02 = 10000 V/m.",
+            q7: "Đường sức điện trường tĩnh: không khép kín, xuất phát từ điện tích dương kết thúc ở điện tích âm, không cắt nhau.",
+            q8: "E tỉ lệ nghịch với r². r tăng 3 lần → E giảm 9 lần: 1800/9 = 200 V/m.",
+            q9: "Đặt MB = x, AB = a. E₁ = E₂ ⇒ 4q/(a+x)² = q/x² ⇒ 2/(a+x) = 1/x ⇒ x = a ⇒ AM = 2a ⇒ AM/AB = 2.",
+            q10: "a = F/m = qE/m = (3.2×10⁻¹⁹×10⁶)/(6.64×10⁻²⁷) = 4.82×10¹³ m/s². s = ½at² = ½×4.82×10¹³×(10⁻⁸)² = 2.41×10⁻³ m = 2.4 mm."
+        };
+        
+        function submitQuiz() {
+            let score = 0;
+            let answerDetailsHTML = "<h3>Chi tiết đáp án:</h3>";
+            
+            for (let i = 1; i <= 10; i++) {
+                const questionName = 'q' + i;
+                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+                const questionDiv = document.querySelector(`input[name="${questionName}"]`).closest('.question');
+                
+                questionDiv.style.borderColor = '#e0e0e0';
+                questionDiv.style.background = '#f8f9fa';
+                
+                if (selectedOption) {
+                    const isCorrect = selectedOption.value === correctAnswers[questionName];
+                    
+                    if (isCorrect) {
+                        score++;
+                        questionDiv.style.borderColor = '#2ecc71';
+                        questionDiv.style.background = '#d5f4e6';
+                        answerDetailsHTML += `<div class="answer-item"><strong>Câu ${i}:</strong> ✅ Đúng. Đáp án của bạn: ${selectedOption.value}. ${explanations[questionName]}</div>`;
+                    } else {
+                        questionDiv.style.borderColor = '#e74c3c';
+                        questionDiv.style.background = '#fadbd8';
+                        answerDetailsHTML += `<div class="answer-item"><strong>Câu ${i}:</strong> ❌ Sai. Đáp án của bạn: ${selectedOption.value}. Đáp án đúng: ${correctAnswers[questionName]}. ${explanations[questionName]}</div>`;
+                    }
+                } else {
+                    questionDiv.style.borderColor = '#f39c12';
+                    questionDiv.style.background = '#fef9e7';
+                    answerDetailsHTML += `<div class="answer-item"><strong>Câu ${i}:</strong> ⚠ Chưa trả lời. Đáp án đúng: ${correctAnswers[questionName]}. ${explanations[questionName]}</div>`;
+                }
+            }
+            
+            document.getElementById('score').textContent = score;
+            document.getElementById('answerDetails').innerHTML = answerDetailsHTML;
+            
+            let feedback = "";
+            if (score >= 9) {
+                feedback = "Xuất sắc! Bạn thực sự xuất sắc về điện trường!";
+            } else if (score >= 7) {
+                feedback = "Rất tốt! Bạn có kiến thức nâng cao vững vàng.";
+            } else if (score >= 5) {
+                feedback = "Khá! Đây là đề khó, bạn đã làm khá tốt.";
+            } else {
+                feedback = "Cần ôn tập thêm các dạng bài nâng cao về điện trường.";
+            }
+            
+            document.getElementById('feedback').textContent = feedback;
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

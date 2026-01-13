@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng dẫn giải bài tập Điện trường</title>
+    <!-- Thêm MathJax để hiển thị công thức toán -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 25px;
+        }
+        
+        .problem-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #fafafa;
+            border-left: 5px solid #4a6491;
+        }
+        
+        .problem-title {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .problem-number {
+            background-color: #4a6491;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        
+        .problem-statement {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .solution {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .solution-step {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        .solution-step:last-child {
+            border-bottom: none;
+        }
+        
+        .formula {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #e0e0e0;
+            text-align: center;
+            overflow-x: auto;
+            font-size: 1.1rem;
+        }
+        
+        .note {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .highlight {
+            background-color: #e8f4fd;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .answer {
+            background-color: #f0f8f0;
+            border-left: 4px solid #2ecc71;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .formula-label {
+            text-align: right;
+            font-style: italic;
+            color: #666;
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .constant-box {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 10px;
+            }
+            
+            header {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .content {
+                padding: 20px 15px;
+            }
+            
+            .formula {
+                font-size: 1rem;
+                padding: 10px;
+            }
+        }
+        
+        /* Tùy chỉnh MathJax */
+        .MathJax {
+            font-size: 1.1em !important;
+        }
+        
+        mjx-container[jax="CHTML"] {
+            text-align: center !important;
+        }
+        
+        mjx-container[jax="CHTML"][display="true"] {
+            margin: 1em 0 !important;
+        }
+        
+        hr {
+            margin: 25px 0;
+            border: none;
+            border-top: 2px dashed #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>HƯỚNG DẪN GIẢI BÀI TẬP ĐIỆN TRƯỜNG</h1>
+            <p class="subtitle">Bài 17: Khái niệm điện trường - Hướng dẫn chi tiết</p>
+        </header>
+        
+        <div class="content">
+            <!-- Bài 1 -->
+            <div class="problem-section">
+                <div class="problem-title">
+                    <div class="problem-number">1</div>
+                    <div>Bài 1: Chứng minh công thức cường độ điện trường</div>
+                </div>
+                
+                <div class="problem-statement">
+                    <p><strong>Đề bài:</strong> Hãy chứng tỏ rằng: Độ lớn cường độ điện trường tại một điểm trong công thức (17.1) bằng độ lớn của lực điện tác dụng lên một đơn vị điện tích đặt tại điểm đó.</p>
+                </div>
+                
+                <div class="solution">
+                    <h3>Hướng dẫn giải:</h3>
+                    
+                    <div class="solution-step">
+                        <p><strong>Bước 1:</strong> Nhắc lại công thức (17.1)</p>
+                        <div class="formula">
+                            <p>\[E = \frac{F}{q}\]</p>
+                            <p class="formula-label">(17.1)</p>
+                        </div>
+                        <p>Trong đó: E là cường độ điện trường, F là lực điện tác dụng lên điện tích q.</p>
+                    </div>
+                    
+                    <div class="solution-step">
+                        <p><strong>Bước 2:</strong> Xét trường hợp điện tích thử có độ lớn 1 Coulomb (1C)</p>
+                        <p>Nếu ta đặt tại điểm đang xét một điện tích thử có độ lớn đúng bằng 1C, tức là \(q = 1 \text{ C}\), thì từ công thức (17.1) ta có:</p>
+                        <div class="formula">
+                            <p>\[E = \frac{F}{1} = F\]</p>
+                        </div>
+                        <p>Điều này có nghĩa là: <strong>cường độ điện trường E tại điểm đó chính bằng độ lớn của lực điện F tác dụng lên điện tích 1C đặt tại điểm đó</strong>.</p>
+                    </div>
+                    
+                    <div class="solution-step">
+                        <p><strong>Bước 3:</strong> Kết luận</p>
+                        <p>Từ phân tích trên, ta đã chứng minh được rằng độ lớn cường độ điện trường tại một điểm trong công thức (17.1) bằng độ lớn của lực điện tác dụng lên một đơn vị điện tích (1C) đặt tại điểm đó.</p>
+                    </div>
+                    
+                    <div class="answer">
+                        <p><strong>Kết luận:</strong> Đã chứng minh xong.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <hr>
+            
+            <!-- Bài 2 -->
+            <div class="problem-section">
+                <div class="problem-title">
+                    <div class="problem-number">2</div>
+                    <div>Bài 2: Cường độ điện trường do điện tích điểm</div>
+                </div>
+                
+                <div class="problem-statement">
+                    <p><strong>Đề bài:</strong> Một điện tích điểm \( Q = 6 \times 10^{-13} \, \text{C} \) đặt trong chân không.</p>
+                    <p>a) Xác định phương, chiều, độ lớn của cường độ điện trường do điện tích điểm Q gây ra tại một điểm cách nó một khoảng 1 cm, 2 cm, 3 cm.</p>
+                    <p>b) Nhận xét về cường độ điện trường ở những điểm gần điện tích Q và ở những điểm cách xa điện tích Q.</p>
+                </div>
+                
+                <div class="solution">
+                    <h3>Hướng dẫn giải:</h3>
+                    
+                    <div class="solution-step">
+                        <p><strong>Bước 1:</strong> Công thức tính cường độ điện trường do điện tích điểm</p>
+                        <div class="formula">
+                            <p>\[E = \frac{k|Q|}{r^2}\]</p>
+                            <p>với \(k = 9 \times 10^9 \, \text{N·m}^2/\text{C}^2\)</p>
+                        </div>
+                        <div class="constant-box">
+                            <p>Hằng số: \(k = 9 \times 10^9 \, \text{N·m}^2/\text{C}^2\)</p>
+                            <p>Điện tích: \(Q = 6 \times 10^{-13} \, \text{C}\)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="solution-step">
+                        <p><strong>Bước 2:</strong> Tính độ lớn cường độ điện trường tại các vị trí</p>
+                        
+                        <p><strong>a) Tại điểm cách Q khoảng \(r_1 = 1 \text{ cm} = 0.01 \text{ m}\):</strong></p>
+                        <div class="formula">
+                            <p>\[E_1 = \frac{(9 \times 10^9) \times (6 \times 10^{-13})}{(0.01)^2}\]</p>
+                            <p>\[E_1 = \frac{5.4 \times 10^{-3}}{10^{-4}} = 5.4 \times 10^{1} = 54 \, \text{V/m}\]</p>
+                        </div>
+                        
+                        <p><strong>b) Tại điểm cách Q khoảng \(r_2 = 2 \text{ cm} = 0.02 \text{ m}\):</strong></p>
+                        <div class="formula">
+                            <p>\[E_2 = \frac{(9 \times 10^9) \times (6 \times 10^{-13})}{(0.02)^2}\]</p>
+                            <p>\[E_2 = \frac{5.4 \times 10^{-3}}{4 \times 10^{-4}} = \frac{5.4 \times 10^{-3}}{0.0004} = 13.5 \, \text{V/m}\]</p>
+                        </div>
+                        
+                        <p><strong>c) Tại điểm cách Q khoảng \(r_3 = 3 \text{ cm} = 0.03 \text{ m}\):</strong></p>
+                        <div class="formula">
+                            <p>\[E_3 = \frac{(9 \times 10^9) \times (6 \times 10^{-13})}{(0.03)^2}\]</p>
+                            <p>\[E_3 = \frac{5.4 \times 10^{-3}}{9 \times 10^{-4}} = 6 \, \text{V/m}\]</p>
+                        </div>
+                    </div>
+                    
+                    <div class="solution-step">
+                        <p><strong>Bước 3:</strong> Xác định phương và chiều của vectơ cường độ điện trường</p>
+                        <ul>
+                            <li><strong>Phương:</strong> Đường thẳng nối điện tích Q với điểm đang xét</li>
+                            <li><strong>Chiều:</strong> Vì Q > 0 (điện tích dương) nên vectơ \(\vec{E}\) hướng ra xa điện tích Q</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="solution-step">
+                        <p><strong>Bước 4:</strong> Nhận xét (phần b)</p>
+                        <p>Từ kết quả tính toán, ta thấy:</p>
+                        <ul>
+                            <li>Tại điểm gần điện tích Q (r = 1 cm): \(E_1 = 54 \, \text{V/m}\)</li>
+                            <li>Tại điểm xa hơn (r = 2 cm): \(E_2 = 13.5 \, \text{V/m}\)</li>
+                            <li>Tại điểm xa nhất (r = 3 cm): \(E_3 = 6 \, \text{V/m}\)</li>
+                        </ul>
+                        <p><strong>Nhận xét:</strong> Cường độ điện trường giảm dần khi khoảng cách tăng lên. Cụ thể, khi khoảng cách tăng gấp đôi (từ 1 cm lên 2 cm), cường độ điện trường giảm đi 4 lần (từ 54 V/m xuống 13.5 V/m). Điều này phù hợp với công thức \(E \propto \frac{1}{r^2}\).</p>
+                    </div>
+                    
+                    <div class="answer">
+                        <p><strong>Đáp án:</strong></p>
+                        <p>a) 
+                            <ul>
+                                <li>Tại r = 1 cm: \(E_1 = 54 \, \text{V/m}\), phương hướng theo bán kính, chiều ra xa Q</li>
+                                <li>Tại r = 2 cm: \(E_2 = 13.5 \, \text{V/m}\), phương hướng theo bán kính, chiều ra xa Q</li>
+                                <li>Tại r = 3 cm: \(E_3 = 6 \, \text{V/m}\), phương hướng theo bán kính, chiều ra xa Q</li>
+                            </ul>
+                        </p>
+                        <p>b) Cường độ điện trường giảm nhanh theo khoảng cách, tỉ lệ nghịch với bình phương khoảng cách (\(E \propto 1/r^2\)).</p>
+                    </div>
+                </div>
+            </div>
+            
+            <hr>
+            
+            <!-- Bài 3 -->
+            <div class="problem-section">
+                <div class="problem-title">
+                    <div class="problem-number">3</div>
+                    <div>Bài 3: Điểm có cường độ điện trường bằng 0</div>
+                </div>
+                
+                <div class="problem-statement">
+                    <p><strong>Đề bài:</strong> Đặt điện tích điểm \( Q_1 = 6 \times 10^{-8} \, \text{C} \) tại điểm A và điện tích điểm \( Q_2 = -2 \times 10^{-8} \, \text{C} \) tại điểm B cách A một khoảng bằng 3 cm. Hãy xác định những điểm mà cường độ điện trường tại đó bằng 0.</p>
+                </div>
+                
+                <div class="solution">
+                    <h3>Hướng dẫn giải:</h3>
+                    
+                    <div class="solution-step">
+                        <p><strong>Bước 1:</strong> Phân tích bài toán</p>
+                        <p>Ta có: 
+                            <ul>
+                                <li>\(Q_1 = 6 \times 10^{-8} \, \text{C}\) (điện tích dương) đặt tại A</li>
+                                <li>\(Q_2 = -2 \times 10^{-8} \, \text{C}\) (điện tích âm) đặt tại B</li>
+                                <li>AB = 3 cm = 0.03 m</li>
+                            </ul>
+                        </p>
+                        <p>Điểm M có cường độ điện trường bằng 0 khi: \(\vec{E}_1 + \vec{E}_2 = 0\) hay \(\vec{E}_1 = -\vec{E}_2\)</p>
+                        <p>Điều này có nghĩa là hai vectơ \(\vec{E}_1\) và \(\vec{E}_2\) phải cùng phương, ngược chiều và có độ lớn bằng nhau.</p>
+                    </div>
+                    
+                    <div class="solution-step">
+                        <p><strong>Bước 2:</strong> Xác định vùng có thể có điểm M</p>
+                        <p>Vì \(Q_1\) và \(Q_2\) trái dấu nên:
+                            <ul>
+                                <li>\(\vec{E}_1\) do \(Q_1\) gây ra hướng ra xa \(Q_1\) (vì \(Q_1 > 0\))</li>
+                                <li>\(\vec{E}_2\) do \(Q_2\) gây ra hướng về phía \(Q_2\) (vì \(Q_2 < 0\))</li>
+                            </ul>
+                        </p>
+                        <p>Để \(\vec{E}_1\) và \(\vec{E}_2\) ngược chiều, điểm M phải nằm trên đường thẳng AB, ở bên ngoài đoạn AB, về phía điện tích có độ lớn nhỏ hơn (vì cần \(E_1 = E_2\) về độ lớn).</p>
+                        <p>Vì \(|Q_1| > |Q_2|\), nên điểm M phải nằm ngoài đoạn AB, về phía B (điện tích có độ lớn nhỏ hơn).</p>
+                    </div>
+                    
+                    <div class="solution-step">
+                        <p><strong>Bước 3:</strong> Thiết lập phương trình</p>
+                        <p>Giả sử điểm M nằm trên đường thẳng AB, cách A một khoảng x (với x > AB = 0.03 m, vì M nằm ngoài đoạn AB về phía B).</p>
+                        <p>Khoảng cách từ M đến B là: \(x - AB = x - 0.03\)</p>
+                        <p>Điều kiện độ lớn: \(E_1 = E_2\)</p>
+                        <div class="formula">
+                            <p>\[\frac{k|Q_1|}{x^2} = \frac{k|Q_2|}{(x - 0.03)^2}\]</p>
+                        </div>
+                        <p>Rút gọn k và thay số:</p>
+                        <div class="formula">
+                            <p>\[\frac{6 \times 10^{-8}}{x^2} = \frac{2 \times 10^{-8}}{(x - 0.03)^2}\]</p>
+                            <p>\[\frac{6}{x^2} = \frac{2}{(x - 0.03)^2}\]</p>
+                            <p>\[\frac{3}{x^2} = \frac{1}{(x - 0.03)^2}\]</p>
+                            <p>\[\sqrt{3} \cdot (x - 0.03) = x\]</p>
+                            <p>\[\sqrt{3}x - 0.03\sqrt{3} = x\]</p>
+                            <p>\[(\sqrt{3} - 1)x = 0.03\sqrt{3}\]</p>
+                            <p>\[x = \frac{0.03\sqrt{3}}{\sqrt{3} - 1}\]</p>
+                        </div>
+                    </div>
+                    
+                    <div class="solution-step">
+                        <p><strong>Bước 4:</strong> Tính toán</p>
+                        <p>Với \(\sqrt{3} \approx 1.732\):</p>
+                        <div class="formula">
+                            <p>\[x = \frac{0.03 \times 1.732}{1.732 - 1} = \frac{0.05196}{0.732} \approx 0.071 \, \text{m} = 7.1 \, \text{cm}\]</p>
+                        </div>
+                        <p>Vậy điểm M cách A khoảng 7.1 cm, nằm ngoài đoạn AB về phía B.</p>
+                    </div>
+                    
+                    <div class="answer">
+                        <p><strong>Đáp án:</strong> Điểm M nằm trên đường thẳng AB, ngoài đoạn AB về phía B, cách A khoảng 7.1 cm.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <hr>
+            
+            <!-- Bài 4 -->
+            <div class="problem-section">
+                <div class="problem-title">
+                    <div class="problem-number">4</div>
+                    <div>Bài 4: Cường độ điện trường tổng hợp</div>
+                </div>
+                
+                <div class="problem-statement">
+                    <p><strong>Đề bài:</strong> Cho tam giác ABC vuông tại A có AB = 3 cm và AC = 4 cm. Tại điểm B ta đặt điện tích \( Q_1 = 4.5 \times 10^{-8} \, \text{C} \), tại điểm C ta đặt điện tích \( Q_2 = 2 \times 10^{-8} \, \text{C} \).</p>
+                    <p>a) Tính độ lớn của cường độ điện trường do mỗi điện tích trên gây ra tại A.</p>
+                    <p>b) Tính cường độ điện trường tổng cộng tại A.</p>
+                </div>
+                
+                <div class="solution">
+                    <h3>Hướng dẫn giải:</h3>
+                    
+                    <div class="solution-step">
+                        <p><strong>Bước 1:</strong> Tóm tắt dữ liệu</p>
+                        <ul>
+                            <li>Tam giác ABC vuông tại A</li>
+                            <li>AB = 3 cm = 0.03 m</li>
+                            <li>AC = 4 cm = 0.04 m</li>
+                            <li>\(Q_1 = 4.5 \times 10^{-8} \, \text{C}\) tại B</li>
+                            <li>\(Q_2 = 2 \times 10^{-8} \, \text{C}\) tại C</li>
+                        </ul>
+                        <p>Tính BC (theo định lý Pythagore):</p>
+                        <div class="formula">
+                            <p>\[BC = \sqrt{AB^2 + AC^2} = \sqrt{(0.03)^2 + (0.04)^2} = \sqrt{0.0009 + 0.0016} = \sqrt{0.0025} = 0.05 \, \text{m}\]</p>
+                        </div>
+                    </div>
+                    
+                    <div class="solution-step">
+                        <p><strong>Bước 2:</strong> Tính cường độ điện trường do từng điện tích gây ra tại A</p>
+                        
+                        <p><strong>a) Do \(Q_1\) tại B gây ra tại A:</strong></p>
+                        <p>Khoảng cách: \(r_{BA} = AB = 0.03 \, \text{m}\)</p>
+                        <div class="formula">
+                            <p>\[E_1 = \frac{k|Q_1|}{r_{BA}^2} = \frac{(9 \times 10^9) \times (4.5 \times 10^{-8})}{(0.03)^2}\]</p>
+                            <p>\[E_1 = \frac{0.405}{0.0009} = 450 \, \text{V/m}\]</p>
+                        </div>
+                        <p>Vectơ \(\vec{E}_1\) có:
+                            <ul>
+                                <li>Phương: đường thẳng BA</li>
+                                <li>Chiều: vì \(Q_1 > 0\), hướng từ B ra xa, tức là từ B đến A</li>
+                                <li>Độ lớn: \(E_1 = 450 \, \text{V/m}\)</li>
+                            </ul>
+                        </p>
+                        
+                        <p><strong>b) Do \(Q_2\) tại C gây ra tại A:</strong></p>
+                        <p>Khoảng cách: \(r_{CA} = AC = 0.04 \, \text{m}\)</p>
+                        <div class="formula">
+                            <p>\[E_2 = \frac{k|Q_2|}{r_{CA}^2} = \frac{(9 \times 10^9) \times (2 \times 10^{-8})}{(0.04)^2}\]</p>
+                            <p>\[E_2 = \frac{0.18}{0.0016} = 112.5 \, \text{V/m}\]</p>
+                        </div>
+                        <p>Vectơ \(\vec{E}_2\) có:
+                            <ul>
+                                <li>Phương: đường thẳng CA</li>
+                                <li>Chiều: vì \(Q_2 > 0\), hướng từ C ra xa, tức là từ C đến A</li>
+                                <li>Độ lớn: \(E_2 = 112.5 \, \text{V/m}\)</li>
+                            </ul>
+                        </p>
+                    </div>
+                    
+                    <div class="solution-step">
+                        <p><strong>Bước 3:</strong> Tính cường độ điện trường tổng hợp tại A</p>
+                        <p>Vì tam giác ABC vuông tại A nên \(\vec{E}_1\) và \(\vec{E}_2\) vuông góc với nhau tại A.</p>
+                        <p>Áp dụng quy tắc hình bình hành:</p>
+                        <div class="formula">
+                            <p>\[E = \sqrt{E_1^2 + E_2^2}\]</p>
+                            <p>\[E = \sqrt{(450)^2 + (112.5)^2} = \sqrt{202500 + 12656.25} = \sqrt{215156.25} \approx 463.8 \, \text{V/m}\]</p>
+                        </div>
+                        
+                        <p>Xác định góc của vectơ tổng hợp:</p>
+                        <div class="formula">
+                            <p>\[\tan \alpha = \frac{E_2}{E_1} = \frac{112.5}{450} = 0.25\]</p>
+                            <p>\[\alpha = \arctan(0.25) \approx 14^\circ\]</p>
+                        </div>
+                        <p>Vectơ \(\vec{E}\) hợp với \(\vec{E}_1\) một góc khoảng \(14^\circ\), hướng về phía giữa \(\vec{E}_1\) và \(\vec{E}_2\).</p>
+                    </div>
+                    
+                    <div class="answer">
+                        <p><strong>Đáp án:</strong></p>
+                        <p>a) 
+                            <ul>
+                                <li>Độ lớn cường độ điện trường do \(Q_1\) gây ra tại A: \(E_1 = 450 \, \text{V/m}\)</li>
+                                <li>Độ lớn cường độ điện trường do \(Q_2\) gây ra tại A: \(E_2 = 112.5 \, \text{V/m}\)</li>
+                            </ul>
+                        </p>
+                        <p>b) Cường độ điện trường tổng hợp tại A: \(E \approx 463.8 \, \text{V/m}\), có phương hợp với AB một góc khoảng \(14^\circ\).</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="note">
+                <h3>Lưu ý quan trọng:</h3>
+                <ul>
+                    <li>Khi tính toán cường độ điện trường, luôn chú ý đổi đơn vị về hệ SI (mét, Coulomb).</li>
+                    <li>Với điện tích điểm, cường độ điện trường tỉ lệ nghịch với bình phương khoảng cách.</li>
+                    <li>Khi tổng hợp vectơ cường độ điện trường, cần xét cả phương, chiều và độ lớn.</li>
+                    <li>Hằng số \(k = 9 \times 10^9 \, \text{N·m}^2/\text{C}^2\) chỉ áp dụng cho môi trường chân không hoặc không khí.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Cấu hình MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+        
+        // Thêm hiệu ứng cho các phần
+        document.addEventListener('DOMContentLoaded', function() {
+            const problemSections = document.querySelectorAll('.problem-section');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            problemSections.forEach(section => {
+                section.style.opacity = '0.8';
+                section.style.transform = 'translateY(10px)';
+                section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
