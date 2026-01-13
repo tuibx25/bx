@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Tập Vật Lý - Chiếu Trên TV</title>
+    <!-- Load MathJax để hiển thị công thức toán -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-bg: #f8f9fa;
+            --dark-text: #2c3e50;
+            --light-text: #7f8c8d;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #1a1a2e;
+            color: var(--dark-text);
+            line-height: 1.8;
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+            font-size: 1.4rem;
+        }
+        
+        .container {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 25px;
+            box-shadow: var(--shadow);
+            padding: 50px;
+            margin-top: 20px;
+            border: 5px solid var(--secondary-color);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-bottom: 30px;
+            border-bottom: 4px solid var(--secondary-color);
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+        
+        .subtitle {
+            color: var(--light-text);
+            font-size: 2rem;
+            font-weight: 400;
+            margin-top: 20px;
+        }
+        
+        .tv-badge {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .exercise-container {
+            margin-bottom: 80px;
+            background-color: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+        }
+        
+        .exercise-title {
+            color: var(--secondary-color);
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 4px dashed var(--secondary-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .exercise-title::before {
+            content: "📘";
+            margin-right: 25px;
+            font-size: 2.5rem;
+        }
+        
+        .exercise-content {
+            background-color: var(--light-bg);
+            border-left: 8px solid var(--secondary-color);
+            padding: 35px;
+            border-radius: 0 15px 15px 0;
+            margin-bottom: 40px;
+            font-size: 1.8rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .solution-container {
+            background-color: #e8f4fc;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.15);
+            margin-top: 30px;
+            border: 3px solid #b3e0ff;
+        }
+        
+        .solution-title {
+            color: var(--success-color);
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .solution-title::before {
+            content: "✅";
+            margin-right: 20px;
+            font-size: 2rem;
+        }
+        
+        .note {
+            background-color: #fffde7;
+            border-left: 8px solid var(--warning-color);
+            padding: 25px;
+            margin-top: 30px;
+            border-radius: 0 15px 15px 0;
+            font-style: italic;
+            font-size: 1.6rem;
+        }
+        
+        .formula {
+            background-color: #e8f4fc;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            font-family: "Courier New", monospace;
+            text-align: center;
+            border: 3px solid #b3e0ff;
+            font-size: 1.8rem;
+            overflow-x: auto;
+        }
+        
+        .result {
+            background-color: #e8f7ee;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            text-align: center;
+            font-weight: bold;
+            color: var(--success-color);
+            border: 3px solid #a3e9c2;
+            font-size: 2rem;
+        }
+        
+        .steps {
+            margin-left: 40px;
+            margin-top: 25px;
+        }
+        
+        .step {
+            margin-bottom: 35px;
+            padding-left: 20px;
+            border-left: 5px solid var(--secondary-color);
+            font-size: 1.7rem;
+        }
+        
+        .step strong {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 70px;
+            padding-top: 30px;
+            border-top: 3px solid #ddd;
+            color: var(--light-text);
+            font-size: 1.5rem;
+        }
+        
+        /* Điều chỉnh MathJax để công thức hiển thị to hơn */
+        .MathJax {
+            font-size: 1.8em !important;
+        }
+        
+        mjx-container {
+            font-size: 1.8em !important;
+        }
+        
+        .math-container {
+            overflow-x: auto;
+            padding: 15px 0;
+            font-size: 1.8rem;
+        }
+        
+        .highlight {
+            background-color: #fffacd;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1.8rem;
+        }
+        
+        /* Nút điều hướng (nếu cần) */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+        
+        .nav-button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 15px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .nav-button:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-5px);
+        }
+        
+        /* Hiệu ứng cho TV */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(52, 152, 219, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Điều chỉnh cho màn hình rất lớn */
+        @media (min-width: 1600px) {
+            body {
+                font-size: 1.6rem;
+                max-width: 1600px;
+            }
+            
+            h1 {
+                font-size: 4rem;
+            }
+            
+            .exercise-title {
+                font-size: 3rem;
+            }
+            
+            .exercise-content, .solution-container {
+                font-size: 2rem;
+            }
+            
+            .formula, .result {
+                font-size: 2.2rem;
+            }
+        }
+        
+        /* Đảm bảo hiển thị tốt trên mọi kích thước màn hình */
+        @media (max-width: 1200px) {
+            body {
+                font-size: 1.3rem;
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 3rem;
+            }
+            
+            .exercise-title {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>BÀI TẬP VẬT LÝ ĐIỆN TÍCH</h1>
+            <p class="subtitle">Chương: Tương tác điện tích - Định luật Coulomb</p>
+        </header>
+        
+        <div class="exercise-container">
+            <h2 class="exercise-title">BÀI 1: Vị trí đặt điện tích để lực điện cân bằng</h2>
+            
+            <div class="exercise-content">
+                <p><strong>Đề bài:</strong> Hai điện tích điểm \( q_1 = 15 \mu C, \, q_2 = -6 \mu C \) đặt cách nhau 0,2m trong không khí. Phải đặt điện tích \( q_3 \) ở đâu để lực điện tác dụng lên nó bằng 0?</p>
+            </div>
+            
+            <div class="solution-container">
+                <h3 class="solution-title">LỜI GIẢI CHI TIẾT</h3>
+                
+                <div class="steps">
+                    <div class="step">
+                        <p><strong>Bước 1:</strong> Phân tích điều kiện cân bằng lực</p>
+                        <p>Để lực điện tổng hợp tác dụng lên \(q_3\) bằng 0, \(q_3\) phải đặt trên đường thẳng nối \(q_1\) và \(q_2\).</p>
+                        <p>Vì \(q_1\) và \(q_2\) trái dấu và \(|q_1| > |q_2|\), vị trí thích hợp là ngoài đoạn nối về phía \(q_2\) (gần điện tích có độ lớn nhỏ hơn).</p>
+                    </div>
+                    
+                    <div class="step">
+                        <p><strong>Bước 2:</strong> Thiết lập phương trình</p>
+                        <p>Giả sử \(q_1\) tại điểm A, \(q_2\) tại điểm B, với AB = 0,2 m.</p>
+                        <p>Gọi AC = \(x\) (với C là vị trí đặt \(q_3\), \(x > AB\)).</p>
+                        <p>Điều kiện cân bằng lực:</p>
+                        <div class="formula">
+                            \[
+                            \frac{k|q_1q_3|}{x^2} = \frac{k|q_2q_3|}{(x - 0,2)^2}
+                            \]
+                        </div>
+                        <p>Rút gọn \(k\) và \(q_3\) (giả sử \(q_3 \neq 0\)):</p>
+                        <div class="formula">
+                            \[
+                            \frac{|q_1|}{x^2} = \frac{|q_2|}{(x - 0,2)^2}
+                            \]
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <p><strong>Bước 3:</strong> Thay số và giải phương trình</p>
+                        <div class="formula">
+                            \[
+                            \frac{15}{x^2} = \frac{6}{(x - 0,2)^2}
+                            \]
+                        </div>
+                        <p>Chuyển vế và rút gọn:</p>
+                        <div class="formula">
+                            \[
+                            \frac{(x - 0,2)^2}{x^2} = \frac{6}{15} = \frac{2}{5}
+                            \]
+                        </div>
+                        <p>Lấy căn hai vế (chú ý \(x > 0,2\)):</p>
+                        <div class="formula">
+                            \[
+                            \frac{x - 0,2}{x} = \sqrt{\frac{2}{5}} \approx 0,632
+                            \]
+                        </div>
+                        <p>Giải phương trình:</p>
+                        <div class="formula">
+                            \[
+                            1 - \frac{0,2}{x} = 0,632 \Rightarrow \frac{0,2}{x} = 0,368 \Rightarrow x \approx 0,543 \, \text{m}
+                            \]
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <p><strong>Bước 4:</strong> Kết luận</p>
+                        <div class="result">
+                            Phải đặt \(q_3\) trên đường thẳng nối \(q_1\) và \(q_2\), ngoài về phía \(q_2\), cách \(q_1\) khoảng \(0,543 \, \text{m}\).
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="note">
+                    <p><strong>Lưu ý:</strong> Ngoài vị trí trên, cũng có thể đặt \(q_3\) trong đoạn nối, gần \(q_2\) hơn. Khi đó, phương trình sẽ là \(\frac{15}{x^2} = \frac{6}{(0,2 - x)^2}\) và giải được \(x \approx 0,1226 \, \text{m}\) (cách \(q_1\) khoảng 0,1226 m).</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="exercise-container">
+            <h2 class="exercise-title">BÀI 2: Lực điện giữa electron và proton trong nguyên tử hydrogen</h2>
+            
+            <div class="exercise-content">
+                <p><strong>Đề bài:</strong> Tính lực điện giữa electron và proton trong nguyên tử hydrogen, biết khoảng cách \( 5 \times 10^{-11} \) m và điện tích mỗi hạt là \( 1,6 \times 10^{-19} \, C \).</p>
+            </div>
+            
+            <div class="solution-container">
+                <h3 class="solution-title">LỜI GIẢI CHI TIẾT</h3>
+                
+                <div class="steps">
+                    <div class="step">
+                        <p><strong>Bước 1:</strong> Xác định công thức tính lực điện</p>
+                        <p>Lực điện giữa electron và proton được tính bằng định luật Coulomb:</p>
+                        <div class="formula">
+                            \[
+                            F = k \frac{|q_1 q_2|}{r^2}
+                            \]
+                        </div>
+                        <p>Với electron và proton có cùng độ lớn điện tích \(e\):</p>
+                        <div class="formula">
+                            \[
+                            F = k \frac{e^2}{r^2}
+                            \]
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <p><strong>Bước 2:</strong> Xác định các hằng số và giá trị đã cho</p>
+                        <ul>
+                            <li>Hằng số Coulomb: \(k = 9 \times 10^9 \, \text{N.m}^2/\text{C}^2\)</li>
+                            <li>Điện tích cơ bản: \(e = 1,6 \times 10^{-19} \, \text{C}\)</li>
+                            <li>Khoảng cách: \(r = 5 \times 10^{-11} \, \text{m}\)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <p><strong>Bước 3:</strong> Thay số và tính toán</p>
+                        <div class="formula">
+                            \[
+                            F = 9 \times 10^9 \times \frac{(1,6 \times 10^{-19})^2}{(5 \times 10^{-11})^2}
+                            \]
+                        </div>
+                        <p>Tính riêng từng phần:</p>
+                        <div class="formula">
+                            \[
+                            (1,6 \times 10^{-19})^2 = 2,56 \times 10^{-38}
+                            \]
+                            \[
+                            (5 \times 10^{-11})^2 = 25 \times 10^{-22} = 2,5 \times 10^{-21}
+                            \]
+                        </div>
+                        <p>Thay vào công thức:</p>
+                        <div class="formula">
+                            \[
+                            F = 9 \times 10^9 \times \frac{2,56 \times 10^{-38}}{2,5 \times 10^{-21}}
+                            \]
+                        </div>
+                        <p>Tính thương số:</p>
+                        <div class="formula">
+                            \[
+                            \frac{2,56 \times 10^{-38}}{2,5 \times 10^{-21}} = 1,024 \times 10^{-17}
+                            \]
+                        </div>
+                        <p>Nhân với hệ số:</p>
+                        <div class="formula">
+                            \[
+                            F = 9 \times 10^9 \times 1,024 \times 10^{-17} = 9,216 \times 10^{-8} \, \text{N}
+                            \]
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <p><strong>Bước 4:</strong> Kết luận</p>
+                        <div class="result">
+                            Lực điện giữa electron và proton trong nguyên tử hydrogen là \(9,22 \times 10^{-8} \, \text{N}\) (lực hút).
+                        </div>
+                        <p>Đây là lực hút vì electron và proton mang điện tích trái dấu.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="window.location.reload()">Làm mới trang</button>
+            <button class="nav-button" onclick="window.print()">In trang</button>
+        </div>
+        
+        <footer>
+            <p>TRANG WEB HIỂN THỊ TRÊN TV - BÀI TẬP VẬT LÝ ĐIỆN TÍCH</p>
+            <p>Sử dụng MathJax để hiển thị công thức toán học | Phiên bản TV | © 2023</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Cấu hình MathJax để công thức hiển thị to và rõ
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+                ignoreHtmlClass: 'tex2jax_ignore'
+            },
+            startup: {
+                ready: () => {
+                    MathJax.startup.defaultReady();
+                    // Tăng kích thước font cho công thức
+                    MathJax.typesetPromise().then(() => {
+                        document.querySelectorAll('mjx-container').forEach(elem => {
+                            elem.style.fontSize = '1.8em';
+                        });
+                    });
+                }
+            }
+        };
+        
+        // Hiệu ứng khi trang được tải
+        document.addEventListener('DOMContentLoaded', function() {
+            // Thêm hiệu ứng xuất hiện từ từ cho các phần tử
+            const containers = document.querySelectorAll('.exercise-container, .solution-container');
+            
+            containers.forEach((container, index) => {
+                container.style.opacity = '0';
+                container.style.transform = 'translateY(30px)';
+                container.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                
+                setTimeout(() => {
+                    container.style.opacity = '1';
+                    container.style.transform = 'translateY(0)';
+                }, 300 + index * 200);
+            });
+            
+            // Tự động cuộn lên đầu trang khi tải lại
+            window.scrollTo(0, 0);
+            
+            // Thêm hiệu ứng cho các công thức toán khi cuộn đến
+            const observerOptions = {
+                threshold: 0.3,
+                rootMargin: '0px 0px -100px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('pulse');
+                        setTimeout(() => {
+                            entry.target.classList.remove('pulse');
+                        }, 3000);
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.formula, .result').forEach(elem => {
+                observer.observe(elem);
+            });
+        });
+        
+        // Chức năng toàn màn hình (nếu cần)
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Lỗi khi vào chế độ toàn màn hình: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+        
+        // Gán sự kiện phím tắt (F11 cho toàn màn hình)
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F11') {
+                e.preventDefault();
+                toggleFullscreen();
+            }
+        });
+    </script>
+</body>
+</html>
