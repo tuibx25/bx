@@ -1,364 +1,1191 @@
-# Trang Web Hiển Thị Ảnh từ Google Drive
-
-Dưới đây là mã HTML tạo trang web hiển thị ảnh từ Google Drive của bạn:
-
-```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang Web Hiển Thị Ảnh</title>
+    <title>Trắc Nghiệm Vật Lý 11</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #f8f9fa;
+            --success-color: #2ecc71;
+            --tv-font-size: 1.8rem;
+            --mobile-font-size: 1rem;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background-color: #eef2f5;
+            color: #333;
+            line-height: 1.6;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            color: #333;
         }
-        
+
         .container {
-            max-width: 1000px;
-            width: 100%;
-            background-color: white;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            padding: 40px;
-            text-align: center;
-        }
-        
-        h1 {
-            color: #2c3e50;
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, #3498db, #2ecc71);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        .subtitle {
-            color: #7f8c8d;
-            font-size: 1.2rem;
-            margin-bottom: 40px;
-            line-height: 1.5;
-        }
-        
-        .image-wrapper {
-            margin: 30px 0;
-            padding: 25px;
-            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
-            border-radius: 15px;
-            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
-            border: 2px dashed #bdc3c7;
-            transition: all 0.3s ease;
-        }
-        
-        .image-wrapper:hover {
-            border-color: #3498db;
-            box-shadow: inset 0 2px 10px rgba(52, 152, 219, 0.1), 0 5px 15px rgba(0, 0, 0, 0.08);
-        }
-        
-        .drive-image {
-            max-width: 100%;
-            max-height: 70vh;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            border: 5px solid white;
-            transition: transform 0.5s ease, box-shadow 0.5s ease;
-            cursor: pointer;
-            display: block;
+            max-width: 1400px;
             margin: 0 auto;
+            padding: 15px;
+            flex: 1;
         }
-        
-        .drive-image:hover {
-            transform: scale(1.02);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+
+        /* Header nhỏ gọn */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            position: relative;
         }
-        
-        .image-info {
-            margin-top: 25px;
-            padding: 20px;
-            background-color: #f1f8ff;
-            border-radius: 10px;
-            text-align: left;
-            border-left: 5px solid #3498db;
-        }
-        
-        .image-info h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.5rem;
-        }
-        
-        .info-item {
+
+        .header-content {
             display: flex;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .info-label {
-            font-weight: bold;
-            min-width: 180px;
-            color: #3498db;
-        }
-        
-        .info-value {
-            color: #555;
-            word-break: break-all;
-        }
-        
-        .actions {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
+            justify-content: space-between;
+            align-items: center;
             flex-wrap: wrap;
         }
-        
-        .btn {
-            padding: 15px 30px;
-            background: linear-gradient(to right, #3498db, #2ecc71);
+
+        .header-left {
+            flex: 1;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .subject-info {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .quiz-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 1rem;
+        }
+
+        .stat-item {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Bố cục chính - câu hỏi chiếm phần lớn */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Phần câu hỏi */
+        .question-section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .question-number {
+            font-size: 1.3rem;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        /* Tùy chọn */
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            background-color: #f8f9fa;
+            padding: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid #e9ecef;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-color: var(--secondary-color);
+        }
+
+        .option.selected {
+            background-color: #e3f2fd;
+            border-color: var(--secondary-color);
+        }
+
+        .option.correct {
+            background-color: #d4edda;
+            border-color: var(--success-color);
+        }
+
+        .option.incorrect {
+            background-color: #f8d7da;
+            border-color: var(--accent-color);
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: var(--secondary-color);
             color: white;
+            border-radius: 50%;
+            margin-right: 15px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .option-text {
+            font-size: 1.2rem;
+        }
+
+        /* Điều hướng */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
             border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
+            border-radius: 6px;
+            font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
-            text-decoration: none;
-            display: inline-flex;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #7f8c8d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #6c7b7d;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Bảng điều khiển nhỏ gọn */
+        .control-panel {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .panel-section {
+            margin-bottom: 25px;
+        }
+
+        .panel-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timer {
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary-color), #5dade2);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Lưới câu hỏi nhỏ gọn */
+        .questions-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .question-index {
+            width: 36px;
+            height: 36px;
+            display: flex;
             align-items: center;
             justify-content: center;
-        }
-        
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
-        }
-        
-        .btn-download {
-            background: linear-gradient(to right, #e74c3c, #e67e22);
-            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
-        }
-        
-        .btn-download:hover {
-            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
-        }
-        
-        .loading {
-            font-size: 1.2rem;
-            color: #7f8c8d;
-            padding: 30px;
-            text-align: center;
-        }
-        
-        footer {
-            margin-top: 40px;
-            text-align: center;
-            color: #7f8c8d;
+            border-radius: 6px;
+            background-color: #f1f8ff;
+            cursor: pointer;
+            font-weight: bold;
             font-size: 0.9rem;
-            line-height: 1.6;
+            transition: all 0.2s ease;
+            border: 1px solid #dee2e6;
         }
-        
-        @media (max-width: 768px) {
-            .container {
+
+        .question-index:hover {
+            transform: scale(1.05);
+            background-color: #e3f2fd;
+        }
+
+        .question-index.answered {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        .question-index.current {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+            transform: scale(1.1);
+            box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+        }
+
+        /* Công thức */
+        .formula-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid var(--secondary-color);
+            font-size: 1rem;
+        }
+
+        /* Chế độ TV */
+        @media (min-width: 1200px) {
+            .tv-mode {
+                font-size: var(--tv-font-size);
+            }
+            
+            .tv-mode .container {
+                max-width: 1600px;
+                padding: 30px;
+            }
+            
+            .tv-mode h1 {
+                font-size: 2.8rem;
+            }
+            
+            .tv-mode .subject-info {
+                font-size: 1.5rem;
+            }
+            
+            .tv-mode .question-text {
+                font-size: 2.4rem;
+                margin-bottom: 40px;
+            }
+            
+            .tv-mode .option {
+                padding: 25px;
+                font-size: 1.8rem;
+            }
+            
+            .tv-mode .option-label {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+            
+            .tv-mode .btn {
+                padding: 20px 35px;
+                font-size: 1.5rem;
+            }
+            
+            .tv-mode .control-panel {
+                padding: 25px;
+            }
+            
+            .tv-mode .panel-title {
+                font-size: 1.8rem;
+            }
+            
+            .tv-mode .timer {
+                font-size: 2rem;
                 padding: 20px;
             }
             
-            h1 {
-                font-size: 2.2rem;
+            .tv-mode .question-index {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
             }
             
-            .actions {
+            .tv-mode .stat-item {
+                font-size: 1.3rem;
+                padding: 12px 18px;
+            }
+        }
+
+        /* Điện thoại */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header {
+                padding: 12px 15px;
+                margin-bottom: 15px;
+            }
+            
+            .header-content {
                 flex-direction: column;
-                align-items: center;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .question-section {
+                padding: 18px;
+            }
+            
+            .question-text {
+                font-size: 1.4rem;
+            }
+            
+            .option {
+                padding: 15px;
+            }
+            
+            .option-text {
+                font-size: 1.1rem;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 12px;
             }
             
             .btn {
                 width: 100%;
-                max-width: 300px;
+                justify-content: center;
+                padding: 14px;
             }
             
-            .info-item {
+            .control-panel {
+                padding: 18px;
+                position: static;
+            }
+            
+            .questions-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .questions-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .question-index {
+                width: 32px;
+                height: 32px;
+                font-size: 0.85rem;
+            }
+            
+            .quiz-stats {
                 flex-direction: column;
+                gap: 8px;
             }
             
-            .info-label {
-                margin-bottom: 5px;
+            .stat-item {
+                padding: 6px 10px;
             }
+        }
+
+        /* Modal kết quả */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .score {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin: 20px 0;
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .detail-item {
+            padding: 10px;
+        }
+
+        .detail-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* Chỉ báo thiết bị */
+        .device-indicator {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            z-index: 50;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .show-device-indicator {
+            display: block;
+        }
+
+        /* Nút chế độ TV */
+        .tv-mode-toggle {
+            position: fixed;
+            bottom: 15px;
+            left: 15px;
+            background-color: var(--secondary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 50;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            font-size: 1.2rem;
+        }
+
+        /* Vật lý styling */
+        .physics-icon {
+            color: var(--secondary-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
+    <div class="device-indicator" id="deviceIndicator">
+        <!-- Nội dung sẽ được cập nhật bởi JavaScript -->
+    </div>
+
+    <div class="tv-mode-toggle" id="tvModeToggle" title="Chuyển chế độ TV">
+        <i class="fas fa-tv"></i>
+    </div>
+
     <div class="container">
-        <h1>Trang Web Hiển Thị Ảnh</h1>
-        <p class="subtitle">Ảnh được tải trực tiếp từ Google Drive của bạn</p>
-        
-        <div class="image-wrapper">
-            <div id="loading" class="loading">Đang tải ảnh từ Google Drive...</div>
-            <img id="driveImage" 
-                 src="https://drive.google.com/uc?id=1eunjml4KBjCkC9pdo-xU2Jo0YJY6b6jX" 
-                 alt="Ảnh từ Google Drive" 
-                 class="drive-image"
-                 style="display: none;">
-        </div>
-        
-        <div class="image-info">
-            <h3>Thông tin ảnh</h3>
-            <div class="info-item">
-                <div class="info-label">Nguồn ảnh:</div>
-                <div class="info-value">Google Drive</div>
+        <header>
+            <div class="header-content">
+                <div class="header-left">
+                    <h1><i class="fas fa-atom physics-icon"></i> Trắc Nghiệm Vật Lý 11</h1>
+                    <p class="subject-info">Chương: Điện tích - Điện trường</p>
+                </div>
+                <div class="header-right">
+                    <div class="quiz-stats">
+                        <div class="stat-item">
+                            <i class="far fa-clock"></i> <span id="timer">20:00</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="far fa-question-circle"></i> 
+                            <span id="currentQuestion">1</span>/<span id="totalQuestions">10</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="info-item">
-                <div class="info-label">ID File:</div>
-                <div class="info-value">1eunjml4KBjCkC9pdo-xU2Jo0YJY6b6jX</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Định dạng:</div>
-                <div class="info-value">PNG (Hình ảnh)</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Liên kết gốc:</div>
-                <div class="info-value">https://drive.google.com/file/d/1eunjml4KBjCkC9pdo-xU2Jo0YJY6b6jX/view</div>
-            </div>
-        </div>
-        
-        <div class="actions">
-            <a href="https://drive.google.com/uc?id=1eunjml4KBjCkC9pdo-xU2Jo0YJY6b6jX&export=download" 
-               class="btn btn-download" 
-               target="_blank">
-                📥 Tải ảnh xuống
-            </a>
-            <button id="viewOriginal" class="btn">
-                🔗 Xem trên Google Drive
-            </button>
-            <button id="zoomIn" class="btn">
-                🔍 Phóng to ảnh
-            </button>
-        </div>
+        </header>
+
+        <main class="main-layout">
+            <section class="question-section">
+                <div class="question-header">
+                    <div class="question-number" id="questionNumber">Câu hỏi 1</div>
+                </div>
+                
+                <div class="question-text" id="questionText"></div>
+                
+                <div class="options-container" id="optionsContainer">
+                    <!-- Các lựa chọn sẽ được chèn bởi JavaScript -->
+                </div>
+                
+                <div class="formula-box" id="formulaDisplay" style="display: none;">
+                    <strong><i class="fas fa-calculator"></i> Công thức liên quan:</strong> 
+                    <span id="formulaText"></span>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="prevBtn" disabled>
+                        <i class="fas fa-arrow-left"></i> Câu trước
+                    </button>
+                    <button class="btn btn-success" id="submitBtn">
+                        Nộp bài <i class="fas fa-paper-plane"></i>
+                    </button>
+                    <button class="btn btn-primary" id="nextBtn">
+                        Câu tiếp <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </section>
+            
+            <aside class="control-panel">
+                <div class="panel-section">
+                    <h3 class="panel-title"><i class="fas fa-tachometer-alt"></i> Tiến độ</h3>
+                    
+                    <div class="timer">
+                        <i class="far fa-clock"></i> <span id="sidebarTimer">20:00</span>
+                    </div>
+                    
+                    <div class="progress-info">
+                        <span>Hoàn thành: <span id="progressPercent">0%</span></span>
+                        <span><span id="answeredCount">0</span>/<span id="totalCount">10</span></span>
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <h3 class="panel-title"><i class="fas fa-list-ol"></i> Danh sách câu hỏi</h3>
+                    <div class="questions-grid" id="questionsGrid">
+                        <!-- Chỉ số câu hỏi sẽ được chèn bởi JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <button class="btn btn-primary" id="showResultsBtn" style="width: 100%;">
+                        <i class="fas fa-chart-bar"></i> Xem kết quả
+                    </button>
+                </div>
+            </aside>
+        </main>
         
         <footer>
-            <p>Trang web này hiển thị ảnh trực tiếp từ Google Drive. Đảm bảo ảnh được chia sẻ ở chế độ "Bất kỳ ai có liên kết" để hiển thị đúng.</p>
-            <p>© 2023 - Trang web hiển thị ảnh từ Google Drive</p>
+            <p>Trắc nghiệm Vật Lý 11 - Dành cho học sinh THPT &copy; 2025</p>
         </footer>
     </div>
 
+    <!-- Modal kết quả -->
+    <div class="modal" id="resultModal">
+        <div class="modal-content">
+            <h2><i class="fas fa-trophy"></i> Kết quả bài làm</h2>
+            <div class="score" id="finalScore">0/10</div>
+            <p id="resultMessage">Chúc mừng bạn đã hoàn thành bài trắc nghiệm!</p>
+            
+            <div class="result-details">
+                <div class="detail-item">
+                    <div class="detail-label">Đúng</div>
+                    <div class="detail-value text-success" id="correctCount">0</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Sai</div>
+                    <div class="detail-value text-danger" id="incorrectCount">0</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Chưa làm</div>
+                    <div class="detail-value" id="skippedCount">0</div>
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <button class="btn btn-secondary" id="reviewBtn">
+                    <i class="fas fa-redo"></i> Xem lại bài
+                </button>
+                <button class="btn btn-primary" id="restartBtn">
+                    <i class="fas fa-play"></i> Làm lại
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const driveImage = document.getElementById('driveImage');
-            const loadingElement = document.getElementById('loading');
-            const viewOriginalBtn = document.getElementById('viewOriginal');
-            const zoomInBtn = document.getElementById('zoomIn');
+        // Dữ liệu câu hỏi Vật Lý 11
+        const quizData = [
+            {
+                question: "Hai điện tích điểm q₁ = 2×10⁻⁹ C và q₂ = -5×10⁻⁹ C đặt cách nhau 10 cm trong chân không. Lực tương tác giữa chúng có độ lớn là:",
+                options: [
+                    "9×10⁻⁶ N",
+                    "9×10⁻⁷ N",
+                    "9×10⁻⁸ N",
+                    "9×10⁻⁹ N"
+                ],
+                correctAnswer: 1,
+                formula: "F = k·|q₁·q₂|/r² với k = 9×10⁹ N·m²/C²"
+            },
+            {
+                question: "Một điện tích q = 5×10⁻⁶ C di chuyển dọc theo một đường sức trong điện trường đều, công của lực điện là 0,1 J. Hiệu điện thế giữa hai điểm đó là:",
+                options: [
+                    "2×10⁴ V",
+                    "5×10⁴ V",
+                    "2×10⁵ V",
+                    "5×10⁵ V"
+                ],
+                correctAnswer: 0,
+                formula: "A = q·U ⇒ U = A/q"
+            },
+            {
+                question: "Công của lực điện trường khi một điện tích di chuyển từ điểm M đến điểm N trong điện trường đều:",
+                options: [
+                    "Luôn bằng không",
+                    "Chỉ phụ thuộc vào vị trí điểm M và N",
+                    "Chỉ phụ thuộc vào độ dài đường đi từ M đến N",
+                    "Không phụ thuộc vào hình dạng đường đi từ M đến N"
+                ],
+                correctAnswer: 3,
+                formula: "A = q·E·d với d là hình chiếu của độ dời lên phương đường sức"
+            },
+            {
+                question: "Một tụ điện phẳng có điện dung C = 5 nF được tích điện đến hiệu điện thế U = 100 V. Điện tích của tụ điện là:",
+                options: [
+                    "5×10⁻⁷ C",
+                    "5×10⁻⁸ C",
+                    "5×10⁻⁹ C",
+                    "5×10⁻¹⁰ C"
+                ],
+                correctAnswer: 0,
+                formula: "Q = C·U"
+            },
+            {
+                question: "Cường độ dòng điện chạy qua một dây dẫn kim loại tuân theo định luật Ôm khi:",
+                options: [
+                    "Nhiệt độ của dây dẫn được giữ không đổi",
+                    "Dây dẫn có tiết diện thuần nhất",
+                    "Dây dẫn có chiều dài đủ lớn",
+                    "Cường độ dòng điện đủ nhỏ"
+                ],
+                correctAnswer: 0,
+                formula: "I = U/R với R không đổi khi nhiệt độ không đổi"
+            },
+            {
+                question: "Đơn vị của cường độ điện trường là:",
+                options: [
+                    "V/m",
+                    "N/C",
+                    "Cả A và B đều đúng",
+                    "Cả A và B đều sai"
+                ],
+                correctAnswer: 2,
+                formula: "E = F/q (N/C) hoặc E = U/d (V/m)"
+            },
+            {
+                question: "Hai điện tích điểm cùng dấu thì:",
+                options: [
+                    "Hút nhau",
+                    "Đẩy nhau",
+                    "Không tương tác",
+                    "Có thể hút hoặc đẩy tùy độ lớn"
+                ],
+                correctAnswer: 1,
+                formula: "Lực Coulomb: F = k·q₁·q₂/r², cùng dấu ⇒ đẩy nhau"
+            },
+            {
+                question: "Suất điện động của nguồn điện là đại lượng đặc trưng cho khả năng:",
+                options: [
+                    "Tích điện cho hai cực của nguồn",
+                    "Thực hiện công của nguồn điện",
+                    "Dự trữ điện tích trong nguồn điện",
+                    "Tạo ra và duy trì hiệu điện thế giữa hai cực của nguồn điện"
+                ],
+                correctAnswer: 3,
+                formula: "ξ = A/q với A là công của lực lạ"
+            },
+            {
+                question: "Điện trở của dây dẫn kim loại phụ thuộc vào nhiệt độ theo công thức:",
+                options: [
+                    "R = R₀[1 + α(t - t₀)]",
+                    "R = R₀[1 - α(t - t₀)]",
+                    "R = R₀·α(t - t₀)",
+                    "R = R₀/α(t - t₀)"
+                ],
+                correctAnswer: 0,
+                formula: "R = R₀[1 + α(t - t₀)] với α là hệ số nhiệt điện trở"
+            },
+            {
+                question: "Khi ghép n nguồn điện giống nhau thành bộ nối tiếp, suất điện động của bộ nguồn là:",
+                options: [
+                    "ξ",
+                    "n·ξ",
+                    "ξ/n",
+                    "n²·ξ"
+                ],
+                correctAnswer: 1,
+                formula: "ξ_b = n·ξ, r_b = n·r (với n nguồn mắc nối tiếp)"
+            }
+        ];
+
+        // Các phần tử DOM
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const questionNumber = document.getElementById('questionNumber');
+        const currentQuestionElement = document.getElementById('currentQuestion');
+        const totalQuestionsElement = document.getElementById('totalQuestions');
+        const progressFill = document.getElementById('progressFill');
+        const progressPercent = document.getElementById('progressPercent');
+        const answeredCount = document.getElementById('answeredCount');
+        const totalCount = document.getElementById('totalCount');
+        const questionsGrid = document.getElementById('questionsGrid');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const timerElement = document.getElementById('timer');
+        const sidebarTimer = document.getElementById('sidebarTimer');
+        const tvModeToggle = document.getElementById('tvModeToggle');
+        const deviceIndicator = document.getElementById('deviceIndicator');
+        const resultModal = document.getElementById('resultModal');
+        const finalScore = document.getElementById('finalScore');
+        const correctCountElement = document.getElementById('correctCount');
+        const incorrectCountElement = document.getElementById('incorrectCount');
+        const skippedCountElement = document.getElementById('skippedCount');
+        const resultMessage = document.getElementById('resultMessage');
+        const reviewBtn = document.getElementById('reviewBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const formulaDisplay = document.getElementById('formulaDisplay');
+        const formulaText = document.getElementById('formulaText');
+        const showResultsBtn = document.getElementById('showResultsBtn');
+
+        // Trạng thái bài trắc nghiệm
+        let currentQuestion = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let quizCompleted = false;
+        let timeLeft = 1200; // 20 phút = 1200 giây
+        let timerInterval;
+        let tvMode = false;
+
+        // Khởi tạo bài trắc nghiệm
+        function initQuiz() {
+            totalQuestionsElement.textContent = quizData.length;
+            totalCount.textContent = quizData.length;
+            updateProgress();
+            loadQuestion();
+            updateQuestionIndices();
+            startTimer();
+            updateDeviceIndicator();
             
-            // Xử lý khi ảnh tải xong
-            driveImage.onload = function() {
-                loadingElement.style.display = 'none';
-                driveImage.style.display = 'block';
-                console.log('✅ Ảnh đã tải thành công từ Google Drive');
-            };
+            // Thêm sự kiện cho nút chuyển chế độ TV
+            tvModeToggle.addEventListener('click', toggleViewMode);
             
-            // Xử lý khi ảnh tải thất bại
-            driveImage.onerror = function() {
-                loadingElement.innerHTML = '❌ Không thể tải ảnh. Vui lòng kiểm tra:<br>' +
-                                          '1. Link chia sẻ ảnh trên Google Drive<br>' +
-                                          '2. Chế độ chia sẻ (phải là "Bất kỳ ai có liên kết")<br>' +
-                                          '3. Kết nối mạng của bạn';
-                loadingElement.style.color = '#e74c3c';
-                console.error('❌ Lỗi tải ảnh từ Google Drive');
-            };
+            // Thêm sự kiện cho điều hướng
+            prevBtn.addEventListener('click', goToPrevQuestion);
+            nextBtn.addEventListener('click', goToNextQuestion);
+            submitBtn.addEventListener('click', showResults);
+            showResultsBtn.addEventListener('click', showResults);
             
-            // Nút xem ảnh gốc trên Google Drive
-            viewOriginalBtn.addEventListener('click', function() {
-                window.open('https://drive.google.com/file/d/1eunjml4KBjCkC9pdo-xU2Jo0YJY6b6jX/view', '_blank');
-            });
+            // Nút trong modal
+            reviewBtn.addEventListener('click', reviewQuiz);
+            restartBtn.addEventListener('click', restartQuiz);
             
-            // Nút phóng to ảnh
-            zoomInBtn.addEventListener('click', function() {
-                if (driveImage.style.display === 'none') return;
+            // Xử lý thay đổi kích thước cửa sổ
+            window.addEventListener('resize', updateDeviceIndicator);
+            
+            // Hiển thị chỉ báo thiết bị trong 3 giây đầu
+            setTimeout(() => {
+                deviceIndicator.classList.add('show-device-indicator');
+                setTimeout(() => {
+                    deviceIndicator.classList.remove('show-device-indicator');
+                }, 3000);
+            }, 1000);
+        }
+
+        // Tải câu hỏi hiện tại
+        function loadQuestion() {
+            const question = quizData[currentQuestion];
+            
+            questionText.textContent = question.question;
+            questionNumber.textContent = `Câu hỏi ${currentQuestion + 1}`;
+            currentQuestionElement.textContent = currentQuestion + 1;
+            
+            // Xóa các lựa chọn cũ
+            optionsContainer.innerHTML = '';
+            
+            // Tạo các lựa chọn mới
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                if (userAnswers[currentQuestion] === index) {
+                    optionElement.classList.add('selected');
+                }
                 
-                const currentWidth = driveImage.clientWidth;
-                const currentHeight = driveImage.clientHeight;
+                optionElement.innerHTML = `
+                    <span class="option-label">${String.fromCharCode(65 + index)}</span>
+                    <span class="option-text">${option}</span>
+                `;
                 
-                if (driveImage.classList.contains('zoomed')) {
-                    // Nếu đang phóng to thì thu nhỏ
-                    driveImage.style.maxWidth = '100%';
-                    driveImage.style.maxHeight = '70vh';
-                    driveImage.classList.remove('zoomed');
-                    zoomInBtn.innerHTML = '🔍 Phóng to ảnh';
-                } else {
-                    // Phóng to ảnh
-                    driveImage.style.maxWidth = '150%';
-                    driveImage.style.maxHeight = '90vh';
-                    driveImage.classList.add('zoomed');
-                    zoomInBtn.innerHTML = '🔍 Thu nhỏ ảnh';
-                }
+                optionElement.addEventListener('click', () => selectOption(index));
+                optionsContainer.appendChild(optionElement);
             });
             
-            // Hiệu ứng khi di chuột vào ảnh
-            driveImage.addEventListener('mouseenter', function() {
-                if (!this.classList.contains('zoomed')) {
-                    this.style.transform = 'scale(1.03)';
-                }
-            });
+            // Hiển thị công thức nếu có
+            if (question.formula) {
+                formulaDisplay.style.display = 'block';
+                formulaText.textContent = question.formula;
+            } else {
+                formulaDisplay.style.display = 'none';
+            }
             
-            driveImage.addEventListener('mouseleave', function() {
-                if (!this.classList.contains('zoomed')) {
-                    this.style.transform = 'scale(1)';
-                }
-            });
+            // Cập nhật nút điều hướng
+            prevBtn.disabled = currentQuestion === 0;
+            nextBtn.disabled = currentQuestion === quizData.length - 1;
             
-            // Tự động hiển thị ảnh sau 2 giây nếu có lỗi (fallback)
-            setTimeout(function() {
-                if (driveImage.style.display === 'none' && loadingElement.style.color !== '#e74c3c') {
-                    loadingElement.style.display = 'none';
-                    driveImage.style.display = 'block';
+            // Cập nhật đánh dấu câu hỏi hiện tại
+            updateQuestionIndices();
+        }
+
+        // Chọn một lựa chọn
+        function selectOption(optionIndex) {
+            if (quizCompleted) return;
+            
+            // Xóa lớp selected từ tất cả các lựa chọn
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            
+            // Thêm lớp selected cho lựa chọn được nhấp
+            options[optionIndex].classList.add('selected');
+            
+            // Lưu câu trả lời của người dùng
+            userAnswers[currentQuestion] = optionIndex;
+            
+            // Cập nhật tiến độ
+            updateProgress();
+            updateQuestionIndices();
+        }
+
+        // Đi đến câu hỏi trước
+        function goToPrevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+
+        // Đi đến câu hỏi tiếp theo
+        function goToNextQuestion() {
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            }
+        }
+
+        // Cập nhật thanh tiến độ
+        function updateProgress() {
+            const answeredCountValue = userAnswers.filter(answer => answer !== null).length;
+            const progressPercentValue = (answeredCountValue / quizData.length) * 100;
+            
+            progressFill.style.width = `${progressPercentValue}%`;
+            progressPercent.textContent = `${Math.round(progressPercentValue)}%`;
+            answeredCount.textContent = answeredCountValue;
+        }
+
+        // Cập nhật lưới câu hỏi
+        function updateQuestionIndices() {
+            questionsGrid.innerHTML = '';
+            
+            for (let i = 0; i < quizData.length; i++) {
+                const indexElement = document.createElement('div');
+                indexElement.className = 'question-index';
+                if (userAnswers[i] !== null) {
+                    indexElement.classList.add('answered');
                 }
+                if (i === currentQuestion) {
+                    indexElement.classList.add('current');
+                }
+                
+                indexElement.textContent = i + 1;
+                indexElement.addEventListener('click', () => {
+                    currentQuestion = i;
+                    loadQuestion();
+                });
+                
+                questionsGrid.appendChild(indexElement);
+            }
+        }
+
+        // Bắt đầu đếm ngược
+        function startTimer() {
+            clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                timerElement.textContent = timeString;
+                sidebarTimer.textContent = timeString;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    showResults();
+                }
+            }, 1000);
+        }
+
+        // Chuyển chế độ TV
+        function toggleViewMode() {
+            tvMode = !tvMode;
+            
+            if (tvMode) {
+                document.body.classList.add('tv-mode');
+                tvModeToggle.innerHTML = '<i class="fas fa-mobile-alt"></i>';
+                tvModeToggle.title = "Chuyển chế độ di động";
+            } else {
+                document.body.classList.remove('tv-mode');
+                tvModeToggle.innerHTML = '<i class="fas fa-tv"></i>';
+                tvModeToggle.title = "Chuyển chế độ TV";
+            }
+            
+            updateDeviceIndicator();
+        }
+
+        // Cập nhật chỉ báo thiết bị
+        function updateDeviceIndicator() {
+            const width = window.innerWidth;
+            let deviceText = "";
+            
+            if (width >= 1200) {
+                deviceText = tvMode ? "Đang xem trên TV (Chế độ TV)" : "Đang xem trên màn hình lớn";
+            } else if (width >= 768) {
+                deviceText = "Đang xem trên máy tính bảng";
+            } else {
+                deviceText = "Đang xem trên điện thoại";
+            }
+            
+            deviceIndicator.textContent = deviceText;
+            
+            // Hiển thị chỉ báo trong 2 giây khi thay đổi kích thước
+            deviceIndicator.classList.add('show-device-indicator');
+            setTimeout(() => {
+                deviceIndicator.classList.remove('show-device-indicator');
             }, 2000);
-        });
+        }
+
+        // Hiển thị kết quả
+        function showResults() {
+            clearInterval(timerInterval);
+            quizCompleted = true;
+            
+            // Tính điểm
+            let correctCountValue = 0;
+            let incorrectCountValue = 0;
+            let skippedCountValue = 0;
+            
+            userAnswers.forEach((answer, index) => {
+                if (answer === null) {
+                    skippedCountValue++;
+                } else if (answer === quizData[index].correctAnswer) {
+                    correctCountValue++;
+                } else {
+                    incorrectCountValue++;
+                }
+            });
+            
+            // Cập nhật nội dung modal
+            finalScore.textContent = `${correctCountValue}/${quizData.length}`;
+            correctCountElement.textContent = correctCountValue;
+            incorrectCountElement.textContent = incorrectCountValue;
+            skippedCountElement.textContent = skippedCountValue;
+            
+            // Đặt thông báo kết quả dựa trên điểm số
+            const scorePercentage = (correctCountValue / quizData.length) * 100;
+            if (scorePercentage >= 90) {
+                resultMessage.textContent = "Xuất sắc! Kiến thức Vật Lý của bạn rất vững!";
+            } else if (scorePercentage >= 70) {
+                resultMessage.textContent = "Tốt! Bạn nắm vững kiến thức cơ bản!";
+            } else if (scorePercentage >= 50) {
+                resultMessage.textContent = "Khá! Cần ôn tập thêm một số phần!";
+            } else {
+                resultMessage.textContent = "Cần cố gắng hơn! Hãy xem lại lý thuyết!";
+            }
+            
+            // Hiển thị modal
+            resultModal.style.display = 'flex';
+        }
+
+        // Xem lại bài
+        function reviewQuiz() {
+            resultModal.style.display = 'none';
+            quizCompleted = false;
+            
+            // Đánh dấu câu trả lời đúng/sai
+            const question = quizData[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            
+            options.forEach((option, index) => {
+                option.classList.remove('correct', 'incorrect');
+                
+                if (index === question.correctAnswer) {
+                    option.classList.add('correct');
+                } else if (index === userAnswers[currentQuestion] && userAnswers[currentQuestion] !== question.correctAnswer) {
+                    option.classList.add('incorrect');
+                }
+            });
+        }
+
+        // Làm lại bài
+        function restartQuiz() {
+            resultModal.style.display = 'none';
+            
+            // Đặt lại trạng thái bài trắc nghiệm
+            currentQuestion = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            quizCompleted = false;
+            timeLeft = 1200;
+            
+            // Tải lại bài trắc nghiệm
+            loadQuestion();
+            updateProgress();
+            updateQuestionIndices();
+            startTimer();
+        }
+
+        // Khởi tạo khi trang được tải
+        document.addEventListener('DOMContentLoaded', initQuiz);
     </script>
 </body>
 </html>
-```
-
-## Tính năng chính của trang web:
-
-1. **Hiển thị ảnh từ Google Drive** - Sử dụng link trực tiếp để tải ảnh
-2. **Giao diện hiện đại** - Thiết kế đẹp mắt với gradient và hiệu ứng mượt mà
-3. **Tính năng tương tác**:
-   - Phóng to/thu nhỏ ảnh
-   - Hiệu ứng khi di chuột
-   - Nút tải ảnh xuống
-   - Nút xem ảnh gốc trên Google Drive
-4. **Thông tin chi tiết** - Hiển thị đầy đủ thông tin về ảnh
-5. **Responsive** - Hiển thị tốt trên mọi thiết bị
-6. **Xử lý lỗi** - Thông báo rõ ràng khi không tải được ảnh
-
-## Cách sử dụng:
-
-1. Lưu mã HTML trên vào file có đuôi `.html` (ví dụ: `hien-thi-anh.html`)
-2. Mở file bằng trình duyệt web bất kỳ
-3. Ảnh sẽ tự động tải từ Google Drive của bạn
-
-## Lưu ý quan trọng:
-
-- Đảm bảo ảnh trên Google Drive được chia sẻ ở chế độ **"Bất kỳ ai có liên kết"** (Anyone with the link)
-- Nếu ảnh không hiển thị, kiểm tra lại cài đặt chia sẻ trên Google Drive
-- Bạn có thể tải ảnh xuống trực tiếp từ trang web bằng nút "Tải ảnh xuống"
-
-Trang web đã sẵn sàng để sử dụng!
