@@ -1,0 +1,2162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc Nghiệm Điện Trường - Vật Lý 11</title>
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a6b29, #2ebf78);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .exam-selector {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .exam-btn {
+            background-color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .exam-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            background-color: #f0f8ff;
+        }
+        
+        .exam-btn.active {
+            background-color: #1a6b29;
+            color: white;
+        }
+        
+        .exam-container {
+            background-color: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            display: none;
+            margin-bottom: 40px;
+        }
+        
+        .exam-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .exam-title {
+            text-align: center;
+            color: #1a6b29;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #2ebf78;
+            font-size: 2.2rem;
+        }
+        
+        .question {
+            margin-bottom: 35px;
+            padding: 25px;
+            border-radius: 15px;
+            background-color: #f9f9f9;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .question:hover {
+            transform: translateX(5px);
+        }
+        
+        .question-number {
+            font-weight: bold;
+            color: #1a6b29;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .question-text {
+            margin-bottom: 20px;
+            line-height: 1.7;
+            font-size: 1.3rem;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        @media (min-width: 768px) {
+            .options {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .option {
+            padding: 18px 20px;
+            background-color: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+        }
+        
+        .option:hover {
+            background-color: #f0f8ff;
+            border-color: #1a6b29;
+        }
+        
+        .option.selected {
+            background-color: #e6f7ff;
+            border-color: #1a6b29;
+            font-weight: bold;
+        }
+        
+        .option.correct {
+            background-color: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .option.incorrect {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+        }
+        
+        .option-label {
+            display: inline-block;
+            width: 40px;
+            font-weight: bold;
+            color: #1a6b29;
+            font-size: 1.3rem;
+        }
+        
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .submit-btn, .answer-btn {
+            background-color: #1a6b29;
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(26, 107, 41, 0.4);
+        }
+        
+        .submit-btn:hover, .answer-btn:hover {
+            background-color: #2ebf78;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(46, 191, 120, 0.4);
+        }
+        
+        .submit-btn:disabled, .answer-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .result-container {
+            display: none;
+            margin-top: 40px;
+            padding: 30px;
+            background-color: #f0f8ff;
+            border-radius: 15px;
+            border-left: 8px solid #1a6b29;
+            text-align: center;
+        }
+        
+        .result-title {
+            color: #1a6b29;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        
+        .score {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #1a6b29;
+            margin: 30px 0;
+        }
+        
+        .score-detail {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .password-box {
+            background-color: white;
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .password-title {
+            color: #1a6b29;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 20px;
+            border: 3px solid #ddd;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            transition: border-color 0.3s;
+        }
+        
+        .password-input:focus {
+            border-color: #1a6b29;
+            outline: none;
+        }
+        
+        .password-submit {
+            background-color: #1a6b29;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-right: 15px;
+        }
+        
+        .password-submit:hover {
+            background-color: #2ebf78;
+        }
+        
+        .password-cancel {
+            background-color: #f0f0f0;
+            color: #333;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .password-cancel:hover {
+            background-color: #ddd;
+        }
+        
+        .answer-section {
+            display: none;
+            margin-top: 40px;
+            padding: 30px;
+            background-color: #f0f8ff;
+            border-radius: 15px;
+            border-left: 8px solid #1a6b29;
+        }
+        
+        .answer-title {
+            color: #1a6b29;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        
+        .answer-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.3rem;
+        }
+        
+        .answer-item .question-info {
+            font-weight: bold;
+        }
+        
+        .answer-item .correct-answer {
+            color: #1a6b29;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            font-size: 1.2rem;
+        }
+        
+        /* Chống copy và in */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+        }
+        
+        /* Tối ưu cho TV/màn chiếu */
+        @media (min-width: 1600px) {
+            .container {
+                max-width: 1400px;
+            }
+            
+            h1 {
+                font-size: 3.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.8rem;
+            }
+            
+            .exam-btn {
+                padding: 20px 40px;
+                font-size: 1.8rem;
+            }
+            
+            .exam-title {
+                font-size: 2.8rem;
+            }
+            
+            .question-number {
+                font-size: 2rem;
+            }
+            
+            .question-text {
+                font-size: 1.8rem;
+            }
+            
+            .option {
+                padding: 25px 30px;
+                font-size: 1.7rem;
+            }
+            
+            .option-label {
+                width: 50px;
+                font-size: 1.8rem;
+            }
+            
+            .submit-btn, .answer-btn {
+                padding: 25px 60px;
+                font-size: 1.8rem;
+            }
+            
+            .score {
+                font-size: 4.5rem;
+            }
+            
+            .score-detail {
+                font-size: 2rem;
+            }
+            
+            .answer-item {
+                font-size: 1.8rem;
+            }
+            
+            .answer-item .correct-answer {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" onkeydown="disableKeys(event)">
+    <div class="container">
+        <header>
+            <h1>TRẮC NGHIỆM VẬT LÝ 11</h1>
+            <p class="subtitle">Chương III: ĐIỆN TRƯỜNG</p>
+        </header>
+        
+        <div class="exam-selector">
+            <button class="exam-btn active" data-exam="1">Đề số 1</button>
+            <button class="exam-btn" data-exam="2">Đề số 2</button>
+            <button class="exam-btn" data-exam="3">Đề số 3</button>
+            <button class="exam-btn" data-exam="4">Đề số 4</button>
+            <button class="exam-btn" data-exam="5">Đề số 5</button>
+        </div>
+        
+        <!-- Đề số 1 -->
+        <div class="exam-container active" id="exam-1">
+            <h2 class="exam-title">ĐỀ SỐ 1: KHÁI NIỆM ĐIỆN TRƯỜNG</h2>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 1:</div>
+                <div class="question-text">Điện trường là gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Dạng vật chất tồn tại xung quanh điện tích và truyền tương tác giữa các điện tích.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Loại năng lượng chỉ tồn tại trong chất khí.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Không gian mà lực hấp dẫn tác dụng lên điện tích.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Trường lực chỉ tồn tại trong chân không.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="B">
+                <div class="question-number">Câu 2:</div>
+                <div class="question-text">Theo hình 17.1, tương tác giữa hai điện tích được truyền đi bằng cách nào?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Tiếp xúc trực tiếp giữa hai điện tích.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Thông qua điện trường xung quanh điện tích.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Thông qua không khí giữa hai điện tích.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Thông qua từ trường Trái Đất.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="C">
+                <div class="question-number">Câu 3:</div>
+                <div class="question-text">Điện trường được tạo ra bởi những gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Chỉ các điện tích dương.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Chỉ các điện tích âm.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Các điện tích đứng yên hoặc chuyển động.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Chỉ các điện tích đứng yên.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 4:</div>
+                <div class="question-text">Để phát hiện điện trường tại một điểm, người ta sử dụng gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Điện tích thử dương có điện tích nhỏ.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Điện tích thử âm có điện tích lớn.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Nam châm thử.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Sợi dây dẫn điện.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 5:</div>
+                <div class="question-text">Điện phổ là gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Hình ảnh các đường sức điện hiện ra bởi các hạt cách điện trong dầu.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Đường đi của điện tích trong điện trường.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Phổ ánh sáng phát ra từ điện tích.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Tần số dao động của điện tích trong điện trường.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 6:</div>
+                <div class="question-text">Ở vùng có điện trường mạnh hơn (gần điện tích), các đường điện phổ như thế nào?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Dày đặc hơn.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Thưa thớt hơn.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Có màu sắc khác biệt.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Thẳng hàng hơn.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="B">
+                <div class="question-number">Câu 7:</div>
+                <div class="question-text">Công thức cường độ điện trường do điện tích điểm Q gây ra là gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">\( E = \frac{Q}{4\pi\epsilon_0 r} \)</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">\( E = \frac{|Q|}{4\pi\epsilon_0 r^2} \)</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">\( E = \frac{Q}{4\pi\epsilon_0 r^3} \)</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">\( E = \frac{4\pi\epsilon_0 |Q|}{r^2} \)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 8:</div>
+                <div class="question-text">Vectơ cường độ điện trường \(\vec{E}\) có phương chiều thế nào với lực điện tác dụng lên điện tích thử dương?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Cùng phương, cùng chiều.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Cùng phương, ngược chiều.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Vuông góc với nhau.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Tạo góc 45°.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 9:</div>
+                <div class="question-text">Đơn vị cường độ điện trường trong hệ SI là gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Vôn trên mét (V/m).</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Newton (N).</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Coulomb (C).</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Tesla (T).</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 10:</div>
+                <div class="question-text">Công thức xác định cường độ điện trường tại một điểm là gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">\( E = \frac{F}{q} \)</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">\( E = F \cdot q \)</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">\( E = \frac{q}{F} \)</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">\( E = \frac{F^2}{q} \)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="buttons-container">
+                <button class="submit-btn" data-exam="1">Nộp bài đề 1</button>
+                <button class="answer-btn" data-exam="1">Xem đáp án đề 1</button>
+            </div>
+            
+            <div class="result-container" id="result-1">
+                <h3 class="result-title">KẾT QUẢ ĐỀ SỐ 1</h3>
+                <div class="score">0/10</div>
+                <div class="score-detail">Số câu đúng: <span class="correct-count">0</span>/10</div>
+                <div class="score-detail">Tỷ lệ đúng: <span class="percentage">0</span>%</div>
+            </div>
+            
+            <div class="answer-section" id="answer-1">
+                <h3 class="answer-title">ĐÁP ÁN ĐỀ SỐ 1</h3>
+                <div class="answer-item">
+                    <span class="question-info">Câu 1:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 2:</span>
+                    <span class="correct-answer">B</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 3:</span>
+                    <span class="correct-answer">C</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 4:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 5:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 6:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 7:</span>
+                    <span class="correct-answer">B</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 8:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 9:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 10:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Đề số 2 -->
+        <div class="exam-container" id="exam-2">
+            <h2 class="exam-title">ĐỀ SỐ 2: CƯỜNG ĐỘ ĐIỆN TRƯỜNG</h2>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 1:</div>
+                <div class="question-text">Cường độ điện trường là đại lượng đặc trưng cho điều gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Độ mạnh yếu của điện trường tại một điểm.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Kích thước của điện trường.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Hình dạng của điện trường.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Màu sắc của điện trường.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="B">
+                <div class="question-number">Câu 2:</div>
+                <div class="question-text">Cường độ điện trường tại một điểm được xác định bằng công thức nào?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Tích của lực điện và điện tích thử.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Tỉ số giữa lực điện tác dụng lên điện tích thử và độ lớn điện tích thử.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Tổng của lực điện và điện tích thử.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Hiệu giữa lực điện và điện tích thử.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="B">
+                <div class="question-number">Câu 3:</div>
+                <div class="question-text">Vectơ cường độ điện trường \(\vec{E}\) là đại lượng gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Đại lượng vô hướng.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Đại lượng vectơ.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Đại lượng không có hướng.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Đại lượng phụ thuộc vào khối lượng điện tích.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 4:</div>
+                <div class="question-text">Chiều của vectơ cường độ điện trường tại một điểm như thế nào?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Cùng chiều với lực điện tác dụng lên điện tích thử dương đặt tại điểm đó.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Ngược chiều với lực điện tác dụng lên điện tích thử dương đặt tại điểm đó.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Luôn hướng về phía điện tích âm.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Luôn hướng ra xa điện tích dương.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="C">
+                <div class="question-number">Câu 5:</div>
+                <div class="question-text">Cường độ điện trường do điện tích điểm Q gây ra phụ thuộc vào khoảng cách r như thế nào?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Tỉ lệ thuận với r.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Tỉ lệ nghịch với r.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Tỉ lệ nghịch với r².</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Tỉ lệ thuận với r².</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="B">
+                <div class="question-number">Câu 6:</div>
+                <div class="question-text">Công thức tính độ lớn cường độ điện trường của điện tích điểm Q trong chân không là gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">\( E = \frac{|Q|}{4\pi\epsilon_0 r} \)</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">\( E = \frac{|Q|}{4\pi\epsilon_0 r^2} \)</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">\( E = \frac{|Q|}{\pi\epsilon_0 r^2} \)</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">\( E = \frac{|Q|}{2\pi\epsilon_0 r^2} \)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 7:</div>
+                <div class="question-text">Điện trường của hệ nhiều điện tích điểm tại một điểm được xác định như thế nào?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Tổng vectơ cường độ điện trường do từng điện tích gây ra tại điểm đó.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Tích các cường độ điện trường do từng điện tích gây ra.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Trung bình cộng các cường độ điện trường do từng điện tích gây ra.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Cường độ điện trường lớn nhất trong hệ.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 8:</div>
+                <div class="question-text">Theo hình 17.3, tại sao điện trường tại điểm N mạnh hơn tại điểm M?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Vì điểm N gần điện tích hơn điểm M.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Vì điểm M gần điện tích hơn điểm N.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Vì điểm N có điện tích thử lớn hơn.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Vì điểm M có điện tích thử nhỏ hơn.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 9:</div>
+                <div class="question-text">Trong công thức \( \vec{E} = \frac{\vec{F}}{q} \), nếu q là điện tích âm thì \(\vec{E}\) và \(\vec{F}\) có mối quan hệ gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Cùng phương, ngược chiều.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Cùng phương, cùng chiều.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Vuông góc với nhau.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Tạo góc 45°.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="B">
+                <div class="question-number">Câu 10:</div>
+                <div class="question-text">Cường độ điện trường tại điểm cách điện tích Q = 3×10⁻⁸ C một khoảng 0.1 m trong chân không là bao nhiêu? (\(\epsilon_0 = 8.85\times10^{-12} C^2/N.m^2\))</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Khoảng 2.7×10⁴ N/C.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Khoảng 2.7×10⁴ V/m.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Khoảng 2.7×10⁵ V/m.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Khoảng 2.7×10² V/m.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="buttons-container">
+                <button class="submit-btn" data-exam="2">Nộp bài đề 2</button>
+                <button class="answer-btn" data-exam="2">Xem đáp án đề 2</button>
+            </div>
+            
+            <div class="result-container" id="result-2">
+                <h3 class="result-title">KẾT QUẢ ĐỀ SỐ 2</h3>
+                <div class="score">0/10</div>
+                <div class="score-detail">Số câu đúng: <span class="correct-count">0</span>/10</div>
+                <div class="score-detail">Tỷ lệ đúng: <span class="percentage">0</span>%</div>
+            </div>
+            
+            <div class="answer-section" id="answer-2">
+                <h3 class="answer-title">ĐÁP ÁN ĐỀ SỐ 2</h3>
+                <div class="answer-item">
+                    <span class="question-info">Câu 1:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 2:</span>
+                    <span class="correct-answer">B</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 3:</span>
+                    <span class="correct-answer">B</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 4:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 5:</span>
+                    <span class="correct-answer">C</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 6:</span>
+                    <span class="correct-answer">B</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 7:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 8:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 9:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 10:</span>
+                    <span class="correct-answer">B</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Đề số 3 -->
+        <div class="exam-container" id="exam-3">
+            <h2 class="exam-title">ĐỀ SỐ 3: TÍNH CHẤT ĐIỆN TRƯỜNG</h2>
+            
+            <div class="question" data-correct="B">
+                <div class="question-number">Câu 1:</div>
+                <div class="question-text">Cường độ điện trường tại một điểm trong điện trường của điện tích điểm thay đổi thế nào khi khoảng cách tăng?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Tăng khi khoảng cách tăng.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Giảm khi khoảng cách tăng.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Không phụ thuộc vào khoảng cách.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Tăng tỉ lệ thuận với khoảng cách.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 2:</div>
+                <div class="question-text">Đường sức điện trường là đường có đặc điểm gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Tiếp tuyến tại mỗi điểm trùng với phương của vectơ cường độ điện trường tại điểm đó.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Điện tích di chuyển theo trong điện trường.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Thẳng đi từ điện tích dương đến điện tích âm.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Vuông góc với vectơ cường độ điện trường.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 3:</div>
+                <div class="question-text">Các đường sức điện của điện trường tĩnh có đặc điểm gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Là những đường cong không khép kín.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Là những đường cong khép kín.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Luôn là những đường thẳng song song.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Luôn là những đường tròn đồng tâm.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="C">
+                <div class="question-number">Câu 4:</div>
+                <div class="question-text">Điện trường đều là điện trường có đặc điểm gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Vectơ cường độ điện trường tại mọi điểm đều bằng nhau.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Các đường sức điện là những đường thẳng song song cách đều.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Cả A và B đều đúng.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Cả A và B đều sai.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 5:</div>
+                <div class="question-text">Trong hình 17.7, các đường sức điện của điện tích dương có đặc điểm gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Hướng ra xa điện tích.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Hướng vào điện tích.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Là những đường tròn đồng tâm.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Là những đường thẳng song song.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 6:</div>
+                <div class="question-text">Điện trường của quả cầu tích điện đều tại những điểm bên ngoài quả cầu có đặc điểm gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Giống điện trường của điện tích điểm đặt tại tâm quả cầu.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Là điện trường đều.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Bằng không.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Chỉ tồn tại ở rất gần bề mặt quả cầu.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 7:</div>
+                <div class="question-text">Tại sao hạt bụi mịn có thể lơ lửng trong không khí?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Lực điện của điện trường Trái Đất cân bằng với trọng lực.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Hạt bụi không chịu tác dụng của lực nào.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Hạt bụi có khối lượng quá nhỏ.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Hạt bụi có kích thước lớn.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 8:</div>
+                <div class="question-text">Sét là hiện tượng gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Phóng điện giữa các đám mây tích điện trái dấu hoặc giữa đám mây với mặt đất.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Tích điện của các đám mây.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Nhiễm điện do cọ xát của các hạt nước trong mây.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Từ trường mạnh trong các đám mây giông.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 9:</div>
+                <div class="question-text">Cường độ điện trường của Trái Đất ở sát bề mặt có giá trị khoảng bao nhiêu?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">100 - 200 V/m.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">10 - 20 V/m.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">1000 - 2000 V/m.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">1 - 2 V/m.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 10:</div>
+                <div class="question-text">Hạt bụi pm2.5 có đường kính tối đa là bao nhiêu?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">2.5 µm.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">2.5 mm.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">25 µm.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">0.25 mm.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="buttons-container">
+                <button class="submit-btn" data-exam="3">Nộp bài đề 3</button>
+                <button class="answer-btn" data-exam="3">Xem đáp án đề 3</button>
+            </div>
+            
+            <div class="result-container" id="result-3">
+                <h3 class="result-title">KẾT QUẢ ĐỀ SỐ 3</h3>
+                <div class="score">0/10</div>
+                <div class="score-detail">Số câu đúng: <span class="correct-count">0</span>/10</div>
+                <div class="score-detail">Tỷ lệ đúng: <span class="percentage">0</span>%</div>
+            </div>
+            
+            <div class="answer-section" id="answer-3">
+                <h3 class="answer-title">ĐÁP ÁN ĐỀ SỐ 3</h3>
+                <div class="answer-item">
+                    <span class="question-info">Câu 1:</span>
+                    <span class="correct-answer">B</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 2:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 3:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 4:</span>
+                    <span class="correct-answer">C</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 5:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 6:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 7:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 8:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 9:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 10:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Đề số 4 -->
+        <div class="exam-container" id="exam-4">
+            <h2 class="exam-title">ĐỀ SỐ 4: ĐIỆN TRƯỜNG CỦA HỆ ĐIỆN TÍCH</h2>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 1:</div>
+                <div class="question-text">Cường độ điện trường tổng hợp tại một điểm do hệ nhiều điện tích điểm gây ra bằng gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Tổng vectơ các cường độ điện trường do từng điện tích gây ra tại điểm đó.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Tổng đại số các cường độ điện trường do từng điện tích gây ra tại điểm đó.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Tích các cường độ điện trường do từng điện tích gây ra tại điểm đó.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Trung bình cộng các cường độ điện trường do từng điện tích gây ra tại điểm đó.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 2:</div>
+                <div class="question-text">Trong hình 17.4, lực điện tổng hợp tác dụng lên điện tích thử q tại A được xác định thế nào?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Tổng vectơ của \(\vec{F}_1\) và \(\vec{F}_2\).</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Tổng đại số của F₁ và F₂.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Hiệu của F₁ và F₂.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Tích của F₁ và F₂.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 3:</div>
+                <div class="question-text">Vectơ cường độ điện trường tổng hợp tại điểm A trong hình 17.4 được tính bằng công thức nào?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">\(\vec{E} = \vec{E}_1 + \vec{E}_2\)</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">\(E = E_1 + E_2\)</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">\(\vec{E} = \vec{E}_1 - \vec{E}_2\)</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">\(E = \frac{E_1 + E_2}{2}\)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 4:</div>
+                <div class="question-text">Nếu tại một điểm cường độ điện trường tổng hợp bằng 0 thì điều gì đúng?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Lực điện tác dụng lên điện tích thử đặt tại điểm đó bằng 0.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Điện trường tại điểm đó không tồn tại.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Không có điện tích nào trong vùng lân cận.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Tất cả các điện tích xung quanh đều bằng 0.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 5:</div>
+                <div class="question-text">Trong hình 17.5, để tìm điểm có cường độ điện trường bằng 0 giữa hai điện tích Q₁ và Q₂, ta giải phương trình nào?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">\(\vec{E}_1 + \vec{E}_2 = 0\)</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">\(E_1 - E_2 = 0\)</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">\(E_1 + E_2 = 0\)</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">\(E_1 \cdot E_2 = 0\)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 6:</div>
+                <div class="question-text">Trong bài toán tính cường độ điện trường tổng hợp tại A của tam giác vuông ABC, cần sử dụng quy tắc nào?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Quy tắc hình bình hành để tổng hợp hai vectơ \(\vec{E}_1\) và \(\vec{E}_2\).</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Công thức cộng đại số E = E₁ + E₂.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Công thức E = E₁ - E₂.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Công thức E = √(E₁² + E₂²).</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 7:</div>
+                <div class="question-text">Cho Q₁ = +4×10⁻⁸ C và Q₂ = -2×10⁻⁸ C đặt cách nhau 6 cm. Điểm có cường độ điện trường bằng 0 nằm ở đâu?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Trên đường nối hai điện tích, ngoài khoảng giữa, về phía Q₂.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Trên đường nối hai điện tích, ngoài khoảng giữa, về phía Q₁.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Tại trung điểm của đoạn nối hai điện tích.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Trong khoảng giữa hai điện tích.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 8:</div>
+                <div class="question-text">Khi tính cường độ điện trường do điện tích điểm Q âm gây ra, vectơ cường độ điện trường có đặc điểm gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Hướng về phía điện tích Q.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Hướng ra xa điện tích Q.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Có phương vuông góc với đường nối từ Q đến điểm khảo sát.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Có độ lớn bằng 0.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="B">
+                <div class="question-number">Câu 9:</div>
+                <div class="question-text">Điện trường của hai điện tích cùng dấu đặt gần nhau có đặc điểm gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Các đường sức điện xuất phát từ điện tích dương và đi vào điện tích âm.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Các đường sức điện xuất phát từ cả hai điện tích và đi ra xa vô cùng.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Các đường sức điện đi từ vô cùng vào cả hai điện tích.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Không có đường sức điện giữa hai điện tích.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 10:</div>
+                <div class="question-text">Điện trường của hai điện tích trái dấu cùng độ lớn đặt gần nhau có đặc điểm gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Các đường sức điện xuất phát từ điện tích dương, đi vào điện tích âm.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Các đường sức điện xuất phát từ cả hai điện tích đi ra xa vô cùng.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Các đường sức điện đi từ vô cùng vào cả hai điện tích.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Các đường sức điện là những đường thẳng song song.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="buttons-container">
+                <button class="submit-btn" data-exam="4">Nộp bài đề 4</button>
+                <button class="answer-btn" data-exam="4">Xem đáp án đề 4</button>
+            </div>
+            
+            <div class="result-container" id="result-4">
+                <h3 class="result-title">KẾT QUẢ ĐỀ SỐ 4</h3>
+                <div class="score">0/10</div>
+                <div class="score-detail">Số câu đúng: <span class="correct-count">0</span>/10</div>
+                <div class="score-detail">Tỷ lệ đúng: <span class="percentage">0</span>%</div>
+            </div>
+            
+            <div class="answer-section" id="answer-4">
+                <h3 class="answer-title">ĐÁP ÁN ĐỀ SỐ 4</h3>
+                <div class="answer-item">
+                    <span class="question-info">Câu 1:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 2:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 3:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 4:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 5:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 6:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 7:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 8:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 9:</span>
+                    <span class="correct-answer">B</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 10:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Đề số 5 -->
+        <div class="exam-container" id="exam-5">
+            <h2 class="exam-title">ĐỀ SỐ 5: ỨNG DỤNG VÀ THỰC TẾ</h2>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 1:</div>
+                <div class="question-text">Hiện tượng sét là do nguyên nhân nào?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Phóng điện giữa các đám mây tích điện trái dấu hoặc giữa đám mây với mặt đất.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Sự chênh lệch nhiệt độ giữa các đám mây.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Sự ion hóa không khí do ánh sáng mặt trời.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Sự thay đổi áp suất khí quyển đột ngột.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 2:</div>
+                <div class="question-text">Điện trường của Trái Đất ở sát bề mặt có đặc điểm gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Phương thẳng đứng, hướng từ trên xuống dưới.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Phương thẳng đứng, hướng từ dưới lên trên.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Phương nằm ngang, hướng từ Bắc đến Nam.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Phương nằm ngang, hướng từ Đông sang Tây.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 3:</div>
+                <div class="question-text">Tại sao các hạt bụi mịn pm2.5 thường tích điện dương lại khó bay lên cao?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Bị lực điện của điện trường Trái Đất giữ lại ở tầng thấp.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Dễ dàng bay lên cao và phân tán đi xa.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Không chịu tác dụng của điện trường.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Bị đẩy ra xa khỏi bề mặt Trái Đất.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 4:</div>
+                <div class="question-text">Thí nghiệm điện phổ trong hình 17.6 cho thấy điều gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Hình dạng của các đường sức điện trong điện trường.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Màu sắc của điện trường.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Nhiệt độ của điện trường.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Vận tốc của điện tích trong điện trường.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 5:</div>
+                <div class="question-text">Ở những vùng có điện trường mạnh hơn (gần điện tích hơn), các đường điện phổ như thế nào?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Dày đặc hơn.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Thưa thớt hơn.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Có màu sắc đậm hơn.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Thẳng hơn.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 6:</div>
+                <div class="question-text">Điện phổ của hai điện tích trái dấu (hình 17.6c) cho thấy điều gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Các đường sức điện xuất phát từ điện tích dương và đi vào điện tích âm.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Các đường sức điện xuất phát từ cả hai điện tích đi ra xa vô cùng.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Các đường sức điện đi từ vô cùng vào cả hai điện tích.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Không có đường sức điện giữa hai điện tích.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 7:</div>
+                <div class="question-text">Tại sao trong thực tế người ta thường sử dụng quả cầu tích điện để nghiên cứu điện trường?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Điện trường bên ngoài quả cầu tương đương với điện trường của điện tích điểm đặt tại tâm.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Quả cầu dễ chế tạo và tích điện.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Quả cầu có điện trường đều bên ngoài.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Quả cầu không tích điện được.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 8:</div>
+                <div class="question-text">Hạt bụi pm2.5 có điện tích 1.6×10⁻¹⁹ C lơ lửng trong điện trường Trái Đất 120 V/m. Lực điện tác dụng lên hạt bụi là bao nhiêu?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Khoảng 1.92×10⁻¹⁷ N.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Khoảng 1.92×10⁻¹⁹ N.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Khoảng 1.92×10⁻¹⁵ N.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Khoảng 1.92×10⁻²¹ N.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 9:</div>
+                <div class="question-text">Theo hình 17.7, các đường sức điện của điện tích âm có đặc điểm gì?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Hướng vào điện tích.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Hướng ra xa điện tích.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Là những đường thẳng song song.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Là những đường tròn đồng tâm.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" data-correct="A">
+                <div class="question-number">Câu 10:</div>
+                <div class="question-text">Tại sao điện trường trong các đám mây giông có thể rất mạnh?</div>
+                <div class="options">
+                    <div class="option" data-option="A">
+                        <span class="option-label">A.</span>
+                        <span class="option-text">Các hạt nước trong mây bị nhiễm điện do cọ xát, tạo ra sự phân bố điện tích lớn.</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-label">B.</span>
+                        <span class="option-text">Nhiệt độ trong mây rất thấp.</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-label">C.</span>
+                        <span class="option-text">Áp suất trong mây rất cao.</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-label">D.</span>
+                        <span class="option-text">Mây chứa nhiều khí CO₂.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="buttons-container">
+                <button class="submit-btn" data-exam="5">Nộp bài đề 5</button>
+                <button class="answer-btn" data-exam="5">Xem đáp án đề 5</button>
+            </div>
+            
+            <div class="result-container" id="result-5">
+                <h3 class="result-title">KẾT QUẢ ĐỀ SỐ 5</h3>
+                <div class="score">0/10</div>
+                <div class="score-detail">Số câu đúng: <span class="correct-count">0</span>/10</div>
+                <div class="score-detail">Tỷ lệ đúng: <span class="percentage">0</span>%</div>
+            </div>
+            
+            <div class="answer-section" id="answer-5">
+                <h3 class="answer-title">ĐÁP ÁN ĐỀ SỐ 5</h3>
+                <div class="answer-item">
+                    <span class="question-info">Câu 1:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 2:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 3:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 4:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 5:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 6:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 7:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 8:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 9:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+                <div class="answer-item">
+                    <span class="question-info">Câu 10:</span>
+                    <span class="correct-answer">A</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Bài tập trắc nghiệm Vật Lý 11 - Chương III: Điện trường</p>
+            <p>Có thể nộp bài để xem kết quả, hoặc nhập mật mã <strong>123q456a</strong> để xem đáp án</p>
+        </div>
+    </div>
+    
+    <!-- Modal nhập mật khẩu -->
+    <div class="password-modal" id="password-modal">
+        <div class="password-box">
+            <h3 class="password-title">NHẬP MẬT MÃ ĐỂ XEM ĐÁP ÁN</h3>
+            <input type="password" class="password-input" id="password-input" placeholder="Nhập mật mã">
+            <button class="password-submit" id="password-submit">Xác nhận</button>
+            <button class="password-cancel" id="password-cancel">Hủy</button>
+        </div>
+    </div>
+
+    <script>
+        // Chống copy, in, tải về
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            alert('Không được phép sao chép nội dung!');
+        });
+        
+        // Chống xem mã nguồn
+        function disableKeys(e) {
+            // Chặn F12
+            if(e.key === 'F12') {
+                e.preventDefault();
+                alert('Không được phép mở công cụ developer!');
+                return false;
+            }
+            
+            // Chặn Ctrl+U (xem mã nguồn)
+            if(e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+                alert('Không được phép xem mã nguồn!');
+                return false;
+            }
+            
+            // Chặn Ctrl+S (lưu trang)
+            if(e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                alert('Không được phép lưu trang!');
+                return false;
+            }
+            
+            // Chặn Ctrl+P (in trang)
+            if(e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                alert('Không được phép in trang!');
+                return false;
+            }
+            
+            // Chặn Ctrl+Shift+I (mở dev tools)
+            if(e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+                alert('Không được phép mở công cụ developer!');
+                return false;
+            }
+            
+            // Chặn Ctrl+Shift+J (mở console)
+            if(e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+                alert('Không được phép mở console!');
+                return false;
+            }
+            
+            // Chặn Ctrl+Shift+C (mở inspect element)
+            if(e.ctrlKey && e.shiftKey && e.key === 'C') {
+                e.preventDefault();
+                alert('Không được phép mở công cụ kiểm tra!');
+                return false;
+            }
+        }
+        
+        // Chuyển đổi giữa các đề
+        const examButtons = document.querySelectorAll('.exam-btn');
+        const examContainers = document.querySelectorAll('.exam-container');
+        
+        examButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const examId = button.getAttribute('data-exam');
+                
+                // Cập nhật nút active
+                examButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Hiển thị đề tương ứng
+                examContainers.forEach(container => {
+                    container.classList.remove('active');
+                });
+                
+                document.getElementById(`exam-${examId}`).classList.add('active');
+            });
+        });
+        
+        // Xử lý chọn đáp án
+        const options = document.querySelectorAll('.option');
+        options.forEach(option => {
+            option.addEventListener('click', function() {
+                const question = this.closest('.question');
+                const otherOptions = question.querySelectorAll('.option');
+                
+                // Xóa chọn ở các option khác trong cùng câu hỏi
+                otherOptions.forEach(opt => opt.classList.remove('selected'));
+                
+                // Chọn option hiện tại
+                this.classList.add('selected');
+                
+                // Đánh dấu câu hỏi đã được trả lời
+                question.setAttribute('data-answered', 'true');
+            });
+        });
+        
+        // Xử lý modal mật khẩu
+        const passwordModal = document.getElementById('password-modal');
+        const passwordInput = document.getElementById('password-input');
+        const passwordSubmit = document.getElementById('password-submit');
+        const passwordCancel = document.getElementById('password-cancel');
+        const answerButtons = document.querySelectorAll('.answer-btn');
+        const submitButtons = document.querySelectorAll('.submit-btn');
+        
+        let currentExam = 1;
+        
+        answerButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                currentExam = button.getAttribute('data-exam');
+                passwordModal.style.display = 'flex';
+                passwordInput.focus();
+            });
+        });
+        
+        // Xử lý nộp bài
+        submitButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const examId = this.getAttribute('data-exam');
+                submitExam(examId);
+            });
+        });
+        
+        function submitExam(examId) {
+            const examContainer = document.getElementById(`exam-${examId}`);
+            const questions = examContainer.querySelectorAll('.question');
+            let correctCount = 0;
+            
+            questions.forEach((question, index) => {
+                const correctAnswer = question.getAttribute('data-correct');
+                const selectedOption = question.querySelector('.option.selected');
+                
+                // Reset màu sắc
+                const options = question.querySelectorAll('.option');
+                options.forEach(option => {
+                    option.classList.remove('correct', 'incorrect');
+                });
+                
+                // Nếu có chọn đáp án
+                if (selectedOption) {
+                    const selectedAnswer = selectedOption.getAttribute('data-option');
+                    
+                    // Đánh dấu đáp án đúng
+                    const correctOption = question.querySelector(`.option[data-option="${correctAnswer}"]`);
+                    correctOption.classList.add('correct');
+                    
+                    // Nếu chọn sai, đánh dấu đáp án sai
+                    if (selectedAnswer !== correctAnswer) {
+                        selectedOption.classList.add('incorrect');
+                    } else {
+                        correctCount++;
+                    }
+                } else {
+                    // Nếu không chọn đáp án, vẫn hiển thị đáp án đúng
+                    const correctOption = question.querySelector(`.option[data-option="${correctAnswer}"]`);
+                    correctOption.classList.add('correct');
+                }
+            });
+            
+            // Hiển thị kết quả
+            const resultContainer = document.getElementById(`result-${examId}`);
+            const scoreElement = resultContainer.querySelector('.score');
+            const correctCountElement = resultContainer.querySelector('.correct-count');
+            const percentageElement = resultContainer.querySelector('.percentage');
+            
+            const percentage = Math.round((correctCount / questions.length) * 100);
+            
+            scoreElement.textContent = `${correctCount}/${questions.length}`;
+            correctCountElement.textContent = correctCount;
+            percentageElement.textContent = percentage;
+            
+            resultContainer.style.display = 'block';
+            resultContainer.scrollIntoView({ behavior: 'smooth' });
+            
+            // Vô hiệu hóa nút nộp bài
+            const submitBtn = examContainer.querySelector('.submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Đã nộp bài";
+        }
+        
+        passwordSubmit.addEventListener('click', () => {
+            const password = passwordInput.value;
+            if (password === '123q456a') {
+                // Hiển thị đáp án
+                const answerSection = document.getElementById(`answer-${currentExam}`);
+                answerSection.style.display = 'block';
+                passwordModal.style.display = 'none';
+                passwordInput.value = '';
+                
+                // Cuộn đến phần đáp án
+                answerSection.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                alert('Mật mã không đúng! Vui lòng thử lại.');
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        });
+        
+        passwordCancel.addEventListener('click', () => {
+            passwordModal.style.display = 'none';
+            passwordInput.value = '';
+        });
+        
+        // Đóng modal khi click ra ngoài
+        passwordModal.addEventListener('click', (e) => {
+            if (e.target === passwordModal) {
+                passwordModal.style.display = 'none';
+                passwordInput.value = '';
+            }
+        });
+        
+        // Cho phép nhấn Enter để submit mật khẩu
+        passwordInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                passwordSubmit.click();
+            }
+        });
+        
+        // Khởi tạo MathJax sau khi trang đã tải
+        window.addEventListener('load', () => {
+            if (window.MathJax) {
+                MathJax.typeset();
+            }
+        });
+    </script>
+</body>
+</html>

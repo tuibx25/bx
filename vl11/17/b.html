@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc Nghiệm Điện Trường - Vật Lý 11</title>
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
+    
+    <!-- MathJax cho công thức toán -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .test-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .test-btn {
+            padding: 15px 25px;
+            background-color: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .test-btn:hover {
+            background-color: #1e3c72;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .test-btn.active {
+            background-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.3);
+        }
+        
+        .test-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            display: none;
+        }
+        
+        .test-container.active {
+            display: block;
+        }
+        
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .test-title {
+            font-size: 1.8rem;
+            color: #1e3c72;
+        }
+        
+        .test-info {
+            display: flex;
+            gap: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .question {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .question-header {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .question-number {
+            background-color: #3498db;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            line-height: 1.5;
+        }
+        
+        .options {
+            margin-left: 50px;
+        }
+        
+        .option {
+            margin-bottom: 12px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid #e0e0e0;
+            background-color: white;
+            display: flex;
+            align-items: center;
+        }
+        
+        .option:hover {
+            background-color: #f1f8ff;
+            border-color: #3498db;
+        }
+        
+        .option.selected {
+            background-color: #e3f2fd;
+            border-color: #1e88e5;
+            font-weight: 600;
+        }
+        
+        .option-label {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: #eee;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 15px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .option.selected .option-label {
+            background-color: #1e88e5;
+            color: white;
+        }
+        
+        .test-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+        
+        .control-btn {
+            padding: 12px 25px;
+            background-color: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .control-btn:hover {
+            background-color: #1e3c72;
+        }
+        
+        .control-btn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        .submit-btn {
+            background-color: #27ae60;
+        }
+        
+        .submit-btn:hover {
+            background-color: #219653;
+        }
+        
+        .result-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: none;
+        }
+        
+        .result-container.active {
+            display: block;
+        }
+        
+        .result-title {
+            font-size: 2rem;
+            color: #1e3c72;
+            margin-bottom: 20px;
+        }
+        
+        .score {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #27ae60;
+            margin: 20px 0;
+        }
+        
+        .score-detail {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #555;
+        }
+        
+        .restart-btn {
+            padding: 15px 40px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        
+        .restart-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        .warning {
+            text-align: center;
+            color: #e74c3c;
+            font-weight: bold;
+            padding: 15px;
+            background-color: #ffeaea;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .formula {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+            font-family: 'Times New Roman', Times, serif;
+            overflow-x: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .test-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .options {
+                margin-left: 0;
+            }
+            
+            .test-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .control-btn {
+                width: 100%;
+            }
+        }
+        
+        /* Chống copy và in */
+        body {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* Chống xem mã nguồn */
+        .no-view-source {
+            display: none;
+        }
+    </style>
+    
+    <script>
+        // Chống chuột phải, copy, in ấn, và xem mã nguồn
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            showWarning("Chức năng này đã bị vô hiệu hóa");
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            // Chống Ctrl+U (xem mã nguồn)
+            if (e.ctrlKey && e.keyCode === 85) {
+                e.preventDefault();
+                showWarning("Không thể xem mã nguồn trang");
+            }
+            // Chống Ctrl+S (lưu trang)
+            if (e.ctrlKey && e.keyCode === 83) {
+                e.preventDefault();
+                showWarning("Không thể lưu trang này");
+            }
+            // Chống Ctrl+P (in trang)
+            if (e.ctrlKey && e.keyCode === 80) {
+                e.preventDefault();
+                showWarning("Không thể in trang này");
+            }
+            // Chống Ctrl+C và Ctrl+V
+            if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 86)) {
+                showWarning("Không thể sao chép hoặc dán nội dung");
+            }
+            // Chống F12
+            if (e.keyCode === 123) {
+                e.preventDefault();
+                showWarning("Không thể mở Developer Tools");
+            }
+        });
+        
+        // Chống kéo thả hình ảnh và text
+        document.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+        });
+        
+        // Chống chụp ảnh màn hình với một số trình duyệt
+        document.addEventListener('keyup', function(e) {
+            if (e.keyCode === 44) { // Print Screen
+                showWarning("Không thể chụp ảnh màn hình");
+            }
+        });
+        
+        function showWarning(message) {
+            const warningEl = document.getElementById('warning');
+            warningEl.textContent = message;
+            warningEl.style.display = 'block';
+            setTimeout(() => {
+                warningEl.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</head>
+<body>
+    <div class="no-view-source">
+        <!-- Nội dung ẩn để chống xem mã nguồn -->
+        <h1>Trang web này được bảo vệ</h1>
+        <p>Bạn không thể xem mã nguồn của trang này.</p>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>TRẮC NGHIỆM VẬT LÝ 11</h1>
+            <p>Chương III: ĐIỆN TRƯỜNG</p>
+            <p>Chọn một đề trắc nghiệm bên dưới để bắt đầu làm bài</p>
+        </div>
+        
+        <div class="warning" id="warning"></div>
+        
+        <div class="test-selector">
+            <button class="test-btn active" data-test="1">Đề số 1</button>
+            <button class="test-btn" data-test="2">Đề số 2</button>
+            <button class="test-btn" data-test="3">Đề số 3</button>
+            <button class="test-btn" data-test="4">Đề số 4</button>
+            <button class="test-btn" data-test="5">Đề số 5</button>
+        </div>
+        
+        <!-- Đề 1 -->
+        <div class="test-container active" id="test-1">
+            <div class="test-header">
+                <h2 class="test-title">Đề trắc nghiệm số 1 - Điện trường</h2>
+                <div class="test-info">
+                    <span>Số câu: 10</span>
+                    <span>Thời gian: 20 phút</span>
+                </div>
+            </div>
+            
+            <div class="questions-container">
+                <!-- Câu hỏi sẽ được thêm bằng JavaScript -->
+            </div>
+            
+            <div class="test-controls">
+                <button class="control-btn prev-btn">Câu trước</button>
+                <button class="control-btn next-btn">Câu tiếp theo</button>
+                <button class="control-btn submit-btn">Nộp bài</button>
+            </div>
+        </div>
+        
+        <!-- Các đề khác -->
+        <div class="test-container" id="test-2">
+            <div class="test-header">
+                <h2 class="test-title">Đề trắc nghiệm số 2 - Điện trường</h2>
+                <div class="test-info">
+                    <span>Số câu: 10</span>
+                    <span>Thời gian: 20 phút</span>
+                </div>
+            </div>
+            
+            <div class="questions-container">
+                <!-- Câu hỏi sẽ được thêm bằng JavaScript -->
+            </div>
+            
+            <div class="test-controls">
+                <button class="control-btn prev-btn">Câu trước</button>
+                <button class="control-btn next-btn">Câu tiếp theo</button>
+                <button class="control-btn submit-btn">Nộp bài</button>
+            </div>
+        </div>
+        
+        <div class="test-container" id="test-3">
+            <div class="test-header">
+                <h2 class="test-title">Đề trắc nghiệm số 3 - Điện trường</h2>
+                <div class="test-info">
+                    <span>Số câu: 10</span>
+                    <span>Thời gian: 20 phút</span>
+                </div>
+            </div>
+            
+            <div class="questions-container">
+                <!-- Câu hỏi sẽ được thêm bằng JavaScript -->
+            </div>
+            
+            <div class="test-controls">
+                <button class="control-btn prev-btn">Câu trước</button>
+                <button class="control-btn next-btn">Câu tiếp theo</button>
+                <button class="control-btn submit-btn">Nộp bài</button>
+            </div>
+        </div>
+        
+        <div class="test-container" id="test-4">
+            <div class="test-header">
+                <h2 class="test-title">Đề trắc nghiệm số 4 - Điện trường</h2>
+                <div class="test-info">
+                    <span>Số câu: 10</span>
+                    <span>Thời gian: 20 phút</span>
+                </div>
+            </div>
+            
+            <div class="questions-container">
+                <!-- Câu hỏi sẽ được thêm bằng JavaScript -->
+            </div>
+            
+            <div class="test-controls">
+                <button class="control-btn prev-btn">Câu trước</button>
+                <button class="control-btn next-btn">Câu tiếp theo</button>
+                <button class="control-btn submit-btn">Nộp bài</button>
+            </div>
+        </div>
+        
+        <div class="test-container" id="test-5">
+            <div class="test-header">
+                <h2 class="test-title">Đề trắc nghiệm số 5 - Điện trường</h2>
+                <div class="test-info">
+                    <span>Số câu: 10</span>
+                    <span>Thời gian: 20 phút</span>
+                </div>
+            </div>
+            
+            <div class="questions-container">
+                <!-- Câu hỏi sẽ được thêm bằng JavaScript -->
+            </div>
+            
+            <div class="test-controls">
+                <button class="control-btn prev-btn">Câu trước</button>
+                <button class="control-btn next-btn">Câu tiếp theo</button>
+                <button class="control-btn submit-btn">Nộp bài</button>
+            </div>
+        </div>
+        
+        <!-- Kết quả -->
+        <div class="result-container" id="result-container">
+            <h2 class="result-title">KẾT QUẢ BÀI LÀM</h2>
+            <div class="score" id="score">0/10</div>
+            <div class="score-detail" id="score-detail"></div>
+            <button class="restart-btn" id="restart-btn">Làm đề khác</button>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu câu hỏi cho 5 đề khác nhau
+        const allQuestions = {
+            // Đề 1
+            1: [
+                {
+                    id: 1,
+                    question: "Điện trường là gì?",
+                    options: [
+                        "Là môi trường không khí xung quanh điện tích",
+                        "Là dạng vật chất tồn tại xung quanh điện tích và truyền tương tác điện",
+                        "Là lực tác dụng giữa hai điện tích",
+                        "Là năng lượng tích trữ trong điện tích"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 2,
+                    question: "Cường độ điện trường tại một điểm được xác định bằng công thức nào?",
+                    options: [
+                        "\\(E = \\frac{q}{F}\\)",
+                        "\\(E = \\frac{F}{q}\\)",
+                        "\\(E = F \\cdot q\\)",
+                        "\\(E = \\frac{1}{F \\cdot q}\\)"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 3,
+                    question: "Đơn vị của cường độ điện trường trong hệ SI là:",
+                    options: [
+                        "Newton (N)",
+                        "Culông (C)",
+                        "Vôn trên mét (V/m)",
+                        "Jun (J)"
+                    ],
+                    correct: 2
+                },
+                {
+                    id: 4,
+                    question: "Vectơ cường độ điện trường tại một điểm có đặc điểm gì?",
+                    options: [
+                        "Có phương vuông góc với lực điện tác dụng lên điện tích thử",
+                        "Có phương trùng với phương của lực điện tác dụng lên điện tích thử dương",
+                        "Luôn hướng về phía điện tích âm",
+                        "Luôn hướng ra xa điện tích dương"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 5,
+                    question: "Công thức tính độ lớn cường độ điện trường do một điện tích điểm Q gây ra tại điểm cách nó khoảng r trong chân không là:",
+                    options: [
+                        "\\(E = \\frac{Q}{4\\pi\\varepsilon_0 r}\\)",
+                        "\\(E = \\frac{|Q|}{4\\pi\\varepsilon_0 r^2}\\)",
+                        "\\(E = \\frac{4\\pi\\varepsilon_0 r^2}{|Q|}\\)",
+                        "\\(E = \\frac{|Q|}{\\varepsilon_0 r^2}\\)"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 6,
+                    question: "Khi điện tích thử q > 0, vectơ cường độ điện trường \\(\\vec{E}\\) và vectơ lực điện \\(\\vec{F}\\) tác dụng lên q có mối quan hệ:",
+                    options: [
+                        "Cùng phương, ngược chiều",
+                        "Cùng phương, cùng chiều",
+                        "Vuông góc với nhau",
+                        "Tạo với nhau một góc 45°"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 7,
+                    question: "Hình ảnh các đường được tạo bởi các hạt cách điện trong dầu khi đặt điện tích vào gọi là:",
+                    options: [
+                        "Đường đẳng thế",
+                        "Điện phổ",
+                        "Đường sức từ",
+                        "Đường trường"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 8,
+                    question: "Khi quan sát điện phổ của một điện tích điểm, vùng nào có điện trường mạnh hơn?",
+                    options: [
+                        "Vùng xa điện tích",
+                        "Vùng gần điện tích",
+                        "Vùng trung gian",
+                        "Tất cả các vùng đều như nhau"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 9,
+                    question: "Hai điện tích điểm cùng dấu đặt gần nhau sẽ:",
+                    options: [
+                        "Hút nhau",
+                        "Đẩy nhau",
+                        "Không tương tác",
+                        "Tạo thành điện trường đều"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 10,
+                    question: "Điện trường của Trái Đất có đặc điểm gì?",
+                    options: [
+                        "Phương nằm ngang, chiều từ Đông sang Tây",
+                        "Phương thẳng đứng, chiều từ trên xuống",
+                        "Phương thẳng đứng, chiều từ dưới lên",
+                        "Không có phương chiều cố định"
+                    ],
+                    correct: 1
+                }
+            ],
+            
+            // Đề 2
+            2: [
+                {
+                    id: 1,
+                    question: "Điện trường tồn tại xung quanh:",
+                    options: [
+                        "Chỉ các điện tích dương",
+                        "Chỉ các điện tích âm",
+                        "Mọi điện tích",
+                        "Chỉ các điện tích đứng yên"
+                    ],
+                    correct: 2
+                },
+                {
+                    id: 2,
+                    question: "Cường độ điện trường là đại lượng:",
+                    options: [
+                        "Vô hướng, luôn dương",
+                        "Vô hướng, có thể âm hoặc dương",
+                        "Vectơ",
+                        "Vô hướng, luôn âm"
+                    ],
+                    correct: 2
+                },
+                {
+                    id: 3,
+                    question: "Điện tích thử dùng để phát hiện điện trường phải có đặc điểm:",
+                    options: [
+                        "Điện tích lớn để dễ phát hiện",
+                        "Điện tích nhỏ để không ảnh hưởng đến điện trường cần đo",
+                        "Luôn là điện tích dương",
+                        "Luôn là điện tích âm"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 4,
+                    question: "Nếu tại một điểm, cường độ điện trường bằng 0 thì:",
+                    options: [
+                        "Không có điện tích nào xung quanh",
+                        "Lực điện tác dụng lên điện tích thử tại đó bằng 0",
+                        "Điện tích thử tại đó phải bằng 0",
+                        "Không thể đặt điện tích thử tại đó"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 5,
+                    question: "Cường độ điện trường do điện tích điểm Q gây ra tại một điểm:",
+                    options: [
+                        "Tỉ lệ thuận với khoảng cách từ điểm đó đến Q",
+                        "Tỉ lệ nghịch với khoảng cách từ điểm đó đến Q",
+                        "Tỉ lệ nghịch với bình phương khoảng cách từ điểm đó đến Q",
+                        "Không phụ thuộc vào khoảng cách từ điểm đó đến Q"
+                    ],
+                    correct: 2
+                },
+                {
+                    id: 6,
+                    question: "Hệ số \\( \\varepsilon_0 \\) trong công thức tính cường độ điện trường gọi là:",
+                    options: [
+                        "Hằng số điện môi",
+                        "Hằng số điện tích",
+                        "Hằng số lực điện",
+                        "Hằng số điện"
+                    ],
+                    correct: 3
+                },
+                {
+                    id: 7,
+                    question: "Điện phổ của hai điện tích cùng dấu sẽ có đặc điểm:",
+                    options: [
+                        "Các đường cong hướng từ điện tích này sang điện tích kia",
+                        "Các đường cong xuất phát từ hai điện tích và hướng ra ngoài",
+                        "Các đường thẳng song song",
+                        "Các đường cong xuất phát từ điện tích dương và hướng vào điện tích âm"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 8,
+                    question: "Trong điện trường đều, các đường sức điện có đặc điểm:",
+                    options: [
+                        "Là những đường thẳng song song và cách đều nhau",
+                        "Là những đường tròn đồng tâm",
+                        "Là những đường cong bất kỳ",
+                        "Là những đường thẳng phát ra từ một điểm"
+                    ],
+                    correct: 0
+                },
+                {
+                    id: 9,
+                    question: "Điện tích điểm Q = 5.10⁻⁸ C đặt trong chân không. Cường độ điện trường tại điểm cách Q 10 cm có độ lớn xấp xỉ:",
+                    options: [
+                        "4500 V/m",
+                        "45000 V/m",
+                        "450 V/m",
+                        "45 V/m"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 10,
+                    question: "Điện trường Trái Đất có cường độ vào khoảng:",
+                    options: [
+                        "1-2 V/m",
+                        "10-20 V/m",
+                        "100-200 V/m",
+                        "1000-2000 V/m"
+                    ],
+                    correct: 2
+                }
+            ],
+            
+            // Đề 3
+            3: [
+                {
+                    id: 1,
+                    question: "Điện trường được mô tả bằng:",
+                    options: [
+                        "Chỉ bằng độ lớn cường độ điện trường",
+                        "Chỉ bằng vectơ cường độ điện trường",
+                        "Bằng cả độ lớn và hướng của vectơ cường độ điện trường",
+                        "Bằng điện tích tạo ra nó"
+                    ],
+                    correct: 2
+                },
+                {
+                    id: 2,
+                    question: "Nếu tăng khoảng cách từ điện tích điểm lên 2 lần thì cường độ điện trường do nó gây ra sẽ:",
+                    options: [
+                        "Tăng 2 lần",
+                        "Giảm 2 lần",
+                        "Tăng 4 lần",
+                        "Giảm 4 lần"
+                    ],
+                    correct: 3
+                },
+                {
+                    id: 3,
+                    question: "Đường sức điện là đường được vẽ sao cho:",
+                    options: [
+                        "Tiếp tuyến tại mỗi điểm trùng với phương của vectơ cường độ điện trường tại điểm đó",
+                        "Luôn vuông góc với vectơ cường độ điện trường",
+                        "Luôn là đường thẳng",
+                        "Luôn là đường cong kín"
+                    ],
+                    correct: 0
+                },
+                {
+                    id: 4,
+                    question: "Đường sức điện của điện tích điểm dương có đặc điểm:",
+                    options: [
+                        "Là những đường thẳng xuất phát từ điện tích",
+                        "Là những đường cong hướng vào điện tích",
+                        "Là những đường thẳng hướng vào điện tích",
+                        "Là những đường cong xuất phát từ điện tích"
+                    ],
+                    correct: 3
+                },
+                {
+                    id: 5,
+                    question: "Hai điện tích trái dấu đặt gần nhau sẽ tạo ra điện phổ có đặc điểm:",
+                    options: [
+                        "Các đường cong xuất phát từ cả hai điện tích và hướng ra ngoài",
+                        "Các đường cong xuất phát từ điện tích dương và hướng vào điện tích âm",
+                        "Các đường thẳng song song",
+                        "Các đường tròn đồng tâm"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 6,
+                    question: "Cường độ điện trường tổng hợp tại một điểm do hệ nhiều điện tích gây ra được tính bằng:",
+                    options: [
+                        "Tổng đại số các cường độ điện trường thành phần",
+                        "Tổng vectơ các cường độ điện trường thành phần",
+                        "Tích các cường độ điện trường thành phần",
+                        "Hiệu các cường độ điện trường thành phần"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 7,
+                    question: "Tại điểm nào dưới đây có thể có cường độ điện trường bằng 0 khi có hai điện tích điểm cùng dấu, độ lớn bằng nhau?",
+                    options: [
+                        "Tại trung điểm của đoạn thẳng nối hai điện tích",
+                        "Tại các điểm trên đường trung trực của đoạn nối hai điện tích",
+                        "Tại các điểm trên đường thẳng nối hai điện tích, ngoài đoạn nối hai điện tích",
+                        "Không có điểm nào"
+                    ],
+                    correct: 3
+                },
+                {
+                    id: 8,
+                    question: "Một điện tích q đặt trong điện trường đều có cường độ E. Lực điện tác dụng lên điện tích có độ lớn:",
+                    options: [
+                        "F = qE",
+                        "F = q/E",
+                        "F = E/q",
+                        "F = q²E"
+                    ],
+                    correct: 0
+                },
+                {
+                    id: 9,
+                    question: "Khi điện tích thử q < 0, vectơ cường độ điện trường \\(\\vec{E}\\) và vectơ lực điện \\(\\vec{F}\\) tác dụng lên q có mối quan hệ:",
+                    options: [
+                        "Cùng phương, ngược chiều",
+                        "Cùng phương, cùng chiều",
+                        "Vuông góc với nhau",
+                        "Tạo với nhau một góc 60°"
+                    ],
+                    correct: 0
+                },
+                {
+                    id: 10,
+                    question: "Hạt bụi mịn pm2.5 thường lơ lửng trong không khí do:",
+                    options: [
+                        "Chịu tác dụng của lực điện từ điện trường Trái Đất",
+                        "Có kích thước quá nhỏ nên trọng lực không đáng kể",
+                        "Bị các dòng đối lưu không khí nâng đỡ",
+                        "Tất cả các ý trên"
+                    ],
+                    correct: 3
+                }
+            ],
+            
+            // Đề 4
+            4: [
+                {
+                    id: 1,
+                    question: "Điện trường có khả năng tác dụng lực lên:",
+                    options: [
+                        "Chỉ các điện tích đứng yên",
+                        "Chỉ các điện tích chuyển động",
+                        "Các điện tích đặt trong nó",
+                        "Chỉ các điện tích dương"
+                    ],
+                    correct: 2
+                },
+                {
+                    id: 2,
+                    question: "Công thức \\( \\vec{E} = \\frac{\\vec{F}}{q} \\) cho phép xác định:",
+                    options: [
+                        "Điện tích q khi biết \\(\\vec{E}\\) và \\(\\vec{F}\\)",
+                        "Lực \\(\\vec{F}\\) khi biết \\(\\vec{E}\\) và q",
+                        "Vectơ cường độ điện trường \\(\\vec{E}\\) khi biết \\(\\vec{F}\\) và q",
+                        "Tất cả các đại lượng trên"
+                    ],
+                    correct: 3
+                },
+                {
+                    id: 3,
+                    question: "Tại một điểm trong điện trường, nếu đặt điện tích 2q thay cho điện tích q thì lực điện tác dụng sẽ:",
+                    options: [
+                        "Tăng 2 lần",
+                        "Giảm 2 lần",
+                        "Không thay đổi",
+                        "Tăng 4 lần"
+                    ],
+                    correct: 0
+                },
+                {
+                    id: 4,
+                    question: "Nếu độ lớn điện tích Q tăng 3 lần, khoảng cách r không đổi thì cường độ điện trường do Q gây ra sẽ:",
+                    options: [
+                        "Tăng 3 lần",
+                        "Giảm 3 lần",
+                        "Tăng 9 lần",
+                        "Giảm 9 lần"
+                    ],
+                    correct: 0
+                },
+                {
+                    id: 5,
+                    question: "Trong công thức \\( E = \\frac{|Q|}{4\\pi\\varepsilon_0 r^2} \\), hằng số \\( \\varepsilon_0 \\) có giá trị xấp xỉ:",
+                    options: [
+                        "8,85 × 10⁻¹² C²/N.m²",
+                        "9 × 10⁹ N.m²/C²",
+                        "1,6 × 10⁻¹⁹ C",
+                        "6,67 × 10⁻¹¹ N.m²/kg²"
+                    ],
+                    correct: 0
+                },
+                {
+                    id: 6,
+                    question: "Điện trường bên ngoài quả cầu tích điện đều, đặc (hoặc rỗng) tương đương với điện trường của:",
+                    options: [
+                        "Điện tích điểm đặt tại tâm quả cầu",
+                        "Nhiều điện tích điểm phân bố đều trên bề mặt",
+                        "Điện tích điểm đặt tại một điểm bất kỳ trong quả cầu",
+                        "Hai điện tích điểm đặt ở hai đầu đường kính"
+                    ],
+                    correct: 0
+                },
+                {
+                    id: 7,
+                    question: "Hạt bụi tích điện dương nằm trong điện trường Trái Đất sẽ chịu tác dụng của lực điện có chiều:",
+                    options: [
+                        "Hướng lên trên",
+                        "Hướng xuống dưới",
+                        "Hướng về phía Bắc",
+                        "Hướng về phía Nam"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 8,
+                    question: "Tại cùng một điểm trong điện trường, nếu đặt lần lượt các điện tích q₁ = 2 μC và q₂ = 4 μC thì tỉ số F₁/F₂ giữa các lực điện tác dụng lên chúng là:",
+                    options: [
+                        "1/2",
+                        "2",
+                        "1/4",
+                        "4"
+                    ],
+                    correct: 0
+                },
+                {
+                    id: 9,
+                    question: "Khi điện tích di chuyển dọc theo đường sức điện thì:",
+                    options: [
+                        "Lực điện thực hiện công dương",
+                        "Lực điện thực hiện công âm",
+                        "Lực điện không thực hiện công",
+                        "Công của lực điện phụ thuộc vào dạng đường đi"
+                    ],
+                    correct: 2
+                },
+                {
+                    id: 10,
+                    question: "Trong các hình vẽ đường sức điện sau, hình nào biểu diễn điện trường đều?",
+                    options: [
+                        "Các đường thẳng song song, cách đều",
+                        "Các đường thẳng xuất phát từ một điểm",
+                        "Các đường cong hướng vào một điểm",
+                        "Các đường tròn đồng tâm"
+                    ],
+                    correct: 0
+                }
+            ],
+            
+            // Đề 5
+            5: [
+                {
+                    id: 1,
+                    question: "Điện trường là một trường:",
+                    options: [
+                        "Vô hướng",
+                        "Thế",
+                        "Lực",
+                        "Từ"
+                    ],
+                    correct: 2
+                },
+                {
+                    id: 2,
+                    question: "Nếu tại một điểm có hai vectơ cường độ điện trường thành phần vuông góc với nhau, độ lớn E₁ = 3 V/m, E₂ = 4 V/m thì độ lớn cường độ điện trường tổng hợp tại điểm đó là:",
+                    options: [
+                        "1 V/m",
+                        "5 V/m",
+                        "7 V/m",
+                        "12 V/m"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 3,
+                    question: "Một điện tích điểm Q gây ra điện trường tại điểm M cách nó 5 cm có độ lớn E = 3600 V/m. Độ lớn điện tích Q là:",
+                    options: [
+                        "10⁻⁸ C",
+                        "10⁻⁹ C",
+                        "10⁻¹⁰ C",
+                        "10⁻¹¹ C"
+                    ],
+                    correct: 2
+                },
+                {
+                    id: 4,
+                    question: "Trong điện trường, nơi nào có đường sức điện dày hơn thì:",
+                    options: [
+                        "Điện trường yếu hơn",
+                        "Điện trường mạnh hơn",
+                        "Điện trường không đổi",
+                        "Không xác định được cường độ điện trường"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 5,
+                    question: "Khi đặt điện tích thử vào một điểm trong điện trường, nếu lực điện tác dụng lên nó tăng gấp đôi khi tăng điện tích thử gấp đôi thì:",
+                    options: [
+                        "Cường độ điện trường tại điểm đó tăng gấp đôi",
+                        "Cường độ điện trường tại điểm đó giảm một nửa",
+                        "Cường độ điện trường tại điểm đó không đổi",
+                        "Không thể kết luận"
+                    ],
+                    correct: 2
+                },
+                {
+                    id: 6,
+                    question: "Hai điện tích điểm Q₁ = 2 × 10⁻⁸ C và Q₂ = -2 × 10⁻⁸ C đặt tại hai điểm A và B cách nhau 6 cm. Cường độ điện trường tại trung điểm của AB có độ lớn:",
+                    options: [
+                        "0 V/m",
+                        "2000 V/m",
+                        "4000 V/m",
+                        "8000 V/m"
+                    ],
+                    correct: 2
+                },
+                {
+                    id: 7,
+                    question: "Đường sức điện của một điện tích điểm âm có dạng:",
+                    options: [
+                        "Các đường thẳng xuất phát từ điện tích",
+                        "Các đường cong hướng vào điện tích",
+                        "Các đường tròn đồng tâm",
+                        "Các đường thẳng song song"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 8,
+                    question: "Đặt một điện tích thử dương vào điện trường, nếu lực điện tác dụng lên nó hướng về phía Tây thì vectơ cường độ điện trường tại điểm đó hướng về phía:",
+                    options: [
+                        "Đông",
+                        "Tây",
+                        "Nam",
+                        "Bắc"
+                    ],
+                    correct: 1
+                },
+                {
+                    id: 9,
+                    question: "Một hạt bụi tích điện âm nằm trong điện trường Trái Đất sẽ chịu tác dụng của lực điện có chiều:",
+                    options: [
+                        "Hướng lên trên",
+                        "Hướng xuống dưới",
+                        "Hướng về phía Bắc",
+                        "Hướng về phía Nam"
+                    ],
+                    correct: 0
+                },
+                {
+                    id: 10,
+                    question: "Để nghiên cứu điện trường trong thí nghiệm, người ta thường sử dụng quả cầu tích điện vì:",
+                    options: [
+                        "Điện trường bên ngoài quả cầu tương đương với điện trường của điện tích điểm đặt tại tâm",
+                        "Quả cầu dễ tích điện hơn các vật khác",
+                        "Quả cầu có điện trường đều bên ngoài",
+                        "Quả cầu không bị ảnh hưởng bởi điện trường xung quanh"
+                    ],
+                    correct: 0
+                }
+            ]
+        };
+
+        // Biến toàn cục
+        let currentTest = 1;
+        let currentQuestion = 0;
+        let userAnswers = {};
+        let testSubmitted = false;
+
+        // Khởi tạo trang web
+        document.addEventListener('DOMContentLoaded', function() {
+            initTestSelector();
+            renderAllTests();
+            initControls();
+            // Chạy MathJax lần đầu
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        });
+
+        // Khởi tạo bộ chọn đề
+        function initTestSelector() {
+            const testBtns = document.querySelectorAll('.test-btn');
+            testBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const testId = parseInt(this.getAttribute('data-test'));
+                    if (testId !== currentTest || testSubmitted) {
+                        switchTest(testId);
+                    }
+                });
+            });
+        }
+
+        // Render tất cả các đề
+        function renderAllTests() {
+            for (let testId = 1; testId <= 5; testId++) {
+                renderQuestions(testId);
+            }
+            // Hiển thị đề 1
+            switchTest(1);
+        }
+
+        // Chuyển đổi giữa các đề
+        function switchTest(testId) {
+            // Đặt lại trạng thái nút
+            document.querySelectorAll('.test-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.test-btn[data-test="${testId}"]`).classList.add('active');
+            
+            // Ẩn tất cả các đề
+            document.querySelectorAll('.test-container').forEach(container => {
+                container.classList.remove('active');
+            });
+            
+            // Hiển thị đề được chọn
+            document.getElementById(`test-${testId}`).classList.add('active');
+            
+            // Ẩn kết quả nếu đang hiển thị
+            document.getElementById('result-container').classList.remove('active');
+            
+            // Cập nhật biến toàn cục
+            currentTest = testId;
+            currentQuestion = 0;
+            userAnswers = {};
+            testSubmitted = false;
+            
+            // Cập nhật điều khiển
+            updateControls();
+            
+            // Render MathJax
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        // Hiển thị câu hỏi
+        function renderQuestions(testId) {
+            const questions = allQuestions[testId];
+            const container = document.querySelector(`#test-${testId} .questions-container`);
+            container.innerHTML = '';
+            
+            questions.forEach((q, index) => {
+                const questionEl = document.createElement('div');
+                questionEl.className = 'question';
+                questionEl.id = `q-${testId}-${index}`;
+                questionEl.style.display = index === 0 ? 'block' : 'none';
+                
+                let optionsHTML = '';
+                q.options.forEach((opt, optIndex) => {
+                    optionsHTML += `
+                        <div class="option" data-option="${optIndex}">
+                            <div class="option-label">${String.fromCharCode(65 + optIndex)}</div>
+                            <div class="option-text">${opt}</div>
+                        </div>
+                    `;
+                });
+                
+                questionEl.innerHTML = `
+                    <div class="question-header">
+                        <div class="question-number">${index + 1}</div>
+                        <div class="question-text">${q.question}</div>
+                    </div>
+                    <div class="options">${optionsHTML}</div>
+                `;
+                
+                container.appendChild(questionEl);
+            });
+            
+            // Gắn sự kiện cho các lựa chọn
+            container.querySelectorAll('.option').forEach(opt => {
+                opt.addEventListener('click', function() {
+                    if (!testSubmitted) {
+                        const questionIndex = parseInt(this.closest('.question').id.split('-')[2]);
+                        const optionIndex = parseInt(this.getAttribute('data-option'));
+                        selectOption(testId, questionIndex, optionIndex);
+                    }
+                });
+            });
+        }
+
+        // Chọn một đáp án
+        function selectOption(testId, questionIndex, optionIndex) {
+            const questionEl = document.getElementById(`q-${testId}-${questionIndex}`);
+            
+            // Xóa chọn trước đó
+            questionEl.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Chọn đáp án mới
+            questionEl.querySelector(`.option[data-option="${optionIndex}"]`).classList.add('selected');
+            
+            // Lưu đáp án
+            userAnswers[questionIndex] = optionIndex;
+        }
+
+        // Khởi tạo điều khiển
+        function initControls() {
+            // Sử dụng event delegation cho các nút điều khiển
+            document.addEventListener('click', function(e) {
+                // Nút "Câu trước"
+                if (e.target.classList.contains('prev-btn')) {
+                    navigateQuestion(-1);
+                }
+                
+                // Nút "Câu tiếp theo"
+                if (e.target.classList.contains('next-btn')) {
+                    navigateQuestion(1);
+                }
+                
+                // Nút "Nộp bài"
+                if (e.target.classList.contains('submit-btn')) {
+                    submitTest();
+                }
+            });
+            
+            // Nút "Làm đề khác"
+            document.getElementById('restart-btn').addEventListener('click', function() {
+                document.getElementById('result-container').classList.remove('active');
+                document.querySelector(`#test-${currentTest}`).classList.add('active');
+            });
+        }
+
+        // Điều hướng giữa các câu hỏi
+        function navigateQuestion(direction) {
+            const questions = allQuestions[currentTest];
+            const newIndex = currentQuestion + direction;
+            
+            if (newIndex >= 0 && newIndex < questions.length) {
+                // Ẩn câu hỏi hiện tại
+                const currentQuestionEl = document.getElementById(`q-${currentTest}-${currentQuestion}`);
+                if (currentQuestionEl) {
+                    currentQuestionEl.style.display = 'none';
+                }
+                
+                // Hiển thị câu hỏi mới
+                const newQuestionEl = document.getElementById(`q-${currentTest}-${newIndex}`);
+                if (newQuestionEl) {
+                    newQuestionEl.style.display = 'block';
+                }
+                
+                currentQuestion = newIndex;
+                updateControls();
+                
+                // Render MathJax cho câu hỏi mới
+                if (window.MathJax) {
+                    MathJax.typesetPromise([newQuestionEl]);
+                }
+            }
+        }
+
+        // Cập nhật trạng thái nút điều khiển
+        function updateControls() {
+            const questions = allQuestions[currentTest];
+            const testContainer = document.getElementById(`test-${currentTest}`);
+            
+            if (testContainer) {
+                const prevBtn = testContainer.querySelector('.prev-btn');
+                const nextBtn = testContainer.querySelector('.next-btn');
+                
+                if (prevBtn) {
+                    prevBtn.disabled = currentQuestion === 0;
+                }
+                
+                if (nextBtn) {
+                    nextBtn.disabled = currentQuestion === questions.length - 1;
+                }
+            }
+        }
+
+        // Nộp bài
+        function submitTest() {
+            const questions = allQuestions[currentTest];
+            let score = 0;
+            let resultHTML = '';
+            
+            // Kiểm tra xem đã trả lời hết các câu chưa
+            const answeredCount = Object.keys(userAnswers).length;
+            if (answeredCount < questions.length) {
+                if (!confirm(`Bạn mới trả lời ${answeredCount}/${questions.length} câu. Bạn có chắc chắn muốn nộp bài không?`)) {
+                    return;
+                }
+            }
+            
+            // Tính điểm
+            for (let i = 0; i < questions.length; i++) {
+                if (userAnswers[i] === questions[i].correct) {
+                    score++;
+                    resultHTML += `<p><strong>Câu ${i+1}:</strong> Đúng ✓</p>`;
+                } else {
+                    const correctAnswer = String.fromCharCode(65 + questions[i].correct);
+                    resultHTML += `<p><strong>Câu ${i+1}:</strong> Sai ✗ (Đáp án đúng: ${correctAnswer})</p>`;
+                }
+            }
+            
+            // Hiển thị kết quả
+            document.getElementById('score').textContent = `${score}/${questions.length}`;
+            document.getElementById('score-detail').innerHTML = resultHTML;
+            document.querySelector(`#test-${currentTest}`).classList.remove('active');
+            document.getElementById('result-container').classList.add('active');
+            
+            testSubmitted = true;
+            
+            // Cập nhật màu sắc cho điểm số
+            const scoreElement = document.getElementById('score');
+            const percentage = score / questions.length;
+            if (percentage >= 0.8) {
+                scoreElement.style.color = '#27ae60'; // Xanh lá
+            } else if (percentage >= 0.6) {
+                scoreElement.style.color = '#f39c12'; // Cam
+            } else {
+                scoreElement.style.color = '#e74c3c'; // Đỏ
+            }
+        }
+    </script>
+</body>
+</html>
