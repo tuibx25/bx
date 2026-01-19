@@ -4,25 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vật Lý 10 KNTT</title>
-	<link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
     <style>
         :root {
-            --primary: #4361ee;
-            --secondary: #3a0ca3;
-            --accent: #7209b7;
-            --success: #4cc9f0;
-            --dark: #1a1a2e;
-            --light: #f8f9fa;
-            --gradient-1: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
-            --gradient-2: linear-gradient(135deg, #7209b7 0%, #f72585 100%);
-            --gradient-3: linear-gradient(135deg, #4cc9f0 0%, #4895ef 100%);
-            --gradient-4: linear-gradient(135deg, #f72585 0%, #b5179e 100%);
-            --gradient-5: linear-gradient(135deg, #ff9a00 0%, #ff5e00 100%);
-            --gradient-6: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
-            --gradient-7: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            --shadow-hover: 0 20px 50px rgba(0, 0, 0, 0.15);
+            --primary: #8B4513; /* Nâu đất - màu chủ đạo */
+            --secondary: #A0522D; /* Nâu đậm */
+            --accent: #D2691E; /* Nâu cam nhạt */
+            --dark: #2C1810; /* Nâu đen */
+            --light: #F5F5DC; /* Màu be nhạt */
+            --neutral: #D2B48C; /* Màu tan */
+            --light-brown: #DEB887; /* Nâu nhạt */
+            --dark-brown: #5D4037; /* Nâu tối */
+            
+            /* Màu nền cố định thay vì gradient */
+            --bg-color: #FDF5E6;
+            --header-bg: #8B4513;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            
+            --shadow: 0 10px 30px rgba(139, 69, 19, 0.1);
+            --shadow-hover: 0 20px 50px rgba(139, 69, 19, 0.15);
         }
         
         * {
@@ -33,7 +34,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #f0f4ff 0%, #f9f7ff 100%);
+            background-color: var(--bg-color);
             color: var(--dark);
             line-height: 1.6;
             min-height: 100vh;
@@ -50,8 +51,8 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 80%, rgba(67, 97, 238, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(114, 9, 183, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 20% 80%, rgba(139, 69, 19, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(210, 180, 140, 0.05) 0%, transparent 50%);
             z-index: -1;
         }
         
@@ -65,7 +66,7 @@
             text-align: center;
             margin-bottom: 60px;
             padding: 40px 30px;
-            background: var(--gradient-1);
+            background-color: var(--header-bg);
             border-radius: 24px;
             color: white;
             position: relative;
@@ -81,11 +82,11 @@
             right: 0;
             height: 5px;
             background: linear-gradient(90deg, 
-                #4cc9f0 0%, 
-                #4361ee 25%, 
-                #7209b7 50%, 
-                #f72585 75%, 
-                #4cc9f0 100%);
+                #A0522D 0%, 
+                #8B4513 25%, 
+                #D2691E 50%, 
+                #DEB887 75%, 
+                #A0522D 100%);
             animation: shimmer 3s infinite linear;
         }
         
@@ -103,10 +104,8 @@
             font-size: 3rem;
             margin-bottom: 10px;
             font-weight: 700;
-            background: linear-gradient(45deg, #fff, #caf0f8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
             letter-spacing: -0.5px;
         }
         
@@ -130,11 +129,11 @@
         }
         
         .chapter-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--card-bg);
             border-radius: 20px;
             padding: 30px;
             box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(139, 69, 19, 0.1);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
@@ -160,6 +159,7 @@
         .chapter-card:hover {
             transform: translateY(-8px) scale(1.02);
             box-shadow: var(--shadow-hover);
+            border-color: rgba(139, 69, 19, 0.2);
         }
         
         .chapter-header {
@@ -184,13 +184,13 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         
-        .chapter-card:nth-child(1) .chapter-icon { background: var(--gradient-1); }
-        .chapter-card:nth-child(2) .chapter-icon { background: var(--gradient-2); }
-        .chapter-card:nth-child(3) .chapter-icon { background: var(--gradient-3); }
-        .chapter-card:nth-child(4) .chapter-icon { background: var(--gradient-4); }
-        .chapter-card:nth-child(5) .chapter-icon { background: var(--gradient-5); }
-        .chapter-card:nth-child(6) .chapter-icon { background: var(--gradient-6); }
-        .chapter-card:nth-child(7) .chapter-icon { background: var(--gradient-7); }
+        .chapter-card:nth-child(1) .chapter-icon { background-color: #8B4513; }
+        .chapter-card:nth-child(2) .chapter-icon { background-color: #A0522D; }
+        .chapter-card:nth-child(3) .chapter-icon { background-color: #D2691E; }
+        .chapter-card:nth-child(4) .chapter-icon { background-color: #5D4037; }
+        .chapter-card:nth-child(5) .chapter-icon { background-color: #8B4513; }
+        .chapter-card:nth-child(6) .chapter-icon { background-color: #A0522D; }
+        .chapter-card:nth-child(7) .chapter-icon { background-color: #D2691E; }
         
         .chapter-title {
             color: var(--dark);
@@ -217,8 +217,8 @@
             padding: 15px;
             border-radius: 12px;
             transition: all 0.3s;
-            background: rgba(255, 255, 255, 0.5);
-            border: 1px solid rgba(0,0,0,0.05);
+            background: rgba(245, 245, 220, 0.5);
+            border: 1px solid rgba(139, 69, 19, 0.1);
             position: relative;
             overflow: hidden;
         }
@@ -238,7 +238,8 @@
         .lesson-link:hover {
             background: white;
             transform: translateX(10px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.1);
+            border-color: rgba(139, 69, 19, 0.2);
         }
         
         .lesson-link:hover::before {
@@ -248,6 +249,7 @@
         .lesson-link:hover .lesson-arrow {
             transform: translateX(5px);
             opacity: 1;
+            color: var(--primary);
         }
         
         .lesson-number {
@@ -256,13 +258,13 @@
             justify-content: center;
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background-color: var(--primary);
             color: white;
             border-radius: 10px;
             margin-right: 15px;
             font-weight: 600;
             font-size: 0.9rem;
-            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+            box-shadow: 0 4px 10px rgba(139, 69, 19, 0.3);
             flex-shrink: 0;
         }
         
@@ -301,9 +303,9 @@
             text-decoration: none;
             border-radius: 12px;
             font-weight: 600;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(139, 69, 19, 0.1);
             transition: all 0.3s ease;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(139, 69, 19, 0.2);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -313,9 +315,10 @@
         
         .home-button:hover {
             background: white;
-            color: var(--secondary);
+            color: var(--primary);
             transform: translateY(-50%) translateX(-5px);
-            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.2);
+            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.2);
+            border-color: rgba(139, 69, 19, 0.3);
         }
         
         .home-button .button-icon {
@@ -335,17 +338,15 @@
             background: rgba(255, 255, 255, 0.9);
             border-radius: 20px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 20px rgba(139, 69, 19, 0.05);
+            border: 1px solid rgba(139, 69, 19, 0.1);
         }
         
         .footer-text {
             font-weight: 600;
             font-size: 1.1rem;
             margin-bottom: 10px;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--primary);
         }
         
         .footer-subtext {
@@ -357,8 +358,8 @@
         .particle {
             position: fixed;
             border-radius: 50%;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            opacity: 0.1;
+            background-color: var(--primary);
+            opacity: 0.05;
             z-index: -1;
         }
         
@@ -369,7 +370,7 @@
             left: 0;
             width: 0;
             height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
+            background-color: var(--primary);
             z-index: 1000;
             transition: width 0.3s;
         }
@@ -570,7 +571,7 @@
         }
 
         function createParticles() {
-            const colors = ['#4361ee', '#7209b7', '#4cc9f0', '#f72585', '#ff9a00', '#00b09b', '#ff416c'];
+            const colors = ['#8B4513', '#A0522D', '#D2691E', '#5D4037', '#DEB887', '#D2B48C', '#2C1810'];
             for (let i = 0; i < 15; i++) {
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
@@ -578,8 +579,8 @@
                 particle.style.height = particle.style.width;
                 particle.style.left = `${Math.random() * 100}vw`;
                 particle.style.top = `${Math.random() * 100}vh`;
-                particle.style.background = `linear-gradient(45deg, ${colors[Math.floor(Math.random() * colors.length)]}, ${colors[Math.floor(Math.random() * colors.length)]})`;
-                particle.style.opacity = `${Math.random() * 0.1 + 0.05}`;
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.opacity = `${Math.random() * 0.05 + 0.02}`;
                 particle.style.animation = `float ${Math.random() * 20 + 10}s infinite ease-in-out`;
                 document.body.appendChild(particle);
             }
