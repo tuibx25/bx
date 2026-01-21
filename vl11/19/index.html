@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 19: Thế năng điện</title>
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-dark: #8B4513;      /* Nâu đất đậm */
+            --primary-medium: #A0522D;    /* Nâu đất trung bình */
+            --primary-light: #D2B48C;     /* Nâu đất nhạt */
+            --secondary: #DEB887;         /* Nâu be */
+            --text-dark: #3E2723;         /* Nâu sô cô la đậm cho chữ */
+            --text-medium: #5D4037;       /* Nâu sô cô la trung bình */
+            --text-light: #795548;        /* Nâu sô cô la nhạt */
+            --background: #FAF3E6;        /* Nền màu kem nhẹ */
+            --card-bg: #FFF8E1;           /* Nền card màu kem đậm hơn */
+            --border-color: #BCAAA4;      /* Màu viền nâu nhạt */
+            --shadow: rgba(139, 69, 19, 0.15);
+            --header-bg: linear-gradient(135deg, var(--primary-dark), var(--primary-medium));
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--background);
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        
+        /* Header */
+        .header {
+            background: var(--header-bg);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+            position: relative;
+            border-bottom: 4px solid var(--primary-light);
+        }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header p {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        /* Content */
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid var(--primary-medium);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .section h2 {
+            color: var(--primary-dark);
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px dashed var(--primary-light);
+            display: flex;
+            align-items: center;
+        }
+        
+        .section h2 i {
+            margin-right: 15px;
+            color: var(--primary-medium);
+        }
+        
+        .section p, .section li {
+            font-size: 1.5rem; /* Kích thước font cho TV */
+            color: var(--text-medium);
+            margin-bottom: 15px;
+        }
+        
+        .formula {
+            background-color: white;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 1.6rem;
+            text-align: center;
+            font-family: 'Cambria', 'Times New Roman', serif;
+            color: var(--text-dark);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .formula-number {
+            display: block;
+            text-align: right;
+            font-size: 1.3rem;
+            color: var(--text-light);
+            margin-top: 8px;
+            font-style: italic;
+        }
+        
+        .note-box {
+            background-color: #F5F5DC; /* Màu be nhạt */
+            border-left: 5px solid var(--primary-medium);
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .note-box h3 {
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            font-size: 1.7rem;
+        }
+        
+        .section ul, .section ol {
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .section li {
+            margin-bottom: 10px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .point {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-top: 4px solid var(--primary-medium);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .point h3 {
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            font-size: 1.6rem;
+        }
+        
+        .point p {
+            font-size: 1.4rem;
+        }
+        
+        .highlight {
+            background-color: var(--secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: var(--primary-dark);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border-top: 1px solid var(--primary-light);
+        }
+        
+        .footer p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .header p {
+                font-size: 1.2rem;
+            }
+            
+            .section h2 {
+                font-size: 1.8rem;
+            }
+            
+            .section p, .section li {
+                font-size: 1.3rem; /* Giảm kích thước font trên mobile */
+            }
+            
+            .formula {
+                font-size: 1.4rem;
+                padding: 15px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .section {
+                padding: 20px 15px;
+            }
+            
+            .section h2 {
+                font-size: 1.6rem;
+            }
+            
+            .section p, .section li {
+                font-size: 1.2rem;
+            }
+        }
+        
+        /* TV Optimizations */
+        @media (min-width: 1200px) {
+            .section p, .section li {
+                font-size: 1.6rem; /* Tăng kích thước font cho TV lớn */
+            }
+            
+            .header h1 {
+                font-size: 3.2rem;
+            }
+            
+            .formula {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-bolt"></i> Bài 19: Thế năng điện</h1>
+            <p>Chương III - Điện trường</p>
+        </header>
+        
+        <main class="content">
+            <section class="section">
+                <h2><i class="fas fa-cogs"></i> I. Công của lực điện</h2>
+                <p>Một điện tích dương <span class="highlight">q</span> dịch chuyển trong điện trường đều từ điểm <span class="highlight">M</span> tới điểm <span class="highlight">N</span> luôn chịu tác dụng của lực điện không đổi.</p>
+                
+                <div class="formula">
+                    A<sub>MN</sub> = qEd
+                    <span class="formula-number">(19.1)</span>
+                </div>
+                
+                <p>Trong đó:</p>
+                <ul>
+                    <li><span class="highlight">d</span> là độ dài đại số của đoạn MM' (hình chiếu của MN trên một đường sức điện)</li>
+                    <li><span class="highlight">E</span> là cường độ điện trường</li>
+                    <li><span class="highlight">q</span> là điện tích</li>
+                </ul>
+                
+                <p>Kết quả cho thấy: <span class="highlight">Công của lực điện làm dịch chuyển điện tích q từ M đến N trong điện trường đều bằng qEd</span>, không phụ thuộc vào hình dạng đường đi mà chỉ phụ thuộc vào vị trí điểm đầu M và điểm cuối N.</p>
+                
+                <div class="note-box">
+                    <h3><i class="fas fa-lightbulb"></i> Chú ý quan trọng</h3>
+                    <p>Với điện trường bất kì, công của lực điện trường làm dịch chuyển điện tích q cũng không phụ thuộc vào hình dạng đường đi, chỉ phụ thuộc vào vị trí điểm đầu và điểm cuối. Đây là tính chất chung của trường tĩnh điện, trường trọng lực,…</p>
+                    <p>Công của lực điện tỉ lệ với điện tích q.</p>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2><i class="fas fa-battery-three-quarters"></i> II. Thế năng của một điện tích trong điện trường</h2>
+                
+                <h3>1. Thế năng của một điện tích trong điện trường đều</h3>
+                <p>Thế năng của điện tích <span class="highlight">q</span> trong điện trường đều đặc trưng cho khả năng sinh công của điện trường khi đặt điện tích q tại điểm xét.</p>
+                
+                <div class="formula">
+                    W<sub>M</sub> = qEd
+                    <span class="formula-number">(19.2)</span>
+                </div>
+                
+                <p>Trong đó:</p>
+                <ul>
+                    <li><span class="highlight">W<sub>M</sub></span> là thế năng điện của điện tích q tại điểm M</li>
+                    <li><span class="highlight">d</span> là khoảng cách từ M đến bản cực âm (được chọn làm mốc thế năng)</li>
+                </ul>
+                
+                <div class="note-box">
+                    <h3><i class="fas fa-exclamation-circle"></i> Lưu ý</h3>
+                    <p>Bản cực âm của tụ điện thường được chọn làm mốc để tính thế năng. Nếu thay q bằng điện tích âm, công A và thế năng W<sub>M</sub> sẽ mang dấu âm.</p>
+                </div>
+                
+                <h3>2. Thế năng của một điện tích trong điện trường bất kì</h3>
+                <p>Thế năng của điện tích q trong điện trường bất kì cũng đặc trưng cho khả năng sinh công của điện trường khi đặt q tại điểm đang xét.</p>
+                
+                <p>Khi chọn mốc thế năng ở vô cực (nơi điện trường bằng 0):</p>
+                
+                <div class="formula">
+                    W<sub>M</sub> = A<sub>M∞</sub>
+                    <span class="formula-number">(19.3)</span>
+                </div>
+                
+                <p>Thế năng tỉ lệ với điện tích q:</p>
+                
+                <div class="formula">
+                    W<sub>M</sub> = V<sub>M</sub>q
+                    <span class="formula-number">(19.4)</span>
+                </div>
+                
+                <p>Hệ số tỉ lệ <span class="highlight">V<sub>M</sub></span> không phụ thuộc vào q, mà chỉ phụ thuộc vào điện trường và vị trí điểm M.</p>
+            </section>
+            
+            <section class="section">
+                <h2><i class="fas fa-key"></i> Điểm quan trọng cần nhớ</h2>
+                
+                <div class="key-points">
+                    <div class="point">
+                        <h3><i class="fas fa-route"></i> Tính chất công lực điện</h3>
+                        <p>Công của lực điện không phụ thuộc vào đường đi, chỉ phụ thuộc vào điểm đầu và điểm cuối.</p>
+                    </div>
+                    
+                    <div class="point">
+                        <h3><i class="fas fa-charging-station"></i> Ý nghĩa thế năng điện</h3>
+                        <p>Thế năng điện đặc trưng cho khả năng sinh công của điện trường, được tính từ điểm xét đến điểm mốc.</p>
+                    </div>
+                    
+                    <div class="point">
+                        <h3><i class="fas fa-balance-scale"></i> Mối quan hệ tỉ lệ</h3>
+                        <p>Thế năng tỉ lệ với điện tích và được biểu diễn qua hệ số điện thế V<sub>M</sub>.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="footer">
+            <p>Bài 19: Thế năng điện | Chương III - Điện trường</p>
+            <p>Trang web tóm tắt nội dung bài học | Thiết kế phù hợp cho TV và điện thoại</p>
+        </footer>
+    </div>
+
+    <script>
+        // Thêm hiệu ứng scroll mượt mà
+        document.addEventListener('DOMContentLoaded', function() {
+            // Thêm hiệu ứng khi cuộn trang
+            window.addEventListener('scroll', function() {
+                const sections = document.querySelectorAll('.section');
+                
+                sections.forEach(section => {
+                    const sectionTop = section.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (sectionTop < windowHeight * 0.75) {
+                        section.style.opacity = '1';
+                        section.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+            
+            // Khởi tạo trạng thái ban đầu cho các section
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            });
+            
+            // Kích hoạt hiệu ứng sau khi trang load xong
+            setTimeout(() => {
+                window.dispatchEvent(new Event('scroll'));
+            }, 100);
+        });
+    </script>
+</body>
+</html>
