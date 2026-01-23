@@ -5,6 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chứng Minh Công của Lực Điện</title>
     <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
+    
+    <!-- Script bảo vệ (giống 17tlsbt.html) -->
+    <script>
+        // Ngăn chặn menu chuột phải
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn phím tắt (Ctrl+U, Ctrl+S, Ctrl+P, F12, etc.)
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+U (View Source)
+            if (e.ctrlKey && e.keyCode === 85) e.preventDefault();
+            // Ctrl+S (Save)
+            if (e.ctrlKey && e.keyCode === 83) e.preventDefault();
+            // Ctrl+P (Print)
+            if (e.ctrlKey && e.keyCode === 80) e.preventDefault();
+            // F12 (Developer Tools)
+            if (e.keyCode === 123) e.preventDefault();
+            // Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) e.preventDefault();
+            // Ctrl+Shift+J (Console)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) e.preventDefault();
+            // Ctrl+Shift+C (Inspector)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) e.preventDefault();
+        });
+        
+        // Ngăn chặn kéo thả hình ảnh
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.tagName === 'IMG') e.preventDefault();
+        });
+        
+        // Ngăn chặn sao chép văn bản
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            alert('Không cho phép sao chép nội dung!');
+        });
+        
+        // Ngăn chặn cắt
+        document.addEventListener('cut', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn dán
+        document.addEventListener('paste', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn chọn văn bản
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn in ấn
+        window.addEventListener('beforeprint', function(e) {
+            e.preventDefault();
+            alert('Không cho phép in trang này!');
+        });
+    </script>
+    
     <style>
         :root {
             --primary-color: #8B4513; /* Màu nâu đất chủ đạo */
@@ -19,6 +78,10 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+/Edge */
+            user-select: none; /* Standard */
         }
         
         body {
@@ -29,6 +92,25 @@
             padding: 20px;
             max-width: 1200px;
             margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Watermark nền cho body */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 400px 400px;
+            opacity: 0.08; /* Độ mờ của watermark */
+            z-index: -1;
+            pointer-events: none;
         }
         
         .container {
@@ -38,6 +120,8 @@
             padding: 30px;
             margin-bottom: 30px;
             border: 1px solid var(--border-color);
+            position: relative;
+            z-index: 1;
         }
         
         header {
@@ -146,6 +230,47 @@
             border-top: 2px solid var(--border-color);
             font-size: 1.2rem;
             color: var(--primary-color);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Watermark phủ toàn màn hình (giống 17tlsbt.html) */
+        .watermark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+        }
+        
+        .watermark-overlay::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 200px 200px;
+            opacity: 0.04;
+        }
+        
+        /* CSS để chống in ấn */
+        @media print {
+            * {
+                display: none !important;
+            }
+            body:before {
+                content: "Không cho phép in trang này!";
+                display: block !important;
+                font-size: 24px;
+                text-align: center;
+                margin-top: 100px;
+            }
         }
         
         /* Responsive design */
@@ -172,6 +297,11 @@
             
             p, .formula {
                 font-size: 1.3rem;
+            }
+            
+            body::before {
+                background-size: 300px 300px;
+                opacity: 0.05;
             }
         }
         
@@ -202,6 +332,9 @@
     </style>
 </head>
 <body>
+    <!-- Watermark phủ toàn màn hình -->
+    <div class="watermark-overlay"></div>
+    
     <div class="container">
         <header>
             <h1>Chứng Minh Công của Lực Điện</h1>
