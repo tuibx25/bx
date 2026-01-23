@@ -8,12 +8,72 @@
     <!-- Thêm MathJax để hiển thị công thức toán -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Ngăn chặn các hành vi không mong muốn (giống 17tlsbt) -->
+    <script>
+        // Ngăn chặn menu chuột phải
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn phím tắt (Ctrl+U, Ctrl+S, Ctrl+P, F12, etc.)
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+U (View Source)
+            if (e.ctrlKey && e.keyCode === 85) e.preventDefault();
+            // Ctrl+S (Save)
+            if (e.ctrlKey && e.keyCode === 83) e.preventDefault();
+            // Ctrl+P (Print)
+            if (e.ctrlKey && e.keyCode === 80) e.preventDefault();
+            // F12 (Developer Tools)
+            if (e.keyCode === 123) e.preventDefault();
+            // Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) e.preventDefault();
+            // Ctrl+Shift+J (Console)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) e.preventDefault();
+            // Ctrl+Shift+C (Inspector)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) e.preventDefault();
+        });
+        
+        // Ngăn chặn kéo thả hình ảnh
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.tagName === 'IMG') e.preventDefault();
+        });
+        
+        // Ngăn chặn sao chép văn bản
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            alert('Không cho phép sao chép nội dung!');
+        });
+        
+        // Ngăn chặn cắt
+        document.addEventListener('cut', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn dán
+        document.addEventListener('paste', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn chọn văn bản
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+    </script>
+    
     <style>
-        /* Reset và cài đặt cơ bản */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        /* CSS để chống in ấn (giống 17tlsbt) */
+        @media print {
+            * {
+                display: none !important;
+            }
+            body:before {
+                content: "Không cho phép in trang này!";
+                display: block !important;
+                font-size: 24px;
+                text-align: center;
+                margin-top: 100px;
+            }
         }
         
         :root {
@@ -31,38 +91,56 @@
             --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+/Edge */
+            user-select: none; /* Standard */
+        }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--neutral-beige);
             color: var(--text-dark);
             line-height: 1.6;
             padding: 20px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            /* Thêm watermark nền */
-            background-color: var(--neutral-beige);
-            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
-            background-repeat: repeat;
-            background-size: 200px 200px;
-            background-position: center;
-            background-attachment: fixed;
-            opacity: 0.95;
+            position: relative;
+            overflow-x: hidden;
         }
         
-        /* Container chính với nền trong suốt để hiển thị watermark */
+        /* Watermark nền (giống 17tlsbt) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 400px 400px;
+            opacity: 0.08; /* Độ mờ của watermark */
+            z-index: -1;
+            pointer-events: none;
+        }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.92);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             padding: 30px;
             flex-grow: 1;
             position: relative;
+            z-index: 1;
         }
         
         /* Header */
@@ -124,6 +202,26 @@
             padding: 25px;
             margin-bottom: 25px;
             border-left: 5px solid var(--secondary-brown);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Watermark nhẹ trên từng câu hỏi (giống 17tlsbt) */
+        .question::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.03;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
         }
         
         .question:hover {
@@ -134,6 +232,8 @@
             display: flex;
             align-items: flex-start;
             margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
         }
         
         .question-number {
@@ -149,6 +249,8 @@
             font-weight: bold;
             font-size: 1.2rem;
             flex-shrink: 0;
+            position: relative;
+            z-index: 1;
         }
         
         .question-text {
@@ -156,11 +258,15 @@
             font-size: 1.5rem;
             color: var(--text-dark);
             padding-top: 5px;
+            position: relative;
+            z-index: 1;
         }
         
         /* Tùy chọn */
         .options {
             margin-left: 10px;
+            position: relative;
+            z-index: 1;
         }
         
         .option {
@@ -172,6 +278,8 @@
             cursor: pointer;
             transition: all 0.2s;
             border: 1px solid #e0d6c8;
+            position: relative;
+            z-index: 1;
         }
         
         .option:hover {
@@ -238,6 +346,8 @@
             margin-top: 0;
             background-color: #f9f7f3;
             border-radius: var(--border-radius);
+            position: relative;
+            z-index: 1;
         }
         
         .explanation.show {
@@ -250,12 +360,16 @@
             color: var(--dark-brown);
             margin-bottom: 15px;
             font-size: 1.3rem;
+            position: relative;
+            z-index: 1;
         }
         
         .explanation p {
             font-size: 1.5rem;
             color: var(--text-light);
             line-height: 1.7;
+            position: relative;
+            z-index: 1;
         }
         
         /* Công thức toán học */
@@ -282,6 +396,8 @@
             gap: 20px;
             margin-top: 30px;
             flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
         }
         
         button {
@@ -293,6 +409,8 @@
             transition: all 0.3s;
             font-size: 1.3rem;
             min-width: 200px;
+            position: relative;
+            z-index: 1;
         }
         
         #checkBtn {
@@ -324,6 +442,8 @@
             text-align: center;
             display: none;
             border: 2px solid var(--light-brown);
+            position: relative;
+            z-index: 1;
         }
         
         .results.show {
@@ -335,6 +455,8 @@
             font-weight: bold;
             color: var(--dark-brown);
             margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
         }
         
         .score-value {
@@ -347,11 +469,15 @@
             margin-bottom: 25px;
             padding: 15px;
             border-radius: var(--border-radius);
+            position: relative;
+            z-index: 1;
         }
         
         .answer-key {
             margin-top: 30px;
             text-align: left;
+            position: relative;
+            z-index: 1;
         }
         
         .answer-key h4 {
@@ -384,44 +510,52 @@
             border-top: 1px solid var(--light-brown);
             color: var(--secondary-brown);
             font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
         }
         
-        /* Overlay bảo vệ */
-        .protection-overlay {
+        /* Watermark footer (giống 17tlsbt) */
+        footer::before {
+            content: "tuibx";
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 1rem;
+            color: rgba(139, 69, 19, 0.3);
+            font-weight: bold;
+            font-style: italic;
+            z-index: 0;
+        }
+        
+        /* Thêm watermark phủ toàn màn hình (giống 17tlsbt) */
+        .watermark-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: transparent;
-            z-index: 9999;
             pointer-events: none;
+            z-index: 9998;
         }
         
-        /* Cảnh báo bảo mật */
-        .security-warning {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background-color: rgba(139, 69, 19, 0.9);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            z-index: 10000;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-        }
-        
-        .security-warning:hover {
-            opacity: 1;
+        .watermark-overlay::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 200px 200px;
+            opacity: 0.04;
         }
         
         /* Responsive cho điện thoại */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
-                background-size: 150px 150px;
             }
             
             .container {
@@ -479,14 +613,20 @@
             .results-message {
                 font-size: 1.5rem;
             }
+            
+            body::before {
+                background-size: 300px 300px;
+                opacity: 0.05;
+            }
+            
+            .question::before {
+                width: 200px;
+                height: 200px;
+            }
         }
         
         /* Tối ưu cho TV/trình chiếu lớn */
         @media (min-width: 1200px) {
-            body {
-                background-size: 300px 300px;
-            }
-            
             .question-text, .option-text, .explanation p, .instructions p {
                 font-size: 1.8rem;
             }
@@ -529,39 +669,26 @@
             .results-message {
                 font-size: 2rem;
             }
+            
+            body::before {
+                background-size: 500px 500px;
+                opacity: 0.1;
+            }
         }
         
-        /* Ẩn khi in */
-        @media print {
-            body * {
-                visibility: hidden;
-                background-image: none !important;
-            }
-            .no-print, .no-print * {
-                display: none !important;
-            }
-            .print-message {
-                visibility: visible;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                font-size: 24px;
-                text-align: center;
-                color: red;
-                font-weight: bold;
-            }
+        /* Đảm bảo MathJax hiển thị đúng */
+        .MathJax_SVG {
+            display: inline !important;
+        }
+        
+        mjx-container[jax="SVG"] {
+            display: inline-block !important;
         }
     </style>
 </head>
 <body>
-    <!-- Overlay bảo vệ chống copy -->
-    <div class="protection-overlay"></div>
-    <!-- Thông báo khi in -->
-    <div class="print-message" style="display: none;">
-        <h2>TRANG NÀY KHÔNG CHO PHÉP IN</h2>
-        <p>Nội dung được bảo vệ bản quyền.</p>
-    </div>
+    <!-- Watermark phủ toàn màn hình (giống 17tlsbt) -->
+    <div class="watermark-overlay"></div>
     
     <div class="container">
         <header>
@@ -709,106 +836,6 @@
         let userAnswers = Array(questions.length).fill(null);
         let quizSubmitted = false;
 
-        // ========== BẢO MẬT ==========
-        // Chống copy
-        document.addEventListener('copy', function(e) {
-            e.preventDefault();
-            showSecurityAlert('Không cho phép sao chép nội dung!');
-            return false;
-        });
-        
-        // Chống cắt (cut)
-        document.addEventListener('cut', function(e) {
-            e.preventDefault();
-            showSecurityAlert('Không cho phép cắt nội dung!');
-            return false;
-        });
-        
-        // Chống chuột phải
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            showSecurityAlert('Không cho phép sử dụng menu chuột phải!');
-            return false;
-        });
-        
-        // Chống kéo và thả
-        document.addEventListener('dragstart', function(e) {
-            e.preventDefault();
-            return false;
-        });
-        
-        // Chống in trang
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) {
-                e.preventDefault();
-                showSecurityAlert('Không cho phép in trang này!');
-                return false;
-            }
-            
-            // Chống F12 và Ctrl+Shift+I/Ctrl+Shift+J/Ctrl+U
-            if (e.key === 'F12' || 
-               (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j')) ||
-               (e.ctrlKey && e.key === 'u')) {
-                e.preventDefault();
-                showSecurityAlert('Truy cập bị hạn chế!');
-                return false;
-            }
-        });
-        
-        // Chống phím tắt in
-        window.addEventListener('beforeprint', function(e) {
-            e.preventDefault();
-            document.querySelector('.print-message').style.display = 'block';
-            showSecurityAlert('Không cho phép in trang này!');
-            return false;
-        });
-        
-        // Chống xem mã nguồn
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey && e.key === 'u') {
-                e.preventDefault();
-                showSecurityAlert('Không cho phép xem mã nguồn!');
-                return false;
-            }
-        });
-        
-        // Ẩn thông báo bảo mật sau 3 giây
-        function showSecurityAlert(message) {
-            const alertDiv = document.createElement('div');
-            alertDiv.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background-color: #C62828;
-                color: white;
-                padding: 15px 20px;
-                border-radius: 5px;
-                z-index: 10001;
-                font-weight: bold;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                animation: fadeInOut 3s ease-in-out;
-            `;
-            
-            alertDiv.textContent = message;
-            document.body.appendChild(alertDiv);
-            
-            setTimeout(() => {
-                alertDiv.remove();
-            }, 3000);
-        }
-        
-        // Thêm CSS cho animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeInOut {
-                0% { opacity: 0; transform: translateY(-20px); }
-                20% { opacity: 1; transform: translateY(0); }
-                80% { opacity: 1; transform: translateY(0); }
-                100% { opacity: 0; transform: translateY(-20px); }
-            }
-        `;
-        document.head.appendChild(style);
-        
         // ========== CHỨC NĂNG TRẮC NGHIỆM ==========
         // Khởi tạo bài trắc nghiệm
         function initializeQuiz() {
