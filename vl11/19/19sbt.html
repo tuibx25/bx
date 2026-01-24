@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Tập - Bài 19 (SBT)</title>
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
+    
+    <!-- Ngăn chặn các hành vi không mong muốn -->
+    <script>
+        // Ngăn chặn menu chuột phải
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn phím tắt (Ctrl+U, Ctrl+S, Ctrl+P, F12, etc.)
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+U (View Source)
+            if (e.ctrlKey && e.keyCode === 85) e.preventDefault();
+            // Ctrl+S (Save)
+            if (e.ctrlKey && e.keyCode === 83) e.preventDefault();
+            // Ctrl+P (Print)
+            if (e.ctrlKey && e.keyCode === 80) e.preventDefault();
+            // F12 (Developer Tools)
+            if (e.keyCode === 123) e.preventDefault();
+            // Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) e.preventDefault();
+            // Ctrl+Shift+J (Console)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) e.preventDefault();
+            // Ctrl+Shift+C (Inspector)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) e.preventDefault();
+        });
+        
+        // Ngăn chặn kéo thả hình ảnh
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.tagName === 'IMG') e.preventDefault();
+        });
+        
+        // Ngăn chặn sao chép văn bản
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            alert('Không cho phép sao chép nội dung!');
+        });
+        
+        // Ngăn chặn cắt
+        document.addEventListener('cut', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn dán
+        document.addEventListener('paste', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn chọn văn bản
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+    </script>
+    
+    <!-- Load MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true,
+                packages: {'[+]': ['ams']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    
+    <style>
+        /* CSS để chống in ấn */
+        @media print {
+            * {
+                display: none !important;
+            }
+            body:before {
+                content: "Không cho phép in trang này!";
+                display: block !important;
+                font-size: 24px;
+                text-align: center;
+                margin-top: 100px;
+            }
+        }
+        
+        :root {
+            --primary-color: #8B4513; /* Màu nâu đất chủ đạo */
+            --secondary-color: #D2691E;
+            --light-color: #FAF3E6;
+            --dark-color: #333;
+            --white: #fff;
+            --font-size-normal: 1.5rem;
+            --font-size-large: 2rem;
+            --font-size-small: 1.2rem;
+            --padding: 2rem;
+            --margin: 1.5rem;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+/Edge */
+            user-select: none; /* Standard */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+            padding: var(--padding);
+            font-size: var(--font-size-normal);
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Watermark nền */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 400px 400px;
+            opacity: 0.08; /* Độ mờ của watermark */
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: var(--margin);
+            padding: var(--padding);
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: var(--font-size-large);
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary-color);
+            position: relative;
+            z-index: 1;
+        }
+
+        h3 {
+            font-size: 1.6rem;
+            color: var(--secondary-color);
+            margin: 1.5rem 0 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section {
+            background-color: rgba(255, 255, 255, 0.92);
+            padding: var(--padding);
+            margin-bottom: var(--margin);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* Watermark nhẹ trên từng section */
+        .section::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.03;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .question {
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: var(--primary-color);
+            position: relative;
+            z-index: 1;
+        }
+
+        .options {
+            list-style-type: none;
+            padding-left: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .options li {
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .answer {
+            background-color: rgba(245, 245, 245, 0.95);
+            padding: 1rem;
+            margin-top: 0.8rem;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            display: none;
+            animation: fadeIn 0.5s ease;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* Watermark nhẹ trên phần đáp án */
+        .answer::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.02;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .answer.show {
+            display: block;
+        }
+
+        .answer strong {
+            color: var(--primary-color);
+            position: relative;
+            z-index: 1;
+        }
+
+        .formula {
+            font-family: 'Courier New', monospace;
+            background-color: rgba(249, 249, 249, 0.9);
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+            overflow-x: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .math {
+            font-size: 1.1em;
+        }
+
+        /* Nút ẩn/hiện */
+        .toggle-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            transition: background-color 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .toggle-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .toggle-btn.hide {
+            background-color: #666;
+        }
+
+        /* Nút tổng hợp */
+        .controls {
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .action-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin: 0 0.5rem;
+            transition: background-color 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .action-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Style cho hình ảnh */
+        .question-image {
+            display: block;
+            max-width: 90%;
+            height: auto;
+            margin: 1.5rem auto;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--secondary-color);
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Watermark footer */
+        footer::before {
+            content: "tuibx";
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 1rem;
+            color: rgba(139, 69, 19, 0.3);
+            font-weight: bold;
+            font-style: italic;
+            z-index: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+                font-size: 1.4rem;
+            }
+            
+            header {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            h3 {
+                font-size: 1.4rem;
+            }
+            
+            .section {
+                padding: 1.5rem;
+            }
+            
+            .math {
+                font-size: 1em;
+            }
+            
+            .toggle-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+            
+            .action-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 1rem;
+                margin: 0.3rem;
+                display: block;
+                width: 90%;
+                margin: 0.5rem auto;
+            }
+            
+            .question-image {
+                max-width: 95%;
+                margin: 1rem auto;
+            }
+            
+            body::before {
+                background-size: 300px 300px;
+                opacity: 0.05;
+            }
+            
+            .section::before {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .answer::before {
+                width: 150px;
+                height: 150px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                font-size: 1.3rem;
+                padding: 0.8rem;
+            }
+            
+            .section {
+                padding: 1rem;
+            }
+            
+            .answer {
+                padding: 0.8rem;
+            }
+            
+            .math {
+                font-size: 0.9em;
+            }
+            
+            .toggle-btn {
+                font-size: 0.8rem;
+                padding: 0.3rem 0.6rem;
+            }
+            
+            .question-image {
+                max-width: 100%;
+            }
+        }
+        
+        /* Đảm bảo MathJax hiển thị đúng */
+        .MathJax_SVG {
+            display: inline !important;
+        }
+        
+        mjx-container[jax="SVG"] {
+            display: inline-block !important;
+        }
+        
+        /* Thêm watermark phủ toàn màn hình */
+        .watermark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+        }
+        
+        .watermark-overlay::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 200px 200px;
+            opacity: 0.04;
+        }
+        
+        /* Responsive cho TV/màn hình lớn */
+        @media (min-width: 1200px) {
+            .question-title, .answer, .subsection-content {
+                font-size: 1.7rem;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2.2rem;
+            }
+            
+            .action-btn {
+                font-size: 1.3rem;
+                padding: 1rem 2rem;
+            }
+            
+            body::before {
+                background-size: 500px 500px;
+                opacity: 0.1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Watermark phủ toàn màn hình -->
+    <div class="watermark-overlay"></div>
+    
+    <header>
+        <h1>BÀI 19. THẾ NĂNG ĐIỆN</h1>
+        <p>Bài tập sách bài tập Vật Lý - Trắc nghiệm và Tự luận</p>
+    </header>
+
+    <div class="controls">
+        <button class="action-btn" id="showAllBtn">Hiện tất cả đáp án</button>
+        <button class="action-btn" id="hideAllBtn">Ẩn tất cả đáp án</button>
+    </div>
+
+    <main>
+        <section class="section">
+            <h2>TRẮC NGHIỆM</h2>
+            
+            <div class="question">
+                <div class="question-title">Câu 1. Công của lực điện trong dịch chuyển của một điện tích trong điện trường đều được tính bằng công thức: A = qEd, trong đó:</div>
+                <ul class="options">
+                    <li>A. d là quãng đường đi được của điện tích q.</li>
+                    <li>B. d là độ dịch chuyển của điện tích q.</li>
+                    <li>C. d là hình chiếu của độ dịch chuyển trên phương vuông góc với đường sức điện trường.</li>
+                    <li>D. d là hình chiếu của độ dịch chuyển trên phương song song với đường sức điện trường.</li>
+                </ul>
+                <button class="toggle-btn" onclick="toggleAnswer('answer1')">Hiện đáp án</button>
+                <div class="answer" id="answer1">
+                    <strong>Đáp án: D</strong><br>
+                    Giải thích: Trong công thức A = qEd, d là hình chiếu của độ dịch chuyển lên phương của đường sức điện, tức là phương song song với đường sức điện trường.
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">Câu 2. Công của lực điện trong dịch chuyển của một điện tích q trong điện trường từ điểm M đến điểm N không phụ thuộc vào</div>
+                <ul class="options">
+                    <li>A. cung đường dịch chuyển.</li>
+                    <li>B. điện tích q.</li>
+                    <li>C. điện trường E.</li>
+                    <li>D. vị trí điểm M.</li>
+                </ul>
+                <button class="toggle-btn" onclick="toggleAnswer('answer2')">Hiện đáp án</button>
+                <div class="answer" id="answer2">
+                    <strong>Đáp án: A</strong><br>
+                    Giải thích: Công của lực điện chỉ phụ thuộc vào vị trí điểm đầu và điểm cuối, không phụ thuộc vào dạng đường đi (cung đường dịch chuyển).
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">Câu 3. Trong điện trường đều của Trái Đất, chọn mặt đất là mốc thế năng điện. Một hạt bụi mịn có khối lượng m, điện tích q đang lớn ở độ cao h so với mặt đất. Thế năng điện của hạt bụi mịn là:</div>
+                <ul class="options">
+                    <li>A. \( W_t = mgh \).</li>
+                    <li>B. \( W_t = qEh \).</li>
+                    <li>C. \( W_t = mE_h \).</li>
+                    <li>D. \( W_t = qgh \).</li>
+                </ul>
+                <button class="toggle-btn" onclick="toggleAnswer('answer3')">Hiện đáp án</button>
+                <div class="answer" id="answer3">
+                    <strong>Đáp án: B</strong><br>
+                    Giải thích: Thế năng điện của điện tích q trong điện trường đều E ở độ cao h là \( W_t = qEh \). Công thức \( mgh \) là thế năng trọng trường.
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">Câu 4. Hạt bụi mịn ở Bài Câu 3 dịch chuyển thẳng xuống dưới 10 cm so với vị trí ban đầu sau đó lại bị các luồng không khí nâng lên trở lại vị trí cũ. Lúc này công của điện trường đều của Trái Đất trong dịch chuyển trên của hạt bụi mịn sẽ bằng:</div>
+                <ul class="options">
+                    <li>A. \( A = 0,1 \cdot qE \).</li>
+                    <li>B. \( A = 0,2 \cdot qE \).</li>
+                    <li>C. \( A = 0,1m \).</li>
+                    <li>D. \( A = 0 \).</li>
+                </ul>
+                <button class="toggle-btn" onclick="toggleAnswer('answer4')">Hiện đáp án</button>
+                <div class="answer" id="answer4">
+                    <strong>Đáp án: D</strong><br>
+                    Giải thích: Vì điện tích dịch chuyển theo đường khép kín (đi xuống rồi trở về vị trí ban đầu), công của lực điện trên đường khép kín bằng 0.
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">Câu 5. Thế năng điện của một điện tích q đặt tại điểm M trong một điện trường bất kì không phụ thuộc vào</div>
+                <ul class="options">
+                    <li>A. điện tích q.</li>
+                    <li>B. vị trí điểm M.</li>
+                    <li>C. điện trường.</li>
+                    <li>D. khối lượng của điện tích q.</li>
+                </ul>
+                <button class="toggle-btn" onclick="toggleAnswer('answer5')">Hiện đáp án</button>
+                <div class="answer" id="answer5">
+                    <strong>Đáp án: D</strong><br>
+                    Giải thích: Thế năng điện \( W_t = qV_M \) chỉ phụ thuộc vào điện tích q, điện thế tại điểm M (phụ thuộc vào điện trường và vị trí), không phụ thuộc vào khối lượng.
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">Câu 6. Đặt vào hai bản kim loại phẳng song song một hiệu điện thế \( U = 100 \, V \). Một hạt bụi mịn có điện tích \( q = +3,2 \cdot 10^{-19} \, C \) lọt vào chính giữa khoảng điện trường đều giữa hai bản phẳng. Coi tốc độ hạt bụi khi bắt đầu vào điện trường đều bằng 0, bỏ qua lực cản của môi trường. Động năng của hạt bụi khi va chạm với bán nhiễm điện âm bằng:</div>
+                <ul class="options">
+                    <li>A. \( W_0 = 6,4 \cdot 10^{-17} \, J \).</li>
+                    <li>B. \( W_d = 3,2 \cdot 10^{-17} \, J \).</li>
+                    <li>C. \( W_d = 1,6 \cdot 10^{-17} \, J \).</li>
+                    <li>D. \( W_d = 0 \, J \).</li>
+                </ul>
+                <button class="toggle-btn" onclick="toggleAnswer('answer6')">Hiện đáp án</button>
+                <div class="answer" id="answer6">
+                    <strong>Đáp án: B</strong><br>
+                    Giải thích: Động năng thu được bằng công của lực điện: \( W_d = qU = 3,2 \cdot 10^{-19} \times 100 = 3,2 \cdot 10^{-17} \, J \).
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>TỰ LUẬN</h2>
+            
+            <div class="question">
+                <div class="question-title">Câu 7. Đối với điện trường của một điện tích điểm Q, người ta tính toán được công để dịch chuyển một điện tích q từ vô cùng về điểm M cách Q một khoảng r có giá trị bằng \( A_{\infty M} = q \frac{Q}{4\pi\epsilon_0r} \). Hãy tính công của lực điện trong dịch chuyển của điện tích q từ vị trí M cách Q một khoảng 1 m tới vị trí N cách Q một khoảng 2 m.</div>
+                <button class="toggle-btn" onclick="toggleAnswer('answer7')">Hiện lời giải</button>
+                <div class="answer" id="answer7">
+                    <strong>Lời giải:</strong><br>
+                    Công của lực điện khi dịch chuyển điện tích q từ điểm M đến điểm N trong điện trường của điện tích điểm Q:<br>
+                    <div class="formula">\[ A_{MN} = q(V_M - V_N) \]</div>
+                    Với điện thế \( V = \dfrac{Q}{4\pi\varepsilon_0 r} \), ta có:<br>
+                    <div class="formula">\[ V_M = \dfrac{Q}{4\pi\varepsilon_0 \cdot 1}, \quad V_N = \dfrac{Q}{4\pi\varepsilon_0 \cdot 2} \]</div>
+                    <div class="formula">\[ A_{MN} = q\left( \dfrac{Q}{4\pi\varepsilon_0} - \dfrac{Q}{8\pi\varepsilon_0} \right) = \dfrac{qQ}{8\pi\varepsilon_0} \]</div>
+                    Vậy công của lực điện là \( \dfrac{qQ}{8\pi\varepsilon_0} \).
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">Câu 8. Trong điện trường của điện tích Q cố định.</div>
+                <button class="toggle-btn" onclick="toggleAnswer('answer8')">Hiện lời giải</button>
+                <div class="answer" id="answer8">
+                    <strong>a) Xác định thế năng điện của một electron tại điểm M cách Q một khoảng 2 m.</strong><br>
+                    Thế năng điện của electron (điện tích \( q_e = -e \)) tại điểm M cách Q khoảng 2 m:<br>
+                    <div class="formula">\[ W_t(M) = q_e \cdot V_M = (-e) \cdot \dfrac{Q}{4\pi\varepsilon_0 \cdot 2} = -\dfrac{eQ}{8\pi\varepsilon_0} \]</div>
+                    
+                    <strong>b) Dưới tác dụng của lực điện kéo electron từ điểm M và với vận tốc ban đầu bằng 0, dịch chuyển theo đường thẳng về phía điện tích Q > 0. Tính tốc độ của electron khi còn cách điện tích Q một khoảng 1 m.</strong><br>
+                    Áp dụng định luật bảo toàn năng lượng khi electron dịch chuyển từ M (cách Q 2 m) đến điểm cách Q 1 m:<br>
+                    Tại M: động năng bằng 0, thế năng \( W_t(M) = -\dfrac{eQ}{8\pi\varepsilon_0} \).<br>
+                    Tại điểm cách Q 1 m: thế năng \( W_t = (-e) \cdot \dfrac{Q}{4\pi\varepsilon_0 \cdot 1} = -\dfrac{eQ}{4\pi\varepsilon_0} \), động năng \( \dfrac{1}{2}m_e v^2 \).<br>
+                    <div class="formula">\[ 0 + \left(-\dfrac{eQ}{8\pi\varepsilon_0}\right) = \dfrac{1}{2}m_e v^2 + \left(-\dfrac{eQ}{4\pi\varepsilon_0}\right) \]</div>
+                    <div class="formula">\[ \dfrac{1}{2}m_e v^2 = \dfrac{eQ}{4\pi\varepsilon_0} - \dfrac{eQ}{8\pi\varepsilon_0} = \dfrac{eQ}{8\pi\varepsilon_0} \]</div>
+                    <div class="formula">\[ v = \sqrt{\dfrac{eQ}{4\pi\varepsilon_0 m_e}} \]</div>
+                    Với \( e = 1,6 \times 10^{-19}\,\text{C} \), \( m_e = 9,1 \times 10^{-31}\,\text{kg} \), \( \varepsilon_0 = 8,85 \times 10^{-12}\,\text{C}^2/\text{N}\cdot\text{m}^2 \).
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">Câu 9. Một ion âm OH⁻ có khối lượng 2,833 · 10⁻²⁶ kg được thổi ra từ máy lọc không khí với vận tốc 10 m/s, cách mặt đất 80 cm ở nơi có điện trường của Trái Đất bằng 120 V/m. Dưới tác dụng của lực điện, sau một thời gian, người ta quan sát thấy ion đang chuyển động với vận tốc 0,5 m/s ở vị trí cách mặt đất 1,5 m. Hãy xác định công cảm mà môi trường đã thực hiện trong quá trình dịch chuyển của ion nói trên.</div>
+                <button class="toggle-btn" onclick="toggleAnswer('answer9')">Hiện lời giải</button>
+                <div class="answer" id="answer9">
+                    <strong>Lời giải:</strong><br>
+                    Ion OH⁻ có điện tích \( q = -e = -1,6 \times 10^{-19}\,\text{C} \), khối lượng \( m = 2,833 \times 10^{-26}\,\text{kg} \).<br>
+                    Điện trường Trái Đất \( E = 120\,\text{V/m} \) hướng xuống, ion âm chịu lực điện hướng lên.<br>
+                    Độ cao ban đầu \( h_1 = 0,8\,\text{m} \), độ cao sau \( h_2 = 1,5\,\text{m} \) → độ dịch chuyển lên cao \( \Delta h = h_2 - h_1 = 0,7\,\text{m} \).<br><br>
+                    
+                    <strong>1. Công của lực điện:</strong><br>
+                    <div class="formula">\[ A_{\text{điện}} = |q|E \Delta h = (1,6 \times 10^{-19}) \times 120 \times 0,7 = 1,344 \times 10^{-17}\,\text{J} \]</div>
+                    
+                    <strong>2. Công của trọng lực:</strong><br>
+                    <div class="formula">\[ A_{\text{trọng}} = -mg\Delta h = -(2,833 \times 10^{-26} \times 10) \times 0,7 = -1,983 \times 10^{-25}\,\text{J} \]</div>
+                    
+                    <strong>3. Độ biến thiên động năng:</strong><br>
+                    <div class="formula">\[ \Delta W_đ = \dfrac{1}{2}m(v_2^2 - v_1^2) = 0,5 \times 2,833 \times 10^{-26} \times (0,25 - 100) \approx -1,413 \times 10^{-24}\,\text{J} \]</div>
+                    
+                    <strong>4. Áp dụng định lý biến thiên động năng:</strong><br>
+                    <div class="formula">\[ A_{\text{điện}} + A_{\text{trọng}} + A_{\text{cản}} = \Delta W_đ \]</div>
+                    <div class="formula">\[ A_{\text{cản}} = \Delta W_đ - A_{\text{điện}} - A_{\text{trọng}} \approx -1,344 \times 10^{-17}\,\text{J} \]</div>
+                    
+                    Vậy công của lực cản môi trường (công cảm) là \( -1,344 \times 10^{-17}\,\text{J} \) (môi trường thực hiện công âm, tức lấy năng lượng từ ion). Độ lớn công là \( 1,344 \times 10^{-17}\,\text{J} \).
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">Câu 10. Hình 19.1 là đồ thị tốc độ thay đổi theo độ cao của một electron chuyển động từ điểm A đến điểm B theo phương thẳng đứng trong điện trường của Trái Đất bỏ qua lực cản của không khí.</div>
+                <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/19/19.1sbt.png" alt="Hình 19.1 - Đồ thị tốc độ thay đổi theo độ cao" class="question-image">
+                <button class="toggle-btn" onclick="toggleAnswer('answer10')">Hiện lời giải</button>
+                <div class="answer" id="answer10">
+                    <strong>a) Hãy cho biết khoảng thay đổi của tốc độ khi electron chuyển động từ A đến B.</strong><br>
+                    Từ đồ thị \( v \) theo độ cao \( h \), xác định tốc độ tại điểm A (\( v_A \)) và điểm B (\( v_B \)). Khoảng thay đổi tốc độ là từ \( v_A \) đến \( v_B \).<br><br>
+                    
+                    <strong>b) Tính cường độ điện trường của Trái Đất tại điểm A.</strong><br>
+                    Áp dụng bảo toàn năng lượng cho electron (điện tích \( q = -e \), khối lượng \( m_e \)):<br>
+                    <div class="formula">\[ \dfrac{1}{2}m_e v_A^2 + (-e)E h_A = \dfrac{1}{2}m_e v_B^2 + (-e)E h_B \]</div>
+                    <div class="formula">\[ \dfrac{1}{2}m_e (v_A^2 - v_B^2) = eE (h_B - h_A) \]</div>
+                    <div class="formula">\[ E = \dfrac{m_e (v_A^2 - v_B^2)}{2e (h_B - h_A)} \]</div>
+                    Với \( e = 1,6 \times 10^{-19}\,\text{C} \), \( m_e = 9,1 \times 10^{-31}\,\text{kg} \), các giá trị \( v_A, v_B, h_A, h_B \) lấy từ đồ thị.
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>Bài tập Vật Lý 11 - Bài 19: Thế năng điện</p>
+    </footer>
+
+    <script>
+        // Hàm ẩn/hiện đáp án cho từng câu
+        function toggleAnswer(answerId) {
+            const answer = document.getElementById(answerId);
+            const button = answer.previousElementSibling;
+            
+            if (answer.classList.contains('show')) {
+                answer.classList.remove('show');
+                button.textContent = 'Hiện ' + (answerId.includes('answer') ? 'đáp án' : 'lời giải');
+                button.classList.remove('hide');
+            } else {
+                answer.classList.add('show');
+                button.textContent = 'Ẩn ' + (answerId.includes('answer') ? 'đáp án' : 'lời giải');
+                button.classList.add('hide');
+            }
+            
+            // Cập nhật MathJax sau khi hiển thị công thức
+            if (window.MathJax) {
+                MathJax.typesetPromise([answer]);
+            }
+        }
+        
+        // Hiển thị tất cả đáp án
+        document.getElementById('showAllBtn').addEventListener('click', function() {
+            const answers = document.querySelectorAll('.answer');
+            const buttons = document.querySelectorAll('.toggle-btn');
+            
+            answers.forEach(answer => {
+                answer.classList.add('show');
+            });
+            
+            buttons.forEach(button => {
+                const answerId = button.getAttribute('onclick').match(/'([^']+)'/)[1];
+                const answer = document.getElementById(answerId);
+                button.textContent = 'Ẩn ' + (answerId.includes('answer') ? 'đáp án' : 'lời giải');
+                button.classList.add('hide');
+            });
+            
+            // Cập nhật MathJax
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        });
+        
+        // Ẩn tất cả đáp án
+        document.getElementById('hideAllBtn').addEventListener('click', function() {
+            const answers = document.querySelectorAll('.answer');
+            const buttons = document.querySelectorAll('.toggle-btn');
+            
+            answers.forEach(answer => {
+                answer.classList.remove('show');
+            });
+            
+            buttons.forEach(button => {
+                const answerId = button.getAttribute('onclick').match(/'([^']+)'/)[1];
+                button.textContent = 'Hiện ' + (answerId.includes('answer') ? 'đáp án' : 'lời giải');
+                button.classList.remove('hide');
+            });
+        });
+        
+        // Khởi tạo MathJax khi trang tải xong
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        });
+    </script>
+</body>
+</html>
