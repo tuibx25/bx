@@ -1,0 +1,2392 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc Nghiệm Điện Trường Đều - Vật Lý 11</title>
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
+    
+    <!-- MathJax để hiển thị công thức toán -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Font Awesome cho biểu tượng -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-brown: #8B4513;
+            --secondary-brown: #A0522D;
+            --light-brown: #D2B48C;
+            --dark-brown: #5D4037;
+            --background-brown: #FAF3E6;
+            --text-color: #333333;
+            --shadow: rgba(139, 69, 19, 0.2);
+            --correct-green: #4CAF50;
+            --incorrect-red: #f44336;
+            --warning-yellow: #ff9800;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-brown);
+            padding: 20px;
+            font-size: 1.5rem; /* Kích thước font lớn cho TV */
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        /* Chống copy và chọn văn bản */
+        body::selection {
+            background: transparent;
+        }
+        
+        /* Bảo vệ chống xem mã nguồn */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9998;
+            pointer-events: none;
+        }
+        
+        /* Ẩn nội dung khi in */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            body {
+                display: none;
+            }
+        }
+        
+        /* Chống click phải chuột */
+        body {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* Loading screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--background-brown);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+        
+        .loading-content {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border: 8px solid var(--light-brown);
+            border-top: 8px solid var(--primary-brown);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 30px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            font-size: 2rem;
+            color: var(--primary-brown);
+            font-weight: bold;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-brown), var(--dark-brown));
+            color: white;
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.3;
+            animation: float 20s linear infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-50px, -50px) rotate(360deg); }
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .subtitle {
+            font-size: 1.8rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Thông tin đề thi */
+        .exam-info {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 16px var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4rem;
+        }
+        
+        .info-icon {
+            color: var(--primary-brown);
+            font-size: 1.8rem;
+        }
+        
+        .progress-container {
+            flex: 1;
+            max-width: 400px;
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background-color: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--light-brown), var(--secondary-brown));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .exam-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .exam-btn {
+            background-color: var(--secondary-brown);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 12px;
+            font-size: 1.6rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .exam-btn:hover {
+            background-color: var(--primary-brown);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px var(--shadow);
+        }
+        
+        .exam-btn.active {
+            background-color: var(--dark-brown);
+            box-shadow: 0 0 0 3px var(--light-brown);
+        }
+        
+        .exam-btn i {
+            font-size: 1.4rem;
+        }
+        
+        .exam-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 15px 30px var(--shadow);
+            margin-bottom: 40px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .exam-container.active {
+            display: block;
+        }
+        
+        .exam-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--light-brown);
+        }
+        
+        .exam-title {
+            font-size: 2.2rem;
+            color: var(--primary-brown);
+            margin-bottom: 10px;
+        }
+        
+        .exam-description {
+            font-size: 1.5rem;
+            color: var(--secondary-brown);
+            margin-bottom: 15px;
+        }
+        
+        .question-counter {
+            font-size: 1.8rem;
+            color: var(--secondary-brown);
+            background-color: #f5f1eb;
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        
+        .question-container {
+            margin-bottom: 40px;
+            padding: 25px;
+            border-radius: 12px;
+            background-color: #f9f5f0;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .question-text {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--dark-brown);
+            font-weight: 600;
+            line-height: 1.8;
+        }
+        
+        .difficulty-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-left: 15px;
+            vertical-align: middle;
+        }
+        
+        .difficulty-easy {
+            background-color: #e8f5e8;
+            color: #2e7d32;
+        }
+        
+        .difficulty-medium {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+        
+        .difficulty-hard {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .option {
+            background-color: white;
+            border: 2px solid var(--light-brown);
+            border-radius: 10px;
+            padding: 20px;
+            font-size: 1.6rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .option:hover {
+            background-color: #f5f1eb;
+            border-color: var(--secondary-brown);
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            background-color: #e8dfd3;
+            border-color: var(--primary-brown);
+            box-shadow: 0 0 0 2px var(--light-brown);
+        }
+        
+        .option.correct {
+            background-color: #e8f5e8;
+            border-color: var(--correct-green);
+        }
+        
+        .option.incorrect {
+            background-color: #ffebee;
+            border-color: var(--incorrect-red);
+        }
+        
+        .option-letter {
+            width: 40px;
+            height: 40px;
+            background-color: var(--light-brown);
+            color: var(--dark-brown);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .option.selected .option-letter {
+            background-color: var(--primary-brown);
+            color: white;
+        }
+        
+        .option.correct .option-letter {
+            background-color: var(--correct-green);
+            color: white;
+        }
+        
+        .option.incorrect .option-letter {
+            background-color: var(--incorrect-red);
+            color: white;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            background-color: var(--secondary-brown);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            border-radius: 10px;
+            font-size: 1.6rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--primary-brown);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+        
+        .nav-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .nav-btn:disabled:hover {
+            background-color: #cccccc;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .submit-btn {
+            background-color: var(--dark-brown);
+        }
+        
+        .submit-btn:hover {
+            background-color: #3e2723;
+        }
+        
+        .quick-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .quick-nav-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--light-brown);
+            background-color: white;
+            color: var(--dark-brown);
+            font-size: 1.6rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .quick-nav-btn:hover {
+            background-color: #f5f1eb;
+            border-color: var(--secondary-brown);
+        }
+        
+        .quick-nav-btn.active {
+            background-color: var(--primary-brown);
+            color: white;
+            border-color: var(--primary-brown);
+        }
+        
+        .quick-nav-btn.answered {
+            background-color: var(--light-brown);
+            color: var(--dark-brown);
+        }
+        
+        .result-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 15px 30px var(--shadow);
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .result-container.active {
+            display: block;
+        }
+        
+        .result-title {
+            font-size: 2.5rem;
+            color: var(--primary-brown);
+            margin-bottom: 25px;
+        }
+        
+        .score-display {
+            font-size: 4rem;
+            color: var(--secondary-brown);
+            margin: 30px 0;
+            font-weight: bold;
+        }
+        
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary-brown) 0% 0%, #f0f0f0 0% 100%);
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .score-circle-inner {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-brown);
+        }
+        
+        .score-percentage {
+            font-size: 1.8rem;
+            color: var(--secondary-brown);
+        }
+        
+        .score-text {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f9f5f0;
+        }
+        
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+            text-align: left;
+        }
+        
+        .detail-card {
+            background-color: #f9f5f0;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid var(--primary-brown);
+        }
+        
+        .detail-title {
+            font-size: 1.6rem;
+            color: var(--dark-brown);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .detail-value {
+            font-size: 2.2rem;
+            color: var(--primary-brown);
+            font-weight: bold;
+        }
+        
+        .result-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .result-btn {
+            background-color: var(--secondary-brown);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 10px;
+            font-size: 1.6rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .result-btn:hover {
+            background-color: var(--primary-brown);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+        
+        .result-btn i {
+            font-size: 1.4rem;
+        }
+        
+        .timer-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px 25px;
+            box-shadow: 0 5px 10px var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.6rem;
+            color: var(--dark-brown);
+            font-weight: bold;
+        }
+        
+        .timer {
+            color: var(--primary-brown);
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .modal-title {
+            font-size: 2.2rem;
+            color: var(--primary-brown);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .modal-text {
+            font-size: 1.6rem;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .modal-btn {
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.6rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-btn-primary {
+            background-color: var(--primary-brown);
+            color: white;
+        }
+        
+        .modal-btn-secondary {
+            background-color: #e0e0e0;
+            color: var(--text-color);
+        }
+        
+        .modal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Responsive cho điện thoại */
+        @media (max-width: 768px) {
+            body {
+                font-size: 1.2rem;
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.4rem;
+            }
+            
+            .exam-btn {
+                padding: 15px 20px;
+                font-size: 1.3rem;
+                width: 100%;
+            }
+            
+            .exam-container {
+                padding: 20px;
+            }
+            
+            .question-text {
+                font-size: 1.5rem;
+            }
+            
+            .option {
+                font-size: 1.3rem;
+                padding: 15px;
+            }
+            
+            .nav-btn {
+                padding: 15px 20px;
+                font-size: 1.3rem;
+                width: 100%;
+            }
+            
+            .result-buttons {
+                flex-direction: column;
+            }
+            
+            .result-btn {
+                width: 100%;
+            }
+            
+            .score-circle {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .score-circle-inner {
+                width: 120px;
+                height: 120px;
+                font-size: 2.2rem;
+            }
+            
+            .quick-nav-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.4rem;
+            }
+        }
+        
+        /* Tối ưu cho TV */
+        @media (min-width: 1600px) {
+            body {
+                font-size: 1.8rem;
+            }
+            
+            h1 {
+                font-size: 3.5rem;
+            }
+            
+            .question-text {
+                font-size: 2.2rem;
+            }
+            
+            .option {
+                font-size: 2rem;
+                padding: 25px;
+            }
+            
+            .exam-btn {
+                font-size: 2rem;
+                padding: 25px 50px;
+            }
+        }
+        
+        /* Hiệu ứng cho đúng/sai */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .option.correct {
+            animation: pulse 0.5s ease;
+        }
+        
+        /* Hiệu ứng cho điểm */
+        @keyframes scoreBounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+        
+        .score-display {
+            animation: scoreBounce 1s;
+        }
+        
+        /* Thanh cuộn tùy chỉnh */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--light-brown);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-brown);
+        }
+    </style>
+</head>
+<body>
+    <!-- Màn hình loading -->
+    <div class="loading-screen" id="loading-screen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Đang tải đề thi...</div>
+        </div>
+    </div>
+    
+    <!-- Modal xác nhận nộp bài -->
+    <div class="modal" id="submit-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Xác nhận nộp bài</h2>
+            <p class="modal-text" id="submit-modal-text">Bạn có chắc chắn muốn nộp bài thi không? Sau khi nộp, bạn không thể thay đổi câu trả lời.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" id="cancel-submit">Hủy bỏ</button>
+                <button class="modal-btn modal-btn-primary" id="confirm-submit">Nộp bài</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Header -->
+    <header>
+        <h1>TRẮC NGHIỆM VẬT LÝ 11</h1>
+        <div class="subtitle">Bài 18: ĐIỆN TRƯỜNG ĐỀU</div>
+    </header>
+    
+    <div class="container">
+        <!-- Thông tin đề thi -->
+        <div class="exam-info" id="exam-info">
+            <div class="info-item">
+                <i class="fas fa-clipboard-list info-icon"></i>
+                <span>Đề số: <strong id="current-exam-number">1</strong></span>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-question-circle info-icon"></i>
+                <span>Câu: <strong id="current-question-number">1</strong>/10</span>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-check-circle info-icon"></i>
+                <span>Đã làm: <strong id="answered-count">0</strong>/10</span>
+            </div>
+            <div class="progress-container">
+                <div>Tiến độ làm bài:</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+            <div class="timer-container">
+                <i class="fas fa-clock info-icon"></i>
+                <span>Thời gian: <span class="timer" id="timer">00:00</span></span>
+            </div>
+        </div>
+        
+        <!-- Chọn đề thi -->
+        <div class="exam-selector">
+            <button class="exam-btn active" data-exam="1">
+                <i class="fas fa-file-alt"></i> ĐỀ SỐ 1
+            </button>
+            <button class="exam-btn" data-exam="2">
+                <i class="fas fa-file-alt"></i> ĐỀ SỐ 2
+            </button>
+            <button class="exam-btn" data-exam="3">
+                <i class="fas fa-file-alt"></i> ĐỀ SỐ 3
+            </button>
+            <button class="exam-btn" data-exam="4">
+                <i class="fas fa-file-alt"></i> ĐỀ SỐ 4
+            </button>
+            <button class="exam-btn" data-exam="5">
+                <i class="fas fa-file-alt"></i> ĐỀ SỐ 5
+            </button>
+        </div>
+        
+        <!-- Đề số 1 -->
+        <div class="exam-container active" id="exam-1">
+            <div class="exam-header">
+                <h2 class="exam-title">ĐỀ SỐ 1: KHÁI NIỆM ĐIỆN TRƯỜNG ĐỀU</h2>
+                <div class="exam-description">Kiểm tra kiến thức cơ bản về điện trường đều</div>
+                <div class="question-counter">Câu 1/10</div>
+            </div>
+            
+            <div class="questions-container">
+                <!-- Câu hỏi sẽ được thêm bằng JavaScript -->
+            </div>
+            
+            <!-- Điều hướng nhanh -->
+            <div class="quick-nav" id="quick-nav">
+                <!-- Các nút sẽ được thêm bằng JavaScript -->
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="nav-btn prev-btn">
+                    <i class="fas fa-arrow-left"></i> Câu trước
+                </button>
+                <button class="nav-btn next-btn">
+                    Câu tiếp theo <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="nav-btn submit-btn">
+                    <i class="fas fa-paper-plane"></i> Nộp bài
+                </button>
+            </div>
+        </div>
+        
+        <!-- Đề số 2 -->
+        <div class="exam-container" id="exam-2">
+            <div class="exam-header">
+                <h2 class="exam-title">ĐỀ SỐ 2: TÍNH CHẤT ĐIỆN TRƯỜNG ĐỀU</h2>
+                <div class="exam-description">Kiểm tra tính chất và đặc điểm của điện trường đều</div>
+                <div class="question-counter">Câu 1/10</div>
+            </div>
+            
+            <div class="questions-container">
+                <!-- Câu hỏi sẽ được thêm bằng JavaScript -->
+            </div>
+            
+            <!-- Điều hướng nhanh -->
+            <div class="quick-nav" id="quick-nav-2">
+                <!-- Các nút sẽ được thêm bằng JavaScript -->
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="nav-btn prev-btn">
+                    <i class="fas fa-arrow-left"></i> Câu trước
+                </button>
+                <button class="nav-btn next-btn">
+                    Câu tiếp theo <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="nav-btn submit-btn">
+                    <i class="fas fa-paper-plane"></i> Nộp bài
+                </button>
+            </div>
+        </div>
+        
+        <!-- Đề số 3 -->
+        <div class="exam-container" id="exam-3">
+            <div class="exam-header">
+                <h2 class="exam-title">ĐỀ SỐ 3: ỨNG DỤNG ĐIỆN TRƯỜNG ĐỀU</h2>
+                <div class="exam-description">Kiểm tra ứng dụng thực tế của điện trường đều</div>
+                <div class="question-counter">Câu 1/10</div>
+            </div>
+            
+            <div class="questions-container">
+                <!-- Câu hỏi sẽ được thêm bằng JavaScript -->
+            </div>
+            
+            <!-- Điều hướng nhanh -->
+            <div class="quick-nav" id="quick-nav-3">
+                <!-- Các nút sẽ được thêm bằng JavaScript -->
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="nav-btn prev-btn">
+                    <i class="fas fa-arrow-left"></i> Câu trước
+                </button>
+                <button class="nav-btn next-btn">
+                    Câu tiếp theo <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="nav-btn submit-btn">
+                    <i class="fas fa-paper-plane"></i> Nộp bài
+                </button>
+            </div>
+        </div>
+        
+        <!-- Đề số 4 -->
+        <div class="exam-container" id="exam-4">
+            <div class="exam-header">
+                <h2 class="exam-title">ĐỀ SỐ 4: BÀI TẬP ĐIỆN TRƯỜNG ĐỀU</h2>
+                <div class="exam-description">Kiểm tra kỹ năng giải bài tập về điện trường đều</div>
+                <div class="question-counter">Câu 1/10</div>
+            </div>
+            
+            <div class="questions-container">
+                <!-- Câu hỏi sẽ được thêm bằng JavaScript -->
+            </div>
+            
+            <!-- Điều hướng nhanh -->
+            <div class="quick-nav" id="quick-nav-4">
+                <!-- Các nút sẽ được thêm bằng JavaScript -->
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="nav-btn prev-btn">
+                    <i class="fas fa-arrow-left"></i> Câu trước
+                </button>
+                <button class="nav-btn next-btn">
+                    Câu tiếp theo <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="nav-btn submit-btn">
+                    <i class="fas fa-paper-plane"></i> Nộp bài
+                </button>
+            </div>
+        </div>
+        
+        <!-- Đề số 5 -->
+        <div class="exam-container" id="exam-5">
+            <div class="exam-header">
+                <h2 class="exam-title">ĐỀ SỐ 5: TỔNG HỢP ĐIỆN TRƯỜNG ĐỀU</h2>
+                <div class="exam-description">Kiểm tra tổng hợp kiến thức về điện trường đều</div>
+                <div class="question-counter">Câu 1/10</div>
+            </div>
+            
+            <div class="questions-container">
+                <!-- Câu hỏi sẽ được thêm bằng JavaScript -->
+            </div>
+            
+            <!-- Điều hướng nhanh -->
+            <div class="quick-nav" id="quick-nav-5">
+                <!-- Các nút sẽ được thêm bằng JavaScript -->
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="nav-btn prev-btn">
+                    <i class="fas fa-arrow-left"></i> Câu trước
+                </button>
+                <button class="nav-btn next-btn">
+                    Câu tiếp theo <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="nav-btn submit-btn">
+                    <i class="fas fa-paper-plane"></i> Nộp bài
+                </button>
+            </div>
+        </div>
+        
+        <!-- Kết quả -->
+        <div class="result-container" id="result-container">
+            <h2 class="result-title">KẾT QUẢ BÀI THI</h2>
+            <div class="score-circle">
+                <div class="score-circle-inner">
+                    <span id="score-circle-text">0/10</span>
+                    <div class="score-percentage" id="score-percentage">0%</div>
+                </div>
+            </div>
+            
+            <div class="score-text" id="score-text"></div>
+            
+            <div class="result-details">
+                <div class="detail-card">
+                    <div class="detail-title">Đề thi</div>
+                    <div class="detail-value" id="result-exam-name">Đề số 1</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-title">Số câu đúng</div>
+                    <div class="detail-value" id="result-correct">0</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-title">Thời gian làm bài</div>
+                    <div class="detail-value" id="result-time">00:00</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-title">Độ chính xác</div>
+                    <div class="detail-value" id="result-accuracy">0%</div>
+                </div>
+            </div>
+            
+            <div class="result-buttons">
+                <button class="result-btn" id="review-btn">
+                    <i class="fas fa-redo"></i> Xem lại bài làm
+                </button>
+                <button class="result-btn" id="new-exam-btn">
+                    <i class="fas fa-file-alt"></i> Làm đề khác
+                </button>
+                <button class="result-btn" id="home-btn">
+                    <i class="fas fa-home"></i> Về trang chủ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Ẩn màn hình loading sau 1.5 giây
+        setTimeout(() => {
+            document.getElementById('loading-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('loading-screen').style.display = 'none';
+            }, 500);
+        }, 1500);
+        
+        // Ngăn chặn các hành động không mong muốn
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            alert('Hành động này đã bị vô hiệu hóa để bảo vệ nội dung.');
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            // Chặn Ctrl+C, Ctrl+U, Ctrl+P, Ctrl+S, Ctrl+Shift+I, F12
+            if ((e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'u' || e.key === 'U' || e.key === 'p' || e.key === 'P' || e.key === 's' || e.key === 'S')) 
+                || e.key === 'F12' 
+                || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i'))) {
+                e.preventDefault();
+                alert('Hành động này đã bị vô hiệu hóa để bảo vệ nội dung.');
+            }
+            
+            // Điều hướng bằng bàn phím
+            if (e.key === 'ArrowLeft' && !e.ctrlKey && !e.altKey) {
+                e.preventDefault();
+                showPreviousQuestion();
+            }
+            if (e.key === 'ArrowRight' && !e.ctrlKey && !e.altKey) {
+                e.preventDefault();
+                showNextQuestion();
+            }
+            if (e.key === 'Enter' && e.ctrlKey) {
+                e.preventDefault();
+                document.querySelector('.submit-btn').click();
+            }
+        });
+        
+        // Chống kéo thả hình ảnh và văn bản
+        document.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+        });
+        
+        // Khởi tạo MathJax với cấu hình chính xác
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+                ignoreHtmlClass: 'tex2jax_ignore'
+            },
+            startup: {
+                ready: () => {
+                    MathJax.startup.defaultReady();
+                    // Render MathJax sau khi nội dung được tải
+                    setTimeout(() => {
+                        if (MathJax.typeset) MathJax.typeset();
+                    }, 500);
+                }
+            }
+        };
+        
+        // Danh sách câu hỏi cho 5 đề
+        const allQuestions = {
+            exam1: [
+                {
+                    id: 1,
+                    text: "Điện trường đều là điện trường mà:",
+                    options: [
+                        "A. Cường độ điện trường tại mỗi điểm có giá trị bằng nhau về độ lớn",
+                        "B. Các vectơ cường độ điện trường tại mọi điểm đều bằng nhau về phương, chiều và độ lớn",
+                        "C. Các đường sức điện là những đường thẳng song song và cách đều nhau",
+                        "D. Tất cả các đặc điểm trên"
+                    ],
+                    correct: 3,
+                    explanation: "Theo định nghĩa trong bài học, điện trường đều có tất cả các đặc điểm trên.",
+                    difficulty: "Dễ"
+                },
+                {
+                    id: 2,
+                    text: "Công thức tính cường độ điện trường đều giữa hai bản phẳng song song là:",
+                    options: [
+                        "A. \\(E = \\frac{F}{q}\\)",
+                        "B. \\(E = \\frac{U}{d}\\)",
+                        "C. \\(E = \\frac{kQ}{r^2}\\)",
+                        "D. \\(E = \\frac{q}{4\\pi\\varepsilon_0 r^2}\\)"
+                    ],
+                    correct: 1,
+                    explanation: "Công thức chính cho điện trường đều giữa hai bản phẳng song song là \\(E = \\frac{U}{d}\\), với U là hiệu điện thế và d là khoảng cách giữa hai bản.",
+                    difficulty: "Dễ"
+                },
+                {
+                    id: 3,
+                    text: "Hai bản phẳng kim loại đặt song song, cách nhau 0.2 m, hiệu điện thế giữa hai bản là 1000 V. Cường độ điện trường giữa hai bản là:",
+                    options: [
+                        "A. 200 V/m",
+                        "B. 500 V/m",
+                        "C. 5000 V/m",
+                        "D. 20000 V/m"
+                    ],
+                    correct: 2,
+                    explanation: "Áp dụng công thức \\(E = \\frac{U}{d} = \\frac{1000}{0.2} = 5000\\) V/m.",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 4,
+                    text: "Một hạt bụi tích điện \\(q = 16 \\times 10^{-19} C\\) nằm trong điện trường đều có cường độ 5000 V/m. Lực điện tác dụng lên hạt bụi là:",
+                    options: [
+                        "A. \\(8 \\times 10^{-15} N\\)",
+                        "B. \\(8 \\times 10^{-16} N\\)",
+                        "C. \\(8 \\times 10^{-17} N\\)",
+                        "D. \\(8 \\times 10^{-18} N\\)"
+                    ],
+                    correct: 0,
+                    explanation: "\\(F = qE = 16 \\times 10^{-19} \\times 5000 = 8 \\times 10^{-15} N\\)",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 5,
+                    text: "Trong điện trường đều giữa hai bản phẳng song song, các đường sức điện:",
+                    options: [
+                        "A. Là những đường cong",
+                        "B. Song song với nhau và cách đều nhau",
+                        "C. Xuất phát từ bản âm và kết thúc ở bản dương",
+                        "D. Tất cả đều sai"
+                    ],
+                    correct: 1,
+                    explanation: "Trong điện trường đều, các đường sức điện song song với nhau và cách đều nhau.",
+                    difficulty: "Dễ"
+                },
+                {
+                    id: 6,
+                    text: "Electron bay vào điện trường đều theo phương vuông góc với đường sức điện. Quỹ đạo của electron là:",
+                    options: [
+                        "A. Đường thẳng",
+                        "B. Đường tròn",
+                        "C. Parabol",
+                        "D. Hyperbol"
+                    ],
+                    correct: 2,
+                    explanation: "Điện tích bay vào điện trường đều theo phương vuông góc với đường sức sẽ chuyển động theo quỹ đạo parabol, tương tự chuyển động ném ngang.",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 7,
+                    text: "Một điện tích dương được đặt trong điện trường đều. Lực điện tác dụng lên điện tích có:",
+                    options: [
+                        "A. Cùng phương, ngược chiều với cường độ điện trường",
+                        "B. Cùng phương, cùng chiều với cường độ điện trường",
+                        "C. Vuông góc với cường độ điện trường",
+                        "D. Không thể xác định"
+                    ],
+                    correct: 1,
+                    explanation: "Lực điện tác dụng lên điện tích dương có cùng phương, cùng chiều với vectơ cường độ điện trường.",
+                    difficulty: "Dễ"
+                },
+                {
+                    id: 8,
+                    text: "Trong ống tia X, điện trường giữa hai cực có cường độ \\(6 \\times 10^6\\) V/m. Lực tác dụng lên electron (điện tích \\(-1.6 \\times 10^{-19}\\) C) là:",
+                    options: [
+                        "A. \\(9.6 \\times 10^{-13} N\\)",
+                        "B. \\(9.6 \\times 10^{-14} N\\)",
+                        "C. \\(9.6 \\times 10^{-15} N\\)",
+                        "D. \\(9.6 \\times 10^{-16} N\\)"
+                    ],
+                    correct: 0,
+                    explanation: "\\(F = |q|E = 1.6 \\times 10^{-19} \\times 6 \\times 10^6 = 9.6 \\times 10^{-13} N\\)",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 9,
+                    text: "Điện trường đều được ứng dụng trong thiết bị nào sau đây?",
+                    options: [
+                        "A. Dao động kí",
+                        "B. Ống tia X",
+                        "C. Máy lọc không khí ion âm",
+                        "D. Tất cả các thiết bị trên"
+                    ],
+                    correct: 3,
+                    explanation: "Điện trường đều được ứng dụng trong tất cả các thiết bị trên.",
+                    difficulty: "Dễ"
+                },
+                {
+                    id: 10,
+                    text: "Hai bản phẳng song song tích điện trái dấu tạo ra điện trường đều. Điện trường này tồn tại:",
+                    options: [
+                        "A. Chỉ ở giữa hai bản",
+                        "B. Ở cả bên trong và bên ngoài hai bản",
+                        "C. Chỉ ở bên ngoài hai bản",
+                        "D. Không tồn tại"
+                    ],
+                    correct: 0,
+                    explanation: "Điện trường đều chỉ tồn tại trong khoảng không gian giữa hai bản phẳng song song, không có ở bên ngoài.",
+                    difficulty: "Trung bình"
+                }
+            ],
+            exam2: [
+                {
+                    id: 1,
+                    text: "Khi nói về điện trường đều, phát biểu nào sau đây là SAI?",
+                    options: [
+                        "A. Cường độ điện trường tại mọi điểm đều bằng nhau",
+                        "B. Các đường sức điện song song và cách đều nhau",
+                        "C. Lực điện tác dụng lên điện tích đặt trong điện trường đều là không đổi",
+                        "D. Điện trường đều tồn tại xung quanh một điện tích điểm"
+                    ],
+                    correct: 3,
+                    explanation: "Điện trường xung quanh một điện tích điểm không phải là điện trường đều, mà là điện trường có cường độ giảm dần theo khoảng cách.",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 2,
+                    text: "Cường độ điện trường đều có đơn vị là:",
+                    options: [
+                        "A. Vôn (V)",
+                        "B. Vôn trên mét (V/m)",
+                        "C. Niutơn (N)",
+                        "D. Culông (C)"
+                    ],
+                    correct: 1,
+                    explanation: "Cường độ điện trường có đơn vị là Vôn trên mét (V/m).",
+                    difficulty: "Dễ"
+                },
+                {
+                    id: 3,
+                    text: "Một electron được thả không vận tốc đầu trong điện trường đều. Electron sẽ chuyển động:",
+                    options: [
+                        "A. Thẳng đều",
+                        "B. Thẳng nhanh dần đều",
+                        "C. Thẳng chậm dần đều",
+                        "D. Tròn đều"
+                    ],
+                    correct: 1,
+                    explanation: "Electron mang điện tích âm nên sẽ chuyển động ngược chiều điện trường với gia tốc không đổi, tức là chuyển động thẳng nhanh dần đều.",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 4,
+                    text: "Hai bản phẳng song song cách nhau 5 cm, hiệu điện thế giữa chúng là 200 V. Cường độ điện trường giữa hai bản là:",
+                    options: [
+                        "A. 10 V/m",
+                        "B. 40 V/m",
+                        "C. 400 V/m",
+                        "D. 4000 V/m"
+                    ],
+                    correct: 3,
+                    explanation: "\\(E = \\frac{U}{d} = \\frac{200}{0.05} = 4000\\) V/m",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 5,
+                    text: "Trong dao động kí, điện trường đều được sử dụng để:",
+                    options: [
+                        "A. Phát ra electron từ cathode",
+                        "B. Gia tốc electron",
+                        "C. Làm lệch chùm electron theo hai phương vuông góc",
+                        "D. Tạo ra điểm sáng trên màn huỳnh quang"
+                    ],
+                    correct: 2,
+                    explanation: "Trong dao động kí, điện trường đều giữa các bản lái tia được sử dụng để làm lệch chùm electron theo hai phương vuông góc.",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 6,
+                    text: "Điện tích điểm q đặt trong điện trường đều E. Biểu thức tính lực điện tác dụng lên điện tích là:",
+                    options: [
+                        "A. \\(F = \\frac{q}{E}\\)",
+                        "B. \\(F = qE\\)",
+                        "C. \\(F = \\frac{E}{q}\\)",
+                        "D. \\(F = q^2E\\)"
+                    ],
+                    correct: 1,
+                    explanation: "Lực điện tác dụng lên điện tích trong điện trường đều được tính bằng công thức \\(F = qE\\)",
+                    difficulty: "Dễ"
+                },
+                {
+                    id: 7,
+                    text: "Một proton (điện tích \\(+1.6 \\times 10^{-19}\\) C) chuyển động trong điện trường đều 3000 V/m. Lực điện tác dụng lên proton là:",
+                    options: [
+                        "A. \\(4.8 \\times 10^{-16} N\\)",
+                        "B. \\(4.8 \\times 10^{-17} N\\)",
+                        "C. \\(4.8 \\times 10^{-18} N\\)",
+                        "D. \\(4.8 \\times 10^{-19} N\\)"
+                    ],
+                    correct: 0,
+                    explanation: "\\(F = qE = 1.6 \\times 10^{-19} \\times 3000 = 4.8 \\times 10^{-16} N\\)",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 8,
+                    text: "Trong máy lọc không khí ion âm, điện trường đều có tác dụng:",
+                    options: [
+                        "A. Phát ra các ion âm",
+                        "B. Làm lệch quỹ đạo của các hạt bụi tích điện",
+                        "C. Tích điện cho các hạt bụi",
+                        "D. Cả ba tác dụng trên"
+                    ],
+                    correct: 3,
+                    explanation: "Trong máy lọc không khí ion âm, điện trường đều có cả ba tác dụng trên.",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 9,
+                    text: "Một điện tích âm chuyển động trong điện trường đều theo phương vuông góc với đường sức. Điện tích sẽ chuyển động theo quỹ đạo:",
+                    options: [
+                        "A. Thẳng về phía bản dương",
+                        "B. Thẳng về phía bản âm",
+                        "C. Parabol lõm hướng về bản dương",
+                        "D. Parabol lõm hướng về bản âm"
+                    ],
+                    correct: 2,
+                    explanation: "Điện tích âm bị hút về phía bản dương nên quỹ đạo parabol sẽ có bề lõm hướng về bản dương.",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 10,
+                    text: "Hiệu điện thế giữa hai bản phẳng song song là 500 V, cường độ điện trường là 2500 V/m. Khoảng cách giữa hai bản là:",
+                    options: [
+                        "A. 0.2 m",
+                        "B. 0.5 m",
+                        "C. 2 m",
+                        "D. 5 m"
+                    ],
+                    correct: 0,
+                    explanation: "Từ công thức \\(E = \\frac{U}{d}\\) suy ra \\(d = \\frac{U}{E} = \\frac{500}{2500} = 0.2\\) m",
+                    difficulty: "Trung bình"
+                }
+            ],
+            exam3: [
+                {
+                    id: 1,
+                    text: "Đặc điểm nào KHÔNG phải của điện trường đều?",
+                    options: [
+                        "A. Vectơ cường độ điện trường không đổi tại mọi điểm",
+                        "B. Các đường sức điện là những đường thẳng song song",
+                        "C. Cường độ điện trường giảm dần theo khoảng cách",
+                        "D. Đường sức điện cách đều nhau"
+                    ],
+                    correct: 2,
+                    explanation: "Trong điện trường đều, cường độ điện trường không đổi tại mọi điểm, không giảm dần theo khoảng cách.",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 2,
+                    text: "Công thức nào sau đây biểu diễn mối quan hệ giữa lực điện và cường độ điện trường?",
+                    options: [
+                        "A. \\(\\vec{F} = q\\vec{E}\\)",
+                        "B. \\(\\vec{F} = \\frac{\\vec{E}}{q}\\)",
+                        "C. \\(\\vec{F} = \\frac{q}{\\vec{E}}\\)",
+                        "D. \\(\\vec{F} = q^2\\vec{E}\\)"
+                    ],
+                    correct: 0,
+                    explanation: "Công thức đúng là \\(\\vec{F} = q\\vec{E}\\)",
+                    difficulty: "Dễ"
+                },
+                {
+                    id: 3,
+                    text: "Electron bay vào điện trường đều với vận tốc ban đầu vuông góc với đường sức. Thành phần vận tốc nào của electron không đổi?",
+                    options: [
+                        "A. Thành phần vuông góc với đường sức",
+                        "B. Thành phần song song với đường sức",
+                        "C. Cả hai thành phần",
+                        "D. Không có thành phần nào"
+                    ],
+                    correct: 0,
+                    explanation: "Thành phần vận tốc vuông góc với đường sức không đổi vì không có lực tác dụng theo phương này.",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 4,
+                    text: "Hai bản phẳng song song cách nhau 2 cm, hiệu điện thế 400 V. Một electron đi từ bản âm đến bản dương. Công của lực điện trường là:",
+                    options: [
+                        "A. \\(6.4 \\times 10^{-18} J\\)",
+                        "B. \\(6.4 \\times 10^{-17} J\\)",
+                        "C. \\(6.4 \\times 10^{-19} J\\)",
+                        "D. \\(6.4 \\times 10^{-20} J\\)"
+                    ],
+                    correct: 1,
+                    explanation: "Công \\(A = qU = 1.6 \\times 10^{-19} \\times 400 = 6.4 \\times 10^{-17} J\\)",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 5,
+                    text: "Trong điện trường đều, đường sức điện:",
+                    options: [
+                        "A. Là đường cong kín",
+                        "B. Xuất phát từ điện tích âm",
+                        "C. Vuông góc với các bản phẳng song song",
+                        "D. Song song với các bản phẳng song song"
+                    ],
+                    correct: 2,
+                    explanation: "Trong điện trường đều giữa hai bản phẳng song song, đường sức điện vuông góc với các bản.",
+                    difficulty: "Dễ"
+                },
+                {
+                    id: 6,
+                    text: "Một điện tích dương chuyển động trong điện trường đều từ bản dương sang bản âm. Nhận xét nào đúng?",
+                    options: [
+                        "A. Thế năng của điện tích tăng",
+                        "B. Động năng của điện tích giảm",
+                        "C. Lực điện thực hiện công âm",
+                        "D. Lực điện thực hiện công dương"
+                    ],
+                    correct: 3,
+                    explanation: "Điện tích dương chuyển động từ bản dương sang bản âm là chuyển động cùng chiều với lực điện, nên lực điện thực hiện công dương.",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 7,
+                    text: "Trong ống tia X, electron được gia tốc bởi hiệu điện thế 120 kV giữa hai cực cách nhau 2 cm. Cường độ điện trường giữa hai cực là:",
+                    options: [
+                        "A. \\(6 \\times 10^5\\) V/m",
+                        "B. \\(6 \\times 10^6\\) V/m",
+                        "C. \\(6 \\times 10^7\\) V/m",
+                        "D. \\(6 \\times 10^8\\) V/m"
+                    ],
+                    correct: 1,
+                    explanation: "\\(E = \\frac{U}{d} = \\frac{120000}{0.02} = 6 \\times 10^6\\) V/m",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 8,
+                    text: "Một điện tích điểm q đặt trong điện trường đều E. Gia tốc của điện tích là:",
+                    options: [
+                        "A. \\(a = \\frac{qE}{m}\\)",
+                        "B. \\(a = \\frac{m}{qE}\\)",
+                        "C. \\(a = qEm\\)",
+                        "D. \\(a = \\frac{E}{mq}\\)"
+                    ],
+                    correct: 0,
+                    explanation: "Theo định luật II Newton, \\(a = \\frac{F}{m} = \\frac{qE}{m}\\)",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 9,
+                    text: "Điện trường đều của Trái Đất có cường độ khoảng:",
+                    options: [
+                        "A. 1-5 V/m",
+                        "B. 10-50 V/m",
+                        "C. 100-150 V/m",
+                        "D. 1000-1500 V/m"
+                    ],
+                    correct: 2,
+                    explanation: "Điện trường đều của Trái Đất có cường độ khoảng 100-150 V/m.",
+                    difficulty: "Dễ"
+                },
+                {
+                    id: 10,
+                    text: "Hai bản phẳng song song tích điện trái dấu, điện trường giữa chúng là 2000 V/m. Khoảng cách giữa hai bản là 5 cm. Hiệu điện thế giữa hai bản là:",
+                    options: [
+                        "A. 10 V",
+                        "B. 100 V",
+                        "C. 1000 V",
+                        "D. 10000 V"
+                    ],
+                    correct: 1,
+                    explanation: "\\(U = Ed = 2000 \\times 0.05 = 100\\) V",
+                    difficulty: "Trung bình"
+                }
+            ],
+            exam4: [
+                {
+                    id: 1,
+                    text: "Điện trường đều có thể được tạo ra bằng:",
+                    options: [
+                        "A. Một điện tích điểm",
+                        "B. Hai bản phẳng song song tích điện trái dấu",
+                        "C. Một quả cầu tích điện",
+                        "D. Một vòng dây tích điện"
+                    ],
+                    correct: 1,
+                    explanation: "Điện trường đều có thể được tạo ra bằng hai bản phẳng song song tích điện trái dấu.",
+                    difficulty: "Dễ"
+                },
+                {
+                    id: 2,
+                    text: "Trong điện trường đều, lực điện tác dụng lên một điện tích:",
+                    options: [
+                        "A. Phụ thuộc vào vị trí của điện tích",
+                        "B. Không phụ thuộc vào vị trí của điện tích",
+                        "C. Tỉ lệ nghịch với khoảng cách từ điện tích đến bản",
+                        "D. Chỉ phụ thuộc vào dấu của điện tích"
+                    ],
+                    correct: 1,
+                    explanation: "Trong điện trường đều, lực điện tác dụng lên một điện tích là không đổi, không phụ thuộc vào vị trí của điện tích.",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 3,
+                    text: "Một electron bay vào điện trường đều theo phương hợp với đường sức điện một góc 30°. Chuyển động của electron là:",
+                    options: [
+                        "A. Thẳng đều",
+                        "B. Tròn đều",
+                        "C. Parabol",
+                        "D. Phức tạp không xác định"
+                    ],
+                    correct: 2,
+                    explanation: "Khi electron bay vào điện trường đều không vuông góc với đường sức, nó vẫn chuyển động theo quỹ đạo parabol.",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 4,
+                    text: "Hiệu điện thế giữa hai bản phẳng song song là 600 V, khoảng cách giữa chúng là 3 cm. Cường độ điện trường giữa hai bản là:",
+                    options: [
+                        "A. 200 V/m",
+                        "B. 2000 V/m",
+                        "C. 20000 V/m",
+                        "D. 200000 V/m"
+                    ],
+                    correct: 2,
+                    explanation: "\\(E = \\frac{U}{d} = \\frac{600}{0.03} = 20000\\) V/m",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 5,
+                    text: "Trong chân không, một điện tích điểm q đặt trong điện trường đều E. So sánh với trong không khí, lực điện tác dụng lên điện tích sẽ:",
+                    options: [
+                        "A. Lớn hơn",
+                        "B. Nhỏ hơn",
+                        "C. Không đổi",
+                        "D. Bằng 0"
+                    ],
+                    correct: 2,
+                    explanation: "Trong điện trường đều, lực điện \\(F = qE\\) không phụ thuộc vào môi trường, nên không đổi.",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 6,
+                    text: "Một proton và một electron cùng được thả không vận tốc đầu trong cùng một điện trường đều. So sánh gia tốc của chúng:",
+                    options: [
+                        "A. Gia tốc của proton lớn hơn",
+                        "B. Gia tốc của electron lớn hơn",
+                        "C. Gia tốc của chúng bằng nhau",
+                        "D. Không thể so sánh"
+                    ],
+                    correct: 1,
+                    explanation: "Gia tốc \\(a = \\frac{qE}{m}\\). Do electron có khối lượng nhỏ hơn nhiều so với proton nên gia tốc của electron lớn hơn.",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 7,
+                    text: "Trong dao động kí, điện trường đều giữa các bản lái tia có tác dụng:",
+                    options: [
+                        "A. Làm nóng cathode",
+                        "B. Tạo ra chùm electron",
+                        "C. Làm lệch chùm electron",
+                        "D. Phát sáng màn huỳnh quang"
+                    ],
+                    correct: 2,
+                    explanation: "Điện trường đều giữa các bản lái tia trong dao động kí có tác dụng làm lệch chùm electron.",
+                    difficulty: "Dễ"
+                },
+                {
+                    id: 8,
+                    text: "Hạt bụi tích điện \\(q = 8 \\times 10^{-19} C\\) nằm cân bằng trong điện trường đều 5000 V/m. Khối lượng của hạt bụi là bao nhiêu nếu lực điện cân bằng với trọng lực?",
+                    options: [
+                        "A. \\(4 \\times 10^{-16} kg\\)",
+                        "B. \\(4 \\times 10^{-15} kg\\)",
+                        "C. \\(4 \\times 10^{-14} kg\\)",
+                        "D. \\(4 \\times 10^{-13} kg\\)"
+                    ],
+                    correct: 1,
+                    explanation: "Cân bằng: \\(mg = qE\\) suy ra \\(m = \\frac{qE}{g} = \\frac{8 \\times 10^{-19} \\times 5000}{10} = 4 \\times 10^{-15} kg\\)",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 9,
+                    text: "Điện trường đều tồn tại trong khoảng không gian nào của hai bản phẳng song song tích điện trái dấu?",
+                    options: [
+                        "A. Chỉ ở chính giữa hai bản",
+                        "B. Ở toàn bộ khoảng không gian giữa hai bản",
+                        "C. Ở cả bên trong và bên ngoài hai bản",
+                        "D. Chỉ ở gần các mép bản"
+                    ],
+                    correct: 1,
+                    explanation: "Điện trường đều tồn tại ở toàn bộ khoảng không gian giữa hai bản phẳng song song (trừ vùng gần mép).",
+                    difficulty: "Dễ"
+                },
+                {
+                    id: 10,
+                    text: "Công của lực điện trường đều khi dịch chuyển điện tích q từ điểm M đến điểm N không phụ thuộc vào:",
+                    options: [
+                        "A. Độ lớn của điện tích q",
+                        "B. Hiệu điện thế giữa M và N",
+                        "C. Hình dạng đường đi từ M đến N",
+                        "D. Cường độ điện trường E"
+                    ],
+                    correct: 2,
+                    explanation: "Trong điện trường đều, công của lực điện không phụ thuộc vào hình dạng đường đi, chỉ phụ thuộc vào vị trí điểm đầu và điểm cuối.",
+                    difficulty: "Trung bình"
+                }
+            ],
+            exam5: [
+                {
+                    id: 1,
+                    text: "Phát biểu nào sau đây là đúng về điện trường đều?",
+                    options: [
+                        "A. Có đường sức điện là những đường tròn đồng tâm",
+                        "B. Có cường độ điện trường giảm tỉ lệ nghịch với bình phương khoảng cách",
+                        "C. Có vectơ cường độ điện trường tại mọi điểm đều bằng nhau",
+                        "D. Chỉ tồn tại xung quanh điện tích điểm"
+                    ],
+                    correct: 2,
+                    explanation: "Trong điện trường đều, vectơ cường độ điện trường tại mọi điểm đều bằng nhau về phương, chiều và độ lớn.",
+                    difficulty: "Dễ"
+                },
+                {
+                    id: 2,
+                    text: "Một điện tích âm được thả không vận tốc đầu trong điện trường đều. Điện tích sẽ chuyển động:",
+                    options: [
+                        "A. Thẳng đều theo chiều điện trường",
+                        "B. Thẳng nhanh dần đều ngược chiều điện trường",
+                        "C. Thẳng chậm dần đều theo chiều điện trường",
+                        "D. Thẳng nhanh dần đều theo chiều điện trường"
+                    ],
+                    correct: 1,
+                    explanation: "Điện tích âm chịu lực điện ngược chiều điện trường, nên sẽ chuyển động thẳng nhanh dần đều ngược chiều điện trường.",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 3,
+                    text: "Cường độ điện trường đều giữa hai bản phẳng song song là 4000 V/m, khoảng cách giữa hai bản là 1.5 cm. Hiệu điện thế giữa hai bản là:",
+                    options: [
+                        "A. 6 V",
+                        "B. 60 V",
+                        "C. 600 V",
+                        "D. 6000 V"
+                    ],
+                    correct: 1,
+                    explanation: "\\(U = Ed = 4000 \\times 0.015 = 60\\) V",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 4,
+                    text: "Trong máy lọc không khí ion âm, các ion âm có tác dụng:",
+                    options: [
+                        "A. Tích điện dương cho các hạt bụi",
+                        "B. Tích điện âm cho các hạt bụi",
+                        "C. Trung hòa điện tích của các hạt bụi",
+                        "D. Không có tác dụng gì với hạt bụi"
+                    ],
+                    correct: 1,
+                    explanation: "Các ion âm kết hợp với hạt bụi, làm cho hạt bụi tích điện âm.",
+                    difficulty: "Dễ"
+                },
+                {
+                    id: 5,
+                    text: "Electron bay vào điện trường đều với vận tốc ban đầu \\(v_0 = 2 \\times 10^6 m/s\\) vuông góc với đường sức. Điện trường có cường độ \\(E = 5000 V/m\\). Gia tốc của electron là:",
+                    options: [
+                        "A. \\(8.8 \\times 10^{14} m/s^2\\)",
+                        "B. \\(8.8 \\times 10^{13} m/s^2\\)",
+                        "C. \\(8.8 \\times 10^{12} m/s^2\\)",
+                        "D. \\(8.8 \\times 10^{11} m/s^2\\)"
+                    ],
+                    correct: 0,
+                    explanation: "\\(a = \\frac{qE}{m} = \\frac{1.6 \\times 10^{-19} \\times 5000}{9.1 \\times 10^{-31}} = 8.8 \\times 10^{14} m/s^2\\)",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 6,
+                    text: "Đường sức điện của điện trường đều:",
+                    options: [
+                        "A. Là những đường cong hở",
+                        "B. Là những đường thẳng song song",
+                        "C. Là những đường tròn đồng tâm",
+                        "D. Là những đường xoắn ốc"
+                    ],
+                    correct: 1,
+                    explanation: "Đường sức điện của điện trường đều là những đường thẳng song song và cách đều nhau.",
+                    difficulty: "Dễ"
+                },
+                {
+                    id: 7,
+                    text: "Một điện tích dương q chuyển động trong điện trường đều từ điểm M đến điểm N. Công của lực điện trường sẽ âm khi:",
+                    options: [
+                        "A. q chuyển động cùng chiều điện trường",
+                        "B. q chuyển động ngược chiều điện trường",
+                        "C. q chuyển động vuông góc với điện trường",
+                        "D. Luôn luôn dương"
+                    ],
+                    correct: 1,
+                    explanation: "Công của lực điện âm khi điện tích dương chuyển động ngược chiều điện trường.",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 8,
+                    text: "Trong công nghệ ion âm lọc không khí, điện trường đều của Trái Đất có cường độ khoảng:",
+                    options: [
+                        "A. 1-5 V/m",
+                        "B. 10-50 V/m",
+                        "C. 100-150 V/m",
+                        "D. 1000-1500 V/m"
+                    ],
+                    correct: 2,
+                    explanation: "Điện trường đều của Trái Đất có cường độ khoảng 100-150 V/m.",
+                    difficulty: "Dễ"
+                },
+                {
+                    id: 9,
+                    text: "Hai bản phẳng song song cách nhau 4 cm, hiệu điện thế 800 V. Một điện tích \\(q = 2 \\times 10^{-9} C\\) di chuyển từ bản này sang bản kia. Công của lực điện trường là:",
+                    options: [
+                        "A. \\(1.6 \\times 10^{-6} J\\)",
+                        "B. \\(1.6 \\times 10^{-7} J\\)",
+                        "C. \\(1.6 \\times 10^{-8} J\\)",
+                        "D. \\(1.6 \\times 10^{-9} J\\)"
+                    ],
+                    correct: 0,
+                    explanation: "\\(A = qU = 2 \\times 10^{-9} \\times 800 = 1.6 \\times 10^{-6} J\\)",
+                    difficulty: "Trung bình"
+                },
+                {
+                    id: 10,
+                    text: "Khi một điện tích bay vào điện trường đều theo phương vuông góc với đường sức, quỹ đạo của nó tương tự với:",
+                    options: [
+                        "A. Chuyển động thẳng đều",
+                        "B. Chuyển động tròn đều",
+                        "C. Chuyển động ném ngang",
+                        "D. Dao động điều hòa"
+                    ],
+                    correct: 2,
+                    explanation: "Chuyển động của điện tích trong điện trường đều (khi bay vuông góc với đường sức) tương tự với chuyển động ném ngang trong trường trọng lực.",
+                    difficulty: "Trung bình"
+                }
+            ]
+        };
+        
+        // Biến toàn cục
+        let currentExam = 1;
+        let currentQuestion = 0;
+        let userAnswers = {};
+        let examSubmitted = false;
+        let startTime = null;
+        let timerInterval = null;
+        let elapsedTime = 0;
+        
+        // Khởi tạo trang web
+        document.addEventListener('DOMContentLoaded', function() {
+            // Xử lý chọn đề thi
+            document.querySelectorAll('.exam-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const examId = parseInt(this.getAttribute('data-exam'));
+                    selectExam(examId);
+                });
+            });
+            
+            // Xử lý nút điều hướng
+            document.querySelectorAll('.prev-btn').forEach(btn => {
+                btn.addEventListener('click', showPreviousQuestion);
+            });
+            
+            document.querySelectorAll('.next-btn').forEach(btn => {
+                btn.addEventListener('click', showNextQuestion);
+            });
+            
+            document.querySelectorAll('.submit-btn').forEach(btn => {
+                btn.addEventListener('click', showSubmitModal);
+            });
+            
+            document.getElementById('review-btn').addEventListener('click', reviewExam);
+            document.getElementById('new-exam-btn').addEventListener('click', startNewExam);
+            document.getElementById('home-btn').addEventListener('click', goToHome);
+            
+            // Modal xác nhận nộp bài
+            document.getElementById('cancel-submit').addEventListener('click', hideSubmitModal);
+            document.getElementById('confirm-submit').addEventListener('click', confirmSubmit);
+            
+            // Tải đề thi đầu tiên
+            selectExam(1);
+            
+            // Khởi động đồng hồ
+            startTimer();
+        });
+        
+        // Bắt đầu đồng hồ
+        function startTimer() {
+            startTime = new Date();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+        
+        // Cập nhật đồng hồ
+        function updateTimer() {
+            if (startTime) {
+                const now = new Date();
+                elapsedTime = Math.floor((now - startTime) / 1000);
+                
+                const minutes = Math.floor(elapsedTime / 60);
+                const seconds = elapsedTime % 60;
+                
+                document.getElementById('timer').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }
+        
+        // Dừng đồng hồ
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+        
+        // Chọn đề thi
+        function selectExam(examId) {
+            // Dừng đồng hồ nếu đang chạy
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            // Cập nhật nút chọn đề
+            document.querySelectorAll('.exam-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (parseInt(btn.getAttribute('data-exam')) === examId) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Ẩn tất cả các đề
+            document.querySelectorAll('.exam-container').forEach(container => {
+                container.classList.remove('active');
+            });
+            
+            // Ẩn kết quả nếu đang hiển thị
+            document.getElementById('result-container').classList.remove('active');
+            
+            // Đặt lại biến
+            currentExam = examId;
+            currentQuestion = 0;
+            userAnswers = {};
+            examSubmitted = false;
+            startTime = new Date();
+            elapsedTime = 0;
+            
+            // Cập nhật thông tin đề thi
+            document.getElementById('current-exam-number').textContent = examId;
+            document.getElementById('current-question-number').textContent = '1';
+            document.getElementById('answered-count').textContent = '0';
+            document.getElementById('progress-fill').style.width = '0%';
+            
+            // Hiển thị đề được chọn
+            document.getElementById(`exam-${examId}`).classList.add('active');
+            
+            // Cập nhật tiêu đề đề thi
+            const examTitles = [
+                "", // Không sử dụng index 0
+                "ĐỀ SỐ 1: KHÁI NIỆM ĐIỆN TRƯỜNG ĐỀU",
+                "ĐỀ SỐ 2: TÍNH CHẤT ĐIỆN TRƯỜNG ĐỀU",
+                "ĐỀ SỐ 3: ỨNG DỤNG ĐIỆN TRƯỜNG ĐỀU",
+                "ĐỀ SỐ 4: BÀI TẬP ĐIỆN TRƯỜNG ĐỀU",
+                "ĐỀ SỐ 5: TỔNG HỢP ĐIỆN TRƯỜNG ĐỀU"
+            ];
+            
+            const examDescriptions = [
+                "",
+                "Kiểm tra kiến thức cơ bản về điện trường đều",
+                "Kiểm tra tính chất và đặc điểm của điện trường đều",
+                "Kiểm tra ứng dụng thực tế của điện trường đều",
+                "Kiểm tra kỹ năng giải bài tập về điện trường đều",
+                "Kiểm tra tổng hợp kiến thức về điện trường đều"
+            ];
+            
+            document.querySelector(`#exam-${examId} .exam-title`).textContent = examTitles[examId];
+            document.querySelector(`#exam-${examId} .exam-description`).textContent = examDescriptions[examId];
+            
+            // Tải câu hỏi cho đề này
+            loadQuestions(examId);
+            
+            // Hiển thị câu hỏi đầu tiên
+            showQuestion(currentQuestion);
+            
+            // Khởi động lại đồng hồ
+            startTimer();
+            
+            // Cập nhật thông tin kết quả
+            document.getElementById('result-exam-name').textContent = `Đề số ${examId}`;
+        }
+        
+        // Tải câu hỏi
+        function loadQuestions(examId) {
+            const questionsContainer = document.querySelector(`#exam-${examId} .questions-container`);
+            questionsContainer.innerHTML = '';
+            
+            const quickNavContainer = document.getElementById(`quick-nav-${examId}`);
+            if (quickNavContainer) {
+                quickNavContainer.innerHTML = '';
+            }
+            
+            const questions = allQuestions[`exam${examId}`];
+            
+            questions.forEach((question, index) => {
+                // Tạo container câu hỏi
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question-container';
+                questionElement.id = `exam${examId}-question-${index}`;
+                questionElement.style.display = index === 0 ? 'block' : 'none';
+                
+                // Tạo các lựa chọn
+                let optionsHTML = '';
+                const optionLetters = ['A', 'B', 'C', 'D'];
+                
+                question.options.forEach((option, optIndex) => {
+                    optionsHTML += `
+                        <div class="option" data-question="${index}" data-option="${optIndex}">
+                            <div class="option-letter">${optionLetters[optIndex]}</div>
+                            <div class="option-text">${option}</div>
+                        </div>
+                    `;
+                });
+                
+                // Thêm badge độ khó
+                let difficultyClass = '';
+                let difficultyText = '';
+                switch(question.difficulty) {
+                    case 'Dễ': difficultyClass = 'difficulty-easy'; break;
+                    case 'Trung bình': difficultyClass = 'difficulty-medium'; break;
+                    case 'Khó': difficultyClass = 'difficulty-hard'; break;
+                }
+                difficultyText = question.difficulty;
+                
+                questionElement.innerHTML = `
+                    <div class="question-text">
+                        Câu ${index + 1}: ${question.text}
+                        <span class="difficulty-badge ${difficultyClass}">${difficultyText}</span>
+                    </div>
+                    <div class="options-container">
+                        ${optionsHTML}
+                    </div>
+                    <div class="explanation" id="exam${examId}-explanation-${index}" style="display:none; margin-top:20px; padding:15px; background-color:#f0f0f0; border-radius:8px;">
+                        <strong>Giải thích:</strong> ${question.explanation}
+                    </div>
+                `;
+                
+                questionsContainer.appendChild(questionElement);
+                
+                // Tạo nút điều hướng nhanh
+                if (quickNavContainer) {
+                    const quickNavBtn = document.createElement('button');
+                    quickNavBtn.className = 'quick-nav-btn';
+                    quickNavBtn.textContent = index + 1;
+                    quickNavBtn.setAttribute('data-question', index);
+                    quickNavBtn.addEventListener('click', function() {
+                        if (examSubmitted) return;
+                        const questionIndex = parseInt(this.getAttribute('data-question'));
+                        currentQuestion = questionIndex;
+                        showQuestion(currentQuestion);
+                    });
+                    quickNavContainer.appendChild(quickNavBtn);
+                }
+            });
+            
+            // Thêm sự kiện cho các lựa chọn
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    if (examSubmitted) return;
+                    
+                    const questionIndex = parseInt(this.getAttribute('data-question'));
+                    const optionIndex = parseInt(this.getAttribute('data-option'));
+                    
+                    selectOption(questionIndex, optionIndex);
+                });
+            });
+            
+            // Render MathJax ngay sau khi tải câu hỏi
+            setTimeout(() => {
+                if (window.MathJax && MathJax.typeset) {
+                    MathJax.typeset([questionsContainer]);
+                }
+            }, 100);
+        }
+        
+        // Chọn đáp án
+        function selectOption(questionIndex, optionIndex) {
+            // Lưu câu trả lời của người dùng
+            userAnswers[questionIndex] = optionIndex;
+            
+            // Xóa lựa chọn trước đó cho câu hỏi này
+            const questionElement = document.getElementById(`exam${currentExam}-question-${questionIndex}`);
+            questionElement.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Đánh dấu lựa chọn hiện tại
+            const selectedOption = questionElement.querySelector(`.option[data-option="${optionIndex}"]`);
+            selectedOption.classList.add('selected');
+            
+            // Cập nhật nút điều hướng nhanh
+            updateQuickNavButtons();
+            
+            // Cập nhật thông tin tiến độ
+            updateProgress();
+            
+            // Nếu đã nộp bài, hiển thị đáp án đúng/sai
+            if (examSubmitted) {
+                showCorrectAnswer(questionIndex);
+            }
+        }
+        
+        // Hiển thị câu hỏi
+        function showQuestion(questionIndex) {
+            // Ẩn tất cả câu hỏi
+            document.querySelectorAll(`#exam-${currentExam} .question-container`).forEach(container => {
+                container.style.display = 'none';
+            });
+            
+            // Hiển thị câu hỏi hiện tại
+            const currentQuestionElement = document.getElementById(`exam${currentExam}-question-${questionIndex}`);
+            currentQuestionElement.style.display = 'block';
+            
+            // Cập nhật bộ đếm câu hỏi
+            document.querySelector(`#exam-${currentExam} .question-counter`).textContent = `Câu ${questionIndex + 1}/10`;
+            
+            // Cập nhật thông tin đề thi
+            document.getElementById('current-question-number').textContent = questionIndex + 1;
+            
+            // Cập nhật trạng thái nút điều hướng
+            document.querySelectorAll('.prev-btn').forEach(btn => {
+                btn.disabled = (questionIndex === 0);
+            });
+            
+            document.querySelectorAll('.next-btn').forEach(btn => {
+                btn.disabled = (questionIndex === 9);
+            });
+            
+            // Cập nhật nút điều hướng nhanh
+            updateQuickNavButtons();
+            
+            // Hiển thị đáp án đã chọn nếu có
+            if (userAnswers[questionIndex] !== undefined) {
+                const selectedOption = document.querySelector(`#exam${currentExam}-question-${questionIndex} .option[data-option="${userAnswers[questionIndex]}"]`);
+                if (selectedOption) {
+                    selectedOption.classList.add('selected');
+                }
+            }
+            
+            // Nếu đã nộp bài, hiển thị đáp án đúng
+            if (examSubmitted) {
+                showCorrectAnswer(questionIndex);
+            }
+            
+            // Render lại MathJax cho câu hỏi hiện tại
+            setTimeout(() => {
+                if (window.MathJax && MathJax.typeset) {
+                    MathJax.typeset([currentQuestionElement]);
+                }
+            }, 50);
+        }
+        
+        // Cập nhật nút điều hướng nhanh
+        function updateQuickNavButtons() {
+            const quickNavContainer = document.getElementById(`quick-nav-${currentExam}`);
+            if (!quickNavContainer) return;
+            
+            const buttons = quickNavContainer.querySelectorAll('.quick-nav-btn');
+            buttons.forEach((btn, index) => {
+                btn.classList.remove('active', 'answered');
+                
+                if (index === currentQuestion) {
+                    btn.classList.add('active');
+                }
+                
+                if (userAnswers[index] !== undefined) {
+                    btn.classList.add('answered');
+                }
+            });
+        }
+        
+        // Cập nhật tiến độ
+        function updateProgress() {
+            const answeredCount = Object.keys(userAnswers).length;
+            const progressPercent = (answeredCount / 10) * 100;
+            
+            document.getElementById('answered-count').textContent = answeredCount;
+            document.getElementById('progress-fill').style.width = `${progressPercent}%`;
+        }
+        
+        // Hiển thị câu hỏi tiếp theo
+        function showNextQuestion() {
+            if (currentQuestion < 9) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+            }
+        }
+        
+        // Hiển thị câu hỏi trước đó
+        function showPreviousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        }
+        
+        // Hiển thị modal xác nhận nộp bài
+        function showSubmitModal() {
+            const answeredCount = Object.keys(userAnswers).length;
+            let modalText = '';
+            
+            if (answeredCount < 10) {
+                modalText = `Bạn mới trả lời ${answeredCount}/10 câu. Bạn có chắc chắn muốn nộp bài không?`;
+            } else {
+                modalText = "Bạn đã trả lời đủ 10 câu. Bạn có chắc chắn muốn nộp bài không?";
+            }
+            
+            document.getElementById('submit-modal-text').textContent = modalText;
+            document.getElementById('submit-modal').classList.add('active');
+        }
+        
+        // Ẩn modal xác nhận nộp bài
+        function hideSubmitModal() {
+            document.getElementById('submit-modal').classList.remove('active');
+        }
+        
+        // Xác nhận nộp bài
+        function confirmSubmit() {
+            hideSubmitModal();
+            submitExam();
+        }
+        
+        // Nộp bài
+        function submitExam() {
+            // Dừng đồng hồ
+            stopTimer();
+            
+            examSubmitted = true;
+            
+            // Tính điểm
+            let score = 0;
+            const questions = allQuestions[`exam${currentExam}`];
+            
+            for (let i = 0; i < questions.length; i++) {
+                if (userAnswers[i] === questions[i].correct) {
+                    score++;
+                }
+            }
+            
+            // Tính phần trăm
+            const percentage = Math.round((score / 10) * 100);
+            
+            // Cập nhật vòng tròn điểm
+            const scoreCircle = document.querySelector('.score-circle');
+            scoreCircle.style.background = `conic-gradient(var(--primary-brown) 0% ${percentage}%, #f0f0f0 ${percentage}% 100%)`;
+            
+            document.getElementById('score-circle-text').textContent = `${score}/10`;
+            document.getElementById('score-percentage').textContent = `${percentage}%`;
+            
+            // Cập nhật thông tin chi tiết kết quả
+            document.getElementById('result-correct').textContent = score;
+            document.getElementById('result-time').textContent = document.getElementById('timer').textContent;
+            document.getElementById('result-accuracy').textContent = `${percentage}%`;
+            
+            // Hiển thị thông báo kết quả
+            let scoreText = "";
+            if (score >= 9) {
+                scoreText = "🎉 Xuất sắc! Bạn đã nắm vững kiến thức về điện trường đều. Hãy tiếp tục phát huy!";
+            } else if (score >= 7) {
+                scoreText = "👍 Giỏi! Bạn hiểu rõ về điện trường đều. Có một vài câu cần ôn tập thêm.";
+            } else if (score >= 5) {
+                scoreText = "💪 Khá! Bạn nắm được kiến thức cơ bản. Hãy ôn tập thêm để cải thiện kết quả.";
+            } else {
+                scoreText = "📚 Cần cố gắng hơn! Bạn nên xem lại bài học về điện trường đều và làm lại các đề thi.";
+            }
+            
+            document.getElementById('score-text').textContent = scoreText;
+            
+            // Hiển thị đáp án đúng cho tất cả câu hỏi
+            for (let i = 0; i < questions.length; i++) {
+                showCorrectAnswer(i);
+            }
+            
+            // Ẩn đề thi và hiển thị kết quả
+            document.querySelectorAll('.exam-container').forEach(container => {
+                container.classList.remove('active');
+            });
+            
+            document.getElementById('result-container').classList.add('active');
+            
+            // Cuộn lên đầu trang
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Render lại MathJax cho tất cả câu hỏi
+            setTimeout(() => {
+                if (window.MathJax && MathJax.typeset) {
+                    MathJax.typeset();
+                }
+            }, 300);
+        }
+        
+        // Hiển thị đáp án đúng
+        function showCorrectAnswer(questionIndex) {
+            const questions = allQuestions[`exam${currentExam}`];
+            const correctAnswer = questions[questionIndex].correct;
+            const userAnswer = userAnswers[questionIndex];
+            
+            const questionElement = document.getElementById(`exam${currentExam}-question-${questionIndex}`);
+            const options = questionElement.querySelectorAll('.option');
+            
+            // Đánh dấu đáp án đúng
+            options.forEach((option, index) => {
+                option.classList.remove('correct', 'incorrect');
+                
+                if (index === correctAnswer) {
+                    option.classList.add('correct');
+                } else if (index === userAnswer && userAnswer !== correctAnswer) {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            // Hiển thị giải thích
+            const explanationElement = document.getElementById(`exam${currentExam}-explanation-${questionIndex}`);
+            explanationElement.style.display = 'block';
+        }
+        
+        // Xem lại bài làm
+        function reviewExam() {
+            // Hiển thị lại đề thi
+            document.getElementById('result-container').classList.remove('active');
+            document.getElementById(`exam-${currentExam}`).classList.add('active');
+            
+            // Hiển thị câu hỏi đầu tiên
+            currentQuestion = 0;
+            showQuestion(currentQuestion);
+            
+            // Cuộn lên đầu trang
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Làm đề mới
+        function startNewExam() {
+            // Chọn đề tiếp theo (hoặc quay lại đề 1 nếu đang ở đề 5)
+            let nextExam = currentExam + 1;
+            if (nextExam > 5) nextExam = 1;
+            
+            selectExam(nextExam);
+            
+            // Cuộn lên đầu trang
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Về trang chủ
+        function goToHome() {
+            selectExam(1);
+            
+            // Cuộn lên đầu trang
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

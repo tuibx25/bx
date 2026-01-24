@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20 Câu Trắc Nghiệm Vật Lý 11: Điện Trường Đều</title>
+    <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f4f0;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(139, 69, 19, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        header {
+            background-color: #8B4513;
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+            border-bottom: 5px solid #6B3410;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .instructions {
+            background-color: #f5f0e8;
+            border-left: 4px solid #8B4513;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            color: #8B4513;
+            margin-bottom: 8px;
+        }
+        
+        .question-section {
+            margin-bottom: 40px;
+        }
+        
+        h2 {
+            color: #5D4037;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #D7CCC8;
+        }
+        
+        .question {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(139, 69, 19, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid #E8E0D9;
+        }
+        
+        .question:hover {
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.08);
+        }
+        
+        .question-number {
+            display: inline-block;
+            background-color: #8B4513;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #5D4037;
+        }
+        
+        .options {
+            list-style-type: none;
+        }
+        
+        .option {
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background-color: white;
+            border-radius: 8px;
+            border: 1px solid #D7CCC8;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .option:hover {
+            background-color: #f5f0e8;
+            border-color: #8B4513;
+        }
+        
+        .option.selected {
+            background-color: #EDE7DC;
+            border-color: #8B4513;
+            font-weight: 600;
+        }
+        
+        .answer-section {
+            background-color: #f8f4f0;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 1px solid #D7CCC8;
+        }
+        
+        .answers-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .answers-table th {
+            background-color: #8B4513;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .answers-table td {
+            padding: 12px;
+            border-bottom: 1px solid #D7CCC8;
+        }
+        
+        .answers-table tr:nth-child(even) {
+            background-color: #f5f0e8;
+        }
+        
+        .answers-table tr:hover {
+            background-color: #EDE7DC;
+        }
+        
+        .correct-answer {
+            color: #2E7D32;
+            font-weight: 600;
+        }
+        
+        .show-answers-btn {
+            display: block;
+            width: 100%;
+            background-color: #5D4037;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .show-answers-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(93, 64, 55, 0.3);
+            background-color: #6B3410;
+        }
+        
+        .result-counter {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f5f0e8;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 25px;
+            border: 1px solid #D7CCC8;
+        }
+        
+        .result-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .result-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #8B4513;
+        }
+        
+        .result-label {
+            font-size: 14px;
+            color: #795548;
+        }
+        
+        .check-btn {
+            background-color: #8B4513;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(139, 69, 19, 0.3);
+            background-color: #6B3410;
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background-color: #E8F5E9;
+            color: #2E7D32;
+            border-left: 4px solid #2E7D32;
+        }
+        
+        .feedback.incorrect {
+            background-color: #FFEBEE;
+            color: #C62828;
+            border-left: 4px solid #C62828;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 10px;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 22px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .result-counter {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .answers-table {
+                font-size: 14px;
+            }
+        }
+        
+        /* Chống copy */
+        .no-copy {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false" onkeydown="return false;" onmousedown="return false;">
+    <div class="container no-copy">
+        <header>
+            <h1>20 Câu Trắc Nghiệm Vật Lý 11</h1>
+            <p class="subtitle">Chủ đề: Điện Trường Đều</p>
+        </header>
+        
+        <div class="content">
+            <div class="instructions">
+                <h3>Hướng dẫn làm bài</h3>
+                <p>1. Đọc kỹ từng câu hỏi và chọn một đáp án đúng nhất.</p>
+                <p>2. Bấm nút "Kiểm tra kết quả" sau mỗi câu để xem bạn trả lời đúng hay sai.</p>
+                <p>3. Bấm nút "Hiển thị đáp án" để xem tất cả đáp án đúng và giải thích.</p>
+            </div>
+            
+            <div class="result-counter">
+                <div class="result-item">
+                    <div class="result-number" id="correct-count">0</div>
+                    <div class="result-label">Câu đúng</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-number" id="incorrect-count">0</div>
+                    <div class="result-label">Câu sai</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-number" id="unanswered-count">20</div>
+                    <div class="result-label">Chưa trả lời</div>
+                </div>
+            </div>
+            
+            <div class="question-section">
+                <h2>📝 Câu hỏi trắc nghiệm</h2>
+                
+                <div id="questions-container">
+                    <!-- Các câu hỏi sẽ được tạo bằng JavaScript -->
+                </div>
+                
+                <button class="show-answers-btn" id="show-answers-btn">Hiển thị đáp án và giải thích</button>
+            </div>
+            
+            <div class="answer-section" id="answer-section" style="display: none;">
+                <h2>📚 Đáp án và giải thích</h2>
+                <table class="answers-table">
+                    <thead>
+                        <tr>
+                            <th width="10%">Câu</th>
+                            <th width="15%">Đáp án</th>
+                            <th>Giải thích / Công thức</th>
+                        </tr>
+                    </thead>
+                    <tbody id="answers-table-body">
+                        <!-- Nội dung đáp án sẽ được tạo bằng JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Chống xem mã nguồn và các phím tắt
+        document.addEventListener('keydown', function(e) {
+            // Chặn Ctrl+U (View Source)
+            if (e.ctrlKey && e.keyCode == 85) {
+                e.preventDefault();
+                return false;
+            }
+            // Chặn Ctrl+S (Save Page)
+            if (e.ctrlKey && e.keyCode == 83) {
+                e.preventDefault();
+                return false;
+            }
+            // Chặn Ctrl+P (Print)
+            if (e.ctrlKey && e.keyCode == 80) {
+                e.preventDefault();
+                return false;
+            }
+            // Chặn F12 (Developer Tools)
+            if (e.keyCode == 123) {
+                e.preventDefault();
+                return false;
+            }
+            // Chặn Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 73) {
+                e.preventDefault();
+                return false;
+            }
+            // Chặn Ctrl+Shift+J (Developer Console)
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 74) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Chống click chuột phải
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Dữ liệu câu hỏi và đáp án
+        const questions = [
+            {
+                question: "Điện trường đều là điện trường mà vectơ cường độ điện trường tại mọi điểm có đặc điểm gì?",
+                options: [
+                    "A. Độ lớn thay đổi, phương và chiều không đổi.",
+                    "B. Độ lớn, phương và chiều giống nhau.",
+                    "C. Phương thay đổi, độ lớn và chiều không đổi.",
+                    "D. Chiều thay đổi, độ lớn và phương không đổi."
+                ],
+                correctAnswer: 1,
+                explanation: "Định nghĩa: Các vectơ E có độ lớn, phương, chiều giống nhau tại mọi điểm."
+            },
+            {
+                question: "Cách phổ biến nhất để tạo ra một điện trường đều là sử dụng?",
+                options: [
+                    "A. Một quả cầu kim loại tích điện.",
+                    "B. Một điện tích điểm.",
+                    "C. Hai bản phẳng kim loại song song, tích điện trái dấu.",
+                    "D. Một vòng dây tròn tích điện."
+                ],
+                correctAnswer: 2,
+                explanation: "Đây là phương pháp cơ bản nhất được nêu trong bài."
+            },
+            {
+                question: "Công thức tính cường độ điện trường đều (E) giữa hai bản phẳng song song là gì? (với U là hiệu điện thế, d là khoảng cách)",
+                options: [
+                    "A. E = U/d",
+                    "B. E = d/U",
+                    "C. E = U.d",
+                    "D. E = U²/d"
+                ],
+                correctAnswer: 0,
+                explanation: "Công thức cơ bản: E = U/d."
+            },
+            {
+                question: "Đường sức điện trong điện trường đều có đặc điểm gì?",
+                options: [
+                    "A. Là những đường cong khép kín.",
+                    "B. Là những đường thẳng song song và cách đều nhau.",
+                    "C. Là những đường hội tụ tại một điểm.",
+                    "D. Là những đường phân kỳ từ một điểm."
+                ],
+                correctAnswer: 1,
+                explanation: "Đặc điểm nhận dạng của đường sức trong điện trường đều."
+            },
+            {
+                question: "Chiều của đường sức điện trong điện trường đều giữa hai bản phẳng được quy ước như thế nào?",
+                options: [
+                    "A. Từ bản âm sang bản dương.",
+                    "B. Từ bản dương sang bản âm.",
+                    "C. Song song với hai bản.",
+                    "D. Cả A và B đều đúng tùy trường hợp."
+                ],
+                correctAnswer: 1,
+                explanation: "Quy ước chung: đường sức đi từ nơi có điện thế cao (+) đến thấp (-)."
+            },
+            {
+                question: "Một electron được thả không vận tốc đầu trong điện trường đều. Electron sẽ chuyển động như thế nào?",
+                options: [
+                    "A. Thẳng đều.",
+                    "B. Thẳng nhanh dần đều về phía bản dương.",
+                    "C. Thẳng nhanh dần đều về phía bản âm.",
+                    "D. Tròn đều."
+                ],
+                correctAnswer: 1,
+                explanation: "Electron (q âm) chịu lực ngược chiều E, nên bị hút về bản dương."
+            },
+            {
+                question: "Công thức tính lực điện tác dụng lên một điện tích q đặt trong điện trường đều E là?",
+                options: [
+                    "A. F = q/E",
+                    "B. F = q.E",
+                    "C. F = E/q",
+                    "D. F = m.E"
+                ],
+                correctAnswer: 1,
+                explanation: "Công thức cơ bản: F = |q|.E."
+            },
+            {
+                question: "Khi một điện tích dương bay vào điện trường đều theo phương vuông góc với đường sức, quỹ đạo của nó là gì?",
+                options: [
+                    "A. Đường tròn.",
+                    "B. Đường thẳng.",
+                    "C. Đường parabol lõm hướng về bản âm.",
+                    "D. Đường parabol lõm hướng về bản dương."
+                ],
+                correctAnswer: 2,
+                explanation: "Điện tích dương bị hút về bản âm, tạo quỹ đạo parabol lõm hướng về đó."
+            },
+            {
+                question: "Thiết bị nào sau đây không ứng dụng nguyên lý điện trường đều để lái chùm electron?",
+                options: [
+                    "A. Dao động kí.",
+                    "B. Đèn hình tivi CRT cũ.",
+                    "C. Bóng đèn sợi đốt.",
+                    "D. Ống tia X."
+                ],
+                correctAnswer: 2,
+                explanation: "Bóng đèn sợi đốt hoạt động dựa trên hiệu ứng nhiệt, không dùng để lái electron."
+            },
+            {
+                question: "Trong dao động kí, điện trường đều giữa các bản lái tia có tác dụng chính là gì?",
+                options: [
+                    "A. Phát xạ electron.",
+                    "B. Làm nóng cathode.",
+                    "C. Làm lệch chùm electron.",
+                    "D. Tạo ra tia X."
+                ],
+                correctAnswer: 2,
+                explanation: "Điện trường làm lệch chùm electron để quét trên màn hình."
+            },
+            {
+                question: "Trong công nghệ lọc không khí bằng ion âm, điện trường đều có vai trò gì?",
+                options: [
+                    "A. Phá hủy cấu trúc vi khuẩn.",
+                    "B. Làm lệch quỹ đạo của các hạt bụi tích điện để chúng bám vào bề mặt thu gom.",
+                    "C. Hút các phân tử khí ô nhiễm.",
+                    "D. Làm mát không khí."
+                ],
+                correctAnswer: 1,
+                explanation: "Điện trường tác dụng lực lên hạt tích điện, điều khiển quỹ đạo của chúng."
+            },
+            {
+                question: "Hai bản phẳng song song cách nhau 2 cm, hiệu điện thế giữa chúng là 200V. Cường độ điện trường đều giữa hai bản là bao nhiêu?",
+                options: [
+                    "A. 100 V/m",
+                    "B. 400 V/m",
+                    "C. 10000 V/m",
+                    "D. 0.01 V/m"
+                ],
+                correctAnswer: 2,
+                explanation: "E = U/d = 200 / 0.02 = 10,000 V/m."
+            },
+            {
+                question: "Dựa vào bài tập ví dụ về ống tia X trong bài học, lực điện trường có tác dụng gì đối với electron?",
+                options: [
+                    "A. Làm electron chuyển động chậm dần.",
+                    "B. Gia tốc electron từ cực âm sang cực dương.",
+                    "C. Giữ electron đứng yên.",
+                    "D. Khiến electron chuyển động tròn."
+                ],
+                correctAnswer: 1,
+                explanation: "Lực điện làm electron tăng tốc, có động năng lớn khi đập vào anode để phát tia X."
+            },
+            {
+                question: "Khi nói về điện trường đều giữa hai bản phẳng, phát biểu nào sau đây là sai?",
+                options: [
+                    "A. Điện trường chỉ tồn tại trong khoảng không gian giữa hai bản.",
+                    "B. Cường độ điện trường E tỉ lệ thuận với hiệu điện thế U.",
+                    "C. Cường độ điện trường E tỉ lệ nghịch với khoảng cách d.",
+                    "D. Điện trường cũng tồn tại mạnh mẽ ở phía ngoài hai bản."
+                ],
+                correctAnswer: 3,
+                explanation: "Điện trường đều lý tưởng chỉ tồn tại trong khoảng giữa hai bản."
+            },
+            {
+                question: "Điện tích điểm q = -5.10⁻⁹ C đặt trong điện trường đều E = 1000 V/m. Độ lớn lực điện tác dụng lên điện tích là?",
+                options: [
+                    "A. 5.10⁻¹² N",
+                    "B. 5.10⁻⁶ N",
+                    "C. 2.10⁻¹² N",
+                    "D. 2.10⁻⁶ N"
+                ],
+                correctAnswer: 1,
+                explanation: "F = |q|.E = |-5.10⁻⁹| . 1000 = 5.10⁻⁶ N."
+            },
+            {
+                question: "So sánh nào sau đây là chính xác khi nói về chuyển động của điện tích trong điện trường đều?",
+                options: [
+                    "A. Giống hoàn toàn với chuyển động rơi tự do.",
+                    "B. Tương tự với chuyển động ném ngang trong trường trọng lực.",
+                    "C. Giống với chuyển động tròn đều.",
+                    "D. Không có sự tương tự với loại chuyển động nào khác."
+                ],
+                correctAnswer: 1,
+                explanation: "Cả hai đều chịu lực không đổi theo phương vuông góc với vận tốc đầu, tạo parabol."
+            },
+            {
+                question: "Trong một điện trường đều, nếu tăng gấp đôi khoảng cách giữa hai bản phẳng nhưng giữ nguyên hiệu điện thế thì cường độ điện trường sẽ thay đổi thế nào?",
+                options: [
+                    "A. Tăng gấp đôi.",
+                    "B. Giảm một nửa.",
+                    "C. Không thay đổi.",
+                    "D. Tăng gấp bốn."
+                ],
+                correctAnswer: 1,
+                explanation: "Từ E = U/d, nếu d tăng 2 lần (U không đổi) thì E giảm 2 lần."
+            },
+            {
+                question: "Theo bài học, điện trường của Trái Đất là một điện trường đều có cường độ vào khoảng bao nhiêu?",
+                options: [
+                    "A. 10-20 V/m",
+                    "B. 100-150 V/m",
+                    "C. 1000-1500 V/m",
+                    "D. 10⁶ V/m"
+                ],
+                correctAnswer: 1,
+                explanation: "Thông tin được nêu trong phần ứng dụng công nghệ ion âm."
+            },
+            {
+                question: "Một hạt bụi tích điện dương nằm lơ lửng trong điện trường đều hướng thẳng đứng. Lực điện tác dụng lên nó có chiều như thế nào?",
+                options: [
+                    "A. Cùng chiều với vectơ cường độ điện trường.",
+                    "B. Ngược chiều với vectơ cường độ điện trường.",
+                    "C. Vuông góc với vectơ cường độ điện trường.",
+                    "D. Bằng 0."
+                ],
+                correctAnswer: 0,
+                explanation: "Với điện tích dương: F cùng phương, cùng chiều với E."
+            },
+            {
+                question: "Phát biểu nào sau đây là đúng khi nói về ứng dụng của điện trường đều?",
+                options: [
+                    "A. Chỉ có ứng dụng trong phòng thí nghiệm vật lý.",
+                    "B. Là nguyên lý cốt lõi của máy lọc không khí ion âm và dao động kí.",
+                    "C. Không có ứng dụng thực tế trong đời sống.",
+                    "D. Chỉ dùng để nghiên cứu chuyển động của các hạt cơ bản."
+                ],
+                correctAnswer: 1,
+                explanation: "Bài học nêu rõ hai ứng dụng quan trọng này trong đời sống và kỹ thuật."
+            }
+        ];
+
+        // Biến để lưu trữ câu trả lời của người dùng
+        let userAnswers = new Array(questions.length).fill(null);
+        let correctCount = 0;
+        let incorrectCount = 0;
+        
+        // Hàm tạo câu hỏi
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            
+            questions.forEach((q, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question';
+                questionElement.id = `question-${index}`;
+                
+                let optionsHTML = '';
+                q.options.forEach((option, optionIndex) => {
+                    optionsHTML += `
+                        <li class="option" data-question="${index}" data-option="${optionIndex}">
+                            ${option}
+                        </li>
+                    `;
+                });
+                
+                questionElement.innerHTML = `
+                    <div class="question-header">
+                        <span class="question-number">${index + 1}</span>
+                        <div class="question-text">${q.question}</div>
+                    </div>
+                    <ul class="options">${optionsHTML}</ul>
+                    <button class="check-btn" data-question="${index}">Kiểm tra kết quả</button>
+                    <div class="feedback" id="feedback-${index}"></div>
+                `;
+                
+                container.appendChild(questionElement);
+            });
+            
+            // Thêm sự kiện click cho các lựa chọn
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const questionIndex = parseInt(this.getAttribute('data-question'));
+                    const optionIndex = parseInt(this.getAttribute('data-option'));
+                    
+                    // Xóa lớp selected từ tất cả các option trong câu hỏi này
+                    document.querySelectorAll(`.option[data-question="${questionIndex}"]`).forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Thêm lớp selected cho option được chọn
+                    this.classList.add('selected');
+                    
+                    // Lưu câu trả lời của người dùng
+                    userAnswers[questionIndex] = optionIndex;
+                    
+                    // Cập nhật số câu chưa trả lời
+                    updateResultCounter();
+                });
+            });
+            
+            // Thêm sự kiện click cho nút kiểm tra kết quả
+            document.querySelectorAll('.check-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const questionIndex = parseInt(this.getAttribute('data-question'));
+                    checkAnswer(questionIndex);
+                });
+            });
+        }
+        
+        // Hàm kiểm tra câu trả lời
+        function checkAnswer(questionIndex) {
+            const feedbackElement = document.getElementById(`feedback-${questionIndex}`);
+            const userAnswer = userAnswers[questionIndex];
+            const correctAnswer = questions[questionIndex].correctAnswer;
+            
+            if (userAnswer === null) {
+                feedbackElement.textContent = "Vui lòng chọn một đáp án trước!";
+                feedbackElement.className = "feedback incorrect";
+                feedbackElement.style.display = "block";
+                return;
+            }
+            
+            if (userAnswer === correctAnswer) {
+                feedbackElement.textContent = "✓ Chính xác! " + questions[questionIndex].explanation;
+                feedbackElement.className = "feedback correct";
+                feedbackElement.style.display = "block";
+            } else {
+                const correctOption = questions[questionIndex].options[correctAnswer];
+                feedbackElement.innerHTML = `✘ Chưa chính xác. Đáp án đúng là: <strong>${correctOption}</strong><br>${questions[questionIndex].explanation}`;
+                feedbackElement.className = "feedback incorrect";
+                feedbackElement.style.display = "block";
+            }
+            
+            // Cập nhật số câu đúng/sai
+            updateResultCounter();
+        }
+        
+        // Hàm cập nhật bộ đếm kết quả
+        function updateResultCounter() {
+            correctCount = 0;
+            incorrectCount = 0;
+            let answeredCount = 0;
+            
+            userAnswers.forEach((answer, index) => {
+                if (answer !== null) {
+                    answeredCount++;
+                    if (answer === questions[index].correctAnswer) {
+                        correctCount++;
+                    } else {
+                        incorrectCount++;
+                    }
+                }
+            });
+            
+            // Cập nhật hiển thị
+            document.getElementById('correct-count').textContent = correctCount;
+            document.getElementById('incorrect-count').textContent = incorrectCount;
+            document.getElementById('unanswered-count').textContent = questions.length - answeredCount;
+        }
+        
+        // Hàm hiển thị đáp án và giải thích
+        function showAnswers() {
+            const tableBody = document.getElementById('answers-table-body');
+            tableBody.innerHTML = '';
+            
+            questions.forEach((q, index) => {
+                const row = document.createElement('tr');
+                
+                // Xác định lớp CSS cho đáp án đúng
+                const answerClass = userAnswers[index] === q.correctAnswer ? 'correct-answer' : '';
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td class="${answerClass}">${String.fromCharCode(65 + q.correctAnswer)}</td>
+                    <td>${q.explanation}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Hiển thị phần đáp án
+            document.getElementById('answer-section').style.display = 'block';
+            
+            // Cuộn đến phần đáp án
+            document.getElementById('answer-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Khởi tạo khi trang được tải
+        document.addEventListener('DOMContentLoaded', function() {
+            renderQuestions();
+            updateResultCounter();
+            
+            // Thêm sự kiện click cho nút hiển thị đáp án
+            document.getElementById('show-answers-btn').addEventListener('click', showAnswers);
+        });
+    </script>
+</body>
+</html>

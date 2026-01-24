@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Tập Tự Luận - Bài 18 (SBT)</title>
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
+    
+    <!-- BẢO MẬT: Ngăn chặn các hành vi không mong muốn -->
+    <script>
+        // Ngăn chặn menu chuột phải
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn phím tắt (Ctrl+U, Ctrl+S, Ctrl+P, F12, etc.)
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+U (View Source)
+            if (e.ctrlKey && e.keyCode === 85) e.preventDefault();
+            // Ctrl+S (Save)
+            if (e.ctrlKey && e.keyCode === 83) e.preventDefault();
+            // Ctrl+P (Print)
+            if (e.ctrlKey && e.keyCode === 80) e.preventDefault();
+            // F12 (Developer Tools)
+            if (e.keyCode === 123) e.preventDefault();
+            // Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) e.preventDefault();
+            // Ctrl+Shift+J (Console)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) e.preventDefault();
+            // Ctrl+Shift+C (Inspector)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) e.preventDefault();
+        });
+        
+        // Ngăn chặn kéo thả hình ảnh
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.tagName === 'IMG') e.preventDefault();
+        });
+        
+        // Ngăn chặn sao chép văn bản
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            alert('Không cho phép sao chép nội dung!');
+        });
+        
+        // Ngăn chặn cắt
+        document.addEventListener('cut', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn dán
+        document.addEventListener('paste', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn chọn văn bản
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn bôi đen văn bản
+        document.addEventListener('mousedown', function(e) {
+            if (e.detail > 1) e.preventDefault(); // Ngăn double-click chọn
+        });
+    </script>
+    
+    <!-- BẢO MẬT: CSS để chống in ấn -->
+    <style>
+        @media print {
+            * {
+                display: none !important;
+            }
+            body:before {
+                content: "Không cho phép in trang này!";
+                display: block !important;
+                font-size: 24px;
+                text-align: center;
+                margin-top: 100px;
+            }
+        }
+    </style>
+    
+    <!-- MathJax để hiển thị công thức toán -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    
+    <style>
+        /* Reset và cài đặt chung */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+/Edge */
+            user-select: none; /* Standard */
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #5D4037; /* Màu nâu đất chủ đạo */
+            background-color: #FDF6E3; /* Nền sáng nhẹ */
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Watermark nền - watermark đầu tiên */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 400px 400px;
+            opacity: 0.08; /* Độ mờ của watermark */
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* Tiêu đề chính */
+        .main-title {
+            text-align: center;
+            color: #4E342E;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #8D6E63;
+            font-size: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Container chính */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.92);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(93, 64, 55, 0.1);
+            padding: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Watermark phủ toàn màn hình - watermark thứ hai */
+        .watermark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+        }
+        
+        .watermark-overlay::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 200px 200px;
+            opacity: 0.04;
+        }
+        
+        /* Nút điều khiển toàn cục */
+        .global-controls {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .global-btn {
+            background-color: #5D4037;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .global-btn:hover {
+            background-color: #3E2723;
+        }
+        
+        /* Phần bài tập */
+        .exercise {
+            margin-bottom: 40px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #D7CCC8;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .exercise:last-child {
+            border-bottom: none;
+        }
+        
+        /* Watermark trên từng bài tập - watermark thứ ba */
+        .exercise::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.03;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .question-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .question-number {
+            background-color: #6D4C41;
+            color: white;
+            font-weight: bold;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .question-title-container {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+        
+        .question-title {
+            color: #4E342E;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-right: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toggle-solution-btn {
+            background-color: #795548;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s;
+            flex-shrink: 0;
+            margin-left: auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toggle-solution-btn:hover {
+            background-color: #5D4037;
+        }
+        
+        .question-content {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-left: 55px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .summary {
+            background-color: #FFECB3;
+            border-left: 4px solid #FFB300;
+            padding: 15px;
+            margin: 15px 0 20px 55px;
+            border-radius: 0 8px 8px 0;
+            font-size: 1.4rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .summary h3, .solution h3 {
+            color: #5D4037;
+            margin-bottom: 8px;
+            font-size: 1.6rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .solution {
+            background-color: #E8F5E9;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin: 15px 0 0 55px;
+            border-radius: 0 8px 8px 0;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Watermark trên phần giải - watermark thứ tư */
+        .solution::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 250px;
+            height: 250px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.02;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .solution.hidden {
+            display: none;
+        }
+        
+        .formula {
+            font-family: 'Cambria Math', serif;
+            background-color: #F5F5F5;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 1.4rem;
+            overflow-x: auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Định dạng cho điện thoại */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                font-size: 90%;
+            }
+            
+            .main-title {
+                font-size: 1.8rem;
+            }
+            
+            .question-content, .summary, .solution {
+                padding-left: 20px;
+                margin-left: 20px;
+                font-size: 1.2rem;
+            }
+            
+            .question-title {
+                font-size: 1.4rem;
+            }
+            
+            .question-number {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .question-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .toggle-solution-btn {
+                margin-top: 10px;
+                align-self: flex-start;
+            }
+            
+            .global-btn {
+                width: 90%;
+                margin: 10px 0;
+                padding: 12px;
+            }
+            
+            body::before {
+                background-size: 300px 300px;
+                opacity: 0.05;
+            }
+            
+            .exercise::before {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .solution::before {
+                width: 150px;
+                height: 150px;
+            }
+        }
+        
+        /* Định dạng cho TV/màn hình lớn */
+        @media (min-width: 1200px) {
+            body {
+                font-size: 110%;
+            }
+            
+            .question-content, .summary, .solution {
+                font-size: 1.6rem;
+            }
+            
+            .question-title {
+                font-size: 2rem;
+            }
+            
+            .main-title {
+                font-size: 3rem;
+            }
+            
+            .container {
+                padding: 40px;
+            }
+            
+            .global-btn {
+                font-size: 1.4rem;
+                padding: 18px 35px;
+            }
+            
+            .formula {
+                font-size: 1.6rem;
+            }
+            
+            body::before {
+                background-size: 500px 500px;
+                opacity: 0.1;
+            }
+        }
+        
+        /* Đảm bảo MathJax hiển thị đúng */
+        .MathJax {
+            font-size: 1.4rem !important;
+            position: relative;
+            z-index: 1;
+        }
+        
+        mjx-container[jax="CHTML"] {
+            display: inline-block !important;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Chú ý về màu sắc */
+        .color-note {
+            text-align: center;
+            font-style: italic;
+            color: #795548;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #FFE0B2;
+            border-radius: 5px;
+            font-size: 1.3rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* ĐÃ XÓA: Hiệu ứng hover cho bài tập (yêu cầu của bạn) */
+        /*
+        .exercise:hover {
+            background-color: rgba(255, 243, 224, 0.5);
+            transition: background-color 0.3s;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        */
+        
+        /* Footer với watermark */
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #8D6E63;
+            color: #5D4037;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        footer::before {
+            content: "tuibx";
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 1rem;
+            color: rgba(139, 69, 19, 0.3);
+            font-weight: bold;
+            font-style: italic;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Watermark phủ toàn màn hình -->
+    <div class="watermark-overlay"></div>
+    
+    <h1 class="main-title">BÀI TẬP TỰ LUẬN - BÀI 18 (SBT)</h1>
+    
+    <div class="global-controls">
+        <button id="show-all-btn" class="global-btn">HIỂN THỊ TẤT CẢ LỜI GIẢI</button>
+        <button id="hide-all-btn" class="global-btn">ẨN TẤT CẢ LỜI GIẢI</button>
+    </div>
+    
+    <div class="container">
+        <!-- Câu 11 -->
+        <div class="exercise">
+            <div class="question-header">
+                <div class="question-title-container">
+                    <div class="question-number">11</div>
+                    <h2 class="question-title">Lực điện tác dụng lên ion OH⁻</h2>
+                </div>
+                <button class="toggle-solution-btn" data-target="solution-11">Hiển thị lời giải</button>
+            </div>
+            <div class="question-content">
+                Ion âm OH⁻ được phát ra từ một máy lọc không khí ở nơi có điện trường trái đất bằng 120 V/m hướng thẳng đứng từ trên xuống dưới. Hãy xác định lực điện của Trái Đất tác dụng lên ion âm nói trên và vẽ hình minh hoạ.
+            </div>
+            <div class="summary">
+                <h3>Tóm tắt</h3>
+                <p>$E = 120 \text{ V/m}$ (hướng xuống), $q(\text{OH}^-) = -1,6 \times 10^{-19} \text{ C}$. Tìm $F$ (độ lớn và hướng).</p>
+            </div>
+            <div class="solution hidden" id="solution-11">
+                <h3>Lời giải</h3>
+                <p><strong>Bước 1:</strong> Xác định điện tích của ion OH⁻</p>
+                <p class="formula">$$q = -1,6 \times 10^{-19} \text{ C}$$</p>
+                
+                <p><strong>Bước 2:</strong> Tính lực điện</p>
+                <p>Lực điện: $F = |q| \cdot E$ (vì lực ngược chiều điện trường đối với điện tích âm)</p>
+                <p class="formula">$$F = (1,6 \times 10^{-19} \text{ C}) \times (120 \text{ V/m}) = 1,92 \times 10^{-17} \text{ N}$$</p>
+                
+                <p><strong>Bước 3:</strong> Xác định hướng của lực</p>
+                <p>Điện trường hướng xuống, ion âm chịu lực ngược chiều điện trường → Lực điện hướng lên trên.</p>
+                
+                <p><strong>Bước 4:</strong> Hình minh họa</p>
+                <p>(Vẽ mũi tên $\vec{E}$ hướng xuống, mũi tên $\vec{F}$ hướng lên từ vị trí ion)</p>
+                
+                <p><strong>Kết luận:</strong> Lực điện tác dụng lên ion OH⁻ có độ lớn $1,92 \times 10^{-17} \text{ N}$, hướng thẳng đứng lên trên.</p>
+            </div>
+        </div>
+        
+        <!-- Câu 12 -->
+        <div class="exercise">
+            <div class="question-header">
+                <div class="question-title-container">
+                    <div class="question-number">12</div>
+                    <h2 class="question-title">Điện trường trong màng tế bào</h2>
+                </div>
+                <button class="toggle-solution-btn" data-target="solution-12">Hiển thị lời giải</button>
+            </div>
+            <div class="question-content">
+                Trong cơ thể sống, có nhiều loại tế bào, màng tế bào có nhiệm vụ kiểm soát các chất và ion ra vào tế bào. Một tế bào có màng dày khoảng $8 \times 10^{-9}$ m, mặt trong của màng tế bào mang điện tích âm, mặt ngoài mang điện tích dương. Hiệu điện thế giữa hai mặt này bằng 0,07 V. Hãy tính cường độ điện trường trong màng tế bào trên.
+            </div>
+            <div class="summary">
+                <h3>Tóm tắt</h3>
+                <p>$d = 8 \times 10^{-9} \text{ m}$, $U = 0,07 \text{ V}$. Tìm $E$.</p>
+            </div>
+            <div class="solution hidden" id="solution-12">
+                <h3>Lời giải</h3>
+                <p><strong>Bước 1:</strong> Công thức tính điện trường đều</p>
+                <p class="formula">$$E = \frac{U}{d}$$</p>
+                
+                <p><strong>Bước 2:</strong> Thay số</p>
+                <p class="formula">$$E = \frac{0,07 \text{ V}}{8 \times 10^{-9} \text{ m}} = 8,75 \times 10^{6} \text{ V/m}$$</p>
+                
+                <p><strong>Bước 3:</strong> Xác định hướng</p>
+                <p>Mặt ngoài (+), mặt trong (-) → Điện trường hướng từ ngoài vào trong.</p>
+                
+                <p><strong>Kết luận:</strong> Cường độ điện trường trong màng tế bào là $8,75 \times 10^{6} \text{ V/m}$, hướng từ mặt ngoài vào mặt trong.</p>
+            </div>
+        </div>
+        
+        <!-- Câu 13 -->
+        <div class="exercise">
+            <div class="question-header">
+                <div class="question-title-container">
+                    <div class="question-number">13</div>
+                    <h2 class="question-title">Hướng chuyển động của ion âm trong màng tế bào</h2>
+                </div>
+                <button class="toggle-solution-btn" data-target="solution-13">Hiển thị lời giải</button>
+            </div>
+            <div class="question-content">
+                Một ion âm có điện tích $-3,2 \times 10^{-19}$ C đi vào trong màng tế bào ở câu 12. Hãy xác định xem ion âm sẽ bị đẩy ra khỏi tế bào hay đẩy vào trong tế bào và lực điện tác dụng lên ion âm bằng bao nhiêu.
+            </div>
+            <div class="summary">
+                <h3>Tóm tắt</h3>
+                <p>$q = -3,2 \times 10^{-19} \text{ C}$, $E = 8,75 \times 10^{6} \text{ V/m}$ (hướng từ ngoài vào trong). Xác định hướng lực và tính $F$.</p>
+            </div>
+            <div class="solution hidden" id="solution-13">
+                <h3>Lời giải</h3>
+                <p><strong>Bước 1:</strong> Xác định hướng lực tác dụng lên ion âm</p>
+                <p>Lực điện tác dụng lên điện tích âm ngược chiều điện trường. Điện trường hướng từ ngoài vào trong → Lực điện tác dụng lên ion âm hướng từ trong ra ngoài.</p>
+                <p>→ Ion âm bị đẩy ra khỏi tế bào.</p>
+                
+                <p><strong>Bước 2:</strong> Tính độ lớn lực điện</p>
+                <p class="formula">$$F = |q| \cdot E = (3,2 \times 10^{-19} \text{ C}) \times (8,75 \times 10^{6} \text{ V/m}) = 2,8 \times 10^{-12} \text{ N}$$</p>
+                
+                <p><strong>Kết luận:</strong> Ion âm bị đẩy ra khỏi tế bào với lực điện $2,8 \times 10^{-12} \text{ N}$.</p>
+            </div>
+        </div>
+        
+        <!-- Câu 14 -->
+        <div class="exercise">
+            <div class="question-header">
+                <div class="question-title-container">
+                    <div class="question-number">14</div>
+                    <h2 class="question-title">Điện trường và động năng electron</h2>
+                </div>
+                <button class="toggle-solution-btn" data-target="solution-14">Hiển thị lời giải</button>
+            </div>
+            <div class="question-content">
+                Cho hai tấm kim loại phẳng rộng, đặt nằm ngang, song song với nhau và cách nhau $d = 5$ cm. Hiệu điện thế giữa hai tấm đó bằng 500 V.
+                a) Tính cường độ điện trường trong khoảng giữa hai bản phẳng.
+                b) Khi một electron bật ra khỏi bản nhiễm điện âm và đi vào khoảng giữa hai bản phẳng với tốc độ ban đầu $v_0 \approx 0$, hãy tính động năng của electron trước khi va chạm với bản nhiễm điện dương.
+            </div>
+            <div class="summary">
+                <h3>Tóm tắt</h3>
+                <p>$d = 0,05 \text{ m}$, $U = 500 \text{ V}$. a) Tính $E$. b) Electron từ bản âm, $v_0 \approx 0$, tính $W_đ$ khi đến bản dương.</p>
+            </div>
+            <div class="solution hidden" id="solution-14">
+                <h3>Lời giải</h3>
+                <p><strong>a) Tính cường độ điện trường:</strong></p>
+                <p class="formula">$$E = \frac{U}{d} = \frac{500 \text{ V}}{0,05 \text{ m}} = 10^{4} \text{ V/m}$$</p>
+                <p>Hướng từ bản dương sang bản âm.</p>
+                
+                <p><strong>b) Tính động năng của electron:</strong></p>
+                <p><strong>Bước 1:</strong> Công của lực điện bằng độ tăng động năng:</p>
+                <p class="formula">$$A = q \cdot U = e \cdot U$$</p>
+                
+                <p><strong>Bước 2:</strong> Vì $v_0 \approx 0$ nên động năng ban đầu $\approx 0$</p>
+                <p class="formula">$$W_đ = A = e \cdot U = (1,6 \times 10^{-19} \text{ C}) \times (500 \text{ V}) = 8 \times 10^{-17} \text{ J}$$</p>
+                
+                <p><strong>Kết luận:</strong> a) $E = 10^{4} \text{ V/m}$; b) $W_đ = 8 \times 10^{-17} \text{ J}$.</p>
+            </div>
+        </div>
+        
+        <!-- Câu 15 -->
+        <div class="exercise">
+            <div class="question-header">
+                <div class="question-title-container">
+                    <div class="question-number">15</div>
+                    <h2 class="question-title">Ứng dụng thực tiễn</h2>
+                </div>
+                <button class="toggle-solution-btn" data-target="solution-15">Hiển thị lời giải</button>
+            </div>
+            <div class="question-content">
+                Hãy cho ví dụ về ứng dụng thực tiễn tác dụng của điện trường đối với chuyển động của điện tích bay vào điện trường đều theo phương vuông góc với đường sức.
+            </div>
+            <div class="solution hidden" id="solution-15">
+                <h3>Lời giải</h3>
+                <p><strong>Ví dụ 1: Máy in phun</strong></p>
+                <p>Các giọt mực tích điện phun ra theo phương ngang, đi qua điện trường đều theo phương thẳng đứng. Điện trường làm lệch các giọt mực theo phương thẳng đứng, điều khiển vị trí in trên giấy.</p>
+                
+                <p><strong>Ví dụ 2: Ống tia âm cực (CRT) trong tivi, máy tính cũ</strong></p>
+                <p>Chùm electron phát ra từ cathode, được gia tốc và đi qua hệ thống làm lệch bằng điện trường, quét trên màn huỳnh quang theo quỹ đạo parabol.</p>
+                
+                <p><strong>Ví dụ 3: Máy đo phổ khối lượng</strong></p>
+                <p>Các ion bay qua điện trường đều bị lệch theo quỹ đạo parabol, độ lệch phụ thuộc vào tỉ số khối lượng/điện tích, dùng để phân tích thành phần hóa học.</p>
+            </div>
+        </div>
+        
+        <!-- Câu 16 -->
+        <div class="exercise">
+            <div class="question-header">
+                <div class="question-title-container">
+                    <div class="question-number">16</div>
+                    <h2 class="question-title">Phương trình quỹ đạo electron</h2>
+                </div>
+                <button class="toggle-solution-btn" data-target="solution-16">Hiển thị lời giải</button>
+            </div>
+            <div class="question-content">
+                Một electron bay vào điện trường đều $\vec{E}$ của Trái Đất với vận tốc ban đầu $v_0$ theo phương vuông góc với đường sức. Chọn gốc toạ độ là điểm bắt đầu chuyển động của electron trong điện trường đều, trục Ox thẳng đứng hướng lên trên, trục Ox lấy theo chiều $v_0$. Viết phương trình quỹ đạo của chuyển động trong điện trường đều.
+            </div>
+            <div class="summary">
+                <h3>Tóm tắt</h3>
+                <p>Electron, $v_0$ vuông góc với $\vec{E}$. $\vec{E}$ hướng xuống. Tìm $y(x)$.</p>
+            </div>
+            <div class="solution hidden" id="solution-16">
+                <h3>Lời giải</h3>
+                <p><strong>Bước 1:</strong> Chọn hệ trục tọa độ</p>
+                <p>• $Ox$: nằm ngang, cùng chiều $v_0$<br>
+                   • $Oy$: thẳng đứng hướng lên</p>
+                
+                <p><strong>Bước 2:</strong> Xác định các đại lượng</p>
+                <p>• Điện trường Trái Đất: $\vec{E} = -E\vec{j}$ (hướng xuống)<br>
+                   • Điện tích electron: $q = -e$<br>
+                   • Lực điện: $\vec{F} = q\vec{E} = (-e)(-E\vec{j}) = eE\vec{j}$<br>
+                   • Gia tốc theo $Oy$: $a_y = \frac{eE}{m}$</p>
+                
+                <p><strong>Bước 3:</strong> Phương trình chuyển động</p>
+                <p class="formula">$$x = v_0 t$$</p>
+                <p class="formula">$$y = \frac{1}{2} a_y t^2 = \frac{1}{2} \cdot \frac{eE}{m} \cdot t^2$$</p>
+                
+                <p><strong>Bước 4:</strong> Phương trình quỹ đạo (khử $t$)</p>
+                <p>Từ $x = v_0 t \Rightarrow t = \frac{x}{v_0}$</p>
+                <p class="formula">$$y = \frac{1}{2} \cdot \frac{eE}{m} \cdot \left(\frac{x}{v_0}\right)^2 = \frac{eE}{2m v_0^2} \cdot x^2$$</p>
+                
+                <p><strong>Kết luận:</strong> Phương trình quỹ đạo là parabol: $$y = \frac{eE}{2m v_0^2} x^2$$</p>
+            </div>
+        </div>
+        
+        <!-- Câu 17 -->
+        <div class="exercise">
+            <div class="question-header">
+                <div class="question-title-container">
+                    <div class="question-number">17</div>
+                    <h2 class="question-title">Tầm xa của electron</h2>
+                </div>
+                <button class="toggle-solution-btn" data-target="solution-17">Hiển thị lời giải</button>
+            </div>
+            <div class="question-content">
+                Hai bản phẳng nhiễm điện trái dấu có kích thước lớn và bằng nhau, đặt song song với nhau, cách nhau một khoảng $d = 12$ cm. Hiệu điện thế giữa hai bản phẳng là 24 V. Một electron bay vào chính giữa hai bản phẳng theo phương vuông góc với các đường sức điện trường với vận tốc 20000 m/s. Chọn gốc toạ độ đúng tại điểm electron bắt đầu bay vào điện trường đều. Bỏ qua điện trường của Trái Đất, lực cản môi trường. Hãy tính tầm xa theo phương Ox mà electron chuyển động được.
+            </div>
+            <div class="summary">
+                <h3>Tóm tắt</h3>
+                <p>$d = 0,12 \text{ m}$, $U = 24 \text{ V}$, $v_0 = 20000 \text{ m/s}$. Electron vào điểm giữa. Tính $L$ (tầm xa theo Ox).</p>
+            </div>
+            <div class="solution hidden" id="solution-17">
+                <h3>Lời giải</h3>
+                <p><strong>Bước 1:</strong> Tính điện trường giữa hai bản</p>
+                <p class="formula">$$E = \frac{U}{d} = \frac{24 \text{ V}}{0,12 \text{ m}} = 200 \text{ V/m}$$</p>
+                
+                <p><strong>Bước 2:</strong> Xác định khoảng cách di chuyển theo phương Oy</p>
+                <p>Electron vào điểm giữa, bị hút về bản dương → di chuyển được nửa khoảng cách:</p>
+                <p class="formula">$$y_{\text{max}} = \frac{d}{2} = 0,06 \text{ m}$$</p>
+                
+                <p><strong>Bước 3:</strong> Tính gia tốc theo Oy</p>
+                <p class="formula">$$a_y = \frac{eE}{m} = \frac{(1,6 \times 10^{-19} \text{ C}) \times (200 \text{ V/m})}{9,1 \times 10^{-31} \text{ kg}} \approx 3,516 \times 10^{13} \text{ m/s}^2$$</p>
+                
+                <p><strong>Bước 4:</strong> Tính thời gian đến khi chạm bản</p>
+                <p class="formula">$$t = \sqrt{\frac{2y_{\text{max}}}{a_y}} = \sqrt{\frac{0,12}{3,516 \times 10^{13}}} \approx 5,843 \times 10^{-8} \text{ s}$$</p>
+                
+                <p><strong>Bước 5:</strong> Tính tầm xa theo Ox</p>
+                <p class="formula">$$L = v_0 \cdot t = 20000 \text{ m/s} \times 5,843 \times 10^{-8} \text{ s} \approx 1,169 \times 10^{-3} \text{ m} = 1,169 \text{ mm}$$</p>
+                
+                <p><strong>Kết luận:</strong> Tầm xa theo phương Ox là khoảng $1,169 \text{ mm}$.</p>
+            </div>
+        </div>
+        
+        <!-- Câu 18 -->
+        <div class="exercise">
+            <div class="question-header">
+                <div class="question-title-container">
+                    <div class="question-number">18</div>
+                    <h2 class="question-title">Vận tốc và động năng electron</h2>
+                </div>
+                <button class="toggle-solution-btn" data-target="solution-18">Hiển thị lời giải</button>
+            </div>
+            <div class="question-content">
+                Hãy tính vận tốc theo phương Oy và động năng của electron khi va chạm với bản phẳng nhiễm điện dương ở câu 17.
+            </div>
+            <div class="summary">
+                <h3>Tóm tắt</h3>
+                <p>Từ câu 17: $a_y = 3,516 \times 10^{13} \text{ m/s}^2$, $t = 5,843 \times 10^{-8} \text{ s}$, $v_0 = 20000 \text{ m/s}$. Tính $v_y$ và $W_đ$.</p>
+            </div>
+            <div class="solution hidden" id="solution-18">
+                <h3>Lời giải</h3>
+                <p><strong>Bước 1:</strong> Tính vận tốc theo phương Oy</p>
+                <p class="formula">$$v_y = a_y \cdot t = (3,516 \times 10^{13} \text{ m/s}^2) \times (5,843 \times 10^{-8} \text{ s}) \approx 2,054 \times 10^{6} \text{ m/s}$$</p>
+                
+                <p><strong>Bước 2:</strong> Tính vận tốc toàn phần</p>
+                <p class="formula">$$v = \sqrt{v_0^2 + v_y^2} = \sqrt{(20000)^2 + (2,054 \times 10^6)^2} \approx 2,054 \times 10^6 \text{ m/s}$$</p>
+                <p>Vì $v_y \gg v_0$ nên $v \approx v_y$</p>
+                
+                <p><strong>Bước 3:</strong> Tính động năng</p>
+                <p>Cách 1: $W_đ = \frac{1}{2} m v^2$</p>
+                <p class="formula">$$W_đ \approx \frac{1}{2} \times (9,1 \times 10^{-31} \text{ kg}) \times (2,054 \times 10^6 \text{ m/s})^2 \approx 1,92 \times 10^{-18} \text{ J}$$</p>
+                
+                <p>Cách 2: Động năng tăng bằng công của lực điện:</p>
+                <p class="formula">$$W_đ = e \cdot \frac{U}{2} = (1,6 \times 10^{-19} \text{ C}) \times (12 \text{ V}) = 1,92 \times 10^{-18} \text{ J}$$</p>
+                
+                <p><strong>Kết luận:</strong> $v_y \approx 2,054 \times 10^6 \text{ m/s}$; $W_đ \approx 1,92 \times 10^{-18} \text{ J}$.</p>
+            </div>
+        </div>
+        
+        <!-- Câu 19 -->
+        <div class="exercise">
+            <div class="question-header">
+                <div class="question-title-container">
+                    <div class="question-number">19</div>
+                    <h2 class="question-title">Quỹ đạo của ion OH⁻ và H⁺</h2>
+                </div>
+                <button class="toggle-solution-btn" data-target="solution-19">Hiển thị lời giải</button>
+            </div>
+            <div class="question-content">
+                Đặt vào hai bản kim loại phẳng song song, cách nhau 2 cm một hiệu điện thế $U = 500$ V. Người ta có thể tạo ra ion bằng cách thổi hơi ẩm vào giữa hai bản phẳng này. Giả sử hơi ẩm được thổi vào với vận tốc 50 m/s, một phân tử H₂O ở vị trí cách đều hai bản phẳng bị tách thành một ion OH⁻ (khối lượng $m_1 = 2,833 \times 10^{-26}$ kg, điện tích $q_1 = -1,6 \times 10^{-19}$ C) và một ion H⁺ (khối lượng $m_2 = 0,1678 \times 10^{-26}$ kg, điện tích $q_2 = +1,6 \times 10^{-19}$ C). Bỏ qua các loại lực cản môi trường, hãy xác định phương trình quỹ đạo cho chuyển động tiếp theo của hai ion này và vẽ hình minh hoạ.
+            </div>
+            <div class="summary">
+                <h3>Tóm tắt</h3>
+                <p>$d = 0,02 \text{ m}$, $U = 500 \text{ V}$, $v_0 = 50 \text{ m/s}$. Ion OH⁻ ($m_1$, $q_1=-e$), H⁺ ($m_2$, $q_2=+e$). Viết phương trình quỹ đạo $y(x)$ cho mỗi ion.</p>
+            </div>
+            <div class="solution hidden" id="solution-19">
+                <h3>Lời giải</h3>
+                <p><strong>Bước 1:</strong> Tính điện trường giữa hai bản</p>
+                <p class="formula">$$E = \frac{U}{d} = \frac{500 \text{ V}}{0,02 \text{ m}} = 25000 \text{ V/m}$$ (hướng từ bản dương xuống bản âm)</p>
+                
+                <p><strong>Bước 2:</strong> Chọn hệ trục tọa độ</p>
+                <p>• Gốc $O$: điểm tách ion (trung điểm)<br>
+                   • $Ox$: phương ngang, cùng chiều $v_0$<br>
+                   • $Oy$: thẳng đứng hướng lên</p>
+                
+                <p><strong>Bước 3:</strong> Phương trình quỹ đạo cho ion OH⁻ ($q_1 = -e$)</p>
+                <p>Gia tốc theo $Oy$: $a_{1y} = \frac{q_1 E}{m_1} = \frac{(-e)(-E)}{m_1} = \frac{eE}{m_1}$</p>
+                <p class="formula">$$y_1 = \frac{eE}{2m_1 v_0^2} \cdot x_1^2$$</p>
+                <p>Thay số:</p>
+                <p class="formula">$$y_1 \approx \frac{(1,6 \times 10^{-19}) \times 25000}{2 \times (2,833 \times 10^{-26}) \times 50^2} \cdot x_1^2 \approx 2,824 \times 10^7 \cdot x_1^2$$</p>
+                
+                <p><strong>Bước 4:</strong> Phương trình quỹ đạo cho ion H⁺ ($q_2 = +e$)</p>
+                <p>Gia tốc theo $Oy$: $a_{2y} = \frac{q_2 E_y}{m_2} = \frac{(+e)(-E)}{m_2} = -\frac{eE}{m_2}$</p>
+                <p class="formula">$$y_2 = -\frac{eE}{2m_2 v_0^2} \cdot x_2^2$$</p>
+                <p>Thay số:</p>
+                <p class="formula">$$y_2 \approx -\frac{(1,6 \times 10^{-19}) \times 25000}{2 \times (0,1678 \times 10^{-26}) \times 50^2} \cdot x_2^2 \approx -4,767 \times 10^8 \cdot x_2^2$$</p>
+                
+                <p><strong>Bước 5:</strong> Hình minh họa</p>
+                <p>Vẽ hai parabol: ion OH⁻ lệch lên trên ($y_1 > 0$), ion H⁺ lệch xuống dưới ($y_2 < 0$), xuất phát từ cùng điểm $O$.</p>
+                
+                <p><strong>Kết luận:</strong><br>
+                • Ion OH⁻: $y_1 \approx 2,824 \times 10^7 \cdot x_1^2$ (parabol hướng lên)<br>
+                • Ion H⁺: $y_2 \approx -4,767 \times 10^8 \cdot x_2^2$ (parabol hướng xuống)</p>
+            </div>
+        </div>
+        <footer>
+            <p>Bài tập tự luận Vật Lý 11 - Bài 18: Điện trường đều</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Lấy tất cả các nút ẩn/hiện lời giải
+            const toggleButtons = document.querySelectorAll('.toggle-solution-btn');
+            
+            // Gán sự kiện cho từng nút
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const solution = document.getElementById(targetId);
+                    
+                    if (solution.classList.contains('hidden')) {
+                        solution.classList.remove('hidden');
+                        this.textContent = 'Ẩn lời giải';
+                    } else {
+                        solution.classList.add('hidden');
+                        this.textContent = 'Hiển thị lời giải';
+                    }
+                    
+                    // Render lại MathJax khi toggle
+                    refreshMathJax();
+                });
+            });
+            
+            // Nút hiển thị tất cả lời giải
+            const showAllBtn = document.getElementById('show-all-btn');
+            showAllBtn.addEventListener('click', function() {
+                toggleButtons.forEach(button => {
+                    const targetId = button.getAttribute('data-target');
+                    const solution = document.getElementById(targetId);
+                    solution.classList.remove('hidden');
+                    button.textContent = 'Ẩn lời giải';
+                });
+                refreshMathJax();
+            });
+            
+            // Nút ẩn tất cả lời giải
+            const hideAllBtn = document.getElementById('hide-all-btn');
+            hideAllBtn.addEventListener('click', function() {
+                toggleButtons.forEach(button => {
+                    const targetId = button.getAttribute('data-target');
+                    const solution = document.getElementById(targetId);
+                    solution.classList.add('hidden');
+                    button.textContent = 'Hiển thị lời giải';
+                });
+            });
+            
+            // Khởi tạo lại MathJax sau khi hiển thị lời giải
+            function refreshMathJax() {
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+            
+            // Khởi tạo MathJax khi trang load xong
+            setTimeout(refreshMathJax, 500);
+        });
+    </script>
+</body>
+</html>
