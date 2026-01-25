@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc Nghiệm VL11 - Bài 19: Thế Năng Điện</title>
+    <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
+    
+    <!-- Biện pháp bảo mật -->
+    <script>
+        // Ngăn chặn menu chuột phải
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn phím tắt
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+U (View Source)
+            if (e.ctrlKey && e.keyCode === 85) e.preventDefault();
+            // Ctrl+S (Save)
+            if (e.ctrlKey && e.keyCode === 83) e.preventDefault();
+            // Ctrl+P (Print)
+            if (e.ctrlKey && e.keyCode === 80) e.preventDefault();
+            // F12 (Developer Tools)
+            if (e.keyCode === 123) e.preventDefault();
+            // Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) e.preventDefault();
+            // Ctrl+Shift+J (Console)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) e.preventDefault();
+            // Ctrl+Shift+C (Inspector)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) e.preventDefault();
+        });
+        
+        // Ngăn chặn kéo thả hình ảnh
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.tagName === 'IMG') e.preventDefault();
+        });
+        
+        // Ngăn chặn sao chép văn bản
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            alert('Không cho phép sao chép nội dung!');
+        });
+        
+        // Ngăn chặn cắt
+        document.addEventListener('cut', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn dán
+        document.addEventListener('paste', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn chọn văn bản
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+    </script>
+    
+    <!-- MathJax cho công thức toán -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true
+            },
+            startup: {
+                ready: () => {
+                    MathJax.startup.defaultReady();
+                }
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+    
+    <style>
+        /* CSS để chống in ấn */
+        @media print {
+            * {
+                display: none !important;
+            }
+            body:before {
+                content: "Không cho phép in trang này!";
+                display: block !important;
+                font-size: 24px;
+                text-align: center;
+                margin-top: 100px;
+            }
+        }
+        
+        :root {
+            --primary-brown: #8B4513;
+            --secondary-brown: #A0522D;
+            --light-brown: #D2B48C;
+            --dark-brown: #654321;
+            --neutral-beige: #F5F5DC;
+            --neutral-tan: #D2B48C;
+            --text-dark: #333333;
+            --text-light: #5D4037;
+            --border-radius: 8px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--neutral-beige);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Watermark nền */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 400px 400px;
+            opacity: 0.08;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.92);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--light-brown);
+        }
+        
+        h1 {
+            color: var(--primary-brown);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: var(--secondary-brown);
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .instructions {
+            background-color: #f9f3e9;
+            border: 1px solid var(--light-brown);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: var(--border-radius);
+        }
+        
+        .instructions h3 {
+            color: var(--dark-brown);
+            margin-bottom: 12px;
+            font-size: 1.4rem;
+        }
+        
+        .quiz-container {
+            margin-bottom: 40px;
+        }
+        
+        .question {
+            background-color: #faf7f2;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--secondary-brown);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Watermark nhẹ trên từng câu hỏi */
+        .question::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.03;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .question-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .question-number {
+            display: inline-block;
+            background-color: var(--primary-brown);
+            color: white;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .question-text {
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            padding-top: 5px;
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .options-container {
+            margin: 20px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            background-color: white;
+            border-radius: 5px;
+            border: 1px solid var(--light-brown);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.4rem;
+        }
+        
+        .option:hover {
+            background-color: #f9f3e9;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .option input {
+            margin-right: 15px;
+            transform: scale(1.3);
+        }
+        
+        .option label {
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .answer-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            margin-top: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .answer-container.show {
+            max-height: 500px;
+            margin-top: 20px;
+        }
+        
+        .toggle-btn {
+            background-color: var(--light-brown);
+            color: var(--dark-brown);
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 15px;
+            display: block;
+            width: 100%;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toggle-btn:hover {
+            background-color: #c9b18c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .answer {
+            background-color: rgba(249, 247, 243, 0.95);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-top: 15px;
+            border: 1px solid var(--light-brown);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Watermark nhẹ trên phần đáp án */
+        .answer::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 250px;
+            height: 250px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.02;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .answer h4 {
+            color: var(--dark-brown);
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            border-bottom: 2px solid var(--light-brown);
+            padding-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .answer-content {
+            font-size: 1.5rem;
+            color: var(--text-light);
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .correct-answer {
+            color: var(--primary-brown);
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .explanation {
+            color: var(--text-dark);
+            margin-top: 15px;
+        }
+        
+        .formula-box {
+            background-color: rgba(248, 248, 248, 0.9);
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid var(--primary-brown);
+            overflow-x: auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .formula {
+            font-size: 1.4rem;
+            text-align: center;
+            padding: 5px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .action-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+            min-width: 180px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        #showAllBtn {
+            background-color: var(--primary-brown);
+            color: white;
+        }
+        
+        #showAllBtn:hover {
+            background-color: var(--dark-brown);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        #hideAllBtn {
+            background-color: var(--light-brown);
+            color: var(--dark-brown);
+        }
+        
+        #hideAllBtn:hover {
+            background-color: #c9b18c;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light-brown);
+            color: var(--secondary-brown);
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Watermark footer */
+        footer::before {
+            content: "tuibx";
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 1rem;
+            color: rgba(139, 69, 19, 0.3);
+            font-weight: bold;
+            font-style: italic;
+            z-index: 0;
+        }
+        
+        /* Responsive cho điện thoại */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .question {
+                padding: 20px;
+            }
+            
+            .question-text, .option, .answer-content {
+                font-size: 1.3rem;
+            }
+            
+            .action-btn {
+                width: 100%;
+                min-width: auto;
+                padding: 12px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            body::before {
+                background-size: 300px 300px;
+                opacity: 0.05;
+            }
+            
+            .question::before {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .answer::before {
+                width: 150px;
+                height: 150px;
+            }
+        }
+        
+        /* Responsive cho TV/màn hình lớn */
+        @media (min-width: 1200px) {
+            .question-text, .option, .answer-content {
+                font-size: 1.8rem;
+            }
+            
+            h1 {
+                font-size: 3rem;
+            }
+            
+            .subtitle {
+                font-size: 1.6rem;
+            }
+            
+            .action-btn {
+                font-size: 1.4rem;
+                padding: 18px 35px;
+            }
+            
+            .formula {
+                font-size: 1.6rem;
+            }
+            
+            body::before {
+                background-size: 500px 500px;
+                opacity: 0.1;
+            }
+        }
+        
+        /* Đảm bảo MathJax hiển thị đúng */
+        .MathJax_SVG {
+            display: inline !important;
+        }
+        
+        mjx-container[jax="SVG"] {
+            display: inline-block !important;
+        }
+        
+        /* Thêm watermark phủ toàn màn hình */
+        .watermark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+        }
+        
+        .watermark-overlay::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 200px 200px;
+            opacity: 0.04;
+        }
+    </style>
+</head>
+<body>
+    <!-- Watermark phủ toàn màn hình -->
+    <div class="watermark-overlay"></div>
+    
+    <div class="container">
+        <header>
+            <h1>Trắc Nghiệm VL11 - Bài 19</h1>
+            <p class="subtitle">THẾ NĂNG ĐIỆN - Vật Lý 11</p>
+        </header>
+        
+        <div class="instructions">
+            <h3>Hướng dẫn:</h3>
+            <p>1. Bài trắc nghiệm gồm 20 câu hỏi về nội dung Bài 19: Thế Năng Điện.</p>
+            <p>2. Chọn đáp án đúng nhất cho mỗi câu hỏi.</p>
+            <p>3. Sử dụng nút "Hiện đáp án" để xem đáp án và lời giải chi tiết cho từng câu.</p>
+            <p>4. Sử dụng nút "HIỆN TẤT CẢ" để xem tất cả đáp án, "ẨN TẤT CẢ" để ẩn tất cả đáp án.</p>
+        </div>
+        
+        <div class="quiz-container" id="quizContainer">
+            <!-- Các câu hỏi sẽ được tạo bằng JavaScript -->
+        </div>
+        
+        <div class="controls">
+            <button class="action-btn" id="showAllBtn">HIỆN TẤT CẢ ĐÁP ÁN</button>
+            <button class="action-btn" id="hideAllBtn">ẨN TẤT CẢ ĐÁP ÁN</button>
+        </div>
+        
+        <footer>
+            <p>Bài tập trắc nghiệm Vật Lý 11 - Bài 19: Thế Năng Điện</p>
+            <p>Nội dung bám sát chương trình học Vật Lý lớp 11</p>
+        </footer>
+    </div>
+
+    <script>
+        // Dữ liệu câu hỏi trắc nghiệm
+        const quizData = [
+            {
+                id: 1,
+                question: "Công của lực điện làm dịch chuyển điện tích q từ điểm M đến điểm N trong điện trường đều được tính bằng công thức nào?",
+                options: [
+                    "A. $A_{MN} = \\frac{qE}{d}$",
+                    "B. $A_{MN} = qEd$",
+                    "C. $A_{MN} = \\frac{Ed}{q}$",
+                    "D. $A_{MN} = \\frac{q}{Ed}$"
+                ],
+                correct: 1,
+                explanation: "Theo công thức (19.1) trong tài liệu: $A_{MN} = qEd$, trong đó d là độ dài đại số của hình chiếu của đoạn MN trên một đường sức điện."
+            },
+            {
+                id: 2,
+                question: "Công của lực điện làm dịch chuyển điện tích q trong điện trường đều phụ thuộc vào yếu tố nào sau đây?",
+                options: [
+                    "A. Hình dạng đường đi từ điểm đầu đến điểm cuối",
+                    "B. Vị trí điểm đầu và điểm cuối của độ dịch chuyển",
+                    "C. Thời gian dịch chuyển điện tích",
+                    "D. Vận tốc dịch chuyển của điện tích"
+                ],
+                correct: 1,
+                explanation: "Theo tài liệu, công của lực điện làm dịch chuyển điện tích q từ điểm M đến điểm N trong điện trường đều không phụ thuộc vào hình dạng của đường đi mà chỉ phụ thuộc vào vị trí của điểm đầu M và điểm cuối N."
+            },
+            {
+                id: 3,
+                question: "Trong điện trường bất kỳ, công của lực điện trường làm dịch chuyển điện tích q có tính chất gì?",
+                options: [
+                    "A. Phụ thuộc vào hình dạng đường đi",
+                    "B. Không phụ thuộc vào hình dạng đường đi, chỉ phụ thuộc vào điểm đầu và điểm cuối",
+                    "C. Phụ thuộc vào thời gian dịch chuyển",
+                    "D. Phụ thuộc vào độ lớn điện tích và hình dạng đường đi"
+                ],
+                correct: 1,
+                explanation: "Với điện trường bất kỳ, công của lực điện trường làm dịch chuyển điện tích q không phụ thuộc vào hình dạng đường đi mà chỉ phụ thuộc vào vị trí điểm đầu và điểm cuối. Đây là tính chất chung của trường tĩnh điện."
+            },
+            {
+                id: 4,
+                question: "Thế năng của một điện tích q trong điện trường đều được tính bằng công thức nào?",
+                options: [
+                    "A. $W_M = \\frac{qE}{d}$",
+                    "B. $W_M = qEd$",
+                    "C. $W_M = \\frac{Ed}{q}$",
+                    "D. $W_M = \\frac{q}{Ed}$"
+                ],
+                correct: 1,
+                explanation: "Theo công thức (19.2): $W_M = qEd$, trong đó d là khoảng cách từ điểm M đến bản cực âm (được chọn làm mốc thế năng)."
+            },
+            {
+                id: 5,
+                question: "Trong điện trường đều của một tụ điện, bản cực nào thường được chọn làm mốc để tính thế năng?",
+                options: [
+                    "A. Bản cực dương",
+                    "B. Bản cực âm",
+                    "C. Điểm giữa hai bản tụ",
+                    "D. Điểm bất kỳ trong điện trường"
+                ],
+                correct: 1,
+                explanation: "Theo tài liệu, bản cực âm của tụ điện thường được chọn làm mốc để tính thế năng trong điện trường đều."
+            },
+            {
+                id: 6,
+                question: "Khi chọn mốc thế năng tại vô cực, thế năng của điện tích q tại điểm M trong điện trường được tính bằng gì?",
+                options: [
+                    "A. Công của lực điện dịch chuyển q từ vô cực đến M",
+                    "B. Công của lực điện dịch chuyển q từ M đến vô cực",
+                    "C. Tích của điện tích q và cường độ điện trường tại M",
+                    "D. Tích của điện tích q và khoảng cách từ M đến bản âm"
+                ],
+                correct: 1,
+                explanation: "Theo công thức (19.3): $W_M = A_{M\\infty}$, tức là bằng công của lực điện trong dịch chuyển của điện tích q từ điểm M tới vô cực."
+            },
+            {
+                id: 7,
+                question: "Trong điện trường bất kỳ, thế năng của điện tích q tại điểm M có thể được biểu diễn dưới dạng nào?",
+                options: [
+                    "A. $W_M = \\frac{V_M}{q}$",
+                    "B. $W_M = V_M q$",
+                    "C. $W_M = \\frac{q}{V_M}$",
+                    "D. $W_M = V_M E$"
+                ],
+                correct: 1,
+                explanation: "Theo công thức (19.4): $W_M = V_M q$, trong đó $V_M$ là hệ số tỉ lệ không phụ thuộc vào q mà chỉ phụ thuộc vào điện trường và vị trí điểm M."
+            },
+            {
+                id: 8,
+                question: "Khi thay điện tích dương q bằng điện tích âm trong công thức $A = qEd$, công A sẽ thay đổi như thế nào?",
+                options: [
+                    "A. Công A không đổi",
+                    "B. Công A đổi dấu",
+                    "C. Công A tăng độ lớn",
+                    "D. Công A giảm độ lớn"
+                ],
+                correct: 1,
+                explanation: "Vì công A tỉ lệ với điện tích q, nếu thay q dương bằng q âm, công sẽ đổi dấu (từ dương sang âm hoặc ngược lại tùy vào chiều dịch chuyển)."
+            },
+            {
+                id: 9,
+                question: "Thế năng của một điện tích trong điện trường đặc trưng cho điều gì?",
+                options: [
+                    "A. Khả năng sinh công của điện tích",
+                    "B. Khả năng sinh công của điện trường khi đặt điện tích tại điểm xét",
+                    "C. Độ lớn của lực điện tác dụng lên điện tích",
+                    "D. Độ nhanh chậm dịch chuyển của điện tích"
+                ],
+                correct: 1,
+                explanation: "Theo tài liệu, thế năng của một điện tích q trong điện trường đặc trưng cho khả năng sinh công của điện trường khi đặt điện tích q tại điểm đang xét."
+            },
+            {
+                id: 10,
+                question: "Trong điện trường đều, khi điện tích q di chuyển theo đường thẳng song song với các đường sức điện, công của lực điện sẽ như thế nào?",
+                options: [
+                    "A. Bằng 0",
+                    "B. Cực đại",
+                    "C. Cực tiểu",
+                    "D. Không xác định được"
+                ],
+                correct: 0,
+                explanation: "Khi điện tích di chuyển song song với đường sức điện, hình chiếu của độ dịch chuyển lên phương đường sức bằng 0, do đó công $A = qEd = 0$ (vì $d = 0$)."
+            },
+            {
+                id: 11,
+                question: "Hệ số tỉ lệ V trong công thức $W_M = V_M q$ phụ thuộc vào yếu tố nào?",
+                options: [
+                    "A. Chỉ phụ thuộc vào điện tích q",
+                    "B. Chỉ phụ thuộc vào điện trường",
+                    "C. Phụ thuộc vào điện trường và vị trí điểm M",
+                    "D. Phụ thuộc vào cả điện tích q, điện trường và vị trí điểm M"
+                ],
+                correct: 2,
+                explanation: "Theo tài liệu, hệ số tỉ lệ V không phụ thuộc vào điện tích q mà chỉ phụ thuộc vào điện trường và vị trí của điểm M."
+            },
+            {
+                id: 12,
+                question: "Công của lực điện khi dịch chuyển điện tích q từ điểm M đến điểm N trong điện trường đều theo đường gấp khúc so với theo đường thẳng sẽ như thế nào?",
+                options: [
+                    "A. Khác nhau",
+                    "B. Bằng nhau",
+                    "C. Theo đường gấp khúc lớn hơn",
+                    "D. Theo đường thẳng lớn hơn"
+                ],
+                correct: 1,
+                explanation: "Công của lực điện không phụ thuộc vào hình dạng đường đi, do đó công khi dịch chuyển theo đường gấp khúc sẽ bằng công khi dịch chuyển theo đường thẳng nối M và N."
+            },
+            {
+                id: 13,
+                question: "Điểm mốc thế năng ở vô cực thường được chọn trong trường hợp nào?",
+                options: [
+                    "A. Chỉ với điện trường đều",
+                    "B. Chỉ với điện trường của một tụ điện",
+                    "C. Với điện trường của một điện tích hoặc hệ điện tích bất kỳ",
+                    "D. Chỉ với điện trường có cường độ rất lớn"
+                ],
+                correct: 2,
+                explanation: "Với điện trường của một điện tích hoặc của một hệ điện tích bất kỳ, người ta thường chọn điểm mốc ở vô cực vì ở đó điện trường và lực điện trường đều bằng không."
+            },
+            {
+                id: 14,
+                question: "Trong điện trường đều của tụ điện, thế năng của điện tích q tại điểm M được tính bằng công của lực điện khi dịch chuyển q từ M đến đâu?",
+                options: [
+                    "A. Đến bản cực dương",
+                    "B. Đến bản cực âm",
+                    "C. Đến điểm giữa hai bản tụ",
+                    "D. Đến vô cực"
+                ],
+                correct: 1,
+                explanation: "Trong điện trường đều của tụ điện, thế năng của điện tích q tại điểm M bằng công mà điện trường đều có thể sinh ra khi dịch chuyển điện tích q từ điểm M tới bản cực âm của tụ điện (điểm mốc)."
+            },
+            {
+                id: 15,
+                question: "Khi điện tích q di chuyển vuông góc với đường sức điện trong điện trường đều, công của lực điện bằng bao nhiêu?",
+                options: [
+                    "A. $qEd$ với d là quãng đường dịch chuyển",
+                    "B. $\\frac{qE}{d}$",
+                    "C. 0",
+                    "D. Không xác định được"
+                ],
+                correct: 2,
+                explanation: "Khi điện tích di chuyển vuông góc với đường sức điện, hình chiếu của độ dịch chuyển lên phương đường sức bằng 0, do đó $d = 0$ và công $A = qEd = 0$."
+            },
+            {
+                id: 16,
+                question: "Tính chất 'công của lực điện không phụ thuộc vào hình dạng đường đi' tương tự với tính chất của trường lực nào sau đây?",
+                options: [
+                    "A. Trường hấp dẫn",
+                    "B. Trường từ",
+                    "C. Trường lực ma sát",
+                    "D. Trường lực đàn hồi"
+                ],
+                correct: 0,
+                explanation: "Theo tài liệu, tính chất này là tính chất chung của một số trường lực như trường tĩnh điện, trường trọng lực (trường hấp dẫn)."
+            },
+            {
+                id: 17,
+                question: "Khi điện tích q di chuyển từ điểm có thế năng cao đến điểm có thế năng thấp trong điện trường, công của lực điện sẽ như thế nào?",
+                options: [
+                    "A. Công dương",
+                    "B. Công âm",
+                    "C. Công bằng 0",
+                    "D. Không xác định được"
+                ],
+                correct: 0,
+                explanation: "Khi điện tích di chuyển từ nơi có thế năng cao đến nơi có thế năng thấp, lực điện thực hiện công dương (công phát động)."
+            },
+            {
+                id: 18,
+                question: "Đại lượng d trong công thức $A = qEd$ là gì?",
+                options: [
+                    "A. Quãng đường dịch chuyển của điện tích",
+                    "B. Khoảng cách thẳng từ điểm đầu đến điểm cuối",
+                    "C. Độ dài đại số của hình chiếu của đoạn dịch chuyển lên phương đường sức",
+                    "D. Khoảng cách từ điện tích đến bản cực âm"
+                ],
+                correct: 2,
+                explanation: "Theo tài liệu, d là độ dài đại số của đoạn MM', là hình chiếu của đoạn MN (độ dịch chuyển) trên một đường sức điện."
+            },
+            {
+                id: 19,
+                question: "Thế năng điện của một điện tích tại một điểm trong điện trường có đơn vị là gì?",
+                options: [
+                    "A. Newton (N)",
+                    "B. Jun (J)",
+                    "C. Vôn (V)",
+                    "D. Culông (C)"
+                ],
+                correct: 1,
+                explanation: "Thế năng là năng lượng nên có đơn vị là Jun (J), giống như công."
+            },
+            {
+                id: 20,
+                question: "Mối quan hệ giữa thế năng $W_M$ và công $A_{MN}$ khi dịch chuyển điện tích từ M đến N là gì?",
+                options: [
+                    "A. $W_M - W_N = A_{MN}$",
+                    "B. $W_N - W_M = A_{MN}$",
+                    "C. $W_M + W_N = A_{MN}$",
+                    "D. $W_M \\times W_N = A_{MN}$"
+                ],
+                correct: 0,
+                explanation: "Độ giảm thế năng bằng công của lực điện: $W_M - W_N = A_{MN}$. Điều này tương tự như trong trường trọng lực."
+            }
+        ];
+
+        // Khởi tạo trang
+        function initializePage() {
+            const quizContainer = document.getElementById('quizContainer');
+            quizContainer.innerHTML = '';
+            
+            quizData.forEach((question) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question';
+                questionElement.id = `question${question.id}`;
+                
+                // Tạo các option
+                let optionsHTML = '';
+                question.options.forEach((option, index) => {
+                    optionsHTML += `
+                        <div class="option">
+                            <input type="radio" name="question${question.id}" id="q${question.id}o${index}" value="${index}">
+                            <label for="q${question.id}o${index}">${option}</label>
+                        </div>
+                    `;
+                });
+                
+                // Tạo chữ cái đáp án đúng
+                const correctAnswerLetter = String.fromCharCode(65 + question.correct);
+                
+                questionElement.innerHTML = `
+                    <div class="question-header">
+                        <span class="question-number">${question.id}</span>
+                        <div class="question-text">${question.question}</div>
+                    </div>
+                    <div class="options-container">
+                        ${optionsHTML}
+                    </div>
+                    <button class="toggle-btn" onclick="toggleAnswer(${question.id})" id="btn${question.id}">Hiện đáp án</button>
+                    <div class="answer-container" id="answer${question.id}">
+                        <div class="answer">
+                            <h4>Đáp án và giải thích:</h4>
+                            <div class="answer-content">
+                                <div class="correct-answer">Đáp án đúng: ${correctAnswerLetter} (${question.options[question.correct]})</div>
+                                <div class="explanation">${question.explanation}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                quizContainer.appendChild(questionElement);
+            });
+            
+            // Đợi MathJax load xong
+            if (window.MathJax) {
+                MathJax.typesetPromise && MathJax.typesetPromise();
+            }
+        }
+
+        // Hàm toggle hiển thị đáp án
+        function toggleAnswer(questionId) {
+            const answerContainer = document.getElementById(`answer${questionId}`);
+            const button = document.getElementById(`btn${questionId}`);
+            
+            if (answerContainer.classList.contains('show')) {
+                answerContainer.classList.remove('show');
+                button.textContent = 'Hiện đáp án';
+            } else {
+                answerContainer.classList.add('show');
+                button.textContent = 'Ẩn đáp án';
+                
+                // Render lại MathJax khi mở đáp án
+                setTimeout(() => {
+                    if (window.MathJax) {
+                        MathJax.typesetPromise && MathJax.typesetPromise([answerContainer]);
+                    }
+                }, 100);
+            }
+        }
+
+        // Hiển thị tất cả đáp án
+        function showAllAnswers() {
+            quizData.forEach((question) => {
+                const answerContainer = document.getElementById(`answer${question.id}`);
+                const button = document.getElementById(`btn${question.id}`);
+                
+                if (!answerContainer.classList.contains('show')) {
+                    answerContainer.classList.add('show');
+                    button.textContent = 'Ẩn đáp án';
+                }
+            });
+            
+            // Render lại MathJax
+            setTimeout(() => {
+                if (window.MathJax) {
+                    MathJax.typesetPromise && MathJax.typesetPromise();
+                }
+            }, 500);
+        }
+
+        // Ẩn tất cả đáp án
+        function hideAllAnswers() {
+            quizData.forEach((question) => {
+                const answerContainer = document.getElementById(`answer${question.id}`);
+                const button = document.getElementById(`btn${question.id}`);
+                
+                if (answerContainer.classList.contains('show')) {
+                    answerContainer.classList.remove('show');
+                    button.textContent = 'Hiện đáp án';
+                }
+            });
+        }
+
+        // Gán sự kiện cho nút
+        document.getElementById('showAllBtn').addEventListener('click', showAllAnswers);
+        document.getElementById('hideAllBtn').addEventListener('click', hideAllAnswers);
+
+        // Khởi tạo trang khi tải
+        document.addEventListener('DOMContentLoaded', initializePage);
+        
+        // Xuất hàm ra toàn cục
+        window.toggleAnswer = toggleAnswer;
+        window.showAllAnswers = showAllAnswers;
+        window.hideAllAnswers = hideAllAnswers;
+    </script>
+</body>
+</html>
