@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 20: Điện Thế</title>
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-dark: #8B4513;
+            --primary-medium: #A0522D;
+            --primary-light: #D2B48C;
+            --secondary: #DEB887;
+            --text-dark: #3E2723;
+            --text-medium: #5D4037;
+            --text-light: #795548;
+            --background: #FAF3E6;
+            --card-bg: #FFF8E1;
+            --border-color: #BCAAA4;
+            --shadow: rgba(139, 69, 19, 0.15);
+            --header-bg: linear-gradient(135deg, var(--primary-dark), var(--primary-medium));
+            --formula-bg: #FFF8DC;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.4;
+            color: var(--text-dark);
+            background-color: var(--background);
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        
+        .header {
+            background: var(--header-bg);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+            position: relative;
+            border-bottom: 4px solid var(--primary-light);
+        }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header p {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            font-weight: 300;
+            margin-bottom: 0;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid var(--primary-medium);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .section h2 {
+            color: var(--primary-dark);
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px dashed var(--primary-light);
+            display: flex;
+            align-items: center;
+        }
+        
+        .section h2 i {
+            margin-right: 15px;
+            color: var(--primary-medium);
+        }
+        
+        .section h3 {
+            color: var(--primary-medium);
+            font-size: 1.8rem;
+            margin: 20px 0 10px;
+            padding-left: 10px;
+            border-left: 4px solid var(--primary-light);
+        }
+        
+        .section p, .section li {
+            font-size: 1.5rem;
+            color: var(--text-medium);
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        
+        .section ul, .section ol {
+            padding-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .section li {
+            margin-bottom: 5px;
+            line-height: 1.3;
+        }
+        
+        .formula {
+            background-color: var(--formula-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            margin: 15px 0;
+            font-size: 1.6rem;
+            text-align: center;
+            font-family: 'Cambria', 'Times New Roman', serif;
+            color: var(--text-dark);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            line-height: 1.2;
+        }
+        
+        .formula-number {
+            display: block;
+            text-align: right;
+            font-size: 1.3rem;
+            color: var(--text-light);
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        .note-box {
+            background-color: #F5F5DC;
+            border-left: 5px solid var(--primary-medium);
+            padding: 18px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .note-box h3 {
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+            font-size: 1.7rem;
+        }
+        
+        .note-box ul, .note-box ol {
+            padding-left: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .note-box li {
+            margin-bottom: 4px;
+            font-size: 1.4rem;
+            line-height: 1.3;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .point {
+            background-color: white;
+            padding: 18px;
+            border-radius: 8px;
+            border-top: 4px solid var(--primary-medium);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .point h3 {
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            font-size: 1.6rem;
+        }
+        
+        .point p {
+            font-size: 1.4rem;
+            line-height: 1.3;
+            margin-bottom: 0;
+        }
+        
+        .highlight {
+            background-color: var(--secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .definition {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .question-box {
+            background-color: #FFF0E0;
+            border-left: 5px solid var(--primary-medium);
+            padding: 18px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .question-box h3 {
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+            font-size: 1.7rem;
+        }
+        
+        .example-box {
+            background-color: #E8F4F8;
+            border-left: 5px solid #4a6fa5;
+            padding: 18px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .example-box h3 {
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 1.7rem;
+        }
+        
+        .image-container {
+            text-align: center;
+            margin: 15px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .image-caption {
+            font-style: italic;
+            color: var(--text-light);
+            margin-top: 5px;
+            font-size: 1.3rem;
+            line-height: 1.2;
+        }
+        
+        .solution-btn {
+            background-color: var(--primary-medium);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.4rem;
+            margin: 12px 0;
+            display: block;
+            transition: background-color 0.3s;
+            font-weight: 600;
+        }
+        
+        .solution-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .solution {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin: 8px 0 15px;
+            border-left: 4px solid var(--primary-medium);
+        }
+        
+        .solution.active {
+            max-height: 2000px;
+        }
+        
+        .solution-content {
+            padding: 18px;
+            font-size: 1.4rem;
+        }
+        
+        .solution-content h4 {
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            font-size: 1.6rem;
+        }
+        
+        .solution-content p {
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        
+        .footer {
+            background-color: var(--primary-dark);
+            color: white;
+            text-align: center;
+            padding: 18px;
+            margin-top: 25px;
+            border-top: 1px solid var(--primary-light);
+        }
+        
+        .footer p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 0;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                line-height: 1.3;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .header p {
+                font-size: 1.2rem;
+            }
+            
+            .section h2 {
+                font-size: 1.8rem;
+            }
+            
+            .section h3 {
+                font-size: 1.5rem;
+                margin: 15px 0 8px;
+            }
+            
+            .section p, .section li {
+                font-size: 1.3rem;
+                margin-bottom: 6px;
+                line-height: 1.2;
+            }
+            
+            .section li {
+                margin-bottom: 4px;
+            }
+            
+            .formula {
+                font-size: 1.4rem;
+                padding: 15px;
+                margin: 12px 0;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .solution-btn {
+                font-size: 1.2rem;
+                padding: 10px 20px;
+                margin: 10px 0;
+            }
+            
+            .solution-content {
+                font-size: 1.2rem;
+                padding: 15px;
+            }
+            
+            .solution-content p {
+                margin-bottom: 6px;
+            }
+            
+            .note-box, .question-box, .example-box {
+                padding: 15px;
+                margin: 15px 0;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 18px 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .section {
+                padding: 18px 12px;
+                margin-bottom: 30px;
+            }
+            
+            .section h2 {
+                font-size: 1.6rem;
+                margin-bottom: 12px;
+            }
+            
+            .section h3 {
+                font-size: 1.4rem;
+                margin: 12px 0 6px;
+            }
+            
+            .section p, .section li {
+                font-size: 1.2rem;
+                margin-bottom: 5px;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .section p, .section li {
+                font-size: 1.6rem;
+                margin-bottom: 10px;
+                line-height: 1.4;
+            }
+            
+            .section h3 {
+                font-size: 2rem;
+                margin: 25px 0 15px;
+            }
+            
+            .header h1 {
+                font-size: 3.2rem;
+            }
+            
+            .formula {
+                font-size: 1.8rem;
+            }
+            
+            .solution-content {
+                font-size: 1.5rem;
+            }
+            
+            .solution-content p {
+                margin-bottom: 10px;
+                line-height: 1.4;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-bolt"></i> Bài 20: Điện Thế</h1>
+            <p>Chương III - Điện trường</p>
+        </header>
+        
+        <main class="content">
+            <section class="section">
+                <h2><i class="fas fa-charging-station"></i> Giới thiệu</h2>
+                
+                <p><span class="definition">Đường dây điện cao thế, trung thế, hạ thế.</span> Trong thực tế chúng ta gặp những đường dây dẫn điện cao thế, trung thế, hạ thế. Từ "thế" ở đây được hiểu như thế nào? Có liên quan tới thế năng điện đã học ở Bài 19 hay không?</p>
+                
+                <div class="question-box">
+                    <h3><i class="fas fa-question-circle"></i> Câu hỏi khởi động</h3>
+                    <p>Từ "thế" trong các thuật ngữ cao thế, trung thế, hạ thế được hiểu như thế nào? Có liên quan gì đến thế năng điện đã học ở Bài 19?</p>
+                    <button class="solution-btn">Xem gợi ý trả lời</button>
+                    <div class="solution">
+                        <div class="solution-content">
+                            <h4>Gợi ý trả lời:</h4>
+                            <p>Từ "thế" trong các thuật ngữ này được hiểu là điện thế. Điện thế là đại lượng vật lý đặc trưng cho điện trường về mặt năng lượng, có liên quan mật thiết đến thế năng điện đã học ở Bài 19. Điện thế càng cao thì khả năng sinh công của điện trường càng lớn.</p>
+                            <p>Cao thế, trung thế, hạ thế là cách phân loại đường dây điện theo mức điện thế (hiệu điện thế) mà chúng truyền tải.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2><i class="fas fa-atom"></i> I. Điện thế tại một điểm trong điện trường</h2>
+                
+                <div class="note-box">
+                    <h3><i class="fas fa-lightbulb"></i> Khái niệm điện thế</h3>
+                    <p>Điện thế tại một điểm trong điện trường đặc trưng cho điện trường tại điểm đó về thế năng, được xác định bằng công dịch chuyển một đơn vị điện tích dương từ vô cực về điểm đó.</p>
+                </div>
+                
+                <h3>1. Công thức xác định điện thế</h3>
+                <p>Để đặt một điện tích q vào điểm M trong điện trường chúng ta cần cung cấp thế năng W<sub>M</sub> cho điện tích q. Điều này tương ứng với việc thực hiện một công A dịch chuyển điện tích q từ vô cực về điểm M.</p>
+                
+                <div class="formula">
+                    \[ V = \frac{A}{q} \]
+                    <span class="formula-number">(20.1)</span>
+                </div>
+                
+                <p>Trong đó:</p>
+                <ul>
+                    <li>V: điện thế tại điểm M (V - vôn)</li>
+                    <li>A: công thực hiện để dịch chuyển điện tích q từ vô cực về điểm M (J - jun)</li>
+                    <li>q: điện tích (C - culông)</li>
+                </ul>
+                
+                <div class="question-box">
+                    <h3><i class="fas fa-question-circle"></i> Câu hỏi thảo luận</h3>
+                    <ol>
+                        <li>Hãy dự đoán điện thế V đặc trưng cho đại lượng nào của điện trường.</li>
+                        <li>Xác định độ lớn điện tích q khi điện thế V có giá trị bằng công A thực hiện để dịch chuyển điện tích q từ vô cực về điểm M.</li>
+                    </ol>
+                    <button class="solution-btn">Xem hướng dẫn trả lời</button>
+                    <div class="solution">
+                        <div class="solution-content">
+                            <h4>Hướng dẫn trả lời:</h4>
+                            <p><strong>Câu 1:</strong> Điện thế V đặc trưng cho khả năng sinh công của điện trường tại điểm đó. Nó là đại lượng đặc trưng cho điện trường về mặt năng lượng.</p>
+                            <p><strong>Câu 2:</strong> Theo công thức (20.1): \( V = \frac{A}{q} \). Khi V = A, ta có \( A = \frac{A}{q} \) ⇒ \( q = 1 \) (C). Vậy khi điện tích có độ lớn 1 culông thì điện thế có giá trị bằng công dịch chuyển nó từ vô cực về điểm đó.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>2. Tính chất của điện thế</h3>
+                
+                <div class="note-box">
+                    <h3><i class="fas fa-exclamation-circle"></i> Đặc điểm của điện thế</h3>
+                    <ul>
+                        <li><span class="highlight">Đơn vị:</span> Đơn vị của điện thế là vôn (kí hiệu là V), ngoài ra người ta còn dùng đơn vị kilóvôn (kV): 1 kV = 1 000 V.</li>
+                        <li><span class="highlight">Giá trị đại số:</span> Điện thế có giá trị đại số, dấu của điện thế phụ thuộc vào dấu của công A và dấu của điện tích q.</li>
+                        <li><span class="highlight">Mốc điện thế:</span> Ngoài việc chọn mốc điện thế ở vô cực thì trong điện trường đều giữa hai bàn phẳng người ta thường chọn mốc điện thế là bàn nhiễm điện âm, còn mặt đất thường được chọn là mốc điện thế trong thực tiễn cuộc sống và kĩ thuật.</li>
+                    </ul>
+                </div>
+                
+                <h3>3. Hiệu điện thế</h3>
+                <p>Chúng ta đã được học và đo hiệu điện thế. Hiệu điện thế \( U_{MN} \) mà chúng ta đo được chính là giá trị của hiệu giữa điện thế tại M và điện thế tại N:</p>
+                
+                <div class="formula">
+                    \[ U_{MN} = V_M - V_N \]
+                    <span class="formula-number">(20.2)</span>
+                </div>
+                
+                <p>Vì vậy U và V đều có chung đơn vị là vôn.</p>
+                
+                <div class="note-box">
+                    <h3><i class="fas fa-info-circle"></i> EM CÓ BIẾT</h3>
+                    <ol>
+                        <li>Hiệu điện thế còn được gọi là điện áp. Thiết bị dùng để biến đổi hiệu điện thế được gọi là biến áp.</li>
+                        <li>Theo quy định của mạng lưới truyền tải điện ở Việt Nam, các lưới điện có điện áp nhỏ hơn 1 kV gọi là hạ thế, từ 1 kV đến 66 kV gọi là trung thế, lớn hơn 66 kV gọi là cao thế. Còn theo quy định của hành lang an toàn lưới điện thì điện áp lớn hơn 1 kV đã được gọi là cao thế.</li>
+                    </ol>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2><i class="fas fa-link"></i> II. Mối liên hệ giữa điện thế và cường độ điện trường</h2>
+                
+                <p>Trong thực tế người ta thường xét sự dịch chuyển một điện tích q từ điểm N tới điểm M nào đó trong điện trường.</p>
+                
+                <h3>1. Công thức tính công dịch chuyển điện tích</h3>
+                <p>Vận dụng công thức \( V = \frac{A}{q} \) ta có:</p>
+                
+                <div class="formula">
+                    \[ A_{MN} = (V_M - V_N)q = U_{MN}q \]
+                    <span class="formula-number">(20.3)</span>
+                </div>
+                
+                <p>Để dịch chuyển một điện tích dương q ngược chiều điện trường từ điểm N tới điểm M, ta cần cung cấp một lực ít nhất bằng với lực điện và ngược chiều. Trong dịch chuyển này, công ta bỏ ra có độ lớn bằng nhưng trái dấu với công của lực điện trường.</p>
+                
+                <div class="example-box">
+                    <h3><i class="fas fa-calculator"></i> Ví dụ áp dụng: Tế bào quang điện chân không</h3>
+                    <p>Tế bào quang điện chân không (Hình 20.1) gồm một ống hình trụ có một cửa sổ trong suốt, được hút chân không (áp suất trong khoảng \( 10^{-8} \, \text{mmHg} \) đến \( 10^{-6} \, \text{mmHg} \)). Trong ống đặt một catôt (cực âm) có khả năng phát xạ electron khi được chiếu sáng và một anôt (cực dương). Electron trong điện trường giữa hai cực sẽ dịch chuyển về phía anôt nếu \( U_{AK} > 0 \).</p>
+                    
+                    <div class="image-container">
+                        <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/20/20.1.png" alt="Tế bào quang điện chân không">
+                        <p class="image-caption">Hình 20.1. Tế bào quang điện chân không</p>
+                    </div>
+                    
+                    <p>Cho hiệu điện thế \( U_{AK} = 45 \, \text{V} \) được đặt vào giữa hai cực của tế bào quang điện. Khi chiếu xạ ánh sáng phù hợp để catôt phát xạ electron vào vùng điện trường giữa hai cực. Hãy tính công của điện trường trong dịch chuyển của electron từ catôt tới anôt.</p>
+                    <button class="solution-btn">Xem hướng dẫn giải</button>
+                    <div class="solution">
+                        <div class="solution-content">
+                            <h4>Hướng dẫn giải:</h4>
+                            <p><strong>Bước 1:</strong> Xác định các đại lượng đã biết</p>
+                            <p>- Hiệu điện thế: \( U_{AK} = 45 \, \text{V} \)</p>
+                            <p>- Điện tích của electron: \( q = -e = -1.6 \times 10^{-19} \, \text{C} \)</p>
+                            
+                            <p><strong>Bước 2:</strong> Áp dụng công thức tính công</p>
+                            <p>Theo công thức (20.3): \( A = U \cdot q \)</p>
+                            <p>\( A = 45 \times (-1.6 \times 10^{-19}) = -7.2 \times 10^{-18} \, \text{J} \)</p>
+                            
+                            <p><strong>Bước 3:</strong> Giải thích kết quả</p>
+                            <p>Dấu âm cho thấy công của điện trường là công cản (vì electron mang điện tích âm di chuyển từ nơi có điện thế thấp đến nơi có điện thế cao).</p>
+                            
+                            <p><strong>Đáp số:</strong> Công của điện trường là \( -7.2 \times 10^{-18} \, \text{J} \).</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>2. Mối liên hệ giữa điện thế và thế năng điện</h3>
+                <p>Điện thế là một đại lượng gắn với điện trường, còn thế năng điện là đại lượng gắn với điện tích đặt trong điện trường. Trong công thức (20.1), công A mà chúng ta sử dụng để dịch chuyển điện tích q từ vô cực về điểm M cũng chính bằng thế năng điện \( W_M \) của điện tích q đặt tại M trong điện trường. Như vậy, thế năng điện và điện thế liên hệ với nhau bởi công thức:</p>
+                
+                <div class="formula">
+                    \[ W_M = Vq \]
+                    <span class="formula-number">(20.4)</span>
+                </div>
+                
+                <h3>3. Mối liên hệ giữa cường độ điện trường và điện thế</h3>
+                <p>Trong điện trường đều, xét một điện tích thử dương chuyển động dọc theo một đường sức điện từ điểm M đến điểm N. Ta thấy, chiều của vectơ cường độ điện trường E hướng theo chiều giảm của điện thế. Chọn chiều dương của trục toạ độ là chiều đường sức (Hình 20.2). Áp dụng công thức (18.1) ta có:</p>
+                
+                <div class="image-container">
+                    <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/20/20.2.png" alt="Mối liên hệ giữa điện thế và cường độ điện trường">
+                    <p class="image-caption">Hình 20.2. Chuyển động của điện tích thử dọc theo một đường sức</p>
+                </div>
+                
+                <div class="formula">
+                    \[ E_M = E_N = E = \frac{U}{d} = \frac{V_M - V_N}{MN} \]
+                    <span class="formula-number">(20.5)</span>
+                </div>
+                
+                <p>Kết quả trên cho thấy: trong điện trường đều, độ lớn cường độ điện trường bằng độ giảm của điện thế dọc theo một đơn vị độ dài đường sức.</p>
+                
+                <p>Với điện trường bất kì, công thức (20.5) vẫn được áp dụng trong trường hợp hai điểm M và N ở rất gần nhau:</p>
+                
+                <div class="formula">
+                    \[ E = \frac{\Delta V}{\Delta d} \]
+                </div>
+                
+                <p>Cường độ điện trường tại một điểm M có độ lớn bằng thương của hiệu điện thế giữa hai điểm M và N trên một đoạn nhỏ đường sức chia cho độ dài đại số của đoạn đường sức đó.</p>
+            </section>
+            
+            <section class="section">
+                <h2><i class="fas fa-calculator"></i> III. Bài tập ví dụ</h2>
+                
+                <div class="example-box">
+                    <h3><i class="fas fa-calculator"></i> Bài tập ví dụ</h3>
+                    <p>Có hai bản phẳng song song cách nhau một khoảng d (Hình 20.3), được nối vào nguồn điện một chiều có hiệu điện thế 48 V. Chọn bản nhiễm điện âm làm mốc điện thế.</p>
+                    
+                    <div class="image-container">
+                        <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/20/20.3.png" alt="Hai bản phẳng song song">
+                        <p class="image-caption">Hình 20.3. Hai bản phẳng song song</p>
+                    </div>
+                    
+                    <p>a) Xác định mối liên hệ giữa điện thế và cường độ điện trường tại một điểm trong điện trường đều giữa hai bản phẳng.</p>
+                    <p>b) Áp dụng kết quả câu a để tính điện thế tại M nằm chính giữa khe hở của hai bản phẳng.</p>
+                    
+                    <button class="solution-btn">Xem hướng dẫn giải</button>
+                    <div class="solution">
+                        <div class="solution-content">
+                            <h4>Hướng dẫn giải:</h4>
+                            <p><strong>a) Xác định mối liên hệ giữa điện thế và cường độ điện trường:</strong></p>
+                            <p>Gọi N là điểm giao của đường sức đi qua M với bản nhiễm điện âm (Hình 20.3). \( V_N = 0 \) do điểm N nằm trên bản phẳng nhiễm điện âm được chọn làm mốc điện thế; \( MN = h > 0 \) và MN thuận theo chiều đường sức, h chính là khoảng cách từ M tới bản nhiễm điện âm. Vận dụng công thức (20.5) vào điện trường đều giữa hai bản phẳng ta tìm được mối liên hệ giữa điện thế và cường độ điện trường tại điểm M:</p>
+                            <div class="formula">
+                                \[ E_M = \frac{V_M - V_N}{MN} \Rightarrow V_M = E_M h \]
+                            </div>
+                            
+                            <p><strong>b) Tính điện thế tại M nằm chính giữa khe hở:</strong></p>
+                            <p>Trường hợp điểm M nằm chính giữa khe hở hai bản phẳng tức là \( h = \frac{d}{2} \), ta có:</p>
+                            <div class="formula">
+                                \[ V_M = Eh = \frac{U}{d} \cdot \frac{d}{2} = \frac{48}{2} = 24 \, \text{V} \]
+                            </div>
+                            <p>Vậy điện thế tại điểm M nằm chính giữa hai bản phẳng là 24 V.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question-box">
+                    <h3><i class="fas fa-tasks"></i> Bài tập vận dụng</h3>
+                    
+                    <h4>Bài 1:</h4>
+                    <p>Vận dụng mối liên hệ giữa điện thế và cường độ điện trường để xác định điện thế tại một điểm cách mặt đất 5 m ở nơi có điện trường của Trái Đất là 114 V/m.</p>
+                    <button class="solution-btn">Xem hướng dẫn giải Bài 1</button>
+                    <div class="solution">
+                        <div class="solution-content">
+                            <h4>Hướng dẫn giải Bài 1:</h4>
+                            <p><strong>Bước 1:</strong> Xác định các đại lượng đã biết</p>
+                            <p>- Cường độ điện trường của Trái Đất: E = 114 V/m</p>
+                            <p>- Khoảng cách từ điểm cần tính đến mặt đất: h = 5 m</p>
+                            <p>- Chọn mốc điện thế: mặt đất có điện thế V<sub>đất</sub> = 0 V</p>
+                            
+                            <p><strong>Bước 2:</strong> Áp dụng công thức liên hệ giữa E và V</p>
+                            <p>Trong điện trường đều: \( E = \frac{V_M - V_N}{d} \)</p>
+                            <p>Trong trường hợp này, điện trường của Trái Đất được coi là đều ở gần mặt đất, hướng thẳng đứng từ trên xuống.</p>
+                            
+                            <p><strong>Bước 3:</strong> Tính toán</p>
+                            <p>Ta có: \( E = \frac{V - 0}{h} \) ⇒ \( V = E \cdot h \)</p>
+                            <p>\( V = 114 \times 5 = 570 \, \text{V} \)</p>
+                            
+                            <p><strong>Đáp số:</strong> Điện thế tại điểm cách mặt đất 5 m là 570 V.</p>
+                            
+                            <p><strong>Lưu ý:</strong> Điện trường của Trái Đất hướng từ trên xuống dưới (từ không khí xuống mặt đất), nên điện thế trong không khí giảm dần khi tiến lại gần mặt đất. Điểm càng cao so với mặt đất thì có điện thế càng lớn.</p>
+                        </div>
+                    </div>
+                    
+                    <h4>Bài 2:</h4>
+                    <p>Tính công cần thiết để dịch chuyển một điện tích \( q = 2 \times 10^{-6} \, \text{C} \) từ điểm M đến điểm N trong điện trường, biết điện thế tại M là \( V_M = 100 \, \text{V} \) và tại N là \( V_N = 60 \, \text{V} \).</p>
+                    <button class="solution-btn">Xem hướng dẫn giải Bài 2</button>
+                    <div class="solution">
+                        <div class="solution-content">
+                            <h4>Hướng dẫn giải Bài 2:</h4>
+                            <p><strong>Bước 1:</strong> Xác định các đại lượng đã biết</p>
+                            <p>- Điện tích: \( q = 2 \times 10^{-6} \, \text{C} \)</p>
+                            <p>- Điện thế tại M: \( V_M = 100 \, \text{V} \)</p>
+                            <p>- Điện thế tại N: \( V_N = 60 \, \text{V} \)</p>
+                            
+                            <p><strong>Bước 2:</strong> Áp dụng công thức tính công</p>
+                            <p>Theo công thức (20.3): \( A_{MN} = (V_M - V_N)q = U_{MN}q \)</p>
+                            
+                            <p><strong>Bước 3:</strong> Tính toán</p>
+                            <p>\( A_{MN} = (100 - 60) \times 2 \times 10^{-6} = 40 \times 2 \times 10^{-6} = 8 \times 10^{-5} \, \text{J} \)</p>
+                            
+                            <p><strong>Đáp số:</strong> Công cần thiết là \( 8 \times 10^{-5} \, \text{J} \).</p>
+                            
+                            <p><strong>Giải thích:</strong> Công dương cho thấy điện trường đã thực hiện công để dịch chuyển điện tích từ M đến N. Điện tích di chuyển từ nơi có điện thế cao (100 V) đến nơi có điện thế thấp hơn (60 V).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2><i class="fas fa-check-circle"></i> IV. Tóm tắt kiến thức</h2>
+                
+                <div class="note-box">
+                    <h3><i class="fas fa-graduation-cap"></i> EM ĐÃ HỌC</h3>
+                    <ul>
+                        <li>Điện thế tại một điểm trong điện trường đặc trưng cho điện trường tại điểm đó về thế năng, được xác định bằng công dịch chuyển một đơn vị điện tích dương từ vô cực về điểm đó: 
+                            <div class="formula">
+                                \[ V = \frac{A}{q} \]
+                            </div>
+                        </li>
+                        <li>Điện thế có mối liên hệ với thế năng điện: 
+                            <div class="formula">
+                                \[ V_M = \frac{W_M}{q} \]
+                            </div>
+                        </li>
+                        <li>Mối liên hệ giữa cường độ điện trường và điện thế của hai điểm M và N trong điện trường đều dọc theo đường sức điện: 
+                            <div class="formula">
+                                \[ E_M = E_N = \frac{V_M - V_N}{MN} \]
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="note-box">
+                    <h3><i class="fas fa-bullseye"></i> EM CÓ THỂ</h3>
+                    <ul>
+                        <li>Giải thích được ý nghĩa của hiệu điện thế giữa hai điểm.</li>
+                        <li>Vận dụng được mối liên hệ thế năng điện với điện thế để tính được thế năng điện của điện tích nằm trong điện trường.</li>
+                        <li>Tính được công dịch chuyển một điện tích q từ điểm N đến điểm M trong điện trường.</li>
+                    </ul>
+                </div>
+                
+                <div class="key-points">
+                    <div class="point">
+                        <h3><i class="fas fa-bolt"></i> Điện thế</h3>
+                        <p>Hiểu được khái niệm điện thế và ý nghĩa của nó trong điện trường. Nắm vững công thức tính điện thế: \( V = \frac{A}{q} \).</p>
+                    </div>
+                    
+                    <div class="point">
+                        <h3><i class="fas fa-exchange-alt"></i> Hiệu điện thế</h3>
+                        <p>Phân biệt được điện thế và hiệu điện thế. Nắm được mối quan hệ: \( U_{MN} = V_M - V_N \).</p>
+                    </div>
+                    
+                    <div class="point">
+                        <h3><i class="fas fa-calculator"></i> Công thức tính công</h3>
+                        <p>Vận dụng thành thạo công thức tính công dịch chuyển điện tích: \( A_{MN} = (V_M - V_N)q = U_{MN}q \).</p>
+                    </div>
+                    
+                    <div class="point">
+                        <h3><i class="fas fa-link"></i> Mối liên hệ E và V</h3>
+                        <p>Hiểu và vận dụng được mối liên hệ giữa cường độ điện trường và điện thế: \( E = \frac{\Delta V}{\Delta d} \).</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="footer">
+            <p>Bài 20: Điện Thế | Chương III - Điện trường | Trang 79-82</p>
+        </footer>
+    </div>
+
+    <!-- MathJax cho hiển thị công thức toán -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            window.addEventListener('scroll', function() {
+                const sections = document.querySelectorAll('.section');
+                
+                sections.forEach(section => {
+                    const sectionTop = section.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (sectionTop < windowHeight * 0.75) {
+                        section.style.opacity = '1';
+                        section.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+            
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            });
+            
+            setTimeout(() => {
+                window.dispatchEvent(new Event('scroll'));
+            }, 100);
+            
+            const solutionButtons = document.querySelectorAll('.solution-btn');
+            solutionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const solution = this.nextElementSibling;
+                    solution.classList.toggle('active');
+                    
+                    if (solution.classList.contains('active')) {
+                        this.textContent = this.textContent.includes('Bài') 
+                            ? 'Ẩn hướng dẫn giải' 
+                            : 'Ẩn hướng dẫn';
+                        solution.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+                    } else {
+                        this.textContent = this.textContent.includes('Bài') 
+                            ? this.textContent.replace('Ẩn', 'Xem') 
+                            : 'Xem hướng dẫn';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
