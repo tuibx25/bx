@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc Nghiệm VL11 - Bài 20: Điện Thế</title>
+    <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
+    
+    <!-- Biện pháp bảo mật -->
+    <script>
+        // Ngăn chặn menu chuột phải
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn phím tắt
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.keyCode === 85) e.preventDefault(); // Ctrl+U
+            if (e.ctrlKey && e.keyCode === 83) e.preventDefault(); // Ctrl+S
+            if (e.ctrlKey && e.keyCode === 80) e.preventDefault(); // Ctrl+P
+            if (e.keyCode === 123) e.preventDefault(); // F12
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) e.preventDefault(); // Ctrl+Shift+I
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) e.preventDefault(); // Ctrl+Shift+J
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) e.preventDefault(); // Ctrl+Shift+C
+        });
+        
+        // Ngăn chặn kéo thả hình ảnh
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.tagName === 'IMG') e.preventDefault();
+        });
+        
+        // Ngăn chặn sao chép văn bản
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            alert('Không cho phép sao chép nội dung!');
+        });
+        
+        // Ngăn chặn cắt
+        document.addEventListener('cut', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn dán
+        document.addEventListener('paste', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn chọn văn bản
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+    </script>
+    
+    <!-- MathJax cho công thức toán -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true
+            },
+            startup: {
+                ready: () => {
+                    MathJax.startup.defaultReady();
+                }
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+    
+    <style>
+        /* CSS để chống in ấn */
+        @media print {
+            * {
+                display: none !important;
+            }
+            body:before {
+                content: "Không cho phép in trang này!";
+                display: block !important;
+                font-size: 24px;
+                text-align: center;
+                margin-top: 100px;
+            }
+        }
+        
+        :root {
+            --primary-brown: #8B4513;
+            --secondary-brown: #A0522D;
+            --light-brown: #D2B48C;
+            --dark-brown: #654321;
+            --neutral-beige: #F5F5DC;
+            --neutral-tan: #D2B48C;
+            --text-dark: #333333;
+            --text-light: #5D4037;
+            --border-radius: 8px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --correct-color: #2E7D32;
+            --incorrect-color: #C62828;
+            --selected-color: #5D4037;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--neutral-beige);
+            color: var(--text-dark);
+            line-height: 1.3;
+            padding: 15px;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Watermark nền */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 400px 400px;
+            opacity: 0.08;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.92);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-brown);
+        }
+        
+        h1 {
+            color: var(--primary-brown);
+            margin-bottom: 8px;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: var(--secondary-brown);
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+        
+        .instructions {
+            background-color: #f9f3e9;
+            border: 1px solid var(--light-brown);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: var(--border-radius);
+        }
+        
+        .instructions h3 {
+            color: var(--dark-brown);
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+        
+        .quiz-container {
+            margin-bottom: 30px;
+        }
+        
+        .question {
+            background-color: #faf7f2;
+            border-radius: var(--border-radius);
+            padding: 18px;
+            margin-bottom: 18px;
+            border-left: 5px solid var(--secondary-brown);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Watermark nhẹ trên từng câu hỏi */
+        .question::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.03;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .question-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .question-number {
+            display: inline-block;
+            background-color: var(--primary-brown);
+            color: white;
+            width: 36px;
+            height: 36px;
+            text-align: center;
+            line-height: 36px;
+            border-radius: 50%;
+            margin-right: 12px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .question-text {
+            font-weight: 600;
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            padding-top: 3px;
+            flex: 1;
+            position: relative;
+            z-index: 1;
+            line-height: 1.3;
+        }
+        
+        .options-container {
+            margin: 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 10px 12px;
+            background-color: white;
+            border-radius: 5px;
+            border: 1px solid var(--light-brown);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.3rem;
+            line-height: 1.2;
+        }
+        
+        .option:hover {
+            background-color: #f9f3e9;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .option input {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+        
+        .option label {
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        /* Style cho đáp án đã chọn */
+        .option.selected {
+            background-color: rgba(139, 69, 19, 0.1);
+            border-color: var(--selected-color);
+        }
+        
+        /* Style cho đáp án đúng */
+        .option.correct {
+            background-color: rgba(46, 125, 50, 0.1);
+            border-color: var(--correct-color);
+        }
+        
+        /* Style cho đáp án sai */
+        .option.incorrect {
+            background-color: rgba(198, 40, 40, 0.05);
+            border-color: var(--incorrect-color);
+        }
+        
+        .answer-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            margin-top: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .answer-container.show {
+            max-height: 500px;
+            margin-top: 12px;
+        }
+        
+        .toggle-btn {
+            background-color: var(--light-brown);
+            color: var(--dark-brown);
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toggle-btn:hover {
+            background-color: #c9b18c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .answer {
+            background-color: rgba(249, 247, 243, 0.95);
+            border-radius: var(--border-radius);
+            padding: 18px;
+            margin-top: 12px;
+            border: 1px solid var(--light-brown);
+            position: relative;
+            overflow: hidden;
+            line-height: 1.3;
+        }
+        
+        /* Watermark nhẹ trên phần đáp án */
+        .answer::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 250px;
+            height: 250px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.02;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .answer h4 {
+            color: var(--dark-brown);
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+            border-bottom: 2px solid var(--light-brown);
+            padding-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .answer-content {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            line-height: 1.3;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .correct-answer {
+            color: var(--correct-color);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .explanation {
+            color: var(--text-dark);
+            margin-top: 10px;
+        }
+        
+        .formula-box {
+            background-color: rgba(248, 248, 248, 0.9);
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin: 12px 0;
+            border-left: 4px solid var(--primary-brown);
+            overflow-x: auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .formula {
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 3px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            min-width: 160px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        #showAllBtn {
+            background-color: var(--primary-brown);
+            color: white;
+        }
+        
+        #showAllBtn:hover {
+            background-color: var(--dark-brown);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        #hideAllBtn {
+            background-color: var(--light-brown);
+            color: var(--dark-brown);
+        }
+        
+        #hideAllBtn:hover {
+            background-color: #c9b18c;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        #scoreBtn {
+            background-color: #2E7D32;
+            color: white;
+        }
+        
+        #scoreBtn:hover {
+            background-color: #1B5E20;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        #resetBtn {
+            background-color: #5D4037;
+            color: white;
+        }
+        
+        #resetBtn:hover {
+            background-color: #3E2723;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .result-container {
+            display: none;
+            background-color: #f9f3e9;
+            border: 2px solid var(--primary-brown);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        .result-container.show {
+            display: block;
+        }
+        
+        .result-title {
+            color: var(--primary-brown);
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .score {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--correct-color);
+            margin: 10px 0;
+        }
+        
+        .score-text {
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+        }
+        
+        .details {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-top: 15px;
+        }
+        
+        .detail-item {
+            margin: 5px 0;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid var(--light-brown);
+            color: var(--secondary-brown);
+            font-size: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Watermark footer */
+        footer::before {
+            content: "tuibx";
+            position: absolute;
+            bottom: 8px;
+            right: 15px;
+            font-size: 0.9rem;
+            color: rgba(139, 69, 19, 0.3);
+            font-weight: bold;
+            font-style: italic;
+            z-index: 0;
+        }
+        
+        /* Responsive cho điện thoại */
+        @media (max-width: 768px) {
+            body {
+                padding: 8px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .question {
+                padding: 15px;
+            }
+            
+            .question-text, .option, .answer-content {
+                font-size: 1.2rem;
+            }
+            
+            .action-btn {
+                width: 100%;
+                min-width: auto;
+                padding: 10px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            body::before {
+                background-size: 300px 300px;
+                opacity: 0.05;
+            }
+            
+            .question::before {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .answer::before {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .score {
+                font-size: 2.8rem;
+            }
+        }
+        
+        /* Responsive cho TV/màn hình lớn */
+        @media (min-width: 1200px) {
+            .question-text, .option, .answer-content {
+                font-size: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.3rem;
+            }
+            
+            .action-btn {
+                font-size: 1.2rem;
+                padding: 15px 25px;
+            }
+            
+            .formula {
+                font-size: 1.4rem;
+            }
+            
+            body::before {
+                background-size: 500px 500px;
+                opacity: 0.1;
+            }
+        }
+        
+        /* Đảm bảo MathJax hiển thị đúng */
+        .MathJax_SVG {
+            display: inline !important;
+        }
+        
+        mjx-container[jax="SVG"] {
+            display: inline-block !important;
+        }
+        
+        /* Thêm watermark phủ toàn màn hình */
+        .watermark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+        }
+        
+        .watermark-overlay::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 200px 200px;
+            opacity: 0.04;
+        }
+    </style>
+</head>
+<body>
+    <!-- Watermark phủ toàn màn hình -->
+    <div class="watermark-overlay"></div>
+    
+    <div class="container">
+        <header>
+            <h1>Trắc Nghiệm VL11 - Bài 20</h1>
+            <p class="subtitle">ĐIỆN THẾ - Vật Lý 11</p>
+        </header>
+        
+        <div class="instructions">
+            <h3>Hướng dẫn:</h3>
+            <p>1. Bài trắc nghiệm gồm 20 câu hỏi về nội dung Bài 20: Điện Thế.</p>
+            <p>2. Chọn đáp án đúng nhất cho mỗi câu hỏi (chỉ được chọn một đáp án).</p>
+            <p>3. Sử dụng nút "CHẤM BÀI" để kiểm tra kết quả và thống kê số câu đúng.</p>
+            <p>4. Sử dụng nút "HIỆN TẤT CẢ" để xem tất cả đáp án, "ẨN TẤT CẢ" để ẩn tất cả đáp án.</p>
+            <p>5. Sử dụng nút "LÀM LẠI" để xóa tất cả lựa chọn và bắt đầu lại.</p>
+        </div>
+        
+        <div class="result-container" id="resultContainer">
+            <div class="result-title">KẾT QUẢ BÀI LÀM</div>
+            <div class="score" id="scoreDisplay">0/20</div>
+            <div class="score-text" id="scoreText">Bạn chưa trả lời đúng câu nào!</div>
+            <div class="details" id="resultDetails"></div>
+        </div>
+        
+        <div class="quiz-container" id="quizContainer">
+            <!-- Các câu hỏi sẽ được tạo bằng JavaScript -->
+        </div>
+        
+        <div class="controls">
+            <button class="action-btn" id="showAllBtn">HIỆN TẤT CẢ ĐÁP ÁN</button>
+            <button class="action-btn" id="hideAllBtn">ẨN TẤT CẢ ĐÁP ÁN</button>
+            <button class="action-btn" id="scoreBtn">CHẤM BÀI</button>
+            <button class="action-btn" id="resetBtn">LÀM LẠI</button>
+        </div>
+        
+        <footer>
+            <p>Bài tập trắc nghiệm Vật Lý 11 - Bài 20: Điện Thế</p>
+            <p>Nội dung bám sát chương trình học Vật Lý lớp 11</p>
+        </footer>
+    </div>
+
+    <script>
+        // Dữ liệu câu hỏi trắc nghiệm - Bài 20: Điện Thế
+        const quizData = [
+            {
+                id: 1,
+                question: "Điện thế tại một điểm trong điện trường được xác định bằng:",
+                options: [
+                    "A. Công dịch chuyển một điện tích dương từ vô cực về điểm đó",
+                    "B. Công dịch chuyển một điện tích bất kì từ vô cực về điểm đó",
+                    "C. Công dịch chuyển một đơn vị điện tích dương từ vô cực về điểm đó",
+                    "D. Công dịch chuyển một đơn vị điện tích âm từ vô cực về điểm đó"
+                ],
+                correct: 2,
+                explanation: "Theo định nghĩa: Điện thế tại một điểm trong điện trường đặc trưng cho điện trường tại điểm đó về thế năng, được xác định bằng công dịch chuyển một đơn vị điện tích dương từ vô cực về điểm đó."
+            },
+            {
+                id: 2,
+                question: "Công thức tính điện thế tại điểm M là:",
+                options: [
+                    "A. $V = \\frac{q}{A}$",
+                    "B. $V = A \\cdot q$",
+                    "C. $V = \\frac{A}{q}$",
+                    "D. $V = \\frac{W}{q^2}$"
+                ],
+                correct: 2,
+                explanation: "Theo công thức (20.1): $V = \\frac{A}{q}$, trong đó A là công thực hiện để dịch chuyển điện tích q từ vô cực về điểm M, q là điện tích."
+            },
+            {
+                id: 3,
+                question: "Hiệu điện thế giữa hai điểm M và N được tính bằng:",
+                options: [
+                    "A. $U_{MN} = V_M + V_N$",
+                    "B. $U_{MN} = V_M - V_N$",
+                    "C. $U_{MN} = \\frac{V_M}{V_N}$",
+                    "D. $U_{MN} = \\frac{V_N}{V_M}$"
+                ],
+                correct: 1,
+                explanation: "Theo công thức (20.2): $U_{MN} = V_M - V_N$. Hiệu điện thế giữa hai điểm bằng hiệu điện thế tại hai điểm đó."
+            },
+            {
+                id: 4,
+                question: "Công của lực điện khi dịch chuyển điện tích q từ M đến N trong điện trường là:",
+                options: [
+                    "A. $A_{MN} = q(V_M + V_N)$",
+                    "B. $A_{MN} = q(V_M - V_N)$",
+                    "C. $A_{MN} = \\frac{V_M - V_N}{q}$",
+                    "D. $A_{MN} = \\frac{q}{V_M - V_N}$"
+                ],
+                correct: 1,
+                explanation: "Theo công thức (20.3): $A_{MN} = (V_M - V_N)q = U_{MN}q$. Công của lực điện bằng tích của điện tích và hiệu điện thế giữa hai điểm."
+            },
+            {
+                id: 5,
+                question: "Trong điện trường đều, mối liên hệ giữa cường độ điện trường E và hiệu điện thế U giữa hai điểm trên cùng một đường sức cách nhau d là:",
+                options: [
+                    "A. $E = \\frac{U}{d}$",
+                    "B. $E = U \\cdot d$",
+                    "C. $E = \\frac{d}{U}$",
+                    "D. $E = \\frac{U^2}{d}$"
+                ],
+                correct: 0,
+                explanation: "Theo công thức (20.5): Trong điện trường đều, $E = \\frac{U}{d} = \\frac{V_M - V_N}{MN}$. Độ lớn cường độ điện trường bằng độ giảm của điện thế dọc theo một đơn vị độ dài đường sức."
+            },
+            {
+                id: 6,
+                question: "Thế năng điện của điện tích q tại điểm M trong điện trường được tính bằng:",
+                options: [
+                    "A. $W_M = \\frac{q}{V_M}$",
+                    "B. $W_M = q \\cdot V_M$",
+                    "C. $W_M = \\frac{V_M}{q}$",
+                    "D. $W_M = q^2 \\cdot V_M$"
+                ],
+                correct: 1,
+                explanation: "Theo công thức (20.4): $W_M = Vq$. Thế năng điện và điện thế liên hệ với nhau bởi công thức này."
+            },
+            {
+                id: 7,
+                question: "Đơn vị của điện thế là:",
+                options: [
+                    "A. Jun (J)",
+                    "B. Vôn (V)",
+                    "C. Niutơn (N)",
+                    "D. Culông (C)"
+                ],
+                correct: 1,
+                explanation: "Đơn vị của điện thế là vôn (kí hiệu là V), ngoài ra người ta còn dùng đơn vị kilóvôn (kV): 1 kV = 1 000 V."
+            },
+            {
+                id: 8,
+                question: "Khi một điện tích dương tự do di chuyển dọc theo đường sức điện, điều gì xảy ra với thế năng của nó?",
+                options: [
+                    "A. Tăng",
+                    "B. Giảm",
+                    "C. Không đổi",
+                    "D. Tăng rồi giảm"
+                ],
+                correct: 1,
+                explanation: "Khi điện tích dương di chuyển dọc theo đường sức điện (cùng chiều với lực điện), thế năng của nó giảm vì công của lực điện là công phát động."
+            },
+            {
+                id: 9,
+                question: "Trong thực tế, mốc điện thế thường được chọn là:",
+                options: [
+                    "A. Vô cực",
+                    "B. Mặt đất",
+                    "C. Bản nhiễm điện dương",
+                    "D. Bản nhiễm điện âm"
+                ],
+                correct: 1,
+                explanation: "Trong thực tiễn cuộc sống và kĩ thuật, mặt đất thường được chọn là mốc điện thế. Trong điện trường đều giữa hai bàn phẳng, người ta thường chọn mốc điện thế là bàn nhiễm điện âm."
+            },
+            {
+                id: 10,
+                question: "Theo quy định của Việt Nam, lưới điện cao thế có điện áp:",
+                options: [
+                    "A. Nhỏ hơn 1 kV",
+                    "B. Từ 1 kV đến 66 kV",
+                    "C. Lớn hơn 66 kV",
+                    "D. Từ 66 kV đến 220 kV"
+                ],
+                correct: 2,
+                explanation: "Theo quy định của mạng lưới truyền tải điện ở Việt Nam, các lưới điện có điện áp nhỏ hơn 1 kV gọi là hạ thế, từ 1 kV đến 66 kV gọi là trung thế, lớn hơn 66 kV gọi là cao thế."
+            },
+            {
+                id: 11,
+                question: "Công của điện trường khi dịch chuyển electron từ catôt đến anôt trong tế bào quang điện với $U_{AK} = 45 \\, \\text{V}$ là:",
+                options: [
+                    "A. $7.2 \\times 10^{-18} \\, \\text{J}$",
+                    "B. $-7.2 \\times 10^{-18} \\, \\text{J}$",
+                    "C. $1.6 \\times 10^{-19} \\, \\text{J}$",
+                    "D. $-1.6 \\times 10^{-19} \\, \\text{J}$"
+                ],
+                correct: 1,
+                explanation: "Theo ví dụ trong bài: $A = U \\cdot q = 45 \\times (-1.6 \\times 10^{-19}) = -7.2 \\times 10^{-18} \\, \\text{J}$. Dấu âm cho thấy công của điện trường là công cản vì electron mang điện tích âm."
+            },
+            {
+                id: 12,
+                question: "Điện thế tại điểm nằm chính giữa hai bản phẳng song song cách nhau d, hiệu điện thế U, chọn bản âm làm mốc là:",
+                options: [
+                    "A. $V = 0$",
+                    "B. $V = \\frac{U}{2}$",
+                    "C. $V = U$",
+                    "D. $V = \\frac{U}{d}$"
+                ],
+                correct: 1,
+                explanation: "Theo ví dụ trong bài: Khi điểm M nằm chính giữa hai bản phẳng, $h = \\frac{d}{2}$, ta có: $V_M = Eh = \\frac{U}{d} \\cdot \\frac{d}{2} = \\frac{U}{2}$."
+            },
+            {
+                id: 13,
+                question: "Nếu điện thế tại điểm M là 100 V, tại N là 60 V, hiệu điện thế $U_{MN}$ bằng:",
+                options: [
+                    "A. 160 V",
+                    "B. 40 V",
+                    "C. -40 V",
+                    "D. 0 V"
+                ],
+                correct: 1,
+                explanation: "Theo công thức: $U_{MN} = V_M - V_N = 100 - 60 = 40 \\, \\text{V}$."
+            },
+            {
+                id: 14,
+                question: "Mối liên hệ giữa cường độ điện trường E và điện thế V trong điện trường đều là:",
+                options: [
+                    "A. $E = \\frac{\\Delta V}{\\Delta d}$",
+                    "B. $E = \\Delta V \\cdot \\Delta d$",
+                    "C. $E = \\frac{\\Delta d}{\\Delta V}$",
+                    "D. $E = \\frac{1}{\\Delta V \\cdot \\Delta d}$"
+                ],
+                correct: 0,
+                explanation: "Theo công thức (20.5): Trong điện trường đều, $E = \\frac{V_M - V_N}{MN} = \\frac{\\Delta V}{\\Delta d}$. Với điện trường bất kì, công thức này vẫn được áp dụng khi hai điểm ở rất gần nhau."
+            },
+            {
+                id: 15,
+                question: "Khi điện tích q = 1 C, điện thế V bằng:",
+                options: [
+                    "A. Công A",
+                    "B. Thế năng W",
+                    "C. Hiệu điện thế U",
+                    "D. Cường độ điện trường E"
+                ],
+                correct: 0,
+                explanation: "Theo công thức $V = \\frac{A}{q}$, khi q = 1 C thì $V = A$. Vậy khi điện tích có độ lớn 1 culông thì điện thế có giá trị bằng công dịch chuyển nó từ vô cực về điểm đó."
+            },
+            {
+                id: 16,
+                question: "Trong điện trường đều, điện thế thay đổi như thế nào dọc theo đường sức?",
+                options: [
+                    "A. Không đổi",
+                    "B. Tăng dần",
+                    "C. Giảm dần",
+                    "D. Tăng rồi giảm"
+                ],
+                correct: 2,
+                explanation: "Trong điện trường đều, chiều của vectơ cường độ điện trường E hướng theo chiều giảm của điện thế. Vậy điện thế giảm dần dọc theo đường sức điện."
+            },
+            {
+                id: 17,
+                question: "Điện thế tại một điểm cách mặt đất 5 m, biết cường độ điện trường Trái Đất là 114 V/m, là:",
+                options: [
+                    "A. 570 V",
+                    "B. 114 V",
+                    "C. 22,8 V",
+                    "D. 0 V"
+                ],
+                correct: 0,
+                explanation: "Theo bài tập vận dụng: $V = E \\cdot h = 114 \\times 5 = 570 \\, \\text{V}$. Điểm càng cao so với mặt đất thì có điện thế càng lớn."
+            },
+            {
+                id: 18,
+                question: "Khi dịch chuyển điện tích dương từ nơi có điện thế thấp đến nơi có điện thế cao, công của lực điện là:",
+                options: [
+                    "A. Dương",
+                    "B. Âm",
+                    "C. Bằng 0",
+                    "D. Không xác định được"
+                ],
+                correct: 1,
+                explanation: "Khi điện tích dương di chuyển từ nơi có điện thế thấp đến nơi có điện thế cao (ngược chiều đường sức), lực điện ngược chiều chuyển động nên công của lực điện là công cản (âm)."
+            },
+            {
+                id: 19,
+                question: "Hiệu điện thế còn được gọi là:",
+                options: [
+                    "A. Điện áp",
+                    "B. Cường độ điện trường",
+                    "C. Điện tích",
+                    "D. Công suất"
+                ],
+                correct: 0,
+                explanation: "Theo phần 'EM CÓ BIẾT': Hiệu điện thế còn được gọi là điện áp. Thiết bị dùng để biến đổi hiệu điện thế được gọi là biến áp."
+            },
+            {
+                id: 20,
+                question: "Thiết bị dùng để biến đổi hiệu điện thế được gọi là:",
+                options: [
+                    "A. Điện trở",
+                    "B. Biến áp",
+                    "C. Tụ điện",
+                    "D. Diode"
+                ],
+                correct: 1,
+                explanation: "Theo phần 'EM CÓ BIẾT': Thiết bị dùng để biến đổi hiệu điện thế được gọi là biến áp (máy biến áp)."
+            }
+        ];
+
+        // Khởi tạo trang
+        function initializePage() {
+            const quizContainer = document.getElementById('quizContainer');
+            quizContainer.innerHTML = '';
+            
+            quizData.forEach((question) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question';
+                questionElement.id = `question${question.id}`;
+                
+                // Tạo các option
+                let optionsHTML = '';
+                question.options.forEach((option, index) => {
+                    optionsHTML += `
+                        <div class="option" id="option${question.id}_${index}">
+                            <input type="radio" name="question${question.id}" id="q${question.id}o${index}" value="${index}" onchange="selectOption(${question.id}, ${index})">
+                            <label for="q${question.id}o${index}">${option}</label>
+                        </div>
+                    `;
+                });
+                
+                // Tạo chữ cái đáp án đúng
+                const correctAnswerLetter = String.fromCharCode(65 + question.correct);
+                
+                questionElement.innerHTML = `
+                    <div class="question-header">
+                        <span class="question-number">${question.id}</span>
+                        <div class="question-text">${question.question}</div>
+                    </div>
+                    <div class="options-container">
+                        ${optionsHTML}
+                    </div>
+                    <button class="toggle-btn" onclick="toggleAnswer(${question.id})" id="btn${question.id}">Hiện đáp án</button>
+                    <div class="answer-container" id="answer${question.id}">
+                        <div class="answer">
+                            <h4>Đáp án và giải thích:</h4>
+                            <div class="answer-content">
+                                <div class="correct-answer">Đáp án đúng: ${correctAnswerLetter} (${question.options[question.correct]})</div>
+                                <div class="explanation">${question.explanation}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                quizContainer.appendChild(questionElement);
+            });
+            
+            // Đợi MathJax load xong
+            if (window.MathJax) {
+                MathJax.typesetPromise && MathJax.typesetPromise();
+            }
+        }
+
+        // Hàm xử lý khi chọn đáp án
+        function selectOption(questionId, optionIndex) {
+            // Xóa class selected từ tất cả các option trong câu hỏi này
+            for (let i = 0; i < 4; i++) {
+                const optionElement = document.getElementById(`option${questionId}_${i}`);
+                if (optionElement) {
+                    optionElement.classList.remove('selected');
+                }
+            }
+            
+            // Thêm class selected cho option được chọn
+            const selectedOption = document.getElementById(`option${questionId}_${optionIndex}`);
+            if (selectedOption) {
+                selectedOption.classList.add('selected');
+            }
+        }
+
+        // Hàm toggle hiển thị đáp án
+        function toggleAnswer(questionId) {
+            const answerContainer = document.getElementById(`answer${questionId}`);
+            const button = document.getElementById(`btn${questionId}`);
+            
+            if (answerContainer.classList.contains('show')) {
+                answerContainer.classList.remove('show');
+                button.textContent = 'Hiện đáp án';
+            } else {
+                answerContainer.classList.add('show');
+                button.textContent = 'Ẩn đáp án';
+                
+                // Render lại MathJax khi mở đáp án
+                setTimeout(() => {
+                    if (window.MathJax) {
+                        MathJax.typesetPromise && MathJax.typesetPromise([answerContainer]);
+                    }
+                }, 100);
+            }
+        }
+
+        // Hiển thị tất cả đáp án
+        function showAllAnswers() {
+            quizData.forEach((question) => {
+                const answerContainer = document.getElementById(`answer${question.id}`);
+                const button = document.getElementById(`btn${question.id}`);
+                
+                if (!answerContainer.classList.contains('show')) {
+                    answerContainer.classList.add('show');
+                    button.textContent = 'Ẩn đáp án';
+                }
+            });
+            
+            // Render lại MathJax
+            setTimeout(() => {
+                if (window.MathJax) {
+                    MathJax.typesetPromise && MathJax.typesetPromise();
+                }
+            }, 500);
+        }
+
+        // Ẩn tất cả đáp án
+        function hideAllAnswers() {
+            quizData.forEach((question) => {
+                const answerContainer = document.getElementById(`answer${question.id}`);
+                const button = document.getElementById(`btn${question.id}`);
+                
+                if (answerContainer.classList.contains('show')) {
+                    answerContainer.classList.remove('show');
+                    button.textContent = 'Hiện đáp án';
+                }
+            });
+        }
+
+        // Hàm chấm bài
+        function scoreQuiz() {
+            let correctCount = 0;
+            let answeredCount = 0;
+            let resultDetails = "";
+            
+            // Reset tất cả các class correct/incorrect
+            quizData.forEach((question) => {
+                for (let i = 0; i < 4; i++) {
+                    const optionElement = document.getElementById(`option${question.id}_${i}`);
+                    if (optionElement) {
+                        optionElement.classList.remove('correct', 'incorrect');
+                    }
+                }
+            });
+            
+            // Kiểm tra từng câu hỏi
+            quizData.forEach((question) => {
+                const selectedInput = document.querySelector(`input[name="question${question.id}"]:checked`);
+                let isCorrect = false;
+                
+                if (selectedInput) {
+                    answeredCount++;
+                    const selectedValue = parseInt(selectedInput.value);
+                    
+                    // Tìm option được chọn
+                    const selectedOption = document.getElementById(`option${question.id}_${selectedValue}`);
+                    
+                    if (selectedValue === question.correct) {
+                        // Đáp án đúng
+                        correctCount++;
+                        isCorrect = true;
+                        if (selectedOption) {
+                            selectedOption.classList.add('correct');
+                        }
+                    } else {
+                        // Đáp án sai
+                        if (selectedOption) {
+                            selectedOption.classList.add('incorrect');
+                        }
+                        
+                        // Hiển thị đáp án đúng
+                        const correctOption = document.getElementById(`option${question.id}_${question.correct}`);
+                        if (correctOption) {
+                            correctOption.classList.add('correct');
+                        }
+                    }
+                }
+                
+                // Thêm chi tiết kết quả cho câu hỏi này
+                resultDetails += `<div class="detail-item">Câu ${question.id}: ${selectedInput ? (isCorrect ? '✓ ĐÚNG' : '✗ SAI') : 'CHƯA TRẢ LỜI'}</div>`;
+            });
+            
+            // Hiển thị kết quả
+            const resultContainer = document.getElementById('resultContainer');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const scoreText = document.getElementById('scoreText');
+            const resultDetailsElement = document.getElementById('resultDetails');
+            
+            scoreDisplay.textContent = `${correctCount}/${quizData.length}`;
+            resultDetailsElement.innerHTML = resultDetails;
+            
+            // Xác định thông báo dựa trên kết quả
+            const percentage = (correctCount / quizData.length) * 100;
+            let message = "";
+            
+            if (percentage === 100) {
+                message = "Xuất sắc! Bạn đã trả lời đúng tất cả các câu hỏi!";
+            } else if (percentage >= 80) {
+                message = "Rất tốt! Bạn nắm vững kiến thức về điện thế.";
+            } else if (percentage >= 60) {
+                message = "Khá tốt! Bạn hiểu cơ bản về điện thế.";
+            } else if (percentage >= 40) {
+                message = "Cần cố gắng thêm! Hãy xem lại kiến thức về điện thế.";
+            } else if (percentage > 0) {
+                message = "Cần học lại! Bạn chưa nắm vững kiến thức về điện thế.";
+            } else if (answeredCount === 0) {
+                message = "Bạn chưa trả lời câu hỏi nào! Hãy chọn đáp án và chấm bài lại.";
+            } else {
+                message = "Cần học lại! Bạn chưa nắm vững kiến thức về điện thế.";
+            }
+            
+            scoreText.textContent = message;
+            resultContainer.classList.add('show');
+            
+            // Cuộn đến phần kết quả
+            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            return correctCount;
+        }
+
+        // Hàm reset bài làm
+        function resetQuiz() {
+            // Xóa tất cả các lựa chọn
+            quizData.forEach((question) => {
+                const selectedInput = document.querySelector(`input[name="question${question.id}"]:checked`);
+                if (selectedInput) {
+                    selectedInput.checked = false;
+                }
+                
+                // Xóa tất cả các class selected, correct, incorrect
+                for (let i = 0; i < 4; i++) {
+                    const optionElement = document.getElementById(`option${question.id}_${i}`);
+                    if (optionElement) {
+                        optionElement.classList.remove('selected', 'correct', 'incorrect');
+                    }
+                }
+            });
+            
+            // Ẩn kết quả
+            const resultContainer = document.getElementById('resultContainer');
+            resultContainer.classList.remove('show');
+            
+            // Ẩn tất cả đáp án
+            hideAllAnswers();
+            
+            // Cuộn lên đầu trang
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Gán sự kiện cho nút
+        document.getElementById('showAllBtn').addEventListener('click', showAllAnswers);
+        document.getElementById('hideAllBtn').addEventListener('click', hideAllAnswers);
+        document.getElementById('scoreBtn').addEventListener('click', scoreQuiz);
+        document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+
+        // Khởi tạo trang khi tải
+        document.addEventListener('DOMContentLoaded', initializePage);
+        
+        // Xuất hàm ra toàn cục
+        window.toggleAnswer = toggleAnswer;
+        window.showAllAnswers = showAllAnswers;
+        window.hideAllAnswers = hideAllAnswers;
+        window.selectOption = selectOption;
+        window.scoreQuiz = scoreQuiz;
+        window.resetQuiz = resetQuiz;
+    </script>
+</body>
+</html>
