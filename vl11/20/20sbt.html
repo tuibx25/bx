@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Tập - Bài 20 (SBT) - Điện Thế</title>
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
+    
+    <!-- Ngăn chặn các hành vi không mong muốn -->
+    <script>
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.keyCode === 85) e.preventDefault();
+            if (e.ctrlKey && e.keyCode === 83) e.preventDefault();
+            if (e.ctrlKey && e.keyCode === 80) e.preventDefault();
+            if (e.keyCode === 123) e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) e.preventDefault();
+        });
+        document.addEventListener('dragstart', function(e) { if (e.target.tagName === 'IMG') e.preventDefault(); });
+        document.addEventListener('copy', function(e) { e.preventDefault(); alert('Không cho phép sao chép nội dung!'); });
+        document.addEventListener('cut', function(e) { e.preventDefault(); });
+        document.addEventListener('paste', function(e) { e.preventDefault(); });
+        document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+    </script>
+    
+    <!-- Load MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true,
+                packages: {'[+]': ['ams']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    
+    <style>
+        :root {
+            --primary-color: #8B4513;
+            --secondary-color: #D2691E;
+            --light-color: #FAF3E6;
+            --dark-color: #333;
+            --white: #fff;
+            --font-size-normal: 1.5rem;
+            --font-size-large: 2rem;
+            --padding: 2rem;
+            --margin: 1.5rem;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+            padding: var(--padding);
+            font-size: var(--font-size-normal);
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 400px 400px;
+            opacity: 0.08;
+            z-index: -1;
+            pointer-events: none;
+        }
+        header {
+            text-align: center;
+            margin-bottom: var(--margin);
+            padding: var(--padding);
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        h1 { font-size: var(--font-size-large); margin-bottom: 1rem; }
+        h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        .section {
+            background-color: rgba(255, 255, 255, 0.92);
+            padding: var(--padding);
+            margin-bottom: var(--margin);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        .section::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.03;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        .question {
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: var(--primary-color);
+        }
+        .options {
+            list-style-type: none;
+            padding-left: 1.5rem;
+        }
+        .options li { margin-bottom: 0.5rem; padding-left: 1rem; }
+        .answer {
+            background-color: rgba(245, 245, 245, 0.95);
+            padding: 1rem;
+            margin-top: 0.8rem;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            display: none;
+            animation: fadeIn 0.5s ease;
+            overflow: hidden;
+        }
+        .answer.show { display: block; }
+        .answer strong { color: var(--primary-color); }
+        .formula {
+            font-family: 'Courier New', monospace;
+            background-color: rgba(249, 249, 249, 0.9);
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .toggle-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            transition: background-color 0.3s;
+        }
+        .toggle-btn:hover { background-color: var(--secondary-color); }
+        .toggle-btn.hide { background-color: #666; }
+        .controls {
+            text-align: center;
+            margin: 2rem 0;
+        }
+        .action-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin: 0 0.5rem;
+            transition: background-color 0.3s;
+        }
+        .action-btn:hover { background-color: var(--secondary-color); }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 1.2rem;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+            text-align: center;
+        }
+        .data-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .data-table tr:nth-child(even) { background-color: #f2f2f2; }
+        .calc-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 1rem;
+        }
+        .calc-table th, .calc-table td {
+            border: 1px solid #ccc;
+            padding: 0.3rem;
+            text-align: center;
+        }
+        .calc-table th { background-color: #e9e9e9; }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--secondary-color);
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+            position: relative;
+        }
+        footer::before {
+            content: "tuibx";
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 1rem;
+            color: rgba(139, 69, 19, 0.3);
+            font-weight: bold;
+            font-style: italic;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @media print {
+            * { display: none !important; }
+            body:before {
+                content: "Không cho phép in trang này!";
+                display: block !important;
+                font-size: 24px;
+                text-align: center;
+                margin-top: 100px;
+            }
+        }
+        @media (max-width: 768px) {
+            body { padding: 1rem; font-size: 1.4rem; }
+            header { padding: 1.5rem; }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.6rem; }
+            .section { padding: 1.5rem; }
+            .action-btn { display: block; width: 90%; margin: 0.5rem auto; }
+            .data-table, .calc-table { font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="watermark-overlay"></div>
+    
+    <header>
+        <h1>BÀI 20. ĐIỆN THẾ</h1>
+        <p>Bài tập sách bài tập Vật Lý - Trắc nghiệm và Tự luận</p>
+    </header>
+
+    <div class="controls">
+        <button class="action-btn" id="showAllBtn">Hiện tất cả đáp án</button>
+        <button class="action-btn" id="hideAllBtn">Ẩn tất cả đáp án</button>
+    </div>
+
+    <main>
+        <!-- Phần TRẮC NGHIỆM (giữ nguyên như trước) -->
+        <section class="section">
+            <h2>TRẮC NGHIỆM</h2>
+            <!-- Câu 1 đến Câu 5 giữ nguyên -->
+            <div class="question">
+                <div class="question-title">Câu 1. Đơn vị của điện thế là:</div>
+                <ul class="options"><li>A. vôn (V).</li><li>B. jun (J).</li><li>C. vôn trên mét (V/m).</li><li>D. oát (W).</li></ul>
+                <button class="toggle-btn" onclick="toggleAnswer('answer1')">Hiện đáp án</button>
+                <div class="answer" id="answer1"><strong>Đáp án: A</strong><br>Giải thích: Điện thế có đơn vị là vôn (V).</div>
+            </div>
+            <div class="question">
+                <div class="question-title">Câu 2. Điện thế tại một điểm M trong điện trường bất kì có cường độ điện trường E không phụ thuộc vào</div>
+                <ul class="options"><li>A. vị trí điểm M.</li><li>B. cường độ điện trường E.</li><li>C. điện tích q đặt tại điểm M.</li><li>D. vị trí được chọn làm mốc của điện thế.</li></ul>
+                <button class="toggle-btn" onclick="toggleAnswer('answer2')">Hiện đáp án</button>
+                <div class="answer" id="answer2"><strong>Đáp án: C</strong><br>Giải thích: Điện thế tại một điểm chỉ phụ thuộc vào điện trường và vị trí điểm đó, không phụ thuộc vào điện tích đặt tại điểm đó.</div>
+            </div>
+            <div class="question">
+                <div class="question-title">Câu 3. Biết điện thế tại điểm M trong điện trường đều trái đất là 120 V. Mốc thế năng điện được chọn tại mặt đất. Electron đặt tại điểm M có thế năng là:</div>
+                <ul class="options">
+                    <li>A. \(-192 \cdot 10^{-19} \, \text{V}\).</li>
+                    <li>B. \(-192 \cdot 10^{-19} \, \text{J}\).</li>
+                    <li>C. \(192 \cdot 10^{-19} \, \text{V}\).</li>
+                    <li>D. \(192 \cdot 10^{-19} \, \text{J}\).</li>
+                </ul>
+                <button class="toggle-btn" onclick="toggleAnswer('answer3')">Hiện đáp án</button>
+                <div class="answer" id="answer3"><strong>Đáp án: B</strong><br>Giải thích: Thế năng điện của electron: \(W = qV = (-1.6 \times 10^{-19}) \times 120 = -1.92 \times 10^{-17} \, \text{J} = -192 \times 10^{-19} \, \text{J}\).</div>
+            </div>
+            <div class="question">
+                <div class="question-title">Câu 4. Khi ta tích điện âm cho một viên bi sắt hình cầu, do các electron cùng mang điện âm nên chúng đẩy nhau và phân bố ở phía ngoài viên bi. Trong lõi viên bi hoàn toàn trung hoà về điện. Với viên bi sắt nhiễm điện âm như vậy thì:</div>
+                <ul class="options">
+                    <li>A. Phần lõi có điện thế cao hơn lớp ngoài.</li>
+                    <li>B. Phần lớp ngoài có điện thế cao hơn phần lõi.</li>
+                    <li>C. Điện thế của mọi điểm trong viên bi là như nhau.</li>
+                    <li>D. A và C đều có thể đúng.</li>
+                </ul>
+                <button class="toggle-btn" onclick="toggleAnswer('answer4')">Hiện đáp án</button>
+                <div class="answer" id="answer4"><strong>Đáp án: C</strong><br>Giải thích: Vật dẫn cân bằng tĩnh điện có điện thế tại mọi điểm trong vật là như nhau.</div>
+            </div>
+            <div class="question">
+                <div class="question-title">Câu 5. Tại nơi có điện trường trái đất bằng 115 V/m, người ta đặt hai bản phẳng song song với nhau và song song với mặt đất. Bản thứ nhất cách mặt đất 1 m và được nối với mặt đất bằng một dây đồng. Bản thứ hai cách mặt đất 1,073 m và được tích điện dương. Hiệu điện thế đo được giữa hai bản là 1,5 V. Chọn mặt đất là mốc điện thế, điện thế bản nhiễm điện dương bằng</div>
+                <ul class="options"><li>A. 1,5 V.</li><li>B. 8,39 V.</li><li>C. 0 V.</li><li>D. -8,39 V.</li></ul>
+                <button class="toggle-btn" onclick="toggleAnswer('answer5')">Hiện đáp án</button>
+                <div class="answer" id="answer5"><strong>Đáp án: A</strong><br>Giải thích: Bản thứ nhất nối đất nên \(V_1 = 0\). Hiệu điện thế \(U = V_2 - V_1 = 1.5 \, \text{V}\) → \(V_2 = 1.5 \, \text{V}\).</div>
+            </div>
+        </section>
+
+        <!-- Phần TỰ LUẬN -->
+        <section class="section">
+            <h2>TỰ LUẬN</h2>
+            
+            <!-- Câu 6 và Câu 7, 8 giữ nguyên -->
+            <div class="question">
+                <div class="question-title">Câu 6. Trong điện trường của một điện tích Q cố định, công để dịch chuyển một điện tích q từ vô cùng về điểm M cách Q một khoảng r có giá trị bằng \(A_{\infty M} = \frac{qQ}{4\pi\varepsilon_0 r}\). M là một điểm cách Q một khoảng 1 m và N là một điểm cách Q một khoảng 2 m.<br>
+                a) Hãy tính hiệu điện thế \(U_{MN}\).<br>
+                b) Áp dụng với \(Q = 8 \cdot 10^{-10} \, \text{C}\). Tính công cần thực hiện để dịch chuyển một electron từ M đến N.</div>
+                <button class="toggle-btn" onclick="toggleAnswer('answer6')">Hiện lời giải</button>
+                <div class="answer" id="answer6">
+                    <strong>Lời giải:</strong><br>
+                    <strong>a) Hiệu điện thế \(U_{MN}\):</strong><br>
+                    \(V_M = \dfrac{Q}{4\pi\varepsilon_0 \cdot 1}\), \(V_N = \dfrac{Q}{4\pi\varepsilon_0 \cdot 2}\)<br>
+                    \(U_{MN} = V_M - V_N = \dfrac{Q}{4\pi\varepsilon_0} \left(1 - \dfrac{1}{2}\right) = \dfrac{Q}{8\pi\varepsilon_0}\).<br><br>
+                    <strong>b) Công dịch chuyển electron:</strong><br>
+                    Với \(Q = 8 \times 10^{-10} \, \text{C}\), \(\frac{1}{4\pi\varepsilon_0} = 9 \times 10^9 \, \text{Nm}^2/\text{C}^2\):<br>
+                    \(U_{MN} = 9 \times 10^9 \times 8 \times 10^{-10} \times 0.5 = 3.6 \, \text{V}\)<br>
+                    Công: \(A = eU_{MN} = 1.6 \times 10^{-19} \times 3.6 = 5.76 \times 10^{-19} \, \text{J}\).
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">Câu 7. Một đám mây dông bị phân thành hai tầng, tầng trên mang điện dương cách xa tầng dưới mang điện âm. Đo bằng thực nghiệm, người ta thấy điện trường trong khoảng giữa hai tầng của đám mây dông đó gần đều, hướng từ trên xuống dưới với E = 830 V/m, khoảng cách giữa hai tầng là 0,7 km, điện tích của tầng phía trên ước tính được bằng \(Q_1 = 1.24 \, \text{C}\). Coi điện thế của tầng mây phía dưới là \(V_1\).<br>
+                a) Hãy tính điện thế của tầng mây phía trên.<br>
+                b) Ước tính thế năng điện của tầng mây phía trên.</div>
+                <button class="toggle-btn" onclick="toggleAnswer('answer7')">Hiện lời giải</button>
+                <div class="answer" id="answer7">
+                    <strong>Lời giải:</strong><br>
+                    <strong>a) Điện thế tầng trên:</strong><br>
+                    \(d = 0.7 \, \text{km} = 700 \, \text{m}\)<br>
+                    \(V_{\text{trên}} - V_1 = E \cdot d = 830 \times 700 = 581000 \, \text{V}\)<br>
+                    \(V_{\text{trên}} = V_1 + 5.81 \times 10^5 \, \text{V}\).<br><br>
+                    <strong>b) Thế năng điện tầng trên:</strong><br>
+                    \(W_1 = Q_1 \cdot V_{\text{trên}} = 1.24 \times (V_1 + 5.81 \times 10^5) \, \text{J}\).
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">Câu 8. Tiếp tục đo bằng thực nghiệm tầng mây phía dưới của đám mây dông ở Câu 7, người ta thấy nó nằm cách mặt đất khoảng 6450 m. Trong khoảng không gian nằm giữa mặt đất và tầng dưới đám mây có điện trường đều hướng thẳng đứng từ dưới lên trên với E = 250 V/m. Điện tích của tầng dưới đám mây ước tính được là \(Q_2 = -2.03 \, \text{C}\).<br>
+                a) Chọn mốc điện thế là mặt đất, hãy ước tính điện thế của tầng phía dưới đám mây dông trên.<br>
+                b) Tính thế năng điện của tầng dưới đám mây dông đó.</div>
+                <button class="toggle-btn" onclick="toggleAnswer('answer8')">Hiện lời giải</button>
+                <div class="answer" id="answer8">
+                    <strong>Lời giải:</strong><br>
+                    <strong>a) Điện thế tầng dưới:</strong><br>
+                    Mốc điện thế mặt đất: \(V_{\text{đất}} = 0\)<br>
+                    \(h = 6450 \, \text{m}\)<br>
+                    \(V_1 - V_{\text{đất}} = -E \cdot h \quad \Rightarrow \quad V_1 = -250 \times 6450 = -1.6125 \times 10^6 \, \text{V}\).<br><br>
+                    <strong>b) Thế năng điện tầng dưới:</strong><br>
+                    \(W_2 = Q_2 \cdot V_1 = (-2.03) \times (-1.6125 \times 10^6) = 3.273 \times 10^6 \, \text{J}\).
+                </div>
+            </div>
+            
+            <!-- Câu 9 - ĐÃ CẬP NHẬT CHI TIẾT -->
+            <div class="question">
+                <div class="question-title">Câu 9. Một viên bi hình cầu bán kính R = 3 cm được đặt cách mặt đất 1,2 m. Tích điện dương cho viên bi tới khi mật độ điện tích \(\rho = 1.44 \cdot 10^{-8} \, \text{C/m}^3\) được phân bố đều trong viên bi. Thực hiện đo theo phương thẳng đứng từ mặt đất lên viên bi cho thấy cường độ điện trường có phương thẳng đứng, hướng đi xuống mặt đất, độ lớn có giá trị được ghi vào bảng sau:</div>
+                
+                <table class="data-table">
+                    <tr>
+                        <th>Độ cao (cm)</th>
+                        <td>10</td><td>20</td><td>30</td><td>40</td><td>50</td><td>60</td><td>70</td><td>80</td><td>90</td><td>100</td><td>110</td><td>117</td>
+                    </tr>
+                    <tr>
+                        <th>E (V/m)</th>
+                        <td>230</td><td>231</td><td>234</td><td>236</td><td>242</td><td>249</td><td>260</td><td>278</td><td>300</td><td>332</td><td>370</td><td>440</td>
+                    </tr>
+                </table>
+                
+                <div class="question-title">a) Tính điện tích mà viên bi đã tích được.<br>
+                b) Hãy ước tính điện thế của viên bi sau khi tích điện.<br>
+                c) Xác định năng lượng cần dùng để tích điện cho viên bi như trên khi bỏ qua các hao phí.</div>
+                <button class="toggle-btn" onclick="toggleAnswer('answer9')">Hiện lời giải</button>
+                <div class="answer" id="answer9">
+                    <strong>Lời giải:</strong><br>
+                    <strong>a) Điện tích viên bi:</strong><br>
+                    Bán kính \(R = 3 \, \text{cm} = 0.03 \, \text{m}\).<br>
+                    Thể tích: 
+                    \[ V = \frac{4}{3}\pi R^3 = \frac{4}{3}\pi (0.03)^3 \approx 1.131 \times 10^{-4} \, \text{m}^3 \]
+                    Điện tích: 
+                    \[ Q = \rho V = 1.44 \times 10^{-8} \times 1.131 \times 10^{-4} \approx 1.63 \times 10^{-12} \, \text{C} \]
+                    <strong>Vậy \( Q \approx 1.63 \times 10^{-12} \, \text{C} \).</strong><br><br>
+
+                    <strong>b) Ước tính điện thế của viên bi (không dùng tích phân):</strong><br>
+                    - Mốc điện thế: Chọn mặt đất có điện thế \(V_{\text{đất}} = 0 \, \text{V}\).<br>
+                    - Điện thế tại một điểm bằng công của lực điện làm di chuyển một điện tích dương đơn vị từ điểm đó đến mốc. Với điện trường biến đổi, ta chia quãng đường từ mặt đất (0 cm) đến điểm thấp nhất của viên bi (117 cm) thành các đoạn nhỏ dựa trên bảng số liệu.<br>
+                    - <strong>Phương pháp:</strong> Với mỗi đoạn nhỏ từ độ cao \(h_1\) đến \(h_2\), ta lấy cường độ điện trường trung bình \(E_{\text{tb}} = \dfrac{E_1 + E_2}{2}\). Hiệu điện thế trên đoạn đó là \(\Delta V = E_{\text{tb}} \cdot (h_2 - h_1)\) (với khoảng cách tính bằng mét). Điện thế tại viên bi (ở độ cao 1.17 m) bằng tổng của tất cả các \(\Delta V\) từ mặt đất lên.<br>
+                    - <strong>Tính toán chi tiết từng đoạn:</strong>
+                    <table class="calc-table">
+                        <tr><th>Đoạn</th><th>\(h_1\) (m)</th><th>\(h_2\) (m)</th><th>\(E_1\) (V/m)</th><th>\(E_2\) (V/m)</th><th>\(E_{\text{tb}}\) (V/m)</th><th>\(\Delta h = h_2 - h_1\) (m)</th><th>\(\Delta V = E_{\text{tb}} \cdot \Delta h\) (V)</th></tr>
+                        <tr><td>1</td><td>0.00</td><td>0.10</td><td>229*</td><td>230</td><td>229.5</td><td>0.10</td><td>22.95</td></tr>
+                        <tr><td>2</td><td>0.10</td><td>0.20</td><td>230</td><td>231</td><td>230.5</td><td>0.10</td><td>23.05</td></tr>
+                        <tr><td>3</td><td>0.20</td><td>0.30</td><td>231</td><td>234</td><td>232.5</td><td>0.10</td><td>23.25</td></tr>
+                        <tr><td>4</td><td>0.30</td><td>0.40</td><td>234</td><td>236</td><td>235.0</td><td>0.10</td><td>23.50</td></tr>
+                        <tr><td>5</td><td>0.40</td><td>0.50</td><td>236</td><td>242</td><td>239.0</td><td>0.10</td><td>23.90</td></tr>
+                        <tr><td>6</td><td>0.50</td><td>0.60</td><td>242</td><td>249</td><td>245.5</td><td>0.10</td><td>24.55</td></tr>
+                        <tr><td>7</td><td>0.60</td><td>0.70</td><td>249</td><td>260</td><td>254.5</td><td>0.10</td><td>25.45</td></tr>
+                        <tr><td>8</td><td>0.70</td><td>0.80</td><td>260</td><td>278</td><td>269.0</td><td>0.10</td><td>26.90</td></tr>
+                        <tr><td>9</td><td>0.80</td><td>0.90</td><td>278</td><td>300</td><td>289.0</td><td>0.10</td><td>28.90</td></tr>
+                        <tr><td>10</td><td>0.90</td><td>1.00</td><td>300</td><td>332</td><td>316.0</td><td>0.10</td><td>31.60</td></tr>
+                        <tr><td>11</td><td>1.00</td><td>1.10</td><td>332</td><td>370</td><td>351.0</td><td>0.10</td><td>35.10</td></tr>
+                        <tr><td>12</td><td>1.10</td><td>1.17</td><td>370</td><td>440</td><td>405.0</td><td>0.07</td><td>28.35</td></tr>
+                        <tr><td colspan="6" style="text-align:right;"><strong>Tổng cộng:</strong></td><td></td><td><strong>≈ 317.50 V</strong></td></tr>
+                    </table>
+                    *Giá trị \(E\) tại mặt đất (h=0) được ước tính ngoại suy từ xu hướng bảng số liệu là 229 V/m.<br>
+                    <strong>Vậy điện thế ước tính của viên bi là \( V_{\text{bi}} \approx 317.5 \, \text{V} \).</strong><br><br>
+
+                    <strong>c) Năng lượng cần dùng để tích điện:</strong><br>
+                    Năng lượng cần dùng (bỏ qua hao phí) chính bằng thế năng điện của viên bi, được tính bằng công thức:
+                    \[ W = Q \cdot V_{\text{bi}} \]
+                    Thay số:
+                    \[ W \approx (1.63 \times 10^{-12}) \times 317.5 \approx 5.18 \times 10^{-10} \, \text{J} \]
+                    <strong>Vậy \( W \approx 5.18 \times 10^{-10} \, \text{J} \).</strong>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>Bài tập Vật Lý 11 - Bài 20: Điện thế</p>
+    </footer>
+
+    <script>
+        function toggleAnswer(answerId) {
+            const answer = document.getElementById(answerId);
+            const button = answer.previousElementSibling;
+            if (answer.classList.contains('show')) {
+                answer.classList.remove('show');
+                button.textContent = 'Hiện ' + (answerId.includes('answer') ? 'đáp án' : 'lời giải');
+                button.classList.remove('hide');
+            } else {
+                answer.classList.add('show');
+                button.textContent = 'Ẩn ' + (answerId.includes('answer') ? 'đáp án' : 'lời giải');
+                button.classList.add('hide');
+            }
+            if (window.MathJax) { MathJax.typesetPromise([answer]); }
+        }
+        document.getElementById('showAllBtn').addEventListener('click', function() {
+            document.querySelectorAll('.answer').forEach(ans => ans.classList.add('show'));
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                const answerId = btn.getAttribute('onclick').match(/'([^']+)'/)[1];
+                btn.textContent = 'Ẩn ' + (answerId.includes('answer') ? 'đáp án' : 'lời giải');
+                btn.classList.add('hide');
+            });
+            if (window.MathJax) { MathJax.typesetPromise(); }
+        });
+        document.getElementById('hideAllBtn').addEventListener('click', function() {
+            document.querySelectorAll('.answer').forEach(ans => ans.classList.remove('show'));
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                const answerId = btn.getAttribute('onclick').match(/'([^']+)'/)[1];
+                btn.textContent = 'Hiện ' + (answerId.includes('answer') ? 'đáp án' : 'lời giải');
+                btn.classList.remove('hide');
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.MathJax) { MathJax.typesetPromise(); }
+        });
+    </script>
+</body>
+</html>
