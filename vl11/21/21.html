@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giới Thiệu Các Loại Tụ Điện - Vật Lý 11</title>
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
+    
+    <!-- Ngăn chặn các hành vi không mong muốn -->
+    <script>
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.keyCode === 85) e.preventDefault();
+            if (e.ctrlKey && e.keyCode === 83) e.preventDefault();
+            if (e.ctrlKey && e.keyCode === 80) e.preventDefault();
+            if (e.keyCode === 123) e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) e.preventDefault();
+        });
+        document.addEventListener('dragstart', function(e) { if (e.target.tagName === 'IMG') e.preventDefault(); });
+        document.addEventListener('copy', function(e) { e.preventDefault(); alert('Không cho phép sao chép nội dung!'); });
+        document.addEventListener('cut', function(e) { e.preventDefault(); });
+        document.addEventListener('paste', function(e) { e.preventDefault(); });
+        document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+    </script>
+    
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --white: #fff;
+            --font-size-normal: 1.5rem;
+            --font-size-large: 2.2rem;
+            --padding: 2rem;
+            --margin: 1.5rem;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.4;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+            padding: var(--padding);
+            font-size: var(--font-size-normal);
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* WATERMARK GIỐNG 20tn.html */
+        .watermark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+        }
+        
+        .watermark-overlay::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 200px 200px;
+            opacity: 0.04;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 400px 400px;
+            opacity: 0.08;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: var(--margin);
+            padding: var(--padding);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        h1 { font-size: var(--font-size-large); margin-bottom: 1rem; }
+        h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        .section {
+            background-color: rgba(255, 255, 255, 0.92);
+            padding: var(--padding);
+            margin-bottom: var(--margin);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.03;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .question {
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+            padding: 1.5rem;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-color);
+            border-top: 1px solid #eee;
+            border-right: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .question::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 250px;
+            height: 250px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.02;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: var(--primary-color);
+            line-height: 1.3;
+            position: relative;
+            z-index: 1;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .question-title::before {
+            content: "⚡";
+            font-size: 1.2rem;
+        }
+        
+        .question-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 1rem auto;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+            max-height: 250px;
+            object-fit: contain;
+            background-color: white;
+        }
+        
+        .features {
+            margin: 1rem 0;
+            position: relative;
+            z-index: 1;
+        }
+        .feature-item {
+            margin-bottom: 0.5rem;
+            padding-left: 1.2rem;
+            position: relative;
+        }
+        .feature-item::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+        
+        .answer {
+            position: relative;
+            background-color: rgba(245, 245, 245, 0.95);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border-left: 4px solid var(--secondary-color);
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            overflow: hidden;
+            line-height: 1.4;
+            display: block;
+        }
+        
+        .answer::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.01;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .answer strong { color: var(--primary-color); }
+        
+        .info-box {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-left: 4px solid var(--secondary-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .info-box strong {
+            color: var(--primary-color);
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #ddd;
+            padding: 0.8rem;
+            text-align: left;
+        }
+        .comparison-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+        }
+        .comparison-table tr:nth-child(even) { background-color: #f9f9f9; }
+        .comparison-table tr:hover { background-color: #f1f1f1; }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--secondary-color);
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+        footer::before {
+            content: "tuibx";
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 1rem;
+            color: rgba(44, 62, 80, 0.3);
+            font-weight: bold;
+            font-style: italic;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @media print {
+            * { display: none !important; }
+            body:before {
+                content: "Không cho phép in trang này!";
+                display: block !important;
+                font-size: 24px;
+                text-align: center;
+                margin-top: 100px;
+            }
+        }
+        @media (max-width: 768px) {
+            body { padding: 1rem; font-size: 1.4rem; }
+            header { padding: 1.5rem; }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.6rem; }
+            .section { padding: 1.5rem; }
+            .comparison-table { font-size: 0.9rem; }
+            .comparison-table th, .comparison-table td { padding: 0.3rem; }
+            .section::before { width: 200px; height: 200px; }
+            .question::before { width: 150px; height: 150px; }
+            .answer::before { width: 120px; height: 120px; }
+            .watermark-overlay::before { background-size: 150px 150px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Watermark phủ toàn màn hình -->
+    <div class="watermark-overlay"></div>
+    
+    <header>
+        <h1>GIỚI THIỆU CÁC LOẠI TỤ ĐIỆN</h1>
+        <p>Tài liệu Vật Lý 11 - Kiến thức cơ bản về tụ điện</p>
+    </header>
+
+    <main>
+        <!-- Phần TỔNG QUAN -->
+        <section class="section">
+            <h2>TỔNG QUAN VỀ TỤ ĐIỆN</h2>
+            <div class="question">
+                <div class="question-title">Tụ điện là gì?</div>
+                <div class="info-box">
+                    <p><strong>Tụ điện</strong> là linh kiện điện tử có khả năng tích trữ năng lượng dưới dạng điện trường. Cấu tạo cơ bản của tụ điện gồm hai bản cực dẫn điện đặt song song và được ngăn cách bởi một lớp điện môi.</p>
+                </div>
+                
+                <p>Tụ điện được phân loại dựa trên loại điện môi sử dụng. Mỗi loại có đặc điểm, ưu nhược điểm và ứng dụng riêng trong mạch điện.</p>
+                
+                <h3 style="margin-top: 1.5rem; color: var(--primary-color);">Bảng so sánh các loại tụ điện</h3>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Loại tụ</th>
+                        <th>Điện dung</th>
+                        <th>Phân cực</th>
+                        <th>Ưu điểm</th>
+                        <th>Nhược điểm</th>
+                    </tr>
+                    <tr>
+                        <td>Tụ gốm</td>
+                        <td>pF đến µF</td>
+                        <td>Không phân cực</td>
+                        <td>Giá rẻ, ổn định</td>
+                        <td>Điện dung nhỏ</td>
+                    </tr>
+                    <tr>
+                        <td>Tụ hóa</td>
+                        <td>µF đến F</td>
+                        <td>Có phân cực</td>
+                        <td>Điện dung lớn</td>
+                        <td>Kích thước lớn, dễ nổ nếu cắm ngược</td>
+                    </tr>
+                    <tr>
+                        <td>Tụ mica</td>
+                        <td>pF đến nF</td>
+                        <td>Không phân cực</td>
+                        <td>Độ ổn định cao</td>
+                        <td>Giá thành cao</td>
+                    </tr>
+                    <tr>
+                        <td>Tụ tantalum</td>
+                        <td>µF đến mF</td>
+                        <td>Có phân cực</td>
+                        <td>Kích thước nhỏ, ổn định</td>
+                        <td>Giá cao, nhạy với cắm ngược cực</td>
+                    </tr>
+                    <tr>
+                        <td>Tụ siêu hóa</td>
+                        <td>F đến kF</td>
+                        <td>Có phân cực</td>
+                        <td>Điện dung cực lớn</td>
+                        <td>Điện áp làm việc thấp</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- Phần GIỚI THIỆU CHI TIẾT -->
+        <section class="section">
+            <h2>CHI TIẾT CÁC LOẠI TỤ ĐIỆN</h2>
+            
+            <!-- Tụ gốm -->
+            <div class="question">
+                <div class="question-title">1. Tụ Gốm (Ceramic Capacitor)</div>
+                <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/21/tu/gom.jpeg" alt="Tụ gốm" class="question-image">
+                
+                <div class="features">
+                    <div class="feature-item"><strong>Cấu tạo:</strong> Chất điện môi bằng gốm, thường có dạng đĩa tròn hoặc hình chữ nhật màu nâu, vàng, xám...</div>
+                    <div class="feature-item"><strong>Điện dung:</strong> Từ pF đến µF</div>
+                    <div class="feature-item"><strong>Phân cực:</strong> Không phân cực (cắm được cả 2 chiều)</div>
+                </div>
+                
+                <div class="answer">
+                    <strong>Đặc điểm nổi bật:</strong><br>
+                    - Giá thành rẻ, sản xuất hàng loạt dễ dàng<br>
+                    - Độ ổn định cao, độ tin cậy tốt<br>
+                    - Kích thước nhỏ gọn<br>
+                    - Thích hợp cho mạch cao tần<br><br>
+                    
+                    <strong>Ứng dụng chính:</strong><br>
+                    - Dùng nhiều trong các mạch cao tần<br>
+                    - Mạch lọc nhiễu, mạch dao động<br>
+                    - Mạch cộng hưởng<br>
+                    - Mạch ghép tín hiệu xoay chiều<br><br>
+                    
+                    <strong>Lưu ý:</strong> Tụ gốm thường có dung sai khá lớn (5-20%), không thích hợp cho các ứng dụng cần độ chính xác cao.
+                </div>
+            </div>
+            
+            <!-- Tụ hóa -->
+            <div class="question">
+                <div class="question-title">2. Tụ Hóa (Electrolytic Capacitor)</div>
+                <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/21/tu/hoa.webp" alt="Tụ hóa" class="question-image">
+                
+                <div class="features">
+                    <div class="feature-item"><strong>Cấu tạo:</strong> Chất điện môi là lớp oxit kim loại mỏng, thường là nhôm (Al) hoặc tantali (Ta)</div>
+                    <div class="feature-item"><strong>Điện dung:</strong> Từ µF đến F</div>
+                    <div class="feature-item"><strong>Phân cực:</strong> CÓ phân cực (+ và -)</div>
+                </div>
+                
+                <div class="answer">
+                    <strong>Đặc điểm nổi bật:</strong><br>
+                    - Điện dung rất lớn so với kích thước<br>
+                    - Giá thành thấp<br>
+                    - Có sẵn với nhiều giá trị điện dung khác nhau<br>
+                    - Có tuổi thọ hạn chế (thường 1000-10000 giờ)<br><br>
+                    
+                    <strong>Ứng dụng chính:</strong><br>
+                    - Dùng trong mạch nguồn (lọc nhiễu, ổn áp)<br>
+                    - Mạch lọc tần số thấp<br>
+                    - Mạch liên quan đến điện áp một chiều (DC)<br>
+                    - Mạch âm thanh (tách sóng, lọc)<br><br>
+                    
+                    <strong>Cảnh báo quan trọng:</strong><br>
+                    - LUÔN chú ý cực tính khi lắp đặt<br>
+                    - Cắm ngược cực có thể gây nổ tụ<br>
+                    - Không sử dụng quá điện áp định mức<br>
+                    - Khi tụ phồng, rò rỉ chất điện phân cần thay thế ngay
+                </div>
+            </div>
+            
+            <!-- Tụ mica -->
+            <div class="question">
+                <div class="question-title">3. Tụ Mica (Mica Capacitor)</div>
+                <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/21/tu/mica.webp" alt="Tụ mica" class="question-image">
+                
+                <div class="features">
+                    <div class="feature-item"><strong>Cấu tạo:</strong> Chất điện môi làm từ khoáng vật mica tự nhiên hoặc nhân tạo</div>
+                    <div class="feature-item"><strong>Điện dung:</strong> Từ pF đến nF</div>
+                    <div class="feature-item"><strong>Phân cực:</strong> Không phân cực</div>
+                </div>
+                
+                <div class="answer">
+                    <strong>Đặc điểm nổi bật:</strong><br>
+                    - Độ ổn định và độ chính xác rất cao<br>
+                    - Hệ số nhiệt độ thấp<br>
+                    - Tổn hao điện môi nhỏ<br>
+                    - Hoạt động tốt ở tần số cao<br><br>
+                    
+                    <strong>Ứng dụng chính:</strong><br>
+                    - Dùng trong các mạch cần độ chính xác cao<br>
+                    - Mạch cộng hưởng, mạch đo lường<br>
+                    - Bộ lọc tần số radio (RF)<br>
+                    - Mạch thời gian chính xác<br><br>
+                    
+                    <strong>Lưu ý:</strong> Tụ mica có giá thành đắt hơn tụ gốm nhưng bù lại có độ ổn định và độ chính xác vượt trội, thích hợp cho các ứng dụng cao cấp.
+                </div>
+            </div>
+            
+            <!-- Tụ giấy -->
+            <div class="question">
+                <div class="question-title">4. Tụ Giấy (Paper Capacitor)</div>
+                <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/21/tu/giay.webp" alt="Tụ giấy" class="question-image">
+                
+                <div class="features">
+                    <div class="feature-item"><strong>Cấu tạo:</strong> Chất điện môi là giấy tẩm dầu, được cuộn lại và bọc kim loại</div>
+                    <div class="feature-item"><strong>Điện dung:</strong> Trung bình (nF đến µF)</div>
+                    <div class="feature-item"><strong>Phân cực:</strong> Không phân cực</div>
+                </div>
+                
+                <div class="answer">
+                    <strong>Đặc điểm nổi bật:</strong><br>
+                    - Cấu trúc đơn giản<br>
+                    - Giá thành thấp<br>
+                    - Dễ bị ẩm và hư hỏng theo thời gian<br>
+                    - Kích thước lớn so với điện dung<br><br>
+                    
+                    <strong>Ứng dụng chính:</strong><br>
+                    - Ngày nay ít phổ biến<br>
+                    - Từng được dùng trong các mạch điện cũ<br>
+                    - Mạch cao áp<br>
+                    - Mạch lọc trong thiết bị âm thanh cổ điển<br><br>
+                    
+                    <strong>Lưu ý:</strong> Tụ giấy dần được thay thế bằng tụ gốm và tụ mica do nhược điểm về kích thước và độ bền.
+                </div>
+            </div>
+            
+            <!-- Tụ tantalum -->
+            <div class="question">
+                <div class="question-title">5. Tụ Tantalum (Tantalum Capacitor)</div>
+                <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/21/tu/tantalum.png" alt="Tụ tantalum" class="question-image">
+                
+                <div class="features">
+                    <div class="feature-item"><strong>Cấu tạo:</strong> Là một loại tụ hóa đặc biệt, chất điện môi là oxit Tantali (Ta₂O₅)</div>
+                    <div class="feature-item"><strong>Điện dung:</strong> Từ µF đến mF</div>
+                    <div class="feature-item"><strong>Phân cực:</strong> CÓ phân cực (+ và -)</div>
+                </div>
+                
+                <div class="answer">
+                    <strong>Đặc điểm nổi bật:</strong><br>
+                    - Kích thước nhỏ gọn so với điện dung lớn<br>
+                    - Độ ổn định cao hơn tụ hóa nhôm<br>
+                    - Tuổi thọ dài<br>
+                    - Hoạt động tốt trong dải nhiệt độ rộng<br><br>
+                    
+                    <strong>Ứng dụng chính:</strong><br>
+                    - Dùng trong các thiết bị điện tử cần kích thước nhỏ<br>
+                    - Điện thoại di động, máy tính xách tay<br>
+                    - Thiết bị y tế di động<br>
+                    - Hệ thống nhúng (embedded systems)<br><br>
+                    
+                    <strong>Cảnh báo:</strong><br>
+                    - Rất nhạy với việc cắm ngược cực (có thể gây cháy nổ)<br>
+                    - Không chịu được quá áp<br>
+                    - Giá thành cao hơn tụ hóa thông thường<br>
+                    - Cần mạch bảo vệ khi sử dụng
+                </div>
+            </div>
+            
+            <!-- Tụ siêu hóa -->
+            <div class="question">
+                <div class="question-title">6. Tụ Siêu Hóa (Supercapacitor)</div>
+                <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/21/tu/sieuhoa.jpg" alt="Tụ siêu hóa" class="question-image">
+                
+                <div class="features">
+                    <div class="feature-item"><strong>Cấu tạo:</strong> Dựa trên nguyên lý hai lớp điện (EDL), sử dụng than hoạt tính có diện tích bề mặt cực lớn</div>
+                    <div class="feature-item"><strong>Điện dung:</strong> Từ F đến kF (lớn hơn tụ hóa thường hàng vạn lần)</div>
+                    <div class="feature-item"><strong>Phân cực:</strong> Có phân cực</div>
+                </div>
+                
+                <div class="answer">
+                    <strong>Đặc điểm nổi bật:</strong><br>
+                    - Điện dung cực lớn (hàng nghìn Farad)<br>
+                    - Có thể nạp/xả điện rất nhanh<br>
+                    - Tuổi thọ cao (hàng trăm ngàn chu kỳ)<br>
+                    - Hiệu suất năng lượng cao<br><br>
+                    
+                    <strong>Ứng dụng chính:</strong><br>
+                    - Dự trữ năng lượng thay pin<br>
+                    - Hệ thống thu hồi năng lượng phanh xe<br>
+                    - Đèn LED dự phòng, UPS mini<br>
+                    - Thiết bị điện tử cần xung năng lượng cao<br>
+                    - Hệ thống khởi động động cơ<br><br>
+                    
+                    <strong>Hạn chế:</strong><br>
+                    - Điện áp làm việc thấp (thường 2.7V - 3V)<br>
+                    - Tự xả nhanh hơn pin<br>
+                    - Giá thành cao<br>
+                    - Cần mạch cân bằng khi ghép nối tiếp
+                </div>
+            </div>
+        </section>
+        
+        <!-- Phần TÓM TẮT -->
+        <section class="section">
+            <h2>TÓM TẮT VÀ LƯU Ý SỬ DỤNG</h2>
+            <div class="question">
+                <div class="question-title">Kết luận và hướng dẫn sử dụng</div>
+                
+                <div class="info-box">
+                    <strong>Tóm tắt phân loại theo phân cực:</strong><br>
+                    • <strong>Không phân cực</strong> (Gốm, Mica, Giấy): Dùng cho mạch xoay chiều, mạch tín hiệu<br>
+                    • <strong>Có phân cực</strong> (Hóa, Tantalum, Siêu hóa): Chủ yếu dùng trong mạch một chiều, LUÔN chú ý cực tính
+                </div>
+                
+                <div class="info-box">
+                    <strong>Hướng dẫn đọc thông số trên tụ điện:</strong><br>
+                    1. <strong>Giá trị điện dung:</strong> Thường ghi bằng µF (microfarad), nF (nanofarad), pF (picofarad)<br>
+                    2. <strong>Điện áp làm việc:</strong> Điện áp tối đa có thể chịu được<br>
+                    3. <strong>Dung sai:</strong> Độ chính xác của giá trị điện dung (±5%, ±10%, ±20%)<br>
+                    4. <strong>Nhiệt độ làm việc:</strong> Dải nhiệt độ hoạt động an toàn
+                </div>
+                
+                <div class="info-box">
+                    <strong>Ứng dụng chính của tụ điện trong mạch:</strong><br>
+                    • Tích trữ năng lượng<br>
+                    • Lọc nhiễu, lọc nguồn<br>
+                    • Tạo dao động, tạo xung<br>
+                    • Dẫn tín hiệu xoay chiều, chặn một chiều<br>
+                    • Bù hệ số công suất
+                </div>
+                
+                <div class="info-box" style="background-color: rgba(231, 76, 60, 0.1); border-left-color: #e74c3c;">
+                    <strong>⚠️ Lưu ý an toàn quan trọng:</strong><br>
+                    1. Luôn phóng điện tụ trước khi chạm vào (đặc biệt là tụ hóa công suất lớn)<br>
+                    2. Không bao giờ vượt quá điện áp định mức<br>
+                    3. Với tụ phân cực: LUÔN lắp đúng cực tính<br>
+                    4. Thay thế tụ phồng, rò rỉ ngay lập tức<br>
+                    5. Sử dụng tụ đúng mục đích thiết kế
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>Tài liệu Vật Lý 11 - Giới thiệu các loại tụ điện</p>
+        <p>tuibx © 2025 - Kiến thức cơ bản cho học sinh lớp 11</p>
+    </footer>
+</body>
+</html>
