@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Tập Trắc Nghiệm - Ôn Tập Chương III</title>
+    <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
+    
+    <!-- Ngăn chặn các hành vi không mong muốn -->
+    <script>
+        // Ngăn chặn menu chuột phải
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            alert('Không cho phép sử dụng menu chuột phải!');
+        });
+        
+        // Ngăn chặn phím tắt (Ctrl+U, Ctrl+S, Ctrl+P, F12, etc.)
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+U (View Source)
+            if (e.ctrlKey && e.keyCode === 85) {
+                e.preventDefault();
+                alert('Không cho phép xem mã nguồn!');
+            }
+            // Ctrl+S (Save)
+            if (e.ctrlKey && e.keyCode === 83) {
+                e.preventDefault();
+                alert('Không cho phép lưu trang!');
+            }
+            // Ctrl+P (Print)
+            if (e.ctrlKey && e.keyCode === 80) {
+                e.preventDefault();
+                alert('Không cho phép in trang!');
+            }
+            // F12 (Developer Tools)
+            if (e.keyCode === 123) {
+                e.preventDefault();
+                alert('Không cho phép mở Developer Tools!');
+            }
+            // Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+                e.preventDefault();
+                alert('Không cho phép mở Developer Tools!');
+            }
+            // Ctrl+Shift+J (Console)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+                e.preventDefault();
+                alert('Không cho phép mở Console!');
+            }
+            // Ctrl+Shift+C (Inspector)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
+                e.preventDefault();
+                alert('Không cho phép mở Inspector!');
+            }
+            // Ctrl+Shift+R (Reload ignoring cache)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 82) {
+                e.preventDefault();
+                alert('Không cho phép tải lại trang bỏ qua cache!');
+            }
+        });
+        
+        // Ngăn chặn kéo thả hình ảnh
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.tagName === 'IMG') {
+                e.preventDefault();
+                alert('Không cho phép kéo thả hình ảnh!');
+            }
+        });
+        
+        // Ngăn chặn sao chép văn bản
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            alert('Không cho phép sao chép nội dung!');
+        });
+        
+        // Ngăn chặn cắt
+        document.addEventListener('cut', function(e) {
+            e.preventDefault();
+            alert('Không cho phép cắt nội dung!');
+        });
+        
+        // Ngăn chặn dán
+        document.addEventListener('paste', function(e) {
+            e.preventDefault();
+            alert('Không cho phép dán nội dung!');
+        });
+        
+        // Ngăn chặn chọn văn bản
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn mất focus
+        window.addEventListener('blur', function() {
+            document.title = "ĐỪNG RỜI KHỎI TRANG!";
+            setTimeout(function() {
+                document.title = "Bài Tập Trắc Nghiệm - Ôn Tập Chương III";
+            }, 1000);
+        });
+    </script>
+    
+    <style>
+        /* CSS để chống in ấn */
+        @media print {
+            * {
+                display: none !important;
+            }
+            body:before {
+                content: "KHÔNG CHO PHÉP IN TRANG NÀY!";
+                display: block !important;
+                font-size: 32px;
+                text-align: center;
+                margin-top: 100px;
+                color: #ff0000;
+                font-weight: bold;
+            }
+            body:after {
+                content: "Bản quyền thuộc về tuibx";
+                display: block !important;
+                font-size: 24px;
+                text-align: center;
+                margin-top: 50px;
+                color: #8B4513;
+            }
+        }
+        
+        :root {
+            --primary-brown: #8B4513;
+            --secondary-brown: #A0522D;
+            --light-brown: #D2B48C;
+            --dark-brown: #654321;
+            --neutral-beige: #F5F5DC;
+            --neutral-tan: #D2B48C;
+            --text-dark: #333333;
+            --text-light: #5D4037;
+            --border-radius: 8px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--neutral-beige);
+            color: var(--text-dark);
+            line-height: 1.2;
+            padding: 15px;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            font-size: 1.4rem;
+        }
+        
+        /* Watermark nền */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 400px 400px;
+            opacity: 0.08;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.92);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-brown);
+        }
+        
+        h1 {
+            color: var(--primary-brown);
+            margin-bottom: 5px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+        
+        .subtitle {
+            color: var(--secondary-brown);
+            font-size: 1.6rem;
+            margin-bottom: 3px;
+            font-weight: 500;
+            line-height: 1.1;
+        }
+        
+        .instructions {
+            background-color: #f9f3e9;
+            border: 1px solid var(--light-brown);
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: var(--border-radius);
+            font-size: 1.4rem;
+            line-height: 1.2;
+        }
+        
+        .instructions h3 {
+            color: var(--dark-brown);
+            margin-bottom: 8px;
+            font-size: 1.6rem;
+            line-height: 1.1;
+        }
+        
+        .instructions p {
+            margin-bottom: 3px;
+        }
+        
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .question-card {
+            background-color: #faf7f2;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 5px solid var(--secondary-brown);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Watermark nhẹ trên từng câu hỏi */
+        .question-card::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.03;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .question-number {
+            display: inline-block;
+            background-color: var(--primary-brown);
+            color: white;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            border-radius: 50%;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .question-text {
+            font-weight: 600;
+            font-size: 1.6rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+            line-height: 1.2;
+        }
+        
+        .image-container {
+            text-align: center;
+            margin: 10px 0;
+            padding: 5px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            border: 1px solid var(--light-brown);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .image-caption {
+            font-style: italic;
+            color: var(--secondary-brown);
+            margin-top: 5px;
+            font-size: 1.2rem;
+            line-height: 1.1;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 10px;
+        }
+        
+        .option {
+            padding: 6px 10px;
+            background-color: white;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            min-height: 40px;
+            line-height: 1.1;
+        }
+        
+        .option:hover {
+            background-color: var(--light-brown);
+            border-color: var(--medium-brown);
+            transform: translateY(-2px);
+        }
+        
+        /* Màu sắc cho câu trả lời khi được chọn */
+        .option.selected {
+            background-color: #C0C0C0; /* Màu bạc khi chọn */
+            color: #333333; /* Màu chữ tối cho dễ đọc */
+            border-color: #999999;
+        }
+        
+        /* Giữ nguyên màu khi hover cho đáp án đã chọn */
+        .option.selected:hover {
+            background-color: #C0C0C0; /* Giữ màu bạc khi hover */
+            border-color: #999999;
+            transform: translateY(-2px);
+        }
+        
+        .option-label {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: var(--medium-brown);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+            flex-shrink: 0;
+            font-size: 1.1rem;
+        }
+        
+        .option-text {
+            line-height: 1.1;
+        }
+        
+        /* Màu sắc cho câu trả lời đúng/sai */
+        .option.correct {
+            background-color: rgba(46, 125, 50, 0.2);
+            border-color: #2E7D32;
+        }
+        
+        .option.incorrect {
+            background-color: rgba(198, 40, 40, 0.2);
+            border-color: #C62828;
+        }
+        
+        /* Nút hiển thị đáp án - ĐÃ GIẢM KÍCH THƯỚC THÊM */
+        .answer-btn {
+            padding: 6px 10px; /* Giảm thêm padding */
+            background-color: var(--primary-brown);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1.1rem; /* Giảm thêm kích thước chữ */
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-top: 5px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .answer-btn:hover {
+            background-color: var(--dark-brown);
+            transform: translateY(-1px); /* Giảm hiệu ứng hover */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Giảm bóng đổ */
+        }
+        
+        /* Phần đáp án và giải thích */
+        .answer-container {
+            display: none;
+            margin-top: 10px; /* Giảm khoảng cách */
+            padding: 10px; /* Giảm padding */
+            background-color: rgba(245, 245, 245, 0.9);
+            border-radius: var(--border-radius);
+            border-left: 3px solid var(--primary-brown); /* Giảm độ dày viền */
+            position: relative;
+            z-index: 1;
+        }
+        
+        .answer-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .correct-answer {
+            font-size: 1.3rem; /* Giảm thêm kích thước chữ */
+            color: var(--primary-brown);
+            margin-bottom: 6px; /* Giảm khoảng cách */
+            font-weight: bold;
+        }
+        
+        .explanation {
+            font-size: 1.2rem; /* Giảm thêm kích thước chữ */
+            line-height: 1.3;
+            color: var(--text-light);
+            padding-top: 6px; /* Giảm padding */
+            border-top: 1px dashed var(--light-brown);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 12px;
+            border-top: 1px solid var(--light-brown);
+            color: var(--secondary-brown);
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+            line-height: 1.2;
+        }
+        
+        /* Watermark footer */
+        footer::before {
+            content: "tuibx";
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 1.2rem;
+            color: rgba(139, 69, 19, 0.5);
+            font-weight: bold;
+            font-style: italic;
+            z-index: 0;
+        }
+        
+        /* Biến bổ sung */
+        --medium-brown: #A0522D;
+        --card-bg: #FAF3E9;
+        --border-color: #BCAAA4;
+        
+        /* Responsive cho điện thoại */
+        @media (max-width: 768px) {
+            body {
+                padding: 8px;
+                font-size: 1.2rem;
+                line-height: 1.1;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 4px;
+                line-height: 1;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+                line-height: 1;
+            }
+            
+            .question-card {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+            
+            .question-text {
+                font-size: 1.3rem;
+                margin-bottom: 8px;
+                line-height: 1.1;
+            }
+            
+            .options {
+                gap: 2px;
+            }
+            
+            .option {
+                padding: 5px 8px;
+                font-size: 1.2rem;
+                min-height: 35px;
+                line-height: 1;
+            }
+            
+            .question-number {
+                width: 35px;
+                height: 35px;
+                line-height: 35px;
+                margin-bottom: 8px;
+                font-size: 1.1rem;
+            }
+            
+            .option-label {
+                width: 25px;
+                height: 25px;
+                line-height: 25px;
+                margin-right: 8px;
+                font-size: 1rem;
+            }
+            
+            body::before {
+                background-size: 300px 300px;
+                opacity: 0.05;
+            }
+            
+            .question-card::before {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .image-container {
+                padding: 4px;
+                margin: 8px 0;
+            }
+            
+            .image-caption {
+                font-size: 1rem;
+                margin-top: 4px;
+                line-height: 1;
+            }
+            
+            .instructions {
+                padding: 10px;
+                margin-bottom: 15px;
+                font-size: 1.2rem;
+                line-height: 1.1;
+            }
+            
+            .instructions h3 {
+                font-size: 1.3rem;
+                margin-bottom: 6px;
+            }
+            
+            .instructions p {
+                margin-bottom: 2px;
+            }
+            
+            /* Nút hiển thị đáp án trên điện thoại - NHỎ HƠN NỮA */
+            .answer-btn {
+                padding: 5px 8px; /* Giảm thêm cho mobile */
+                font-size: 1rem; /* Giảm thêm kích thước chữ */
+            }
+            
+            .correct-answer {
+                font-size: 1.1rem; /* Giảm thêm */
+            }
+            
+            .explanation {
+                font-size: 1rem; /* Giảm thêm */
+            }
+            
+            footer {
+                margin-top: 20px;
+                padding-top: 10px;
+                font-size: 1rem;
+            }
+            
+            .answer-container {
+                margin-top: 8px;
+                padding: 8px;
+            }
+        }
+        
+        /* Responsive cho TV/màn hình lớn */
+        @media (min-width: 1200px) {
+            .question-text {
+                font-size: 1.8rem;
+                line-height: 1.2;
+            }
+            
+            .option {
+                font-size: 1.6rem;
+                min-height: 45px;
+                line-height: 1.1;
+            }
+            
+            .options {
+                gap: 6px;
+            }
+            
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1.8rem;
+            }
+            
+            body::before {
+                background-size: 500px 500px;
+                opacity: 0.1;
+            }
+            
+            .image-container {
+                max-width: 80%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            /* Nút hiển thị đáp án trên màn hình lớn */
+            .answer-btn {
+                font-size: 1.2rem; /* Giữ nhỏ hơn nữa */
+                padding: 8px 12px; /* Giảm thêm padding */
+            }
+            
+            .correct-answer {
+                font-size: 1.4rem; /* Giảm thêm */
+            }
+            
+            .explanation {
+                font-size: 1.3rem; /* Giảm thêm */
+            }
+        }
+        
+        /* Watermark phủ toàn màn hình */
+        .watermark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+        }
+        
+        .watermark-overlay::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 200px 200px;
+            opacity: 0.04;
+        }
+        
+        /* Hiệu ứng bảo mật - làm mờ khi cố gắng chụp màn hình */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.01);
+            pointer-events: none;
+            z-index: 9999;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Watermark phủ toàn màn hình -->
+    <div class="watermark-overlay"></div>
+    
+    <div class="container">
+        <header>
+            <h1>BÀI TẬP CUỐI CHƯƠNG III</h1>
+            <p class="subtitle">TRẮC NGHIỆM - Vật Lý 11</p>
+        </header>
+        
+        <div class="instructions">
+            <h3>HƯỚNG DẪN LÀM BÀI</h3>
+            <p>1. Đọc kỹ từng câu hỏi và chọn một đáp án đúng nhất.</p>
+            <p>2. Nhấp vào đáp án để chọn. Đáp án được chọn sẽ được đánh dấu.</p>
+            <p>3. Nhấn nút "HIỂN THỊ ĐÁP ÁN" dưới mỗi câu để xem đáp án đúng và giải thích.</p>
+        </div>
+        
+        <div class="quiz-container" id="quizContainer">
+            <!-- Các câu hỏi sẽ được tạo bằng JavaScript -->
+        </div>
+        
+        <footer>
+            <p>Bài tập trắc nghiệm Vật Lý 11 - Chương III: Điện trường</p>
+        </footer>
+    </div>
+
+    <script>
+        // Dữ liệu câu hỏi và đáp án
+        const quizData = [
+            {
+                question: "Đối với điện trường xung quanh một điện tích điểm Q đặt trong chân không, độ lớn của vectơ cường độ điện trường tại một điểm M không phụ thộc vào",
+                options: [
+                    "A. vị trí của điểm M.",
+                    "B. dấu của điện tích Q.",
+                    "C. độ lớn của điện tích Q.",
+                    "D. khoảng cách từ điểm M đến điện tích điểm Q."
+                ],
+                correct: 1,
+                explanation: "Cường độ điện trường tại điểm M: E = k|Q|/r². Độ lớn của E phụ thuộc vào độ lớn của Q, khoảng cách r, và hằng số k, nhưng không phụ thuộc vào dấu của Q (dấu chỉ quyết định hướng của E)."
+            },
+            {
+                question: "Một điện tích q bay vào trong một điện trường đều theo phương vuông góc với đường sức điện. Trong suốt quá trình chuyển động, thế năng điện của điện tích đó",
+                options: [
+                    "A. luôn giảm dần.",
+                    "B. luôn không đổi.",
+                    "C. luôn giảm dần nếu q > 0 và luôn tăng dần nếu q < 0.",
+                    "D. luôn giảm dần nếu q < 0 và luôn tăng dần nếu q > 0."
+                ],
+                correct: 2,
+                explanation: "Thế năng điện: Wt = qV. Khi q > 0 chuyển động theo hướng làm V giảm thì Wt giảm. Khi q < 0 chuyển động theo hướng làm V giảm thì Wt tăng (vì q âm)."
+            },
+            {
+                question: "Dọc theo đường sức điện của một điện tích âm được đặt trong chân không, điện thế sẽ",
+                options: [
+                    "A. giảm dần khi đi từ điện tích ra xa về cùng.",
+                    "B. tăng dần khi đi từ điện tích ra xa về cùng.",
+                    "C. luôn không đổi vì các điểm nằm trên cùng một đường sức điện.",
+                    "D. lúc đầu tăng lên sau đó giảm dần khi đi từ điện tích ra xa về cùng."
+                ],
+                correct: 1,
+                explanation: "Đối với điện tích âm: V = kQ/r với Q < 0. Khi r tăng (ra xa điện tích), |V| giảm nhưng vì Q âm nên V = âm/giá trị nhỏ → V tăng dần (từ âm lớn đến âm nhỏ rồi về 0)."
+            },
+            {
+                question: "Hai tụ điện có điện dung C₁ = 2μF, C₂ = 3μF ghép song song. Mắc bộ tụ điện đó vào hai cực của nguồn điện có hiệu điện thế U = 60 V. Điện tích của các tụ điện là:",
+                options: [
+                    "A. Q₁ = 120·10⁻⁶ C và Q₂ = 180·10⁻⁶ C.",
+                    "B. Q₁ = Q₂ = 72·10⁻⁶ C.",
+                    "C. Q₁ = 3·10⁻⁶ C và Q₂ = 2·10⁻⁶ C.",
+                    "D. Q₁ = Q₂ = 300·10⁻⁶ C."
+                ],
+                correct: 0,
+                explanation: "Tụ ghép song song: U₁ = U₂ = U = 60V. Q₁ = C₁U = 2×10⁻⁶ × 60 = 120×10⁻⁶ C. Q₂ = C₂U = 3×10⁻⁶ × 60 = 180×10⁻⁶ C."
+            },
+            {
+                question: "Quạt điện nhà bạn A bị hỏng chiếc tụ điện như Hình 1 và cần được thay thế. Cửa hàng đồ điện có một số loại tụ điện đang bán như sau: (a) 2μF - 300V; (b) 2,5μF - 300V; (c) 2,5μF - 100V; (d) 1,5μF - 250V; (e) 1μF - 250V.",
+                image: {
+                    url: "https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/21/ot3h1.png",
+                    caption: "Hình 1. Tụ điện của quạt điện"
+                },
+                options: [
+                    "A. Chọn (a) 2μF - 300V.",
+                    "B. Chọn (b) 2,5μF - 300V.",
+                    "C. Chọn (c) 2,5μF - 100V.",
+                    "D. Chọn (d) 1,5μF - 250V."
+                ],
+                correct: 0,
+                explanation: "Khi thay tụ điện cần chú ý: 1) Điện dung gần bằng tụ cũ (2μF); 2) Điện áp làm việc lớn hơn hoặc bằng tụ cũ (250V). Chọn (a) 2μF - 300V là phù hợp nhất."
+            }
+        ];
+
+        // Khởi tạo biến
+        let userAnswers = new Array(quizData.length).fill(-1);
+        let answerVisibility = new Array(quizData.length).fill(false);
+
+        // Hiển thị các câu hỏi
+        function renderQuiz() {
+            const quizContainer = document.getElementById('quizContainer');
+            quizContainer.innerHTML = '';
+            
+            quizData.forEach((item, index) => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                
+                let questionHTML = `
+                    <div class="question-number">${index + 1}</div>
+                    <div class="question-text">${item.question}</div>
+                `;
+                
+                // Thêm hình ảnh nếu có
+                if (item.image) {
+                    questionHTML += `
+                        <div class="image-container">
+                            <img src="${item.image.url}" alt="${item.image.caption}">
+                            <div class="image-caption">${item.image.caption}</div>
+                        </div>
+                    `;
+                }
+                
+                questionHTML += `<div class="options">`;
+                
+                item.options.forEach((option, optionIndex) => {
+                    const isSelected = userAnswers[index] === optionIndex;
+                    let optionClass = 'option';
+                    if (isSelected) optionClass += ' selected';
+                    
+                    questionHTML += `
+                        <div class="${optionClass}" data-question="${index}" data-option="${optionIndex}">
+                            <div class="option-label">${String.fromCharCode(65 + optionIndex)}</div>
+                            <div class="option-text">${option}</div>
+                        </div>
+                    `;
+                });
+                
+                questionHTML += `</div>`;
+                
+                // Thêm nút hiển thị đáp án
+                questionHTML += `
+                    <button class="answer-btn" data-question="${index}">
+                        ${answerVisibility[index] ? 'ẨN ĐÁP ÁN' : 'HIỂN THỊ ĐÁP ÁN'}
+                    </button>
+                `;
+                
+                // Thêm phần đáp án và giải thích
+                questionHTML += `
+                    <div class="answer-container ${answerVisibility[index] ? 'show' : ''}" id="answer-${index}">
+                        <div class="correct-answer">
+                            Đáp án đúng: ${String.fromCharCode(65 + item.correct)}. ${item.options[item.correct]}
+                        </div>
+                        <div class="explanation">
+                            <strong>Giải thích:</strong> ${item.explanation}
+                        </div>
+                    </div>
+                `;
+                
+                questionCard.innerHTML = questionHTML;
+                quizContainer.appendChild(questionCard);
+            });
+            
+            // Thêm sự kiện click cho các lựa chọn
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const questionIndex = parseInt(this.dataset.question);
+                    const optionIndex = parseInt(this.dataset.option);
+                    
+                    // Chỉ cho phép chọn 1 đáp án cho mỗi câu hỏi
+                    userAnswers[questionIndex] = optionIndex;
+                    
+                    // Cập nhật giao diện
+                    renderQuiz();
+                });
+            });
+            
+            // Thêm sự kiện click cho các nút hiển thị đáp án
+            document.querySelectorAll('.answer-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const questionIndex = parseInt(this.dataset.question);
+                    
+                    // Đảo trạng thái hiển thị
+                    answerVisibility[questionIndex] = !answerVisibility[questionIndex];
+                    
+                    // Cập nhật giao diện
+                    renderQuiz();
+                    
+                    // Cuộn đến phần đáp án nếu đang mở
+                    if (answerVisibility[questionIndex]) {
+                        const answerElement = document.getElementById(`answer-${questionIndex}`);
+                        answerElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                });
+            });
+        }
+
+        // Khởi tạo bài quiz
+        renderQuiz();
+        
+        // Bảo vệ chống chụp màn hình bằng cách thêm hiệu ứng khi chụp
+        document.addEventListener('keydown', function(e) {
+            // Print Screen key
+            if (e.keyCode === 44) {
+                document.body.style.filter = 'blur(5px)';
+                setTimeout(() => {
+                    document.body.style.filter = 'none';
+                }, 1000);
+                alert('Không cho phép chụp màn hình!');
+            }
+        });
+        
+        // Bảo vệ chống chụp màn hình bằng cách phát hiện sự thay đổi kích thước cửa sổ
+        let originalWidth = window.innerWidth;
+        let originalHeight = window.innerHeight;
+        
+        window.addEventListener('resize', function() {
+            if (window.innerWidth !== originalWidth || window.innerHeight !== originalHeight) {
+                document.body.style.filter = 'blur(3px)';
+                setTimeout(() => {
+                    document.body.style.filter = 'none';
+                }, 500);
+            }
+        });
+        
+        // Ngăn chặn mở Developer Tools bằng cách phát hiện sự thay đổi kích thước console
+        setInterval(function() {
+            if (window.outerWidth - window.innerWidth > 200 || window.outerHeight - window.innerHeight > 200) {
+                document.body.innerHTML = '<div style="text-align:center;padding:50px;font-size:24px;color:red;">KHÔNG ĐƯỢC PHÉP MỞ DEVELOPER TOOLS!</div>';
+            }
+        }, 1000);
+        
+        // Ngăn chặn việc sử dụng F11 để vào chế độ toàn màn hình
+        document.addEventListener('fullscreenchange', function() {
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+                alert('Không cho phép vào chế độ toàn màn hình!');
+            }
+        });
+        
+        document.addEventListener('webkitfullscreenchange', function() {
+            if (document.webkitFullscreenElement) {
+                document.webkitExitFullscreen();
+                alert('Không cho phép vào chế độ toàn màn hình!');
+            }
+        });
+    </script>
+</body>
+</html>
