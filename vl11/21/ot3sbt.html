@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Tập Cuối Chương III - Điện Trường và Tụ Điện</title>
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
+    
+    <!-- Ngăn chặn các hành vi không mong muốn -->
+    <script>
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.keyCode === 85) e.preventDefault();
+            if (e.ctrlKey && e.keyCode === 83) e.preventDefault();
+            if (e.ctrlKey && e.keyCode === 80) e.preventDefault();
+            if (e.keyCode === 123) e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) e.preventDefault();
+        });
+        document.addEventListener('dragstart', function(e) { if (e.target.tagName === 'IMG') e.preventDefault(); });
+        document.addEventListener('copy', function(e) { e.preventDefault(); alert('Không cho phép sao chép nội dung!'); });
+        document.addEventListener('cut', function(e) { e.preventDefault(); });
+        document.addEventListener('paste', function(e) { e.preventDefault(); });
+        document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+    </script>
+    
+    <!-- Load MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true,
+                packages: {'[+]': ['ams']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    
+    <style>
+        :root {
+            --primary-color: #8B4513;
+            --secondary-color: #D2691E;
+            --light-color: #FAF3E6;
+            --dark-color: #333;
+            --white: #fff;
+            --font-size-normal: 1.5rem;
+            --font-size-large: 2rem;
+            --padding: 2rem;
+            --margin: 1.5rem;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.4;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+            padding: var(--padding);
+            font-size: var(--font-size-normal);
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Watermark phủ toàn màn hình */
+        .watermark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+        }
+        
+        .watermark-overlay::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 200px 200px;
+            opacity: 0.04;
+        }
+        
+        /* Watermark nền */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 400px 400px;
+            opacity: 0.08;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: var(--margin);
+            padding: var(--padding);
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        h1 { font-size: var(--font-size-large); margin-bottom: 1rem; }
+        h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        h3 {
+            font-size: 1.6rem;
+            color: var(--secondary-color);
+            margin: 1.5rem 0 1rem;
+        }
+        .section {
+            background-color: rgba(255, 255, 255, 0.92);
+            padding: var(--padding);
+            margin-bottom: var(--margin);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Watermark nhẹ trên từng section */
+        .section::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.03;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .question {
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        /* Watermark nhẹ trên từng câu hỏi */
+        .question::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 250px;
+            height: 250px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.02;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: #000;
+            line-height: 1.3;
+            position: relative;
+            z-index: 1;
+        }
+        .options {
+            list-style-type: none;
+            padding-left: 1.5rem;
+        }
+        .options li { 
+            margin-bottom: 0.3rem; 
+            padding-left: 1rem; 
+            line-height: 1.3;
+            position: relative;
+            z-index: 1;
+        }
+        .answer {
+            position: relative;
+            background-color: rgba(245, 245, 245, 0.95);
+            padding: 1rem;
+            margin-top: 0.8rem;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            display: none;
+            animation: fadeIn 0.5s ease;
+            overflow: hidden;
+            line-height: 1.4;
+        }
+        
+        /* Watermark nhẹ trên phần đáp án */
+        .answer::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.01;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .answer.show { display: block; }
+        .answer strong { color: var(--primary-color); }
+        .formula {
+            font-family: 'Courier New', monospace;
+            background-color: rgba(249, 249, 249, 0.9);
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+            overflow-x: auto;
+            position: relative;
+            z-index: 1;
+        }
+        .toggle-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            transition: background-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        .toggle-btn:hover { background-color: var(--secondary-color); }
+        .toggle-btn.hide { background-color: #666; }
+        .toggle-btn::before {
+            content: "🔍";
+            font-size: 0.9rem;
+        }
+        .toggle-btn.hide::before {
+            content: "👁️";
+        }
+        .controls {
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            z-index: 1;
+        }
+        .action-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin: 0 0.5rem;
+            transition: background-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        .action-btn:hover { background-color: var(--secondary-color); }
+        .action-btn::before {
+            content: "📘";
+            font-size: 1rem;
+        }
+        #hideAllBtn::before {
+            content: "📖";
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+            text-align: center;
+        }
+        .data-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .data-table tr:nth-child(even) { background-color: #f2f2f2; }
+        .calc-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        .calc-table th, .calc-table td {
+            border: 1px solid #ccc;
+            padding: 0.3rem;
+            text-align: center;
+        }
+        .calc-table th { background-color: #e9e9e9; }
+        .image-container {
+            text-align: center;
+            margin: 1rem 0;
+            position: relative;
+            z-index: 1;
+        }
+        /* GIẢM KÍCH THƯỚC HÌNH 50% */
+        .image-container img {
+            max-width: 50%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .image-caption {
+            font-style: italic;
+            margin-top: 0.5rem;
+            color: #666;
+            font-size: 1.2rem;
+        }
+        .circuit-diagram {
+            background-color: #f9f9f9;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--secondary-color);
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+        footer::before {
+            content: "tuibx";
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 1rem;
+            color: rgba(139, 69, 19, 0.3);
+            font-weight: bold;
+            font-style: italic;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @media print {
+            * { display: none !important; }
+            body:before {
+                content: "Không cho phép in trang này!";
+                display: block !important;
+                font-size: 24px;
+                text-align: center;
+                margin-top: 100px;
+            }
+        }
+        @media (max-width: 768px) {
+            body { padding: 1rem; font-size: 1.4rem; }
+            header { padding: 1.5rem; }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.6rem; }
+            h3 { font-size: 1.4rem; }
+            .section { padding: 1.5rem; }
+            .action-btn { display: block; width: 90%; margin: 0.5rem auto; }
+            .data-table, .calc-table { font-size: 0.9rem; }
+            .data-table th, .data-table td { padding: 0.3rem; }
+            /* Điều chỉnh watermark cho mobile */
+            .section::before {
+                width: 200px;
+                height: 200px;
+            }
+            .question::before {
+                width: 150px;
+                height: 150px;
+            }
+            .answer::before {
+                width: 120px;
+                height: 120px;
+            }
+            .watermark-overlay::before {
+                background-size: 150px 150px;
+            }
+            /* Điều chỉnh kích thước hình ảnh cho mobile */
+            .image-container img {
+                max-width: 90%;
+            }
+        }
+        /* Cải thiện cho công thức toán */
+        .MathJax_Display { margin: 0.8rem 0 !important; }
+        mjx-container[jax="CHTML"][display="true"] { margin: 0.8rem 0 !important; }
+        /* Đảm bảo MathJax hiển thị đúng */
+        .MathJax_SVG { display: inline !important; }
+        mjx-container[jax="SVG"] { display: inline-block !important; }
+        .note {
+            background-color: #e8f4fd;
+            padding: 1rem;
+            border-left: 4px solid #4a90e2;
+            margin: 1rem 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .solution-step {
+            margin-bottom: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Watermark phủ toàn màn hình -->
+    <div class="watermark-overlay"></div>
+    
+    <header>
+        <h1>BÀI TẬP CUỐI CHƯƠNG III</h1>
+        <p>Điện trường và tụ điện - Vật Lý 11</p>
+    </header>
+
+    <div class="controls">
+        <button class="action-btn" id="showAllBtn">Hiện tất cả đáp án</button>
+        <button class="action-btn" id="hideAllBtn">Ẩn tất cả đáp án</button>
+    </div>
+
+    <main>
+        <!-- Phần TRẮC NGHIỆM -->
+        <section class="section">
+            <h2>TRẮC NGHIỆM</h2>
+            
+            <div class="question">
+                <div class="question-title">Câu 1. Đối với điện trường xung quanh một điện tích điểm \( Q \) đặt trong chân không, độ lớn của vectơ cường độ điện trường tại một điểm \( M \) không phụ thộc vào</div>
+                <ul class="options">
+                    <li>A. vị trí của điểm \( M \).</li>
+                    <li>B. dấu của điện tích \( Q \).</li>
+                    <li>C. độ lớn của điện tích \( Q \).</li>
+                    <li>D. khoảng cách từ điểm \( M \) đến điện tích điểm \( Q \).</li>
+                </ul>
+                <button class="toggle-btn" onclick="toggleAnswer('answer1')">Hiện đáp án</button>
+                <div class="answer" id="answer1">
+                    <strong>Đáp án: B</strong><br>
+                    Giải thích: Cường độ điện trường của một điện tích điểm \( Q \) tại điểm M cách nó một khoảng r trong chân không được tính bằng công thức:
+                    \[ E = k\frac{|Q|}{r^2} \]
+                    Trong đó:
+                    <ul>
+                        <li>\( k \) là hằng số điện</li>
+                        <li>\( |Q| \) là độ lớn của điện tích Q</li>
+                        <li>\( r \) là khoảng cách từ Q đến điểm M</li>
+                    </ul>
+                    Công thức này cho thấy độ lớn của vectơ cường độ điện trường chỉ phụ thuộc vào độ lớn của điện tích Q và khoảng cách r, không phụ thuộc vào dấu của điện tích Q. Dấu của điện tích chỉ xác định chiều của vectơ cường độ điện trường (hướng ra xa nếu Q > 0, hướng vào nếu Q < 0).
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">Câu 2. Một điện tích \( q \) bay vào trong một điện trường đều theo phương vuông góc với đường sức điện. Trong suốt quá trình chuyển động, thể năng điện của điện tích đó</div>
+                <ul class="options">
+                    <li>A. luôn giảm dần.</li>
+                    <li>B. luôn không đổi.</li>
+                    <li>C. luôn giảm dần nếu \( q > 0 \) và luôn tăng dần nếu \( q < 0 \).</li>
+                    <li>D. luôn giảm dần nếu \( q < 0 \) và luôn tăng dần nếu \( q > 0 \).</li>
+                </ul>
+                <button class="toggle-btn" onclick="toggleAnswer('answer2')">Hiện đáp án</button>
+                <div class="answer" id="answer2">
+                    <strong>Đáp án: B</strong><br>
+                    Giải thích: Khi điện tích bay vào điện trường đều theo phương vuông góc với đường sức điện, nó chuyển động theo quỹ đạo parabol. Trong điện trường đều, thế năng điện của điện tích được tính bằng \( W_t = qV \), với V là điện thế tại vị trí của điện tích. 
+                    
+                    <div class="note">
+                        Vì điện tích chuyển động vuông góc với đường sức điện, nên nó di chuyển trên một mặt đẳng thế (các điểm trên mặt vuông góc với đường sức có cùng điện thế). Do đó, thế năng điện của điện tích không thay đổi trong suốt quá trình chuyển động.
+                    </div>
+                    
+                    Điện tích chỉ thay đổi động năng do lực điện thực hiện công, nhưng thế năng điện không đổi vì nó di chuyển trên mặt đẳng thế.
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">Câu 3. Dọc theo đường sức điện của một điện tích âm được đặt trong chân không, điện thế sẽ</div>
+                <ul class="options">
+                    <li>A. giảm dần khi đi từ điện tích ra xa về cùng.</li>
+                    <li>B. tăng dần khi đi từ điện tích ra xa về cùng.</li>
+                    <li>C. luôn không đổi vì các điểm nằm trên cùng một đường sức điện.</li>
+                    <li>D. lúc đầu tăng lên sau đó giảm dần khi đi từ điện tích ra xa về cùng.</li>
+                </ul>
+                <button class="toggle-btn" onclick="toggleAnswer('answer3')">Hiện đáp án</button>
+                <div class="answer" id="answer3">
+                    <strong>Đáp án: B</strong><br>
+                    Giải thích: Đối với điện tích điểm âm Q < 0, điện thế tại điểm cách nó một khoảng r được tính bằng:
+                    \[ V = k\frac{Q}{r} \]
+                    Vì Q < 0 nên V < 0 (điện thế âm). Khi đi từ điện tích ra xa (r tăng), giá trị tuyệt đối của V giảm, nhưng vì V âm nên thực tế V tăng dần (từ giá trị âm lớn đến giá trị âm nhỏ hơn, và tiến tới 0 ở vô cùng).
+                    
+                    <div class="note">
+                        Ví dụ: Nếu tại r₁ = 1m, V₁ = -100V và tại r₂ = 2m, V₂ = -50V. Khi đi từ điện tích ra xa, điện thế tăng từ -100V lên -50V.
+                    </div>
+                    
+                    Do đó, dọc theo đường sức điện của điện tích âm, điện thế tăng dần khi đi từ điện tích ra xa.
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">Câu 4. Hai tụ điện có điện dung \( C_1 = 2\mu F, C_2 = 3\mu F \) ghép song song. Mắc bộ tụ điện đó vào hai cực của nguồn điện có hiệu điện thế \( U = 60 \, V \). Điện tích của các tụ điện là:</div>
+                <ul class="options">
+                    <li>A. \( Q_1 = 120 \cdot 10^{-6} \, C \) và \( Q_2 = 180 \cdot 10^{-6} \, C \).</li>
+                    <li>B. \( Q_1 = Q_2 = 72 \cdot 10^{-6} \, C \).</li>
+                    <li>C. \( Q_1 = 3 \cdot 10^{-6} \, C \) và \( Q_2 = 2 \cdot 10^{-6} \, C \).</li>
+                    <li>D. \( Q_1 = Q_2 = 300 \cdot 10^{-6} \, C \).</li>
+                </ul>
+                <button class="toggle-btn" onclick="toggleAnswer('answer4')">Hiện đáp án</button>
+                <div class="answer" id="answer4">
+                    <strong>Đáp án: A</strong><br>
+                    Giải thích: Khi ghép song song, hiệu điện thế trên mỗi tụ bằng hiệu điện thế của nguồn: \( U_1 = U_2 = U = 60V \).
+                    
+                    <div class="solution-step">
+                        <strong>Bước 1:</strong> Tính điện tích trên từng tụ:
+                        \[ Q_1 = C_1 \cdot U = 2 \times 10^{-6} \times 60 = 120 \times 10^{-6} \, C \]
+                        \[ Q_2 = C_2 \cdot U = 3 \times 10^{-6} \times 60 = 180 \times 10^{-6} \, C \]
+                    </div>
+                    
+                    <div class="solution-step">
+                        <strong>Bước 2:</strong> Kiểm tra đáp án:
+                        <ul>
+                            <li>\( Q_1 = 120 \times 10^{-6} \, C \)</li>
+                            <li>\( Q_2 = 180 \times 10^{-6} \, C \)</li>
+                        </ul>
+                        Khớp với đáp án A.
+                    </div>
+                    
+                    <div class="note">
+                        Lưu ý: Khi ghép song song, điện tích trên các tụ khác nhau (nếu điện dung khác nhau), nhưng hiệu điện thế bằng nhau.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">Câu 5. Quạt điện nhà bạn A bị hỏng chiếc tụ điện như Hình 1 và cần được thay thế. Cửa hàng đồ điện có một số loại tụ điện đang bán như sau:<br>
+                (a) \( 2\mu F - 300 \, V \);<br>
+                (b) \( 2,5\mu F - 300 \, V \);<br>
+                (c) \( 2,5\mu F - 100 \, V \);<br>
+                (d) \( 1,5\mu F - 250 \, V \);<br>
+                (e) \( 1\mu F - 250 \, V \).</div>
+                <div class="image-container">
+                    <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/21/ot3h1.png" alt="Hình 1. Tụ điện của quạt">
+                    <div class="image-caption">Hình 1. Tụ điện của quạt</div>
+                </div>
+                <button class="toggle-btn" onclick="toggleAnswer('answer5')">Hiện đáp án</button>
+                <div class="answer" id="answer5">
+                    <strong>Đáp án: (b) \( 2,5\mu F - 300 \, V \)</strong><br>
+                    Giải thích: Từ hình 1, ta thấy tụ điện quạt có thông số:
+                    <ul>
+                        <li>Điện dung: \( 2.5\mu F \)</li>
+                        <li>Điện áp: \( 250V \) (hoặc \( 250VAC \))</li>
+                    </ul>
+                    
+                    Khi thay thế tụ điện, cần chọn tụ có:
+                    <ol>
+                        <li><strong>Điện dung bằng hoặc gần bằng</strong> tụ gốc (2.5μF)</li>
+                        <li><strong>Điện áp định mức bằng hoặc cao hơn</strong> tụ gốc (≥250V)</li>
+                    </ol>
+                    
+                    <div class="solution-step">
+                        <strong>Phân tích các lựa chọn:</strong>
+                        <table class="calc-table">
+                            <tr>
+                                <th>Lựa chọn</th>
+                                <th>Điện dung</th>
+                                <th>Điện áp</th>
+                                <th>Phù hợp</th>
+                            </tr>
+                            <tr>
+                                <td>(a)</td>
+                                <td>2μF</td>
+                                <td>300V</td>
+                                <td>Điện dung thấp hơn (2μF < 2.5μF)</td>
+                            </tr>
+                            <tr>
+                                <td>(b)</td>
+                                <td>2.5μF</td>
+                                <td>300V</td>
+                                <td><strong>HOÀN TOÀN PHÙ HỢP</strong></td>
+                            </tr>
+                            <tr>
+                                <td>(c)</td>
+                                <td>2.5μF</td>
+                                <td>100V</td>
+                                <td>Điện áp quá thấp (100V < 250V)</td>
+                            </tr>
+                            <tr>
+                                <td>(d)</td>
+                                <td>1.5μF</td>
+                                <td>250V</td>
+                                <td>Điện dung thấp hơn (1.5μF < 2.5μF)</td>
+                            </tr>
+                            <tr>
+                                <td>(e)</td>
+                                <td>1μF</td>
+                                <td>250V</td>
+                                <td>Điện dung quá thấp (1μF < 2.5μF)</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div class="note">
+                        Chỉ có tụ (b) đáp ứng đầy đủ cả hai điều kiện: điện dung bằng 2.5μF và điện áp định mức 300V (cao hơn 250V của tụ gốc).
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phần TỰ LUẬN -->
+        <section class="section">
+            <h2>TỰ LUẬN</h2>
+            
+            <div class="question">
+                <div class="question-title">Câu 6. Để mô tả điện thế trong không gian người ta còn dùng các mặt đẳng thế. Mặt đẳng thế là các mặt được vẽ trong không gian sao cho điện thế của các điểm trên mặt đẳng thế là bằng nhau, vectơ pháp tuyến của mặt đẳng thế được chọn hướng theo chiều tăng của điện thế.<br>
+                a) Chứng minh rằng công của lực điện trong sự dịch chuyển các điện tích bên trong mặt đẳng thế luôn bằng 0.<br>
+                b) Chứng tỏ rằng vectơ pháp tuyến của mặt đẳng thế tại mỗi điểm cùng phương và ngược chiều với vectơ cường độ điện trường tại điểm đó.</div>
+                <button class="toggle-btn" onclick="toggleAnswer('answer6')">Hiện lời giải</button>
+                <div class="answer" id="answer6">
+                    <strong>Lời giải:</strong><br>
+                    
+                    <div class="solution-step">
+                        <strong>a) Chứng minh công của lực điện bằng 0:</strong><br>
+                        Giả sử có một điện tích q dịch chuyển từ điểm A đến điểm B trên cùng một mặt đẳng thế. 
+                        
+                        Theo định nghĩa, trên mặt đẳng thế, điện thế tại mọi điểm bằng nhau, do đó:
+                        \[ V_A = V_B \]
+                        
+                        Công của lực điện trong sự dịch chuyển này là:
+                        \[ A_{AB} = q(V_A - V_B) \]
+                        
+                        Vì \( V_A = V_B \) nên:
+                        \[ A_{AB} = q(V_A - V_B) = q \cdot 0 = 0 \]
+                        
+                        Vậy công của lực điện khi dịch chuyển điện tích trên mặt đẳng thế luôn bằng 0.
+                    </div>
+                    
+                    <div class="solution-step">
+                        <strong>b) Chứng minh vectơ pháp tuyến cùng phương, ngược chiều với vectơ cường độ điện trường:</strong><br>
+                        1. Xét một điện tích thử q di chuyển một đoạn nhỏ \( \vec{ds} \) trên mặt đẳng thế. Công của lực điện là:
+                        \[ dA = \vec{F} \cdot \vec{ds} = q\vec{E} \cdot \vec{ds} = 0 \]
+                        (vì di chuyển trên mặt đẳng thế)
+                        
+                        2. Từ đó suy ra:
+                        \[ \vec{E} \cdot \vec{ds} = 0 \]
+                        Điều này chứng tỏ vectơ cường độ điện trường \( \vec{E} \) vuông góc với mọi vectơ dịch chuyển \( \vec{ds} \) trên mặt đẳng thế.
+                        
+                        3. Mặt khác, vectơ pháp tuyến \( \vec{n} \) của mặt đẳng thế cũng vuông góc với mặt đẳng thế. Do đó, \( \vec{E} \) và \( \vec{n} \) cùng phương.
+                        
+                        4. Vectơ pháp tuyến được chọn hướng theo chiều tăng của điện thế, còn vectơ cường độ điện trường hướng từ nơi có điện thế cao đến nơi có điện thế thấp. Do đó, chúng ngược chiều nhau.
+                        
+                        Kết luận: Vectơ pháp tuyến của mặt đẳng thế tại mỗi điểm cùng phương và ngược chiều với vectơ cường độ điện trường tại điểm đó.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">Câu 7.<br>
+                a) Hãy nêu đặc điểm của mặt đẳng thế trong điện trường đều. Vẽ hình minh hoạ.<br>
+                b) Hãy nêu đặc điểm của mặt đẳng thế trong điện trường của một điện tích điểm dương.</div>
+                <button class="toggle-btn" onclick="toggleAnswer('answer7')">Hiện lời giải</button>
+                <div class="answer" id="answer7">
+                    <strong>Lời giải:</strong><br>
+                    
+                    <div class="solution-step">
+                        <strong>a) Đặc điểm mặt đẳng thế trong điện trường đều:</strong><br>
+                        1. Trong điện trường đều, các mặt đẳng thế là những mặt phẳng song song với nhau.<br>
+                        2. Các mặt đẳng thế vuông góc với đường sức điện (vì \( \vec{E} \) vuông góc với mặt đẳng thế).<br>
+                        3. Khoảng cách giữa các mặt đẳng thế tỉ lệ với hiệu điện thế giữa chúng.<br>
+                        4. Mật độ các mặt đẳng thế thể hiện độ lớn của cường độ điện trường: nơi nào mặt đẳng thế sát nhau thì điện trường mạnh, nơi nào thưa thì điện trường yếu.<br>
+                        
+                        <div class="image-container">
+                            <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/21/ot3h0.png" alt="Mặt đẳng thế trong điện trường đều">
+                            <div class="image-caption">Hình minh họa: Mặt đẳng thế trong điện trường đều</div>
+                        </div>
+                        
+                        Trong hình trên:
+                        <ul>
+                            <li>Các đường thẳng song song là đường sức điện</li>
+                            <li>Các đường nét đứt là mặt đẳng thế (mặt phẳng vuông góc với đường sức)</li>
+                            <li>Điện thế giảm dần từ trái sang phải</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="solution-step">
+                        <strong>b) Đặc điểm mặt đẳng thế trong điện trường của điện tích điểm dương:</strong><br>
+                        1. Các mặt đẳng thế là những mặt cầu đồng tâm, với tâm là vị trí điện tích điểm.<br>
+                        2. Bán kính của các mặt cầu tỉ lệ với khoảng cách từ điện tích đến mặt đẳng thế.<br>
+                        3. Điện thế giảm dần khi ra xa điện tích: mặt cầu càng gần điện tích có điện thế càng cao, mặt cầu càng xa có điện thế càng thấp (tiến về 0 ở vô cùng).<br>
+                        4. Các mặt đẳng thế vuông góc với đường sức điện tại mọi điểm (đường sức là các đường thẳng xuyên tâm).<br>
+                        5. Mật độ các mặt đẳng thế thay đổi: càng gần điện tích, các mặt đẳng thế càng sát nhau (điện trường mạnh); càng xa điện tích, các mặt đẳng thế càng thưa nhau (điện trường yếu).
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">Câu 8. Một nhóm học sinh nghiên cứu cơ chế lái tia điện tử của bản lái tia trong máy dao động kí. Họ phát hiện rằng khi electron đi qua bản lái tia không chỉ thay đổi phương của chuyển động mà còn được tăng tốc. Tụ điện phẳng được dùng để khảo sát có khoảng cách giữa hai bản tụ \( d = 1 \, cm \) được mắc vào nguồn không đổi hiệu điện thế \( U = 12 \, V \). Trong một thí nghiệm, khi cho một electron với vận tốc có độ lớn \( v_0 = 200000 \, m/s \) đi vào điện trường giữa hai bản tụ tại điểm \( M \) nằm chính giữa hai bản tụ và đi ra khỏi điện trường tại điểm \( N \) cách bản cực âm 4,9 mm như Hình 2. Hãy xác định độ lớn vận tốc của electron khi đi ra khỏi điện trường.</div>
+                <div class="image-container">
+                    <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/21/ot3h2.png" alt="Hình 2. Khảo sát chuyển động của electron qua điện trường của tụ điện">
+                    <div class="image-caption">Hình 2. Khảo sát chuyển động của electron qua điện trường của tụ điện</div>
+                </div>
+                <button class="toggle-btn" onclick="toggleAnswer('answer8')">Hiện lời giải</button>
+                <div class="answer" id="answer8">
+                    <strong>Lời giải:</strong><br>
+                    
+                    <div class="solution-step">
+                        <strong>Bước 1: Tóm tắt dữ liệu:</strong>
+                        <ul>
+                            <li>Khoảng cách giữa hai bản tụ: \( d = 1 \, cm = 0.01 \, m \)</li>
+                            <li>Hiệu điện thế: \( U = 12 \, V \)</li>
+                            <li>Vận tốc ban đầu của electron: \( v_0 = 200000 \, m/s \)</li>
+                            <li>Electron vào ở điểm M chính giữa hai bản: cách mỗi bản \( \frac{d}{2} = 0.005 \, m \)</li>
+                            <li>Electron ra ở điểm N cách bản âm: \( y = 4.9 \, mm = 0.0049 \, m \)</li>
+                            <li>Điện tích electron: \( e = 1.6 \times 10^{-19} \, C \)</li>
+                            <li>Khối lượng electron: \( m = 9.1 \times 10^{-31} \, kg \)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="solution-step">
+                        <strong>Bước 2: Tính cường độ điện trường giữa hai bản tụ:</strong>
+                        \[ E = \frac{U}{d} = \frac{12}{0.01} = 1200 \, V/m \]
+                    </div>
+                    
+                    <div class="solution-step">
+                        <strong>Bước 3: Tính độ dịch chuyển theo phương thẳng đứng của electron:</strong><br>
+                        Vì electron vào ở chính giữa hai bản (cách mỗi bản 0.005 m) và ra ở vị trí cách bản âm 0.0049 m, nên độ dịch chuyển theo phương y là:
+                        \[ \Delta y = 0.005 - 0.0049 = 0.0001 \, m = 0.1 \, mm \]
+                        
+                        Electron dịch chuyển về phía bản dương (vì electron mang điện tích âm).
+                    </div>
+                    
+                    <div class="solution-step">
+                        <strong>Bước 4: Tính công của lực điện tác dụng lên electron:</strong><br>
+                        Lực điện tác dụng lên electron: \( F = eE \) (hướng từ bản dương sang bản âm, ngược chiều với \( \vec{E} \))
+                        
+                        Công của lực điện:
+                        \[ A = F \cdot \Delta y \cdot \cos\theta \]
+                        
+                        Vì lực điện cùng hướng với độ dịch chuyển (cả hai đều hướng từ bản âm sang bản dương đối với electron), nên \( \cos\theta = 1 \):
+                        \[ A = eE \cdot \Delta y = 1.6 \times 10^{-19} \times 1200 \times 0.0001 \]
+                        \[ A = 1.92 \times 10^{-20} \, J \]
+                    </div>
+                    
+                    <div class="solution-step">
+                        <strong>Bước 5: Áp dụng định lý động năng:</strong><br>
+                        Công của lực điện bằng độ biến thiên động năng:
+                        \[ A = \Delta W_d = \frac{1}{2}mv^2 - \frac{1}{2}mv_0^2 \]
+                        
+                        Suy ra:
+                        \[ \frac{1}{2}mv^2 = \frac{1}{2}mv_0^2 + A \]
+                        \[ v^2 = v_0^2 + \frac{2A}{m} \]
+                        
+                        Thay số:
+                        \[ v^2 = (200000)^2 + \frac{2 \times 1.92 \times 10^{-20}}{9.1 \times 10^{-31}} \]
+                        \[ v^2 = 4 \times 10^{10} + \frac{3.84 \times 10^{-20}}{9.1 \times 10^{-31}} \]
+                        \[ v^2 = 4 \times 10^{10} + 4.22 \times 10^{10} \]
+                        \[ v^2 = 8.22 \times 10^{10} \]
+                        \[ v = \sqrt{8.22 \times 10^{10}} \approx 2.87 \times 10^5 \, m/s \]
+                    </div>
+                    
+                    <div class="solution-step">
+                        <strong>Bước 6: Kết luận:</strong><br>
+                        Độ lớn vận tốc của electron khi đi ra khỏi điện trường là:
+                        \[ v \approx 2.87 \times 10^5 \, m/s \]
+                    </div>
+                    
+                    <div class="note">
+                        <strong>Nhận xét:</strong> Electron được tăng tốc từ \( 2.0 \times 10^5 \, m/s \) lên \( 2.87 \times 10^5 \, m/s \) khi đi qua điện trường của tụ điện.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">Câu 9. Việc thay đổi vận tốc của electron khi qua bản lái tia như nghiên cứu ở Câu 8 có làm ảnh hưởng đến sự hiển thị tín hiệu trên màn huỳnh quang do thứ tự hiển thị tín hiệu có thể bị đảo lộn hay không? Hãy giải thích.</div>
+                <button class="toggle-btn" onclick="toggleAnswer('answer9')">Hiện lời giải</button>
+                <div class="answer" id="answer9">
+                    <strong>Lời giải:</strong><br>
+                    
+                    <div class="solution-step">
+                        <strong>Không, việc thay đổi vận tốc của electron không làm đảo lộn thứ tự hiển thị tín hiệu trên màn huỳnh quang.</strong>
+                    </div>
+                    
+                    <div class="solution-step">
+                        <strong>Giải thích:</strong><br>
+                        1. Trong máy dao động ký, tín hiệu được hiển thị theo thời gian: electron đập vào màn huỳnh quang tại các thời điểm khác nhau tạo thành đồ thị của tín hiệu theo thời gian.
+                        
+                        2. Bản lái tia có hai chức năng chính:
+                        <ul>
+                            <li><strong>Bản lái ngang (X):</strong> Làm lệch electron theo phương ngang, tỉ lệ với thời gian (tạo trục thời gian)</li>
+                            <li><strong>Bản lái dọc (Y):</strong> Làm lệch electron theo phương dọc, tỉ lệ với biên độ tín hiệu cần quan sát</li>
+                        </ul>
+                        
+                        3. Khi electron đi qua bản lái tia, nó bị lệch do lực điện tác dụng. Độ lệch \( y \) của electron trên màn được tính bằng:
+                        \[ y = \frac{1}{2} \cdot \frac{eE}{m} \cdot \left( \frac{L}{v} \right)^2 \]
+                        Trong đó:
+                        <ul>
+                            <li>\( e, m \): điện tích và khối lượng electron</li>
+                            <li>\( E \): cường độ điện trường trong bản lái tia</li>
+                            <li>\( L \): chiều dài bản lái tia</li>
+                            <li>\( v \): vận tốc electron</li>
+                        </ul>
+                        
+                        4. Độ lệch \( y \) tỉ lệ nghịch với bình phương vận tốc \( v^2 \). Khi vận tốc thay đổi, độ lệch cũng thay đổi, nhưng <strong>không làm đảo lộn thứ tự</strong> các điểm trên đồ thị.
+                        
+                        5. Thứ tự các điểm trên đồ thị được xác định bởi <strong>thời điểm</strong> electron đi qua bản lái tia, không phải bởi vận tốc của nó. Các electron phát ra từ súng electron tại các thời điểm khác nhau sẽ đến bản lái tia tại các thời điểm khác nhau, và thứ tự thời gian này được bảo toàn.
+                        
+                        6. Ngay cả khi electron bị tăng tốc hay giảm tốc, electron phát ra trước vẫn sẽ đến màn trước electron phát ra sau (trừ trường hợp electron phát ra sau có vận tốc lớn hơn nhiều để đuổi kịp, nhưng điều này không xảy ra trong thực tế vì tất cả electron đều được gia tốc bởi cùng một hiệu điện thế trong súng electron).
+                    </div>
+                    
+                    <div class="solution-step">
+                        <strong>Kết luận:</strong> Việc thay đổi vận tốc electron chỉ làm thay đổi độ nhạy của máy dao động ký (độ lệch trên màn ứng với một điện áp nhất định), nhưng không làm đảo lộn thứ tự hiển thị tín hiệu theo thời gian.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">Câu 10. Một máy hàn bu - lông dùng hiệu điện thế 220 V không đổi có bộ tụ điện với điện dung \( C = 0,09 \, \text{F} \).<br>
+                a) Tính năng lượng mà bộ tụ điện của máy hàn trên có thể tích được.<br>
+                b) Máy hàn trên có thể phóng điện giải phóng hoàn toàn năng lượng mà bộ tụ điện đã tích được trong khoảng thời gian từ 0,2 s đến 1 s. Hãy tính công suất phóng điện tối đa của máy hàn đó.</div>
+                <button class="toggle-btn" onclick="toggleAnswer('answer10')">Hiện lời giải</button>
+                <div class="answer" id="answer10">
+                    <strong>Lời giải:</strong><br>
+                    
+                    <div class="solution-step">
+                        <strong>a) Tính năng lượng tích được trong tụ điện:</strong><br>
+                        Năng lượng tích trữ trong tụ điện được tính bằng công thức:
+                        \[ W = \frac{1}{2} C U^2 \]
+                        
+                        Thay số: \( C = 0.09 \, F \), \( U = 220 \, V \)
+                        \[ W = \frac{1}{2} \times 0.09 \times (220)^2 \]
+                        \[ W = 0.045 \times 48400 \]
+                        \[ W = 2178 \, J \]
+                        
+                        Vậy năng lượng mà bộ tụ điện có thể tích được là \( 2178 \, J \).
+                    </div>
+                    
+                    <div class="solution-step">
+                        <strong>b) Tính công suất phóng điện tối đa:</strong><br>
+                        Công suất phóng điện được tính bằng công thức:
+                        \[ P = \frac{W}{t} \]
+                        Trong đó:
+                        <ul>
+                            <li>\( W = 2178 \, J \): năng lượng tích trữ</li>
+                            <li>\( t \): thời gian phóng điện</li>
+                        </ul>
+                        
+                        Công suất tối đa đạt được khi thời gian phóng điện ngắn nhất:
+                        \[ t_{min} = 0.2 \, s \]
+                        
+                        Công suất phóng điện tối đa:
+                        \[ P_{max} = \frac{W}{t_{min}} = \frac{2178}{0.2} = 10890 \, W \]
+                        
+                        Vậy công suất phóng điện tối đa của máy hàn là \( 10890 \, W \) (hay \( 10.89 \, kW \)).
+                    </div>
+                    
+                    <div class="note">
+                        <strong>Nhận xét:</strong> Máy hàn bu-lông sử dụng tụ điện có thể tích trữ năng lượng và phóng ra trong thời gian rất ngắn, tạo ra dòng điện cực lớn để hàn các chi tiết. Công suất phóng điện rất cao (gần 11 kW) mặc dù hiệu điện thế chỉ 220V, nhờ khả năng phóng điện trong thời gian rất ngắn (0.2 giây).
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>Bài tập cuối chương III - Điện trường và tụ điện - Vật Lý 11</p>
+    </footer>
+
+    <script>
+        function toggleAnswer(answerId) {
+            const answer = document.getElementById(answerId);
+            const button = answer.previousElementSibling;
+            if (answer.classList.contains('show')) {
+                answer.classList.remove('show');
+                button.textContent = answerId.includes('answer') ? 'Hiện đáp án' : 'Hiện lời giải';
+                button.classList.remove('hide');
+            } else {
+                answer.classList.add('show');
+                button.textContent = answerId.includes('answer') ? 'Ẩn đáp án' : 'Ẩn lời giải';
+                button.classList.add('hide');
+            }
+            if (window.MathJax) { 
+                MathJax.typesetPromise([answer]).catch(err => console.log('MathJax error:', err));
+            }
+        }
+        
+        document.getElementById('showAllBtn').addEventListener('click', function() {
+            document.querySelectorAll('.answer').forEach(ans => {
+                ans.classList.add('show');
+                const button = ans.previousElementSibling;
+                const answerId = button.getAttribute('onclick').match(/'([^']+)'/)[1];
+                button.textContent = answerId.includes('answer') ? 'Ẩn đáp án' : 'Ẩn lời giải';
+                button.classList.add('hide');
+            });
+            if (window.MathJax) { 
+                MathJax.typesetPromise().catch(err => console.log('MathJax error:', err));
+            }
+        });
+        
+        document.getElementById('hideAllBtn').addEventListener('click', function() {
+            document.querySelectorAll('.answer').forEach(ans => {
+                ans.classList.remove('show');
+                const button = ans.previousElementSibling;
+                const answerId = button.getAttribute('onclick').match(/'([^']+)'/)[1];
+                button.textContent = answerId.includes('answer') ? 'Hiện đáp án' : 'Hiện lời giải';
+                button.classList.remove('hide');
+            });
+        });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.MathJax) { 
+                MathJax.typesetPromise().catch(err => console.log('MathJax error:', err));
+            }
+        });
+    </script>
+</body>
+</html>
