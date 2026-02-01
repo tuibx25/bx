@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Tập Tự Luận - Ôn Tập Chương III</title>
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
+    
+    <!-- BẢO MẬT: Ngăn chặn các hành vi không mong muốn -->
+    <script>
+        // Ngăn chặn menu chuột phải
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn phím tắt (Ctrl+U, Ctrl+S, Ctrl+P, F12, etc.)
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+U (View Source)
+            if (e.ctrlKey && e.keyCode === 85) e.preventDefault();
+            // Ctrl+S (Save)
+            if (e.ctrlKey && e.keyCode === 83) e.preventDefault();
+            // Ctrl+P (Print)
+            if (e.ctrlKey && e.keyCode === 80) e.preventDefault();
+            // F12 (Developer Tools)
+            if (e.keyCode === 123) e.preventDefault();
+            // Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) e.preventDefault();
+            // Ctrl+Shift+J (Console)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) e.preventDefault();
+            // Ctrl+Shift+C (Inspector)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) e.preventDefault();
+        });
+        
+        // Ngăn chặn kéo thả hình ảnh
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.tagName === 'IMG') e.preventDefault();
+        });
+        
+        // Ngăn chặn sao chép văn bản
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            alert('Không cho phép sao chép nội dung!');
+        });
+        
+        // Ngăn chặn cắt
+        document.addEventListener('cut', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn dán
+        document.addEventListener('paste', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn chọn văn bản
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+        
+        // Ngăn chặn bôi đen văn bản
+        document.addEventListener('mousedown', function(e) {
+            if (e.detail > 1) e.preventDefault(); // Ngăn double-click chọn
+        });
+    </script>
+    
+    <!-- BẢO MẬT: CSS để chống in ấn -->
+    <style>
+        @media print {
+            * {
+                display: none !important;
+            }
+            body:before {
+                content: "Không cho phép in trang này!";
+                display: block !important;
+                font-size: 24px;
+                text-align: center;
+                margin-top: 100px;
+            }
+        }
+    </style>
+    
+    <!-- MathJax để hiển thị công thức toán -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    
+    <style>
+        /* Reset và cài đặt chung */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+/Edge */
+            user-select: none; /* Standard */
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.4;
+            color: #5D4037;
+            background-color: #FDF6E3;
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Watermark nền - watermark đầu tiên */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 400px 400px;
+            opacity: 0.08;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* Tiêu đề chính */
+        .main-title {
+            text-align: center;
+            color: #4E342E;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #8D6E63;
+            font-size: 2.5rem;
+            position: relative;
+            z-index: 1;
+            line-height: 1.2;
+        }
+        
+        /* Container chính */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.92);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(93, 64, 55, 0.1);
+            padding: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Watermark phủ toàn màn hình - watermark thứ hai */
+        .watermark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+        }
+        
+        .watermark-overlay::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 200px 200px;
+            opacity: 0.04;
+        }
+        
+        /* Nút điều khiển toàn cục */
+        .global-controls {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .global-btn {
+            background-color: #5D4037;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+            position: relative;
+            z-index: 1;
+            line-height: 1.2;
+        }
+        
+        .global-btn:hover {
+            background-color: #3E2723;
+        }
+        
+        /* Phần bài tập */
+        .exercise {
+            margin-bottom: 40px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #D7CCC8;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .exercise:last-child {
+            border-bottom: none;
+        }
+        
+        /* Watermark trên từng bài tập - watermark thứ ba */
+        .exercise::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.03;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .question-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .question-number {
+            background-color: #6D4C41;
+            color: white;
+            font-weight: bold;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+            line-height: 1;
+        }
+        
+        .question-title-container {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+        
+        .question-title {
+            color: #4E342E;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-right: 20px;
+            position: relative;
+            z-index: 1;
+            line-height: 1.2;
+        }
+        
+        .toggle-solution-btn {
+            background-color: #795548;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s;
+            flex-shrink: 0;
+            margin-left: auto;
+            position: relative;
+            z-index: 1;
+            line-height: 1.2;
+        }
+        
+        .toggle-solution-btn:hover {
+            background-color: #5D4037;
+        }
+        
+        .question-content {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-left: 55px;
+            position: relative;
+            z-index: 1;
+            line-height: 1.3;
+        }
+        
+        .summary {
+            background-color: #FFECB3;
+            border-left: 4px solid #FFB300;
+            padding: 15px;
+            margin: 15px 0 20px 55px;
+            border-radius: 0 8px 8px 0;
+            font-size: 1.4rem;
+            position: relative;
+            z-index: 1;
+            line-height: 1.3;
+        }
+        
+        .summary h3, .solution h3 {
+            color: #5D4037;
+            margin-bottom: 8px;
+            font-size: 1.6rem;
+            position: relative;
+            z-index: 1;
+            line-height: 1.2;
+        }
+        
+        .solution {
+            background-color: #E8F5E9;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin: 15px 0 0 55px;
+            border-radius: 0 8px 8px 0;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            line-height: 1.3;
+        }
+        
+        /* Watermark trên phần giải - watermark thứ tư */
+        .solution::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 250px;
+            height: 250px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.02;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .solution.hidden {
+            display: none;
+        }
+        
+        .solution p {
+            margin-bottom: 4px; /* Giảm từ 8px xuống 4px */
+            line-height: 1.2; /* Giảm line-height */
+        }
+        
+        .solution p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .formula {
+            font-family: 'Cambria Math', serif;
+            background-color: #F5F5F5;
+            padding: 6px 10px; /* Giảm padding trên/dưới từ 10px xuống 6px */
+            border-radius: 4px;
+            margin: 2px 0 4px 0; /* Giảm margin trên/dưới đáng kể */
+            font-size: 1.4rem;
+            overflow-x: auto;
+            position: relative;
+            z-index: 1;
+            line-height: 1.1; /* Giảm line-height trong công thức */
+        }
+        
+        /* Giảm khoảng cách cho các phần tử đặc biệt trong solution */
+        .solution strong {
+            display: inline-block;
+            margin-bottom: 2px; /* Giảm khoảng cách dưới các thẻ strong */
+        }
+        
+        /* Hình ảnh trong bài giải */
+        .solution-image {
+            text-align: center;
+            margin: 10px 0;
+            padding: 5px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            border: 1px solid #D7CCC8;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .solution-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .image-caption {
+            font-style: italic;
+            color: #795548;
+            margin-top: 5px;
+            font-size: 1.2rem;
+            line-height: 1.1;
+        }
+        
+        /* Định dạng cho điện thoại */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                font-size: 90%;
+                line-height: 1.3;
+            }
+            
+            .main-title {
+                font-size: 1.8rem;
+                line-height: 1.1;
+            }
+            
+            .question-content, .summary, .solution {
+                padding-left: 20px;
+                margin-left: 20px;
+                font-size: 1.2rem;
+                line-height: 1.2;
+            }
+            
+            .question-title {
+                font-size: 1.4rem;
+                line-height: 1.1;
+            }
+            
+            .question-number {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .question-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .toggle-solution-btn {
+                margin-top: 10px;
+                align-self: flex-start;
+            }
+            
+            .global-btn {
+                width: 90%;
+                margin: 10px 0;
+                padding: 12px;
+                line-height: 1.2;
+            }
+            
+            body::before {
+                background-size: 300px 300px;
+                opacity: 0.05;
+            }
+            
+            .exercise::before {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .solution::before {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .summary h3, .solution h3 {
+                font-size: 1.4rem;
+                line-height: 1.1;
+            }
+            
+            /* Điều chỉnh cho di động */
+            .solution p {
+                margin-bottom: 3px;
+                line-height: 1.1;
+            }
+            
+            .formula {
+                padding: 4px 8px;
+                margin: 1px 0 3px 0;
+                font-size: 1.2rem;
+                line-height: 1;
+            }
+        }
+        
+        /* Định dạng cho TV/màn hình lớn */
+        @media (min-width: 1200px) {
+            body {
+                font-size: 110%;
+                line-height: 1.5;
+            }
+            
+            .question-content, .summary, .solution {
+                font-size: 1.6rem;
+                line-height: 1.4;
+            }
+            
+            .question-title {
+                font-size: 2rem;
+                line-height: 1.3;
+            }
+            
+            .main-title {
+                font-size: 3rem;
+                line-height: 1.3;
+            }
+            
+            .container {
+                padding: 40px;
+            }
+            
+            .global-btn {
+                font-size: 1.4rem;
+                padding: 18px 35px;
+                line-height: 1.3;
+            }
+            
+            .formula {
+                font-size: 1.6rem;
+                line-height: 1.2;
+            }
+            
+            body::before {
+                background-size: 500px 500px;
+                opacity: 0.1;
+            }
+            
+            .solution p {
+                margin-bottom: 5px;
+                line-height: 1.3;
+            }
+        }
+        
+        /* Đảm bảo MathJax hiển thị đúng */
+        .MathJax {
+            font-size: 1.4rem !important;
+            position: relative;
+            z-index: 1;
+            line-height: 1.1 !important;
+            margin: 0 !important;
+        }
+        
+        mjx-container[jax="CHTML"] {
+            display: inline-block !important;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Chú ý về màu sắc */
+        .color-note {
+            text-align: center;
+            font-style: italic;
+            color: #795548;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #FFE0B2;
+            border-radius: 5px;
+            font-size: 1.3rem;
+            position: relative;
+            z-index: 1;
+            line-height: 1.3;
+        }
+        
+        /* Footer với watermark */
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #8D6E63;
+            color: #5D4037;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+            line-height: 1.3;
+        }
+        
+        footer::before {
+            content: "tuibx";
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 1rem;
+            color: rgba(139, 69, 19, 0.3);
+            font-weight: bold;
+            font-style: italic;
+            z-index: 0;
+        }
+        
+        /* Giảm khoảng cách giữa các đoạn văn trong toàn bộ trang */
+        p {
+            margin-bottom: 8px;
+        }
+        
+        /* Giảm khoảng cách dòng cho các danh sách (nếu có) */
+        li {
+            line-height: 1.3;
+            margin-bottom: 5px;
+        }
+        
+        /* Điều chỉnh đặc biệt cho các phần tử liền kề công thức */
+        .solution p + .formula {
+            margin-top: 1px; /* Giảm khoảng cách trên của công thức khi nằm sau đoạn văn */
+        }
+        
+        .formula + p {
+            margin-top: 1px; /* Giảm khoảng cách trên của đoạn văn khi nằm sau công thức */
+        }
+    </style>
+</head>
+<body>
+    <!-- Watermark phủ toàn màn hình -->
+    <div class="watermark-overlay"></div>
+    
+    <h1 class="main-title">BÀI TẬP CUỐI CHƯƠNG III</h1>
+    
+    <div class="global-controls">
+        <button id="show-all-btn" class="global-btn">HIỂN THỊ TẤT CẢ LỜI GIẢI</button>
+        <button id="hide-all-btn" class="global-btn">ẨN TẤT CẢ LỜI GIẢI</button>
+    </div>
+    
+    <div class="container">
+        <!-- Câu 6 -->
+        <div class="exercise">
+            <div class="question-header">
+                <div class="question-title-container">
+                    <div class="question-number">6</div>
+                    <h2 class="question-title">Mặt đẳng thế và tính chất</h2>
+                </div>
+                <button class="toggle-solution-btn" data-target="solution-6">Hiển thị lời giải</button>
+            </div>
+            <div class="question-content">
+                Để mô tả điện thế trong không gian người ta còn dùng các mặt đẳng thế. Mặt đẳng thế là các mặt được vẽ trong không gian sao cho điện thế của các điểm trên mặt đẳng thế là bằng nhau, vectơ pháp tuyến của mặt đẳng thế được chọn hướng theo chiều tăng của điện thế.<br><br>
+                a) Chứng minh rằng công của lực điện trong sự dịch chuyển các điện tích bên trong mặt đẳng thế luôn bằng 0.<br>
+                b) Chứng tỏ rằng vectơ pháp tuyến của mặt đẳng thế tại mỗi điểm cùng phương và ngược chiều với vectơ cường độ điện trường tại điểm đó.
+            </div>
+            <div class="summary">
+                <h3>Tóm tắt</h3>
+                <p>Mặt đẳng thế: mặt mà điện thế không đổi. Chứng minh: a) Công lực điện = 0; b) $\vec{n} \uparrow\downarrow \vec{E}$.</p>
+            </div>
+            <div class="solution hidden" id="solution-6">
+                <h3>Lời giải</h3>
+                
+                <p><strong>a) Chứng minh công của lực điện trong sự dịch chuyển các điện tích bên trong mặt đẳng thế luôn bằng 0:</strong></p>
+                
+                <p><strong>Bước 1:</strong> Xét một điện tích q di chuyển từ điểm A đến điểm B trên cùng một mặt đẳng thế.</p>
+                
+                <p><strong>Bước 2:</strong> Trên mặt đẳng thế, điện thế tại mọi điểm đều bằng nhau:</p>
+                <p class="formula">$$V_A = V_B = V$$</p>
+                
+                <p><strong>Bước 3:</strong> Công của lực điện được tính theo công thức:</p>
+                <p class="formula">$$A_{AB} = q(V_A - V_B) = q(V - V) = 0$$</p>
+                
+                <p><strong>Kết luận:</strong> Công của lực điện khi di chuyển điện tích trên mặt đẳng thế luôn bằng 0.</p>
+                
+                <p><strong>b) Chứng tỏ vectơ pháp tuyến của mặt đẳng thế cùng phương và ngược chiều với vectơ cường độ điện trường:</strong></p>
+                
+                <p><strong>Bước 1:</strong> Xét một điện tích thử q di chuyển một đoạn nhỏ $\vec{ds}$ trên mặt đẳng thế.</p>
+                
+                <p><strong>Bước 2:</strong> Công nguyên tố của lực điện:</p>
+                <p class="formula">$$dA = \vec{F} \cdot \vec{ds} = q\vec{E} \cdot \vec{ds}$$</p>
+                
+                <p><strong>Bước 3:</strong> Vì di chuyển trên mặt đẳng thế nên công bằng 0:</p>
+                <p class="formula">$$q\vec{E} \cdot \vec{ds} = 0 \Rightarrow \vec{E} \cdot \vec{ds} = 0$$</p>
+                
+                <p><strong>Bước 4:</strong> Vectơ $\vec{ds}$ nằm tiếp tuyến với mặt đẳng thế, nên $\vec{E}$ vuông góc với mọi tiếp tuyến của mặt đẳng thế.</p>
+                
+                <p><strong>Bước 5:</strong> Vectơ pháp tuyến $\vec{n}$ của mặt đẳng thế cũng vuông góc với mặt đẳng thế.</p>
+                
+                <p><strong>Bước 6:</strong> Do đó, $\vec{E}$ và $\vec{n}$ cùng phương. Vì $\vec{n}$ hướng theo chiều tăng của điện thế, còn $\vec{E}$ hướng từ nơi có điện thế cao đến nơi có điện thế thấp, nên $\vec{n}$ và $\vec{E}$ ngược chiều.</p>
+                
+                <p class="formula">$$\vec{n} \uparrow\downarrow \vec{E}$$</p>
+                
+                <p><strong>Kết luận:</strong> Vectơ pháp tuyến của mặt đẳng thế tại mỗi điểm cùng phương và ngược chiều với vectơ cường độ điện trường tại điểm đó.</p>
+            </div>
+        </div>
+        
+        <!-- Câu 7 -->
+        <div class="exercise">
+            <div class="question-header">
+                <div class="question-title-container">
+                    <div class="question-number">7</div>
+                    <h2 class="question-title">Đặc điểm mặt đẳng thế</h2>
+                </div>
+                <button class="toggle-solution-btn" data-target="solution-7">Hiển thị lời giải</button>
+            </div>
+            <div class="question-content">
+                a) Hãy nêu đặc điểm của mặt đẳng thế trong điện trường đều. Vẽ hình minh hoạ.<br>
+                b) Hãy nêu đặc điểm của mặt đẳng thế trong điện trường của một điện tích điểm dương.
+            </div>
+            <div class="summary">
+                <h3>Tóm tắt</h3>
+                <p>a) Đặc điểm mặt đẳng thế trong điện trường đều.<br>
+                   b) Đặc điểm mặt đẳng thế của điện tích điểm dương.</p>
+            </div>
+            <div class="solution hidden" id="solution-7">
+                <h3>Lời giải</h3>
+                
+                <p><strong>a) Đặc điểm của mặt đẳng thế trong điện trường đều:</strong></p>
+                
+                <p><strong>1. Hình dạng:</strong> Mặt đẳng thế trong điện trường đều là các mặt phẳng song song với nhau.</p>
+                
+                <p><strong>2. Vị trí tương đối:</strong> Các mặt phẳng đẳng thế vuông góc với đường sức điện trường.</p>
+                
+                <p><strong>3. Mật độ:</strong> Các mặt đẳng thế cách đều nhau (khoảng cách giữa các mặt đẳng thế bằng nhau).</p>
+                
+                <p><strong>4. Điện thế:</strong> Điện thế giảm dần theo chiều của đường sức điện.</p>
+                
+                <p><strong>5. Hình minh họa:</strong></p>
+                <div class="solution-image">
+                    <p>(Hình vẽ các đường sức điện thẳng đứng, các mặt phẳng ngang cắt vuông góc với đường sức, mỗi mặt ghi giá trị điện thế V₁, V₂, V₃ với V₁ > V₂ > V₃)</p>
+                </div>
+                
+                <p><strong>b) Đặc điểm của mặt đẳng thế trong điện trường của một điện tích điểm dương:</strong></p>
+                
+                <p><strong>1. Hình dạng:</strong> Mặt đẳng thế là các mặt cầu đồng tâm, tâm là điện tích điểm.</p>
+                
+                <p><strong>2. Vị trí tương đối:</strong> Các mặt cầu đẳng thế vuông góc với đường sức điện (đường sức là các đường thẳng xuyên tâm).</p>
+                
+                <p><strong>3. Mật độ:</strong> Các mặt cầu đẳng thế không cách đều nhau. Càng xa điện tích, khoảng cách giữa các mặt đẳng thế càng lớn (mật độ thưa dần).</p>
+                
+                <p><strong>4. Điện thế:</strong> Điện thế giảm dần khi ra xa điện tích theo công thức:</p>
+                <p class="formula">$$V = \frac{kQ}{r}$$</p>
+                <p>Với Q > 0 (điện tích dương).</p>
+                
+                <p><strong>5. Hình minh họa:</strong></p>
+                <div class="solution-image">
+                    <p>(Hình vẽ các đường sức điện tỏa ra từ tâm, các đường tròn đồng tâm cắt vuông góc với đường sức, mỗi đường tròn ghi giá trị điện thế V₁, V₂, V₃ với V₁ > V₂ > V₃)</p>
+                </div>
+                
+                <p><strong>Kết luận:</strong> Trong điện trường đều, mặt đẳng thế là mặt phẳng; trong điện trường của điện tích điểm, mặt đẳng thế là mặt cầu.</p>
+            </div>
+        </div>
+        
+        <!-- Câu 8 -->
+        <div class="exercise">
+            <div class="question-header">
+                <div class="question-title-container">
+                    <div class="question-number">8</div>
+                    <h2 class="question-title">Chuyển động electron trong tụ điện</h2>
+                </div>
+                <button class="toggle-solution-btn" data-target="solution-8">Hiển thị lời giải</button>
+            </div>
+            <div class="question-content">
+                Một nhóm học sinh nghiên cứu cơ chế lái tia điện tử của bản lái tia trong máy dao động kí. Họ phát hiện rằng khi electron đi qua bản lái tia không chỉ thay đổi phương của chuyển động mà còn được tăng tốc. Tụ điện phẳng được dùng để khảo sát có khoảng cách giữa hai bản tụ d = 1 cm được mắc vào nguồn không đổi hiệu điện thế U = 12 V. Trong một thí nghiệm, khi cho một electron với vận tốc có độ lớn v₀ = 200000 m/s đi vào điện trường giữa hai bản tụ tại điểm M nằm chính giữa hai bản tụ và đi ra khỏi điện trường tại điểm N cách bản cực âm 4,9 mm như Hình 2. Hãy xác định độ lớn vận tốc của electron khi đi ra khỏi điện trường.
+            </div>
+            <div class="solution-image">
+                <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/21/ot3h2.png" alt="Hình 2. Khảo sát chuyển động của electron qua điện trường của tụ điện">
+                <div class="image-caption">Hình 2. Khảo sát chuyển động của electron qua điện trường của tụ điện</div>
+            </div>
+            <div class="summary">
+                <h3>Tóm tắt</h3>
+                <p>$d = 0,01 \text{ m}$, $U = 12 \text{ V}$, $v_0 = 200000 \text{ m/s}$, electron vào điểm giữa, ra cách bản âm 4,9 mm = 0,0049 m. Tính $v$ khi ra khỏi điện trường.</p>
+            </div>
+            <div class="solution hidden" id="solution-8">
+                <h3>Lời giải</h3>
+                
+                <p><strong>Bước 1:</strong> Xác định các đại lượng đã cho</p>
+                <p>• Khoảng cách giữa hai bản tụ: $d = 1 \text{ cm} = 0,01 \text{ m}$<br>
+                   • Hiệu điện thế: $U = 12 \text{ V}$<br>
+                   • Vận tốc ban đầu: $v_0 = 200000 \text{ m/s}$<br>
+                   • Điện tích electron: $e = 1,6 \times 10^{-19} \text{ C}$<br>
+                   • Khối lượng electron: $m = 9,1 \times 10^{-31} \text{ kg}$<br>
+                   • Electron vào điểm giữa, ra cách bản âm: $y_N = 0,0049 \text{ m}$</p>
+                
+                <p><strong>Bước 2:</strong> Tính cường độ điện trường giữa hai bản tụ</p>
+                <p class="formula">$$E = \frac{U}{d} = \frac{12}{0,01} = 1200 \text{ V/m}$$</p>
+                
+                <p><strong>Bước 3:</strong> Tính độ dịch chuyển theo phương Oy của electron</p>
+                <p>Vì electron vào điểm giữa (cách đều hai bản), nên ban đầu cách mỗi bản:</p>
+                <p class="formula">$$y_0 = \frac{d}{2} = \frac{0,01}{2} = 0,005 \text{ m}$$</p>
+                <p>Điểm ra cách bản âm 0,0049 m, nên độ dịch chuyển theo Oy là:</p>
+                <p class="formula">$$\Delta y = y_N - y_0 = 0,0049 - 0,005 = -0,0001 \text{ m} = -0,1 \text{ mm}$$</p>
+                <p>(Dấu âm cho thấy electron dịch chuyển về phía bản dương)</p>
+                
+                <p><strong>Bước 4:</strong> Tính hiệu điện thế giữa điểm vào và điểm ra</p>
+                <p>Hiệu điện thế giữa hai điểm cách nhau $\Delta y$ trong điện trường đều:</p>
+                <p class="formula">$$\Delta V = E \cdot \Delta y = 1200 \times (-0,0001) = -0,12 \text{ V}$$</p>
+                
+                <p><strong>Bước 5:</strong> Áp dụng định luật bảo toàn năng lượng</p>
+                <p>Công của lực điện bằng độ tăng động năng:</p>
+                <p class="formula">$$A = \Delta W_đ = W_đ - W_{đ0}$$</p>
+                <p>Công của lực điện: $A = q \cdot \Delta V = (-e) \cdot (-0,12) = 0,12e$</p>
+                <p>Động năng ban đầu: $W_{đ0} = \frac{1}{2} m v_0^2$</p>
+                <p>Động năng lúc sau: $W_đ = \frac{1}{2} m v^2$</p>
+                
+                <p><strong>Bước 6:</strong> Tính vận tốc khi ra khỏi điện trường</p>
+                <p>Theo định luật bảo toàn năng lượng:</p>
+                <p class="formula">$$\frac{1}{2} m v^2 = \frac{1}{2} m v_0^2 + 0,12e$$</p>
+                <p class="formula">$$v^2 = v_0^2 + \frac{0,24e}{m}$$</p>
+                <p>Thay số:</p>
+                <p class="formula">$$v^2 = (200000)^2 + \frac{0,24 \times 1,6 \times 10^{-19}}{9,1 \times 10^{-31}}$$</p>
+                <p class="formula">$$v^2 = 4 \times 10^{10} + \frac{3,84 \times 10^{-20}}{9,1 \times 10^{-31}}$$</p>
+                <p class="formula">$$v^2 = 4 \times 10^{10} + 4,22 \times 10^{10} = 8,22 \times 10^{10}$$</p>
+                <p class="formula">$$v = \sqrt{8,22 \times 10^{10}} \approx 2,87 \times 10^5 \text{ m/s}$$</p>
+                
+                <p><strong>Bước 7:</strong> Kiểm tra lại bằng cách tính trực tiếp từ hiệu điện thế</p>
+                <p>Điện thế tại điểm vào (giữa hai bản): $V_M = \frac{U}{2} = 6 \text{ V}$ (nếu coi bản âm có V = 0)</p>
+                <p>Điện thế tại điểm ra: $V_N = E \cdot y_N = 1200 \times 0,0049 = 5,88 \text{ V}$</p>
+                <p>Hiệu điện thế: $\Delta V = V_N - V_M = 5,88 - 6 = -0,12 \text{ V}$ (phù hợp với bước 4)</p>
+                
+                <p><strong>Kết luận:</strong> Độ lớn vận tốc của electron khi đi ra khỏi điện trường là khoảng $2,87 \times 10^5 \text{ m/s}$.</p>
+            </div>
+        </div>
+        
+        <!-- Câu 9 -->
+        <div class="exercise">
+            <div class="question-header">
+                <div class="question-title-container">
+                    <div class="question-number">9</div>
+                    <h2 class="question-title">Ảnh hưởng của thay đổi vận tốc electron</h2>
+                </div>
+                <button class="toggle-solution-btn" data-target="solution-9">Hiển thị lời giải</button>
+            </div>
+            <div class="question-content">
+                Việc thay đổi vận tốc của electron khi qua bản lái tia như nghiên cứu ở Câu 8 có làm ảnh hưởng đến sự hiển thị tín hiệu trên màn huỳnh quang do thứ tự hiển thị tín hiệu có thể bị đảo lộn hay không? Hãy giải thích.
+            </div>
+            <div class="summary">
+                <h3>Tóm tắt</h3>
+                <p>Electron thay đổi vận tốc khi qua bản lái tia. Ảnh hưởng đến hiển thị trên màn huỳnh quang? Giải thích.</p>
+            </div>
+            <div class="solution hidden" id="solution-9">
+                <h3>Lời giải</h3>
+                
+                <p><strong>Bước 1:</strong> Hiểu nguyên lý hoạt động của máy dao động kí</p>
+                <p>Trong máy dao động kí (oscilloscope):<br>
+                   • Electron được phát ra từ cathode, gia tốc bởi hiệu điện thế cao<br>
+                   • Đi qua hệ thống lái tia (deflection plates) gồm hai cặp bản tụ:<br>
+                   &nbsp;&nbsp;- Bản lái tia đứng (Y): làm lệch chùm tia theo phương thẳng đứng<br>
+                   &nbsp;&nbsp;- Bản lái tia ngang (X): làm lệch chùm tia theo phương ngang<br>
+                   • Chùm electron đập vào màn huỳnh quang tạo thành điểm sáng</p>
+                
+                <p><strong>Bước 2:</strong> Phân tích ảnh hưởng của thay đổi vận tốc</p>
+                <p>Khi electron qua bản lái tia:<br>
+                   • Nó chịu lực điện làm thay đổi vận tốc theo phương vuông góc với vận tốc ban đầu<br>
+                   • Thời gian bay qua bản lái tia: $t = \frac{L}{v_x}$ (với L là chiều dài bản, $v_x$ là vận tốc theo phương ngang)<br>
+                   • Độ lệch trên màn: $y = \frac{1}{2} a_y t^2 = \frac{1}{2} \cdot \frac{eE}{m} \cdot \left(\frac{L}{v_x}\right)^2$</p>
+                
+                <p><strong>Bước 3:</strong> Xét ảnh hưởng đến thứ tự hiển thị</p>
+                <p>• Thứ tự hiển thị tín hiệu phụ thuộc vào thời điểm electron đến màn huỳnh quang<br>
+                   • Thời gian bay từ bản lái tia đến màn: $t' = \frac{D}{v_x}$ (với D là khoảng cách từ bản lái tia đến màn)<br>
+                   • Tổng thời gian từ khi ra khỏi bản lái tia đến khi đến màn phụ thuộc vào $v_x$</p>
+                
+                <p><strong>Bước 4:</strong> Kết luận về ảnh hưởng</p>
+                <p>Việc thay đổi vận tốc electron khi qua bản lái tia <strong>KHÔNG</strong> làm đảo lộn thứ tự hiển thị tín hiệu vì:</p>
+                <p>1. Tất cả electron trong cùng một chùm đều có vận tốc ban đầu như nhau (được gia tốc bởi cùng hiệu điện thế)</p>
+                <p>2. Khi qua bản lái tia, mọi electron đều bị thay đổi vận tốc theo cùng một cách (cùng điện trường E)</p>
+                <p>3. Thứ tự thời gian của các electron được bảo toàn: electron nào vào bản lái tia trước sẽ ra trước và đến màn trước</p>
+                <p>4. Sự thay đổi vận tốc chỉ ảnh hưởng đến độ lớn của độ lệch, không ảnh hưởng đến thứ tự thời gian</p>
+                
+                <p><strong>Bước 5:</strong> Giải thích chi tiết</p>
+                <p>Giả sử có hai electron A và B, electron A vào bản lái tia trước electron B một khoảng thời gian $\Delta t$:<br>
+                   • Sau khi ra khỏi bản lái tia, electron A vẫn đi trước electron B<br>
+                   • Cả hai đều bị tăng tốc/thay đổi vận tốc như nhau<br>
+                   • Khoảng thời gian $\Delta t$ giữa chúng được bảo toàn<br>
+                   • Do đó, thứ tự hiển thị trên màn không bị đảo lộn</p>
+                
+                <p><strong>Kết luận:</strong> Việc thay đổi vận tốc của electron khi qua bản lái tia không làm ảnh hưởng đến thứ tự hiển thị tín hiệu trên màn huỳnh quang, chỉ ảnh hưởng đến độ lớn của độ lệch (kích thước của tín hiệu hiển thị).</p>
+            </div>
+        </div>
+        
+        <!-- Câu 10 -->
+        <div class="exercise">
+            <div class="question-header">
+                <div class="question-title-container">
+                    <div class="question-number">10</div>
+                    <h2 class="question-title">Máy hàn bu-lông</h2>
+                </div>
+                <button class="toggle-solution-btn" data-target="solution-10">Hiển thị lời giải</button>
+            </div>
+            <div class="question-content">
+                Một máy hàn bu-lông dùng hiệu điện thế 220 V không đổi có bộ tụ điện với điện dung C = 0,09 F.<br><br>
+                a) Tính năng lượng mà bộ tụ điện của máy hàn trên có thể tích được.<br>
+                b) Máy hàn trên có thể phóng điện giải phóng hoàn toàn năng lượng mà bộ tụ điện đã tích được trong khoảng thời gian từ 0,2 s đến 1 s. Hãy tính công suất phóng điện tối đa của máy hàn đó.
+            </div>
+            <div class="summary">
+                <h3>Tóm tắt</h3>
+                <p>$U = 220 \text{ V}$, $C = 0,09 \text{ F}$.<br>
+                   a) Tính năng lượng tích được $W$.<br>
+                   b) Thời gian phóng điện: $t_{\text{min}} = 0,2 \text{ s}$, $t_{\text{max}} = 1 \text{ s}$. Tính công suất phóng điện tối đa $P_{\text{max}}$.</p>
+            </div>
+            <div class="solution hidden" id="solution-10">
+                <h3>Lời giải</h3>
+                
+                <p><strong>a) Tính năng lượng mà bộ tụ điện có thể tích được:</strong></p>
+                
+                <p><strong>Bước 1:</strong> Công thức tính năng lượng tích trong tụ điện</p>
+                <p class="formula">$$W = \frac{1}{2} C U^2$$</p>
+                
+                <p><strong>Bước 2:</strong> Thay số vào công thức</p>
+                <p class="formula">$$W = \frac{1}{2} \times 0,09 \times (220)^2$$</p>
+                <p class="formula">$$W = 0,045 \times 48400 = 2178 \text{ J}$$</p>
+                
+                <p><strong>Kết luận a:</strong> Năng lượng mà bộ tụ điện có thể tích được là $2178 \text{ J}$.</p>
+                
+                <p><strong>b) Tính công suất phóng điện tối đa:</strong></p>
+                
+                <p><strong>Bước 1:</strong> Hiểu ý nghĩa của công suất phóng điện tối đa</p>
+                <p>Công suất phóng điện tối đa đạt được khi toàn bộ năng lượng được giải phóng trong thời gian ngắn nhất.</p>
+                
+                <p><strong>Bước 2:</strong> Xác định thời gian phóng điện ngắn nhất</p>
+                <p>Theo đề bài: thời gian phóng điện từ 0,2 s đến 1 s.<br>
+                   Thời gian ngắn nhất: $t_{\text{min}} = 0,2 \text{ s}$</p>
+                
+                <p><strong>Bước 3:</strong> Tính công suất phóng điện tối đa</p>
+                <p>Công thức tính công suất: $P = \frac{W}{t}$</p>
+                <p>Công suất tối đa khi thời gian phóng điện ngắn nhất:</p>
+                <p class="formula">$$P_{\text{max}} = \frac{W}{t_{\text{min}}} = \frac{2178}{0,2} = 10890 \text{ W}$$</p>
+                
+                <p><strong>Bước 4:</strong> Đổi đơn vị và làm tròn</p>
+                <p class="formula">$$P_{\text{max}} = 10890 \text{ W} = 10,89 \text{ kW} \approx 10,9 \text{ kW}$$</p>
+                
+                <p><strong>Bước 5:</strong> Tính thêm công suất phóng điện tối thiểu (để so sánh)</p>
+                <p>Công suất tối thiểu khi thời gian phóng điện dài nhất:</p>
+                <p class="formula">$$P_{\text{min}} = \frac{W}{t_{\text{max}}} = \frac{2178}{1} = 2178 \text{ W} = 2,178 \text{ kW}$$</p>
+                
+                <p><strong>Kết luận b:</strong> Công suất phóng điện tối đa của máy hàn là khoảng $10,9 \text{ kW}$ (khi phóng điện trong 0,2 s).</p>
+                
+                <p><strong>Nhận xét:</strong> Máy hàn bu-lông sử dụng tụ điện có thể tích trữ năng lượng lớn (2178 J) và phóng ra trong thời gian rất ngắn (0,2 s) để tạo ra công suất cực lớn (gần 11 kW) giúp hàn nhanh và chắc các bu-lông.</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Bài tập tự luận Vật Lý 11 - Ôn tập Chương III: Điện trường</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Lấy tất cả các nút ẩn/hiện lời giải
+            const toggleButtons = document.querySelectorAll('.toggle-solution-btn');
+            
+            // Gán sự kiện cho từng nút
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const solution = document.getElementById(targetId);
+                    
+                    if (solution.classList.contains('hidden')) {
+                        solution.classList.remove('hidden');
+                        this.textContent = 'Ẩn lời giải';
+                    } else {
+                        solution.classList.add('hidden');
+                        this.textContent = 'Hiển thị lời giải';
+                    }
+                    
+                    // Render lại MathJax khi toggle
+                    refreshMathJax();
+                });
+            });
+            
+            // Nút hiển thị tất cả lời giải
+            const showAllBtn = document.getElementById('show-all-btn');
+            showAllBtn.addEventListener('click', function() {
+                toggleButtons.forEach(button => {
+                    const targetId = button.getAttribute('data-target');
+                    const solution = document.getElementById(targetId);
+                    solution.classList.remove('hidden');
+                    button.textContent = 'Ẩn lời giải';
+                });
+                refreshMathJax();
+            });
+            
+            // Nút ẩn tất cả lời giải
+            const hideAllBtn = document.getElementById('hide-all-btn');
+            hideAllBtn.addEventListener('click', function() {
+                toggleButtons.forEach(button => {
+                    const targetId = button.getAttribute('data-target');
+                    const solution = document.getElementById(targetId);
+                    solution.classList.add('hidden');
+                    button.textContent = 'Hiển thị lời giải';
+                });
+            });
+            
+            // Khởi tạo lại MathJax sau khi hiển thị lời giải
+            function refreshMathJax() {
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+            
+            // Khởi tạo MathJax khi trang load xong
+            setTimeout(refreshMathJax, 500);
+        });
+    </script>
+</body>
+</html>
