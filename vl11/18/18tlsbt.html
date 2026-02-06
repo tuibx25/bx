@@ -6,80 +6,41 @@
     <title>Bài Tập Tự Luận - Bài 18 (SBT)</title>
     <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
     
-    <!-- BẢO MẬT: Ngăn chặn các hành vi không mong muốn -->
+    <!-- BẢO MẬT -->
     <script>
-        // Ngăn chặn menu chuột phải
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-        
-        // Ngăn chặn phím tắt (Ctrl+U, Ctrl+S, Ctrl+P, F12, etc.)
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
         document.addEventListener('keydown', function(e) {
-            // Ctrl+U (View Source)
             if (e.ctrlKey && e.keyCode === 85) e.preventDefault();
-            // Ctrl+S (Save)
             if (e.ctrlKey && e.keyCode === 83) e.preventDefault();
-            // Ctrl+P (Print)
             if (e.ctrlKey && e.keyCode === 80) e.preventDefault();
-            // F12 (Developer Tools)
             if (e.keyCode === 123) e.preventDefault();
-            // Ctrl+Shift+I (Developer Tools)
             if (e.ctrlKey && e.shiftKey && e.keyCode === 73) e.preventDefault();
-            // Ctrl+Shift+J (Console)
             if (e.ctrlKey && e.shiftKey && e.keyCode === 74) e.preventDefault();
-            // Ctrl+Shift+C (Inspector)
             if (e.ctrlKey && e.shiftKey && e.keyCode === 67) e.preventDefault();
         });
-        
-        // Ngăn chặn kéo thả hình ảnh
-        document.addEventListener('dragstart', function(e) {
-            if (e.target.tagName === 'IMG') e.preventDefault();
-        });
-        
-        // Ngăn chặn sao chép văn bản
-        document.addEventListener('copy', function(e) {
-            e.preventDefault();
-            alert('Không cho phép sao chép nội dung!');
-        });
-        
-        // Ngăn chặn cắt
-        document.addEventListener('cut', function(e) {
-            e.preventDefault();
-        });
-        
-        // Ngăn chặn dán
-        document.addEventListener('paste', function(e) {
-            e.preventDefault();
-        });
-        
-        // Ngăn chặn chọn văn bản
-        document.addEventListener('selectstart', function(e) {
-            e.preventDefault();
-        });
-        
-        // Ngăn chặn bôi đen văn bản
-        document.addEventListener('mousedown', function(e) {
-            if (e.detail > 1) e.preventDefault(); // Ngăn double-click chọn
-        });
+        document.addEventListener('dragstart', function(e) { if (e.target.tagName === 'IMG') e.preventDefault(); });
+        document.addEventListener('copy', function(e) { e.preventDefault(); alert('Không cho phép sao chép nội dung!'); });
+        document.addEventListener('cut', function(e) { e.preventDefault(); });
+        document.addEventListener('paste', function(e) { e.preventDefault(); });
+        document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+        document.addEventListener('mousedown', function(e) { if (e.detail > 1) e.preventDefault(); });
     </script>
     
-    <!-- BẢO MẬT: CSS để chống in ấn -->
+    <!-- CHỐNG IN ẤN -->
     <style>
         @media print {
-            * {
-                display: none !important;
-            }
-            body:before {
-                content: "Không cho phép in trang này!";
-                display: block !important;
-                font-size: 24px;
-                text-align: center;
-                margin-top: 100px;
+            * { display: none !important; }
+            body:before { 
+                content: "Không cho phép in trang này!"; 
+                display: block !important; 
+                font-size: 24px; 
+                text-align: center; 
+                margin-top: 100px; 
             }
         }
     </style>
     
-    <!-- MathJax để hiển thị công thức toán -->
+    <!-- MATHJAX -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>
@@ -97,29 +58,39 @@
     </script>
     
     <style>
-        /* Reset và cài đặt chung */
+        /* BIẾN MÀU SẮC */
+        :root {
+            --primary-brown: #8B4513;
+            --secondary-brown: #A0522D;
+            --light-brown: #D2B48C;
+            --dark-brown: #654321;
+            --neutral-beige: #F5F5DC;
+            --text-dark: #333333;
+        }
+        
+        /* RESET */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* IE10+/Edge */
-            user-select: none; /* Standard */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.4;
-            color: #5D4037;
-            background-color: #FDF6E3;
-            padding: 20px;
+            line-height: 1;
+            color: var(--text-dark);
+            background-color: var(--neutral-beige);
+            padding: 6px;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
         
-        /* Watermark nền - watermark đầu tiên */
+        /* WATERMARK NỀN */
         body::before {
             content: "";
             position: fixed;
@@ -136,32 +107,32 @@
             pointer-events: none;
         }
         
-        /* Tiêu đề chính */
+        /* TIÊU ĐỀ CHÍNH */
         .main-title {
             text-align: center;
-            color: #4E342E;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #8D6E63;
+            color: var(--primary-brown);
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid var(--light-brown);
             font-size: 2.5rem;
             position: relative;
             z-index: 1;
-            line-height: 1.2;
+            line-height: 1;
         }
         
-        /* Container chính */
+        /* CONTAINER */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             background-color: rgba(255, 255, 255, 0.92);
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(93, 64, 55, 0.1);
-            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 10px;
             position: relative;
             z-index: 1;
         }
         
-        /* Watermark phủ toàn màn hình - watermark thứ hai */
+        /* WATERMARK PHỦ */
         .watermark-overlay {
             position: fixed;
             top: 0;
@@ -186,38 +157,38 @@
             opacity: 0.04;
         }
         
-        /* Nút điều khiển toàn cục */
+        /* NÚT ĐIỀU KHIỂN */
         .global-controls {
             text-align: center;
-            margin: 30px 0;
+            margin: 12px 0;
             position: relative;
             z-index: 1;
         }
         
         .global-btn {
-            background-color: #5D4037;
+            background-color: var(--primary-brown);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             margin: 0 10px;
             transition: background-color 0.3s;
             position: relative;
             z-index: 1;
-            line-height: 1.2;
+            line-height: 1;
         }
         
         .global-btn:hover {
-            background-color: #3E2723;
+            background-color: var(--dark-brown);
         }
         
-        /* Phần bài tập */
+        /* BÀI TẬP */
         .exercise {
-            margin-bottom: 40px;
-            padding-bottom: 25px;
-            border-bottom: 1px solid #D7CCC8;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--light-brown);
             position: relative;
             overflow: hidden;
         }
@@ -226,7 +197,7 @@
             border-bottom: none;
         }
         
-        /* Watermark trên từng bài tập - watermark thứ ba */
+        /* WATERMARK TRÊN BÀI TẬP */
         .exercise::before {
             content: "";
             position: absolute;
@@ -248,24 +219,24 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 15px;
+            margin-bottom: 4px;
             flex-wrap: wrap;
             position: relative;
             z-index: 1;
         }
         
         .question-number {
-            background-color: #6D4C41;
+            background-color: var(--secondary-brown);
             color: white;
             font-weight: bold;
-            width: 40px;
-            height: 40px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 15px;
-            font-size: 1.2rem;
+            margin-right: 6px;
+            font-size: 1.1rem;
             flex-shrink: 0;
             position: relative;
             z-index: 1;
@@ -279,20 +250,20 @@
         }
         
         .question-title {
-            color: #4E342E;
-            font-size: 1.8rem;
+            color: var(--dark-brown);
+            font-size: 1.5rem;
             font-weight: 600;
             margin-right: 20px;
             position: relative;
             z-index: 1;
-            line-height: 1.2;
+            line-height: 1;
         }
         
         .toggle-solution-btn {
-            background-color: #795548;
+            background-color: var(--secondary-brown);
             color: white;
             border: none;
-            padding: 8px 16px;
+            padding: 6px 12px;
             border-radius: 4px;
             cursor: pointer;
             font-size: 1.1rem;
@@ -301,58 +272,58 @@
             margin-left: auto;
             position: relative;
             z-index: 1;
-            line-height: 1.2;
+            line-height: 1;
         }
         
         .toggle-solution-btn:hover {
-            background-color: #5D4037;
+            background-color: var(--primary-brown);
         }
         
         .question-content {
             font-size: 1.5rem;
-            margin-bottom: 20px;
-            padding-left: 55px;
+            margin-bottom: 8px;
+            padding-left: 40px;
             position: relative;
             z-index: 1;
-            line-height: 1.3;
+            line-height: 1.1;
         }
         
         .summary {
-            background-color: #FFECB3;
-            border-left: 4px solid #FFB300;
-            padding: 15px;
-            margin: 15px 0 20px 55px;
+            background-color: #f9f3e9;
+            border-left: 4px solid var(--light-brown);
+            padding: 8px;
+            margin: 8px 0 8px 40px;
             border-radius: 0 8px 8px 0;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             position: relative;
             z-index: 1;
-            line-height: 1.3;
+            line-height: 1.1;
         }
         
         .summary h3, .solution h3 {
-            color: #5D4037;
-            margin-bottom: 8px;
-            font-size: 1.6rem;
+            color: var(--dark-brown);
+            margin-bottom: 4px;
+            font-size: 1.3rem;
             position: relative;
             z-index: 1;
-            line-height: 1.2;
+            line-height: 1;
         }
         
         .solution {
-            background-color: #E8F5E9;
-            border-left: 4px solid #4CAF50;
-            padding: 15px;
-            margin: 15px 0 0 55px;
+            background-color: #f9f7f3;
+            border-left: 4px solid var(--secondary-brown);
+            padding: 8px;
+            margin: 8px 0 0 40px;
             border-radius: 0 8px 8px 0;
             font-size: 1.5rem;
             transition: all 0.3s ease;
             overflow: hidden;
             position: relative;
             z-index: 1;
-            line-height: 1.3;
+            line-height: 1.1;
         }
         
-        /* Watermark trên phần giải - watermark thứ tư */
+        /* WATERMARK TRÊN LỜI GIẢI */
         .solution::before {
             content: "";
             position: absolute;
@@ -375,66 +346,123 @@
         }
         
         .solution p {
-            margin-bottom: 4px; /* Giảm từ 8px xuống 4px */
-            line-height: 1.2; /* Giảm line-height */
+            margin-bottom: 2px;
+            line-height: 1.1;
         }
         
         .solution p:last-child {
             margin-bottom: 0;
         }
         
+        /* CÔNG THỨC - KÍCH THƯỚC BẰNG VĂN BẢN */
         .formula {
             font-family: 'Cambria Math', serif;
-            background-color: #F5F5F5;
-            padding: 6px 10px; /* Giảm padding trên/dưới từ 10px xuống 6px */
+            background-color: #f8f8f8;
+            padding: 4px 8px;
             border-radius: 4px;
-            margin: 2px 0 4px 0; /* Giảm margin trên/dưới đáng kể */
-            font-size: 1.4rem;
+            margin: 2px 0 4px 0;
+            font-size: 1.5rem;
             overflow-x: auto;
             position: relative;
             z-index: 1;
-            line-height: 1.1; /* Giảm line-height trong công thức */
+            line-height: 1.2;
         }
         
-        /* Giảm khoảng cách cho các phần tử đặc biệt trong solution */
         .solution strong {
             display: inline-block;
-            margin-bottom: 2px; /* Giảm khoảng cách dưới các thẻ strong */
+            margin-bottom: 1px;
         }
         
-        /* Định dạng cho điện thoại */
+        /* MATHJAX */
+        .MathJax {
+            font-size: 1.5rem !important;
+            position: relative;
+            z-index: 1;
+            line-height: 1.2 !important;
+            margin: 0 !important;
+        }
+        
+        mjx-container[jax="CHTML"] {
+            display: inline-block !important;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* FOOTER */
+        footer {
+            text-align: center;
+            margin-top: 12px;
+            padding-top: 6px;
+            border-top: 1px solid var(--light-brown);
+            color: var(--secondary-brown);
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+            line-height: 1;
+        }
+        
+        footer::before {
+            content: "tuibx";
+            position: absolute;
+            bottom: 2px;
+            right: 6px;
+            font-size: 1rem;
+            color: rgba(139, 69, 19, 0.3);
+            font-weight: bold;
+            font-style: italic;
+            z-index: 0;
+        }
+        
+        p {
+            margin-bottom: 2px;
+        }
+        
+        li {
+            line-height: 1.1;
+            margin-bottom: 2px;
+        }
+        
+        .solution p + .formula {
+            margin-top: 1px;
+        }
+        
+        .formula + p {
+            margin-top: 1px;
+        }
+        
+        /* RESPONSIVE - MOBILE */
         @media (max-width: 768px) {
             body {
-                padding: 10px;
+                padding: 4px;
                 font-size: 90%;
-                line-height: 1.3;
+                line-height: 1;
             }
             
             .main-title {
                 font-size: 1.8rem;
-                line-height: 1.1;
+                line-height: 1;
             }
             
             .question-content, .summary, .solution {
                 padding-left: 20px;
                 margin-left: 20px;
-                font-size: 1.2rem;
-                line-height: 1.2;
-            }
-            
-            .question-title {
-                font-size: 1.4rem;
+                font-size: 1.3rem;
                 line-height: 1.1;
             }
             
+            .question-title {
+                font-size: 1.3rem;
+                line-height: 1;
+            }
+            
             .question-number {
-                width: 35px;
-                height: 35px;
+                width: 30px;
+                height: 30px;
                 font-size: 1rem;
             }
             
             .container {
-                padding: 15px;
+                padding: 6px;
             }
             
             .question-header {
@@ -443,15 +471,15 @@
             }
             
             .toggle-solution-btn {
-                margin-top: 10px;
+                margin-top: 6px;
                 align-self: flex-start;
             }
             
             .global-btn {
                 width: 90%;
-                margin: 10px 0;
-                padding: 12px;
-                line-height: 1.2;
+                margin: 6px 0;
+                padding: 8px;
+                line-height: 1;
             }
             
             body::before {
@@ -470,59 +498,64 @@
             }
             
             .summary h3, .solution h3 {
-                font-size: 1.4rem;
-                line-height: 1.1;
+                font-size: 1.2rem;
+                line-height: 1;
             }
             
-            /* Điều chỉnh cho di động */
             .solution p {
-                margin-bottom: 3px;
+                margin-bottom: 2px;
                 line-height: 1.1;
             }
             
             .formula {
-                padding: 4px 8px;
-                margin: 1px 0 3px 0;
-                font-size: 1.2rem;
-                line-height: 1;
+                padding: 3px 6px;
+                margin: 2px 0 4px 0;
+                font-size: 1.3rem;
+                line-height: 1.2;
+            }
+            
+            .MathJax {
+                font-size: 1.3rem !important;
             }
         }
         
-        /* Định dạng cho TV/màn hình lớn */
+        /* RESPONSIVE - DESKTOP LARGE */
         @media (min-width: 1200px) {
             body {
                 font-size: 110%;
-                line-height: 1.5;
+                line-height: 1;
             }
             
             .question-content, .summary, .solution {
-                font-size: 1.6rem;
-                line-height: 1.4;
+                font-size: 1.8rem;
+                line-height: 1.1;
             }
             
             .question-title {
-                font-size: 2rem;
-                line-height: 1.3;
+                font-size: 1.8rem;
+                line-height: 1;
             }
             
             .main-title {
                 font-size: 3rem;
-                line-height: 1.3;
+                line-height: 1;
             }
             
             .container {
-                padding: 40px;
+                padding: 20px;
             }
             
             .global-btn {
-                font-size: 1.4rem;
-                padding: 18px 35px;
-                line-height: 1.3;
+                font-size: 1.6rem;
+                padding: 10px 20px;
+                line-height: 1;
             }
             
             .formula {
-                font-size: 1.6rem;
+                font-size: 1.8rem;
                 line-height: 1.2;
+                padding: 5px 10px;
+                margin: 3px 0 5px 0;
             }
             
             body::before {
@@ -531,89 +564,18 @@
             }
             
             .solution p {
-                margin-bottom: 5px;
-                line-height: 1.3;
+                margin-bottom: 3px;
+                line-height: 1.1;
             }
-        }
-        
-        /* Đảm bảo MathJax hiển thị đúng */
-        .MathJax {
-            font-size: 1.4rem !important;
-            position: relative;
-            z-index: 1;
-            line-height: 1.1 !important;
-            margin: 0 !important;
-        }
-        
-        mjx-container[jax="CHTML"] {
-            display: inline-block !important;
-            position: relative;
-            z-index: 1;
-        }
-        
-        /* Chú ý về màu sắc */
-        .color-note {
-            text-align: center;
-            font-style: italic;
-            color: #795548;
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #FFE0B2;
-            border-radius: 5px;
-            font-size: 1.3rem;
-            position: relative;
-            z-index: 1;
-            line-height: 1.3;
-        }
-        
-        /* Footer với watermark */
-        footer {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #8D6E63;
-            color: #5D4037;
-            font-size: 1.1rem;
-            position: relative;
-            z-index: 1;
-            line-height: 1.3;
-        }
-        
-        footer::before {
-            content: "tuibx";
-            position: absolute;
-            bottom: 10px;
-            right: 20px;
-            font-size: 1rem;
-            color: rgba(139, 69, 19, 0.3);
-            font-weight: bold;
-            font-style: italic;
-            z-index: 0;
-        }
-        
-        /* Giảm khoảng cách giữa các đoạn văn trong toàn bộ trang */
-        p {
-            margin-bottom: 8px;
-        }
-        
-        /* Giảm khoảng cách dòng cho các danh sách (nếu có) */
-        li {
-            line-height: 1.3;
-            margin-bottom: 5px;
-        }
-        
-        /* Điều chỉnh đặc biệt cho các phần tử liền kề công thức */
-        .solution p + .formula {
-            margin-top: 1px; /* Giảm khoảng cách trên của công thức khi nằm sau đoạn văn */
-        }
-        
-        .formula + p {
-            margin-top: 1px; /* Giảm khoảng cách trên của đoạn văn khi nằm sau công thức */
+            
+            .MathJax {
+                font-size: 1.8rem !important;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Watermark phủ toàn màn hình -->
+    <!-- WATERMARK PHỦ TOÀN MÀN HÌNH -->
     <div class="watermark-overlay"></div>
     
     <h1 class="main-title">BÀI TẬP TỰ LUẬN - BÀI 18 (SBT)</h1>
