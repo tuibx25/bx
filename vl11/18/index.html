@@ -58,14 +58,15 @@
     </script>
     
     <style>
-        /* BIẾN MÀU SẮC */
+        /* BIẾN MÀU SẮC MỚI */
         :root {
-            --primary-brown: #8B4513;
-            --secondary-brown: #A0522D;
-            --light-brown: #D2B48C;
-            --dark-brown: #654321;
-            --neutral-beige: #F5F5DC;
-            --text-dark: #333333;
+            --yellow-light: #F0E68C;     /* Vàng nhạt (nền chính) */
+            --brown-earth: #8B4513;      /* Nâu đất (màu chính) */
+            --white: #FFFFFF;            /* Trắng (nền phụ) */
+            --silver: #C0C0C0;           /* Bạc (viền, chi tiết) */
+            --text-black: #000000;       /* Đen (chữ ưu tiên) */
+            --text-dark: #333333;        /* Đen đậm vừa */
+            --text-light: #666666;       /* Xám đậm cho chữ phụ */
         }
         
         /* RESET */
@@ -82,8 +83,8 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1;
-            color: var(--text-dark);
-            background-color: var(--neutral-beige);
+            color: var(--text-black); /* Ưu tiên màu đen */
+            background-color: var(--yellow-light); /* Nền vàng nhạt */
             padding: 6px;
             min-height: 100vh;
             position: relative;
@@ -112,13 +113,13 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.92);
+            background-color: var(--white); /* Nền trắng */
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             padding: 10px;
             position: relative;
             z-index: 1;
-            border: 2px solid var(--light-brown);
+            border: 2px solid var(--silver); /* Viền bạc */
         }
         
         /* WATERMARK PHỦ */
@@ -148,11 +149,11 @@
         
         /* HEADER */
         header {
-            background: linear-gradient(135deg, var(--dark-brown) 0%, var(--secondary-brown) 100%);
-            color: white;
+            background: linear-gradient(135deg, var(--brown-earth) 0%, #A0522D 100%); /* Nâu đất */
+            color: var(--white); /* Chữ trắng */
             padding: 15px 25px;
             text-align: center;
-            border-bottom: 6px solid var(--primary-brown);
+            border-bottom: 6px solid var(--silver); /* Viền bạc */
             position: relative;
             z-index: 1;
         }
@@ -163,11 +164,12 @@
             letter-spacing: 1px;
             font-weight: 700;
             line-height: 1;
+            color: var(--white); /* Chữ trắng */
         }
         
         .chapter {
             font-size: 1.5rem;
-            color: var(--light-brown);
+            color: var(--silver); /* Chữ bạc */
             font-weight: 500;
             margin-top: 8px;
             line-height: 1;
@@ -183,15 +185,15 @@
         section {
             margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 1px dashed var(--light-brown);
+            border-bottom: 1px dashed var(--silver); /* Đường kẻ bạc */
         }
         
         h2 {
-            color: var(--dark-brown);
+            color: var(--brown-earth); /* Nâu đất */
             font-size: 1.8rem;
             margin-bottom: 12px;
             padding-bottom: 8px;
-            border-bottom: 3px solid var(--secondary-brown);
+            border-bottom: 3px solid var(--brown-earth); /* Nâu đất */
             display: flex;
             align-items: center;
             line-height: 1;
@@ -200,10 +202,11 @@
         h2 i {
             margin-right: 10px;
             font-size: 1.6rem;
+            color: var(--brown-earth); /* Nâu đất */
         }
         
         h3 {
-            color: var(--dark-brown);
+            color: var(--text-black); /* Đen */
             font-size: 1.5rem;
             margin: 12px 0 8px;
             font-weight: 600;
@@ -213,7 +216,7 @@
         h4 {
             font-size: 1.5rem;
             margin: 10px 0 6px;
-            color: var(--secondary-brown);
+            color: var(--brown-earth); /* Nâu đất */
             font-weight: 600;
             line-height: 1;
         }
@@ -222,6 +225,7 @@
             margin-bottom: 8px;
             font-size: 1.5rem;
             line-height: 1.1;
+            color: var(--text-black); /* Đen */
         }
         
         ul, ol {
@@ -233,6 +237,7 @@
             margin-bottom: 6px;
             font-size: 1.5rem;
             line-height: 1.1;
+            color: var(--text-black); /* Đen */
         }
         
         /* SPECIAL BOXES */
@@ -241,33 +246,35 @@
             border-radius: 8px;
             margin: 12px 0;
             line-height: 1.1;
+            background-color: var(--white); /* Nền trắng */
+            border: 2px solid var(--silver); /* Viền bạc */
         }
         
         .definition-box {
-            background-color: var(--light-brown);
-            border-left: 6px solid var(--secondary-brown);
+            background-color: rgba(240, 230, 140, 0.2); /* Vàng nhạt nhạt */
+            border-left: 6px solid var(--brown-earth); /* Nâu đất */
         }
         
         .formula-box {
-            background-color: var(--neutral-beige);
-            border: 2px solid var(--secondary-brown);
+            background-color: rgba(255, 255, 255, 0.9); /* Trắng trong suốt */
+            border: 2px solid var(--brown-earth); /* Nâu đất */
             text-align: center;
             font-size: 1.5rem;
             padding: 10px;
         }
         
         .example-box {
-            background-color: var(--neutral-beige);
-            border: 2px solid var(--secondary-brown);
+            background-color: rgba(240, 230, 140, 0.1); /* Vàng nhạt rất nhạt */
+            border: 2px solid var(--brown-earth); /* Nâu đất */
         }
         
         .application-box {
-            background-color: var(--light-brown);
-            border: 2px solid var(--dark-brown);
+            background-color: rgba(240, 230, 140, 0.2); /* Vàng nhạt nhạt */
+            border: 2px solid var(--brown-earth); /* Nâu đất */
         }
         
         .box-title {
-            color: var(--dark-brown);
+            color: var(--brown-earth); /* Nâu đất */
             font-size: 1.5rem;
             margin-bottom: 8px;
             display: flex;
@@ -279,6 +286,7 @@
         .box-title i {
             margin-right: 8px;
             font-size: 1.4rem;
+            color: var(--brown-earth); /* Nâu đất */
         }
         
         /* KEY POINTS GRID */
@@ -290,20 +298,22 @@
         }
         
         .point-card {
-            background-color: var(--neutral-beige);
+            background-color: var(--white); /* Nền trắng */
             padding: 12px;
             border-radius: 8px;
-            border-top: 4px solid var(--secondary-brown);
+            border-top: 4px solid var(--brown-earth); /* Nâu đất */
             transition: transform 0.3s ease;
             line-height: 1.1;
+            border: 1px solid var(--silver); /* Viền bạc */
         }
         
         .point-card:hover {
             transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2); /* Bóng nâu */
         }
         
         .point-card h4 {
-            color: var(--secondary-brown);
+            color: var(--brown-earth); /* Nâu đất */
             margin-bottom: 8px;
             font-size: 1.5rem;
             font-weight: 600;
@@ -314,6 +324,7 @@
             font-size: 1.5rem;
             line-height: 1.1;
             margin-bottom: 4px;
+            color: var(--text-black); /* Đen */
         }
         
         .point-card ul {
@@ -322,13 +333,13 @@
         
         /* IMAGES */
         .image-placeholder {
-            background-color: var(--neutral-beige);
-            border: 2px dashed var(--secondary-brown);
+            background-color: rgba(255, 255, 255, 0.8); /* Trắng trong suốt */
+            border: 2px dashed var(--silver); /* Bạc */
             border-radius: 8px;
             padding: 25px 15px;
             text-align: center;
             margin: 15px 0;
-            color: var(--text-dark);
+            color: var(--text-black); /* Đen */
             font-style: italic;
             font-size: 1.5rem;
             line-height: 1.1;
@@ -340,8 +351,8 @@
             height: auto;
             margin: 10px auto;
             border-radius: 8px;
-            border: 2px solid var(--secondary-brown);
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--brown-earth); /* Nâu đất */
+            box-shadow: 0 3px 10px rgba(139, 69, 19, 0.2); /* Bóng nâu */
         }
         
         .image-caption {
@@ -349,7 +360,7 @@
             font-style: italic;
             margin-top: 4px;
             margin-bottom: 12px;
-            color: var(--text-dark);
+            color: var(--text-dark); /* Đen đậm vừa */
             font-size: 1.5rem;
             line-height: 1.1;
         }
@@ -359,6 +370,7 @@
             font-size: 1.5rem !important;
             line-height: 1.1 !important;
             margin: 4px 0 !important;
+            color: var(--text-black) !important; /* Đen */
         }
         
         mjx-container[jax="CHTML"] {
@@ -373,8 +385,8 @@
         
         /* FOOTER */
         footer {
-            background-color: var(--dark-brown);
-            color: white;
+            background-color: var(--brown-earth); /* Nâu đất */
+            color: var(--white); /* Trắng */
             text-align: center;
             padding: 15px;
             margin-top: 20px;
@@ -382,16 +394,31 @@
             position: relative;
             z-index: 1;
             line-height: 1;
+            border-top: 2px solid var(--silver); /* Viền bạc */
         }
         
         footer p {
             font-size: 1.5rem;
             margin-bottom: 6px;
             line-height: 1.1;
+            color: var(--white); /* Trắng */
         }
         
         footer strong {
             font-size: 1.5rem;
+            color: var(--white); /* Trắng */
+        }
+        
+        /* LIÊN KẾT */
+        a {
+            color: var(--brown-earth); /* Nâu đất */
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        a:hover {
+            color: #5D4037; /* Nâu đậm hơn */
+            text-decoration: underline;
         }
         
         /* RESPONSIVE */
@@ -846,7 +873,7 @@
             // Hiệu ứng cho thẻ point-card
             document.querySelectorAll('.point-card').forEach(card => {
                 card.addEventListener('mouseenter', function() {
-                    this.style.boxShadow = '0 6px 15px rgba(0,0,0,0.1)';
+                    this.style.boxShadow = '0 6px 15px rgba(139, 69, 19, 0.2)';
                     this.style.transition = 'all 0.3s ease';
                 });
                 
