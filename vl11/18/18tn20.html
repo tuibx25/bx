@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20 Câu Trắc Nghiệm Vật Lý 11: Điện Trường Đều</title>
+    <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <script>
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.keyCode === 85) e.preventDefault();
+            if (e.ctrlKey && e.keyCode === 83) e.preventDefault();
+            if (e.ctrlKey && e.keyCode === 80) e.preventDefault();
+            if (e.keyCode === 123) e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) e.preventDefault();
+        });
+        document.addEventListener('dragstart', function(e) { if (e.target.tagName === 'IMG') e.preventDefault(); });
+        document.addEventListener('copy', function(e) { e.preventDefault(); alert('Không cho phép sao chép nội dung!'); });
+        document.addEventListener('cut', function(e) { e.preventDefault(); });
+        document.addEventListener('paste', function(e) { e.preventDefault(); });
+        document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+    </script>
+    
+    <style>
+        @media print { * { display: none !important; } body:before { content: "Không cho phép in trang này!"; display: block !important; font-size: 24px; text-align: center; margin-top: 100px; } }
+        
+        :root {
+            --primary-brown: #8B4513; --secondary-brown: #A0522D; --light-brown: #D2B48C; --dark-brown: #654321;
+            --neutral-beige: #F5F5DC; --neutral-tan: #D2B48C; --text-dark: #333333; --text-light: #5D4037;
+            --correct-color: #2E7D32; --incorrect-color: #C62828; --border-radius: 8px; --shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--neutral-beige); color: var(--text-dark);
+            line-height: 1; padding: 6px; min-height: 100vh; display: flex; flex-direction: column; position: relative; overflow-x: hidden;
+        }
+        
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png'); background-repeat: repeat;
+            background-position: center; background-size: 400px 400px; opacity: 0.08; z-index: -1; pointer-events: none;
+        }
+        
+        .container {
+            max-width: 1200px; margin: 0 auto; background-color: rgba(255,255,255,0.92); border-radius: var(--border-radius);
+            box-shadow: var(--shadow); padding: 10px; flex-grow: 1; position: relative; z-index: 1;
+        }
+        
+        header { text-align: center; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 2px solid var(--light-brown); }
+        h1 { color: var(--primary-brown); margin-bottom: 15px; font-size: 2.5rem; font-weight: 700; line-height: 1; }
+        .subtitle { color: var(--secondary-brown); font-size: 1.3rem; margin-bottom: 1px; font-weight: 500; line-height: 1; }
+        .chapter-info { color: var(--dark-brown); font-size: 1.1rem; margin-top: 2px; line-height: 1; }
+        
+        .instructions { background-color: #f9f3e9; border: 1px solid var(--light-brown); padding: 8px; margin-bottom: 8px; border-radius: var(--border-radius); }
+        .instructions h3 { color: var(--dark-brown); margin-bottom: 4px; font-size: 1.4rem; line-height: 1; }
+        .instructions p { margin-bottom: 2px; font-size: 1.1rem; line-height: 1; }
+        
+        .quiz-container { margin-bottom: 12px; }
+        .question { background-color: #faf7f2; border-radius: var(--border-radius); padding: 10px; margin-bottom: 8px; border-left: 5px solid var(--secondary-brown); position: relative; overflow: hidden; }
+        .question::before {
+            content: ""; position: absolute; top: 50%; left: 50%; width: 300px; height: 300px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png'); background-repeat: no-repeat;
+            background-position: center; background-size: contain; opacity: 0.03; transform: translate(-50%, -50%); z-index: 0; pointer-events: none;
+        }
+        .question:hover { box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
+        .question-header { display: flex; align-items: flex-start; margin-bottom: 4px; position: relative; z-index: 1; }
+        .question-number {
+            display: inline-block; background-color: var(--primary-brown); color: white; width: 34px; height: 34px; text-align: center;
+            line-height: 34px; border-radius: 50%; margin-right: 6px; font-weight: bold; font-size: 1.1rem; flex-shrink: 0; position: relative; z-index: 1;
+        }
+        .question-text { font-weight: 600; font-size: 1.5rem; color: #000000; padding-top: 0; position: relative; z-index: 1; line-height: 1.1; }
+        
+        .options { margin-left: 1px; position: relative; z-index: 1; }
+        .option {
+            display: flex; align-items: flex-start; margin-bottom: 2px; padding: 3px; border-radius: var(--border-radius); cursor: pointer;
+            transition: all 0.2s; border: 1px solid #e0d6c8; position: relative; z-index: 1;
+        }
+        .option:hover { background-color: #f0ebe1; transform: translateY(-1px); }
+        .option.selected { background-color: #e8dfd1; border-color: var(--secondary-brown); }
+        .option.correct { background-color: #e8f5e9; border-color: var(--correct-color); }
+        .option.incorrect { background-color: #ffebee; border-color: var(--incorrect-color); }
+        .option-letter {
+            display: inline-block; width: 30px; height: 30px; background-color: var(--light-brown); color: var(--dark-brown); text-align: center;
+            line-height: 30px; border-radius: 50%; margin-right: 6px; font-weight: bold; font-size: 1rem; flex-shrink: 0;
+        }
+        .selected .option-letter { background-color: var(--secondary-brown); color: white; }
+        .correct .option-letter { background-color: var(--correct-color); color: white; }
+        .incorrect .option-letter { background-color: var(--incorrect-color); color: white; }
+        .option-text { padding-top: 0; font-size: 1.5rem; color: #000000; line-height: 1.1; }
+        
+        .explanation { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; margin-top: 0; background-color: #f9f7f3; border-radius: var(--border-radius); position: relative; z-index: 1; }
+        .explanation.show { max-height: 500px; margin-top: 6px; padding: 8px; }
+        .explanation h4 { color: var(--dark-brown); margin-bottom: 4px; font-size: 1.3rem; position: relative; z-index: 1; line-height: 1; }
+        .explanation p { font-size: 1.5rem; color: var(--text-light); line-height: 1.1; position: relative; z-index: 1; }
+        
+        .math-formula { font-family: "Times New Roman", Times, serif; font-size: 1.4rem; background-color: #f8f8f8; padding: 5px 10px; border-radius: 4px; display: inline-block; margin: 5px 0; }
+        mjx-container { display: inline-block; margin: 0 2px; vertical-align: middle; }
+        
+        .controls { display: flex; justify-content: center; gap: 8px; margin-top: 12px; flex-wrap: wrap; position: relative; z-index: 1; }
+        button { padding: 8px 16px; border: none; border-radius: var(--border-radius); font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 1.3rem; min-width: 130px; position: relative; z-index: 1; }
+        #checkBtn { background-color: var(--primary-brown); color: white; }
+        #checkBtn:hover { background-color: var(--dark-brown); transform: translateY(-2px); }
+        #resetBtn { background-color: var(--light-brown); color: var(--dark-brown); }
+        #resetBtn:hover { background-color: #c9b18c; transform: translateY(-2px); }
+        
+        .results { margin-top: 12px; padding: 10px; background-color: #f9f7f3; border-radius: var(--border-radius); text-align: center; display: none; border: 2px solid var(--light-brown); position: relative; z-index: 1; }
+        .results.show { display: block; }
+        .score { font-size: 2rem; font-weight: bold; color: var(--dark-brown); margin-bottom: 6px; position: relative; z-index: 1; line-height: 1; }
+        .score-value { font-size: 3.5rem; color: var(--primary-brown); }
+        .results-message { font-size: 1.8rem; margin-bottom: 8px; padding: 6px; border-radius: var(--border-radius); position: relative; z-index: 1; line-height: 1.1; }
+        .answer-key { margin-top: 8px; text-align: left; position: relative; z-index: 1; }
+        .answer-key h4 { margin-bottom: 4px; color: var(--dark-brown); font-size: 1.5rem; text-align: center; line-height: 1; }
+        .answer-list { list-style-type: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 2px; }
+        .answer-list li { padding: 4px; background-color: white; border-radius: var(--border-radius); border: 1px solid var(--light-brown); font-size: 1.3rem; line-height: 1.1; }
+        
+        footer { text-align: center; margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--light-brown); color: var(--secondary-brown); font-size: 1.1rem; position: relative; z-index: 1; line-height: 1; }
+        footer::before { content: "tuibx"; position: absolute; bottom: 2px; right: 6px; font-size: 1rem; color: rgba(139,69,19,0.3); font-weight: bold; font-style: italic; z-index: 0; }
+        
+        .watermark-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; }
+        .watermark-overlay::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png'); background-repeat: repeat;
+            background-position: center; background-size: 200px 200px; opacity: 0.04;
+        }
+        
+        @media (max-width: 768px) {
+            body { padding: 4px; }
+            .container { padding: 6px; }
+            h1 { font-size: 2rem; margin-bottom: 10px; }
+            .subtitle { font-size: 1.1rem; }
+            .question { padding: 8px; margin-bottom: 6px; }
+            .question-text { font-size: 1.3rem; }
+            .option-text { font-size: 1.3rem; }
+            .explanation p { font-size: 1.3rem; }
+            button { padding: 6px; font-size: 1.2rem; }
+            .controls { gap: 6px; }
+            .answer-list { grid-template-columns: 1fr; }
+            .score { font-size: 1.8rem; }
+            .score-value { font-size: 2.8rem; }
+            .results-message { font-size: 1.5rem; }
+            body::before { background-size: 300px 300px; opacity: 0.05; }
+            .question::before { width: 200px; height: 200px; }
+        }
+        
+        @media (min-width: 1200px) {
+            .question-text, .option-text, .explanation p, .instructions p { font-size: 1.8rem; line-height: 1.1; }
+            h1 { font-size: 3rem; line-height: 1; margin-bottom: 20px; }
+            .subtitle { font-size: 1.6rem; line-height: 1; }
+            button { font-size: 1.6rem; padding: 10px 20px; }
+            .question-number { width: 38px; height: 38px; line-height: 38px; font-size: 1.2rem; }
+            .option-letter { width: 34px; height: 34px; line-height: 34px; font-size: 1.1rem; }
+            .score { font-size: 2.5rem; line-height: 1; }
+            .score-value { font-size: 4rem; }
+            .results-message { font-size: 2rem; line-height: 1.1; }
+            body::before { background-size: 500px 500px; opacity: 0.1; }
+        }
+        
+        .MathJax_SVG { display: inline !important; }
+        mjx-container[jax="SVG"] { display: inline-block !important; }
+    </style>
+</head>
+<body>
+    <div class="watermark-overlay"></div>
+    
+    <div class="container">
+        <header>
+            <h1>20 Câu Trắc Nghiệm Vật Lý 11</h1>
+            <p class="subtitle">CHỦ ĐỀ: ĐIỆN TRƯỜNG ĐỀU</p>
+            <p class="chapter-info">Ôn tập kiến thức</p>
+        </header>
+        
+        <div class="instructions">
+            <h3>Hướng dẫn làm bài:</h3>
+            <p>1. Đọc kỹ từng câu hỏi và chọn một đáp án đúng nhất.</p>
+            <p>2. Bấm nút "KIỂM TRA KẾT QUẢ" để xem điểm và giải thích.</p>
+            <p>3. Bấm nút "LÀM LẠI" để làm bài tập lại từ đầu.</p>
+        </div>
+        
+        <div class="quiz-container" id="quizContainer"></div>
+        
+        <div class="controls">
+            <button id="checkBtn">KIỂM TRA KẾT QUẢ</button>
+            <button id="resetBtn">LÀM LẠI</button>
+        </div>
+        
+        <div class="results" id="resultsContainer">
+            <div class="score">Điểm của bạn: <span class="score-value" id="scoreValue">0/20</span></div>
+            <div class="results-message" id="resultsMessage"></div>
+            <div class="answer-key">
+                <h4>Đáp án chính xác:</h4>
+                <ul class="answer-list" id="answerList"></ul>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Bài tập trắc nghiệm Vật Lý 11 - Chủ đề: Điện trường đều</p>
+        </footer>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                text: "Điện trường đều là điện trường mà vectơ cường độ điện trường tại mọi điểm có đặc điểm gì?",
+                options: [
+                    "A. Độ lớn thay đổi, phương và chiều không đổi.",
+                    "B. Độ lớn, phương và chiều giống nhau.",
+                    "C. Phương thay đổi, độ lớn và chiều không đổi.",
+                    "D. Chiều thay đổi, độ lớn và phương không đổi."
+                ],
+                correct: 1, // B
+                explanation: "Định nghĩa: Các vectơ E có độ lớn, phương, chiều giống nhau tại mọi điểm."
+            },
+            {
+                text: "Cách phổ biến nhất để tạo ra một điện trường đều là sử dụng?",
+                options: [
+                    "A. Một quả cầu kim loại tích điện.",
+                    "B. Một điện tích điểm.",
+                    "C. Hai bản phẳng kim loại song song, tích điện trái dấu.",
+                    "D. Một vòng dây tròn tích điện."
+                ],
+                correct: 2, // C
+                explanation: "Đây là phương pháp cơ bản nhất được nêu trong bài."
+            },
+            {
+                text: "Công thức tính cường độ điện trường đều (E) giữa hai bản phẳng song song là gì? (với U là hiệu điện thế, d là khoảng cách)",
+                options: [
+                    "A. E = U/d",
+                    "B. E = d/U",
+                    "C. E = U.d",
+                    "D. E = U²/d"
+                ],
+                correct: 0, // A
+                explanation: "Công thức cơ bản: E = U/d."
+            },
+            {
+                text: "Đường sức điện trong điện trường đều có đặc điểm gì?",
+                options: [
+                    "A. Là những đường cong khép kín.",
+                    "B. Là những đường thẳng song song và cách đều nhau.",
+                    "C. Là những đường hội tụ tại một điểm.",
+                    "D. Là những đường phân kỳ từ một điểm."
+                ],
+                correct: 1, // B
+                explanation: "Đặc điểm nhận dạng của đường sức trong điện trường đều."
+            },
+            {
+                text: "Chiều của đường sức điện trong điện trường đều giữa hai bản phẳng được quy ước như thế nào?",
+                options: [
+                    "A. Từ bản âm sang bản dương.",
+                    "B. Từ bản dương sang bản âm.",
+                    "C. Song song với hai bản.",
+                    "D. Cả A và B đều đúng tùy trường hợp."
+                ],
+                correct: 1, // B
+                explanation: "Quy ước chung: đường sức đi từ nơi có điện thế cao (+) đến thấp (-)."
+            },
+            {
+                text: "Một electron được thả không vận tốc đầu trong điện trường đều. Electron sẽ chuyển động như thế nào?",
+                options: [
+                    "A. Thẳng đều.",
+                    "B. Thẳng nhanh dần đều về phía bản dương.",
+                    "C. Thẳng nhanh dần đều về phía bản âm.",
+                    "D. Tròn đều."
+                ],
+                correct: 1, // B
+                explanation: "Electron (q âm) chịu lực ngược chiều E, nên bị hút về bản dương."
+            },
+            {
+                text: "Công thức tính lực điện tác dụng lên một điện tích q đặt trong điện trường đều E là?",
+                options: [
+                    "A. F = q/E",
+                    "B. F = q.E",
+                    "C. F = E/q",
+                    "D. F = m.E"
+                ],
+                correct: 1, // B
+                explanation: "Công thức cơ bản: F = |q|.E."
+            },
+            {
+                text: "Khi một điện tích dương bay vào điện trường đều theo phương vuông góc với đường sức, quỹ đạo của nó là gì?",
+                options: [
+                    "A. Đường tròn.",
+                    "B. Đường thẳng.",
+                    "C. Đường parabol lõm hướng về bản âm.",
+                    "D. Đường parabol lõm hướng về bản dương."
+                ],
+                correct: 2, // C
+                explanation: "Điện tích dương bị hút về bản âm, tạo quỹ đạo parabol lõm hướng về đó."
+            },
+            {
+                text: "Thiết bị nào sau đây không ứng dụng nguyên lý điện trường đều để lái chùm electron?",
+                options: [
+                    "A. Dao động kí.",
+                    "B. Đèn hình tivi CRT cũ.",
+                    "C. Bóng đèn sợi đốt.",
+                    "D. Ống tia X."
+                ],
+                correct: 2, // C
+                explanation: "Bóng đèn sợi đốt hoạt động dựa trên hiệu ứng nhiệt, không dùng để lái electron."
+            },
+            {
+                text: "Trong dao động kí, điện trường đều giữa các bản lái tia có tác dụng chính là gì?",
+                options: [
+                    "A. Phát xạ electron.",
+                    "B. Làm nóng cathode.",
+                    "C. Làm lệch chùm electron.",
+                    "D. Tạo ra tia X."
+                ],
+                correct: 2, // C
+                explanation: "Điện trường làm lệch chùm electron để quét trên màn hình."
+            },
+            {
+                text: "Trong công nghệ lọc không khí bằng ion âm, điện trường đều có vai trò gì?",
+                options: [
+                    "A. Phá hủy cấu trúc vi khuẩn.",
+                    "B. Làm lệch quỹ đạo của các hạt bụi tích điện để chúng bám vào bề mặt thu gom.",
+                    "C. Hút các phân tử khí ô nhiễm.",
+                    "D. Làm mát không khí."
+                ],
+                correct: 1, // B
+                explanation: "Điện trường tác dụng lực lên hạt tích điện, điều khiển quỹ đạo của chúng."
+            },
+            {
+                text: "Hai bản phẳng song song cách nhau 2 cm, hiệu điện thế giữa chúng là 200V. Cường độ điện trường đều giữa hai bản là bao nhiêu?",
+                options: [
+                    "A. 100 V/m",
+                    "B. 400 V/m",
+                    "C. 10000 V/m",
+                    "D. 0.01 V/m"
+                ],
+                correct: 2, // C
+                explanation: "E = U/d = 200 / 0.02 = 10,000 V/m."
+            },
+            {
+                text: "Dựa vào bài tập ví dụ về ống tia X trong bài học, lực điện trường có tác dụng gì đối với electron?",
+                options: [
+                    "A. Làm electron chuyển động chậm dần.",
+                    "B. Gia tốc electron từ cực âm sang cực dương.",
+                    "C. Giữ electron đứng yên.",
+                    "D. Khiến electron chuyển động tròn."
+                ],
+                correct: 1, // B
+                explanation: "Lực điện làm electron tăng tốc, có động năng lớn khi đập vào anode để phát tia X."
+            },
+            {
+                text: "Khi nói về điện trường đều giữa hai bản phẳng, phát biểu nào sau đây là sai?",
+                options: [
+                    "A. Điện trường chỉ tồn tại trong khoảng không gian giữa hai bản.",
+                    "B. Cường độ điện trường E tỉ lệ thuận với hiệu điện thế U.",
+                    "C. Cường độ điện trường E tỉ lệ nghịch với khoảng cách d.",
+                    "D. Điện trường cũng tồn tại mạnh mẽ ở phía ngoài hai bản."
+                ],
+                correct: 3, // D
+                explanation: "Điện trường đều lý tưởng chỉ tồn tại trong khoảng giữa hai bản."
+            },
+            {
+                text: "Điện tích điểm q = -5.10⁻⁹ C đặt trong điện trường đều E = 1000 V/m. Độ lớn lực điện tác dụng lên điện tích là?",
+                options: [
+                    "A. 5.10⁻¹² N",
+                    "B. 5.10⁻⁶ N",
+                    "C. 2.10⁻¹² N",
+                    "D. 2.10⁻⁶ N"
+                ],
+                correct: 1, // B
+                explanation: "F = |q|.E = |-5.10⁻⁹| . 1000 = 5.10⁻⁶ N."
+            },
+            {
+                text: "So sánh nào sau đây là chính xác khi nói về chuyển động của điện tích trong điện trường đều?",
+                options: [
+                    "A. Giống hoàn toàn với chuyển động rơi tự do.",
+                    "B. Tương tự với chuyển động ném ngang trong trường trọng lực.",
+                    "C. Giống với chuyển động tròn đều.",
+                    "D. Không có sự tương tự với loại chuyển động nào khác."
+                ],
+                correct: 1, // B
+                explanation: "Cả hai đều chịu lực không đổi theo phương vuông góc với vận tốc đầu, tạo parabol."
+            },
+            {
+                text: "Trong một điện trường đều, nếu tăng gấp đôi khoảng cách giữa hai bản phẳng nhưng giữ nguyên hiệu điện thế thì cường độ điện trường sẽ thay đổi thế nào?",
+                options: [
+                    "A. Tăng gấp đôi.",
+                    "B. Giảm một nửa.",
+                    "C. Không thay đổi.",
+                    "D. Tăng gấp bốn."
+                ],
+                correct: 1, // B
+                explanation: "Từ E = U/d, nếu d tăng 2 lần (U không đổi) thì E giảm 2 lần."
+            },
+            {
+                text: "Theo bài học, điện trường của Trái Đất là một điện trường đều có cường độ vào khoảng bao nhiêu?",
+                options: [
+                    "A. 10-20 V/m",
+                    "B. 100-150 V/m",
+                    "C. 1000-1500 V/m",
+                    "D. 10⁶ V/m"
+                ],
+                correct: 1, // B
+                explanation: "Thông tin được nêu trong phần ứng dụng công nghệ ion âm."
+            },
+            {
+                text: "Một hạt bụi tích điện dương nằm lơ lửng trong điện trường đều hướng thẳng đứng. Lực điện tác dụng lên nó có chiều như thế nào?",
+                options: [
+                    "A. Cùng chiều với vectơ cường độ điện trường.",
+                    "B. Ngược chiều với vectơ cường độ điện trường.",
+                    "C. Vuông góc với vectơ cường độ điện trường.",
+                    "D. Bằng 0."
+                ],
+                correct: 0, // A
+                explanation: "Với điện tích dương: F cùng phương, cùng chiều với E."
+            },
+            {
+                text: "Phát biểu nào sau đây là đúng khi nói về ứng dụng của điện trường đều?",
+                options: [
+                    "A. Chỉ có ứng dụng trong phòng thí nghiệm vật lý.",
+                    "B. Là nguyên lý cốt lõi của máy lọc không khí ion âm và dao động kí.",
+                    "C. Không có ứng dụng thực tế trong đời sống.",
+                    "D. Chỉ dùng để nghiên cứu chuyển động của các hạt cơ bản."
+                ],
+                correct: 1, // B
+                explanation: "Bài học nêu rõ hai ứng dụng quan trọng này trong đời sống và kỹ thuật."
+            }
+        ];
+
+        let userAnswers = Array(questions.length).fill(null);
+        let quizSubmitted = false;
+
+        function initializeQuiz() {
+            const quizContainer = document.getElementById('quizContainer');
+            quizContainer.innerHTML = '';
+            
+            questions.forEach((question, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question';
+                questionElement.dataset.index = index;
+                
+                let questionHTML = `
+                    <div class="question-header">
+                        <span class="question-number">${index + 1}</span>
+                        <span class="question-text">${question.text}</span>
+                    </div>
+                `;
+                
+                questionHTML += `
+                    <div class="options">
+                        ${question.options.map((option, optIndex) => {
+                            // Loại bỏ chữ cái đầu (A., B., C., D.) khỏi phần văn bản lựa chọn
+                            const optionText = option.substring(option.indexOf('. ') + 2);
+                            return `
+                                <div class="option" data-option="${optIndex}">
+                                    <div class="option-letter">${String.fromCharCode(65 + optIndex)}</div>
+                                    <div class="option-text">${optionText}</div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    <div class="explanation" id="explanation${index}">
+                        <h4>Giải thích:</h4>
+                        <p>${question.explanation}</p>
+                    </div>
+                `;
+                
+                questionElement.innerHTML = questionHTML;
+                quizContainer.appendChild(questionElement);
+                
+                const optionElements = questionElement.querySelectorAll('.option');
+                optionElements.forEach(option => {
+                    option.addEventListener('click', () => {
+                        if (quizSubmitted) return;
+                        const questionIndex = parseInt(questionElement.dataset.index);
+                        const optionIndex = parseInt(option.dataset.option);
+                        optionElements.forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+                        userAnswers[questionIndex] = optionIndex;
+                    });
+                });
+            });
+            
+            quizSubmitted = false;
+            document.getElementById('resultsContainer').classList.remove('show');
+            setTimeout(() => { if (window.MathJax) window.MathJax.typeset(); }, 100);
+        }
+
+        function checkAnswers() {
+            let correctCount = 0;
+            questions.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                const correctAnswer = question.correct;
+                const questionElement = document.querySelector(`.question[data-index="${index}"]`);
+                const explanationElement = document.getElementById(`explanation${index}`);
+                explanationElement.classList.add('show');
+                const options = questionElement.querySelectorAll('.option');
+                options[correctAnswer].classList.add('correct');
+                if (userAnswer !== null && userAnswer !== correctAnswer) options[userAnswer].classList.add('incorrect');
+                if (userAnswer === correctAnswer) correctCount++;
+            });
+            showResults(correctCount);
+            quizSubmitted = true;
+            setTimeout(() => { if (window.MathJax) window.MathJax.typeset(); }, 300);
+        }
+
+        function showResults(correctCount) {
+            const scoreValue = document.getElementById('scoreValue');
+            const resultsMessage = document.getElementById('resultsMessage');
+            const answerList = document.getElementById('answerList');
+            const score = correctCount;
+            const total = questions.length;
+            const percentage = Math.round((correctCount / total) * 100);
+            scoreValue.textContent = `${score}/${total}`;
+            
+            if (percentage >= 80) {
+                resultsMessage.textContent = "Xuất sắc! Bạn đã nắm vững kiến thức về điện trường đều.";
+                resultsMessage.style.color = "var(--correct-color)";
+            } else if (percentage >= 60) {
+                resultsMessage.textContent = "Khá tốt! Bạn hiểu khá rõ về điện trường đều.";
+                resultsMessage.style.color = "var(--secondary-brown)";
+            } else if (percentage >= 40) {
+                resultsMessage.textContent = "Cần cố gắng thêm! Hãy xem lại lý thuyết về điện trường đều.";
+                resultsMessage.style.color = "var(--dark-brown)";
+            } else {
+                resultsMessage.textContent = "Cần ôn tập lại! Bạn nên xem kỹ lại bài học về điện trường đều.";
+                resultsMessage.style.color = "var(--incorrect-color)";
+            }
+            
+            answerList.innerHTML = '';
+            questions.forEach((question, index) => {
+                const listItem = document.createElement('li');
+                const correctAnswer = String.fromCharCode(65 + question.correct);
+                listItem.innerHTML = `<strong>Câu ${index + 1}:</strong> ${correctAnswer}`;
+                answerList.appendChild(listItem);
+            });
+            
+            document.getElementById('resultsContainer').classList.add('show');
+            document.getElementById('resultsContainer').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            userAnswers = Array(questions.length).fill(null);
+            initializeQuiz();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.getElementById('checkBtn').addEventListener('click', checkAnswers);
+        document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+        window.addEventListener('DOMContentLoaded', initializeQuiz);
+        
+        window.MathJax = {
+            tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], processEscapes: true, processEnvironments: true },
+            options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'] },
+            startup: { pageReady: () => { return MathJax.startup.defaultPageReady().then(() => { console.log('MathJax đã sẵn sàng'); }); } }
+        };
+    </script>
+</body>
+</html>
