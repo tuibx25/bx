@@ -58,15 +58,28 @@
     </script>
     
     <style>
-        /* BIẾN MÀU SẮC MỚI */
+        /* BIẾN MÀU SẮC ĐÃ ĐIỀU CHỈNH THEO PHONG THỦY TUỔI 29/10/1970 (MỆNH KIM) */
         :root {
-            --yellow-light: #F0E68C;     /* Vàng nhạt (nền chính) */
-            --brown-earth: #8B4513;      /* Nâu đất (màu chính) */
-            --white: #FFFFFF;            /* Trắng (nền phụ) */
-            --silver: #C0C0C0;           /* Bạc (viền, chi tiết) */
-            --text-black: #000000;       /* Đen (chữ ưu tiên) */
-            --text-dark: #333333;        /* Đen đậm vừa */
-            --text-light: #666666;       /* Xám đậm cho chữ phụ */
+            /* MÀU TƯƠNG SINH (ƯU TIÊN CAO NHẤT - THỔ) - TỐT NHẤT */
+            --earth-yellow: #F4A460;      /* Nâu Cát (Sand Brown) */
+            --earth-brown: #8B4513;       /* Nâu Đậm (Saddle Brown) */
+            --earth-light-yellow: #D2B48C; /* Vàng Đất Nhạt (Tan) */
+            --earth-orange: #A52A2A;      /* Nâu Đỏ (Brown) */
+            
+            /* MÀU TƯƠNG HỢP (ƯU TIÊN THỨ HAI - KIM) - TỐT NHÌ */
+            --metal-white: #FFFFFF;       /* Trắng */
+            --metal-silver: #C0C0C0;      /* Bạc (Silver) */
+            --metal-gray: #808080;        /* Xám (Gray) */
+            --metal-offwhite: #F5F5F5;    /* Trắng Khói (White Smoke) */
+            
+            /* MÀU TRUNG TÍNH (CÓ THỂ DÙNG VỪA PHẢI) */
+            --neutral-beige: #f5f5dc;     /* Be */
+            --neutral-cream: #f5deb3;     /* Kem */
+            --neutral-dark-gray: #34495e;  /* Xám than */
+            
+            /* MÀU CẦN HẠN CHẾ/TRÁNH */
+            --text-dark: #3c3c3c;         /* Xám đậm thay vì đen tuyền */
+            --text-light: #5c5c5c;        /* Xám vừa */
         }
         
         /* RESET */
@@ -83,8 +96,8 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1;
-            color: var(--text-black); /* Ưu tiên màu đen */
-            background-color: var(--yellow-light); /* Nền vàng nhạt */
+            color: var(--text-dark); /* Màu xám đậm thay vì đen */
+            background-color: var(--earth-light-yellow); /* Nền Vàng Đất Nhạt (Thổ) */
             padding: 6px;
             min-height: 100vh;
             position: relative;
@@ -113,13 +126,13 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background-color: var(--white); /* Nền trắng */
+            background-color: var(--metal-white); /* Nền trắng (Kim) */
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             padding: 10px;
             position: relative;
             z-index: 1;
-            border: 2px solid var(--silver); /* Viền bạc */
+            border: 2px solid var(--metal-silver); /* Viền bạc (Kim) */
         }
         
         /* WATERMARK PHỦ */
@@ -149,11 +162,11 @@
         
         /* HEADER */
         header {
-            background: linear-gradient(135deg, var(--brown-earth) 0%, #A0522D 100%); /* Nâu đất */
-            color: var(--white); /* Chữ trắng */
+            background: linear-gradient(135deg, var(--earth-yellow) 0%, var(--earth-brown) 100%); /* Nâu Cát -> Nâu Đậm (Thổ) */
+            color: var(--metal-white); /* Chữ trắng (Kim) */
             padding: 15px 25px;
             text-align: center;
-            border-bottom: 6px solid var(--silver); /* Viền bạc */
+            border-bottom: 6px solid var(--metal-silver); /* Viền bạc (Kim) */
             position: relative;
             z-index: 1;
         }
@@ -164,12 +177,12 @@
             letter-spacing: 1px;
             font-weight: 700;
             line-height: 1;
-            color: var(--white); /* Chữ trắng */
+            color: var(--metal-white); /* Chữ trắng (Kim) */
         }
         
         .chapter {
             font-size: 1.5rem;
-            color: var(--silver); /* Chữ bạc */
+            color: var(--metal-silver); /* Chữ bạc (Kim) */
             font-weight: 500;
             margin-top: 8px;
             line-height: 1;
@@ -185,15 +198,15 @@
         section {
             margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 1px dashed var(--silver); /* Đường kẻ bạc */
+            border-bottom: 1px dashed var(--metal-silver); /* Đường kẻ bạc (Kim) */
         }
         
         h2 {
-            color: var(--brown-earth); /* Nâu đất */
+            color: var(--earth-brown); /* Nâu Đậm (Thổ) */
             font-size: 1.8rem;
             margin-bottom: 12px;
             padding-bottom: 8px;
-            border-bottom: 3px solid var(--brown-earth); /* Nâu đất */
+            border-bottom: 3px solid var(--earth-brown); /* Nâu Đậm (Thổ) */
             display: flex;
             align-items: center;
             line-height: 1;
@@ -202,11 +215,11 @@
         h2 i {
             margin-right: 10px;
             font-size: 1.6rem;
-            color: var(--brown-earth); /* Nâu đất */
+            color: var(--earth-brown); /* Nâu Đậm (Thổ) */
         }
         
         h3 {
-            color: var(--text-black); /* Đen */
+            color: var(--earth-orange); /* Nâu Đỏ (Thổ) */
             font-size: 1.5rem;
             margin: 12px 0 8px;
             font-weight: 600;
@@ -216,7 +229,7 @@
         h4 {
             font-size: 1.5rem;
             margin: 10px 0 6px;
-            color: var(--brown-earth); /* Nâu đất */
+            color: var(--earth-orange); /* Nâu Đỏ (Thổ) */
             font-weight: 600;
             line-height: 1;
         }
@@ -225,7 +238,7 @@
             margin-bottom: 8px;
             font-size: 1.5rem;
             line-height: 1.1;
-            color: var(--text-black); /* Đen */
+            color: var(--text-dark); /* Xám đậm thay vì đen */
         }
         
         ul, ol {
@@ -237,7 +250,7 @@
             margin-bottom: 6px;
             font-size: 1.5rem;
             line-height: 1.1;
-            color: var(--text-black); /* Đen */
+            color: var(--text-dark); /* Xám đậm thay vì đen */
         }
         
         /* SPECIAL BOXES */
@@ -246,35 +259,35 @@
             border-radius: 8px;
             margin: 12px 0;
             line-height: 1.1;
-            background-color: var(--white); /* Nền trắng */
-            border: 2px solid var(--silver); /* Viền bạc */
+            background-color: var(--metal-white); /* Nền trắng (Kim) */
+            border: 2px solid var(--metal-silver); /* Viền bạc (Kim) */
         }
         
         .definition-box {
-            background-color: rgba(240, 230, 140, 0.2); /* Vàng nhạt nhạt */
-            border-left: 6px solid var(--brown-earth); /* Nâu đất */
+            background-color: rgba(139, 69, 19, 0.1); /* Nâu Đậm nhạt (Thổ) */
+            border-left: 6px solid var(--earth-brown); /* Nâu Đậm (Thổ) */
         }
         
         .formula-box {
-            background-color: rgba(255, 255, 255, 0.9); /* Trắng trong suốt */
-            border: 2px solid var(--brown-earth); /* Nâu đất */
+            background-color: rgba(255, 255, 255, 0.95); /* Trắng (Kim) */
+            border: 2px solid var(--earth-brown); /* Nâu Đậm (Thổ) */
             text-align: center;
             font-size: 1.5rem;
             padding: 10px;
         }
         
         .example-box {
-            background-color: rgba(240, 230, 140, 0.1); /* Vàng nhạt rất nhạt */
-            border: 2px solid var(--brown-earth); /* Nâu đất */
+            background-color: rgba(210, 180, 140, 0.15); /* Vàng Đất Nhạt (Thổ) */
+            border: 2px solid var(--earth-brown); /* Nâu Đậm (Thổ) */
         }
         
         .application-box {
-            background-color: rgba(240, 230, 140, 0.2); /* Vàng nhạt nhạt */
-            border: 2px solid var(--brown-earth); /* Nâu đất */
+            background-color: rgba(139, 69, 19, 0.1); /* Nâu Đậm nhạt (Thổ) */
+            border: 2px solid var(--earth-brown); /* Nâu Đậm (Thổ) */
         }
         
         .box-title {
-            color: var(--brown-earth); /* Nâu đất */
+            color: var(--earth-brown); /* Nâu Đậm (Thổ) */
             font-size: 1.5rem;
             margin-bottom: 8px;
             display: flex;
@@ -286,7 +299,7 @@
         .box-title i {
             margin-right: 8px;
             font-size: 1.4rem;
-            color: var(--brown-earth); /* Nâu đất */
+            color: var(--earth-brown); /* Nâu Đậm (Thổ) */
         }
         
         /* KEY POINTS GRID */
@@ -298,22 +311,22 @@
         }
         
         .point-card {
-            background-color: var(--white); /* Nền trắng */
+            background-color: var(--metal-white); /* Nền trắng (Kim) */
             padding: 12px;
             border-radius: 8px;
-            border-top: 4px solid var(--brown-earth); /* Nâu đất */
+            border-top: 4px solid var(--earth-yellow); /* Nâu Cát (Thổ) */
             transition: transform 0.3s ease;
             line-height: 1.1;
-            border: 1px solid var(--silver); /* Viền bạc */
+            border: 1px solid var(--metal-silver); /* Viền bạc (Kim) */
         }
         
         .point-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2); /* Bóng nâu */
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3); /* Bóng nâu đất */
         }
         
         .point-card h4 {
-            color: var(--brown-earth); /* Nâu đất */
+            color: var(--earth-brown); /* Nâu Đậm (Thổ) */
             margin-bottom: 8px;
             font-size: 1.5rem;
             font-weight: 600;
@@ -324,7 +337,7 @@
             font-size: 1.5rem;
             line-height: 1.1;
             margin-bottom: 4px;
-            color: var(--text-black); /* Đen */
+            color: var(--text-dark); /* Xám đậm thay vì đen */
         }
         
         .point-card ul {
@@ -333,13 +346,13 @@
         
         /* IMAGES */
         .image-placeholder {
-            background-color: rgba(255, 255, 255, 0.8); /* Trắng trong suốt */
-            border: 2px dashed var(--silver); /* Bạc */
+            background-color: rgba(255, 255, 255, 0.9); /* Trắng (Kim) */
+            border: 2px dashed var(--metal-silver); /* Bạc (Kim) */
             border-radius: 8px;
             padding: 25px 15px;
             text-align: center;
             margin: 15px 0;
-            color: var(--text-black); /* Đen */
+            color: var(--text-dark); /* Xám đậm */
             font-style: italic;
             font-size: 1.5rem;
             line-height: 1.1;
@@ -351,8 +364,8 @@
             height: auto;
             margin: 10px auto;
             border-radius: 8px;
-            border: 2px solid var(--brown-earth); /* Nâu đất */
-            box-shadow: 0 3px 10px rgba(139, 69, 19, 0.2); /* Bóng nâu */
+            border: 2px solid var(--earth-brown); /* Nâu Đậm (Thổ) */
+            box-shadow: 0 3px 10px rgba(139, 69, 19, 0.2); /* Bóng nâu đất */
         }
         
         .image-caption {
@@ -360,7 +373,7 @@
             font-style: italic;
             margin-top: 4px;
             margin-bottom: 12px;
-            color: var(--text-dark); /* Đen đậm vừa */
+            color: var(--text-light); /* Xám vừa */
             font-size: 1.5rem;
             line-height: 1.1;
         }
@@ -370,7 +383,7 @@
             font-size: 1.5rem !important;
             line-height: 1.1 !important;
             margin: 4px 0 !important;
-            color: var(--text-black) !important; /* Đen */
+            color: var(--text-dark) !important; /* Xám đậm */
         }
         
         mjx-container[jax="CHTML"] {
@@ -385,8 +398,8 @@
         
         /* FOOTER */
         footer {
-            background-color: var(--brown-earth); /* Nâu đất */
-            color: var(--white); /* Trắng */
+            background-color: var(--earth-brown); /* Nâu Đậm (Thổ) */
+            color: var(--metal-white); /* Trắng (Kim) */
             text-align: center;
             padding: 15px;
             margin-top: 20px;
@@ -394,30 +407,30 @@
             position: relative;
             z-index: 1;
             line-height: 1;
-            border-top: 2px solid var(--silver); /* Viền bạc */
+            border-top: 2px solid var(--metal-silver); /* Viền bạc (Kim) */
         }
         
         footer p {
             font-size: 1.5rem;
             margin-bottom: 6px;
             line-height: 1.1;
-            color: var(--white); /* Trắng */
+            color: var(--metal-white); /* Trắng (Kim) */
         }
         
         footer strong {
             font-size: 1.5rem;
-            color: var(--white); /* Trắng */
+            color: var(--metal-white); /* Trắng (Kim) */
         }
         
         /* LIÊN KẾT */
         a {
-            color: var(--brown-earth); /* Nâu đất */
+            color: var(--earth-brown); /* Nâu Đậm (Thổ) */
             text-decoration: none;
             transition: color 0.3s;
         }
         
         a:hover {
-            color: #5D4037; /* Nâu đậm hơn */
+            color: var(--earth-orange); /* Nâu Đỏ (Thổ) */
             text-decoration: underline;
         }
         
