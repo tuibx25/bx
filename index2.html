@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang Chủ Bài Tập Vật Lý</title>
-    <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
+    <!-- Favicon -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -15,46 +18,13 @@
         }
         
         body {
-            background-color: #D2B48C;
-            color: #000000;
+            background: #8B4513;
+            color: #333;
             min-height: 100vh;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative;
-            overflow-x: hidden;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        
-        /* Watermark */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: 300px 300px;
-            opacity: 0.05;
-            z-index: -1;
-            pointer-events: none;
-        }
-        
-        /* Chống copy và click phải */
-        body {
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
         }
         
         .container {
@@ -62,8 +32,6 @@
             width: 100%;
             margin: 0 auto;
             padding: 20px;
-            position: relative;
-            z-index: 1;
         }
         
         header {
@@ -71,21 +39,21 @@
             margin-bottom: 40px;
             padding: 20px;
             border-radius: 15px;
-            background-color: #F5F5F5;
-            border: 2px solid #8B4513;
-            width: 100%;
+            background-color: #ffffff;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            border: 2px solid #3498db;
         }
         
         h1 {
-            color: #8B4513;
+            color: #1a2980;
             font-size: 2.8rem;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .subtitle {
-            color: #808080;
+            color: #2d3436;
             font-size: 1.2rem;
             max-width: 800px;
             margin: 0 auto;
@@ -94,13 +62,13 @@
         
         /* Sitemap Styles */
         .sitemap {
-            background-color: #F5F5F5;
+            background-color: #ffffff;
             border-radius: 10px;
             padding: 15px 25px;
             margin-bottom: 30px;
             width: 100%;
-            border: 2px solid #A52A2A;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            border: 1px solid #8B7355;
         }
         
         .sitemap-links {
@@ -111,35 +79,33 @@
         }
         
         .sitemap-link {
-            background-color: #8B4513;
-            color: #FFFFFF;
+            background: #1a2980;
+            color: white;
             padding: 10px 20px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
             font-size: 1rem;
             transition: all 0.3s ease;
-            box-shadow: 0 3px 8px rgba(139, 69, 19, 0.3);
+            box-shadow: 0 3px 8px rgba(26, 41, 128, 0.4);
             display: flex;
             align-items: center;
             gap: 8px;
-            border: 1px solid #A52A2A;
         }
         
         .sitemap-link:hover {
             transform: translateY(-3px);
-            box-shadow: 0 5px 12px rgba(139, 69, 19, 0.4);
-            background-color: #A52A2A;
+            box-shadow: 0 5px 12px rgba(139, 115, 85, 0.5);
+            background: #8B7355;
         }
         
         .sitemap-link.active {
-            background-color: #A52A2A;
-            border: 1px solid #8B4513;
-            box-shadow: 0 3px 8px rgba(165, 42, 42, 0.4);
+            background: #3498db;
+            box-shadow: 0 3px 8px rgba(166, 124, 82, 0.5);
         }
         
         .sitemap-separator {
-            color: #808080;
+            color: #3498db;
             display: flex;
             align-items: center;
             padding: 0 5px;
@@ -155,10 +121,10 @@
         }
         
         .link-card {
-            background-color: #FFFFFF;
+            background-color: white;
             border-radius: 15px;
             padding: 30px 25px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
@@ -167,13 +133,13 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            border: 2px solid #C0C0C0;
+            border: 2px solid transparent;
         }
         
         .link-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
-            border-color: #8B4513;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: #3498db;
         }
         
         .link-card:before {
@@ -183,32 +149,47 @@
             left: 0;
             width: 100%;
             height: 5px;
-            background-color: #8B4513;
+            background: #1a2980;
         }
         
         .link-icon {
             font-size: 3.5rem;
             margin-bottom: 20px;
-            color: #8B4513;
+            color: #1a2980;
             height: 80px;
             width: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            background-color: #F5F5F5;
-            border: 2px solid #C0C0C0;
+            background-color: rgba(52, 152, 219, 0.15);
+        }
+        
+        /* Màu khác nhau cho mỗi icon */
+        .link-card:nth-child(1) .link-icon {
+            color: #3498db;
+            background-color: rgba(52, 152, 219, 0.2);
+        }
+        
+        .link-card:nth-child(2) .link-icon {
+            color: #8B7355;
+            background-color: rgba(139, 115, 85, 0.2);
+        }
+        
+        .link-card:nth-child(3) .link-icon {
+            color: #f1c40f;
+            background-color: rgba(241, 196, 15, 0.2);
         }
         
         .link-title {
             font-size: 1.8rem;
-            color: #000000;
+            color: #2d3436;
             margin-bottom: 10px;
             font-weight: 700;
         }
         
         .link-desc {
-            color: #808080;
+            color: #636e72;
             margin-bottom: 25px;
             line-height: 1.5;
             flex-grow: 1;
@@ -216,23 +197,23 @@
         
         .btn {
             display: inline-block;
-            background-color: #8B4513;
-            color: #FFFFFF;
+            background: #3498db;
+            color: white;
             padding: 12px 28px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
             font-size: 1.1rem;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
-            border: 1px solid #A52A2A;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+            border: none;
             cursor: pointer;
         }
         
         .btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(139, 69, 19, 0.4);
-            background-color: #A52A2A;
+            box-shadow: 0 6px 20px rgba(166, 124, 82, 0.5);
+            background: #A67C52;
         }
         
         .btn i {
@@ -243,34 +224,33 @@
             text-align: center;
             margin-top: 40px;
             padding: 20px;
-            color: #FFFFFF;
+            color: white;
             width: 100%;
             font-size: 1rem;
-            opacity: 0.9;
+            opacity: 0.95;
         }
         
         .footer-text {
-            background-color: rgba(139, 69, 19, 0.8);
+            background-color: rgba(0, 0, 0, 0.25);
             padding: 15px;
             border-radius: 10px;
             max-width: 800px;
             margin: 0 auto;
-            border: 1px solid #A52A2A;
         }
         
         .instructions {
-            background-color: #F5F5F5;
+            background-color: #ffffff;
             border-radius: 15px;
             padding: 25px;
             margin-bottom: 40px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             width: 100%;
             max-width: 800px;
-            border: 2px solid #C0C0C0;
+            border: 1px solid #f1c40f;
         }
         
         .instructions h2 {
-            color: #8B4513;
+            color: #3498db;
             margin-bottom: 15px;
             font-size: 1.8rem;
         }
@@ -278,7 +258,7 @@
         .instructions p {
             margin-bottom: 10px;
             line-height: 1.6;
-            color: #808080;
+            color: #2d3436;
         }
         
         .instructions ul {
@@ -304,25 +284,24 @@
         .special-card {
             width: 100%;
             max-width: 700px;
-            background-color: #F5F5F5;
-            border: 3px solid #1E90FF;
+            background: #F5E6D3;
+            border: 3px solid #A67C52;
         }
         
         .special-card .link-title {
-            color: #000080;
+            color: #1a2980;
         }
         
         .special-card .link-icon {
-            background-color: #FFFFFF;
-            color: #1E90FF;
-            border-color: #1E90FF;
+            background-color: rgba(166, 124, 82, 0.25);
+            color: #1a2980;
         }
         
         /* Hiệu ứng đặc biệt cho thẻ Túi Tài Liệu */
         .special-card:hover {
             transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(30, 144, 255, 0.3);
-            border-color: #000080;
+            box-shadow: 0 20px 40px rgba(166, 124, 82, 0.3);
+            border-color: #3498db;
         }
         
         @media (max-width: 992px) {
@@ -467,42 +446,13 @@
         
         <footer>
             <div class="footer-text">
-                <p><i class="fas fa-copyright"></i> 2025 Trang Bài Tập Vật Lý | Tất cả các liên kết được cung cấp bởi tuibx25.github.io.bx</p>
+                <p><i class="fas fa-copyright"></i> 2025 Trang Bài Tập Vật Lý | Tất cả các liên kết được cung cấp bởi tuibx25.github.io</p>
                 <p>Trang web này hoạt động như một cổng thông tin đến các tài nguyên học tập Vật Lý trực tuyến.</p>
             </div>
         </footer>
     </div>
 
     <script>
-        // Bảo mật: Chống click phải và các phím tắt xem mã nguồn
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            return false;
-        });
-        
-        document.addEventListener('keydown', function(e) {
-            // Chặn F12
-            if(e.keyCode === 123) {
-                e.preventDefault();
-                return false;
-            }
-            // Chặn Ctrl+Shift+I
-            if(e.ctrlKey && e.shiftKey && e.keyCode === 73) {
-                e.preventDefault();
-                return false;
-            }
-            // Chặn Ctrl+U
-            if(e.ctrlKey && e.keyCode === 85) {
-                e.preventDefault();
-                return false;
-            }
-            // Chặn Ctrl+S
-            if(e.ctrlKey && e.keyCode === 83) {
-                e.preventDefault();
-                return false;
-            }
-        });
-        
         // Thêm hiệu ứng cho các thẻ khi tải trang
         document.addEventListener('DOMContentLoaded', function() {
             // Hiệu ứng cho sitemap
@@ -544,7 +494,7 @@
                     let pulseCount = 0;
                     const pulseInterval = setInterval(() => {
                         if (pulseCount < 3) {
-                            specialCard.style.boxShadow = '0 0 40px rgba(30, 144, 255, 0.7)';
+                            specialCard.style.boxShadow = '0 0 40px rgba(166, 124, 82, 0.7)';
                             setTimeout(() => {
                                 specialCard.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.25)';
                             }, 400);
