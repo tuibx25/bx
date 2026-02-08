@@ -856,84 +856,7 @@
             }
         });
         document.addEventListener('dragstart', function(e) { e.preventDefault(); });
-            // Thêm chức năng điều khiển bằng bàn phím
-        document.addEventListener('keydown', function(event) {
-            // Chỉ xử lý khi không ở chế độ nộp bài
-            if (examSubmitted) return;
-            
-            // Không xử lý khi modal đang hiển thị
-            const modal = document.getElementById('submit-modal');
-            if (modal.classList.contains('active')) return;
-            
-            const key = event.key;
-            
-            // Xử lý phím số 1-0 (1-9, 0 cho câu 10)
-            if (key >= '1' && key <= '9') {
-                const questionIndex = parseInt(key) - 1;
-                if (questionIndex >= 0 && questionIndex < 10) {
-                    currentQuestion = questionIndex;
-                    showQuestion(currentQuestion);
-                    event.preventDefault();
-                }
-            } else if (key === '0') {
-                // Phím 0 cho câu 10
-                currentQuestion = 9;
-                showQuestion(currentQuestion);
-                event.preventDefault();
-            }
-            
-            // Xử lý phím mũi tên
-            if (key === 'ArrowLeft') {
-                if (currentQuestion > 0) {
-                    currentQuestion--;
-                    showQuestion(currentQuestion);
-                }
-                event.preventDefault();
-            } else if (key === 'ArrowRight') {
-                if (currentQuestion < 9) {
-                    currentQuestion++;
-                    showQuestion(currentQuestion);
-                }
-                event.preventDefault();
-            }
-            
-            // Thêm chức năng chọn đáp án bằng phím A, B, C, D
-            if (key === 'a' || key === 'A') {
-                selectOption(currentQuestion, 0);
-                event.preventDefault();
-            } else if (key === 'b' || key === 'B') {
-                selectOption(currentQuestion, 1);
-                event.preventDefault();
-            } else if (key === 'c' || key === 'C') {
-                selectOption(currentQuestion, 2);
-                event.preventDefault();
-            } else if (key === 'd' || key === 'D') {
-                selectOption(currentQuestion, 3);
-                event.preventDefault();
-            }
-            
-            // Phím Enter để nộp bài
-            if (key === 'Enter' && !examSubmitted) {
-                showSubmitModal();
-                event.preventDefault();
-            }
-            
-            // Phím Space để hiện/ẩn giải thích
-            if (key === ' ' && examSubmitted) {
-                const explanation = document.getElementById(`exam${currentExam}-explanation-${currentQuestion}`);
-                if (explanation) {
-                    explanation.classList.toggle('show');
-                }
-                event.preventDefault();
-            }
-        });
-        
-        // Thêm hướng dẫn sử dụng bàn phím vào phần hướng dẫn
-        const instructionsElement = document.querySelector('.instructions');
-        const keyboardInstructions = document.createElement('p');
-        keyboardInstructions.innerHTML = '<strong>Điều khiển bằng bàn phím:</strong> Phím số 1-0 (chọn câu), Mũi tên trái/phải (chuyển câu), A/B/C/D (chọn đáp án), Enter (nộp bài)';
-        instructionsElement.appendChild(keyboardInstructions);
-	</script>
+    </script>
 </head>
 <body>
     <div class="watermark-overlay"></div>
@@ -964,6 +887,7 @@
             <p>3. Sử dụng nút "Câu trước", "Câu tiếp theo" hoặc nút điều hướng nhanh để chuyển câu.</p>
             <p>4. Bấm nút "Nộp bài" để kết thúc và xem kết quả.</p>
             <p>5. Sau khi nộp bài, bạn có thể xem lại bài làm hoặc làm đề khác.</p>
+            <p>6. <strong>Điều khiển bằng bàn phím:</strong> Phím số 1-0 (chọn câu), Mũi tên trái/phải (chuyển câu), A/B/C/D (chọn đáp án), Enter (nộp bài).</p>
         </div>
         
         <!-- Chọn đề thi -->
@@ -2399,6 +2323,78 @@
             // Cuộn lên đầu trang
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+        
+        // Thêm chức năng điều khiển bằng bàn phím
+        document.addEventListener('keydown', function(event) {
+            // Chỉ xử lý khi không ở chế độ nộp bài
+            if (examSubmitted) return;
+            
+            // Không xử lý khi modal đang hiển thị
+            const modal = document.getElementById('submit-modal');
+            if (modal.classList.contains('active')) return;
+            
+            const key = event.key;
+            
+            // Xử lý phím số 1-0 (1-9, 0 cho câu 10)
+            if (key >= '1' && key <= '9') {
+                const questionIndex = parseInt(key) - 1;
+                if (questionIndex >= 0 && questionIndex < 10) {
+                    currentQuestion = questionIndex;
+                    showQuestion(currentQuestion);
+                    event.preventDefault();
+                }
+            } else if (key === '0') {
+                // Phím 0 cho câu 10
+                currentQuestion = 9;
+                showQuestion(currentQuestion);
+                event.preventDefault();
+            }
+            
+            // Xử lý phím mũi tên
+            if (key === 'ArrowLeft') {
+                if (currentQuestion > 0) {
+                    currentQuestion--;
+                    showQuestion(currentQuestion);
+                }
+                event.preventDefault();
+            } else if (key === 'ArrowRight') {
+                if (currentQuestion < 9) {
+                    currentQuestion++;
+                    showQuestion(currentQuestion);
+                }
+                event.preventDefault();
+            }
+            
+            // Thêm chức năng chọn đáp án bằng phím A, B, C, D
+            if (key === 'a' || key === 'A') {
+                selectOption(currentQuestion, 0);
+                event.preventDefault();
+            } else if (key === 'b' || key === 'B') {
+                selectOption(currentQuestion, 1);
+                event.preventDefault();
+            } else if (key === 'c' || key === 'C') {
+                selectOption(currentQuestion, 2);
+                event.preventDefault();
+            } else if (key === 'd' || key === 'D') {
+                selectOption(currentQuestion, 3);
+                event.preventDefault();
+            }
+            
+            // Phím Enter để nộp bài
+            if (key === 'Enter' && !examSubmitted) {
+                showSubmitModal();
+                event.preventDefault();
+            }
+            
+            // Phím Space để hiện/ẩn giải thích
+            if (key === ' ' && examSubmitted) {
+                const explanation = document.getElementById(`exam${currentExam}-explanation-${currentQuestion}`);
+                if (explanation) {
+                    explanation.classList.toggle('show');
+                }
+                event.preventDefault();
+            }
+        });
     </script>
 </body>
 </html>
