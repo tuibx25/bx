@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Màu sắc phong thủy - SN 29/10/1970</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            margin: -20px -20px 30px;
+            border-radius: 20px 20px 0 0;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .birthdate-info {
+            background-color: #f0f7ff;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #4b6cb7;
+        }
+        
+        .birthdate-info h2 {
+            color: #182848;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            min-width: 150px;
+            color: #4b6cb7;
+        }
+        
+        .color-sections {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .color-section {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .color-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .color-section.compatible {
+            border-top: 5px solid #2ecc71;
+        }
+        
+        .color-section.conflicting {
+            border-top: 5px solid #e74c3c;
+        }
+        
+        .section-title {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .compatible .section-title {
+            color: #2ecc71;
+        }
+        
+        .conflicting .section-title {
+            color: #e74c3c;
+        }
+        
+        .color-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .color-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .color-preview {
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
+            margin-right: 20px;
+            border: 3px solid white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .color-details {
+            flex: 1;
+        }
+        
+        .color-name {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .color-code {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .meaning {
+            font-style: italic;
+            color: #666;
+            margin-top: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .explanation {
+            background-color: #fff9e6;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border-left: 5px solid #f1c40f;
+        }
+        
+        .explanation h3 {
+            color: #d35400;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .explanation p {
+            margin-bottom: 15px;
+        }
+        
+        .explanation ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .explanation li {
+            margin-bottom: 8px;
+        }
+        
+        .disclaimer {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-style: italic;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .color-sections {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .color-section {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-palette"></i> Màu Sắc Phong Thủy</h1>
+            <p class="subtitle">Tra cứu màu hợp và khắc cho ngày sinh 29/10/1970</p>
+        </header>
+        
+        <div class="birthdate-info">
+            <h2><i class="fas fa-birthday-cake"></i> Thông tin ngày sinh</h2>
+            <div class="info-row">
+                <div class="info-label">Ngày sinh:</div>
+                <div class="info-value">29 tháng 10 năm 1970</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Mệnh theo năm sinh:</div>
+                <div class="info-value">Thoa Xuyến Kim (Vàng trang sức) - Mệnh Kim</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Ngũ hành tương sinh:</div>
+                <div class="info-value">Thổ sinh Kim (màu vàng, nâu đất)</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Ngũ hành tương khắc:</div>
+                <div class="info-value">Hỏa khắc Kim (màu đỏ, hồng, tím, cam)</div>
+            </div>
+        </div>
+        
+        <div class="color-sections">
+            <div class="color-section compatible">
+                <h2 class="section-title"><i class="fas fa-check-circle"></i> Màu tương hợp & tương sinh</h2>
+                
+                <div class="color-item">
+                    <div class="color-preview" style="background-color: #F0E68C;"></div>
+                    <div class="color-details">
+                        <div class="color-name">Vàng nhạt</div>
+                        <div class="color-code">Mã: #F0E68C</div>
+                        <div class="meaning">Màu tương sinh (Thổ sinh Kim): Mang lại may mắn, tài lộc</div>
+                    </div>
+                </div>
+                
+                <div class="color-item">
+                    <div class="color-preview" style="background-color: #8B4513;"></div>
+                    <div class="color-details">
+                        <div class="color-name">Nâu đất</div>
+                        <div class="color-code">Mã: #8B4513</div>
+                        <div class="meaning">Màu tương sinh (Thổ sinh Kim): Tạo sự ổn định, bền vững</div>
+                    </div>
+                </div>
+                
+                <div class="color-item">
+                    <div class="color-preview" style="background-color: #FFFFFF; border: 1px solid #eee;"></div>
+                    <div class="color-details">
+                        <div class="color-name">Trắng</div>
+                        <div class="color-code">Mã: #FFFFFF</div>
+                        <div class="meaning">Màu tương hợp (bản mệnh Kim): Thanh khiết, sáng sủa</div>
+                    </div>
+                </div>
+                
+                <div class="color-item">
+                    <div class="color-preview" style="background-color: #C0C0C0;"></div>
+                    <div class="color-details">
+                        <div class="color-name">Bạc</div>
+                        <div class="color-code">Mã: #C0C0C0</div>
+                        <div class="meaning">Màu tương hợp (bản mệnh Kim): Sang trọng, hiện đại</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="color-section conflicting">
+                <h2 class="section-title"><i class="fas fa-times-circle"></i> Màu tương khắc</h2>
+                
+                <div class="color-item">
+                    <div class="color-preview" style="background-color: #FF0000;"></div>
+                    <div class="color-details">
+                        <div class="color-name">Đỏ</div>
+                        <div class="color-code">Mã: #FF0000</div>
+                        <div class="meaning">Hỏa khắc Kim: Có thể gây cản trở, tiêu hao năng lượng</div>
+                    </div>
+                </div>
+                
+                <div class="color-item">
+                    <div class="color-preview" style="background-color: #FF69B4;"></div>
+                    <div class="color-details">
+                        <div class="color-name">Hồng</div>
+                        <div class="color-code">Mã: #FF69B4</div>
+                        <div class="meaning">Hỏa khắc Kim: Có thể tạo cảm giác bất an</div>
+                    </div>
+                </div>
+                
+                <div class="color-item">
+                    <div class="color-preview" style="background-color: #800080;"></div>
+                    <div class="color-details">
+                        <div class="color-name">Tím</div>
+                        <div class="color-code">Mã: #800080</div>
+                        <div class="meaning">Hỏa khắc Kim: Có thể gây trở ngại trong công việc</div>
+                    </div>
+                </div>
+                
+                <div class="color-item">
+                    <div class="color-preview" style="background-color: #FFA500;"></div>
+                    <div class="color-details">
+                        <div class="color-name">Cam</div>
+                        <div class="color-code">Mã: #FFA500</div>
+                        <div class="meaning">Hỏa khắc Kim: Có thể tạo cảm giác nóng nảy, thiếu kiên nhẫn</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="explanation">
+            <h3><i class="fas fa-lightbulb"></i> Giải thích phong thủy</h3>
+            <p>Theo thuyết ngũ hành, người sinh ngày 29/10/1970 thuộc mệnh <strong>Kim (Thoa Xuyến Kim)</strong>. Màu sắc phù hợp được xác định dựa trên nguyên lý tương sinh, tương hợp và tương khắc:</p>
+            
+            <ul>
+                <li><strong>Tương sinh:</strong> Thổ sinh Kim → Màu vàng, nâu đất (hành Thổ) sẽ mang lại năng lượng hỗ trợ, sinh khí cho người mệnh Kim.</li>
+                <li><strong>Tương hợp:</strong> Kim hợp Kim → Màu trắng, bạc, xám (hành Kim) sẽ tăng cường năng lượng bản mệnh.</li>
+                <li><strong>Tương khắc:</strong> Hỏa khắc Kim → Màu đỏ, hồng, tím, cam (hành Hỏa) có thể làm suy giảm năng lượng của người mệnh Kim.</li>
+            </ul>
+            
+            <p><strong>Ứng dụng:</strong> Nên sử dụng các màu tương sinh và tương hợp trong trang phục, phụ kiện, sơn nhà, nội thất, xe cộ để tăng cường vận may, sức khỏe và tài lộc. Hạn chế sử dụng các màu tương khắc trong những vật dụng quan trọng.</p>
+        </div>
+        
+        <div class="disclaimer">
+            <p><i class="fas fa-exclamation-circle"></i> Thông tin trên đây chỉ mang tính chất tham khảo dựa trên nguyên lý phong thủy ngũ hành. Việc ứng dụng màu sắc cần linh hoạt kết hợp với nhiều yếu tố khác.</p>
+        </div>
+        
+        <footer>
+            <p>Trang web tra cứu màu sắc phong thủy theo ngày sinh | 29/10/1970</p>
+            <p>© 2023 - Thiết kế cho mục đích tham khảo</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Thêm hiệu ứng khi di chuột vào ô màu
+        document.querySelectorAll('.color-preview').forEach(preview => {
+            preview.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.1)';
+                this.style.transition = 'transform 0.3s ease';
+            });
+            
+            preview.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+        
+        // Thêm hiệu ứng khi click vào mã màu để sao chép
+        document.querySelectorAll('.color-code').forEach(codeElement => {
+            codeElement.addEventListener('click', function() {
+                const colorCode = this.textContent.replace('Mã: ', '');
+                navigator.clipboard.writeText(colorCode).then(() => {
+                    const originalText = this.textContent;
+                    this.textContent = 'Đã sao chép!';
+                    this.style.backgroundColor = '#2ecc71';
+                    this.style.color = 'white';
+                    
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                        this.style.backgroundColor = '#f8f9fa';
+                        this.style.color = '#555';
+                    }, 1500);
+                });
+            });
+            
+            // Thêm con trỏ dạng pointer để biểu thị có thể click
+            codeElement.style.cursor = 'pointer';
+        });
+    </script>
+</body>
+</html>
