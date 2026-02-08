@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giờ Hà Nội</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 25px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 25px;
+            background: linear-gradient(to right, #8B4513, #A52A2A);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(139, 69, 19, 0.2);
+        }
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        .clock-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border: 2px dashed #C0C0C0;
+        }
+        /* ĐỒNG HỒ CỠ LỚN */
+        #live-clock {
+            font-size: 7.5rem;
+            font-weight: 800;
+            color: #1E90FF;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.15);
+            line-height: 1.2;
+        }
+        .date-display {
+            font-size: 3.2rem;
+            color: #8B4513;
+            font-weight: 700;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+        }
+        .timezone {
+            font-size: 2rem;
+            color: #808080;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 25px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        /* Responsive cho đồng hồ lớn */
+        @media (max-width: 1024px) {
+            #live-clock { font-size: 6rem; }
+            .date-display { font-size: 2.5rem; }
+            .timezone { font-size: 1.7rem; }
+        }
+        @media (max-width: 768px) {
+            #live-clock { font-size: 4.5rem; }
+            .date-display { font-size: 2rem; }
+            .timezone { font-size: 1.5rem; }
+            header h1 { font-size: 2.2rem; }
+        }
+        @media (max-width: 480px) {
+            #live-clock { font-size: 3.5rem; }
+            .date-display { font-size: 1.7rem; }
+            .timezone { font-size: 1.3rem; }
+            header h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-clock"></i> GIỜ HÀ NỘI</h1>
+            <p style="font-size: 1.3rem;">Thời gian thực theo múi giờ Việt Nam (UTC+7)</p>
+        </header>
+
+        <section class="clock-container">
+            <h2 style="font-size: 2.2rem; color: #8B4513;"><i class="fas fa-globe-asia"></i> THỜI GIAN HIỆN TẠI TẠI HÀ NỘI</h2>
+            <div id="live-clock">--:--:--</div>
+            <div id="date-display" class="date-display">--/--/----</div>
+            <div class="timezone">Múi giờ: UTC+7 (Giờ Việt Nam)</div>
+        </section>
+    </div>
+
+    <script>
+        // ===== HÀM HIỂN THỊ ĐỒNG HỒ THỜI GIAN THỰC CHÍNH XÁC =====
+        function updateClock() {
+            const now = new Date();
+            
+            // Tính toán giờ Hà Nội (UTC+7) một cách chính xác
+            // Lấy giờ UTC và cộng thêm 7 giờ
+            const utcHours = now.getUTCHours();
+            const utcMinutes = now.getUTCMinutes();
+            const utcSeconds = now.getUTCSeconds();
+            
+            // Cộng thêm 7 giờ cho múi giờ Hà Nội
+            let hanoiHours = utcHours + 7;
+            
+            // Xử lý trường hợp vượt quá 24 giờ
+            if (hanoiHours >= 24) {
+                hanoiHours -= 24;
+            }
+            
+            // Định dạng với 2 chữ số
+            const hours = hanoiHours.toString().padStart(2, '0');
+            const minutes = utcMinutes.toString().padStart(2, '0');
+            const seconds = utcSeconds.toString().padStart(2, '0');
+            
+            // Lấy ngày tháng năm
+            const day = now.getDate().toString().padStart(2, '0');
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const year = now.getFullYear();
+            
+            const timeStr = `${hours}:${minutes}:${seconds}`;
+            const dateStr = `${day}/${month}/${year}`;
+            
+            document.getElementById('live-clock').innerHTML = timeStr;
+            document.getElementById('date-display').innerHTML = dateStr;
+        }
+
+        // ===== HÀM KHỞI TẠO TRANG =====
+        function initializePage() {
+            // Hiển thị đồng hồ ngay lập tức và cập nhật mỗi giây
+            updateClock();
+            setInterval(updateClock, 1000);
+        }
+
+        // ===== CHẠY KHI TRANG ĐƯỢC TẢI =====
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>
