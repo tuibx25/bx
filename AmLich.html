@@ -1,0 +1,98 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+ <meta name="robots" content="index, follow" />
+ <meta content="index,follow" name="GOOGLEBOT" />
+ <meta name="Author" content="TuiBinhXuyen">
+ <title>TuiBinhXuyen</title>
+ <style>
+    #hanoi-clock {
+        font-family: Arial, sans-serif;
+        font-size: 28px;  /* Tăng cỡ chữ từ 18px lên 28px */
+        font-weight: bold; /* Thêm đậm để dễ đọc hơn */
+        color: #222;
+        padding: 15px;
+        background-color: transparent; /* Đã đổi từ #f0f0f0 sang trong suốt */
+        border-radius: 8px;
+        margin-bottom: 20px;
+        display: inline-block;
+        text-align: center;
+        min-width: 500px; /* Đảm bảo đủ không gian cho nội dung */
+    }
+    
+    .clock-time {
+        font-size: 32px;  /* Cỡ chữ riêng cho phần thời gian */
+        color: #0066cc;
+    }
+    
+    .clock-date {
+        font-size: 22px;
+        color: #666;
+        margin-top: 5px;
+    }
+ </style>
+</head>
+<body marginwidth="0" marginheight="0" topmargin="0" leftmargin="0" align="center" bgcolor="">
+<table align="center" bgcolor="" border="0" bordercolor="#ffe3cb" width="100%" height="" cellpadding="0" cellspacing="0">
+<tr>
+    <td align="center">
+        <!-- Hiển thị giờ Hà Nội -->
+        <div id="hanoi-clock">
+            <div id="clock-time" class="clock-time">Đang tải...</div>
+            <div id="clock-date" class="clock-date"></div>
+        </div>
+    </td>
+</tr>
+<tr>    
+    <td align="center" bgcolor="">
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = -->
+<div align="center">
+<script type="text/javascript" language="JavaScript" src="amlich.js">
+</script>
+<script language="JavaScript">
+<!--
+setOutputSize("big");
+document.writeln(printSelectedMonth());
+-->
+</script>
+</div>
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = -->
+    </td>    
+</tr>
+</table>
+
+<script>
+// Hàm cập nhật giờ Hà Nội (GMT+7)
+function updateHanoiTime() {
+    var now = new Date();
+    // Lấy giờ UTC và cộng thêm 7 giờ cho múi giờ Hà Nội
+    var utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+    var hanoiTime = new Date(utc + (3600000 * 7));
+    
+    // Định dạng ngày giờ
+    var days = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+    var dayName = days[hanoiTime.getDay()];
+    var date = hanoiTime.getDate().toString().padStart(2, '0');
+    var month = (hanoiTime.getMonth() + 1).toString().padStart(2, '0');
+    var year = hanoiTime.getFullYear();
+    var hours = hanoiTime.getHours().toString().padStart(2, '0');
+    var minutes = hanoiTime.getMinutes().toString().padStart(2, '0');
+    var seconds = hanoiTime.getSeconds().toString().padStart(2, '0');
+    
+    // Hiển thị kết quả
+    document.getElementById('clock-time').innerHTML = 
+        hours + ' : ' + minutes + ' : ' + seconds;
+    
+    document.getElementById('clock-date').innerHTML = 
+        dayName + ', ' + date + '/' + month + '/' + year;
+}
+
+// Cập nhật mỗi giây
+setInterval(updateHanoiTime, 1000);
+
+// Chạy lần đầu ngay khi tải trang
+updateHanoiTime();
+</script>
+
+</body>
+</html>

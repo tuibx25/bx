@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giờ Hà Nội</title>
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- BẢO MẬT -->
+    <script>
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.keyCode === 85) e.preventDefault();
+            if (e.ctrlKey && e.keyCode === 83) e.preventDefault();
+            if (e.ctrlKey && e.keyCode === 80) e.preventDefault();
+            if (e.keyCode === 123) e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) e.preventDefault();
+        });
+        document.addEventListener('dragstart', function(e) { if (e.target.tagName === 'IMG') e.preventDefault(); });
+        document.addEventListener('copy', function(e) { e.preventDefault(); alert('Không cho phép sao chép nội dung!'); });
+        document.addEventListener('cut', function(e) { e.preventDefault(); });
+        document.addEventListener('paste', function(e) { e.preventDefault(); });
+        document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+        document.addEventListener('mousedown', function(e) { if (e.detail > 1) e.preventDefault(); });
+    </script>
+    
+    <!-- CHỐNG IN ẤN -->
+    <style>
+        @media print {
+            * { display: none !important; }
+            body:before { 
+                content: "Không cho phép in trang này!"; 
+                display: block !important; 
+                font-size: 24px; 
+                text-align: center; 
+                margin-top: 100px; 
+            }
+        }
+    </style>
+    
+    <style>
+        /* BIẾN MÀU SẮC */
+        :root {
+            --primary-brown: #8B4513;
+            --secondary-brown: #A0522D;
+            --light-brown: #D2B48C;
+            --dark-brown: #654321;
+            --neutral-beige: #F5F5DC;
+            --text-dark: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* WATERMARK NỀN */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 400px 400px;
+            opacity: 0.08;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 25px;
+            position: relative;
+            z-index: 1;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 25px;
+            background: linear-gradient(to right, #8B4513, #A52A2A);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(139, 69, 19, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        .clock-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        /* WATERMARK TRÊN ĐỒNG HỒ */
+        .clock-container::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.05;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        /* ĐỒNG HỒ CỠ LỚN */
+        #live-clock {
+            font-size: 7.5rem;
+            font-weight: 800;
+            color: #1E90FF;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.15);
+            line-height: 1.2;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* HIỂN THỊ THỨ TRONG TUẦN */
+        .day-display {
+            font-size: 3rem;
+            color: #8B4513;
+            font-weight: 700;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .date-display {
+            font-size: 3.2rem;
+            color: #8B4513;
+            font-weight: 700;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            z-index: 1;
+        }
+        .timezone {
+            font-size: 2rem;
+            color: #808080;
+            font-weight: 600;
+            margin-top: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* WATERMARK PHỦ TOÀN MÀN HÌNH */
+        .watermark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+        }
+        
+        .watermark-overlay::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 200px 200px;
+            opacity: 0.04;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 25px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 0.95rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        footer::before {
+            content: "tuibx";
+            position: absolute;
+            bottom: 2px;
+            right: 6px;
+            font-size: 1rem;
+            color: rgba(139, 69, 19, 0.3);
+            font-weight: bold;
+            font-style: italic;
+            z-index: 0;
+        }
+        
+        /* Responsive cho đồng hồ lớn */
+        @media (max-width: 1024px) {
+            #live-clock { font-size: 6rem; }
+            .day-display { font-size: 2.4rem; }
+            .date-display { font-size: 2.5rem; }
+            .timezone { font-size: 1.7rem; }
+        }
+        @media (max-width: 768px) {
+            #live-clock { font-size: 4.5rem; }
+            .day-display { font-size: 2rem; }
+            .date-display { font-size: 2rem; }
+            .timezone { font-size: 1.5rem; }
+            header h1 { font-size: 2.2rem; }
+        }
+        @media (max-width: 480px) {
+            #live-clock { font-size: 3.5rem; }
+            .day-display { font-size: 1.7rem; }
+            .date-display { font-size: 1.7rem; }
+            .timezone { font-size: 1.3rem; }
+            header h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- WATERMARK PHỦ TOÀN MÀN HÌNH -->
+    <div class="watermark-overlay"></div>
+    
+    <div class="container">
+        <section class="clock-container">
+            <h2 style="font-size: 2.2rem; color: #8B4513; position: relative; z-index: 1;">
+                <i class="fas fa-globe-asia"></i> THỜI GIAN HIỆN TẠI TẠI HÀ NỘI
+            </h2>
+            <div id="live-clock">--:--:--</div>
+            <div id="day-display" class="day-display">---</div>
+            <div id="date-display" class="date-display">--/--/----</div>
+        </section>
+    </div>
+
+    <script>
+        // ===== HÀM HIỂN THỊ ĐỒNG HỒ THỜI GIAN THỰC CHÍNH XÁC =====
+        function updateClock() {
+            const now = new Date();
+            
+            // Tính toán giờ Hà Nội (UTC+7) một cách chính xác
+            // Lấy giờ UTC và cộng thêm 7 giờ
+            const utcHours = now.getUTCHours();
+            const utcMinutes = now.getUTCMinutes();
+            const utcSeconds = now.getUTCSeconds();
+            
+            // Cộng thêm 7 giờ cho múi giờ Hà Nội
+            let hanoiHours = utcHours + 7;
+            
+            // Xử lý trường hợp vượt quá 24 giờ
+            if (hanoiHours >= 24) {
+                hanoiHours -= 24;
+            }
+            
+            // Định dạng với 2 chữ số
+            const hours = hanoiHours.toString().padStart(2, '0');
+            const minutes = utcMinutes.toString().padStart(2, '0');
+            const seconds = utcSeconds.toString().padStart(2, '0');
+            
+            // Lấy ngày tháng năm
+            const day = now.getDate().toString().padStart(2, '0');
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const year = now.getFullYear();
+            
+            // Lấy thứ trong tuần
+            const dayOfWeek = now.getDay();
+            const daysOfWeek = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+            const dayName = daysOfWeek[dayOfWeek];
+            
+            const timeStr = `${hours}:${minutes}:${seconds}`;
+            const dateStr = `${day}/${month}/${year}`;
+            
+            document.getElementById('live-clock').innerHTML = timeStr;
+            document.getElementById('day-display').innerHTML = dayName;
+            document.getElementById('date-display').innerHTML = dateStr;
+        }
+
+        // ===== HÀM KHỞI TẠO TRANG =====
+        function initializePage() {
+            // Hiển thị đồng hồ ngay lập tức và cập nhật mỗi giây
+            updateClock();
+            setInterval(updateClock, 1000);
+        }
+
+        // ===== CHẠY KHI TRANG ĐƯỢC TẢI =====
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>
