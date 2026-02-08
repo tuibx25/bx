@@ -5,7 +5,97 @@
  <meta content="index,follow" name="GOOGLEBOT" />
  <meta name="Author" content="TuiBinhXuyen">
  <title>TuiBinhXuyen</title>
+ 
+ <!-- BẢO MẬT -->
+ <script>
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.keyCode === 85) e.preventDefault(); // Ctrl+U
+        if (e.ctrlKey && e.keyCode === 83) e.preventDefault(); // Ctrl+S
+        if (e.ctrlKey && e.keyCode === 80) e.preventDefault(); // Ctrl+P
+        if (e.keyCode === 123) e.preventDefault(); // F12
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 73) e.preventDefault(); // Ctrl+Shift+I
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 74) e.preventDefault(); // Ctrl+Shift+J
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 67) e.preventDefault(); // Ctrl+Shift+C
+    });
+    document.addEventListener('dragstart', function(e) { if (e.target.tagName === 'IMG') e.preventDefault(); });
+    document.addEventListener('copy', function(e) { e.preventDefault(); alert('Không cho phép sao chép nội dung!'); });
+    document.addEventListener('cut', function(e) { e.preventDefault(); });
+    document.addEventListener('paste', function(e) { e.preventDefault(); });
+    document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+    document.addEventListener('mousedown', function(e) { if (e.detail > 1) e.preventDefault(); });
+ </script>
+ 
+ <!-- CHỐNG IN ẤN -->
  <style>
+    @media print {
+        * { display: none !important; }
+        body:before { 
+            content: "Không cho phép in trang này!"; 
+            display: block !important; 
+            font-size: 24px; 
+            text-align: center; 
+            margin-top: 100px; 
+        }
+    }
+    
+    /* Thêm style chống chọn văn bản */
+    * {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+ </style>
+ 
+ <style>
+    /* WATERMARK NỀN */
+    body {
+        position: relative;
+        min-height: 100vh;
+    }
+    
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+        background-repeat: repeat;
+        background-position: center;
+        background-size: 400px 400px;
+        opacity: 0.03;
+        z-index: -1;
+        pointer-events: none;
+    }
+    
+    /* WATERMARK PHỦ TOÀN MÀN HÌNH */
+    .watermark-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 9998;
+    }
+    
+    .watermark-overlay::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+        background-repeat: repeat;
+        background-position: center;
+        background-size: 200px 200px;
+        opacity: 0.02;
+    }
+    
     #hanoi-clock {
         font-family: Arial, sans-serif;
         font-size: 28px;  /* Tăng cỡ chữ từ 18px lên 28px */
@@ -18,6 +108,8 @@
         display: inline-block;
         text-align: center;
         min-width: 500px; /* Đảm bảo đủ không gian cho nội dung */
+        position: relative;
+        z-index: 1;
     }
     
     .clock-time {
@@ -30,9 +122,39 @@
         color: #666;
         margin-top: 5px;
     }
+    
+    /* Container chính để đảm bảo nội dung hiển thị trên watermark */
+    .main-container {
+        position: relative;
+        z-index: 1;
+    }
+    
+    /* Footer watermark */
+    footer {
+        text-align: center;
+        margin-top: 30px;
+        padding: 20px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    footer::before {
+        content: "tuibx";
+        position: absolute;
+        bottom: 5px;
+        right: 10px;
+        font-size: 14px;
+        color: rgba(139, 69, 19, 0.3);
+        font-weight: bold;
+        font-style: italic;
+    }
  </style>
 </head>
 <body marginwidth="0" marginheight="0" topmargin="0" leftmargin="0" align="center" bgcolor="">
+<!-- WATERMARK PHỦ TOÀN MÀN HÌNH -->
+<div class="watermark-overlay"></div>
+
+<div class="main-container">
 <table align="center" bgcolor="" border="0" bordercolor="#ffe3cb" width="100%" height="" cellpadding="0" cellspacing="0">
 <tr>
     <td align="center">
@@ -60,7 +182,6 @@ document.writeln(printSelectedMonth());
     </td>    
 </tr>
 </table>
-
 <script>
 // Hàm cập nhật giờ Hà Nội (GMT+7)
 function updateHanoiTime() {
@@ -94,5 +215,6 @@ setInterval(updateHanoiTime, 1000);
 updateHanoiTime();
 </script>
 
+</div>
 </body>
 </html>
