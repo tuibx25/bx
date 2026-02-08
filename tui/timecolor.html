@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giờ Hà Nội & Màu Phong Thủy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 25px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 25px;
+            background: linear-gradient(to right, #8B4513, #A52A2A);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(139, 69, 19, 0.2);
+        }
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        .clock-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border: 2px dashed #C0C0C0;
+        }
+        /* ĐỒNG HỒ CỠ LỚN */
+        #live-clock {
+            font-size: 7.5rem;
+            font-weight: 800;
+            color: #1E90FF;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.15);
+            line-height: 1.2;
+        }
+        .date-display {
+            font-size: 3.2rem;
+            color: #8B4513;
+            font-weight: 700;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+        }
+        .timezone {
+            font-size: 2rem;
+            color: #808080;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+        .info-box {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-left: 6px solid #D2B48C;
+        }
+        .info-box h2 {
+            color: #8B4513;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .info-box h2 i {
+            color: #F4A460;
+        }
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        .color-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: white;
+        }
+        .color-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        .color-preview {
+            height: 140px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+        }
+        .color-info {
+            padding: 20px;
+            text-align: center;
+        }
+        .color-info h3 {
+            margin-bottom: 8px;
+            font-size: 1.4rem;
+        }
+        .color-hex {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 5px 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 25px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        /* Responsive cho đồng hồ lớn */
+        @media (max-width: 1024px) {
+            #live-clock { font-size: 6rem; }
+            .date-display { font-size: 2.5rem; }
+            .timezone { font-size: 1.7rem; }
+        }
+        @media (max-width: 768px) {
+            #live-clock { font-size: 4.5rem; }
+            .date-display { font-size: 2rem; }
+            .timezone { font-size: 1.5rem; }
+            header h1 { font-size: 2.2rem; }
+            .color-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+        }
+        @media (max-width: 480px) {
+            #live-clock { font-size: 3.5rem; }
+            .date-display { font-size: 1.7rem; }
+            .timezone { font-size: 1.3rem; }
+            header h1 { font-size: 1.8rem; }
+            .color-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-clock"></i> GIỜ HÀ NỘI & MÀU PHONG THỦY</h1>
+            <p style="font-size: 1.3rem;">Thời gian thực theo múi giờ Việt Nam (UTC+7)</p>
+        </header>
+
+        <section class="clock-container">
+            <h2 style="font-size: 2.2rem; color: #8B4513;"><i class="fas fa-globe-asia"></i> THỜI GIAN HIỆN TẠI TẠI HÀ NỘI</h2>
+            <div id="live-clock">--:--:--</div>
+            <div id="date-display" class="date-display">--/--/----</div>
+            <div class="timezone">Múi giờ: UTC+7 (Giờ Việt Nam)</div>
+            <p style="margin-top:20px; color:#555; font-size: 1.2rem;">Thời gian được cập nhật liên tục mỗi giây</p>
+        </section>
+
+        <section class="info-box">
+            <h2><i class="fas fa-user-circle"></i> Thông Tin Bản Mệnh</h2>
+            <p><strong>Ngày sinh dương lịch:</strong> 29/10/1970</p>
+            <p><strong>Năm sinh âm lịch:</strong> Canh Tuất (01/10/Canh Tuất)</p>
+            <p><strong>Mệnh Niên (Mệnh sinh):</strong> Thoa Xuyến Kim (Vàng Trang Sức)</p>
+            <p><strong>Ngũ hành bản mệnh:</strong> <strong style="color:#8B4513; font-size: 1.2rem;">KIM</strong></p>
+            <p>Áp dụng nguyên tắc tương sinh (Thổ sinh Kim), tương hợp (Kim hợp Kim) để chọn màu sắc hỗ trợ.</p>
+        </section>
+
+        <section class="info-box">
+            <h2><i class="fas fa-palette"></i> Màu Tương Sinh (Tốt nhất)</h2>
+            <p><em>Nguyên lý: <strong>Thổ sinh Kim</strong>. Sử dụng màu thuộc hành Thổ để bồi đắp, hỗ trợ năng lượng cho bản mệnh Kim.</em></p>
+            <div class="color-grid" id="tuong-sinh-grid">
+                <!-- Màu sẽ được thêm bằng JavaScript -->
+            </div>
+        </section>
+
+        <section class="info-box">
+            <h2><i class="fas fa-handshake"></i> Màu Tương Hợp (Tốt nhì)</h2>
+            <p><em>Nguyên lý: <strong>Kim hợp Kim</strong>. Sử dụng màu cùng hành Kim để củng cố, tăng cường bản mệnh.</em></p>
+            <div class="color-grid" id="tuong-hop-grid">
+                <!-- Màu sẽ được thêm bằng JavaScript -->
+            </div>
+        </section>
+
+        <footer>
+            <p>Thông tin màu sắc dựa trên phân tích phong thủy cho người sinh năm 1970, mệnh Thoa Xuyến Kim.</p>
+            <p>Trang hiển thị thời gian thực được xây dựng dựa trên dữ liệu từ <a href="https://tuibx25.github.io/bx/tui/bx" target="_blank">tuibx25.github.io</a>.</p>
+            <p style="margin-top:10px; font-size: 1.1rem;">© 2025 - Hiển thị thời gian Hà Nội</p>
+        </footer>
+    </div>
+
+    <script>
+        // ===== 1. CẤU HÌNH MÀU SẮC TỪ NGUỒN DỮ LIỆU =====
+        const colorData = {
+            tươngSinh: [
+                { name: "Vàng Đất Nhạt", hex: "#D2B48C", note: "Tan" },
+                { name: "Nâu Đậm", hex: "#8B4513", note: "Saddle Brown" },
+                { name: "Nâu Đỏ", hex: "#A52A2A", note: "Nâu" },
+                { name: "Nâu Cát", hex: "#F4A460", note: "Sand Brown" }
+            ],
+            tươngHợp: [
+                { name: "Trắng", hex: "#FFFFFF", note: "Trắng" },
+                { name: "Trắng Khói", hex: "#F5F5F5", note: "White Smoke" },
+                { name: "Bạc", hex: "#C0C0C0", note: "Silver" },
+                { name: "Xám", hex: "#808080", note: "Gray" }
+            ]
+        };
+
+        // ===== 2. HÀM HIỂN THỊ ĐỒNG HỒ THỜI GIAN THỰC CHÍNH XÁC =====
+        function updateClock() {
+            const now = new Date();
+            
+            // Tính toán giờ Hà Nội (UTC+7) một cách chính xác
+            // Lấy giờ UTC và cộng thêm 7 giờ
+            const utcHours = now.getUTCHours();
+            const utcMinutes = now.getUTCMinutes();
+            const utcSeconds = now.getUTCSeconds();
+            
+            // Cộng thêm 7 giờ cho múi giờ Hà Nội
+            let hanoiHours = utcHours + 7;
+            
+            // Xử lý trường hợp vượt quá 24 giờ
+            if (hanoiHours >= 24) {
+                hanoiHours -= 24;
+            }
+            
+            // Định dạng với 2 chữ số
+            const hours = hanoiHours.toString().padStart(2, '0');
+            const minutes = utcMinutes.toString().padStart(2, '0');
+            const seconds = utcSeconds.toString().padStart(2, '0');
+            
+            // Lấy ngày tháng năm
+            const day = now.getDate().toString().padStart(2, '0');
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const year = now.getFullYear();
+            
+            const timeStr = `${hours}:${minutes}:${seconds}`;
+            const dateStr = `${day}/${month}/${year}`;
+            
+            document.getElementById('live-clock').innerHTML = timeStr;
+            document.getElementById('date-display').innerHTML = dateStr;
+        }
+
+        // ===== 3. HÀM TẠO THẺ MÀU =====
+        function createColorCard(color) {
+            const card = document.createElement('div');
+            card.className = 'color-card';
+            
+            // Kiểm tra độ sáng để chọn màu chữ phù hợp
+            const hex = color.hex.replace('#', '');
+            const r = parseInt(hex.substr(0, 2), 16);
+            const g = parseInt(hex.substr(2, 2), 16);
+            const b = parseInt(hex.substr(4, 2), 16);
+            const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+            const textColor = brightness > 128 ? '#333' : '#FFF';
+            
+            card.innerHTML = `
+                <div class="color-preview" style="background-color: ${color.hex}; color: ${textColor};">
+                    ${color.name}
+                </div>
+                <div class="color-info">
+                    <h3>${color.name}</h3>
+                    <p>${color.note}</p>
+                    <div class="color-hex">${color.hex}</div>
+                </div>
+            `;
+            return card;
+        }
+
+        // ===== 4. HÀM KHỞI TẠO TRANG =====
+        function initializePage() {
+            // Hiển thị đồng hồ ngay lập tức và cập nhật mỗi giây
+            updateClock();
+            setInterval(updateClock, 1000);
+            
+            // Tải màu tương sinh
+            const tuongSinhGrid = document.getElementById('tuong-sinh-grid');
+            colorData.tươngSinh.forEach(color => {
+                tuongSinhGrid.appendChild(createColorCard(color));
+            });
+            
+            // Tải màu tương hợp
+            const tuongHopGrid = document.getElementById('tuong-hop-grid');
+            colorData.tươngHợp.forEach(color => {
+                tuongHopGrid.appendChild(createColorCard(color));
+            });
+        }
+
+        // ===== 5. CHẠY KHI TRANG ĐƯỢC TẢI =====
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>
