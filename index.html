@@ -25,6 +25,39 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Watermark Background */
+        .watermark-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 300px;
+            opacity: 0.03;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* Anti-selection overlay */
+        .no-selection-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9998;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            pointer-events: none;
         }
         
         .container {
@@ -32,6 +65,8 @@
             width: 100%;
             margin: 0 auto;
             padding: 20px;
+            position: relative;
+            z-index: 1;
         }
         
         header {
@@ -290,6 +325,11 @@
             box-shadow: 0 20px 40px rgba(139, 69, 19, 0.2);
         }
         
+        /* Hidden watermark in text */
+        .hidden-watermark {
+            display: none;
+        }
+        
         @media (max-width: 992px) {
             .links-container {
                 grid-template-columns: repeat(2, 1fr);
@@ -336,6 +376,10 @@
                 text-align: center;
                 width: 90%;
             }
+            
+            .watermark-bg {
+                background-size: 200px;
+            }
         }
         
         @media (max-width: 480px) {
@@ -354,10 +398,25 @@
             .sitemap {
                 padding: 12px 15px;
             }
+            
+            .watermark-bg {
+                background-size: 150px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Watermark Background -->
+    <div class="watermark-bg"></div>
+    
+    <!-- Anti-selection overlay -->
+    <div class="no-selection-overlay"></div>
+    
+    <!-- Hidden watermark text -->
+    <div class="hidden-watermark">
+        © tuibx25.github.io | Bài Tập Vật Lý | https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png
+    </div>
+    
     <div class="container">
         <header>
             <h1><i class="fas fa-book-open"></i> Bài Tập Vật Lý</h1>
@@ -435,8 +494,112 @@
     </div>
 
     <script>
+        // ==================== BẢO MẬT CHỐNG XEM MÃ NGUỒN ====================
+        
+        // Chống click chuột phải
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Chống phím tắt Ctrl+U, Ctrl+Shift+I, F12, etc.
+        document.addEventListener('keydown', function(e) {
+            // Chặn Ctrl+U (View Source)
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+                return false;
+            }
+            // Chặn Ctrl+Shift+I (DevTools)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+                return false;
+            }
+            // Chặn Ctrl+Shift+J (Console)
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+                return false;
+            }
+            // Chặn F12
+            if (e.key === 'F12' || e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+            // Chặn Ctrl+S (Save Page)
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                return false;
+            }
+            // Chặn Ctrl+Shift+C (Inspect Element)
+            if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        // Chống sao chép nội dung
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            alert('Nội dung được bảo vệ bản quyền. Vui lòng không sao chép!');
+            return false;
+        });
+        
+        // Chống kéo thả hình ảnh
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.tagName === 'IMG') {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        // Chống chọn văn bản
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        // ==================== WATERMARK BẢO VỆ ====================
+        
+        // Thêm watermark động vào cuối trang
+        function addDynamicWatermark() {
+            const watermark = document.createElement('div');
+            watermark.style.position = 'fixed';
+            watermark.style.bottom = '10px';
+            watermark.style.right = '10px';
+            watermark.style.color = 'rgba(139, 69, 19, 0.3)';
+            watermark.style.fontSize = '12px';
+            watermark.style.zIndex = '9999';
+            watermark.style.pointerEvents = 'none';
+            watermark.style.userSelect = 'none';
+            watermark.innerHTML = '© tuibx25.github.io';
+            document.body.appendChild(watermark);
+            
+            // Thêm watermark vào tiêu đề trang
+            document.title = document.title + ' | tuibx25.github.io';
+        }
+        
+        // Thêm watermark ẩn vào nội dung
+        function addHiddenWatermarks() {
+            // Watermark trong các thẻ
+            const cards = document.querySelectorAll('.link-desc');
+            cards.forEach(card => {
+                const originalText = card.innerHTML;
+                card.innerHTML = originalText + '<span style="color:transparent;font-size:0;"> tuibx25</span>';
+            });
+            
+            // Watermark trong footer
+            const footer = document.querySelector('.footer-text');
+            const footerText = footer.innerHTML;
+            footer.innerHTML = footerText + '<span style="opacity:0.001;font-size:1px;">watermark:tuibx25</span>';
+        }
+        
+        // ==================== HIỆU ỨNG TRANG ====================
+        
         // Thêm hiệu ứng cho các thẻ khi tải trang
         document.addEventListener('DOMContentLoaded', function() {
+            // Gọi các hàm bảo mật và watermark
+            addDynamicWatermark();
+            addHiddenWatermarks();
+            
             // Hiệu ứng cho sitemap
             const sitemap = document.querySelector('.sitemap');
             sitemap.style.opacity = '0';
@@ -545,6 +708,28 @@
                     e.stopPropagation();
                 });
             });
+            
+            // ==================== BẢO VỆ NÂNG CAO ====================
+            
+            // Chống mở DevTools bằng cách kiểm tra kích thước cửa sổ
+            function checkDevTools() {
+                const threshold = 160;
+                const widthDiff = window.outerWidth - window.innerWidth;
+                const heightDiff = window.outerHeight - window.innerHeight;
+                
+                if (widthDiff > threshold || heightDiff > threshold) {
+                    document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100vh;font-size:24px;color:#8B4513;text-align:center;padding:20px;">Trang này được bảo vệ. Vui lòng tắt Developer Tools.<br><small>© tuibx25.github.io</small></div>';
+                }
+            }
+            
+            // Kiểm tra định kỳ
+            setInterval(checkDevTools, 1000);
+            
+            // Chống chụp màn hình (một phần)
+            document.body.style.userSelect = 'none';
+            document.body.style.webkitUserSelect = 'none';
+            document.body.style.mozUserSelect = 'none';
+            document.body.style.msUserSelect = 'none';
         });
         
         // Đánh dấu trang hiện tại trong sitemap
@@ -558,6 +743,25 @@
                 link.classList.remove('active');
             }
         });
+        
+        // ==================== BẢO VỆ CHỐNG DEBUG ====================
+        
+        // Phát hiện và ngăn chặn debugger
+        function antiDebug() {
+            function checkDebugger() {
+                const startTime = new Date().getTime();
+                debugger;
+                const endTime = new Date().getTime();
+                if (endTime - startTime > 100) {
+                    window.location.reload();
+                }
+            }
+            
+            setInterval(checkDebugger, 1000);
+        }
+        
+        // Kích hoạt bảo vệ debug (có thể comment nếu gây lỗi)
+        // antiDebug();
     </script>
 </body>
 </html>
