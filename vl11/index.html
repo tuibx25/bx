@@ -7,14 +7,15 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
     <style>
+        /* CSS hiện tại của bạn vẫn giữ nguyên */
         :root {
-            --primary: #8B4513;      /* Nâu đậm */
-            --secondary: #A0522D;    /* Nâu đất */
-            --accent: #D2691E;       /* Nâu cam nhạt */
-            --success: #8B7355;      /* Nâu xám */
-            --dark: #3E2723;         /* Nâu rất đậm */
-            --light: #F5F5DC;        /* Màu be nhạt */
-            --neutral: #BC8F8F;      /* Nâu hồng nhạt */
+            --primary: #8B4513;
+            --secondary: #A0522D;
+            --accent: #D2691E;
+            --success: #8B7355;
+            --dark: #3E2723;
+            --light: #F5F5DC;
+            --neutral: #BC8F8F;
             --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             --shadow-hover: 0 20px 50px rgba(0, 0, 0, 0.15);
         }
@@ -27,13 +28,34 @@
         }
         
         body {
-            background: #FAF3E0; /* Nền be nhạt */
+            background: #FAF3E0;
             color: var(--dark);
             line-height: 1.6;
             min-height: 100vh;
             padding: 20px;
             position: relative;
             overflow-x: hidden;
+            /* Chống chọn và sao chép */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* Thêm Watermark */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-size: 300px 100px;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 9999;
         }
         
         body::before {
@@ -49,17 +71,31 @@
             z-index: -1;
         }
         
+        /* Thêm lớp overlay bảo vệ */
+        .protector {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+            pointer-events: none;
+        }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            position: relative;
+            z-index: 1;
         }
         
+        /* Phần còn lại của CSS giữ nguyên */
         header {
             text-align: center;
             margin-bottom: 60px;
             padding: 40px 30px;
-            background: var(--primary); /* Nâu đậm */
+            background: var(--primary);
             border-radius: 24px;
             color: white;
             position: relative;
@@ -74,7 +110,7 @@
             left: 0;
             right: 0;
             height: 5px;
-            background: var(--accent); /* Nâu cam nhạt */
+            background: var(--accent);
             animation: shimmer 3s infinite linear;
         }
         
@@ -92,7 +128,7 @@
             font-size: 3rem;
             margin-bottom: 10px;
             font-weight: 700;
-            color: #FFF8DC; /* Màu trắng ngà */
+            color: #FFF8DC;
             text-shadow: 0 2px 10px rgba(0,0,0,0.2);
             letter-spacing: -0.5px;
         }
@@ -170,7 +206,7 @@
             font-size: 1.5rem;
             color: white;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            background: var(--secondary); /* Nâu đất */
+            background: var(--secondary);
         }
         
         .chapter-card:nth-child(1) .chapter-icon { background: var(--primary); }
@@ -203,10 +239,12 @@
             padding: 15px;
             border-radius: 12px;
             transition: all 0.3s;
-            background: rgba(245, 245, 220, 0.5); /* Màu be */
+            background: rgba(245, 245, 220, 0.5);
             border: 1px solid rgba(139, 69, 19, 0.1);
             position: relative;
             overflow: hidden;
+            /* Cho phép click trên link */
+            pointer-events: auto;
         }
         
         .lesson-link::before {
@@ -222,7 +260,7 @@
         }
         
         .lesson-link:hover {
-            background: #FFF8DC; /* Trắng ngà */
+            background: #FFF8DC;
             transform: translateX(10px);
             box-shadow: 0 5px 15px rgba(139, 69, 19, 0.1);
         }
@@ -242,7 +280,7 @@
             justify-content: center;
             width: 40px;
             height: 40px;
-            background: var(--secondary); /* Nâu đất */
+            background: var(--secondary);
             color: white;
             border-radius: 10px;
             margin-right: 15px;
@@ -282,8 +320,8 @@
             left: 30px;
             transform: translateY(-50%);
             padding: 14px 28px;
-            background: rgba(255, 248, 220, 0.95); /* Trắng ngà */
-            color: var(--primary); /* Nâu đậm */
+            background: rgba(255, 248, 220, 0.95);
+            color: var(--primary);
             text-decoration: none;
             border-radius: 12px;
             font-weight: 600;
@@ -295,11 +333,12 @@
             gap: 10px;
             backdrop-filter: blur(10px);
             z-index: 10;
+            pointer-events: auto;
         }
         
         .home-button:hover {
-            background: #FFF8DC; /* Trắng ngà đậm hơn */
-            color: var(--dark); /* Nâu rất đậm */
+            background: #FFF8DC;
+            color: var(--dark);
             transform: translateY(-50%) translateX(-5px);
             box-shadow: 0 8px 25px rgba(139, 69, 19, 0.15);
             border-color: var(--accent);
@@ -319,7 +358,7 @@
             padding: 30px;
             color: var(--dark);
             font-size: 0.95rem;
-            background: rgba(255, 248, 220, 0.9); /* Trắng ngà */
+            background: rgba(255, 248, 220, 0.9);
             border-radius: 20px;
             backdrop-filter: blur(10px);
             box-shadow: 0 5px 20px rgba(0,0,0,0.05);
@@ -330,7 +369,7 @@
             font-weight: 600;
             font-size: 1.1rem;
             margin-bottom: 10px;
-            color: var(--primary); /* Nâu đậm */
+            color: var(--primary);
         }
         
         .footer-subtext {
@@ -338,23 +377,21 @@
             font-size: 0.9rem;
         }
         
-        /* Floating particles */
         .particle {
             position: fixed;
             border-radius: 50%;
-            background: var(--secondary); /* Nâu đất */
+            background: var(--secondary);
             opacity: 0.1;
             z-index: -1;
         }
         
-        /* Progress indicator */
         .progress-bar {
             position: fixed;
             top: 0;
             left: 0;
             width: 0;
             height: 3px;
-            background: var(--primary); /* Nâu đậm */
+            background: var(--primary);
             z-index: 1000;
             transition: width 0.3s;
         }
@@ -408,7 +445,6 @@
             }
         }
         
-        /* Animations */
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-20px) rotate(180deg); }
@@ -439,6 +475,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Lớp bảo vệ chống xem mã nguồn -->
+    <div class="protector" id="pageProtector"></div>
+    
     <div class="progress-bar" id="progressBar"></div>
     
     <div class="container">
@@ -446,7 +485,7 @@
             <div class="header-content">
                 <h1>Vật Lý 11</h1>
                 <p class="subtitle">Kết Nối Tri Thức Với Cuộc Sống</p>
-                <a href="../" class="home-button"> <!-- Đã sửa link tương đối -->
+                <a href="../" class="home-button">
                     <span class="button-icon">←</span>
                     Trang chủ
                 </a>
@@ -459,12 +498,88 @@
         
         <footer>
             <p class="footer-text">TuiBX</p>
-            <p class="footer-subtext">...</p>
             <p class="footer-subtext">© 2025 - Tài liệu học tập Vật Lý 11</p>
         </footer>
     </div>
 
     <script>
+        // Các biện pháp bảo mật
+        (function() {
+            'use strict';
+            
+            // Chống nhấp chuột phải
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // Chống các phím tắt xem mã nguồn
+            document.addEventListener('keydown', function(e) {
+                // Ctrl+U (xem mã nguồn)
+                if (e.ctrlKey && e.key === 'u') {
+                    e.preventDefault();
+                    return false;
+                }
+                // Ctrl+Shift+I (DevTools)
+                if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                    e.preventDefault();
+                    return false;
+                }
+                // Ctrl+Shift+J (Console)
+                if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                    e.preventDefault();
+                    return false;
+                }
+                // Ctrl+Shift+C (Inspect)
+                if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+                    e.preventDefault();
+                    return false;
+                }
+                // F12 (DevTools)
+                if (e.key === 'F12') {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            
+            // Chống sao chép
+            document.addEventListener('copy', function(e) {
+                e.preventDefault();
+                alert('Không được phép sao chép nội dung!');
+                return false;
+            });
+            
+            // Chống kéo thả hình ảnh
+            document.addEventListener('dragstart', function(e) {
+                if (e.target.tagName === 'IMG') {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            
+            // Bảo vệ khi mở DevTools
+            let devToolsOpen = false;
+            const threshold = 160;
+            
+            const checkDevTools = function() {
+                const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+                const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+                const orientation = widthThreshold || heightThreshold;
+                
+                if (orientation && !devToolsOpen) {
+                    devToolsOpen = true;
+                    document.body.innerHTML = '<div style="padding: 50px; text-align: center; font-size: 24px; color: var(--primary);">Chức năng này đã bị vô hiệu hóa để bảo vệ nội dung.</div>';
+                    document.body.style.background = '#FAF3E0';
+                    throw new Error('DevTools detected');
+                }
+            };
+            
+            // Kiểm tra định kỳ
+            setInterval(checkDevTools, 1000);
+            
+        })();
+        
+        // Dữ liệu và hàm hiện có vẫn giữ nguyên
         const physicsChapters = [
             {
                 title: "Chương 1. DAO ĐỘNG",
@@ -522,7 +637,6 @@
 
         function generateLessonLink(lessonIndex) {
             const lessonNumber = (lessonIndex + 1).toString().padStart(2, '0');
-            // Đã đổi từ link tuyệt đối sang link tương đối
             return `./${lessonNumber}/`;
         }
 
@@ -557,7 +671,6 @@
                 const chapterCard = document.createElement('div');
                 chapterCard.className = 'chapter-card';
                 
-                // Tạo header chương
                 const chapterHeader = document.createElement('div');
                 chapterHeader.className = 'chapter-header';
                 
@@ -577,7 +690,6 @@
                 chapterHeader.appendChild(chapterIcon);
                 chapterHeader.appendChild(chapterTitleDiv);
                 
-                // Tạo danh sách bài học
                 const lessonList = document.createElement('ul');
                 lessonList.className = 'lesson-list';
                 
@@ -591,7 +703,6 @@
                     lessonLink.target = "_blank";
                     lessonLink.rel = "noopener noreferrer";
                     
-                    // Tạo nội dung bài học
                     lessonLink.innerHTML = `
                         <div class="lesson-number">${(lessonCounter + 1).toString().padStart(2, '0')}</div>
                         <div class="lesson-content">
