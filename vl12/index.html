@@ -8,19 +8,18 @@
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
     <style>
         :root {
-            --primary: #8B4513; /* Nâu đất */
+            --primary: #8B4513;
             --primary-light: #A0522D;
             --primary-dark: #654321;
-            --secondary: #D2B48C; /* Nâu tanin */
+            --secondary: #D2B48C;
             --secondary-light: #E6D3B9;
             --secondary-dark: #B8860B;
-            --accent: #5D4037; /* Nâu sẫm */
-            --success: #8D6E63; /* Nâu xám */
-            --dark: #3E2723; /* Nâu đen */
-            --light: #FFF8E1; /* Vàng nhạt */
-            --neutral: #BCAAA4; /* Nâu xám nhạt */
+            --accent: #5D4037;
+            --success: #8D6E63;
+            --dark: #3E2723;
+            --light: #FFF8E1;
+            --neutral: #BCAAA4;
             
-            /* Màu nền */
             --bg-light: #F5F5F5;
             --bg-card: #FFFFFF;
             
@@ -33,6 +32,27 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            /* Chống chọn văn bản */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* Watermark bảo vệ */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-size: 350px 120px;
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 9999;
         }
         
         body {
@@ -58,10 +78,23 @@
             z-index: -1;
         }
         
+        /* Lớp bảo vệ chống xem mã nguồn */
+        .protector {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+            pointer-events: none;
+        }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            position: relative;
+            z-index: 1;
         }
         
         header {
@@ -217,6 +250,12 @@
             border: 1px solid var(--secondary-light);
             position: relative;
             overflow: hidden;
+            /* Cho phép tương tác trên link */
+            pointer-events: auto;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
         }
         
         .lesson-link::before {
@@ -309,6 +348,11 @@
             gap: 10px;
             backdrop-filter: blur(10px);
             z-index: 10;
+            pointer-events: auto;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
         }
         
         .home-button:hover {
@@ -454,6 +498,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Lớp bảo vệ chống xem mã nguồn -->
+    <div class="protector" id="pageProtector"></div>
+    
     <div class="progress-bar" id="progressBar"></div>
     
     <div class="container">
@@ -474,12 +521,127 @@
         
         <footer>
             <p class="footer-text">TuiBX</p>
-            <p class="footer-subtext">...</p>
             <p class="footer-subtext">© 2025 - Tài liệu học tập Vật Lý 12</p>
         </footer>
     </div>
 
     <script>
+        // ========== HỆ THỐNG BẢO MẬT KHÔNG CẢNH BÁO ==========
+        
+        // 1. Chống nhấp chuột phải (KHÔNG HIỂN THỊ CẢNH BÁO)
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        // 2. Chống các phím tắt xem mã nguồn và DevTools (KHÔNG HIỂN THỊ CẢNH BÁO)
+        const blockedShortcuts = [
+            { key: 'F12', ctrl: false, shift: false },
+            { key: 'I', ctrl: true, shift: true },
+            { key: 'J', ctrl: true, shift: true },
+            { key: 'C', ctrl: true, shift: true },
+            { key: 'U', ctrl: true, shift: false },
+            { key: 'S', ctrl: true, shift: false }
+        ];
+        
+        document.addEventListener('keydown', function(e) {
+            // Kiểm tra từng tổ hợp phím bị chặn
+            for (const shortcut of blockedShortcuts) {
+                const ctrlMatch = shortcut.ctrl === e.ctrlKey;
+                const shiftMatch = shortcut.shift === e.shiftKey;
+                const altMatch = !shortcut.alt || shortcut.alt === e.altKey;
+                const metaMatch = !shortcut.meta || shortcut.meta === e.metaKey;
+                const keyMatch = e.key.toUpperCase() === shortcut.key.toUpperCase();
+                
+                if (ctrlMatch && shiftMatch && altMatch && metaMatch && keyMatch) {
+                    e.preventDefault();
+                    return false;
+                }
+            }
+            
+            // Chặn F12 riêng biệt
+            if (e.key === 'F12') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Chặn Ctrl+S
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        // 3. Chống sao chép nội dung (KHÔNG HIỂN THỊ CẢNH BÁO)
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        // 4. Chống cắt nội dung
+        document.addEventListener('cut', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        // 5. Chống kéo thả hình ảnh và nội dung
+        document.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        // 6. Chống chọn văn bản (ngoại trừ các liên kết và nút)
+        document.addEventListener('selectstart', function(e) {
+            const target = e.target;
+            const isAllowed = target.closest('.lesson-link') || 
+                            target.closest('.home-button') ||
+                            target.closest('input') ||
+                            target.closest('textarea');
+            
+            if (!isAllowed) {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        // 7. Phát hiện và chống mở Developer Tools (KHÔNG HIỂN THỊ CẢNH BÁO)
+        let devToolsOpened = false;
+        const devToolsThreshold = 160;
+        
+        function detectDevTools() {
+            const widthDiff = Math.abs(window.outerWidth - window.innerWidth);
+            const heightDiff = Math.abs(window.outerHeight - window.innerHeight);
+            
+            if (widthDiff > devToolsThreshold || heightDiff > devToolsThreshold) {
+                if (!devToolsOpened) {
+                    devToolsOpened = true;
+                    // Chỉ làm mờ trang, không hiển thị cảnh báo
+                    document.body.style.filter = 'blur(5px)';
+                    document.body.style.opacity = '0.7';
+                    document.body.style.pointerEvents = 'none';
+                }
+            } else {
+                if (devToolsOpened) {
+                    devToolsOpened = false;
+                    // Khôi phục trạng thái ban đầu
+                    document.body.style.filter = 'none';
+                    document.body.style.opacity = '1';
+                    document.body.style.pointerEvents = 'auto';
+                }
+            }
+        }
+        
+        // Kiểm tra DevTools định kỳ
+        setInterval(detectDevTools, 1000);
+        
+        // 8. Bảo vệ khi người dùng cố gắng xem mã nguồn qua URL
+        window.addEventListener('beforeunload', function(e) {
+            // Thêm một lớp bảo vệ trước khi rời trang
+            document.body.style.opacity = '0.5';
+        });
+        
+        // ========== NỘI DUNG GỐC VẪN GIỮ NGUYÊN ==========
+        
         const physicsChapters = [
             {
                 title: "Chương I. VẬT LÍ NHIỆT",
