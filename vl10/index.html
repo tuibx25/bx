@@ -530,14 +530,13 @@
     </div>
 
     <script>
-        // Các biện pháp bảo mật nâng cao
+        // Các biện pháp bảo mật nâng cao (không hiển thị cảnh báo)
         (function() {
             'use strict';
             
             // Chống nhấp chuột phải
             document.addEventListener('contextmenu', function(e) {
                 e.preventDefault();
-                showSecurityAlert('Chức năng nhấp chuột phải đã bị vô hiệu hóa để bảo vệ nội dung.');
                 return false;
             });
             
@@ -557,7 +556,6 @@
                 // Chặn phím F12
                 if (e.key === 'F12') {
                     e.preventDefault();
-                    showSecurityAlert('Phím F12 đã bị vô hiệu hóa.');
                     return false;
                 }
                 
@@ -569,7 +567,6 @@
                         (combo.meta === undefined || combo.meta === e.metaKey) &&
                         e.key.toUpperCase() === combo.key.toUpperCase()) {
                         e.preventDefault();
-                        showSecurityAlert('Tổ hợp phím này đã bị vô hiệu hóa để bảo vệ nội dung.');
                         return false;
                     }
                 }
@@ -584,7 +581,6 @@
             // Chống sao chép nội dung
             document.addEventListener('copy', function(e) {
                 e.preventDefault();
-                showSecurityAlert('Không được phép sao chép nội dung!');
                 return false;
             });
             
@@ -608,7 +604,7 @@
                 }
             });
             
-            // Bảo vệ khi mở DevTools
+            // Bảo vệ khi mở DevTools (không hiển thị cảnh báo)
             let devToolsOpen = false;
             const threshold = 160;
             
@@ -619,32 +615,6 @@
                 
                 if (orientation && !devToolsOpen) {
                     devToolsOpen = true;
-                    // Thay vì xóa toàn bộ nội dung, chúng ta thêm một lớp phủ
-                    const overlay = document.createElement('div');
-                    overlay.style.cssText = `
-                        position: fixed;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        background: rgba(0, 0, 0, 0.9);
-                        color: white;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        z-index: 100000;
-                        font-size: 24px;
-                        text-align: center;
-                        padding: 20px;
-                        flex-direction: column;
-                    `;
-                    overlay.innerHTML = `
-                        <div style="margin-bottom: 20px;">⚠️ Cảnh báo bảo mật ⚠️</div>
-                        <div style="font-size: 18px; margin-bottom: 20px;">Công cụ nhà phát triển đã bị phát hiện.</div>
-                        <div style="font-size: 16px; opacity: 0.8;">Trang này được bảo vệ để chống sao chép nội dung.</div>
-                    `;
-                    document.body.appendChild(overlay);
-                    
                     // Vô hiệu hóa tất cả các liên kết và nút
                     document.querySelectorAll('a, button').forEach(el => {
                         el.style.pointerEvents = 'none';
@@ -654,42 +624,6 @@
             
             // Kiểm tra định kỳ
             setInterval(checkDevTools, 1000);
-            
-            // Hàm hiển thị cảnh báo bảo mật
-            function showSecurityAlert(message) {
-                const alertDiv = document.createElement('div');
-                alertDiv.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: var(--primary);
-                    color: white;
-                    padding: 15px 20px;
-                    border-radius: 10px;
-                    z-index: 10000;
-                    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-                    animation: slideIn 0.3s ease;
-                    max-width: 300px;
-                    font-size: 14px;
-                `;
-                
-                const style = document.createElement('style');
-                style.textContent = `
-                    @keyframes slideIn {
-                        from { transform: translateX(100%); opacity: 0; }
-                        to { transform: translateX(0); opacity: 1; }
-                    }
-                `;
-                document.head.appendChild(style);
-                
-                alertDiv.textContent = message;
-                document.body.appendChild(alertDiv);
-                
-                setTimeout(() => {
-                    alertDiv.style.animation = 'slideOut 0.3s ease';
-                    setTimeout(() => alertDiv.remove(), 300);
-                }, 3000);
-            }
             
         })();
         
