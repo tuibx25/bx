@@ -8,16 +8,15 @@
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
     <style>
         :root {
-            --primary: #8B4513; /* Nâu đất - màu chủ đạo */
-            --secondary: #A0522D; /* Nâu đậm */
-            --accent: #D2691E; /* Nâu cam nhạt */
-            --dark: #2C1810; /* Nâu đen */
-            --light: #F5F5DC; /* Màu be nhạt */
-            --neutral: #D2B48C; /* Màu tan */
-            --light-brown: #DEB887; /* Nâu nhạt */
-            --dark-brown: #5D4037; /* Nâu tối */
+            --primary: #8B4513;
+            --secondary: #A0522D;
+            --accent: #D2691E;
+            --dark: #2C1810;
+            --light: #F5F5DC;
+            --neutral: #D2B48C;
+            --light-brown: #DEB887;
+            --dark-brown: #5D4037;
             
-            /* Màu nền cố định thay vì gradient */
             --bg-color: #FDF5E6;
             --header-bg: #8B4513;
             --card-bg: rgba(255, 255, 255, 0.95);
@@ -31,6 +30,27 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            /* Chống chọn và sao chép */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* Watermark cố định */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-size: 400px 150px;
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 9999;
         }
         
         body {
@@ -56,10 +76,23 @@
             z-index: -1;
         }
         
+        /* Lớp bảo vệ */
+        .protector {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+            pointer-events: none;
+        }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            position: relative;
+            z-index: 1;
         }
         
         header {
@@ -221,6 +254,12 @@
             border: 1px solid rgba(139, 69, 19, 0.1);
             position: relative;
             overflow: hidden;
+            /* Cho phép click trên link */
+            pointer-events: auto;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
         }
         
         .lesson-link::before {
@@ -311,6 +350,11 @@
             gap: 10px;
             backdrop-filter: blur(10px);
             z-index: 10;
+            pointer-events: auto;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
         }
         
         .home-button:hover {
@@ -458,6 +502,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Lớp bảo vệ chống xem mã nguồn -->
+    <div class="protector" id="pageProtector"></div>
+    
     <div class="progress-bar" id="progressBar"></div>
     
     <div class="container">
@@ -478,12 +525,175 @@
         
         <footer>
             <p class="footer-text">TuiBX</p>
-            <p class="footer-subtext">...</p>
             <p class="footer-subtext">© 2025 - Tài liệu học tập Vật Lý 10</p>
         </footer>
     </div>
 
     <script>
+        // Các biện pháp bảo mật nâng cao
+        (function() {
+            'use strict';
+            
+            // Chống nhấp chuột phải
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                showSecurityAlert('Chức năng nhấp chuột phải đã bị vô hiệu hóa để bảo vệ nội dung.');
+                return false;
+            });
+            
+            // Chống các phím tắt xem mã nguồn
+            const blockedKeys = new Set(['F12', 'I', 'J', 'C', 'S', 'U']);
+            const blockedCombinations = [
+                {ctrl: true, shift: true, key: 'I'},
+                {ctrl: true, shift: true, key: 'J'},
+                {ctrl: true, shift: true, key: 'C'},
+                {ctrl: true, shift: true, key: 'S'},
+                {ctrl: true, key: 'U'},
+                {ctrl: true, key: 'S'},
+                {meta: true, alt: true, key: 'I'}
+            ];
+            
+            document.addEventListener('keydown', function(e) {
+                // Chặn phím F12
+                if (e.key === 'F12') {
+                    e.preventDefault();
+                    showSecurityAlert('Phím F12 đã bị vô hiệu hóa.');
+                    return false;
+                }
+                
+                // Chặn tổ hợp phím
+                for (const combo of blockedCombinations) {
+                    if ((combo.ctrl === undefined || combo.ctrl === e.ctrlKey) &&
+                        (combo.shift === undefined || combo.shift === e.shiftKey) &&
+                        (combo.alt === undefined || combo.alt === e.altKey) &&
+                        (combo.meta === undefined || combo.meta === e.metaKey) &&
+                        e.key.toUpperCase() === combo.key.toUpperCase()) {
+                        e.preventDefault();
+                        showSecurityAlert('Tổ hợp phím này đã bị vô hiệu hóa để bảo vệ nội dung.');
+                        return false;
+                    }
+                }
+                
+                // Chặn khi chỉ nhấn Ctrl/Shift + phím bị chặn
+                if ((e.ctrlKey || e.shiftKey) && blockedKeys.has(e.key.toUpperCase())) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            
+            // Chống sao chép nội dung
+            document.addEventListener('copy', function(e) {
+                e.preventDefault();
+                showSecurityAlert('Không được phép sao chép nội dung!');
+                return false;
+            });
+            
+            // Chống cắt nội dung
+            document.addEventListener('cut', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // Chống kéo thả hình ảnh và nội dung
+            document.addEventListener('dragstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // Chống chọn văn bản (ngoại trừ liên kết và nút)
+            document.addEventListener('selectstart', function(e) {
+                if (!e.target.closest('.lesson-link') && !e.target.closest('.home-button')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            
+            // Bảo vệ khi mở DevTools
+            let devToolsOpen = false;
+            const threshold = 160;
+            
+            const checkDevTools = function() {
+                const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+                const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+                const orientation = widthThreshold || heightThreshold;
+                
+                if (orientation && !devToolsOpen) {
+                    devToolsOpen = true;
+                    // Thay vì xóa toàn bộ nội dung, chúng ta thêm một lớp phủ
+                    const overlay = document.createElement('div');
+                    overlay.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0, 0, 0, 0.9);
+                        color: white;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        z-index: 100000;
+                        font-size: 24px;
+                        text-align: center;
+                        padding: 20px;
+                        flex-direction: column;
+                    `;
+                    overlay.innerHTML = `
+                        <div style="margin-bottom: 20px;">⚠️ Cảnh báo bảo mật ⚠️</div>
+                        <div style="font-size: 18px; margin-bottom: 20px;">Công cụ nhà phát triển đã bị phát hiện.</div>
+                        <div style="font-size: 16px; opacity: 0.8;">Trang này được bảo vệ để chống sao chép nội dung.</div>
+                    `;
+                    document.body.appendChild(overlay);
+                    
+                    // Vô hiệu hóa tất cả các liên kết và nút
+                    document.querySelectorAll('a, button').forEach(el => {
+                        el.style.pointerEvents = 'none';
+                    });
+                }
+            };
+            
+            // Kiểm tra định kỳ
+            setInterval(checkDevTools, 1000);
+            
+            // Hàm hiển thị cảnh báo bảo mật
+            function showSecurityAlert(message) {
+                const alertDiv = document.createElement('div');
+                alertDiv.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: var(--primary);
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 10px;
+                    z-index: 10000;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                    animation: slideIn 0.3s ease;
+                    max-width: 300px;
+                    font-size: 14px;
+                `;
+                
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                alertDiv.textContent = message;
+                document.body.appendChild(alertDiv);
+                
+                setTimeout(() => {
+                    alertDiv.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => alertDiv.remove(), 300);
+                }, 3000);
+            }
+            
+        })();
+        
+        // Dữ liệu và hàm hiện có vẫn giữ nguyên
         const physicsChapters = [
             {
                 title: "CHƯƠNG I. MỞ ĐẦU",
