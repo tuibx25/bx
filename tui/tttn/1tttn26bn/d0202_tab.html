@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đề thi Vật lí - Mã đề 0202 (Dạng Tab)</title>
+    <title>Đề thi Vật lí - Mã đề 0202</title>
     
     <!-- Thêm MathJax để hiển thị công thức toán học -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
@@ -14,14 +14,14 @@
             font-family: 'Times New Roman', Times, serif;
             line-height: 1.6;
             margin: 20px;
-            background-color: #f9f9f9;
+            background-color: #D2B48C;
             color: #333;
         }
         
         .header {
             text-align: center;
             margin-bottom: 30px;
-            border-bottom: 2px solid #333;
+            border-bottom: 2px solid #8B4513;
             padding-bottom: 15px;
         }
         
@@ -34,63 +34,72 @@
             margin: 20px 0;
         }
         
-        /* Tab Styles */
-        .tabs-container {
-            margin: 30px 0;
-        }
-        
-        .tabs {
-            display: flex;
-            border-bottom: 2px solid #ddd;
-            margin-bottom: 0;
-        }
-        
+        /* Style cho tab - Giống index.html */
         .tab {
-            padding: 12px 24px;
-            background-color: #f1f1f1;
-            border: 1px solid #ddd;
-            border-bottom: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s;
+            overflow: hidden;
+            border-bottom: 2px solid #8B4513;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            background-color: #D2B48C;
+            padding: 10px 0;
             border-radius: 8px 8px 0 0;
-            margin-right: 5px;
         }
         
-        .tab:hover {
-            background-color: #e0e0e0;
+        .tab button {
+            background-color: transparent;
+            border: 2px solid #8B4513;
+            outline: none;
+            cursor: pointer;
+            padding: 12px 25px;
+            transition: all 0.3s;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 10px;
+            border-radius: 6px;
+            color: #8B4513;
         }
         
-        .tab.active {
-            background-color: white;
-            border-bottom: 2px solid white;
-            margin-bottom: -2px;
-            position: relative;
-            z-index: 1;
+        .tab button:hover {
+            background-color: #8B4513;
+            color: #FFFFFF;
         }
         
-        .tab-content {
+        .tab button.active {
+            background-color: #8B4513;
+            color: #FFFFFF;
+            box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
+        }
+        
+        .tabcontent {
             display: none;
-            padding: 25px;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-top: none;
+            padding: 20px;
+            animation: fadeEffect 0.5s;
+            background-color: #FFFFFF;
             border-radius: 0 0 8px 8px;
+            min-height: 500px;
+        }
+        
+        @keyframes fadeEffect {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+        
+        /* Các style khác giữ nguyên */
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
-        .tab-content.active {
-            display: block;
-        }
-        
-        /* Common question styles */
         .section-title {
             font-weight: bold;
             font-size: 1.2em;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
             border-bottom: 1px solid #ccc;
-            text-align: center;
         }
         
         .question {
@@ -102,7 +111,6 @@
         .question-number {
             font-weight: bold;
             margin-bottom: 8px;
-            color: #2c3e50;
         }
         
         .options {
@@ -123,6 +131,14 @@
         .diagram {
             text-align: center;
             margin: 15px 0;
+        }
+        
+        /* Kích thước mặc định cho hình ảnh */
+        .diagram img {
+            height: auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 10px;
         }
         
         /* Kích thước tùy chỉnh cho từng hình */
@@ -175,7 +191,7 @@
             margin-top: 30px;
             font-style: italic;
             padding-top: 15px;
-            border-top: 1px solid #ccc;
+            border-top: 1px solid #8B4513;
         }
         
         @media print {
@@ -183,19 +199,71 @@
                 background-color: white;
             }
             
-            .tabs-container {
+            .tab {
                 display: none;
             }
             
-            .tab-content {
+            .tabcontent {
                 display: block !important;
                 box-shadow: none;
                 border: none;
                 padding: 0;
             }
             
-            .tab-content:not(.active) {
+            .tabcontent:not(.active) {
                 page-break-before: always;
+            }
+        }
+        
+        /* Watermark - Giống index.html */
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 120px;
+            height: 40px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.4;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .tab button {
+                padding: 10px 20px;
+                font-size: 16px;
+            }
+            
+            .tabcontent {
+                min-height: 400px;
+            }
+            
+            .watermark {
+                width: 100px;
+                height: 35px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .tab {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab button {
+                width: 90%;
+                margin: 5px 0;
+            }
+            
+            .watermark {
+                width: 80px;
+                height: 30px;
+                bottom: 10px;
+                right: 10px;
             }
         }
     </style>
@@ -226,16 +294,16 @@
         <p><strong>+ Không làm tròn kết quả các phép tính trung gian.</strong></p>
     </div>
     
-    <!-- Tab Navigation -->
-    <div class="tabs-container">
-        <div class="tabs">
-            <div class="tab active" data-tab="part1">PHẦN I (Câu 1-18)</div>
-            <div class="tab" data-tab="part2">PHẦN II (Câu 1-4)</div>
-            <div class="tab" data-tab="part3">PHẦN III (Câu 1-6)</div>
-        </div>
-        
-        <!-- Tab 1 Content: Part I -->
-        <div class="tab-content active" id="part1">
+    <!-- Tab điều hướng - Giống index.html -->
+    <div class="tab">
+        <button class="tablink active" onclick="openTab(event, 'part1')">PHẦN I (Câu 1-18)</button>
+        <button class="tablink" onclick="openTab(event, 'part2')">PHẦN II (Câu 1-4)</button>
+        <button class="tablink" onclick="openTab(event, 'part3')">PHẦN III (Câu 1-6)</button>
+    </div>
+    
+    <!-- Tab 1 Content: Part I -->
+    <div id="part1" class="tabcontent" style="display: block;">
+        <div class="section">
             <div class="section-title">PHẦN I. Thí sinh trả lời từ câu 1 đến câu 18. Mỗi câu hỏi thí sinh chỉ chọn một phương án.</div>
             
             <div class="question">
@@ -454,9 +522,11 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Tab 2 Content: Part II -->
-        <div class="tab-content" id="part2">
+    </div>
+    
+    <!-- Tab 2 Content: Part II -->
+    <div id="part2" class="tabcontent">
+        <div class="section">
             <div class="section-title">PHẦN II. Thí sinh trả lời từ câu 1 đến câu 4. Trong mỗi ý a), b), c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.</div>
             
             <div class="question">
@@ -553,9 +623,11 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Tab 3 Content: Part III -->
-        <div class="tab-content" id="part3">
+    </div>
+    
+    <!-- Tab 3 Content: Part III -->
+    <div id="part3" class="tabcontent">
+        <div class="section">
             <div class="section-title">PHẦN III. Thí sinh trả lời từ câu 1 đến câu 6.</div>
             
             <div class="question">
@@ -606,6 +678,9 @@
         <p>- Giám thị không giải thích gì thêm.</p>
         <p>Trang 4/4 - Mã đề thi 0202</p>
     </div>
+    
+    <!-- Watermark - Giống index.html -->
+    <div class="watermark"></div>
 
     <script>
         // Cấu hình MathJax
@@ -621,30 +696,35 @@
             }
         };
         
-        // Tab switching functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabs = document.querySelectorAll('.tab');
-            const tabContents = document.querySelectorAll('.tab-content');
+        // Hàm chuyển tab - Giống index.html
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
             
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // Remove active class from all tabs and tab contents
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.remove('active'));
-                    
-                    // Add active class to clicked tab
-                    tab.classList.add('active');
-                    
-                    // Show the corresponding tab content
-                    const tabId = tab.getAttribute('data-tab');
-                    document.getElementById(tabId).classList.add('active');
-                    
-                    // Re-process MathJax when switching tabs
-                    if (window.MathJax) {
-                        MathJax.typesetPromise();
-                    }
-                });
-            });
+            // Ẩn tất cả các tab content
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            
+            // Xóa class active khỏi tất cả các tab button
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            
+            // Hiển thị tab được chọn và thêm class active cho button
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+            
+            // Re-process MathJax khi chuyển tab
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+        
+        // Mặc định hiển thị tab đầu tiên
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector('.tablink.active').click();
         });
     </script>
 </body>
