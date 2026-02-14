@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề thi 0202 · Vật lý (Tabbed Interface)</title>
+    <!-- MathJax để hiển thị \(\overrightarrow{...}\) và công thức đẹp -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        body {
+            background: #eef2f5;
+            font-family: 'Times New Roman', Times, serif;
+            margin: 0;
+            padding: 30px 20px;
+            color: #1a1e24;
+        }
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.06);
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            overflow: hidden;
+        }
+        /* Tab navigation */
+        .tab-nav {
+            display: flex;
+            background: #dae3ed;
+            border-bottom: 3px solid #1e3a5f;
+            padding: 0;
+            margin: 0;
+        }
+        .tab-link {
+            background: #b6c9d6;
+            border: none;
+            padding: 16px 28px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0a3144;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-right: 1px solid #8ba0b8;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .tab-link:last-child {
+            border-right: none;
+        }
+        .tab-link:hover {
+            background: #a3bacc;
+            color: #000;
+        }
+        .tab-link.active {
+            background: white;
+            color: #1e3a5f;
+            box-shadow: inset 0 -3px 0 #1e3a5f;
+        }
+        /* Tab content */
+        .tab-pane {
+            display: none;
+            padding: 35px 40px;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+        /* Phần header chung */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.12rem;
+            font-weight: 550;
+            border-bottom: 2.5px solid #1e3a5f;
+            padding-bottom: 18px;
+            margin-bottom: 28px;
+        }
+        .exam-code {
+            background: #dae3ed;
+            padding: 7px 20px;
+            border-radius: 40px;
+            font-weight: 650;
+        }
+        .info-bar {
+            background: #e8edf2;
+            padding: 12px 22px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+        }
+        h2, h3 {
+            font-weight: 550;
+            margin-top: 38px;
+            color: #0a3144;
+            border-left: 8px solid #0a3144;
+            padding-left: 16px;
+        }
+        .choice-item {
+            margin: 22px 0;
+            padding-left: 12px;
+            line-height: 1.7;
+        }
+        .fig-placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 25px 0;
+        }
+        .fig-img {
+            border: 1px solid #8ba0b8;
+            border-radius: 10px;
+            background: #fcfefe;
+            padding: 10px;
+            box-shadow: 0 3px 7px rgba(0,0,0,0.04);
+        }
+        .true-false {
+            background: #fef7ea;
+            padding: 18px 22px;
+            border-left: 6px solid #c45a1c;
+            margin: 28px 0;
+            border-radius: 0 14px 14px 0;
+        }
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+        table {
+            border-collapse: collapse;
+            background: white;
+            font-size: 0.9rem;
+            width: auto;
+            margin: 0;
+        }
+        td, th {
+            border: 1.2px solid #30546b;
+            padding: 5.5px 10px;
+            text-align: center;
+        }
+        .info-box {
+            background: #e4ebf3;
+            padding: 16px 22px;
+            border-radius: 16px;
+            margin: 25px 0;
+        }
+        .page-footer {
+            margin-top: 45px;
+            border-top: 1px solid #9aacbc;
+            padding-top: 22px;
+            font-size: 0.98rem;
+            color: #2e4a62;
+        }
+        .options-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            align-items: center;
+            margin: 12px 0 8px;
+        }
+        /* Đảm bảo hình ảnh giữ tỉ lệ */
+        .fig-img img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div class="main-container">
+    <!-- Thanh tab điều hướng -->
+    <div class="tab-nav">
+        <button class="tab-link active" data-tab="part1">📋 PHẦN I (Câu 1–18)</button>
+        <button class="tab-link" data-tab="part2">⚖️ PHẦN II (Đúng/Sai)</button>
+        <button class="tab-link" data-tab="part3">✍️ PHẦN III (Tự luận)</button>
+    </div>
+
+    <!-- PHẦN I -->
+    <div id="part1" class="tab-pane active">
+        <div class="page-header">
+            <span>Họ và tên thí sinh : ......................... Số báo danh : .................</span>
+            <span class="exam-code">Mã đề: 0202</span>
+        </div>
+        <div class="info-bar">
+            + Cho biết: T (K) = t (°C) + 273; R = 8,31 J.mol<sup>–1</sup>.K<sup>–1</sup>; π = 3,14.<br>
+            + Không làm tròn kết quả các phép tính trung gian.
+        </div>
+
+        <h2>PHẦN I. Thí sinh trả lời từ câu 1 đến câu 18. Mỗi câu hỏi thí sinh chỉ chọn một phương án.</h2>
+
+        <div class="choice-item"><strong>Câu 1:</strong> Gọi V và T lần lượt là thể tích và nhiệt độ tuyệt đối của một khối lượng khí lí tưởng xác định. Công thức V = hằng số được áp dụng khi khối khí biến đổi trạng thái theo quá trình nào sau đây?<br>
+            <span style="margin-right: 28px;">A. Quá trình dãn đẳng nhiệt.</span> <span style="margin-right: 28px;">B. Quá trình đẳng áp.</span> <span style="margin-right: 28px;">C. Quá trình nén đẳng nhiệt.</span> <span>D. Quá trình đẳng tích.</span>
+        </div>
+        <div class="choice-item"><strong>Câu 2:</strong> Ở nhiệt độ nóng chảy, nhiệt lượng cần cung cấp để một chất rắn kết tinh có khối lượng m nóng chảy hoàn toàn là Q. Nhiệt nóng chảy riêng của chất rắn đó là<br>
+            <span style="margin-right: 35px;">A. λ = Qm.</span> <span style="margin-right: 35px;">B. λ = 2Qm.</span> <span style="margin-right: 35px;">C. λ = m/Q.</span> <span>D. λ = Q/m.</span>
+        </div>
+        <div class="choice-item"><strong>Câu 3:</strong> Theo định luật I của nhiệt động lực học, độ biến thiên nội năng của một khối khí được tính bằng công thức ΔU = A + Q, với A là kí hiệu công và Q là kí hiệu nhiệt lượng. Nếu khối khí nhận nhiệt lượng và nhận công thì quy ước thích hợp về dấu của A và Q là<br>
+            <span style="margin-right: 35px;">A. Q > 0 và A > 0.</span> <span style="margin-right: 35px;">B. Q < 0 và A > 0.</span> <span style="margin-right: 35px;">C. Q > 0 và A < 0.</span> <span>D. Q < 0 và A < 0.</span>
+        </div>
+        <div class="choice-item"><strong>Câu 4:</strong> Trong phòng xét nghiệm, một mẫu chứa virus được bảo quản ở -4 °C. Nhiệt độ tương ứng của mẫu theo thang Kelvin là<br>
+            <span style="margin-right: 35px;">A. 269 K.</span> <span style="margin-right: 35px;">B. 292 K.</span> <span style="margin-right: 35px;">C. 277 K.</span> <span>D. 301 K.</span>
+        </div>
+        <div class="choice-item"><strong>Câu 5:</strong> Trong hệ đơn vị SI, tesla (T) là đơn vị của đại lượng nào sau đây?<br>
+            <span style="margin-right: 35px;">A. Cảm ứng từ.</span> <span style="margin-right: 35px;">B. Cường độ điện trường.</span> <span style="margin-right: 35px;">C. Từ thông.</span> <span>D. Suất điện động.</span>
+        </div>
+        <div class="choice-item"><strong>Câu 6:</strong> Cho một đoạn dây dẫn mang dòng điện I đặt trong từ trường đều có vectơ cảm ứng từ \(\overrightarrow{B}\). Quy ước ⊗ cho biết chiều dòng điện hướng vuông góc từ ngoài vào trong trang giấy, ⊙ cho biết chiều dòng điện hướng vuông góc từ trong trang giấy ra ngoài. Hình nào dưới đây biểu diễn sai chiều của lực từ \(\overrightarrow{F}\) tác dụng lên đoạn dây?</div>
+        <div class="fig-placeholder"><div class="fig-img" style="width: 50%;"><img src="c6.png" alt="Hình câu 6 - lực từ" style="width: 100%;"></div></div>
+        <div class="options-row"><span>A. Hình 2.</span> <span>B. Hình 4.</span> <span>C. Hình 3.</span> <span>D. Hình 1.</span></div>
+
+        <div class="choice-item"><strong>Câu 7:</strong> Khi dùng búa đập nhiều lần vào một thanh đồng thì thanh đồng nóng lên. Nội năng của thanh đồng tăng lên chủ yếu là do<br>
+            <span style="margin-right: 30px;">A. thanh đồng nhận nhiệt lượng từ búa.</span> <span style="margin-right: 30px;">B. thanh đồng thực hiện công.</span> <span style="margin-right: 30px;">C. thanh đồng truyền nhiệt cho búa.</span> <span>D. thanh đồng nhận công.</span>
+        </div>
+        <div class="choice-item"><strong>Câu 8:</strong> Cho dòng điện không đổi chạy qua hai dây dẫn thẳng đặt song song và gần nhau. Nếu dòng điện trong hai dây dẫn cùng chiều nhau thì hai dây dẫn sẽ<br>
+            <span style="margin-right: 40px;">A. không tương tác.</span> <span style="margin-right: 40px;">B. đẩy nhau.</span> <span style="margin-right: 40px;">C. lúc đầu hút nhau, sau đó đẩy nhau.</span> <span>D. hút nhau.</span>
+        </div>
+        <div class="fig-placeholder"><div class="fig-img" style="width: 10%;"><img src="c8.png" alt="Hai dây dẫn song song" style="width: 100%;"></div></div>
+
+        <!-- Thêm câu 9-18 để hoàn thiện phần I (tôi lấy từ nguyên bản) -->
+        <div class="choice-item"><strong>Câu 9:</strong> Quá trình hơi nước trong không khí chuyển thành thể lỏng tạo thành những giọt sương đọng trên lá cây vào buổi sáng sớm là quá trình<br>
+            <span style="margin-right: 40px;">A. bay hơi.</span> <span style="margin-right: 40px;">B. đông đặc.</span> <span style="margin-right: 40px;">C. ngưng tụ.</span> <span>D. nóng chảy.</span>
+        </div>
+        <div class="choice-item"><strong>Câu 10:</strong> Trong quá trình đẳng nhiệt của một khối lượng khí lí tưởng xác định<br>
+            <span style="margin-right: 30px;">A. áp suất của khối khí tăng khi thể tích tăng.</span> <span style="margin-right: 30px;">B. áp suất tăng khi thể tích giảm.</span> <span style="margin-right: 30px;">C. áp suất luôn không đổi.</span> <span>D. thể tích luôn không đổi.</span>
+        </div>
+        <div class="choice-item"><strong>Câu 11:</strong> Nhiệt lượng cần cung cấp để làm cho một kilôgam một chất lỏng hóa hơi hoàn toàn ở nhiệt độ sôi của nó được gọi là<br>
+            <span style="margin-right: 35px;">A. nhiệt nóng chảy.</span> <span style="margin-right: 35px;">B. nhiệt dung riêng.</span> <span style="margin-right: 35px;">C. nhiệt nóng chảy riêng.</span> <span>D. nhiệt hóa hơi riêng.</span>
+        </div>
+        <div class="choice-item"><strong>Câu 12:</strong> Công thức liên hệ giữa hằng số Boltzmann (k), số Avogadro (N<sub>A</sub>) và hằng số khí lí tưởng (R) là<br>
+            <span style="margin-right: 45px;">A. R = k N<sub>A</sub>.</span> <span style="margin-right: 45px;">B. R = k N<sub>A</sub>.</span> <span style="margin-right: 45px;">C. k = R<sup>2</sup> N<sub>A</sub>.</span> <span>D. k = N<sub>A</sub> . R.</span>
+        </div>
+        <div class="choice-item"><strong>Câu 13:</strong> Một lượng khí lí tưởng đang có áp suất p và nhiệt độ tuyệt đối T. Biết R là hằng số khí lí tưởng và M là khối lượng mol của khí. Đại lượng bằng \(\frac{pM}{RT}\) là<br>
+            <span style="margin-right: 35px;">A. mật độ phân tử khí.</span> <span style="margin-right: 35px;">B. khối lượng riêng của khí.</span> <span style="margin-right: 35px;">C. tổng số phân tử khí.</span> <span>D. số mol của khí.</span>
+        </div>
+        <div class="choice-item"><strong>Câu 14:</strong> Một nhóm học sinh cho một lượng khí vào trong ống thủy tinh (1) có đầu kín, đầu còn lại đậy bằng nút bấc (2). Họ dùng đèn cồn (3) đun nóng khí. Khi đun đến một lúc thì thấy nút bấc bật ra. Chọn phát biểu đúng.<br>
+            A. Nút bấc bật ra chứng tỏ số phân tử khí trong ống tăng.<br>
+            B. Nút bấc bật ra chứng tỏ động năng của các phân tử khí trong ống giảm.<br>
+            C. Khi nút bấc chưa bật ra thì nội năng của khí trong ống tăng.<br>
+            D. Khi nút bấc bật ra thì thế năng của các phân tử trong ống không đổi.
+        </div>
+        <div class="fig-placeholder"><div class="fig-img" style="width: 20%;"><img src="c14.png" alt="Ống thủy tinh, đèn cồn" style="width: 100%;"></div></div>
+        <div class="choice-item"><strong>Câu 15:</strong> Một khung dây dẫn cứng CDEG có khối lượng m được treo bằng một sợi dây nhẹ, không co dãn. Cạnh EG của khung dài 15 cm, nằm trong vùng MNPQ có từ trường đều như hình vẽ bên. Biết vectơ cảm ứng từ của từ trường đều có phương vuông góc với mặt phẳng trang giấy, có chiều hướng từ trong ra ngoài trang giấy và có độ lớn B = 0,6 T. Nếu cho dòng điện có độ lớn I = 12 A chạy trong khung theo chiều mũi tên thì lực căng của dây treo khung CDEG có độ lớn tăng gấp đôi so với khi chưa có dòng điện (dây không bị đứt). Lấy g = 10 m/s². Khối lượng m bằng bao nhiêu?<br>
+            <span style="margin-right: 40px;">A. 108 g.</span> <span style="margin-right: 40px;">B. 76 g.</span> <span style="margin-right: 40px;">C. 96 g.</span> <span>D. 150 g.</span>
+        </div>
+        <div class="fig-placeholder"><div class="fig-img" style="width: 15%;"><img src="c15.png" alt="Khung dây CDEG" style="width: 100%;"></div></div>
+        <div class="choice-item"><strong>Câu 16:</strong> Thí nghiệm quan sát chuyển động của các hạt khói trong không khí như hình bên cho thấy<br>
+            A. khi nhiệt độ tăng thì các hạt khói chuyển động nhanh hơn.<br>
+            B. các electron trong phân tử khói chuyển động tròn đều quanh hạt nhân.<br>
+            C. các electron trong chất khí chuyển động hỗn loạn không ngừng.<br>
+            D. quỹ đạo của các hạt khói là đường gấp khúc tuần hoàn.
+        </div>
+        <div class="fig-placeholder"><div class="fig-img" style="width: 20%;"><img src="c16.png" alt="Chuyển động hạt khói" style="width: 100%;"></div></div>
+        <div class="choice-item"><strong>Câu 17:</strong> Quá trình nào sau đây là sự nóng chảy?<br>
+            <span style="margin-right: 35px;">A. Nước đóng băng trong ngăn đá.</span> <span style="margin-right: 35px;">B. Muối ăn tan ra khi thả vào nước.</span> <span style="margin-right: 35px;">C. Bánh quy mềm ra khi thả vào nước.</span> <span>D. Kem chảy ra khi để ngoài không khí.</span>
+        </div>
+        <div class="choice-item"><strong>Câu 18:</strong> Gọi d<sub>r</sub>, d<sub>l</sub>, d<sub>k</sub> lần lượt là khoảng cách trung bình giữa các phân tử của cùng một chất ở thể rắn, thể lỏng và thể khí. Sắp xếp theo thứ tự giảm dần là<br>
+            <span style="margin-right: 45px;">A. d<sub>k</sub>, d<sub>l</sub>, d<sub>r</sub>.</span>
+            <span style="margin-right: 45px;">B. d<sub>k</sub>, d<sub>l</sub>, d<sub>r</sub>.</span>
+            <span style="margin-right: 45px;">C. d<sub>r</sub>, d<sub>k</sub>, d<sub>l</sub>.</span>
+            <span>D. d<sub>r</sub>, d<sub>l</sub>, d<sub>k</sub>.</span>
+        </div>
+        <div style="text-align: right; font-style: italic; margin-top: 22px;">Trang 1+2/4 (gộp) - Mã đề thi 0202</div>
+    </div>
+
+    <!-- PHẦN II -->
+    <div id="part2" class="tab-pane">
+        <h2>PHẦN II. Thí sinh trả lời từ câu 1 đến câu 4. Mỗi ý a), b), c), d) chọn đúng hoặc sai.</h2>
+        <div class="true-false"><strong>Câu 1:</strong> Từ các thí nghiệm và thực tế, các nhà khoa học đưa ra mô hình động học phân tử chất khí.<br>
+            a) Các phân tử khí va chạm vào thành bình gây ra áp suất lên thành bình chứa khí.<br>
+            b) Các phân tử khí chỉ chuyển động ở nhiệt độ cao.<br>
+            c) Khi chuyển động hỗn loạn, các phân tử khí va chạm với nhau và với thành bình.<br>
+            d) Nhiệt độ khí càng cao thì các phân tử khí chuyển động càng nhanh.
+        </div>
+        <div class="true-false"><strong>Câu 2:</strong> Hình bên là máy nước nóng năng lượng mặt trời. Máy gồm hai bộ phận chính: bộ thu nhiệt diện tích 2 m² và bình bảo ôn. Biết nhiệt dung riêng của nước 4200 J/kg.K, khối lượng riêng 1000 kg/m³, nhiệt độ sôi 100°C. Cường độ sáng trung bình 1370 W/m², 60% năng lượng mặt trời chuyển hoá thành nhiệt. Bỏ qua thất thoát.<br>
+            a) Khi trời nắng, nhiệt lượng trung bình mà nước trong bình nhận được mỗi giờ là 1644 kJ.<br>
+            b) Nếu ban đầu trong máy nước nóng chứa 120 lít nước ở 20°C thì sau 7 giờ có nắng liên tục, nước trong bình đang sôi.<br>
+            c) Máy nước nóng năng lượng mặt trời hoạt động dựa trên sự chuyển hoá quang năng thành điện năng.<br>
+            d) Khi nước nóng lên thì độ tăng nội năng của nước bằng nhiệt lượng mà nước nhận được.
+        </div>
+        <div class="fig-placeholder"><div class="fig-img" style="width: 20%;"><img src="ii2.png" alt="Máy nước nóng mặt trời" style="width: 100%;"></div></div>
+        <div class="true-false"><strong>Câu 3:</strong> Hiện tượng cảm ứng điện từ được ứng dụng nhiều trong đời sống và sản xuất.<br>
+            a) Dòng điện cảm ứng xuất hiện trong mạch kín có chiều sao cho từ trường do nó sinh ra có tác dụng chống lại sự biến thiên của từ thông qua mạch kín đó.<br>
+            b) Hiện tượng cảm ứng điện từ xảy ra khi từ thông gửi qua một mạch điện kín biến thiên.<br>
+            c) Trong hiện tượng cảm ứng điện từ có sự chuyển hoá từ nhiệt năng thành cơ năng.<br>
+            d) Độ lớn của suất điện động cảm ứng trong mạch kín tỉ lệ nghịch với tốc độ biến thiên của từ thông qua mạch.
+        </div>
+        <div class="true-false"><strong>Câu 4:</strong> Một học sinh sử dụng bộ dụng cụ thí nghiệm như hình bên dưới để tìm hiểu mối liên hệ giữa thể tích V và nhiệt độ tuyệt đối T của một khối lượng khí xác định.<br>
+            a) Khi nhiệt độ tăng thì áp suất của khí A trong ống tăng, đẩy giọt thuỷ ngân lên trên.<br>
+            b) Kết quả thí nghiệm cho thấy, thể tích của khí A trong ống tỉ lệ nghịch với nhiệt độ tuyệt đối của khí.<br>
+            c) Quá trình biến đổi trạng thái của khí A trong ống là quá trình đẳng áp.<br>
+            d) Đường kính trong của ống mao dẫn là 2 mm. Với kết quả thu được ở bảng trên thì tỉ số V/T = 2,9 mm³/K.
+        </div>
+        <div class="flex-row">
+            <div class="fig-img" style="width: 20%;"><img src="ii4.png" alt="Ống mao dẫn" style="width: 100%;"></div>
+            <table>
+                <tr><th>Lần đo</th><th>t (°C)</th><th>h (mm)</th></tr>
+                <tr><td>1</td><td>72</td><td>40</td></tr>
+                <tr><td>2</td><td>72</td><td>47</td></tr>
+                <tr><td>3</td><td>72</td><td>60</td></tr>
+                <tr><td>4</td><td>72</td><td>68</td></tr>
+                <tr><td>5</td><td>72</td><td>80</td></tr>
+            </table>
+        </div>
+        <div style="text-align: right; font-style: italic; margin-top: 22px;">Trang 3/4 - Mã đề thi 0202</div>
+    </div>
+
+    <!-- PHẦN III -->
+    <div id="part3" class="tab-pane">
+        <h2>PHẦN III. Thí sinh trả lời từ câu 1 đến câu 6.</h2>
+        <div class="choice-item"><strong>Câu 1:</strong> Trong một lần chạy bộ ngoài trời, một người tiêu hao 6.10⁵ J nội năng của mình. Biết nhiệt lượng mà cơ thể người truyền ra ngoài môi trường là 2,5.10⁵ J. Tổng công mà người này thực hiện trong quá trình chạy bộ là x.10⁵ J. Giá trị của x là bao nhiêu?</div>
+        <div class="choice-item"><strong>Câu 2:</strong> Một móng sắt bảo vệ chân ngựa có khối lượng 0,4 kg vừa được rèn và rất nóng. Để làm nguội nhanh, người ta thả móng sắt vào 5 kg nước ở 20 °C đựng trong một chậu sắt có khối lượng 0,5 kg. Biết nhiệt độ của nước khi có cân bằng nhiệt là 28 °C, nhiệt dung riêng của sắt và của nước lần lượt là 450 J/kg.K và 4186 J/kg.K. Bỏ qua sự trao đổi nhiệt với môi trường và sự hóa hơi của nước. Nhiệt độ của móng sắt khi bắt đầu thả vào nước là bao nhiêu độ Celsius (làm tròn kết quả đến chữ số hàng đơn vị)?</div>
+        <div class="fig-placeholder"><div class="fig-img" style="width: 20%;"><img src="iii2.png" alt="Móng sắt" style="width: 100%;"></div></div>
+        <div class="choice-item"><strong>Câu 3:</strong> Trong phòng thí nghiệm, người ta dùng một lò nấu chảy kim loại để nấu chảy một mẫu đồng. Hình bên là đồ thị biểu diễn sự phụ thuộc nhiệt độ của mẫu đồng theo thời gian. Biết lò cung cấp nhiệt cho mẫu đồng với tốc độ không đổi là 135 kJ/phút, nhiệt nóng chảy riêng của đồng là 1,8.10⁵ J/kg. Bỏ qua sự trao đổi nhiệt với môi trường. Khối lượng của mẫu đồng này là bao nhiêu kilôgam (làm tròn kết quả đến chữ số hàng phần mười)?</div>
+        <div class="fig-placeholder"><div class="fig-img" style="width: 20%;"><img src="iii3.png" alt="Đồ thị nóng chảy đồng" style="width: 100%;"></div></div>
+
+        <div class="info-box">
+            <strong>Sử dụng thông tin sau cho Câu 4 và Câu 5:</strong> Trong một cuộc thi sáng tạo khoa học, một đội thi đã đề xuất giải pháp cảnh báo nhiệt độ cho một kho lạnh mà không dùng đến cảm biến điện tử. Họ sử dụng bộ dụng cụ như hình bên: xi lanh kín, thành mỏng, tiết diện S = 50 cm²; pit-tông m₁ = 1 kg; thanh cứng AB đồng chất tiết diện đều, trục quay tại O, OA = OB; đầu A nối pit-tông, đầu B treo vật m₂ = 5 kg đặt trên mặt cân điện tử. Tại 27°C, pit-tông cách đáy 40 cm, áp suất khí trong xi lanh 98200 Pa, thanh AB cân bằng ngang. Dây treo nhẹ, không co dãn, phương thẳng đứng. Nhiệt độ khí trong xi lanh bằng nhiệt độ kho. Áp suất khí quyển p₀ = 10⁵ Pa. Bỏ qua sự dãn nở vì nhiệt. Lấy g = 10 m/s².
+        </div>
+        <div class="fig-placeholder"><div class="fig-img" style="width: 20%;"><img src="iii4.png" alt="Xi lanh và cân" style="width: 100%;"></div></div>
+        <div class="choice-item"><strong>Câu 4:</strong> Số mol khí lí tưởng trong xi lanh là x.10⁻² mol. Giá trị của x là bao nhiêu (làm tròn kết quả đến chữ số hàng phần trăm)?</div>
+        <div class="choice-item"><strong>Câu 5:</strong> Hệ thống được thiết lập để chuông báo reo vào thời điểm vật m₂ bắt đầu nhấc khỏi mặt cân (số chỉ trên cân bằng 0). Để sử dụng kho lạnh, người ta hạ dần nhiệt độ của kho lạnh từ nhiệt độ phòng, khi nhiệt độ của kho giảm đến x °C thì chuông bắt đầu reo. Giá trị của x là bao nhiêu (làm tròn kết quả đến chữ số hàng phần trăm)?</div>
+        <div class="choice-item"><strong>Câu 6:</strong> Một đoạn dây dẫn dài 50 cm mang dòng điện có cường độ 10 A đặt vuông góc với các đường sức từ trong một từ trường đều. Biết độ lớn của lực từ tác dụng lên đoạn dây dẫn là 4 N. Độ lớn cảm ứng từ của từ trường bằng bao nhiêu tesla?</div>
+        <div class="page-footer">
+            ---- HẾT ----<br>
+            - Thí sinh không được sử dụng tài liệu;<br>
+            - Giám thị không giải thích gì thêm.
+        </div>
+        <div style="text-align: right; font-style: italic; margin-top: 22px;">Trang 4/4 - Mã đề thi 0202</div>
+    </div>
+</div>
+
+<!-- JavaScript chuyển tab -->
+<script>
+    (function() {
+        const tabLinks = document.querySelectorAll('.tab-link');
+        const tabPanes = document.querySelectorAll('.tab-pane');
+
+        function activateTab(tabId) {
+            // Ẩn tất cả pane
+            tabPanes.forEach(pane => pane.classList.remove('active'));
+            // Bỏ active tất cả link
+            tabLinks.forEach(link => link.classList.remove('active'));
+
+            // Hiện pane được chọn
+            const activePane = document.getElementById(tabId);
+            if (activePane) activePane.classList.add('active');
+
+            // Đánh dấu link active
+            const activeLink = Array.from(tabLinks).find(link => link.dataset.tab === tabId);
+            if (activeLink) activeLink.classList.add('active');
+
+            // Kích hoạt lại MathJax để render công thức trong tab mới
+            if (window.MathJax) {
+                window.MathJax.typesetPromise ? window.MathJax.typesetPromise() : window.MathJax.typeset();
+            }
+        }
+
+        tabLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const tabId = e.target.dataset.tab;
+                if (tabId) activateTab(tabId);
+            });
+        });
+
+        // Kích hoạt tab đầu tiên (phần I) khi load trang
+        activateTab('part1');
+    })();
+</script>
+
+<!-- MathJax kích hoạt hiển thị công thức, đặc biệt là \(\overrightarrow{...}\) -->
+<script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$','$$'], ['\\[','\\]']],
+            processEscapes: true
+        },
+        svg: { fontCache: 'global' },
+        options: { ignoreHtmlClass: 'no-mathjax' }
+    };
+</script>
+</body>
+</html>
