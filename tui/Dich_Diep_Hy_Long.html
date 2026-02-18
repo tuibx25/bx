@@ -4,11 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ý nghĩa: 奕葉煕隆 (Dịch Diệp Hy Long)</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            /* Chống bôi đen/chọn nội dung */
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
         body {
             background: #f5f0e7;
@@ -18,6 +25,7 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            position: relative;
         }
         .card {
             max-width: 900px;
@@ -26,6 +34,8 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 6px 12px rgba(0, 0, 0, 0.08);
             padding: 40px;
             border: 1px solid #e9dacb;
+            position: relative;
+            z-index: 2;
         }
         .title {
             font-size: 3rem;
@@ -162,6 +172,20 @@
             background: linear-gradient(to right, transparent, #dac0aa, transparent);
             margin: 28px 0 10px;
         }
+        /* Watermark */
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0.2;
+            z-index: 999;
+            pointer-events: none;
+        }
+        .watermark img {
+            width: 120px;
+            height: auto;
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
@@ -231,7 +255,7 @@
             <strong>🇻🇳 奕葉煕隆 trong tiếng Việt:</strong> “Đời đời thịnh vượng” hoặc “Nối tiếp thịnh vượng huy hoàng” (phiên âm: Dịch Diệp Hy Long). Nếu gắn với tên làng Dịch Diệp, nó trở thành lời nguyện cầu: <em>“Làng Dịch Diệp trường tồn vinh quang”</em>.
         </div>
 
-        <!-- Phần hình ảnh minh họa (thêm mới) -->
+        <!-- Phần hình ảnh minh họa -->
         <div style="margin: 30px 0 20px;">
             <h3 style="color: #6b4f3c; font-weight: 400; margin-bottom: 16px;">🖼️ Hình ảnh minh họa</h3>
             <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
@@ -253,5 +277,89 @@
             <span>⚘ Thành ngữ Hán Việt · mang vẻ đẹp trường tồn</span>
         </div>
     </div>
+
+    <!-- Watermark bảo mật -->
+    <div class="watermark">
+        <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png" alt="Watermark">
+    </div>
+
+    <!-- Script chống sao chép, chống xem mã nguồn cơ bản -->
+    <script>
+        (function() {
+            // Chặn chuột phải
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Chặn các phím tắt nguy hiểm
+            document.addEventListener('keydown', function(e) {
+                // Kiểm tra tổ hợp phím
+                if (e.ctrlKey || e.metaKey) {
+                    // Danh sách phím cần chặn
+                    var forbiddenKeys = ['u', 'U', 's', 'S', 'p', 'P', 'a', 'A', 'c', 'C', 'x', 'X', 'v', 'V'];
+                    if (forbiddenKeys.includes(e.key)) {
+                        e.preventDefault();
+                        return false;
+                    }
+                }
+                // Chặn F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))) {
+                    e.preventDefault();
+                    return false;
+                }
+                // Chặn Ctrl+U (đã xử lý ở trên) và Ctrl+S, Ctrl+P, Ctrl+A, Ctrl+C, Ctrl+X, Ctrl+V
+            });
+
+            // Chặn kéo thả ảnh và văn bản
+            document.addEventListener('dragstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Chặn copy
+            document.addEventListener('copy', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Chặn cut
+            document.addEventListener('cut', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Chặn paste (không bắt buộc, nhưng thêm cho chắc)
+            document.addEventListener('paste', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Cảnh báo khi cố mở DevTools (phát hiện thông qua thay đổi kích thước debugger)
+            (function detectDevTools() {
+                let devtoolsOpen = false;
+                const threshold = 160; // độ lệch kích thước
+
+                const check = function() {
+                    const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+                    const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+                    if (widthThreshold || heightThreshold) {
+                        if (!devtoolsOpen) {
+                            devtoolsOpen = true;
+                            alert('⚠️ Vui lòng không mở DevTools để bảo vệ nội dung.');
+                        }
+                    } else {
+                        devtoolsOpen = false;
+                    }
+                };
+
+                window.addEventListener('resize', check);
+                check();
+            })();
+
+            // Ngăn chọn toàn bộ bằng Ctrl+A (đã chặn ở keydown) nhưng thêm dự phòng
+        })();
+    </script>
 </body>
 </html>
