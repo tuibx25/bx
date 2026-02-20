@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Động và Web Tĩnh - So sánh chi tiết</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #0056b3;
+        }
+        h1 {
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #0056b3;
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .example-list {
+            background-color: #e9f0f9;
+            padding: 15px 20px;
+            border-radius: 5px;
+            border-left: 5px solid #0056b3;
+        }
+        .note {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 Web Động là gì? Web Tĩnh là gì? So sánh chi tiết</h1>
+        
+        <h2>📌 1. Khái niệm</h2>
+        <h3>Web Tĩnh (Static Website)</h3>
+        <p>
+            Là website mà nội dung (chữ, hình ảnh) được <strong>"fix cứng"</strong> trong từng trang HTML. 
+            Khi người dùng truy cập, máy chủ chỉ gửi thẳng file HTML đó về trình duyệt mà <strong>không cần xử lý thêm</strong>.
+            <br>👉 Giống như một tờ rơi hay brochure trên mạng. Muốn thay đổi nội dung, người quản trị phải sửa trực tiếp vào code của từng trang.
+        </p>
+
+        <h3>Web Động (Dynamic Website)</h3>
+        <p>
+            Là website có nội dung được <strong>tạo ra theo thời gian thực</strong> dựa trên tương tác của người dùng hoặc dữ liệu trong Database (Cơ sở dữ liệu). 
+            Máy chủ sẽ đọc yêu cầu, lấy dữ liệu phù hợp từ database, ráp nó vào một khuôn mẫu (template) và gửi kết quả hoàn chỉnh về cho người dùng.
+            <br>👉 Giống như một ứng dụng. Mỗi người dùng có thể thấy một nội dung khác nhau khi đăng nhập (ví dụ: Facebook, Gmail).
+        </p>
+
+        <h2>📊 2. So sánh chi tiết Web Tĩnh và Web Động</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tiêu chí</th>
+                    <th>Web Tĩnh</th>
+                    <th>Web Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Định nghĩa</strong></td>
+                    <td>Nội dung cố định, hiển thị giống nhau cho mọi người dùng.</td>
+                    <td>Nội dung linh hoạt, thay đổi theo người dùng hoặc dữ liệu mới.</td>
+                </tr>
+                <tr>
+                    <td><strong>Công nghệ sử dụng</strong></td>
+                    <td>Chủ yếu HTML, CSS, và có thể thêm JavaScript (phía client).</td>
+                    <td>Sử dụng ngôn ngữ lập trình back-end (PHP, ASP.NET, Python, Java...) và Database (MySQL, SQL Server...).</td>
+                </tr>
+                <tr>
+                    <td><strong>Cơ chế hoạt động</strong></td>
+                    <td>Server gửi file HTML có sẵn đến trình duyệt.</td>
+                    <td>Server xử lý logic, truy vấn Database, tạo file HTML tạm thời và gửi đi.</td>
+                </tr>
+                <tr>
+                    <td><strong>Tốc độ tải trang</strong></td>
+                    <td>✅ Nhanh hơn (vì chỉ gửi file tĩnh, không cần tính toán).</td>
+                    <td>⏱ Chậm hơn một chút (cần thời gian xử lý và truy vấn dữ liệu). Có thể khắc phục bằng bộ nhớ đệm (cache).</td>
+                </tr>
+                <tr>
+                    <td><strong>Chi phí lưu trữ</strong></td>
+                    <td>💰 Rất rẻ hoặc miễn phí (Hosting cơ bản).</td>
+                    <td>💸 Đắt hơn (Cần cấu hình hosting hỗ trợ ngôn ngữ lập trình và database).</td>
+                </tr>
+                <tr>
+                    <td><strong>Tương tác</strong></td>
+                    <td>Hạn chế. Các form liên hệ thường phải nhờ dịch vụ bên thứ 3.</td>
+                    <td>Mạnh mẽ. Có form đăng ký, đăng nhập, bình luận, giỏ hàng, chat trực tiếp...</td>
+                </tr>
+                <tr>
+                    <td><strong>Bảo trì, cập nhật</strong></td>
+                    <td>❌ Khó khăn. Phải sửa code HTML của từng trang nếu muốn thay đổi nội dung.</td>
+                    <td>✅ Dễ dàng. Chỉ cần cập nhật trong Database hoặc trang quản trị (Admin Panel), nội dung sẽ thay đổi đồng loạt.</td>
+                </tr>
+                <tr>
+                    <td><strong>Tính bảo mật</strong></td>
+                    <td>🛡 Cao (dễ bảo mật hơn vì không có kết nối database hay xử lý logic phức tạp).</td>
+                    <td>⚠ Phức tạp hơn (dễ bị lỗ hổng SQL Injection, XSS... nếu code không an toàn).</td>
+                </tr>
+                <tr>
+                    <td><strong>SEO (Tối ưu công cụ tìm kiếm)</strong></td>
+                    <td>Dễ dàng tối ưu do cấu trúc đơn giản, tốc độ nhanh.</td>
+                    <td>Cũng có thể tối ưu tốt nhưng đòi hỏi cấu hình kỹ thuật phức tạp hơn.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>💡 3. Ví dụ thực tế</h2>
+        <div class="example-list">
+            <h3>📄 Web Tĩnh:</h3>
+            <ul>
+                <li>Trang web giới thiệu công ty nhỏ (chỉ có vài trang: Trang chủ, Giới thiệu, Sản phẩm mẫu, Liên hệ).</li>
+                <li>Trang web hồ sơ năng lực (Portfolio) của một nhiếp ảnh gia.</li>
+                <li>Landing page cho một chiến dịch quảng cáo ngắn hạn.</li>
+            </ul>
+            <p><em>(Nội dung ít thay đổi, mục đích chính là cung cấp thông tin.)</em></p>
+
+            <h3>⚙️ Web Động:</h3>
+            <ul>
+                <li><strong>Tin tức, Blog:</strong> VnExpress, Techcombank – mỗi giờ có bài mới mà không cần đụng đến code.</li>
+                <li><strong>Mạng xã hội:</strong> Facebook, TikTok – nội dung News Feed khác nhau với mỗi người.</li>
+                <li><strong>Thương mại điện tử:</strong> Shopee, Lazada, Tiki – có giỏ hàng, đăng nhập tài khoản, tìm kiếm sản phẩm.</li>
+                <li><strong>Diễn đàn:</strong> Reddit, các group thảo luận.</li>
+            </ul>
+        </div>
+
+        <h2>🤔 4. Nên chọn loại nào?</h2>
+        <div class="note">
+            <p><strong>✅ Chọn Web Tĩnh</strong> nếu bạn cần một trang web <strong>đơn giản, chỉ để cung cấp thông tin cơ bản và rất ít khi cập nhật</strong> (ví dụ: web giới thiệu công ty nhỏ, web danh thiếp). Ưu điểm là chi phí rẻ, tốc độ nhanh.</p>
+            <p><strong>✅ Chọn Web Động</strong> nếu bạn cần <strong>cập nhật nội dung thường xuyên, có nhiều bài viết, có tính năng tương tác với người dùng (đăng ký, bình luận, mua bán), hoặc mỗi người dùng cần có trải nghiệm riêng</strong>. Hầu hết các website chuyên nghiệp ngày nay đều là web động.</p>
+        </div>
+
+        <footer>
+            <p>📅</p>
+        </footer>
+    </div>
+</body>
+</html>
