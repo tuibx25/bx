@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gộp màu · sắp xếp theo độ sáng (ưu tiên #8B4513 #8B5A2B)</title>
+    <title>Gộp màu · sắp xếp theo độ sáng (ưu tiên #8B5A2B #8B4513)</title>
     <style>
         * {
             box-sizing: border-box;
@@ -57,6 +57,7 @@
             height: 110px;
             border-radius: 18px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
@@ -70,11 +71,19 @@
             text-shadow: 0 1px 2px rgba(0,0,0,0.2);
             cursor: pointer;
             user-select: none;
+            line-height: 1.3;
         }
 
         .swatch:hover {
             transform: scale(1.06) translateY(-4px);
             box-shadow: 0 20px 25px -8px rgba(0,0,0,0.3), 0 0 0 2px rgba(255,255,255,0.6) inset;
+        }
+
+        .swatch span {
+            font-size: 0.8em;
+            opacity: 0.9;
+            margin-top: 4px;
+            font-weight: 400;
         }
 
         /* Toast thông báo copy */
@@ -227,14 +236,46 @@
 
             let sortedColors = colorsWithHsl.map(item => item.hex);
 
-            // ----- ƯU TIÊN ĐẶT #8B4513 VÀ #8B5A2B LÊN ĐẦU (theo thứ tự) -----
-            const priorityList = ["#8B4513", "#8B5A2B"];
+            // ----- ƯU TIÊN ĐẶT #8B5A2B VÀ #8B4513 LÊN ĐẦU (theo thứ tự) -----
+            const priorityList = ["#8B5A2B", "#8B4513"];   // Đã đổi thứ tự: nâu đất trước, nâu sô-cô-la sau
             // Lọc ra các màu ưu tiên có thực trong sortedColors
             const priorityColors = priorityList.filter(hex => sortedColors.includes(hex));
             // Các màu còn lại (không nằm trong priorityList)
             const otherColors = sortedColors.filter(hex => !priorityList.includes(hex));
             // Gộp lại: ưu tiên trước, sau đó là các màu khác đã sắp xếp
             sortedColors = [...priorityColors, ...otherColors];
+
+            // ---------- BẢNG TÊN MÀU (TIẾNG VIỆT) ----------
+            const colorNames = {
+                "#FFFFFF": "Trắng",
+                "#F5F5F5": "Trắng xám",
+                "#D3D3D3": "Xám nhạt",
+                "#A9A9A9": "Xám đậm",
+                "#808080": "Xám",
+                "#C2A36B": "Vàng nâu",
+                "#B5946B": "Nâu nhạt",
+                "#8B5A2B": "Nâu đất",          // giữ nguyên
+                "#C9A87C": "Beige",
+                "#D2B48C": "Tan",
+                "#1C3A5F": "Xanh đen",
+                "#2C5F8A": "Xanh lam",
+                "#8B4513": "Nâu sô-cô-la",      // đã sửa từ "Nâu saddle" thành tên dễ hiểu hơn
+                "#F0E68C": "Vàng nhạt",
+                "#B5651D": "Nâu cam",
+                "#7A5230": "Nâu",
+                "#C0C0C0": "Bạc",
+                "#BDC3C7": "Xám khói",
+                "#2C3E50": "Xanh than",
+                "#34495E": "Xanh than đậm",
+                "#F5F5DC": "Beige nhạt",
+                "#F5DEB3": "Lúa mì",
+                "#0066CC": "Xanh dương",
+                "#004488": "Xanh dương đậm"
+            };
+
+            function getColorName(hex) {
+                return colorNames[hex] || "";
+            }
 
             // ---------- TOAST ----------
             const toastEl = document.getElementById('copyToast');
@@ -255,13 +296,19 @@
                 return luma > 160 ? '#111111' : '#f0f6fc';
             }
 
-            // ---------- TẠO SWATCH ----------
+            // ---------- TẠO SWATCH (có tên màu) ----------
             function createSwatch(hexColor) {
                 const swatch = document.createElement('div');
                 swatch.className = 'swatch';
                 swatch.style.backgroundColor = hexColor;
                 swatch.style.color = getSmartTextColor(hexColor);
-                swatch.textContent = hexColor;
+
+                const name = getColorName(hexColor);
+                if (name) {
+                    swatch.innerHTML = `${hexColor}<span>${name}</span>`;
+                } else {
+                    swatch.textContent = hexColor;
+                }
 
                 swatch.addEventListener('click', async (e) => {
                     e.stopPropagation();
@@ -292,7 +339,7 @@
                 grid.appendChild(createSwatch(hex));
             });
 
-            console.log('Màu sau khi ưu tiên (hai màu nâu lên đầu):', sortedColors);
+            console.log('Màu sau khi ưu tiên (nâu đất lên trước nâu sô-cô-la):', sortedColors);
         })();
     </script>
 </body>
