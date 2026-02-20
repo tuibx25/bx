@@ -239,7 +239,7 @@
             let sortedColors = colorsWithHsl.map(item => item.hex);
 
             // ----- ƯU TIÊN ĐẶT #8B5A2B VÀ #8B4513 LÊN ĐẦU (theo thứ tự) -----
-            const priorityList = ["#8B5A2B", "#8B4513"];   // Đã đổi thứ tự: nâu đất trước, nâu sô-cô-la sau
+            const priorityList = ["#8B5A2B", "#8B4513"];   // nâu đất trước, nâu sô-cô-la sau
             // Lọc ra các màu ưu tiên có thực trong sortedColors
             const priorityColors = priorityList.filter(hex => sortedColors.includes(hex));
             // Các màu còn lại (không nằm trong priorityList)
@@ -247,7 +247,7 @@
             // Gộp lại: ưu tiên trước, sau đó là các màu khác đã sắp xếp
             sortedColors = [...priorityColors, ...otherColors];
 
-            // ---------- BẢNG TÊN MÀU (TIẾNG VIỆT) ----------
+            // ---------- BẢNG TÊN MÀU (TIẾNG VIỆT) ĐÃ CHỈNH SỬA ----------
             const colorNames = {
                 "#FFFFFF": "Trắng",
                 "#F5F5F5": "Trắng xám",
@@ -256,12 +256,12 @@
                 "#808080": "Xám",
                 "#C2A36B": "Vàng nâu",
                 "#B5946B": "Nâu nhạt",
-                "#8B5A2B": "Nâu đất",          // giữ nguyên
-                "#C9A87C": "Beige",
-                "#D2B48C": "Tan",
+                "#8B5A2B": "Nâu đất",
+                "#C9A87C": "Nâu be",          // sửa từ "Beige"
+                "#D2B48C": "Nâu tan",          // sửa từ "Tan"
                 "#1C3A5F": "Xanh đen",
                 "#2C5F8A": "Xanh lam",
-                "#8B4513": "Nâu sô-cô-la",      // đã sửa từ "Nâu saddle" thành tên dễ hiểu hơn
+                "#8B4513": "Nâu sô-cô-la",
                 "#F0E68C": "Vàng nhạt",
                 "#B5651D": "Nâu cam",
                 "#7A5230": "Nâu",
@@ -270,7 +270,7 @@
                 "#2C3E50": "Xanh than",
                 "#34495E": "Xanh than đậm",
                 "#F5F5DC": "Beige nhạt",
-                "#F5DEB3": "Lúa mì",
+                "#F5DEB3": "Kem",              // sửa từ "Lúa mì"
                 "#0066CC": "Xanh dương",
                 "#004488": "Xanh dương đậm"
             };
@@ -341,7 +341,7 @@
                 grid.appendChild(createSwatch(hex));
             });
 
-            console.log('Màu sau khi ưu tiên (nâu đất lên trước nâu sô-cô-la):', sortedColors);
+            console.log('Màu sau khi ưu tiên:', sortedColors);
         })();
     </script>
 </body>
