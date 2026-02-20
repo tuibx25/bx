@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gộp màu · sắp xếp theo độ sáng (ưu tiên #8B4513 #8B5A2B)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #f4f7fb;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            position: relative;
+        }
+
+        .wrapper {
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        h1 {
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: #1e293b;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 15px;
+        }
+
+        .swatch-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            background: rgba(255,255,255,0.5);
+            backdrop-filter: blur(2px);
+            border-radius: 48px;
+            padding: 30px 25px;
+            box-shadow: 0 20px 30px -10px rgba(0,20,40,0.2);
+            border: 1px solid rgba(255,255,255,0.7);
+        }
+
+        .swatch {
+            width: 140px;
+            height: 110px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+            font-size: 15px;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 10px 15px -5px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.3) inset;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            padding: 0 6px;
+            word-break: break-word;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .swatch:hover {
+            transform: scale(1.06) translateY(-4px);
+            box-shadow: 0 20px 25px -8px rgba(0,0,0,0.3), 0 0 0 2px rgba(255,255,255,0.6) inset;
+        }
+
+        /* Toast thông báo copy */
+        .copy-toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1e293b;
+            color: #f8fafc;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 500;
+            box-shadow: 0 15px 25px -8px rgba(0,0,0,0.4);
+            border: 1px solid #ffffff30;
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            pointer-events: none;
+            max-width: 300px;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .copy-toast.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: #475569;
+            opacity: 0.7;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .swatch {
+                width: 120px;
+                height: 100px;
+                font-size: 13px;
+            }
+            .copy-toast {
+                left: 20px;
+                right: 20px;
+                bottom: 20px;
+                width: auto;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="swatch-grid" id="mergedGrid"></div>
+    </div>
+
+    <div id="copyToast" class="copy-toast">✅ Đã copy mã màu</div>
+
+    <script>
+        (function() {
+            // ---------- DỮ LIỆU GỐC (hai nhóm) ----------
+            const rawGroup1 = [
+                "#FFFFFF", "#F5F5F5", "#D3D3D3", "#A9A9A9", "#808080",
+                "#C2A36B", "#B5946B", "#8B5A2B", "#C9A87C", "#D2B48C",
+                "#000000", "#1C3A5F", "#2C5F8A"
+            ];
+
+            const rawGroup2 = [
+                "#8b4513", "#d4ac0d", "#f0e68c", "#b5651d", "#7a5230",
+                "#7a5230", "#c0c0c0", "#bdc3c7", "#f5f5f5", "#2c3e50",
+                "#34495e", "#f5f5dc", "#f5deb3", "#0066cc", "#004488",
+                "#2c3e50", "#2980b9", "#3498db", "#34495e"
+            ];
+
+            // Những màu cần loại bỏ (không phân biệt hoa thường)
+            const removeList = ["#3498DB", "#000000", "#2980B9", "#D4AC0D"];
+            const removeSet = new Set(removeList.map(c => c.trim().toUpperCase()));
+
+            // Lọc bỏ các màu không mong muốn ngay khi gộp
+            const combinedRaw = rawGroup1.concat(rawGroup2).filter(c => {
+                const norm = c.trim().toUpperCase();
+                return !removeSet.has(norm);
+            });
+
+            // ---------- GỘP VÀ LỌC TRÙNG ----------
+            function uniqueColors(colorsArray) {
+                const seen = new Set();
+                const result = [];
+                for (let col of colorsArray) {
+                    const normalized = col.trim().toUpperCase();
+                    if (!seen.has(normalized)) {
+                        seen.add(normalized);
+                        result.push(normalized);
+                    }
+                }
+                return result;
+            }
+
+            const uniqueCombined = uniqueColors(combinedRaw);
+
+            // ---------- CHUYỂN HEX → RGB ----------
+            function hexToRgb(hex) {
+                let cleanHex = hex.replace(/^#/, '');
+                if (cleanHex.length === 3) {
+                    cleanHex = cleanHex.split('').map(ch => ch + ch).join('');
+                }
+                const num = parseInt(cleanHex, 16);
+                return {
+                    r: (num >> 16) & 255,
+                    g: (num >> 8) & 255,
+                    b: num & 255
+                };
+            }
+
+            // ---------- CHUYỂN RGB → HSL ----------
+            function rgbToHsl(r, g, b) {
+                r /= 255, g /= 255, b /= 255;
+                const max = Math.max(r, g, b);
+                const min = Math.min(r, g, b);
+                let h, s, l = (max + min) / 2;
+
+                if (max === min) {
+                    h = s = 0;
+                } else {
+                    const d = max - min;
+                    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                    switch (max) {
+                        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                        case g: h = (b - r) / d + 2; break;
+                        case b: h = (r - g) / d + 4; break;
+                    }
+                    h /= 6;
+                }
+                return { h: h * 360, s: s * 100, l: l * 100 };
+            }
+
+            // ---------- TẠO MẢNG ĐỐI TƯỢNG MÀU ----------
+            const colorsWithHsl = uniqueCombined.map(hex => {
+                const { r, g, b } = hexToRgb(hex);
+                const hsl = rgbToHsl(r, g, b);
+                return { hex, ...hsl };
+            });
+
+            // ---------- SẮP XẾP THEO ĐỘ SÁNG (L) GIẢM DẦN ----------
+            colorsWithHsl.sort((a, b) => b.l - a.l || a.h - b.h || a.s - b.s);
+
+            let sortedColors = colorsWithHsl.map(item => item.hex);
+
+            // ----- ƯU TIÊN ĐẶT #8B4513 VÀ #8B5A2B LÊN ĐẦU (theo thứ tự) -----
+            const priorityList = ["#8B4513", "#8B5A2B"];
+            // Lọc ra các màu ưu tiên có thực trong sortedColors
+            const priorityColors = priorityList.filter(hex => sortedColors.includes(hex));
+            // Các màu còn lại (không nằm trong priorityList)
+            const otherColors = sortedColors.filter(hex => !priorityList.includes(hex));
+            // Gộp lại: ưu tiên trước, sau đó là các màu khác đã sắp xếp
+            sortedColors = [...priorityColors, ...otherColors];
+
+            // ---------- TOAST ----------
+            const toastEl = document.getElementById('copyToast');
+            function showToast(message) {
+                if (!toastEl) return;
+                toastEl.textContent = message;
+                toastEl.classList.add('show');
+                clearTimeout(window.toastTimer);
+                window.toastTimer = setTimeout(() => {
+                    toastEl.classList.remove('show');
+                }, 1600);
+            }
+
+            // ---------- TÍNH MÀU CHỮ TỰ ĐỘNG ----------
+            function getSmartTextColor(hex) {
+                const { r, g, b } = hexToRgb(hex);
+                const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+                return luma > 160 ? '#111111' : '#f0f6fc';
+            }
+
+            // ---------- TẠO SWATCH ----------
+            function createSwatch(hexColor) {
+                const swatch = document.createElement('div');
+                swatch.className = 'swatch';
+                swatch.style.backgroundColor = hexColor;
+                swatch.style.color = getSmartTextColor(hexColor);
+                swatch.textContent = hexColor;
+
+                swatch.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    try {
+                        await navigator.clipboard.writeText(hexColor);
+                        showToast(`✅ Copied ${hexColor}`);
+                    } catch {
+                        try {
+                            const textarea = document.createElement('textarea');
+                            textarea.value = hexColor;
+                            document.body.appendChild(textarea);
+                            textarea.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(textarea);
+                            showToast(`📋 Copied ${hexColor}`);
+                        } catch {
+                            alert('Không thể copy. Hãy thử lại.');
+                        }
+                    }
+                });
+
+                return swatch;
+            }
+
+            // ---------- RENDER ----------
+            const grid = document.getElementById('mergedGrid');
+            sortedColors.forEach(hex => {
+                grid.appendChild(createSwatch(hex));
+            });
+
+            console.log('Màu sau khi ưu tiên (hai màu nâu lên đầu):', sortedColors);
+        })();
+    </script>
+</body>
+</html>
