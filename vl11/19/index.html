@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Bài 19: THẾ NĂNG ĐIỆN</title>
+    <!-- Favicon từ CDN -->
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
+
+    <!-- CHỐNG SAO CHÉP CƠ BẢN -->
+    <script>
+        // 1. Vô hiệu hóa chuột phải
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // 2. Vô hiệu hóa các tổ hợp phím sao chép thông dụng (Ctrl+C, Ctrl+X, Ctrl+S, Ctrl+U)
+        document.addEventListener('keydown', function(e) {
+            // Kiểm tra nếu phím Ctrl được nhấn (hoặc Meta dành cho Mac)
+            if (e.ctrlKey || e.metaKey) {
+                // Danh sách các phím cần chặn
+                const blockedKeys = ['c', 'C', 'x', 'X', 's', 'S', 'u', 'U'];
+                if (blockedKeys.includes(e.key)) {
+                    e.preventDefault();
+                    return false;
+                }
+            }
+            // Chặn phím F12 (thường dùng để mở DevTools)
+            if (e.key === 'F12') {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // 3. Cảnh báo khi cố gắng sao chép (tùy chọn)
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            alert('⚠️ Nội dung được bảo vệ, không thể sao chép!');
+            return false;
+        });
+
+        // 4. Phát hiện DevTools bị mở (kỹ thuật đơn giản, không hoàn hảo 100%)
+        setInterval(function() {
+            const before = new Date().getTime();
+            debugger; // Lệnh này sẽ làm chậm nếu DevTools đang mở
+            const after = new Date().getTime();
+            if (after - before > 100) { // Nếu thời gian trễ lớn hơn 100ms, có thể DevTools đang mở
+                // Có thể thực hiện hành động, ví dụ: chuyển hướng hoặc hiện cảnh báo
+                // alert('Phát hiện công cụ phát triển! Một số tính năng có thể bị hạn chế.');
+                // Không làm gì quá mạnh tay để tránh ảnh hưởng trải nghiệm người dùng bình thường
+            }
+        }, 4000); // Kiểm tra mỗi 4 giây
+    </script>
+
+    <style>
+        /* Bảng màu từ https://tuibx25.github.io/bx/tui/color.txt */
+        :root {
+            --mau-nau-dam-1: #8B5A2B;
+            --mau-nau-dam-2: #8B4513;
+            --trang: #FFFFFF;
+            --trang-nhe: #F5F5F5;
+            --trang-nga: #F5F5DC;
+            --vang-nhat: #F5DEB3;
+            --xam-nhe: #D3D3D3;
+            --xam-bac: #C0C0C0;
+            --nau-nhat: #D2B48C;
+            --xam-vua: #A9A9A9;
+            --xam-dam: #808080;
+            --xanh-dh: #0066CC;
+            --xanh-dam: #004488;
+            --xanh-than: #2C3E50;
+            --xanh-bien: #1C3A5F;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #000000; /* Màu đen cho toàn bộ văn bản */
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--trang-nga);
+            /* Vị trí tương đối để watermark hiển thị bên dưới nội dung */
+            position: relative;
+            min-height: 100vh;
+            z-index: 1;
+        }
+
+        /* WATERMARK - Hình mờ ở góc dưới bên phải */
+        body::after {
+            content: "";
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 120px; /* Điều chỉnh kích thước khung chứa watermark */
+            height: 120px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat; /* Không lặp lại */
+            background-position: center;
+            background-size: contain; /* Giữ nguyên tỷ lệ ảnh */
+            opacity: 0.15; /* Độ mờ nhẹ */
+            pointer-events: none; /* Cho phép tương tác xuyên qua watermark */
+            z-index: -1; /* Đặt watermark ở dưới cùng */
+        }
+
+        /* Bạn có thể thay đổi vị trí watermark bằng cách chỉnh sửa các giá trị:
+           - bottom: 20px; (cách đáy 20px) -> có thể đổi thành top: 20px; để lên trên
+           - right: 20px; (cách phải 20px) -> có thể đổi thành left: 20px; để sang trái
+        */
+
+        h1 {
+            color: var(--mau-nau-dam-1);
+            border-bottom: 3px solid var(--xanh-dh);
+            padding-bottom: 10px;
+            text-align: center;
+            font-size: 2.2em;
+        }
+        h2 {
+            color: var(--xanh-dam);
+            border-left: 5px solid var(--xanh-dh);
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        h3 {
+            color: var(--mau-nau-dam-2);
+            margin-top: 25px;
+        }
+        .highlight {
+            background-color: var(--trang);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--xanh-dh);
+            margin: 20px 0;
+            color: #000000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .question-box {
+            background-color: var(--trang);
+            border: 1px solid var(--xam-nhe);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .question-box h3 {
+            margin-top: 0;
+            color: var(--mau-nau-dam-2);
+        }
+        .question-box p, .question-box ul, .question-box li {
+            color: #000000;
+        }
+        .proof {
+            background-color: var(--trang-nhe);
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid var(--mau-nau-dam-1);
+            margin: 15px 0;
+            color: #000000;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: var(--trang);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        th {
+            background-color: var(--xanh-dam);
+            color: var(--trang);
+            padding: 12px;
+            font-weight: 600;
+        }
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--xam-nhe);
+            color: #000000;
+        }
+        tr:nth-child(even) {
+            background-color: var(--trang-nhe);
+        }
+        tr:hover {
+            background-color: var(--vang-nhat);
+        }
+        .example {
+            background-color: var(--trang);
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid var(--mau-nau-dam-2);
+            margin: 20px 0;
+            color: #000000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .note {
+            background-color: #fff0f0;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ffcdcd;
+            color: #b30000;
+        }
+        ul, ol {
+            padding-left: 25px;
+        }
+        .footer-box {
+            background-color: var(--trang);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 30px 0 15px;
+            border: 1px solid var(--xam-nhe);
+            color: #000000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .footer-box h3 {
+            margin-top: 0;
+            color: var(--xanh-bien);
+        }
+        .footer-box ul, .footer-box li {
+            color: #000000;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, var(--xam-nhe), var(--xanh-dh), var(--xam-nhe));
+            margin: 30px 0;
+        }
+        kbd {
+            background-color: var(--xam-nhe);
+            border-radius: 3px;
+            border: 1px solid var(--xam-vua);
+            color: #000000;
+            padding: 2px 4px;
+        }
+        .emphasize {
+            font-weight: bold;
+            color: var(--mau-nau-dam-2);
+        }
+        a {
+            color: var(--xanh-dh);
+            text-decoration: none;
+        }
+        a:hover {
+            color: var(--xanh-dam);
+            text-decoration: underline;
+        }
+        /* Đảm bảo tất cả văn bản thông thường đều màu đen */
+        p, li, .highlight p, .question-box p, .proof p, .example p, .footer-box p {
+            color: #000000;
+        }
+        strong, b {
+            color: #000000;
+        }
+        /* Giữ màu cho các tiêu đề và các phần tử đặc biệt */
+        .emphasize, h1, h2, h3, th, .question-box h3, .footer-box h3 {
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NỘI DUNG TRANG WEB -->
+    <h1>⚡ Bài 19: THẾ NĂNG ĐIỆN</h1>
+    <p><em>Quỹ đạo chuyển động của điện tích q > 0 bay vào điện trường đều theo phương vuông góc với đường sức.</em></p>
+    <hr>
+
+    <h2>I. CÔNG CỦA LỰC ĐIỆN</h2>
+    <p>Một điện tích dương q dịch chuyển trong điện trường đều từ điểm M tới điểm N luôn chịu tác dụng của lực điện không đổi. Công của lực điện làm dịch chuyển điện tích q từ M đến N trong điện trường đều <span class="emphasize">không phụ thuộc vào hình dạng đường đi</span>, chỉ phụ thuộc vào vị trí điểm đầu M và điểm cuối N.</p>
+    <div class="highlight">
+        <strong>A<sub>MN</sub> = qEd</strong>
+        <p>Trong đó: d là độ dài đại số của đoạn MN chiếu lên phương đường sức điện (hình chiếu trên một đường sức).</p>
+    </div>
+    <p>Với điện trường bất kì, công của lực điện cũng không phụ thuộc hình dạng đường đi – tính chất của trường lực thế (tĩnh điện, trọng lực…). Vì lực điện tỉ lệ với q nên công cũng tỉ lệ với q.</p>
+
+    <h2>II. THẾ NĂNG CỦA MỘT ĐIỆN TÍCH TRONG ĐIỆN TRƯỜNG</h2>
+    <h3>1. Thế năng của một điện tích trong điện trường đều</h3>
+    <p>Thế năng của điện tích q tại một điểm trong điện trường đều đặc trưng cho khả năng sinh công của điện trường khi đặt điện tích q tại điểm đó. Với tụ điện, thường chọn bản cực âm làm mốc thế năng.</p>
+
+    <div class="question-box">
+        <h3>📌 Câu hỏi 1:</h3>
+        <p><strong>Yêu cầu:</strong> Một điện tích dương q đặt tại điểm M trong điện trường đều của tụ điện có độ lớn E. Chứng minh công mà điện trường có thể sinh ra khi dịch chuyển q từ M đến bản cực âm là A = qEd.</p>
+        <div class="proof">
+            ✓ <strong>Chứng minh:</strong> Lực điện tác dụng lên q là F = qE (cùng chiều E, hướng từ bản dương sang bản âm). Nếu q dịch chuyển thẳng từ M đến bản âm theo phương đường sức, quãng đường d, công A = F·d = qE·d. <strong>Vì lực tác dụng cùng hướng chuyển động, góc α giữa lực và phương chuyển động = 0.</strong>
+        </div>
+    </div>
+
+    <div class="question-box">
+        <h3>📌 Câu hỏi 2:</h3>
+        <p><strong>Yêu cầu:</strong> Nhận xét về công A khi thay q bằng một điện tích âm.</p>
+        <div class="proof">
+            ✓ <strong>Nhận xét:</strong> Nếu q < 0, lực điện F = qE ngược chiều E. Khi điện tích âm di chuyển từ M đến bản âm, lực điện ngược chiều dịch chuyển → công của lực điện là âm: A = -|q|Ed. Điều đó có nghĩa là cần có ngoại lực thực hiện công để đưa điện tích âm về bản âm (lực điện cản trở chuyển động).
+        </div>
+    </div>
+
+    <p>Trong điện trường đều, nếu chọn mốc thế năng tại bản âm, thế năng tại điểm M cách bản âm khoảng d là:</p>
+    <div class="highlight">
+        <strong>W<sub>M</sub> = qEd</strong>
+    </div>
+    <p>Với điện trường bất kì, người ta thường chọn mốc ở vô cực (nơi điện trường bằng không).</p>
+
+    <h3>2. Thế năng của một điện tích trong điện trường bất kì</h3>
+    <p>Thế năng của q tại điểm M bằng công của lực điện khi dịch chuyển q từ M ra vô cực (hoặc đến điểm mốc):</p>
+    <div class="highlight">
+        <strong>W<sub>M</sub> = A<sub>M∞</sub></strong>
+    </div>
+    <p>Vì độ lớn lực điện tỉ lệ với q, thế năng cũng tỉ lệ với q: W<sub>M</sub> = V<sub>M</sub> · q, với V<sub>M</sub> là điện thế tại M (phụ thuộc điện trường và vị trí, không phụ thuộc q).</p>
+
+    <hr>
+
+    <h2>📐 CÂU HỎI MỞ RỘNG</h2>
+    <div class="question-box">
+        <h3>🔍 Câu hỏi 1 (mở rộng):</h3>
+        <p>"Chứng tỏ rằng, công của lực điện trong sự dịch chuyển của điện tích q từ điểm M đến điểm N sẽ bằng độ giảm thế năng của điện tích q trong điện trường. Hãy mở rộng cho trường hợp M ở xa vô cùng."</p>
+        <div class="proof">
+            ✅ <strong>Chứng minh:</strong>
+            <p><strong>a) Trường hợp tổng quát:</strong></p>
+            <ul>
+                <li>Thế năng tại M: W<sub>M</sub> = A<sub>M∞</sub> (công dịch chuyển q từ M ra vô cùng)</li>
+                <li>Thế năng tại N: W<sub>N</sub> = A<sub>N∞</sub> (công dịch chuyển q từ N ra vô cùng)</li>
+                <li>Xét dịch chuyển M → N → ∞: A<sub>M∞</sub> = A<sub>MN</sub> + A<sub>N∞</sub></li>
+            </ul>
+            <p>Suy ra:</p>
+            <p><strong>A<sub>MN</sub> = A<sub>M∞</sub> - A<sub>N∞</sub> = W<sub>M</sub> - W<sub>N</sub></strong></p>
+            <p>⇒ Công của lực điện bằng độ giảm thế năng</p>
+            <p><strong>A<sub>MN</sub> = W<sub>M</sub> - W<sub>N</sub> = -ΔW</strong></p>
+            <p><strong>b) Mở rộng cho trường hợp M ở xa vô cùng:</strong></p>
+            <p>Khi M ở xa vô cùng, thế năng tại M bằng 0 (mốc thế năng): W<sub>M</sub> = 0</p>
+            <p>Công dịch chuyển từ vô cùng đến điểm N là:</p>
+            <p><strong>A<sub>∞N</sub> = W<sub>∞</sub> - W<sub>N</sub> = 0 - W<sub>N</sub> = -W<sub>N</sub></strong></p>
+            <p>Vậy: Công để đưa điện tích từ vô cùng về điểm N bằng giá trị âm của thế năng tại N.</p>
+        </div>
+    </div>
+
+    <h3>📊 Tóm tắt công thức</h3>
+    <table>
+        <tr>
+            <th>Dịch chuyển</th>
+            <th>Công thức</th>
+            <th>Ý nghĩa</th>
+        </tr>
+        <tr>
+            <td>M → N</td>
+            <td>A<sub>MN</sub> = W<sub>M</sub> - W<sub>N</sub></td>
+            <td>Công bằng độ giảm thế năng</td>
+        </tr>
+        <tr>
+            <td>∞ → N</td>
+            <td>A<sub>∞N</sub> = -W<sub>N</sub></td>
+            <td>Công từ vô cùng về N bằng âm thế năng tại N</td>
+        </tr>
+    </table>
+
+    <h3>📝 Ví dụ minh họa</h3>
+    <div class="example">
+        <p><strong>Ví dụ 1:</strong> Điện tích dương q = 2.10⁻⁶ C đặt trong điện trường đều E = 5000 V/m. Biết thế năng tại M là W<sub>M</sub> = 0,02 J, tại N là W<sub>N</sub> = 0,008 J. Tính công của lực điện khi dịch chuyển điện tích từ M đến N.</p>
+        <p><em>Giải:</em> A<sub>MN</sub> = W<sub>M</sub> - W<sub>N</sub> = 0,02 - 0,008 = <strong>0,012 J</strong></p>
+    </div>
+
+    <div class="example">
+        <p><strong>Ví dụ 2:</strong> Cũng với điện tích trên, tính công của lực điện khi dịch chuyển nó từ vô cùng về điểm N.</p>
+        <p><em>Giải:</em> A<sub>∞N</sub> = -W<sub>N</sub> = -0,008 J<br>Dấu âm cho thấy công của lực điện là công cản.</p>
+    </div>
+
+    <div class="question-box">
+        <h3>⚡ Câu hỏi 2:</h3>
+        <p>"Trong điện trường bất kì, khi chọn mốc là ở xa vô cùng, có trường hợp mà số đo thế năng sẽ có giá trị âm không? Hãy vẽ hình minh họa."</p>
+        <div class="proof">
+            ✓ <strong>Trả lời:</strong> Có. Khi điện tích thử q < 0 trong điện trường của điện tích dương Q > 0, lực hút sinh công dương khi đưa q từ vô cùng lại gần Q, làm thế năng giảm từ 0 xuống âm.
+            <p style="text-align: center; margin-top: 15px;"><strong>W<sub>M</sub> = kQq/r < 0 (vì q < 0)</strong></p>
+            <p><em>(Hình minh họa: Điện tích âm q di chuyển từ vô cực về phía điện tích dương Q)</em></p>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="footer-box">
+        <h2>✅ EM ĐÃ HỌC</h2>
+        <ul>
+            <li>Công của lực điện không phụ thuộc hình dạng đường đi, chỉ phụ thuộc vị trí đầu và cuối.</li>
+            <li>Thế năng của điện tích q đặc trưng cho khả năng sinh công của điện trường khi đặt q tại điểm đó.</li>
+            <li>Điện trường đều: W<sub>M</sub> = qEd.</li>
+            <li>Điện trường bất kì: W<sub>M</sub> = A<sub>M0</sub> (mốc tại vô cực hoặc bản âm).</li>
+            <li>Công thức liên hệ: A<sub>MN</sub> = W<sub>M</sub> - W<sub>N</sub></li>
+        </ul>
+    </div>
+
+    <div class="footer-box">
+        <h2>🚀 EM CÓ THỂ</h2>
+        <ul>
+            <li>🔹 Xác định thế năng điện của quả cầu tích điện đều trong điện trường đều của Trái Đất.</li>
+            <li>🔹 Xác định công dịch chuyển một điện tích giữa hai điểm trong điện trường đều của Trái Đất.</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <p style="text-align: center; color: var(--xam-vua); font-style: italic;">📘 KẾT NỐI TRI THỨC VỚI CUỘC SỐNG ⚡ 19. THẾ NĂNG ĐIỆN</p>
+
+</body>
+</html>
