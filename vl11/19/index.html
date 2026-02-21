@@ -3,58 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <meta content="index,follow" name="GOOGLEBOT">
+    <meta name="Author" content="TuiBinhXuyen">
     <title>⚡ Bài 19: THẾ NĂNG ĐIỆN</title>
-    <!-- Favicon từ CDN -->
-    <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
-
-    <!-- CHỐNG SAO CHÉP CƠ BẢN -->
-    <script>
-        // 1. Vô hiệu hóa chuột phải
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            return false;
-        });
-
-        // 2. Vô hiệu hóa các tổ hợp phím sao chép thông dụng (Ctrl+C, Ctrl+X, Ctrl+S, Ctrl+U)
-        document.addEventListener('keydown', function(e) {
-            // Kiểm tra nếu phím Ctrl được nhấn (hoặc Meta dành cho Mac)
-            if (e.ctrlKey || e.metaKey) {
-                // Danh sách các phím cần chặn
-                const blockedKeys = ['c', 'C', 'x', 'X', 's', 'S', 'u', 'U'];
-                if (blockedKeys.includes(e.key)) {
-                    e.preventDefault();
-                    return false;
-                }
-            }
-            // Chặn phím F12 (thường dùng để mở DevTools)
-            if (e.key === 'F12') {
-                e.preventDefault();
-                return false;
-            }
-        });
-
-        // 3. Cảnh báo khi cố gắng sao chép (tùy chọn)
-        document.addEventListener('copy', function(e) {
-            e.preventDefault();
-            alert('⚠️ Nội dung được bảo vệ, không thể sao chép!');
-            return false;
-        });
-
-        // 4. Phát hiện DevTools bị mở (kỹ thuật đơn giản, không hoàn hảo 100%)
-        setInterval(function() {
-            const before = new Date().getTime();
-            debugger; // Lệnh này sẽ làm chậm nếu DevTools đang mở
-            const after = new Date().getTime();
-            if (after - before > 100) { // Nếu thời gian trễ lớn hơn 100ms, có thể DevTools đang mở
-                // Có thể thực hiện hành động, ví dụ: chuyển hướng hoặc hiện cảnh báo
-                // alert('Phát hiện công cụ phát triển! Một số tính năng có thể bị hạn chế.');
-                // Không làm gì quá mạnh tay để tránh ảnh hưởng trải nghiệm người dùng bình thường
-            }
-        }, 4000); // Kiểm tra mỗi 4 giây
-    </script>
+    <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
 
     <style>
-        /* Bảng màu từ https://tuibx25.github.io/bx/tui/color.txt */
+        /* Bảng màu từ index và bài học */
         :root {
             --mau-nau-dam-1: #8B5A2B;
             --mau-nau-dam-2: #8B4513;
@@ -64,7 +20,7 @@
             --vang-nhat: #F5DEB3;
             --xam-nhe: #D3D3D3;
             --xam-bac: #C0C0C0;
-            --nau-nhat: #D2B48C;
+            --nau-nhat: #F5F5F5;      /* Màu nền chính của index */
             --xam-vua: #A9A9A9;
             --xam-dam: #808080;
             --xanh-dh: #0066CC;
@@ -76,38 +32,31 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #000000; /* Màu đen cho toàn bộ văn bản */
+            color: #000000;
             max-width: 900px;
             margin: 0 auto;
             padding: 20px;
-            background-color: var(--trang-nga);
-            /* Vị trí tương đối để watermark hiển thị bên dưới nội dung */
+            background-color: var(--nau-nhat);  /* Màu nền giống index */
             position: relative;
             min-height: 100vh;
             z-index: 1;
         }
 
-        /* WATERMARK - Hình mờ ở góc dưới bên phải */
-        body::after {
-            content: "";
+        /* Watermark dạng div (giống index) */
+        .watermark {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 120px; /* Điều chỉnh kích thước khung chứa watermark */
-            height: 120px;
+            width: 120px;
+            height: 40px;
             background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
-            background-repeat: no-repeat; /* Không lặp lại */
+            background-size: contain;
+            background-repeat: no-repeat;
             background-position: center;
-            background-size: contain; /* Giữ nguyên tỷ lệ ảnh */
-            opacity: 0.15; /* Độ mờ nhẹ */
-            pointer-events: none; /* Cho phép tương tác xuyên qua watermark */
-            z-index: -1; /* Đặt watermark ở dưới cùng */
+            opacity: 0.4;
+            z-index: 9999;
+            pointer-events: none;
         }
-
-        /* Bạn có thể thay đổi vị trí watermark bằng cách chỉnh sửa các giá trị:
-           - bottom: 20px; (cách đáy 20px) -> có thể đổi thành top: 20px; để lên trên
-           - right: 20px; (cách phải 20px) -> có thể đổi thành left: 20px; để sang trái
-        */
 
         h1 {
             color: var(--mau-nau-dam-1);
@@ -242,22 +191,32 @@
             color: var(--xanh-dam);
             text-decoration: underline;
         }
-        /* Đảm bảo tất cả văn bản thông thường đều màu đen */
         p, li, .highlight p, .question-box p, .proof p, .example p, .footer-box p {
             color: #000000;
         }
         strong, b {
             color: #000000;
         }
-        /* Giữ màu cho các tiêu đề và các phần tử đặc biệt */
-        .emphasize, h1, h2, h3, th, .question-box h3, .footer-box h3 {
-            color: inherit;
+        /* Responsive cho watermark */
+        @media (max-width: 768px) {
+            .watermark {
+                width: 100px;
+                height: 35px;
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+        @media (max-width: 480px) {
+            .watermark {
+                width: 80px;
+                height: 30px;
+            }
         }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false" onkeydown="return disableKeys(event)">
 
-    <!-- NỘI DUNG TRANG WEB -->
+    <!-- NỘI DUNG BÀI HỌC (giữ nguyên) -->
     <h1>⚡ Bài 19: THẾ NĂNG ĐIỆN</h1>
     <p><em>Quỹ đạo chuyển động của điện tích q > 0 bay vào điện trường đều theo phương vuông góc với đường sức.</em></p>
     <hr>
@@ -391,8 +350,63 @@
     </div>
 
     <hr>
-
     <p style="text-align: center; color: var(--xam-vua); font-style: italic;">📘 KẾT NỐI TRI THỨC VỚI CUỘC SỐNG ⚡ 19. THẾ NĂNG ĐIỆN</p>
 
+    <!-- Watermark từ index -->
+    <div class="watermark"></div>
+
+    <!-- Script bảo mật từ index -->
+    <script>
+        // Hàm chặn phím (từ index)
+        function disableKeys(e) {
+            // Chặn phím F12
+            if(e.keyCode == 123) {
+                return false;
+            }
+            // Chặn Ctrl+Shift+I
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 73) {
+                return false;
+            }
+            // Chặn Ctrl+Shift+J
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 74) {
+                return false;
+            }
+            // Chặn Ctrl+U
+            if(e.ctrlKey && e.keyCode == 85) {
+                return false;
+            }
+            // Chặn Ctrl+S
+            if(e.ctrlKey && e.keyCode == 83) {
+                return false;
+            }
+        }
+
+        // Vô hiệu hóa chuột phải (dự phòng)
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Thêm cảnh báo khi cố gắng mở DevTools (kỹ thuật từ index)
+        (function() {
+            var devtools = /./;
+            devtools.toString = function() {
+                console.clear();
+                console.log('Chức năng này đã bị vô hiệu hóa');
+                return '';
+            }
+            console.log('%c', devtools);
+        })();
+
+        // Phát hiện DevTools đơn giản (từ index, tùy chọn)
+        setInterval(function() {
+            const before = new Date().getTime();
+            debugger;
+            const after = new Date().getTime();
+            if (after - before > 100) {
+                // Có thể thêm hành động nếu muốn
+            }
+        }, 4000);
+    </script>
 </body>
 </html>
