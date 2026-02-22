@@ -3,85 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bài Tập Tự Luận Bài 17 (SBT)</title>
-    <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
+    <title>Bài 20: Điện Thế</title>
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Ngăn chặn các hành vi không mong muốn -->
+    <!-- BẢO MẬT: Script ngăn chặn các hành vi không mong muốn -->
     <script>
-        // Ngăn chặn menu chuột phải
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-        
-        // Ngăn chặn phím tắt (Ctrl+U, Ctrl+S, Ctrl+P, F12, etc.)
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
         document.addEventListener('keydown', function(e) {
-            // Ctrl+U (View Source)
             if (e.ctrlKey && e.keyCode === 85) e.preventDefault();
-            // Ctrl+S (Save)
             if (e.ctrlKey && e.keyCode === 83) e.preventDefault();
-            // Ctrl+P (Print)
             if (e.ctrlKey && e.keyCode === 80) e.preventDefault();
-            // F12 (Developer Tools)
             if (e.keyCode === 123) e.preventDefault();
-            // Ctrl+Shift+I (Developer Tools)
             if (e.ctrlKey && e.shiftKey && e.keyCode === 73) e.preventDefault();
-            // Ctrl+Shift+J (Console)
             if (e.ctrlKey && e.shiftKey && e.keyCode === 74) e.preventDefault();
-            // Ctrl+Shift+C (Inspector)
             if (e.ctrlKey && e.shiftKey && e.keyCode === 67) e.preventDefault();
         });
-        
-        // Ngăn chặn kéo thả hình ảnh
-        document.addEventListener('dragstart', function(e) {
-            if (e.target.tagName === 'IMG') e.preventDefault();
-        });
-        
-        // Ngăn chặn sao chép văn bản
-        document.addEventListener('copy', function(e) {
-            e.preventDefault();
-            alert('Không cho phép sao chép nội dung!');
-        });
-        
-        // Ngăn chặn cắt
-        document.addEventListener('cut', function(e) {
-            e.preventDefault();
-        });
-        
-        // Ngăn chặn dán
-        document.addEventListener('paste', function(e) {
-            e.preventDefault();
-        });
-        
-        // Ngăn chặn chọn văn bản
-        document.addEventListener('selectstart', function(e) {
-            e.preventDefault();
-        });
+        document.addEventListener('dragstart', function(e) { if (e.target.tagName === 'IMG') e.preventDefault(); });
+        document.addEventListener('copy', function(e) { e.preventDefault(); alert('Không cho phép sao chép nội dung!'); });
+        document.addEventListener('cut', function(e) { e.preventDefault(); });
+        document.addEventListener('paste', function(e) { e.preventDefault(); });
+        document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+        document.addEventListener('mousedown', function(e) { if (e.detail > 1) e.preventDefault(); });
     </script>
     
-    <!-- MathJax với cấu hình đơn giản nhưng hiệu quả -->
-    <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$']],
-                displayMath: [['$$', '$$']],
-                processEscapes: true
-            },
-            startup: {
-                ready: () => {
-                    console.log('MathJax is ready');
-                    MathJax.startup.defaultReady();
-                }
-            }
-        };
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
-    
+    <!-- BẢO MẬT: CSS để chống in ấn -->
     <style>
-        /* CSS để chống in ấn */
         @media print {
-            * {
-                display: none !important;
-            }
+            * { display: none !important; }
             body:before {
                 content: "Không cho phép in trang này!";
                 display: block !important;
@@ -90,39 +39,45 @@
                 margin-top: 100px;
             }
         }
-        
+    </style>
+    
+    <style>
         :root {
-            --primary-brown: #8B4513;
-            --secondary-brown: #A0522D;
-            --light-brown: #D2B48C;
-            --dark-brown: #654321;
-            --neutral-beige: #F5F5DC;
-            --neutral-tan: #D2B48C;
-            --text-dark: #333333;
-            --text-light: #5D4037;
-            --border-radius: 8px;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --primary-dark: #8B4513;
+            --primary-medium: #8B5A2B;
+            --primary-light: #F5DEB3;
+            --secondary: #F5F5DC;
+            --text-dark: #1C3A5F;
+            --text-medium: #2C3E50;
+            --text-light: #004488;
+            --background: #D3D3D3;
+            --card-bg: #F5F5F5;
+            --border-color: #A9A9A9;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --header-bg: #8B4513;
+            --formula-bg: #F5F5DC;
         }
         
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* IE10+/Edge */
-            user-select: none; /* Standard */
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--neutral-beige);
-            color: #000000;
-            line-height: 1.2; /* Giảm từ 1.5 xuống 1.2 */
-            padding: 15px; /* Giảm padding */
-            min-height: 100vh;
+            line-height: 1.1;
+            color: var(--text-dark);
+            background-color: var(--background);
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
             position: relative;
-            overflow-x: hidden;
+            min-height: 100vh;
         }
         
         /* Watermark nền */
@@ -143,70 +98,58 @@
         }
         
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.92);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            padding: 20px; /* Giảm từ 30px xuống 20px */
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
             position: relative;
             z-index: 1;
         }
         
-        header {
+        .header {
+            background: var(--header-bg);
+            color: white;
+            padding: 15px 20px;
             text-align: center;
-            margin-bottom: 20px; /* Giảm từ 30px xuống 20px */
-            padding-bottom: 15px; /* Giảm từ 20px xuống 15px */
-            border-bottom: 2px solid var(--light-brown);
-        }
-        
-        h1 {
-            color: var(--primary-brown);
-            margin-bottom: 8px; /* Giảm từ 10px xuống 8px */
-            font-size: 2.2rem; /* Giảm từ 2.5rem xuống 2.2rem */
-            font-weight: 700;
-            line-height: 1.1; /* Giảm line-height */
-        }
-        
-        .subtitle {
-            color: var(--secondary-brown);
-            font-size: 1.1rem; /* Giảm từ 1.3rem xuống 1.1rem */
-            margin-bottom: 3px; /* Giảm từ 5px xuống 3px */
-            font-weight: 500;
-            line-height: 1.1;
-        }
-        
-        .instructions {
-            background-color: #f9f3e9;
-            border: 1px solid var(--light-brown);
-            padding: 15px; /* Giảm từ 20px xuống 15px */
-            margin-bottom: 20px; /* Giảm từ 30px xuống 20px */
-            border-radius: var(--border-radius);
-        }
-        
-        .instructions h3 {
-            color: var(--dark-brown);
-            margin-bottom: 8px; /* Giảm từ 12px xuống 8px */
-            font-size: 1.2rem; /* Giảm từ 1.4rem xuống 1.2rem */
-            line-height: 1.1;
-        }
-        
-        .question-container {
-            margin-bottom: 30px; /* Giảm từ 40px xuống 30px */
-        }
-        
-        .question {
-            background-color: #faf7f2;
-            border-radius: var(--border-radius);
-            padding: 18px; /* Giảm từ 25px xuống 18px */
-            margin-bottom: 18px; /* Giảm từ 25px xuống 18px */
-            border-left: 5px solid var(--secondary-brown);
             position: relative;
+            border-bottom: 4px solid var(--primary-light);
+        }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            line-height: 1.2;
+        }
+        
+        .header p {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            font-weight: 300;
+            margin-bottom: 0;
+            line-height: 1.2;
+        }
+        
+        .content {
+            padding: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section {
+            margin-bottom: 15px;
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid var(--primary-medium);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1;
             overflow: hidden;
         }
         
-        /* Watermark nhẹ trên từng câu hỏi */
-        .question::before {
+        .section::before {
             content: "";
             position: absolute;
             top: 50%;
@@ -223,112 +166,96 @@
             pointer-events: none;
         }
         
-        .question-header {
+        .section h2 {
+            color: var(--primary-dark);
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            padding-bottom: 3px;
+            border-bottom: 2px dashed var(--primary-light);
             display: flex;
-            align-items: flex-start;
-            margin-bottom: 10px; /* Giảm từ 15px xuống 10px */
-            position: relative;
-            z-index: 1;
-        }
-        
-        .question-number {
-            display: inline-block;
-            background-color: var(--primary-brown);
-            color: white;
-            width: 35px; /* Giảm từ 40px xuống 35px */
-            height: 35px; /* Giảm từ 40px xuống 35px */
-            text-align: center;
-            line-height: 35px; /* Giảm từ 40px xuống 35px */
-            border-radius: 50%;
-            margin-right: 12px; /* Giảm từ 15px xuống 12px */
-            font-weight: bold;
-            font-size: 1.1rem; /* Giảm từ 1.2rem xuống 1.1rem */
-            flex-shrink: 0;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .question-text {
-            font-weight: 600;
-            font-size: 1.3rem; /* Giảm từ 1.5rem xuống 1.3rem */
-            color: #000000;
-            padding-top: 3px; /* Giảm từ 5px xuống 3px */
-            flex: 1;
-            position: relative;
-            z-index: 1;
-            line-height: 1.2; /* Giảm từ 1.4 xuống 1.2 */
-        }
-        
-        .summary {
-            font-size: 1.3rem; /* Giảm từ 1.5rem xuống 1.3rem */
-            color: var(--secondary-brown);
-            margin: 8px 0; /* Giảm từ 12px xuống 8px */
-            padding: 8px 12px; /* Giảm từ 10px 15px xuống 8px 12px */
-            background-color: #f5f0e6;
-            border-radius: 5px;
-            border-left: 3px solid var(--light-brown);
-            position: relative;
-            z-index: 1;
-            line-height: 1.2; /* Giảm từ 1.4 xuống 1.2 */
-        }
-        
-        .solution-container {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease;
-            margin-top: 0;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .solution-container.show {
-            max-height: 5000px;
-            margin-top: 10px; /* Giảm từ 15px xuống 10px */
-        }
-        
-        .toggle-btn {
-            background-color: var(--light-brown);
-            color: var(--dark-brown);
-            border: none;
-            padding: 10px 20px; /* Giảm từ 12px 24px xuống 10px 20px */
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1rem; /* Giảm từ 1.1rem xuống 1rem */
-            margin-top: 12px; /* Giảm từ 15px xuống 12px */
-            display: block;
-            width: 100%;
-            text-align: center;
-            transition: all 0.3s;
+            align-items: center;
             position: relative;
             z-index: 1;
             line-height: 1.2;
         }
         
-        .toggle-btn:hover {
-            background-color: #c9b18c;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        .section h2 i {
+            margin-right: 15px;
+            color: var(--primary-medium);
         }
         
-        .solution {
-            background-color: rgba(249, 247, 243, 0.95);
-            border-radius: var(--border-radius);
-            padding: 15px; /* Giảm từ 20px xuống 15px */
-            margin-top: 8px; /* Giảm từ 10px xuống 8px */
-            border: 1px solid var(--light-brown);
+        .section h3 {
+            color: var(--primary-medium);
+            font-size: 1.8rem;
+            margin: 10px 0 5px;
+            padding-left: 10px;
+            border-left: 4px solid var(--primary-light);
             position: relative;
+            z-index: 1;
+            line-height: 1.2;
+        }
+        
+        .section p, .section li {
+            font-size: 1.5rem;
+            color: var(--text-medium);
+            margin-bottom: 2px;
+            margin-top: 2px;
+            line-height: 1.1;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section ul, .section ol {
+            padding-left: 25px;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section li {
+            margin-bottom: 2px;
+            line-height: 1.1;
+        }
+        
+        .formula {
+            background-color: var(--formula-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 2px;
+            padding: 2px;
+            margin: 2px 0;
+            font-size: 1.6rem;
+            text-align: center;
+            font-family: 'Cambria', 'Times New Roman', serif;
+            color: var(--text-dark);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            box-sizing: border-box;
+            white-space: normal;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-x: auto;
+        }
+        
+        .note-box {
+            background-color: #F5F5F5;
+            border-left: 5px solid var(--primary-medium);
+            padding: 5px;
+            margin: 5px 0;
+            border-radius: 0 8px 8px 0;
+            position: relative;
+            z-index: 1;
             overflow: hidden;
         }
         
-        /* Watermark nhẹ trên phần giải */
-        .solution::before {
+        .note-box::before {
             content: "";
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 250px;
-            height: 250px;
+            width: 200px;
+            height: 200px;
             background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
             background-repeat: no-repeat;
             background-position: center;
@@ -339,327 +266,275 @@
             pointer-events: none;
         }
         
-        .solution h4 {
-            color: var(--dark-brown);
-            margin-bottom: 12px; /* Giảm từ 15px xuống 12px */
-            font-size: 1.2rem; /* Giảm từ 1.4rem xuống 1.2rem */
-            border-bottom: 2px solid var(--light-brown);
-            padding-bottom: 6px; /* Giảm từ 8px xuống 6px */
+        .note-box h3 {
+            color: var(--primary-dark);
+            margin-bottom: 3px;
+            font-size: 1.7rem;
             position: relative;
             z-index: 1;
+            line-height: 1.2;
+        }
+        
+        .note-box ul, .note-box ol {
+            padding-left: 20px;
+            margin-bottom: 3px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .note-box li {
+            margin-bottom: 2px;
+            font-size: 1.4rem;
             line-height: 1.1;
-        }
-        
-        .subsection {
-            margin-bottom: 15px; /* Giảm từ 20px xuống 15px */
             position: relative;
             z-index: 1;
         }
         
-        .subsection h5 {
-            color: var(--secondary-brown);
-            margin-bottom: 8px; /* Giảm từ 10px xuống 8px */
-            font-size: 1.1rem; /* Giảm từ 1.3rem xuống 1.1rem */
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
             position: relative;
             z-index: 1;
+        }
+        
+        .point {
+            background-color: var(--card-bg);
+            padding: 10px;
+            border-radius: 8px;
+            border-top: 4px solid var(--primary-medium);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .point h3 {
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+            font-size: 1.6rem;
+            line-height: 1.2;
+        }
+        
+        .point p {
+            font-size: 1.4rem;
             line-height: 1.1;
+            margin-bottom: 0;
         }
         
-        .subsection-content {
-            font-size: 1.3rem; /* Giảm từ 1.5rem xuống 1.3rem */
-            color: #000000;
-            line-height: 1.2; /* Giảm từ 1.4 xuống 1.2 */
+        .highlight {
+            background-color: var(--secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .definition {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .question-box {
+            background-color: #F5F5F5;
+            border-left: 5px solid var(--primary-medium);
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 0 8px 8px 0;
             position: relative;
             z-index: 1;
+            overflow: hidden;
         }
         
-        .subsection-content p {
-            margin-bottom: 6px; /* Giảm từ 10px xuống 6px */
+        .question-box::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.02;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .question-box h3 {
+            color: var(--primary-dark);
+            margin-bottom: 3px;
+            font-size: 1.7rem;
             position: relative;
             z-index: 1;
+            line-height: 1.2;
         }
         
-        .subsection-content ul {
-            padding-left: 20px; /* Giảm từ 25px xuống 20px */
-            margin-bottom: 8px; /* Giảm từ 12px xuống 8px */
+        .example-box {
+            background-color: #F5F5F5;
+            border-left: 5px solid #004488;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 0 8px 8px 0;
             position: relative;
             z-index: 1;
+            overflow: hidden;
         }
         
-        .subsection-content li {
-            margin-bottom: 3px; /* Giảm từ 6px xuống 3px */
-            position: relative;
-            z-index: 1;
+        .example-box h3 {
+            color: #1C3A5F;
+            margin-bottom: 3px;
+            font-size: 1.7rem;
+            line-height: 1.2;
         }
         
-        .formula-box {
-            background-color: rgba(248, 248, 248, 0.9);
-            padding: 2px 8px;
+        .image-container {
+            text-align: center;
+            margin: 5px 0;
+            padding: 3px;
+            background-color: #f9f9f9;
             border-radius: 6px;
-            margin: 2px 0;
-            border-left: 4px solid var(--primary-brown);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
             position: relative;
             z-index: 1;
-            /* Cho phép ngắt dòng tự nhiên cho công thức */
-            word-wrap: break-word;
-            overflow-wrap: break-word;
         }
         
-        .formula {
-            font-size: 1.2rem; /* Giảm từ 1.4rem xuống 1.2rem */
-            text-align: center;
-            padding: 0;
-            margin: 0;
-            position: relative;
-            z-index: 1;
-            line-height: 1;
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
             display: block;
+            margin: 0 auto;
         }
         
-        /* Loại bỏ hoàn toàn khoảng cách giữa các dòng công thức */
-        .formula-box .formula + .formula {
-            margin-top: 0;
-            padding-top: 0;
+        .image-caption {
+            font-style: italic;
+            color: var(--text-light);
+            margin-top: 2px;
+            font-size: 1.3rem;
+            line-height: 1.1;
+            text-align: center;
         }
         
-        /* Đảm bảo MathJax hiển thị không có khoảng cách */
-        .formula-box mjx-container {
-            margin: 0 !important;
-            padding: 0 !important;
-            line-height: 1 !important;
+        .small-image {
+            max-width: 350px !important;
         }
         
-        .answer-box {
-            background-color: rgba(232, 244, 252, 0.9);
-            border-left: 4px solid var(--primary-brown);
-            padding: 12px; /* Giảm từ 15px xuống 12px */
-            margin-top: 12px; /* Giảm từ 15px xuống 12px */
-            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        .medium-image {
+            max-width: 450px !important;
+        }
+        
+        .solution-btn {
+            background-color: var(--primary-medium);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.4rem;
+            margin: 5px 0;
+            display: block;
+            transition: background-color 0.3s;
+            font-weight: 600;
             position: relative;
             z-index: 1;
         }
         
-        .answer-box h5 {
-            color: var(--dark-brown);
-            margin-bottom: 6px; /* Giảm từ 8px xuống 6px */
-            font-size: 1.1rem; /* Giảm từ 1.3rem xuống 1.1rem */
+        .solution-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .solution {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin: 3px 0 8px;
+            border-left: 4px solid var(--primary-medium);
             position: relative;
             z-index: 1;
+            overflow: hidden;
+        }
+        
+        .solution.active {
+            max-height: 2000px;
+        }
+        
+        .solution-content {
+            padding: 8px;
+            font-size: 1.4rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .solution::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150px;
+            height: 150px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.02;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .solution-content h4 {
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+            font-size: 1.6rem;
+            line-height: 1.2;
+        }
+        
+        .solution-content p {
+            margin-bottom: 3px;
             line-height: 1.1;
         }
         
-        .answer-content {
-            font-size: 1.3rem; /* Giảm từ 1.5rem xuống 1.3rem */
-            font-weight: 600;
-            color: #000000;
-            position: relative;
-            z-index: 1;
-            line-height: 1.2; /* Giảm từ 1.4 xuống 1.2 */
-        }
-        
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 15px; /* Giảm từ 20px xuống 15px */
-            margin-top: 25px; /* Giảm từ 30px xuống 25px */
-            flex-wrap: wrap;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .action-btn {
-            padding: 12px 25px; /* Giảm từ 15px 30px xuống 12px 25px */
-            border: none;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1.1rem; /* Giảm từ 1.2rem xuống 1.1rem */
-            min-width: 160px; /* Giảm từ 180px xuống 160px */
-            position: relative;
-            z-index: 1;
-            line-height: 1.2;
-        }
-        
-        #expandAllBtn {
-            background-color: var(--primary-brown);
+        .footer {
+            background-color: var(--primary-dark);
             color: white;
-        }
-        
-        #expandAllBtn:hover {
-            background-color: var(--dark-brown);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
-        
-        #collapseAllBtn {
-            background-color: var(--light-brown);
-            color: var(--dark-brown);
-        }
-        
-        #collapseAllBtn:hover {
-            background-color: #c9b18c;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
-        
-        footer {
             text-align: center;
-            margin-top: 25px; /* Giảm từ 30px xuống 25px */
-            padding-top: 15px; /* Giảm từ 20px xuống 15px */
-            border-top: 1px solid var(--light-brown);
-            color: var(--secondary-brown);
-            font-size: 1rem; /* Giảm từ 1.1rem xuống 1rem */
+            padding: 10px;
+            margin-top: 10px;
+            border-top: 1px solid var(--primary-light);
             position: relative;
             z-index: 1;
-            line-height: 1.2;
         }
         
-        /* Watermark footer */
-        footer::before {
+        .footer::before {
             content: "tuibx";
             position: absolute;
-            bottom: 8px; /* Giảm từ 10px xuống 8px */
-            right: 15px; /* Giảm từ 20px xuống 15px */
-            font-size: 0.9rem; /* Giảm từ 1rem xuống 0.9rem */
-            color: rgba(139, 69, 19, 0.3);
+            bottom: 10px;
+            right: 20px;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.3);
             font-weight: bold;
             font-style: italic;
             z-index: 0;
         }
         
-        /* Responsive cho điện thoại */
-        @media (max-width: 768px) {
-            body {
-                padding: 8px; /* Giảm từ 10px xuống 8px */
-            }
-            
-            .container {
-                padding: 15px; /* Giảm từ 20px xuống 15px */
-            }
-            
-            h1 {
-                font-size: 1.8rem; /* Giảm từ 2rem xuống 1.8rem */
-            }
-            
-            .subtitle {
-                font-size: 1rem; /* Giảm từ 1.1rem xuống 1rem */
-            }
-            
-            .question {
-                padding: 15px; /* Giảm từ 20px xuống 15px */
-            }
-            
-            .question-text, .subsection-content, .answer-content {
-                font-size: 1.1rem; /* Giảm từ 1.3rem xuống 1.1rem */
-            }
-            
-            .summary {
-                font-size: 1.1rem; /* Giảm từ 1.2rem xuống 1.1rem */
-            }
-            
-            .action-btn {
-                width: 100%;
-                min-width: auto;
-                padding: 10px; /* Giảm từ 12px xuống 10px */
-            }
-            
-            .controls {
-                flex-direction: column;
-                gap: 12px; /* Giảm từ 15px xuống 12px */
-            }
-            
-            body::before {
-                background-size: 300px 300px;
-                opacity: 0.05;
-            }
-            
-            .question::before {
-                width: 200px;
-                height: 200px;
-            }
-            
-            .solution::before {
-                width: 150px;
-                height: 150px;
-            }
-            
-            /* Sửa cho công thức trên điện thoại */
-            .formula-box {
-                overflow-x: auto; /* Cho phép cuộn ngang khi cần */
-                -webkit-overflow-scrolling: touch; /* Cuộn mượt trên iOS */
-                max-width: 100%; /* Đảm bảo không vượt quá chiều rộng */
-                padding: 8px 4px; /* Thêm padding để dễ cuộn */
-            }
-            
-            /* Đảm bảo MathJax container không bị tràn */
-            .formula-box mjx-container {
-                max-width: 100% !important;
-                overflow-x: auto !important;
-                display: block !important;
-            }
-            
-            /* Đảm bảo công thức có thể hiển thị đầy đủ */
-            .formula {
-                display: inline-block; /* Cho phép công thức dài cuộn ngang */
-                min-width: min-content; /* Đảm bảo chiều rộng tối thiểu */
-            }
-            
-            /* Tăng độ rộng tối đa cho hình ảnh nếu cần */
-            .subsection-content img {
-                max-width: 100% !important;
-                height: auto !important;
-            }
+        .footer p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 0;
+            position: relative;
+            z-index: 1;
+            line-height: 1.2;
         }
         
-        /* Responsive cho TV/màn hình lớn */
-        @media (min-width: 1200px) {
-            .question-text, .subsection-content, .answer-content {
-                font-size: 1.5rem; /* Giảm từ 1.8rem xuống 1.5rem */
-            }
-            
-            .summary {
-                font-size: 1.3rem; /* Giảm từ 1.5rem xuống 1.3rem */
-            }
-            
-            h1 {
-                font-size: 2.5rem; /* Giảm từ 3rem xuống 2.5rem */
-            }
-            
-            .subtitle {
-                font-size: 1.3rem; /* Giảm từ 1.6rem xuống 1.3rem */
-            }
-            
-            .action-btn {
-                font-size: 1.2rem; /* Giảm từ 1.4rem xuống 1.2rem */
-                padding: 15px 30px; /* Giảm từ 18px 35px xuống 15px 30px */
-            }
-            
-            .formula {
-                font-size: 1.4rem; /* Giảm từ 1.6rem xuống 1.4rem */
-            }
-            
-            body::before {
-                background-size: 500px 500px;
-                opacity: 0.1;
-            }
-            
-            /* Đảm bảo công thức trên màn hình lớn cũng hiển thị tốt */
-            .formula-box {
-                overflow-x: auto; /* Vẫn cho phép cuộn nếu cần */
-            }
-        }
-        
-        /* Đảm bảo MathJax hiển thị đúng */
-        .MathJax_SVG {
-            display: inline !important;
-        }
-        
-        mjx-container[jax="SVG"] {
-            display: inline-block !important;
-        }
-        
-        /* Thêm watermark phủ toàn màn hình */
+        /* Watermark phủ toàn màn hình */
         .watermark-overlay {
             position: fixed;
             top: 0;
@@ -684,36 +559,120 @@
             opacity: 0.04;
         }
         
-        /* Cải thiện hiển thị MathJax trên mobile */
+        /* Override margin của MathJax Display */
+        .MathJax_Display {
+            margin: 0.2em 0 !important;
+        }
+        
+        /* CSS mạnh cho MathJax container */
         mjx-container {
+            max-width: 100% !important;
+            overflow-x: auto !important;
+            white-space: normal !important;
+        }
+        mjx-container[jax="CHTML"][display="true"] {
+            display: block !important;
+            white-space: normal !important;
+        }
+        mjx-container[jax="CHTML"] {
+            white-space: normal !important;
+        }
+        
+        .formula,
+        .MathJax_Display,
+        .MathJax {
+            max-width: 100%;
+            width: 100%;
+            box-sizing: border-box;
             overflow-x: auto;
             overflow-y: hidden;
-            max-width: 100%;
+            -webkit-overflow-scrolling: touch;
+            white-space: normal;
+            word-wrap: break-word;
+            word-break: break-word;
         }
-
-        /* Đảm bảo công thức không bị cắt trên mobile */
-        mjx-merror {
+        
+        .formula::-webkit-scrollbar,
+        .MathJax_Display::-webkit-scrollbar,
+        .MathJax::-webkit-scrollbar {
+            height: 4px;
+        }
+        .formula::-webkit-scrollbar-thumb,
+        .MathJax_Display::-webkit-scrollbar-thumb,
+        .MathJax::-webkit-scrollbar-thumb {
+            background: var(--primary-medium);
+            border-radius: 4px;
+        }
+        .formula::-webkit-scrollbar-track,
+        .MathJax_Display::-webkit-scrollbar-track,
+        .MathJax::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .solution .formula,
+        .solution .MathJax_Display,
+        .solution .MathJax {
+            max-width: 100%;
             overflow-x: auto;
-            max-width: 100%;
         }
-
-        /* Tùy chỉnh scrollbar cho công thức */
-        .formula-box::-webkit-scrollbar {
-            height: 6px;
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { line-height: 1.1; }
+            .header h1 { font-size: 2.2rem; }
+            .header p { font-size: 1.2rem; }
+            .section h2 { font-size: 1.8rem; }
+            .section h3 { font-size: 1.5rem; margin: 8px 0 4px; }
+            .section p, .section li { font-size: 1.3rem; margin-bottom: 2px; line-height: 1.1; }
+            .section li { margin-bottom: 2px; }
+            .formula { font-size: 1.4rem; padding: 2px; margin: 2px 0; }
+            .content { padding: 10px; }
+            .key-points { grid-template-columns: 1fr; gap: 8px; }
+            .solution-btn { font-size: 1.2rem; padding: 5px 10px; margin: 5px 0; }
+            .solution-content { font-size: 1.2rem; padding: 8px; }
+            .solution-content p { margin-bottom: 3px; }
+            .note-box, .question-box, .example-box { padding: 5px; margin: 5px 0; }
+            .image-container { max-width: 90%; margin: 5px auto; }
+            .small-image { max-width: 280px !important; }
+            .medium-image { max-width: 350px !important; }
+            body::before { background-size: 300px 300px; opacity: 0.05; }
+            .section::before { width: 200px; height: 200px; }
+            .note-box::before, .question-box::before { width: 150px; height: 150px; }
+            .watermark-overlay::before { background-size: 150px 150px; opacity: 0.03; }
         }
-
-        .formula-box::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 3px;
+        
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .header { padding: 12px 15px; }
+            .header h1 { font-size: 1.8rem; }
+            .section { padding: 12px 10px; margin-bottom: 15px; }
+            .section h2 { font-size: 1.6rem; margin-bottom: 5px; }
+            .section h3 { font-size: 1.4rem; margin: 6px 0 3px; }
+            .section p, .section li { font-size: 1.2rem; margin-bottom: 2px; }
+            .formula { font-size: 1.2rem; }
+            /* Buộc ngắt dòng triệt để cho MathJax trên màn hình rất nhỏ */
+            .formula, .MathJax_Display, .MathJax, mjx-container, mjx-math {
+                white-space: normal !important;
+                word-break: break-all !important;
+                overflow-wrap: break-word !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+            .image-container { max-width: 95%; padding: 3px; }
+            .small-image { max-width: 250px !important; }
+            .medium-image { max-width: 300px !important; }
+            .watermark-overlay::before { background-size: 120px 120px; }
         }
-
-        .formula-box::-webkit-scrollbar-thumb {
-            background: var(--light-brown);
-            border-radius: 3px;
-        }
-
-        .formula-box::-webkit-scrollbar-thumb:hover {
-            background: var(--secondary-brown);
+        
+        @media (min-width: 1200px) {
+            .section p, .section li { font-size: 1.6rem; margin-bottom: 3px; line-height: 1.1; }
+            .section h3 { font-size: 2rem; margin: 15px 0 8px; }
+            .header h1 { font-size: 3.2rem; }
+            .formula { font-size: 1.8rem; margin: 3px 0; }
+            .solution-content { font-size: 1.5rem; }
+            .solution-content p { margin-bottom: 4px; line-height: 1.1; }
+            .image-container { max-width: 550px; }
+            body::before { background-size: 500px 500px; opacity: 0.1; }
         }
     </style>
 </head>
@@ -722,481 +681,412 @@
     <div class="watermark-overlay"></div>
     
     <div class="container">
-        <header>
-            <h1>Bài Tập Tự Luận Bài 17 (SBT)</h1>
-            <p class="subtitle">KHÁI NIỆM ĐIỆN TRƯỜNG - Vật Lý 11</p>
+        <header class="header">
+            <h1><i class="fas fa-bolt"></i> Bài 20: Điện Thế</h1>
+            <p>Chương III - Điện trường</p>
         </header>
         
-        <div class="question-container" id="questionContainer">
-            <!-- Các câu hỏi sẽ được tạo bằng JavaScript -->
-        </div>
+        <main class="content">
+            <!-- Giới thiệu -->
+            <section class="section">
+                <h2><i class="fas fa-charging-station"></i> Giới thiệu</h2>
+                
+                <p><span class="definition">Đường dây điện cao thế, trung thế, hạ thế.</span> Trong thực tế chúng ta gặp những đường dây dẫn điện cao thế, trung thế, hạ thế. Từ "thế" ở đây được hiểu như thế nào? Có liên quan tới thế năng điện đã học ở Bài 19 hay không?</p>
+                
+                <div class="question-box">
+                    <h3><i class="fas fa-question-circle"></i> Câu hỏi khởi động</h3>
+                    <p>Từ "thế" trong các thuật ngữ cao thế, trung thế, hạ thế được hiểu như thế nào? Có liên quan gì đến thế năng điện đã học ở Bài 19?</p>
+                    
+                    <button class="solution-btn">Xem gợi ý trả lời</button>
+                    <div class="solution">
+                        <div class="solution-content">
+                            <h4>Gợi ý trả lời:</h4>
+                            <p>Từ "thế" trong các thuật ngữ này được hiểu là điện thế. Điện thế là đại lượng vật lý đặc trưng cho điện trường về mặt năng lượng, có liên quan mật thiết đến thế năng điện đã học ở Bài 19. Điện thế càng cao thì khả năng sinh công của điện trường càng lớn.</p>
+                            <p>Cao thế, trung thế, hạ thế là cách phân loại đường dây điện theo mức điện thế (hiệu điện thế) mà chúng truyền tải.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- I. Điện thế tại một điểm trong điện trường -->
+            <section class="section">
+                <h2><i class="fas fa-atom"></i> I. Điện thế tại một điểm trong điện trường</h2>
+                
+                <div class="note-box">
+                    <h3><i class="fas fa-lightbulb"></i> Khái niệm điện thế</h3>
+                    <p>Điện thế tại một điểm trong điện trường đặc trưng cho điện trường tại điểm đó về thế năng, được xác định bằng công dịch chuyển một đơn vị điện tích dương từ vô cực về điểm đó.</p>
+                </div>
+                
+                <h3>1. Công thức xác định điện thế</h3>
+                <p>Để đặt một điện tích q vào điểm M trong điện trường chúng ta cần cung cấp thế năng W<sub>M</sub> cho điện tích q. Điều này tương ứng với việc thực hiện một công A dịch chuyển điện tích q từ vô cực về điểm M.</p>
+                
+                <div class="formula">
+                    \[ V = \frac{A}{q} \tag{20.1} \]
+                </div>
+                
+                <p>Trong đó:</p>
+                <ul>
+                    <li>V: điện thế tại điểm M (V - vôn)</li>
+                    <li>A: công thực hiện để dịch chuyển điện tích q từ vô cực về điểm M (J - jun)</li>
+                    <li>q: điện tích (C - culông)</li>
+                </ul>
+                
+                <div class="question-box">
+                    <h3><i class="fas fa-question-circle"></i> Câu hỏi thảo luận</h3>
+                    <ol>
+                        <li>Hãy dự đoán điện thế V đặc trưng cho đại lượng nào của điện trường.</li>
+                        <li>Xác định độ lớn điện tích q khi điện thế V có giá trị bằng công A thực hiện để dịch chuyển điện tích q từ vô cực về điểm M.</li>
+                    </ol>
+                    
+                    <button class="solution-btn">Xem hướng dẫn trả lời</button>
+                    <div class="solution">
+                        <div class="solution-content">
+                            <h4>Hướng dẫn trả lời:</h4>
+                            <p><strong>Câu 1:</strong> Điện thế V đặc trưng cho khả năng sinh công của điện trường tại điểm đó. Nó là đại lượng đặc trưng cho điện trường về mặt năng lượng.</p>
+                            <p><strong>Câu 2:</strong> Theo công thức (20.1): \( V = \frac{A}{q} \). Khi V = A, ta có \( A = \frac{A}{q} \) ⇒ \( q = 1 \) (C). Vậy khi điện tích có độ lớn 1 culông thì điện thế có giá trị bằng công dịch chuyển nó từ vô cực về điểm đó.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>2. Tính chất của điện thế</h3>
+                <div class="note-box">
+                    <h3><i class="fas fa-exclamation-circle"></i> Đặc điểm của điện thế</h3>
+                    <ul>
+                        <li><span class="highlight">Đơn vị:</span> Đơn vị của điện thế là vôn (kí hiệu là V), ngoài ra người ta còn dùng đơn vị kilóvôn (kV): 1 kV = 1 000 V.</li>
+                        <li><span class="highlight">Giá trị đại số:</span> Điện thế có giá trị đại số, dấu của điện thế phụ thuộc vào dấu của công A và dấu của điện tích q.</li>
+                        <li><span class="highlight">Mốc điện thế:</span> Ngoài việc chọn mốc điện thế ở vô cực thì trong điện trường đều giữa hai bàn phẳng người ta thường chọn mốc điện thế là bàn nhiễm điện âm, còn mặt đất thường được chọn là mốc điện thế trong thực tiễn cuộc sống và kĩ thuật.</li>
+                    </ul>
+                </div>
+                
+                <h3>3. Hiệu điện thế</h3>
+                <p>Chúng ta đã được học và đo hiệu điện thế. Hiệu điện thế \( U_{MN} \) mà chúng ta đo được chính là giá trị của hiệu giữa điện thế tại M và điện thế tại N:</p>
+                
+                <div class="formula">
+                    \[ U_{MN} = V_M - V_N \tag{20.2} \]
+                </div>
+                
+                <p>Vì vậy U và V đều có chung đơn vị là vôn.</p>
+                
+                <div class="note-box">
+                    <h3><i class="fas fa-info-circle"></i> EM CÓ BIẾT</h3>
+                    <ol>
+                        <li>Hiệu điện thế còn được gọi là điện áp. Thiết bị dùng để biến đổi hiệu điện thế được gọi là biến áp.</li>
+                        <li>Theo quy định của mạng lưới truyền tải điện ở Việt Nam, các lưới điện có điện áp nhỏ hơn 1 kV gọi là hạ thế, từ 1 kV đến 66 kV gọi là trung thế, lớn hơn 66 kV gọi là cao thế. Còn theo quy định của hành lang an toàn lưới điện thì điện áp lớn hơn 1 kV đã được gọi là cao thế.</li>
+                    </ol>
+                </div>
+            </section>
+            
+            <!-- II. Mối liên hệ giữa điện thế và cường độ điện trường -->
+            <section class="section">
+                <h2><i class="fas fa-link"></i> II. Mối liên hệ giữa điện thế và cường độ điện trường</h2>
+                
+                <p>Trong thực tế người ta thường xét sự dịch chuyển một điện tích q từ điểm N tới điểm M nào đó trong điện trường.</p>
+                
+                <h3>1. Công thức tính công dịch chuyển điện tích</h3>
+                <p>Vận dụng công thức \( V = \frac{A}{q} \) ta có:</p>
+                
+                <div class="formula">
+                    \[ A_{MN} = (V_M - V_N)q = U_{MN}q \tag{20.3} \]
+                </div>
+                
+                <p>Để dịch chuyển một điện tích dương q ngược chiều điện trường từ điểm N tới điểm M, ta cần cung cấp một lực ít nhất bằng với lực điện và ngược chiều. Trong dịch chuyển này, công ta bỏ ra có độ lớn bằng nhưng trái dấu với công của lực điện trường.</p>
+                
+                <div class="example-box">
+                    <h3><i class="fas fa-calculator"></i> Ví dụ áp dụng: Tế bào quang điện chân không</h3>
+                    <p>Tế bào quang điện chân không (Hình 20.1) gồm một ống hình trụ có một cửa sổ trong suốt, được hút chân không (áp suất trong khoảng \( 10^{-8} \, \text{mmHg} \) đến \( 10^{-6} \, \text{mmHg} \)). Trong ống đặt một catôt (cực âm) có khả năng phát xạ electron khi được chiếu sáng và một anôt (cực dương). Electron trong điện trường giữa hai cực sẽ dịch chuyển về phía anôt nếu \( U_{AK} > 0 \).</p>
+                    
+                    <div class="image-container medium-image">
+                        <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/20/20.1.png" alt="Tế bào quang điện chân không">
+                        <p class="image-caption">Hình 20.1. Tế bào quang điện chân không</p>
+                    </div>
+                    
+                    <p>Cho hiệu điện thế \( U_{AK} = 45 \, \text{V} \) được đặt vào giữa hai cực của tế bào quang điện. Khi chiếu xạ ánh sáng phù hợp để catôt phát xạ electron vào vùng điện trường giữa hai cực. Hãy tính công của điện trường trong dịch chuyển của electron từ catôt tới anôt.</p>
+                    
+                    <button class="solution-btn">Xem hướng dẫn giải</button>
+                    <div class="solution">
+                        <div class="solution-content">
+                            <h4>Hướng dẫn giải:</h4>
+                            <p><strong>Bước 1:</strong> Xác định các đại lượng đã biết</p>
+                            <p>- Hiệu điện thế: \( U_{AK} = 45 \, \text{V} \)</p>
+                            <p>- Điện tích của electron: \( q = -e = -1.6 \times 10^{-19} \, \text{C} \)</p>
+                            <p><strong>Bước 2:</strong> Áp dụng công thức tính công</p>
+                            <p>Theo công thức (20.3): \( A = U \cdot q \)</p>
+                            <p>\( A = 45 \times (-1.6 \times 10^{-19}) = -7.2 \times 10^{-18} \, \text{J} \)</p>
+                            <p><strong>Bước 3:</strong> Giải thích kết quả</p>
+                            <p>Dấu âm cho thấy công của điện trường là công cản (vì electron mang điện tích âm di chuyển từ nơi có điện thế thấp đến nơi có điện thế cao).</p>
+                            <p><strong>Đáp số:</strong> Công của điện trường là \( -7.2 \times 10^{-18} \, \text{J} \).</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>2. Mối liên hệ giữa điện thế và thế năng điện</h3>
+                <p>Điện thế là một đại lượng gắn với điện trường, còn thế năng điện là đại lượng gắn với điện tích đặt trong điện trường. Trong công thức (20.1), công A mà chúng ta sử dụng để dịch chuyển điện tích q từ vô cực về điểm M cũng chính bằng thế năng điện \( W_M \) của điện tích q đặt tại M trong điện trường. Như vậy, thế năng điện và điện thế liên hệ với nhau bởi công thức:</p>
+                
+                <div class="formula">
+                    \[ W_M = Vq \tag{20.4} \]
+                </div>
+                
+                <h3>3. Mối liên hệ giữa cường độ điện trường và điện thế</h3>
+                <p>Trong điện trường đều, xét một điện tích thử dương chuyển động dọc theo một đường sức điện từ điểm M đến điểm N. Ta thấy, chiều của vectơ cường độ điện trường E hướng theo chiều giảm của điện thế. Chọn chiều dương của trục toạ độ là chiều đường sức (Hình 20.2). Áp dụng công thức ta có:</p>
+                
+                <div class="image-container medium-image">
+                    <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/20/20.2.png" alt="Mối liên hệ giữa điện thế và cường độ điện trường">
+                    <p class="image-caption">Hình 20.2. Chuyển động của điện tích thử dọc theo một đường sức</p>
+                </div>
+                
+                <div class="formula">
+                    \[ E_M = E_N = E = \frac{U}{d} = \frac{V_M - V_N}{MN} \tag{20.5} \]
+                </div>
+                
+                <p>Kết quả trên cho thấy: trong điện trường đều, độ lớn cường độ điện trường bằng độ giảm của điện thế dọc theo một đơn vị độ dài đường sức.</p>
+                <p>Với điện trường bất kì, công thức trên vẫn được áp dụng trong trường hợp hai điểm M và N ở rất gần nhau:</p>
+                
+                <div class="formula">
+                    \[ E = \frac{\Delta V}{\Delta d} \]
+                </div>
+                
+                <p>Cường độ điện trường tại một điểm M có độ lớn bằng thương của hiệu điện thế giữa hai điểm M và N trên một đoạn nhỏ đường sức chia cho độ dài đại số của đoạn đường sức đó.</p>
+            </section>
+            
+            <!-- III. Bài tập ví dụ -->
+            <section class="section">
+                <h2><i class="fas fa-calculator"></i> III. Bài tập ví dụ</h2>
+                
+                <div class="example-box">
+                    <h3><i class="fas fa-calculator"></i> Bài tập ví dụ</h3>
+                    <p>Có hai bản phẳng song song cách nhau một khoảng d (Hình 20.3), được nối vào nguồn điện một chiều có hiệu điện thế 48 V. Chọn bản nhiễm điện âm làm mốc điện thế.</p>
+                    
+                    <div class="image-container medium-image">
+                        <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/20/20.3.png" alt="Hai bản phẳng song song">
+                        <p class="image-caption">Hình 20.3. Hai bản phẳng song song</p>
+                    </div>
+                    
+                    <p>a) Xác định mối liên hệ giữa điện thế và cường độ điện trường tại một điểm trong điện trường đều giữa hai bản phẳng.</p>
+                    <p>b) Áp dụng kết quả câu a để tính điện thế tại M nằm chính giữa khe hở của hai bản phẳng.</p>
+                    
+                    <button class="solution-btn">Xem hướng dẫn giải</button>
+                    <div class="solution">
+                        <div class="solution-content">
+                            <h4>Hướng dẫn giải:</h4>
+                            <p><strong>a) Xác định mối liên hệ giữa điện thế và cường độ điện trường:</strong></p>
+                            <p>Gọi N là điểm giao của đường sức đi qua M với bản nhiễm điện âm (Hình 20.3). \( V_N = 0 \) do điểm N nằm trên bản phẳng nhiễm điện âm được chọn làm mốc điện thế; \( MN = h > 0 \) và MN thuận theo chiều đường sức, h chính là khoảng cách từ M tới bản nhiễm điện âm. Vận dụng công thức (20.5) vào điện trường đều giữa hai bản phẳng ta tìm được mối liên hệ:</p>
+                            <div class="formula">
+                                \[ E_M = \frac{V_M - V_N}{MN} \Rightarrow V_M = E_M h \]
+                            </div>
+                            <p><strong>b) Tính điện thế tại M nằm chính giữa khe hở:</strong></p>
+                            <p>Trường hợp điểm M nằm chính giữa khe hở hai bản phẳng tức là \( h = \frac{d}{2} \), ta có:</p>
+                            <div class="formula">
+                                \[ V_M = Eh = \frac{U}{d} \cdot \frac{d}{2} = \frac{48}{2} = 24 \, \text{V} \]
+                            </div>
+                            <p>Vậy điện thế tại điểm M nằm chính giữa hai bản phẳng là 24 V.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question-box">
+                    <h3><i class="fas fa-tasks"></i> Bài tập vận dụng</h3>
+                    
+                    <h4>Bài 1:</h4>
+                    <p>Vận dụng mối liên hệ giữa điện thế và cường độ điện trường để xác định điện thế tại một điểm cách mặt đất 5 m ở nơi có điện trường của Trái Đất là 114 V/m.</p>
+                    
+                    <button class="solution-btn">Xem hướng dẫn giải Bài 1</button>
+                    <div class="solution">
+                        <div class="solution-content">
+                            <h4>Hướng dẫn giải Bài 1:</h4>
+                            <p><strong>Bước 1:</strong> Xác định các đại lượng đã biết</p>
+                            <p>- Cường độ điện trường của Trái Đất: E = 114 V/m</p>
+                            <p>- Khoảng cách từ điểm cần tính đến mặt đất: h = 5 m</p>
+                            <p>- Chọn mốc điện thế: mặt đất có điện thế V<sub>đất</sub> = 0 V</p>
+                            <p><strong>Bước 2:</strong> Áp dụng công thức liên hệ giữa E và V</p>
+                            <p>Trong điện trường đều: \( E = \frac{V_M - V_N}{d} \)</p>
+                            <p>Trong trường hợp này, điện trường của Trái Đất được coi là đều ở gần mặt đất, hướng thẳng đứng từ trên xuống.</p>
+                            <p><strong>Bước 3:</strong> Tính toán</p>
+                            <p>Ta có: \( E = \frac{V - 0}{h} \) ⇒ \( V = E \cdot h \)</p>
+                            <p>\( V = 114 \times 5 = 570 \, \text{V} \)</p>
+                            <p><strong>Đáp số:</strong> Điện thế tại điểm cách mặt đất 5 m là 570 V.</p>
+                            <p><strong>Lưu ý:</strong> Điện trường của Trái Đất hướng từ trên xuống dưới (từ không khí xuống mặt đất), nên điện thế trong không khí giảm dần khi tiến lại gần mặt đất. Điểm càng cao so với mặt đất thì có điện thế càng lớn.</p>
+                        </div>
+                    </div>
+                    
+                    <h4>Bài 2:</h4>
+                    <p>Tính công cần thiết để dịch chuyển một điện tích \( q = 2 \times 10^{-6} \, \text{C} \) từ điểm M đến điểm N trong điện trường, biết điện thế tại M là \( V_M = 100 \, \text{V} \) và tại N là \( V_N = 60 \, \text{V} \).</p>
+                    
+                    <button class="solution-btn">Xem hướng dẫn giải Bài 2</button>
+                    <div class="solution">
+                        <div class="solution-content">
+                            <h4>Hướng dẫn giải Bài 2:</h4>
+                            <p><strong>Bước 1:</strong> Xác định các đại lượng đã biết</p>
+                            <p>- Điện tích: \( q = 2 \times 10^{-6} \, \text{C} \)</p>
+                            <p>- Điện thế tại M: \( V_M = 100 \, \text{V} \)</p>
+                            <p>- Điện thế tại N: \( V_N = 60 \, \text{V} \)</p>
+                            <p><strong>Bước 2:</strong> Áp dụng công thức tính công</p>
+                            <p>Theo công thức (20.3): \( A_{MN} = (V_M - V_N)q = U_{MN}q \)</p>
+                            <p><strong>Bước 3:</strong> Tính toán</p>
+                            <p>\( A_{MN} = (100 - 60) \times 2 \times 10^{-6} = 40 \times 2 \times 10^{-6} = 8 \times 10^{-5} \, \text{J} \)</p>
+                            <p><strong>Đáp số:</strong> Công cần thiết là \( 8 \times 10^{-5} \, \text{J} \).</p>
+                            <p><strong>Giải thích:</strong> Công dương cho thấy điện trường đã thực hiện công để dịch chuyển điện tích từ M đến N. Điện tích di chuyển từ nơi có điện thế cao (100 V) đến nơi có điện thế thấp hơn (60 V).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- IV. Tóm tắt kiến thức -->
+            <section class="section">
+                <h2><i class="fas fa-check-circle"></i> IV. Tóm tắt kiến thức</h2>
+                
+                <div class="note-box">
+                    <h3><i class="fas fa-graduation-cap"></i> EM ĐÃ HỌC</h3>
+                    <ul>
+                        <li>Điện thế tại một điểm trong điện trường đặc trưng cho điện trường tại điểm đó về thế năng, được xác định bằng công dịch chuyển một đơn vị điện tích dương từ vô cực về điểm đó: 
+                            <div class="formula">
+                                \[ V = \frac{A}{q} \]
+                            </div>
+                        </li>
+                        <li>Điện thế có mối liên hệ với thế năng điện: 
+                            <div class="formula">
+                                \[ V_M = \frac{W_M}{q} \]
+                            </div>
+                        </li>
+                        <li>Mối liên hệ giữa cường độ điện trường và điện thế của hai điểm M và N trong điện trường đều dọc theo đường sức điện: 
+                            <div class="formula">
+                                \[ E_M = E_N = \frac{V_M - V_N}{MN} \]
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="note-box">
+                    <h3><i class="fas fa-bullseye"></i> EM CÓ THỂ</h3>
+                    <ul>
+                        <li>Giải thích được ý nghĩa của hiệu điện thế giữa hai điểm.</li>
+                        <li>Vận dụng được mối liên hệ thế năng điện với điện thế để tính được thế năng điện của điện tích nằm trong điện trường.</li>
+                        <li>Tính được công dịch chuyển một điện tích q từ điểm N đến điểm M trong điện trường.</li>
+                    </ul>
+                </div>
+                
+                <div class="key-points">
+                    <div class="point">
+                        <h3><i class="fas fa-bolt"></i> Điện thế</h3>
+                        <p>Hiểu được khái niệm điện thế và ý nghĩa của nó trong điện trường. Nắm vững công thức tính điện thế: \( V = \frac{A}{q} \).</p>
+                    </div>
+                    <div class="point">
+                        <h3><i class="fas fa-exchange-alt"></i> Hiệu điện thế</h3>
+                        <p>Phân biệt được điện thế và hiệu điện thế. Nắm được mối quan hệ: \( U_{MN} = V_M - V_N \).</p>
+                    </div>
+                    <div class="point">
+                        <h3><i class="fas fa-calculator"></i> Công thức tính công</h3>
+                        <p>Vận dụng thành thạo công thức tính công dịch chuyển điện tích: \( A_{MN} = (V_M - V_N)q = U_{MN}q \).</p>
+                    </div>
+                    <div class="point">
+                        <h3><i class="fas fa-link"></i> Mối liên hệ E và V</h3>
+                        <p>Hiểu và vận dụng được mối liên hệ giữa cường độ điện trường và điện thế: \( E = \frac{\Delta V}{\Delta d} \).</p>
+                    </div>
+                </div>
+            </section>
+        </main>
         
-        <div class="controls">
-            <button class="action-btn" id="expandAllBtn">MỞ RỘNG TẤT CẢ</button>
-            <button class="action-btn" id="collapseAllBtn">THU GỌN TẤT CẢ</button>
-        </div>
-        
-        <footer>
-            <p>Bài tập tự luận Vật Lý 11 - Bài 17: Khái niệm điện trường</p>
+        <footer class="footer">
+            <p>Bài 20: Điện Thế | Chương III - Điện trường | Trang 79-82</p>
         </footer>
     </div>
 
+    <!-- MathJax cho hiển thị công thức toán -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
     <script>
-        // Dữ liệu câu hỏi và lời giải - SỬ DỤNG CÚ PHÁP ĐƠN GIẢN
-        const questions = [
-            {
-                number: 11,
-                text: "Khi làm thực nghiệm xác định điện trường tại một điểm M gần mặt đất, người ta dùng điện tích thứ $q = 4 \\times 10^{-16}$ C xác định được lực điện tác dụng lên điện tích q có giá trị bằng $5 \\times 10^{-14}$ N, có phương thẳng đứng hướng từ trên xuống dưới. Hãy tính độ lớn cường độ điện trường tại điểm M.",
-                summary: "Tính cường độ điện trường E từ lực điện F và điện tích thử q.",
-                solution: {
-                    tóm_tắt: `<ul>
-                        <li>$q = 4 \\times 10^{-16}$ C</li>
-                        <li>$F = 5 \\times 10^{-14}$ N</li>
-                        <li>Phương thẳng đứng, hướng từ trên xuống</li>
-                        <li>Tính $E$ tại M</li>
-                    </ul>`,
-                    giải: `<p>Công thức tính cường độ điện trường:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$E = \\frac{F}{q}$$</div>
-                    </div>
-                    <p>Thay số:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$E = \\frac{5 \\times 10^{-14}}{4 \\times 10^{-16}} = 125 \\text{ V/m}$$</div>
-                    </div>
-                    <p>Cường độ điện trường có cùng phương, chiều với lực điện tác dụng lên điện tích dương.</p>`,
-                    đáp_số: "$E = 125$ V/m, phương thẳng đứng, hướng từ trên xuống dưới."
-                }
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true,
+                tags: 'ams'
             },
-            {
-                number: 12,
-                text: "Khi phát hiện một đám mây dông có kích thước nhỏ, một trạm quan sát thời tiết đã đo được khoảng cách từ đám mây đó đến trạm cỡ bằng 6350 m, người ta cũng xác định được cường độ điện trường do nó gây ra tại trạm cỡ bằng 450 V/m. Hãy ước lượng độ lớn điện tích của đám mây dông đó. Coi đám mây như một điện tích điểm.",
-                summary: "Tính điện tích Q của đám mây từ cường độ điện trường E và khoảng cách r.",
-                solution: {
-                    tóm_tắt: `<ul>
-                        <li>$r = 6350$ m</li>
-                        <li>$E = 450$ V/m</li>
-                        <li>Coi đám mây như điện tích điểm</li>
-                        <li>Tính $|Q|$</li>
-                    </ul>`,
-                    giải: `<p>Công thức cường độ điện trường do điện tích điểm gây ra:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$E = \\frac{k|Q|}{r^2}$$</div>
-                    </div>
-                    <p>Suy ra:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$|Q| = \\frac{E r^2}{k}$$</div>
-                    </div>
-                    <p>Với $k = 9 \\times 10^9$ N·m²/C²</p>
-                    <p>Thay số:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$|Q| = \\frac{450 \\times (6350)^2}{9 \\times 10^9}$$</div>
-                        <div class="formula">$$|Q| = \\frac{450 \\times 4.03225 \\times 10^7}{9 \\times 10^9}$$</div>
-                        <div class="formula">$$|Q| = \\frac{1.8145125 \\times 10^{10}}{9 \\times 10^9} \\approx 2.016 \\text{ C}$$</div>
-                    </div>`,
-                    đáp_số: "$|Q| \\approx 2.02$ C"
-                }
+            chtml: {
+                linebreaks: { automatic: true }   // Tự động ngắt dòng
             },
-            {
-                number: 13,
-                text: "Cường độ điện trường của Trái Đất tại điểm M có giá trị bằng 120 V/m. Một electron có điện tích bằng $1.6 \\times 10^{-19}$ C và khối lượng bằng $9.1 \\times 10^{-31}$ kg. Chứng minh rằng, trọng lực có thể được bỏ qua so với lực điện mà Trái Đất tác dụng lên electron. Lấy $g = 9.8$ m/s².",
-                summary: "So sánh lực điện và trọng lực tác dụng lên electron.",
-                solution: {
-                    tóm_tắt: `<ul>
-                        <li>$E = 120$ V/m</li>
-                        <li>$e = 1.6 \\times 10^{-19}$ C</li>
-                        <li>$m_e = 9.1 \\times 10^{-31}$ kg</li>
-                        <li>$g = 9.8$ m/s²</li>
-                        <li>So sánh $F_e$ và $P$</li>
-                    </ul>`,
-                    giải: `<p>Lực điện tác dụng lên electron:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$F_e = eE = 1.6 \\times 10^{-19} \\times 120 = 1.92 \\times 10^{-17} \\text{ N}$$</div>
-                    </div>
-                    
-                    <p>Trọng lực tác dụng lên electron:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$P = m_e g = 9.1 \\times 10^{-31} \\times 9.8 \\approx 8.92 \\times 10^{-30} \\text{ N}$$</div>
-                    </div>
-                    
-                    <p>Tỉ số giữa lực điện và trọng lực:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$\\frac{F_e}{P} = \\frac{1.92 \\times 10^{-17}}{8.92 \\times 10^{-30}} \\approx 2.15 \\times 10^{12}$$</div>
-                    </div>
-                    
-                    <p>Nhận xét: Lực điện lớn hơn trọng lực khoảng $2.15 \\times 10^{12}$ lần (hơn 2 nghìn tỷ lần).</p>`,
-                    đáp_số: "Vì $\\frac{F_e}{P} \\approx 2.15 \\times 10^{12} \\gg 1$, nên trọng lực có thể bỏ qua so với lực điện."
-                }
+            svg: {
+                linebreaks: { automatic: true }
             },
-            {
-                number: 14,
-                text: "Hãy vẽ hệ đường sức điện của điện trường xung quanh một điện tích âm đặt trong chân không và nhận xét vị trí có điện trường mạnh.",
-                summary: "Vẽ đường sức điện và nhận xét về cường độ điện trường.",
-                solution: {
-                    tóm_tắt: `<ul>
-                        <li>Điện tích âm trong chân không</li>
-                        <li>Vẽ hệ đường sức điện</li>
-                        <li>Nhận xét vị trí điện trường mạnh</li>
-                    </ul>`,
-                    giải: `<p><strong>Cách vẽ:</strong></p>
-                    <ul>
-                        <li>Đường sức điện là các đường thẳng hướng vào điện tích âm</li>
-                        <li>Các đường sức xuất phát từ vô cùng và kết thúc tại điện tích</li>
-                        <li>Mật độ đường sức tỉ lệ với độ lớn cường độ điện trường</li>
-                    </ul>
-<img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/17/e-q.png" style="max-width:300px; width:100%; height:auto; display:block; margin:15px auto; border:1px solid #ccc; border-radius:5px;">
-                    <p><strong>Nhận xét:</strong></p>
-                    <ul>
-                        <li>Điện trường mạnh nhất ở gần điện tích (vì $E \\propto \\frac{1}{r^2}$)</li>
-                        <li>Càng xa điện tích, điện trường càng yếu dần</li>
-                        <li>Mật độ đường sức dày nhất ở gần điện tích</li>
-                    </ul>`,
-                    đáp_số: "Điện trường mạnh nhất ở vị trí gần điện tích âm nhất."
-                }
-            },
-            {
-                number: 15,
-                text: "Hãy vẽ hệ đường sức điện của điện trường xung quanh hệ hai điện tích âm bằng nhau và xác định những vị trí có điện trường yếu.",
-                summary: "Vẽ đường sức điện cho hai điện tích âm và tìm vị trí điện trường yếu.",
-                solution: {
-                    tóm_tắt: `<ul>
-                        <li>Hai điện tích âm bằng nhau</li>
-                        <li>Vẽ hệ đường sức điện</li>
-                        <li>Xác định vị trí điện trường yếu</li>
-                    </ul>`,
-                    giải: `<p><strong>Cách vẽ:</strong></p>
-                    <ul>
-                        <li>Các đường sức hướng vào từng điện tích</li>
-                        <li>Ở vùng giữa hai điện tích, đường sức cong do chồng chập điện trường</li>
-                        <li>Đường sức đối xứng qua đường trung trực của đoạn nối hai điện tích</li>
-                    </ul>
-<img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/17/q-e-q.png" style="max-width:350px; width:100%; height:auto; display:block; margin:15px auto; border:1px solid #ccc; border-radius:5px;">
-                    <p><strong>Vị trí điện trường yếu:</strong></p>
-                    <ul>
-                        <li>Điểm trung điểm của đoạn nối hai điện tích: tại đây hai vectơ cường độ điện trường ngược chiều, độ lớn bằng nhau nên triệt tiêu lẫn nhau ($\\vec{E} = \\vec{0}$)</li>
-                        <li>Các điểm nằm trên đường trung trực của đoạn nối hai điện tích, xa hai điện tích: thành phần điện trường theo phương ngữ triệt tiêu, chỉ còn thành phần nhỏ hướng vào trung điểm</li>
-                    </ul>`,
-                    đáp_số: "Điện trường yếu nhất tại trung điểm của đoạn nối hai điện tích ($E = 0$)."
-                }
-            },
-            {
-                number: 16,
-                text: "Vào một ngày đẹp trời đo đạc thực nghiệm cho thấy gần bề mặt Trái Đất ở một khu vực tại Hà Nội tồn tại điện trường theo phương thẳng đứng, hướng từ trên xuống dưới, có độ lớn cường độ điện trường không đổi trong khu vực khảo sát và bằng 114 V/m.<br><br>a) Hãy vẽ hệ đường sức điện của điện trường trái đất ở khu vực đó.<br><br>b) Một hạt bụi mịn có điện tích $6.4 \\times 10^{-19}$ C sẽ chịu tác dụng của lực điện có phương, chiều và độ lớn như thế nào?",
-                summary: "Vẽ đường sức điện và tính lực điện tác dụng lên hạt bụi.",
-                solution: {
-                    tóm_tắt: `<ul>
-                        <li>$E = 114$ V/m</li>
-                        <li>Phương thẳng đứng, hướng từ trên xuống</li>
-                        <li>$q = 6.4 \\times 10^{-19}$ C (hạt bụi)</li>
-                        <li>a) Vẽ đường sức</li>
-                        <li>b) Tính lực điện</li>
-                    </ul>`,
-                    giải: `<p><strong>a) Vẽ hệ đường sức điện:</strong></p>
-                    <ul>
-                        <li>Đường sức thẳng đứng, song song với nhau</li>
-                        <li>Chiều từ trên xuống dưới (hướng của $\\vec{E}$)</li>
-                        <li>Các đường sức cách đều nhau (vì E không đổi)</li>
-                    </ul>
-<img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/17/17_.16.a.sbt.png" style="max-width:200px; width:100%; height:auto; display:block; margin:15px auto; border:1px solid #ccc; border-radius:5px;">
-                    <p><strong>b) Lực điện tác dụng lên hạt bụi:</strong></p>
-                    <ul>
-                        <li>Phương: thẳng đứng (cùng phương với $\\vec{E}$)</li>
-                        <li>Chiều: Vì điện tích âm ($q < 0$), lực điện $\\vec{F}$ ngược chiều với $\\vec{E}$ → hướng từ dưới lên trên</li>
-                        <li>Độ lớn: $F = |q|E$</li>
-                    </ul>
-                    
-                    <div class="formula-box">
-                        <div class="formula">$$F = 6.4 \\times 10^{-19} \\times 114 = 7.296 \\times 10^{-17} \\text{ N}$$</div>
-                    </div>`,
-                    đáp_số: `<p>a) Đường sức thẳng đứng, song song, hướng từ trên xuống.</p>
-                    <p>b) Lực điện: Phương thẳng đứng, chiều từ dưới lên, độ lớn $F \\approx 7.30 \\times 10^{-17}$ N.</p>`
-                }
-            },
-            {
-                number: 17,
-                text: "Đặt điện tích $Q_1 = +6 \\times 10^{-8}$ C tại điểm A và điện tích $Q_2 = -2 \\times 10^{-8}$ C tại điểm B cách A một khoảng bằng 3 cm. Hãy xác định những điểm mà cường độ điện trường tại đó bằng 0.",
-                summary: "Tìm điểm có E = 0 trong hệ hai điện tích trái dấu.",
-                solution: {
-                    tóm_tắt: `<ul>
-                        <li>$Q_1 = +6 \\times 10^{-8}$ C tại A</li>
-                        <li>$Q_2 = -2 \\times 10^{-8}$ C tại B</li>
-                        <li>$AB = 3$ cm $= 0.03$ m</li>
-                        <li>Tìm điểm M sao cho $\\vec{E}_M = \\vec{0}$</li>
-                    </ul>`,
-                    giải: `<p>Vì $Q_1 > 0$ và $Q_2 < 0$ (trái dấu), điểm M phải nằm ngoài đoạn AB.</p>
-                    <p>Do $|Q_1| > |Q_2|$, điểm M nằm về phía B (gần điện tích nhỏ hơn).</p>
-                    
-                    <p>Gọi M nằm trên đường thẳng AB, về phía B, cách B khoảng $x$, cách A khoảng $0.03 + x$.</p>
-<img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/17/17_17sbt.png" style="max-width:350px; width:100%; height:auto; display:block; margin:15px auto; border:1px solid #ccc; border-radius:5px;">
-                    <p>Điều kiện $E_1 = E_2$:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$\\frac{k|Q_1|}{(0.03 + x)^2} = \\frac{k|Q_2|}{x^2}$$</div>
-                    </div>
-                    
-                    <p>Rút gọn $k$:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$\\frac{6 \\times 10^{-8}}{(0.03 + x)^2} = \\frac{2 \\times 10^{-8}}{x^2}$$</div>
-                    </div>
-                    
-                    <p>Chia cả hai vế cho $2 \\times 10^{-8}$:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$\\frac{3}{(0.03 + x)^2} = \\frac{1}{x^2}$$</div>
-                    </div>
-                    
-                    <p>Lấy căn hai vế:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$\\sqrt{3} = \\frac{0.03 + x}{x}$$</div>
-                    </div>
-                    
-                    <p>Giải phương trình:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$\\sqrt{3}x = 0.03 + x$$</div>
-                        <div class="formula">$$(\\sqrt{3} - 1)x = 0.03$$</div>
-                        <div class="formula">$$x = \\frac{0.03}{\\sqrt{3} - 1} \\approx \\frac{0.03}{0.732} \\approx 0.041 \\text{ m}$$</div>
-                    </div>`,
-                    đáp_số: "Điểm M nằm trên đường thẳng AB, về phía B, cách B khoảng 4.1 cm."
-                }
-            },
-            {
-                number: 18,
-                text: "Cho tam giác $ABC$ vuông tại $A$ có $AB = 3$ cm và $AC = 4$ cm. Tại $B$ ta đặt điện tích $Q_1 = 4.5 \\times 10^{-8}$ C, tại $C$, ta đặt điện tích $Q_2 = 2 \\times 10^{-8}$ C. Hãy tính độ lớn của cường độ điện trường do hai điện tích này gây ra tại $A$.",
-                summary: "Tính cường độ điện trường tổng hợp tại đỉnh A của tam giác vuông.",
-                solution: {
-                    tóm_tắt: `<ul>
-                        <li>Tam giác ABC vuông tại A</li>
-                        <li>$AB = 3$ cm $= 0.03$ m</li>
-                        <li>$AC = 4$ cm $= 0.04$ m</li>
-                        <li>$Q_1 = 4.5 \\times 10^{-8}$ C tại B</li>
-                        <li>$Q_2 = 2 \\times 10^{-8}$ C tại C</li>
-                        <li>Tính $E_A$</li>
-                    </ul>`,
-                    giải: `<p><strong>Cường độ điện trường do $Q_1$ gây ra tại A:</strong></p>
-                    <div class="formula-box">
-                        <div class="formula">$$E_1 = \\frac{k|Q_1|}{AB^2} = \\frac{9 \\times 10^9 \\times 4.5 \\times 10^{-8}}{(0.03)^2}$$</div>
-                        <div class="formula">$$E_1 = \\frac{0.405}{0.0009} = 450000 \\text{ V/m}$$</div>
-                    </div>
-                    <p>Hướng từ B đến A (vì $Q_1 > 0$).</p>
-<img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/17/17_18sbt.png" style="max-width:350px; width:100%; height:auto; display:block; margin:15px auto; border:1px solid #ccc; border-radius:5px;">
-                    <p><strong>Cường độ điện trường do $Q_2$ gây ra tại A:</strong></p>
-                    <div class="formula-box">
-                        <div class="formula">$$E_2 = \\frac{k|Q_2|}{AC^2} = \\frac{9 \\times 10^9 \\times 2 \\times 10^{-8}}{(0.04)^2}$$</div>
-                        <div class="formula">$$E_2 = \\frac{0.18}{0.0016} = 112500 \\text{ V/m}$$</div>
-                    </div>
-                    <p>Hướng từ C đến A (vì $Q_2 > 0$).</p>
-                    
-                    <p>Vì tam giác vuông tại A nên $\\vec{E}_1 \\perp \\vec{E}_2$.</p>
-                    
-                    <p><strong>Cường độ điện trường tổng hợp tại A:</strong></p>
-                    <div class="formula-box">
-                        <div class="formula">$$E_A = \\sqrt{E_1^2 + E_2^2} = \\sqrt{(450000)^2 + (112500)^2}$$</div>
-                        <div class="formula">$$E_A = \\sqrt{2.025 \\times 10^{11} + 1.265625 \\times 10^{10}}$$</div>
-                        <div class="formula">$$E_A = \\sqrt{2.1515625 \\times 10^{11}} \\approx 4.639 \\times 10^5 \\text{ V/m}$$</div>
-                    </div>`,
-                    đáp_số: "$E_A \\approx 4.64 \\times 10^5$ V/m"
-                }
-            },
-            {
-                number: 19,
-                text: "Hai điểm $A$ và $B$ cách nhau 6 cm. Tại $A$, đặt điện tích $Q_1 = +8 \\times 10^{-10}$ C. Tại $B$, đặt điện tích $Q_2 = +2 \\times 10^{-10}$ C. Hãy xác định những điểm mà cường độ điện trường tại đó bằng 0.",
-                summary: "Tìm điểm có E = 0 trong hệ hai điện tích cùng dấu.",
-                solution: {
-                    tóm_tắt: `<ul>
-                        <li>$AB = 6$ cm $= 0.06$ m</li>
-                        <li>$Q_1 = +8 \\times 10^{-10}$ C tại A</li>
-                        <li>$Q_2 = +2 \\times 10^{-10}$ C tại B</li>
-                        <li>Tìm điểm M có $\\vec{E}_M = \\vec{0}$</li>
-                    </ul>`,
-                    giải: `<p>Vì $Q_1$ và $Q_2$ cùng dấu dương, điểm M phải nằm giữa A và B để hai vectơ $\\vec{E}_1$ và $\\vec{E}_2$ ngược chiều.</p>
-<img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/17/17_19sbt.png" style="max-width:350px; width:100%; height:auto; display:block; margin:15px auto; border:1px solid #ccc; border-radius:5px;">
-                    <p>Gọi M cách A khoảng $x$, cách B khoảng $0.06 - x$.</p>
-                    
-                    <p>Điều kiện $E_1 = E_2$:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$\\frac{kQ_1}{x^2} = \\frac{kQ_2}{(0.06 - x)^2}$$</div>
-                    </div>
-                    
-                    <p>Rút gọn $k$:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$\\frac{8 \\times 10^{-10}}{x^2} = \\frac{2 \\times 10^{-10}}{(0.06 - x)^2}$$</div>
-                    </div>
-                    
-                    <p>Chia cả hai vế cho $2 \\times 10^{-10}$:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$\\frac{4}{x^2} = \\frac{1}{(0.06 - x)^2}$$</div>
-                    </div>
-                    
-                    <p>Lấy căn hai vế:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$2 = \\frac{x}{0.06 - x}$$</div>
-                    </div>
-                    
-                    <p>Giải phương trình:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$2(0.06 - x) = x$$</div>
-                        <div class="formula">$$0.12 - 2x = x$$</div>
-                        <div class="formula">$$0.12 = 3x$$</div>
-                        <div class="formula">$$x = 0.04 \\text{ m} = 4 \\text{ cm}$$</div>
-                    </div>`,
-                    đáp_số: "Điểm M nằm trên đoạn AB, cách A 4 cm, cách B 2 cm."
-                }
-            },
-            {
-                number: 20,
-                text: "Trong thí nghiệm về điện trường (Hình 17.1), người ta tạo ra một điện trường giống nhau tại mọi điểm giữa hai bản kim loại hình tròn với $E = 10^5$ V/m, có phương nằm ngang và hướng từ tấm bên phải (+) sang tấm bên trái (-). Một viên bi nhỏ khối lượng 0,1 g, tích điện âm $q = -10^{-8}$ C được móc bằng hai dây chỉ và treo vào giá như hình.<br><img src='https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/17/17.1sbt.png' style='max-width:350px; width:100%; height:auto; display:block; margin:15px auto; border:1px solid #ccc; border-radius:5px;'> Hãy tính góc lệch của mặt phẳng tạo bởi hai dây treo và mặt phẳng thẳng đứng. Lấy $g = 10$ m/s².",
-                summary: "Tính góc lệch của dây treo khi viên bi chịu tác dụng của lực điện và trọng lực.",
-                solution: {
-                    tóm_tắt: `<ul>
-                        <li>$E = 10^5$ V/m (nằm ngang, từ phải sang trái)</li>
-                        <li>$m = 0.1$ g $= 10^{-4}$ kg</li>
-                        <li>$q = -10^{-8}$ C</li>
-                        <li>$g = 10$ m/s²</li>
-                        <li>Tính góc lệch $\\alpha$</li>
-                    </ul>`,
-                    giải: `<p><strong>Lực điện tác dụng lên viên bi:</strong></p>
-                    <div class="formula-box">
-                        <div class="formula">$$F_e = |q|E = 10^{-8} \\times 10^5 = 10^{-3} \\text{ N}$$</div>
-                    </div>
-                    <p>Vì $q < 0$, lực điện ngược chiều với $\\vec{E}$ → hướng từ trái sang phải.</p>
-<img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/17/17_20sbt.png" style="max-width:350px; width:100%; height:auto; display:block; margin:15px auto; border:1px solid #ccc; border-radius:5px;">
-                    <p><strong>Trọng lực:</strong></p>
-                    <div class="formula-box">
-                        <div class="formula">$$P = mg = 10^{-4} \\times 10 = 10^{-3} \\text{ N}$$</div>
-                    </div>
-                    
-                    <p>Nhận thấy $F_e = P$.</p>
-                    
-                    <p>Viên bi chịu tác dụng của hai lực vuông góc: $\\vec{P}$ (thẳng đứng hướng xuống) và $\\vec{F}_e$ (nằm ngang hướng sang phải).</p>
-                    
-                    <p>Hợp lực: $\\vec{R} = \\vec{P} + \\vec{F}_e$ có độ lớn:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$R = \\sqrt{P^2 + F_e^2} = \\sqrt{(10^{-3})^2 + (10^{-3})^2} = 10^{-3}\\sqrt{2} \\text{ N}$$</div>
-                    </div>
-                    
-                    <p>Hợp lực $\\vec{R}$ tạo với phương thẳng đứng một góc $\\alpha$ thỏa mãn:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$\\tan \\alpha = \\frac{F_e}{P} = \\frac{10^{-3}}{10^{-3}} = 1$$</div>
-                    </div>
-                    
-                    <p>Do đó:</p>
-                    <div class="formula-box">
-                        <div class="formula">$$\\alpha = 45^\\circ$$</div>
-                    </div>
-                    
-                    <p>Mặt phẳng tạo bởi hai dây treo sẽ nghiêng một góc $\\alpha = 45^\\circ$ so với mặt phẳng thẳng đứng.</p>`,
-                    đáp_số: "Góc lệch $\\alpha = 45^\\circ$."
-                }
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
             }
-        ];
+        };
 
-        // Khởi tạo trang
-        function initializePage() {
-            const questionContainer = document.getElementById('questionContainer');
-            questionContainer.innerHTML = '';
-            
-            questions.forEach((question) => {
-                const questionElement = document.createElement('div');
-                questionElement.className = 'question';
-                questionElement.id = `question${question.number}`;
-                
-                questionElement.innerHTML = `
-                    <div class="question-header">
-                        <span class="question-number">${question.number}</span>
-                        <div class="question-text">${question.text}</div>
-                    </div>
-                    <div class="summary"><strong>Tóm tắt:</strong> ${question.summary}</div>
-                    <button class="toggle-btn" onclick="toggleSolution(${question.number})" id="btn${question.number}">Xem giải</button>
-                    <div class="solution-container" id="solution${question.number}">
-                        <div class="solution">
-                            <h4>Hướng dẫn giải chi tiết:</h4>
-                            <div class="subsection">
-                                <h5>Tóm tắt:</h5>
-                                <div class="subsection-content">${question.solution.tóm_tắt}</div>
-                            </div>
-                            <div class="subsection">
-                                <h5>Giải:</h5>
-                                <div class="subsection-content">${question.solution.giải}</div>
-                            </div>
-                            <div class="answer-box">
-                                <h5>Đáp số:</h5>
-                                <div class="answer-content">${question.solution.đáp_số}</div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                questionContainer.appendChild(questionElement);
-            });
-            
-            // Đợi MathJax load xong
+        // Hàm yêu cầu MathJax xử lý lại toàn bộ hoặc một phần
+        function typesetMathJax(container = null) {
             if (window.MathJax) {
-                MathJax.typesetPromise && MathJax.typesetPromise();
+                MathJax.typesetPromise(container ? [container] : undefined)
+                    .then(() => console.log('MathJax typeset done'))
+                    .catch(err => console.log('MathJax error: ' + err));
             }
         }
 
-        // Hàm toggle hiển thị lời giải
-        function toggleSolution(questionNumber) {
-            const solutionContainer = document.getElementById(`solution${questionNumber}`);
-            const button = document.getElementById(`btn${questionNumber}`);
-            
-            if (solutionContainer.classList.contains('show')) {
-                solutionContainer.classList.remove('show');
-                button.textContent = 'Xem giải';
-            } else {
-                solutionContainer.classList.add('show');
-                button.textContent = 'Ẩn giải';
-                
-                // Render lại MathJax khi mở giải
-                setTimeout(() => {
-                    if (window.MathJax) {
-                        MathJax.typesetPromise && MathJax.typesetPromise([solutionContainer]);
-                    }
-                }, 100);
-            }
-        }
+        // Xử lý khi trang tải
+        window.addEventListener('load', function() {
+            typesetMathJax();
+        });
 
-        // Mở rộng tất cả
-        function expandAll() {
-            questions.forEach((question) => {
-                const solutionContainer = document.getElementById(`solution${question.number}`);
-                const button = document.getElementById(`btn${question.number}`);
-                
-                if (!solutionContainer.classList.contains('show')) {
-                    solutionContainer.classList.add('show');
-                    button.textContent = 'Ẩn giải';
-                }
-            });
-            
-            // Render lại MathJax
-            setTimeout(() => {
-                if (window.MathJax) {
-                    MathJax.typesetPromise && MathJax.typesetPromise();
-                }
-            }, 500);
-        }
-
-        // Thu gọn tất cả
-        function collapseAll() {
-            questions.forEach((question) => {
-                const solutionContainer = document.getElementById(`solution${question.number}`);
-                const button = document.getElementById(`btn${question.number}`);
-                
-                if (solutionContainer.classList.contains('show')) {
-                    solutionContainer.classList.remove('show');
-                    button.textContent = 'Xem giải';
-                }
-            });
-        }
-
-        // Gán sự kiện cho nút
-        document.getElementById('expandAllBtn').addEventListener('click', expandAll);
-        document.getElementById('collapseAllBtn').addEventListener('click', collapseAll);
-
-        // Khởi tạo trang khi tải
-        document.addEventListener('DOMContentLoaded', initializePage);
+        // Xử lý khi thay đổi kích thước màn hình (có thể cần tính toán lại ngắt dòng)
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                typesetMathJax();
+            }, 250); // đợi 250ms sau khi resize xong mới gọi
+        });
         
-        // Xuất hàm ra toàn cục
-        window.toggleSolution = toggleSolution;
-        window.expandAll = expandAll;
-        window.collapseAll = collapseAll;
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hiệu ứng scroll cho các section
+            window.addEventListener('scroll', function() {
+                const sections = document.querySelectorAll('.section');
+                
+                sections.forEach(section => {
+                    const sectionTop = section.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (sectionTop < windowHeight * 0.75) {
+                        section.style.opacity = '1';
+                        section.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+            
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            });
+            
+            setTimeout(() => {
+                window.dispatchEvent(new Event('scroll'));
+            }, 100);
+            
+            // Xử lý nút hiện/ẩn giải
+            const solutionButtons = document.querySelectorAll('.solution-btn');
+            solutionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const solution = this.nextElementSibling;
+                    solution.classList.toggle('active');
+                    
+                    if (solution.classList.contains('active')) {
+                        this.textContent = this.textContent.includes('Bài') 
+                            ? 'Ẩn hướng dẫn giải' 
+                            : 'Ẩn hướng dẫn';
+                        solution.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+                        
+                        // Xử lý MathJax cho phần vừa mở
+                        typesetMathJax(solution);
+                    } else {
+                        this.textContent = this.textContent.includes('Bài') 
+                            ? this.textContent.replace('Ẩn', 'Xem') 
+                            : 'Xem hướng dẫn';
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
