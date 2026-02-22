@@ -835,6 +835,43 @@
                 opacity: 0.1;
             }
         }
+        
+        /* ===== THÊM QUY TẮC CUỘN NGANG CHO CÔNG THỨC DÀI ===== */
+        .formula,
+        .MathJax_Display,
+        .MathJax {
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch; /* cuộn mượt trên iOS */
+            white-space: nowrap; /* giữ công thức không xuống dòng, tạo cuộn ngang */
+        }
+        
+        /* Tùy chỉnh thanh cuộn đẹp hơn (không bắt buộc) */
+        .formula::-webkit-scrollbar,
+        .MathJax_Display::-webkit-scrollbar,
+        .MathJax::-webkit-scrollbar {
+            height: 4px;
+        }
+        .formula::-webkit-scrollbar-thumb,
+        .MathJax_Display::-webkit-scrollbar-thumb,
+        .MathJax::-webkit-scrollbar-thumb {
+            background: var(--primary-medium);
+            border-radius: 4px;
+        }
+        .formula::-webkit-scrollbar-track,
+        .MathJax_Display::-webkit-scrollbar-track,
+        .MathJax::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        /* Đảm bảo công thức trong solution cũng được cuộn */
+        .solution .formula,
+        .solution .MathJax_Display,
+        .solution .MathJax {
+            max-width: 100%;
+            overflow-x: auto;
+        }
     </style>
 </head>
 <body>
