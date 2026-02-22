@@ -7,7 +7,7 @@
     <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- BẢO MẬT: Script ngăn chặn các hành vi không mong muốn (giống b.html) -->
+    <!-- BẢO MẬT: Script ngăn chặn các hành vi không mong muốn -->
     <script>
         document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
         document.addEventListener('keydown', function(e) {
@@ -27,7 +27,7 @@
         document.addEventListener('mousedown', function(e) { if (e.detail > 1) e.preventDefault(); });
     </script>
     
-    <!-- BẢO MẬT: CSS để chống in ấn (giống b.html) -->
+    <!-- BẢO MẬT: CSS để chống in ấn -->
     <style>
         @media print {
             * { display: none !important; }
@@ -230,11 +230,12 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
             position: relative;
             z-index: 1;
-        }
-        
-        /* Ẩn class formula-number cũ (nếu có) nhưng không cần dùng nữa */
-        .formula-number {
-            display: none;
+            width: 100%;
+            box-sizing: border-box;
+            white-space: normal;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-x: auto;
         }
         
         .note-box {
@@ -563,15 +564,32 @@
             margin: 0.2em 0 !important;
         }
         
-        /* Cuộn ngang cho công thức dài */
+        /* CSS mạnh cho MathJax container */
+        mjx-container {
+            max-width: 100% !important;
+            overflow-x: auto !important;
+            white-space: normal !important;
+        }
+        mjx-container[jax="CHTML"][display="true"] {
+            display: block !important;
+            white-space: normal !important;
+        }
+        mjx-container[jax="CHTML"] {
+            white-space: normal !important;
+        }
+        
         .formula,
         .MathJax_Display,
         .MathJax {
             max-width: 100%;
+            width: 100%;
+            box-sizing: border-box;
             overflow-x: auto;
             overflow-y: hidden;
             -webkit-overflow-scrolling: touch;
-            white-space: nowrap;
+            white-space: normal;
+            word-wrap: break-word;
+            word-break: break-word;
         }
         
         .formula::-webkit-scrollbar,
@@ -631,6 +649,15 @@
             .section h2 { font-size: 1.6rem; margin-bottom: 5px; }
             .section h3 { font-size: 1.4rem; margin: 6px 0 3px; }
             .section p, .section li { font-size: 1.2rem; margin-bottom: 2px; }
+            .formula { font-size: 1.2rem; }
+            /* Buộc ngắt dòng triệt để cho MathJax trên màn hình rất nhỏ */
+            .formula, .MathJax_Display, .MathJax, mjx-container, mjx-math {
+                white-space: normal !important;
+                word-break: break-all !important;
+                overflow-wrap: break-word !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
             .image-container { max-width: 95%; padding: 3px; }
             .small-image { max-width: 250px !important; }
             .medium-image { max-width: 300px !important; }
@@ -974,14 +1001,44 @@
                 displayMath: [['$$', '$$'], ['\\[', '\\]']],
                 processEscapes: true,
                 processEnvironments: true,
-                tags: 'ams'  // Cho phép đánh số tự động, nhưng ta dùng \tag thủ công
+                tags: 'ams'
+            },
+            chtml: {
+                linebreaks: { automatic: true }   // Tự động ngắt dòng
+            },
+            svg: {
+                linebreaks: { automatic: true }
             },
             options: {
                 skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
             }
         };
+
+        // Hàm yêu cầu MathJax xử lý lại toàn bộ hoặc một phần
+        function typesetMathJax(container = null) {
+            if (window.MathJax) {
+                MathJax.typesetPromise(container ? [container] : undefined)
+                    .then(() => console.log('MathJax typeset done'))
+                    .catch(err => console.log('MathJax error: ' + err));
+            }
+        }
+
+        // Xử lý khi trang tải
+        window.addEventListener('load', function() {
+            typesetMathJax();
+        });
+
+        // Xử lý khi thay đổi kích thước màn hình (có thể cần tính toán lại ngắt dòng)
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                typesetMathJax();
+            }, 250); // đợi 250ms sau khi resize xong mới gọi
+        });
         
         document.addEventListener('DOMContentLoaded', function() {
+            // Hiệu ứng scroll cho các section
             window.addEventListener('scroll', function() {
                 const sections = document.querySelectorAll('.section');
                 
@@ -1007,6 +1064,7 @@
                 window.dispatchEvent(new Event('scroll'));
             }, 100);
             
+            // Xử lý nút hiện/ẩn giải
             const solutionButtons = document.querySelectorAll('.solution-btn');
             solutionButtons.forEach(button => {
                 button.addEventListener('click', function() {
@@ -1018,6 +1076,9 @@
                             ? 'Ẩn hướng dẫn giải' 
                             : 'Ẩn hướng dẫn';
                         solution.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+                        
+                        // Xử lý MathJax cho phần vừa mở
+                        typesetMathJax(solution);
                     } else {
                         this.textContent = this.textContent.includes('Bài') 
                             ? this.textContent.replace('Ẩn', 'Xem') 
