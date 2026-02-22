@@ -7,46 +7,55 @@
     <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Script bảo mật (giữ nguyên) -->
+    <!-- BẢO MẬT: Script ngăn chặn các hành vi không mong muốn (giống b.html) -->
     <script>
         document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
         document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey && e.keyCode === 85) e.preventDefault(); // Ctrl+U
-            if (e.ctrlKey && e.keyCode === 83) e.preventDefault(); // Ctrl+S
-            if (e.ctrlKey && e.keyCode === 80) e.preventDefault(); // Ctrl+P
-            if (e.keyCode === 123) e.preventDefault(); // F12
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) e.preventDefault(); // Ctrl+Shift+I
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) e.preventDefault(); // Ctrl+Shift+J
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) e.preventDefault(); // Ctrl+Shift+C
+            if (e.ctrlKey && e.keyCode === 85) e.preventDefault();
+            if (e.ctrlKey && e.keyCode === 83) e.preventDefault();
+            if (e.ctrlKey && e.keyCode === 80) e.preventDefault();
+            if (e.keyCode === 123) e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) e.preventDefault();
         });
         document.addEventListener('dragstart', function(e) { if (e.target.tagName === 'IMG') e.preventDefault(); });
         document.addEventListener('copy', function(e) { e.preventDefault(); alert('Không cho phép sao chép nội dung!'); });
         document.addEventListener('cut', function(e) { e.preventDefault(); });
         document.addEventListener('paste', function(e) { e.preventDefault(); });
         document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+        document.addEventListener('mousedown', function(e) { if (e.detail > 1) e.preventDefault(); });
     </script>
+    
+    <!-- BẢO MẬT: CSS để chống in ấn (giống b.html) -->
+    <style>
+        @media print {
+            * { display: none !important; }
+            body:before {
+                content: "Không cho phép in trang này!";
+                display: block !important;
+                font-size: 24px;
+                text-align: center;
+                margin-top: 100px;
+            }
+        }
+    </style>
     
     <style>
         :root {
-            /* Màu từ color.txt và đen */
-            --primary-dark: #8B4513;      /* nâu đỏ */
-            --primary-medium: #8B5A2B;     /* nâu vàng */
-            --primary-light: #D2B48C;      /* nâu nhạt */
-            --secondary: #F5DEB3;           /* vàng nhạt */
-            --text-dark: #000000;           /* đen */
-            --text-medium: #2C3E50;          /* xanh đen */
-            --text-light: #1C3A5F;           /* xanh đen đậm */
-            --background: #F5F5F5;           /* xám nhạt */
-            --card-bg: #F5F5DC;               /* be */
-            --border-color: #A9A9A9;          /* xám */
-            --shadow: rgba(139, 69, 19, 0.15); /* dùng primary-dark */
-            --header-bg: #8B4513;              /* màu đơn thay gradient */
-            --formula-bg: #F5DEB3;             /* vàng nhạt */
-            --note-bg: #F5F5DC;                 /* be */
-            --question-bg: #F5DEB3;              /* vàng nhạt */
-            --example-bg: #D3D3D3;                /* xám nhạt */
-            --example-border: #0066CC;            /* xanh dương */
-            --image-bg: #F5F5F5;                   /* xám nhạt */
+            --primary-dark: #8B4513;
+            --primary-medium: #8B5A2B;
+            --primary-light: #F5DEB3;
+            --secondary: #F5F5DC;
+            --text-dark: #1C3A5F;
+            --text-medium: #2C3E50;
+            --text-light: #004488;
+            --background: #D3D3D3;
+            --card-bg: #F5F5F5;
+            --border-color: #A9A9A9;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --header-bg: #8B4513;
+            --formula-bg: #F5F5DC;
         }
         
         * {
@@ -61,13 +70,467 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.4;
+            line-height: 1.1;
             color: var(--text-dark);
             background-color: var(--background);
             padding: 20px;
             max-width: 1200px;
             margin: 0 auto;
             position: relative;
+            min-height: 100vh;
+        }
+        
+        /* Watermark nền */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 400px 400px;
+            opacity: 0.08;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header {
+            background: var(--header-bg);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            position: relative;
+            border-bottom: 4px solid var(--primary-light);
+        }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            line-height: 1.2;
+        }
+        
+        .header p {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            font-weight: 300;
+            margin-bottom: 0;
+            line-height: 1.2;
+        }
+        
+        .content {
+            padding: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section {
+            margin-bottom: 15px;
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid var(--primary-medium);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .section::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.03;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .section h2 {
+            color: var(--primary-dark);
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            padding-bottom: 3px;
+            border-bottom: 2px dashed var(--primary-light);
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            line-height: 1.2;
+        }
+        
+        .section h2 i {
+            margin-right: 15px;
+            color: var(--primary-medium);
+        }
+        
+        .section h3 {
+            color: var(--primary-medium);
+            font-size: 1.8rem;
+            margin: 10px 0 5px;
+            padding-left: 10px;
+            border-left: 4px solid var(--primary-light);
+            position: relative;
+            z-index: 1;
+            line-height: 1.2;
+        }
+        
+        .section p, .section li {
+            font-size: 1.5rem;
+            color: var(--text-medium);
+            margin-bottom: 2px;
+            margin-top: 2px;
+            line-height: 1.1;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section ul, .section ol {
+            padding-left: 25px;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section li {
+            margin-bottom: 2px;
+            line-height: 1.1;
+        }
+        
+        .formula {
+            background-color: var(--formula-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 2px;
+            padding: 2px;
+            margin: 2px 0;
+            font-size: 1.6rem;
+            text-align: center;
+            font-family: 'Cambria', 'Times New Roman', serif;
+            color: var(--text-dark);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Ẩn class formula-number cũ (nếu có) nhưng không cần dùng nữa */
+        .formula-number {
+            display: none;
+        }
+        
+        .note-box {
+            background-color: #F5F5F5;
+            border-left: 5px solid var(--primary-medium);
+            padding: 5px;
+            margin: 5px 0;
+            border-radius: 0 8px 8px 0;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .note-box::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.02;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .note-box h3 {
+            color: var(--primary-dark);
+            margin-bottom: 3px;
+            font-size: 1.7rem;
+            position: relative;
+            z-index: 1;
+            line-height: 1.2;
+        }
+        
+        .note-box ul, .note-box ol {
+            padding-left: 20px;
+            margin-bottom: 3px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .note-box li {
+            margin-bottom: 2px;
+            font-size: 1.4rem;
+            line-height: 1.1;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .point {
+            background-color: var(--card-bg);
+            padding: 10px;
+            border-radius: 8px;
+            border-top: 4px solid var(--primary-medium);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .point h3 {
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+            font-size: 1.6rem;
+            line-height: 1.2;
+        }
+        
+        .point p {
+            font-size: 1.4rem;
+            line-height: 1.1;
+            margin-bottom: 0;
+        }
+        
+        .highlight {
+            background-color: var(--secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .definition {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .question-box {
+            background-color: #F5F5F5;
+            border-left: 5px solid var(--primary-medium);
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 0 8px 8px 0;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .question-box::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.02;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .question-box h3 {
+            color: var(--primary-dark);
+            margin-bottom: 3px;
+            font-size: 1.7rem;
+            position: relative;
+            z-index: 1;
+            line-height: 1.2;
+        }
+        
+        .example-box {
+            background-color: #F5F5F5;
+            border-left: 5px solid #004488;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 0 8px 8px 0;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .example-box h3 {
+            color: #1C3A5F;
+            margin-bottom: 3px;
+            font-size: 1.7rem;
+            line-height: 1.2;
+        }
+        
+        .image-container {
+            text-align: center;
+            margin: 5px 0;
+            padding: 3px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .image-caption {
+            font-style: italic;
+            color: var(--text-light);
+            margin-top: 2px;
+            font-size: 1.3rem;
+            line-height: 1.1;
+            text-align: center;
+        }
+        
+        .small-image {
+            max-width: 350px !important;
+        }
+        
+        .medium-image {
+            max-width: 450px !important;
+        }
+        
+        .solution-btn {
+            background-color: var(--primary-medium);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.4rem;
+            margin: 5px 0;
+            display: block;
+            transition: background-color 0.3s;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .solution-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .solution {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin: 3px 0 8px;
+            border-left: 4px solid var(--primary-medium);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .solution.active {
+            max-height: 2000px;
+        }
+        
+        .solution-content {
+            padding: 8px;
+            font-size: 1.4rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .solution::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150px;
+            height: 150px;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.02;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .solution-content h4 {
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+            font-size: 1.6rem;
+            line-height: 1.2;
+        }
+        
+        .solution-content p {
+            margin-bottom: 3px;
+            line-height: 1.1;
+        }
+        
+        .footer {
+            background-color: var(--primary-dark);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: 10px;
+            border-top: 1px solid var(--primary-light);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .footer::before {
+            content: "tuibx";
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.3);
+            font-weight: bold;
+            font-style: italic;
+            z-index: 0;
+        }
+        
+        .footer p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 0;
+            position: relative;
+            z-index: 1;
+            line-height: 1.2;
         }
         
         /* Watermark phủ toàn màn hình */
@@ -95,537 +558,94 @@
             opacity: 0.04;
         }
         
-        /* Watermark nền */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
-            background-repeat: repeat;
-            background-position: center;
-            background-size: 400px 400px;
-            opacity: 0.08;
-            z-index: -1;
-            pointer-events: none;
+        /* Override margin của MathJax Display */
+        .MathJax_Display {
+            margin: 0.2em 0 !important;
         }
         
-        .container {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px var(--shadow);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            position: relative;
-            z-index: 1;
-        }
-        
-        /* Watermark nhẹ trên container */
-        .container::before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300px;
-            height: 300px;
-            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
-            opacity: 0.03;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-            pointer-events: none;
-        }
-        
-        .header {
-            background: var(--header-bg);  /* bỏ gradient */
-            color: white;
-            padding: 25px 30px;
-            text-align: center;
-            position: relative;
-            border-bottom: 4px solid var(--primary-light);
-            z-index: 1;
-        }
-        
-        .header h1 {
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-        }
-        
-        .header p {
-            font-size: 1.4rem;
-            opacity: 0.9;
-            font-weight: 300;
-            margin-bottom: 0;
-        }
-        
-        .content {
-            padding: 30px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .section {
-            margin-bottom: 40px;
-            background-color: var(--card-bg);
-            padding: 25px;
-            border-radius: 10px;
-            border-left: 5px solid var(--primary-medium);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        /* Watermark nhẹ trên từng section */
-        .section::before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 250px;
-            height: 250px;
-            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
-            opacity: 0.02;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-            pointer-events: none;
-        }
-        
-        .section h2 {
-            color: var(--primary-dark);
-            font-size: 2.2rem;
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 2px dashed var(--primary-light);
-            display: flex;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .section h2 i {
-            margin-right: 15px;
-            color: var(--primary-medium);
-        }
-        
-        .section h3 {
-            color: var(--primary-medium);
-            font-size: 1.8rem;
-            margin: 20px 0 10px;
-            padding-left: 10px;
-            border-left: 4px solid var(--primary-light);
-            position: relative;
-            z-index: 1;
-        }
-        
-        .section p, .section li {
-            font-size: 1.5rem;
-            color: var(--text-medium);
-            margin-bottom: 8px;
-            line-height: 1.3;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .section ul, .section ol {
-            padding-left: 25px;
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .section li {
-            margin-bottom: 5px;
-            line-height: 1.3;
-        }
-        
-        .formula {
-            background-color: var(--formula-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            padding: 18px;
-            margin: 15px 0;
-            font-size: 1.6rem;
-            text-align: center;
-            font-family: 'Cambria', 'Times New Roman', serif;
-            color: var(--text-dark);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            line-height: 1.2;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .formula-number {
-            display: block;
-            text-align: right;
-            font-size: 1.3rem;
-            color: var(--text-light);
-            margin-top: 5px;
-            font-style: italic;
-        }
-        
-        .note-box {
-            background-color: var(--note-bg);
-            border-left: 5px solid var(--primary-medium);
-            padding: 18px;
-            margin: 20px 0;
-            border-radius: 0 8px 8px 0;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .note-box h3 {
-            color: var(--primary-dark);
-            margin-bottom: 8px;
-            font-size: 1.7rem;
-        }
-        
-        .note-box ul, .note-box ol {
-            padding-left: 20px;
-            margin-bottom: 10px;
-        }
-        
-        .note-box li {
-            margin-bottom: 4px;
-            font-size: 1.4rem;
-            line-height: 1.3;
-        }
-        
-        .key-points {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 25px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .point {
-            background-color: white;
-            padding: 18px;
-            border-radius: 8px;
-            border-top: 4px solid var(--primary-medium);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .point h3 {
-            color: var(--primary-dark);
-            margin-bottom: 10px;
-            font-size: 1.6rem;
-        }
-        
-        .point p {
-            font-size: 1.4rem;
-            line-height: 1.3;
-            margin-bottom: 0;
-        }
-        
-        .highlight {
-            background-color: var(--secondary);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-        
-        .definition {
-            font-weight: 600;
-            color: var(--primary-dark);
-        }
-        
-        .question-box {
-            background-color: var(--question-bg);
-            border-left: 5px solid var(--primary-medium);
-            padding: 18px;
-            margin: 20px 0;
-            border-radius: 0 8px 8px 0;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .question-box h3 {
-            color: var(--primary-dark);
-            margin-bottom: 8px;
-            font-size: 1.7rem;
-        }
-        
-        .example-box {
-            background-color: var(--example-bg);
-            border-left: 5px solid var(--example-border);
-            padding: 18px;
-            margin: 20px 0;
-            border-radius: 0 8px 8px 0;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .example-box h3 {
-            color: var(--text-medium);
-            margin-bottom: 8px;
-            font-size: 1.7rem;
-        }
-        
-        .image-container {
-            text-align: center;
-            margin: 15px 0;
-            padding: 8px;
-            background-color: var(--image-bg);
-            border-radius: 6px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .image-container img {
+        /* Cuộn ngang cho công thức dài */
+        .formula,
+        .MathJax_Display,
+        .MathJax {
             max-width: 100%;
-            height: auto;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            white-space: nowrap;
+        }
+        
+        .formula::-webkit-scrollbar,
+        .MathJax_Display::-webkit-scrollbar,
+        .MathJax::-webkit-scrollbar {
+            height: 4px;
+        }
+        .formula::-webkit-scrollbar-thumb,
+        .MathJax_Display::-webkit-scrollbar-thumb,
+        .MathJax::-webkit-scrollbar-thumb {
+            background: var(--primary-medium);
             border-radius: 4px;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        .formula::-webkit-scrollbar-track,
+        .MathJax_Display::-webkit-scrollbar-track,
+        .MathJax::-webkit-scrollbar-track {
+            background: transparent;
         }
         
-        .image-caption {
-            font-style: italic;
-            color: var(--text-light);
-            margin-top: 5px;
-            font-size: 1.3rem;
-            line-height: 1.2;
+        .solution .formula,
+        .solution .MathJax_Display,
+        .solution .MathJax {
+            max-width: 100%;
+            overflow-x: auto;
         }
         
-        .solution-btn {
-            background-color: var(--primary-medium);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1.4rem;
-            margin: 12px 0;
-            display: block;
-            transition: background-color 0.3s;
-            font-weight: 600;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .solution-btn:hover {
-            background-color: var(--primary-dark);
-        }
-        
-        .solution {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            margin: 8px 0 15px;
-            border-left: 4px solid var(--primary-medium);
-            position: relative;
-            z-index: 1;
-        }
-        
-        .solution.active {
-            max-height: 2000px;
-        }
-        
-        .solution-content {
-            padding: 18px;
-            font-size: 1.4rem;
-        }
-        
-        .solution-content h4 {
-            color: var(--primary-dark);
-            margin-bottom: 10px;
-            font-size: 1.6rem;
-        }
-        
-        .solution-content p {
-            margin-bottom: 8px;
-            line-height: 1.3;
-        }
-        
-        .footer {
-            background-color: var(--primary-dark);
-            color: white;
-            text-align: center;
-            padding: 18px;
-            margin-top: 25px;
-            border-top: 1px solid var(--primary-light);
-            position: relative;
-            z-index: 1;
-        }
-        
-        .footer p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            margin-bottom: 0;
-        }
-        
+        /* Responsive */
         @media (max-width: 768px) {
-            body {
-                line-height: 1.3;
-            }
-            
-            .header h1 {
-                font-size: 2.2rem;
-            }
-            
-            .header p {
-                font-size: 1.2rem;
-            }
-            
-            .section h2 {
-                font-size: 1.8rem;
-            }
-            
-            .section h3 {
-                font-size: 1.5rem;
-                margin: 15px 0 8px;
-            }
-            
-            .section p, .section li {
-                font-size: 1.3rem;
-                margin-bottom: 6px;
-                line-height: 1.2;
-            }
-            
-            .section li {
-                margin-bottom: 4px;
-            }
-            
-            .formula {
-                font-size: 1.4rem;
-                padding: 15px;
-                margin: 12px 0;
-            }
-            
-            .content {
-                padding: 20px;
-            }
-            
-            .key-points {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            
-            .solution-btn {
-                font-size: 1.2rem;
-                padding: 10px 20px;
-                margin: 10px 0;
-            }
-            
-            .solution-content {
-                font-size: 1.2rem;
-                padding: 15px;
-            }
-            
-            .solution-content p {
-                margin-bottom: 6px;
-            }
-            
-            .note-box, .question-box, .example-box {
-                padding: 15px;
-                margin: 15px 0;
-            }
-            
-            /* Điều chỉnh watermark cho mobile */
-            .section::before {
-                width: 150px;
-                height: 150px;
-            }
-            
-            .container::before {
-                width: 200px;
-                height: 200px;
-            }
-            
-            .watermark-overlay::before {
-                background-size: 150px 150px;
-            }
+            body { line-height: 1.1; }
+            .header h1 { font-size: 2.2rem; }
+            .header p { font-size: 1.2rem; }
+            .section h2 { font-size: 1.8rem; }
+            .section h3 { font-size: 1.5rem; margin: 8px 0 4px; }
+            .section p, .section li { font-size: 1.3rem; margin-bottom: 2px; line-height: 1.1; }
+            .section li { margin-bottom: 2px; }
+            .formula { font-size: 1.4rem; padding: 2px; margin: 2px 0; }
+            .content { padding: 10px; }
+            .key-points { grid-template-columns: 1fr; gap: 8px; }
+            .solution-btn { font-size: 1.2rem; padding: 5px 10px; margin: 5px 0; }
+            .solution-content { font-size: 1.2rem; padding: 8px; }
+            .solution-content p { margin-bottom: 3px; }
+            .note-box, .question-box, .example-box { padding: 5px; margin: 5px 0; }
+            .image-container { max-width: 90%; margin: 5px auto; }
+            .small-image { max-width: 280px !important; }
+            .medium-image { max-width: 350px !important; }
+            body::before { background-size: 300px 300px; opacity: 0.05; }
+            .section::before { width: 200px; height: 200px; }
+            .note-box::before, .question-box::before { width: 150px; height: 150px; }
+            .watermark-overlay::before { background-size: 150px 150px; opacity: 0.03; }
         }
         
         @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            
-            .header {
-                padding: 18px 15px;
-            }
-            
-            .header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .section {
-                padding: 18px 12px;
-                margin-bottom: 30px;
-            }
-            
-            .section h2 {
-                font-size: 1.6rem;
-                margin-bottom: 12px;
-            }
-            
-            .section h3 {
-                font-size: 1.4rem;
-                margin: 12px 0 6px;
-            }
-            
-            .section p, .section li {
-                font-size: 1.2rem;
-                margin-bottom: 5px;
-            }
+            body { padding: 10px; }
+            .header { padding: 12px 15px; }
+            .header h1 { font-size: 1.8rem; }
+            .section { padding: 12px 10px; margin-bottom: 15px; }
+            .section h2 { font-size: 1.6rem; margin-bottom: 5px; }
+            .section h3 { font-size: 1.4rem; margin: 6px 0 3px; }
+            .section p, .section li { font-size: 1.2rem; margin-bottom: 2px; }
+            .image-container { max-width: 95%; padding: 3px; }
+            .small-image { max-width: 250px !important; }
+            .medium-image { max-width: 300px !important; }
+            .watermark-overlay::before { background-size: 120px 120px; }
         }
         
         @media (min-width: 1200px) {
-            .section p, .section li {
-                font-size: 1.6rem;
-                margin-bottom: 10px;
-                line-height: 1.4;
-            }
-            
-            .section h3 {
-                font-size: 2rem;
-                margin: 25px 0 15px;
-            }
-            
-            .header h1 {
-                font-size: 3.2rem;
-            }
-            
-            .formula {
-                font-size: 1.8rem;
-            }
-            
-            .solution-content {
-                font-size: 1.5rem;
-            }
-            
-            .solution-content p {
-                margin-bottom: 10px;
-                line-height: 1.4;
-            }
-        }
-        
-        /* Chống in */
-        @media print {
-            * {
-                display: none !important;
-            }
-            
-            body:before {
-                content: "Không cho phép in trang này!";
-                display: block !important;
-                font-size: 24px;
-                text-align: center;
-                margin-top: 100px;
-            }
+            .section p, .section li { font-size: 1.6rem; margin-bottom: 3px; line-height: 1.1; }
+            .section h3 { font-size: 2rem; margin: 15px 0 8px; }
+            .header h1 { font-size: 3.2rem; }
+            .formula { font-size: 1.8rem; margin: 3px 0; }
+            .solution-content { font-size: 1.5rem; }
+            .solution-content p { margin-bottom: 4px; line-height: 1.1; }
+            .image-container { max-width: 550px; }
+            body::before { background-size: 500px 500px; opacity: 0.1; }
         }
     </style>
 </head>
@@ -640,13 +660,16 @@
         </header>
         
         <main class="content">
-            <!-- Nội dung giữ nguyên, chỉ thay đổi màu qua CSS -->
+            <!-- Giới thiệu -->
             <section class="section">
                 <h2><i class="fas fa-charging-station"></i> Giới thiệu</h2>
+                
                 <p><span class="definition">Đường dây điện cao thế, trung thế, hạ thế.</span> Trong thực tế chúng ta gặp những đường dây dẫn điện cao thế, trung thế, hạ thế. Từ "thế" ở đây được hiểu như thế nào? Có liên quan tới thế năng điện đã học ở Bài 19 hay không?</p>
+                
                 <div class="question-box">
                     <h3><i class="fas fa-question-circle"></i> Câu hỏi khởi động</h3>
                     <p>Từ "thế" trong các thuật ngữ cao thế, trung thế, hạ thế được hiểu như thế nào? Có liên quan gì đến thế năng điện đã học ở Bài 19?</p>
+                    
                     <button class="solution-btn">Xem gợi ý trả lời</button>
                     <div class="solution">
                         <div class="solution-content">
@@ -658,30 +681,36 @@
                 </div>
             </section>
             
+            <!-- I. Điện thế tại một điểm trong điện trường -->
             <section class="section">
                 <h2><i class="fas fa-atom"></i> I. Điện thế tại một điểm trong điện trường</h2>
+                
                 <div class="note-box">
                     <h3><i class="fas fa-lightbulb"></i> Khái niệm điện thế</h3>
                     <p>Điện thế tại một điểm trong điện trường đặc trưng cho điện trường tại điểm đó về thế năng, được xác định bằng công dịch chuyển một đơn vị điện tích dương từ vô cực về điểm đó.</p>
                 </div>
+                
                 <h3>1. Công thức xác định điện thế</h3>
                 <p>Để đặt một điện tích q vào điểm M trong điện trường chúng ta cần cung cấp thế năng W<sub>M</sub> cho điện tích q. Điều này tương ứng với việc thực hiện một công A dịch chuyển điện tích q từ vô cực về điểm M.</p>
+                
                 <div class="formula">
-                    \[ V = \frac{A}{q} \]
-                    <span class="formula-number">(20.1)</span>
+                    \[ V = \frac{A}{q} \tag{20.1} \]
                 </div>
+                
                 <p>Trong đó:</p>
                 <ul>
                     <li>V: điện thế tại điểm M (V - vôn)</li>
                     <li>A: công thực hiện để dịch chuyển điện tích q từ vô cực về điểm M (J - jun)</li>
                     <li>q: điện tích (C - culông)</li>
                 </ul>
+                
                 <div class="question-box">
                     <h3><i class="fas fa-question-circle"></i> Câu hỏi thảo luận</h3>
                     <ol>
                         <li>Hãy dự đoán điện thế V đặc trưng cho đại lượng nào của điện trường.</li>
                         <li>Xác định độ lớn điện tích q khi điện thế V có giá trị bằng công A thực hiện để dịch chuyển điện tích q từ vô cực về điểm M.</li>
                     </ol>
+                    
                     <button class="solution-btn">Xem hướng dẫn trả lời</button>
                     <div class="solution">
                         <div class="solution-content">
@@ -691,6 +720,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <h3>2. Tính chất của điện thế</h3>
                 <div class="note-box">
                     <h3><i class="fas fa-exclamation-circle"></i> Đặc điểm của điện thế</h3>
@@ -700,13 +730,16 @@
                         <li><span class="highlight">Mốc điện thế:</span> Ngoài việc chọn mốc điện thế ở vô cực thì trong điện trường đều giữa hai bàn phẳng người ta thường chọn mốc điện thế là bàn nhiễm điện âm, còn mặt đất thường được chọn là mốc điện thế trong thực tiễn cuộc sống và kĩ thuật.</li>
                     </ul>
                 </div>
+                
                 <h3>3. Hiệu điện thế</h3>
                 <p>Chúng ta đã được học và đo hiệu điện thế. Hiệu điện thế \( U_{MN} \) mà chúng ta đo được chính là giá trị của hiệu giữa điện thế tại M và điện thế tại N:</p>
+                
                 <div class="formula">
-                    \[ U_{MN} = V_M - V_N \]
-                    <span class="formula-number">(20.2)</span>
+                    \[ U_{MN} = V_M - V_N \tag{20.2} \]
                 </div>
+                
                 <p>Vì vậy U và V đều có chung đơn vị là vôn.</p>
+                
                 <div class="note-box">
                     <h3><i class="fas fa-info-circle"></i> EM CÓ BIẾT</h3>
                     <ol>
@@ -716,24 +749,32 @@
                 </div>
             </section>
             
+            <!-- II. Mối liên hệ giữa điện thế và cường độ điện trường -->
             <section class="section">
                 <h2><i class="fas fa-link"></i> II. Mối liên hệ giữa điện thế và cường độ điện trường</h2>
+                
                 <p>Trong thực tế người ta thường xét sự dịch chuyển một điện tích q từ điểm N tới điểm M nào đó trong điện trường.</p>
+                
                 <h3>1. Công thức tính công dịch chuyển điện tích</h3>
                 <p>Vận dụng công thức \( V = \frac{A}{q} \) ta có:</p>
+                
                 <div class="formula">
-                    \[ A_{MN} = (V_M - V_N)q = U_{MN}q \]
-                    <span class="formula-number">(20.3)</span>
+                    \[ A_{MN} = (V_M - V_N)q = U_{MN}q \tag{20.3} \]
                 </div>
+                
                 <p>Để dịch chuyển một điện tích dương q ngược chiều điện trường từ điểm N tới điểm M, ta cần cung cấp một lực ít nhất bằng với lực điện và ngược chiều. Trong dịch chuyển này, công ta bỏ ra có độ lớn bằng nhưng trái dấu với công của lực điện trường.</p>
+                
                 <div class="example-box">
                     <h3><i class="fas fa-calculator"></i> Ví dụ áp dụng: Tế bào quang điện chân không</h3>
                     <p>Tế bào quang điện chân không (Hình 20.1) gồm một ống hình trụ có một cửa sổ trong suốt, được hút chân không (áp suất trong khoảng \( 10^{-8} \, \text{mmHg} \) đến \( 10^{-6} \, \text{mmHg} \)). Trong ống đặt một catôt (cực âm) có khả năng phát xạ electron khi được chiếu sáng và một anôt (cực dương). Electron trong điện trường giữa hai cực sẽ dịch chuyển về phía anôt nếu \( U_{AK} > 0 \).</p>
-                    <div class="image-container">
+                    
+                    <div class="image-container medium-image">
                         <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/20/20.1.png" alt="Tế bào quang điện chân không">
                         <p class="image-caption">Hình 20.1. Tế bào quang điện chân không</p>
                     </div>
+                    
                     <p>Cho hiệu điện thế \( U_{AK} = 45 \, \text{V} \) được đặt vào giữa hai cực của tế bào quang điện. Khi chiếu xạ ánh sáng phù hợp để catôt phát xạ electron vào vùng điện trường giữa hai cực. Hãy tính công của điện trường trong dịch chuyển của electron từ catôt tới anôt.</p>
+                    
                     <button class="solution-btn">Xem hướng dẫn giải</button>
                     <div class="solution">
                         <div class="solution-content">
@@ -750,47 +791,58 @@
                         </div>
                     </div>
                 </div>
+                
                 <h3>2. Mối liên hệ giữa điện thế và thế năng điện</h3>
                 <p>Điện thế là một đại lượng gắn với điện trường, còn thế năng điện là đại lượng gắn với điện tích đặt trong điện trường. Trong công thức (20.1), công A mà chúng ta sử dụng để dịch chuyển điện tích q từ vô cực về điểm M cũng chính bằng thế năng điện \( W_M \) của điện tích q đặt tại M trong điện trường. Như vậy, thế năng điện và điện thế liên hệ với nhau bởi công thức:</p>
+                
                 <div class="formula">
-                    \[ W_M = Vq \]
-                    <span class="formula-number">(20.4)</span>
+                    \[ W_M = Vq \tag{20.4} \]
                 </div>
+                
                 <h3>3. Mối liên hệ giữa cường độ điện trường và điện thế</h3>
-                <p>Trong điện trường đều, xét một điện tích thử dương chuyển động dọc theo một đường sức điện từ điểm M đến điểm N. Ta thấy, chiều của vectơ cường độ điện trường E hướng theo chiều giảm của điện thế. Chọn chiều dương của trục toạ độ là chiều đường sức (Hình 20.2). Áp dụng công thức (18.1) ta có:</p>
-                <div class="image-container">
+                <p>Trong điện trường đều, xét một điện tích thử dương chuyển động dọc theo một đường sức điện từ điểm M đến điểm N. Ta thấy, chiều của vectơ cường độ điện trường E hướng theo chiều giảm của điện thế. Chọn chiều dương của trục toạ độ là chiều đường sức (Hình 20.2). Áp dụng công thức ta có:</p>
+                
+                <div class="image-container medium-image">
                     <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/20/20.2.png" alt="Mối liên hệ giữa điện thế và cường độ điện trường">
                     <p class="image-caption">Hình 20.2. Chuyển động của điện tích thử dọc theo một đường sức</p>
                 </div>
+                
                 <div class="formula">
-                    \[ E_M = E_N = E = \frac{U}{d} = \frac{V_M - V_N}{MN} \]
-                    <span class="formula-number">(20.5)</span>
+                    \[ E_M = E_N = E = \frac{U}{d} = \frac{V_M - V_N}{MN} \tag{20.5} \]
                 </div>
+                
                 <p>Kết quả trên cho thấy: trong điện trường đều, độ lớn cường độ điện trường bằng độ giảm của điện thế dọc theo một đơn vị độ dài đường sức.</p>
-                <p>Với điện trường bất kì, công thức (20.5) vẫn được áp dụng trong trường hợp hai điểm M và N ở rất gần nhau:</p>
+                <p>Với điện trường bất kì, công thức trên vẫn được áp dụng trong trường hợp hai điểm M và N ở rất gần nhau:</p>
+                
                 <div class="formula">
                     \[ E = \frac{\Delta V}{\Delta d} \]
                 </div>
+                
                 <p>Cường độ điện trường tại một điểm M có độ lớn bằng thương của hiệu điện thế giữa hai điểm M và N trên một đoạn nhỏ đường sức chia cho độ dài đại số của đoạn đường sức đó.</p>
             </section>
             
+            <!-- III. Bài tập ví dụ -->
             <section class="section">
                 <h2><i class="fas fa-calculator"></i> III. Bài tập ví dụ</h2>
+                
                 <div class="example-box">
                     <h3><i class="fas fa-calculator"></i> Bài tập ví dụ</h3>
                     <p>Có hai bản phẳng song song cách nhau một khoảng d (Hình 20.3), được nối vào nguồn điện một chiều có hiệu điện thế 48 V. Chọn bản nhiễm điện âm làm mốc điện thế.</p>
-                    <div class="image-container">
+                    
+                    <div class="image-container medium-image">
                         <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/20/20.3.png" alt="Hai bản phẳng song song">
                         <p class="image-caption">Hình 20.3. Hai bản phẳng song song</p>
                     </div>
+                    
                     <p>a) Xác định mối liên hệ giữa điện thế và cường độ điện trường tại một điểm trong điện trường đều giữa hai bản phẳng.</p>
                     <p>b) Áp dụng kết quả câu a để tính điện thế tại M nằm chính giữa khe hở của hai bản phẳng.</p>
+                    
                     <button class="solution-btn">Xem hướng dẫn giải</button>
                     <div class="solution">
                         <div class="solution-content">
                             <h4>Hướng dẫn giải:</h4>
                             <p><strong>a) Xác định mối liên hệ giữa điện thế và cường độ điện trường:</strong></p>
-                            <p>Gọi N là điểm giao của đường sức đi qua M với bản nhiễm điện âm (Hình 20.3). \( V_N = 0 \) do điểm N nằm trên bản phẳng nhiễm điện âm được chọn làm mốc điện thế; \( MN = h > 0 \) và MN thuận theo chiều đường sức, h chính là khoảng cách từ M tới bản nhiễm điện âm. Vận dụng công thức (20.5) vào điện trường đều giữa hai bản phẳng ta tìm được mối liên hệ giữa điện thế và cường độ điện trường tại điểm M:</p>
+                            <p>Gọi N là điểm giao của đường sức đi qua M với bản nhiễm điện âm (Hình 20.3). \( V_N = 0 \) do điểm N nằm trên bản phẳng nhiễm điện âm được chọn làm mốc điện thế; \( MN = h > 0 \) và MN thuận theo chiều đường sức, h chính là khoảng cách từ M tới bản nhiễm điện âm. Vận dụng công thức (20.5) vào điện trường đều giữa hai bản phẳng ta tìm được mối liên hệ:</p>
                             <div class="formula">
                                 \[ E_M = \frac{V_M - V_N}{MN} \Rightarrow V_M = E_M h \]
                             </div>
@@ -803,10 +855,13 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="question-box">
                     <h3><i class="fas fa-tasks"></i> Bài tập vận dụng</h3>
+                    
                     <h4>Bài 1:</h4>
                     <p>Vận dụng mối liên hệ giữa điện thế và cường độ điện trường để xác định điện thế tại một điểm cách mặt đất 5 m ở nơi có điện trường của Trái Đất là 114 V/m.</p>
+                    
                     <button class="solution-btn">Xem hướng dẫn giải Bài 1</button>
                     <div class="solution">
                         <div class="solution-content">
@@ -825,8 +880,10 @@
                             <p><strong>Lưu ý:</strong> Điện trường của Trái Đất hướng từ trên xuống dưới (từ không khí xuống mặt đất), nên điện thế trong không khí giảm dần khi tiến lại gần mặt đất. Điểm càng cao so với mặt đất thì có điện thế càng lớn.</p>
                         </div>
                     </div>
+                    
                     <h4>Bài 2:</h4>
                     <p>Tính công cần thiết để dịch chuyển một điện tích \( q = 2 \times 10^{-6} \, \text{C} \) từ điểm M đến điểm N trong điện trường, biết điện thế tại M là \( V_M = 100 \, \text{V} \) và tại N là \( V_N = 60 \, \text{V} \).</p>
+                    
                     <button class="solution-btn">Xem hướng dẫn giải Bài 2</button>
                     <div class="solution">
                         <div class="solution-content">
@@ -846,8 +903,10 @@
                 </div>
             </section>
             
+            <!-- IV. Tóm tắt kiến thức -->
             <section class="section">
                 <h2><i class="fas fa-check-circle"></i> IV. Tóm tắt kiến thức</h2>
+                
                 <div class="note-box">
                     <h3><i class="fas fa-graduation-cap"></i> EM ĐÃ HỌC</h3>
                     <ul>
@@ -868,6 +927,7 @@
                         </li>
                     </ul>
                 </div>
+                
                 <div class="note-box">
                     <h3><i class="fas fa-bullseye"></i> EM CÓ THỂ</h3>
                     <ul>
@@ -876,6 +936,7 @@
                         <li>Tính được công dịch chuyển một điện tích q từ điểm N đến điểm M trong điện trường.</li>
                     </ul>
                 </div>
+                
                 <div class="key-points">
                     <div class="point">
                         <h3><i class="fas fa-bolt"></i> Điện thế</h3>
@@ -912,7 +973,8 @@
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
                 displayMath: [['$$', '$$'], ['\\[', '\\]']],
                 processEscapes: true,
-                processEnvironments: true
+                processEnvironments: true,
+                tags: 'ams'  // Cho phép đánh số tự động, nhưng ta dùng \tag thủ công
             },
             options: {
                 skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
