@@ -217,6 +217,7 @@
             line-height: 1.1;
         }
         
+        /* Cập nhật .formula để căn giữa và hỗ trợ cuộn */
         .formula {
             background-color: var(--formula-bg);
             border: 2px solid var(--border-color);
@@ -224,7 +225,6 @@
             padding: 2px;
             margin: 2px 0;
             font-size: 1.6rem;
-            text-align: center;
             font-family: 'Cambria', 'Times New Roman', serif;
             color: var(--text-dark);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
@@ -236,6 +236,22 @@
             word-wrap: break-word;
             word-break: break-word;
             overflow-x: auto;
+            
+            /* Căn giữa nội dung bên trong */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        /* Điều chỉnh container của MathJax */
+        .formula mjx-container {
+            display: inline-block !important;
+            max-width: 100% !important;
+            overflow-x: auto !important;
+            margin: 0 auto !important;
+            text-align: left;  /* Giữ căn trái cho nội dung công thức khi cuộn */
         }
         
         .note-box {
@@ -650,14 +666,30 @@
             .section h3 { font-size: 1.4rem; margin: 6px 0 3px; }
             .section p, .section li { font-size: 1.2rem; margin-bottom: 2px; }
             .formula { font-size: 1.2rem; }
-            /* Buộc ngắt dòng triệt để cho MathJax trên màn hình rất nhỏ */
-            .formula, .MathJax_Display, .MathJax, mjx-container, mjx-math {
+            
+            /* Tăng cường ngắt dòng và căn giữa trên màn hình nhỏ */
+            .formula,
+            .MathJax_Display,
+            .MathJax,
+            mjx-container,
+            mjx-math {
                 white-space: normal !important;
-                word-break: break-all !important;
+                word-break: break-word !important;
                 overflow-wrap: break-word !important;
                 max-width: 100% !important;
                 width: 100% !important;
             }
+            /* Giữ căn giữa container */
+            .formula {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .formula mjx-container {
+                display: inline-block !important;
+                text-align: left;  /* Nội dung bên trong căn trái khi cuộn, nhưng container vẫn ở giữa */
+            }
+            
             .image-container { max-width: 95%; padding: 3px; }
             .small-image { max-width: 250px !important; }
             .medium-image { max-width: 300px !important; }
