@@ -709,27 +709,6 @@
                 });
             });
             
-            // ==================== BẢO VỆ NÂNG CAO ====================
-            
-            // Chống mở DevTools bằng cách kiểm tra kích thước cửa sổ
-            function checkDevTools() {
-                const threshold = 160;
-                const widthDiff = window.outerWidth - window.innerWidth;
-                const heightDiff = window.outerHeight - window.innerHeight;
-                
-                if (widthDiff > threshold || heightDiff > threshold) {
-                    document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100vh;font-size:24px;color:#8B4513;text-align:center;padding:20px;">Trang này được bảo vệ. Vui lòng tắt Developer Tools.<br><small>© tuibx25.github.io</small></div>';
-                }
-            }
-            
-            // Kiểm tra định kỳ
-            setInterval(checkDevTools, 1000);
-            
-            // Chống chụp màn hình (một phần)
-            document.body.style.userSelect = 'none';
-            document.body.style.webkitUserSelect = 'none';
-            document.body.style.mozUserSelect = 'none';
-            document.body.style.msUserSelect = 'none';
         });
         
         // Đánh dấu trang hiện tại trong sitemap
@@ -744,24 +723,6 @@
             }
         });
         
-        // ==================== BẢO VỆ CHỐNG DEBUG ====================
-        
-        // Phát hiện và ngăn chặn debugger
-        function antiDebug() {
-            function checkDebugger() {
-                const startTime = new Date().getTime();
-                debugger;
-                const endTime = new Date().getTime();
-                if (endTime - startTime > 100) {
-                    window.location.reload();
-                }
-            }
-            
-            setInterval(checkDebugger, 1000);
-        }
-        
-        // Kích hoạt bảo vệ debug (có thể comment nếu gây lỗi)
-        // antiDebug();
     </script>
 </body>
 </html>
