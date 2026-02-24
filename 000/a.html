@@ -237,6 +237,33 @@
             overflow-x: auto;
         }
         
+        /* Class mới để căn giữa công thức trong mục tóm tắt */
+        .formula-center {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            width: 100% !important;
+            text-align: center !important;
+            margin: 5px 0 !important;
+            background-color: var(--formula-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 2px;
+            padding: 2px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            font-family: 'Cambria', 'Times New Roman', serif;
+            color: var(--text-dark);
+            box-sizing: border-box;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .formula-center mjx-container {
+            text-align: center !important;
+            margin: 0 auto !important;
+            display: inline-block !important;
+            font-size: 1.6rem;
+        }
+        
         .note-box {
             background-color: #F5F5F5;
             border-left: 5px solid var(--primary-medium);
@@ -590,18 +617,21 @@
         
         .formula::-webkit-scrollbar,
         .MathJax_Display::-webkit-scrollbar,
-        .MathJax::-webkit-scrollbar {
+        .MathJax::-webkit-scrollbar,
+        .formula-center::-webkit-scrollbar {
             height: 4px;
         }
         .formula::-webkit-scrollbar-thumb,
         .MathJax_Display::-webkit-scrollbar-thumb,
-        .MathJax::-webkit-scrollbar-thumb {
+        .MathJax::-webkit-scrollbar-thumb,
+        .formula-center::-webkit-scrollbar-thumb {
             background: var(--primary-medium);
             border-radius: 4px;
         }
         .formula::-webkit-scrollbar-track,
         .MathJax_Display::-webkit-scrollbar-track,
-        .MathJax::-webkit-scrollbar-track {
+        .MathJax::-webkit-scrollbar-track,
+        .formula-center::-webkit-scrollbar-track {
             background: transparent;
         }
         
@@ -610,6 +640,42 @@
         .solution .MathJax {
             max-width: 100%;
             overflow-x: auto;
+        }
+        
+        /* Responsive adjustments for formula-center */
+        @media (max-width: 768px) {
+            .formula-center {
+                display: block !important;
+                text-align: center !important;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                padding: 5px 0 !important;
+                margin: 5px 0 !important;
+                white-space: nowrap !important;
+            }
+            
+            .formula-center mjx-container {
+                display: inline-block !important;
+                max-width: 100% !important;
+                overflow-x: auto !important;
+                white-space: nowrap !important;
+                font-size: 1.3rem !important;
+            }
+            
+            .formula-center::-webkit-scrollbar {
+                height: 3px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .formula-center {
+                margin: 3px 0 !important;
+                padding: 3px 0 !important;
+            }
+            
+            .formula-center mjx-container {
+                font-size: 1.1rem !important;
+            }
         }
         
         @media (max-width: 768px) {
@@ -926,17 +992,17 @@
                     <h3><i class="fas fa-graduation-cap"></i> EM ĐÃ HỌC</h3>
                     <ul>
                         <li>Điện thế tại một điểm trong điện trường đặc trưng cho điện trường tại điểm đó về thế năng, được xác định bằng công dịch chuyển một đơn vị điện tích dương từ vô cực về điểm đó: 
-                            <div class="formula">
+                            <div class="formula-center">
                                 \[ V = \frac{A}{q} \]
                             </div>
                         </li>
                         <li>Điện thế có mối liên hệ với thế năng điện: 
-                            <div class="formula">
+                            <div class="formula-center">
                                 \[ V_M = \frac{W_M}{q} \]
                             </div>
                         </li>
                         <li>Mối liên hệ giữa cường độ điện trường và điện thế của hai điểm M và N trong điện trường đều dọc theo đường sức điện: 
-                            <div class="formula">
+                            <div class="formula-center">
                                 \[ E_M = E_N = \frac{V_M - V_N}{MN} \]
                             </div>
                         </li>
