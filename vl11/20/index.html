@@ -80,7 +80,6 @@
             min-height: 100vh;
         }
         
-        /* Watermark nền */
         body::before {
             content: "";
             position: fixed;
@@ -534,7 +533,6 @@
             line-height: 1.2;
         }
         
-        /* Watermark phủ toàn màn hình */
         .watermark-overlay {
             position: fixed;
             top: 0;
@@ -559,12 +557,10 @@
             opacity: 0.04;
         }
         
-        /* Override margin của MathJax Display */
         .MathJax_Display {
             margin: 0.2em 0 !important;
         }
         
-        /* CSS mạnh cho MathJax container */
         mjx-container {
             max-width: 100% !important;
             overflow-x: auto !important;
@@ -616,7 +612,6 @@
             overflow-x: auto;
         }
         
-        /* Responsive */
         @media (max-width: 768px) {
             body { line-height: 1.1; }
             .header h1 { font-size: 2.2rem; }
@@ -650,7 +645,6 @@
             .section h3 { font-size: 1.4rem; margin: 6px 0 3px; }
             .section p, .section li { font-size: 1.2rem; margin-bottom: 2px; }
             .formula { font-size: 1.2rem; }
-            /* Buộc ngắt dòng triệt để cho MathJax trên màn hình rất nhỏ */
             .formula, .MathJax_Display, .MathJax, mjx-container, mjx-math {
                 white-space: normal !important;
                 word-break: break-all !important;
@@ -677,7 +671,6 @@
     </style>
 </head>
 <body>
-    <!-- Watermark phủ toàn màn hình -->
     <div class="watermark-overlay"></div>
     
     <div class="container">
@@ -687,7 +680,6 @@
         </header>
         
         <main class="content">
-            <!-- Giới thiệu -->
             <section class="section">
                 <h2><i class="fas fa-charging-station"></i> Giới thiệu</h2>
                 
@@ -708,7 +700,6 @@
                 </div>
             </section>
             
-            <!-- I. Điện thế tại một điểm trong điện trường -->
             <section class="section">
                 <h2><i class="fas fa-atom"></i> I. Điện thế tại một điểm trong điện trường</h2>
                 
@@ -776,7 +767,6 @@
                 </div>
             </section>
             
-            <!-- II. Mối liên hệ giữa điện thế và cường độ điện trường -->
             <section class="section">
                 <h2><i class="fas fa-link"></i> II. Mối liên hệ giữa điện thế và cường độ điện trường</h2>
                 
@@ -848,7 +838,6 @@
                 <p>Cường độ điện trường tại một điểm M có độ lớn bằng thương của hiệu điện thế giữa hai điểm M và N trên một đoạn nhỏ đường sức chia cho độ dài đại số của đoạn đường sức đó.</p>
             </section>
             
-            <!-- III. Bài tập ví dụ -->
             <section class="section">
                 <h2><i class="fas fa-calculator"></i> III. Bài tập ví dụ</h2>
                 
@@ -930,7 +919,6 @@
                 </div>
             </section>
             
-            <!-- IV. Tóm tắt kiến thức -->
             <section class="section">
                 <h2><i class="fas fa-check-circle"></i> IV. Tóm tắt kiến thức</h2>
                 
@@ -990,7 +978,6 @@
         </footer>
     </div>
 
-    <!-- MathJax cho hiển thị công thức toán -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
@@ -1004,7 +991,7 @@
                 tags: 'ams'
             },
             chtml: {
-                linebreaks: { automatic: true }   // Tự động ngắt dòng
+                linebreaks: { automatic: true }
             },
             svg: {
                 linebreaks: { automatic: true }
@@ -1014,7 +1001,6 @@
             }
         };
 
-        // Hàm yêu cầu MathJax xử lý lại toàn bộ hoặc một phần
         function typesetMathJax(container = null) {
             if (window.MathJax) {
                 MathJax.typesetPromise(container ? [container] : undefined)
@@ -1023,22 +1009,19 @@
             }
         }
 
-        // Xử lý khi trang tải
         window.addEventListener('load', function() {
             typesetMathJax();
         });
 
-        // Xử lý khi thay đổi kích thước màn hình (có thể cần tính toán lại ngắt dòng)
         let resizeTimer;
         window.addEventListener('resize', function() {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(function() {
                 typesetMathJax();
-            }, 250); // đợi 250ms sau khi resize xong mới gọi
+            }, 250);
         });
         
         document.addEventListener('DOMContentLoaded', function() {
-            // Hiệu ứng scroll cho các section
             window.addEventListener('scroll', function() {
                 const sections = document.querySelectorAll('.section');
                 
@@ -1064,7 +1047,6 @@
                 window.dispatchEvent(new Event('scroll'));
             }, 100);
             
-            // Xử lý nút hiện/ẩn giải
             const solutionButtons = document.querySelectorAll('.solution-btn');
             solutionButtons.forEach(button => {
                 button.addEventListener('click', function() {
@@ -1077,7 +1059,6 @@
                             : 'Ẩn hướng dẫn';
                         solution.scrollIntoView({behavior: 'smooth', block: 'nearest'});
                         
-                        // Xử lý MathJax cho phần vừa mở
                         typesetMathJax(solution);
                     } else {
                         this.textContent = this.textContent.includes('Bài') 
