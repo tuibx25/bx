@@ -225,24 +225,15 @@
     <td align="center">
         <!-- Tab điều hướng -->
         <div class="tab">
-            <button class="tablink active" onclick="openTab(event, 'clock-tab')">Đồng Hồ Hà Nội</button>
-            <button class="tablink" onclick="openTab(event, 'calendar-tab')">Lịch Âm Dương</button>
+            <button class="tablink active" onclick="openTab(event, 'calendar-tab')">Lịch Âm Dương</button>
+            <button class="tablink" onclick="openTab(event, 'clock-tab')">Đồng Hồ Hà Nội</button>
         </div>
     </td>
 </tr>
 <tr>    
     <td align="center" bgcolor="#D2B48C">
-        <!-- Tab Đồng Hồ (hiển thị mặc định) -->
-        <div id="clock-tab" class="tabcontent" style="display: block;">
-            <!-- Hiển thị giờ Hà Nội với cỡ chữ SIÊU TO -->
-            <div id="hanoi-clock">
-                <div id="clock-time" class="clock-time">Đang tải...</div>
-                <div id="clock-date" class="clock-date"></div>
-            </div>
-        </div>
-        
-        <!-- Tab Lịch Âm Dương -->
-        <div id="calendar-tab" class="tabcontent">
+        <!-- Tab Lịch Âm Dương (hiển thị mặc định) -->
+        <div id="calendar-tab" class="tabcontent" style="display: block;">
             <div class="calendar-container">
                 <script type="text/javascript" language="JavaScript" src="amlich.js"></script>
                 <script language="JavaScript">
@@ -251,6 +242,15 @@
                 document.writeln(printSelectedMonth());
                 -->
                 </script>
+            </div>
+        </div>
+        
+        <!-- Tab Đồng Hồ -->
+        <div id="clock-tab" class="tabcontent">
+            <!-- Hiển thị giờ Hà Nội với cỡ chữ SIÊU TO -->
+            <div id="hanoi-clock">
+                <div id="clock-time" class="clock-time">Đang tải...</div>
+                <div id="clock-date" class="clock-date"></div>
             </div>
         </div>
     </td>    
@@ -313,8 +313,9 @@ setInterval(updateHanoiTime, 1000);
 // Chạy lần đầu ngay khi tải trang
 updateHanoiTime();
 
-// Mặc định hiển thị tab đầu tiên
+// Mặc định hiển thị tab đầu tiên (Lịch Âm Dương)
 document.addEventListener("DOMContentLoaded", function() {
+    // Kích hoạt tab Lịch Âm Dương
     document.querySelector('.tablink').click();
 });
 
