@@ -129,18 +129,20 @@
         
         .formula-box {
             background-color: #F5F5DC;
-            padding: 15px;
+            padding: 0px 12px;  /* Xóa hoàn toàn padding trên/dưới */
             border-radius: 8px;
-            margin: 12px 0;
+            margin: 0px 0;       /* Xóa hoàn toàn margin trên/dưới */
             text-align: center;
             border: 1px solid #8B5A2B;
+            line-height: 1;      /* Giảm line-height để công thức sát hơn */
         }
         
         .formula {
             font-size: 1.3rem;
-            margin: 5px 0;
+            margin: 0px;         /* Xóa margin của công thức */
             color: #000000;
             font-weight: bold;
+            line-height: 1.4;    /* Giữ line-height vừa đủ cho công thức hiển thị đẹp */
         }
         
         .content-list {
@@ -449,13 +451,31 @@
         
         <p>Trong vật lí, người ta gọi độ lớn của điện lượng chuyển qua tiết diện thẳng của một dây dẫn trong một đơn vị thời gian là cường độ dòng điện chạy qua dây dẫn, được xác định bằng công thức:</p>
         
+        <!-- FORMULA 22.1 với khoảng cách bằng 0 -->
         <div class="formula-box">
             <div class="formula">\[I = \frac{\Delta q}{\Delta t} \tag{22.1}\]</div>
+            <!-- Giải thích các đại lượng với khoảng cách tối thiểu -->
+            <div style="text-align: left; margin-top: 2px; padding: 4px; background-color: #e8e8e8; border-radius: 5px; border-left: 4px solid #004488;">
+                <p style="margin-bottom: 0px; font-weight: bold; color: #004488; font-size: 0.9rem;">Trong đó:</p>
+                <ul style="list-style-type: none; padding-left: 5px; margin: 0;">
+                    <li style="margin-bottom: 0px; font-size: 0.9rem;">
+                        <span style="font-weight: bold; background-color: #d9d9d9; padding: 1px 4px; border-radius: 3px;">\(I\)</span> : cường độ dòng điện (A)
+                    </li>
+                    <li style="margin-bottom: 0px; font-size: 0.9rem;">
+                        <span style="font-weight: bold; background-color: #d9d9d9; padding: 1px 4px; border-radius: 3px;">\(\Delta q\)</span> : điện lượng (C)
+                    </li>
+                    <li style="margin-bottom: 0px; font-size: 0.9rem;">
+                        <span style="font-weight: bold; background-color: #d9d9d9; padding: 1px 4px; border-radius: 3px;">\(\Delta t\)</span> : thời gian (s)
+                    </li>
+                </ul>
+                <p style="margin-bottom: 0; font-style: italic; border-top: 1px dashed #aaa; padding-top: 2px; font-size: 0.85rem;">→ Ý nghĩa: Thương số điện lượng và thời gian</p>
+            </div>
         </div>
-        
+
         <p>Trong công thức trên, đơn vị của cường độ dòng điện là ampere (kí hiệu là A), của điện lượng là Coulomb (kí hiệu là C), của thời gian là giây (kí hiệu là s).</p>
         <p>Từ công thức (22.1), ta rút ra:</p>
         
+        <!-- Formula 22.2 với khoảng cách bằng 0 -->
         <div class="formula-box">
             <div class="formula">\[\Delta q = I \cdot \Delta t \tag{22.2}\]</div>
         </div>
@@ -524,6 +544,7 @@
         
         <p>Theo định nghĩa cường độ dòng điện ở công thức (22.1), ta xác định được cường độ dòng điện chạy qua mật dây dẫn kim loại như sau:</p>
         
+        <!-- Formula 22.3 với khoảng cách bằng 0 -->
         <div class="formula-box">
             <div class="formula">\[I = Snve \tag{22.3}\]</div>
         </div>
@@ -541,9 +562,9 @@
             <p><strong>Giải:</strong></p>
             <p>Áp dụng công thức (22.3) ta có:</p>
             <p>\[I = Snve\]</p>
-            <p>\[\Rightarrow v = \frac{I}{nSe} = \frac{I}{\pi d^2 \cdot n} = \frac{4I}{\pi d^2 \cdot n}.\]</p>
-            <p>\[= \frac{I}{\pi d^2 \cdot n} = \frac{4I}{\text{nπd}^2 \cdot e}.\]</p>
-            <p>Thay số ta được: \(v \approx 1,2 \cdot 10^{-4} \, m/s = 0,12 \, mm/s.\)</p>
+            <p>\[\Rightarrow v = \frac{I}{nSe} = \frac{I}{\pi \left(\frac{d}{2}\right)^2 n e} = \frac{4I}{\pi d^2 n e}.\]</p>
+            <p>Thay số: \(d = 2\,mm = 2\cdot10^{-3} m\), \(e = 1,6\cdot10^{-19} C\), ta được:</p>
+            <p>\[v = \frac{4 \cdot 5}{\pi \cdot (2\cdot10^{-3})^2 \cdot 8,45\cdot10^{28} \cdot 1,6\cdot10^{-19}} \approx 1,18 \cdot 10^{-4} \, m/s = 0,118 \, mm/s.\]</p>
         </div>
         
         <div class="page-break"></div>
@@ -554,10 +575,8 @@
                 <li>Cường độ dòng điện là đại lượng đặc trưng cho tác dụng mạnh, yếu của dòng điện và được xác định bằng công thức:  
                 \[ I = \frac{\Delta q}{\Delta t} \]</li>
                 <li>Biểu thức liên hệ giữa cường độ dòng điện trong dây dẫn kim loại với mật độ hạt mang điện tốc độ dịch chuyển có hướng của các hạt mang điện là:  
-                \[ I = S \cdot n \cdot v \]</li>
-                <li>Với tính được cường độ dòng điện của tia sét trong các con dòng.</li>
-                <li>Hiểu được ý nghĩa của thông số mA·h ghi trên pin, ac quy và sạc dự phòng.</li>
-                <li>Giải thích được nguyên tắc đo điện tâm đồ.</li>
+                \[ I = S \cdot n \cdot v \cdot e \]</li>
+                <li>Hiểu được ý nghĩa của thông số mA·h ghi trên pin, acquy và sạc dự phòng.</li>
             </ul>
             
             <h3>EM CÓ THỂ</h3>
