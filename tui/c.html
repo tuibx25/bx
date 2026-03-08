@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng màu thu gọn</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #f0f2f5 0%, #dadde2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        .palette-card {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 2.5rem;
+            padding: 2.2rem 2rem 2.5rem;
+            box-shadow: 0 25px 40px -12px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        /* Ẩn header, footer hoàn toàn */
+        h1, .sub, .footer-note {
+            display: none;
+        }
+
+        /* Chỉ giữ lại nút copy tất cả, đặt ở vị trí riêng */
+        .copy-all-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1.8rem;
+        }
+        #copyAllBtn {
+            background: #1f2a3a;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.6rem 1.6rem;
+            border-radius: 40px;
+            cursor: pointer;
+            box-shadow: 0 8px 14px -6px #1f2a3a80;
+            border: 1px solid #ffffff40;
+            transition: 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: 0.3px;
+        }
+        #copyAllBtn:hover {
+            background: #2d3b4f;
+            transform: scale(1.02);
+            box-shadow: 0 12px 18px -8px #0f1a2b;
+        }
+        #copyAllBtn:active {
+            transform: scale(0.98);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1.2rem;
+        }
+        /* card màu */
+        .color-item {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.2rem 0.6rem 0.8rem 0.6rem;
+            box-shadow: 0 12px 18px -10px rgba(0,0,0,0.2);
+            transition: transform 0.15s ease, box-shadow 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.7);
+            user-select: none;
+        }
+        .color-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 22px 28px -12px rgba(0, 0, 0, 0.35);
+        }
+        .color-item:active {
+            transform: scale(0.98);
+            transition: transform 0.05s;
+        }
+        .color-preview {
+            width: 100%;
+            aspect-ratio: 1 / 0.9;
+            border-radius: 1.2rem;
+            margin-bottom: 0.9rem;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.08), 0 6px 12px rgba(0,0,0,0.1);
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+        .color-code {
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+            background: #f3f5f9;
+            padding: 0.25rem 0.7rem;
+            border-radius: 40px;
+            letter-spacing: 0.3px;
+            color: #1e293b;
+            border: 1px solid #e1e6ec;
+            box-shadow: inset 0 1px 3px #ffffff, 0 2px 4px rgba(0,0,0,0.03);
+        }
+        /* Ẩn khu vực feedback (dòng chữ click để copy) */
+        .copy-feedback {
+            display: none;
+        }
+
+        .toast-notification {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            background: #1f2a3ad9;
+            backdrop-filter: blur(8px);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 60px;
+            font-weight: 500;
+            font-size: 1.1rem;
+            box-shadow: 0 12px 24px -8px black;
+            opacity: 0;
+            transition: opacity 0.2s, transform 0.2s;
+            pointer-events: none;
+            border: 1px solid #ffffff50;
+            z-index: 999;
+        }
+        .toast-notification.show {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+    </style>
+</head>
+<body>
+    <div class="palette-card">
+        <!-- Header và sub hoàn toàn bị ẩn bằng CSS, không chiếm không gian -->
+        <h1>Ẩn</h1>
+        <div class="sub">Ẩn</div>
+
+        <!-- Nút copy tất cả được đặt riêng, hiển thị gọn gàng -->
+        <div class="copy-all-container">
+            <button id="copyAllBtn" title="Sao chép tất cả mã màu">📋 copy tất cả</button>
+        </div>
+
+        <!-- Lưới màu được tạo bằng js -->
+        <div class="grid" id="colorGrid"></div>
+
+        <!-- Footer cũ ẩn luôn -->
+        <div class="footer-note" style="display: none;"></div>
+    </div>
+
+    <!-- Toast thông báo copy -->
+    <div id="toast" class="toast-notification">✅ Đã sao chép</div>
+
+    <script>
+        (function() {
+            // Danh sách mã màu gốc
+            const colorList = [
+                "#8B5A2B", "#8B4513", "#FFFFFF", "#F5F5F5", "#F5F5DC",
+                "#F5DEB3", "#D3D3D3", "#0066CC", "#004488"
+            ];
+
+            const grid = document.getElementById('colorGrid');
+            const toast = document.getElementById('toast');
+            const copyAllBtn = document.getElementById('copyAllBtn');
+
+            // Hàm hiện toast
+            function showToast(message, isError = false) {
+                toast.textContent = message;
+                toast.classList.add('show');
+                toast.style.background = isError ? '#b91c1cd9' : '#1f2a3ad9';
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 1600);
+            }
+
+            // Hàm copy clipboard
+            async function copyToClipboard(text, friendlyName = 'Mã màu') {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    showToast(`✅ Đã copy ${friendlyName}`, false);
+                } catch (err) {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    try {
+                        document.execCommand('copy');
+                        showToast(`📋 Đã copy ${friendlyName}`, false);
+                    } catch (e) {
+                        showToast(`❌ Không thể copy`, true);
+                    }
+                    document.body.removeChild(textarea);
+                }
+            }
+
+            // Render từng ô màu – không có dòng chữ "click để copy"
+            colorList.forEach(hex => {
+                const item = document.createElement('div');
+                item.className = 'color-item';
+                item.setAttribute('role', 'button');
+                item.setAttribute('tabindex', '0');
+                item.setAttribute('aria-label', `Sao chép mã màu ${hex}`);
+
+                const preview = document.createElement('div');
+                preview.className = 'color-preview';
+                preview.style.backgroundColor = hex;
+
+                const codeSpan = document.createElement('div');
+                codeSpan.className = 'color-code';
+                codeSpan.textContent = hex;
+
+                // VẪN giữ div .copy-feedback nhưng đã ẩn bằng CSS (display: none)
+                const feedbackDiv = document.createElement('div');
+                feedbackDiv.className = 'copy-feedback';
+                // Nội dung bên trong không quan trọng vì đã ẩn
+                feedbackDiv.textContent = '';
+
+                item.appendChild(preview);
+                item.appendChild(codeSpan);
+                item.appendChild(feedbackDiv);
+
+                // Sự kiện click copy (vẫn hoạt động, nhưng không hiện dòng chữ)
+                item.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    await copyToClipboard(hex, hex);
+                    // Không cập nhật feedback vì đã ẩn
+                });
+
+                // Phím Enter / Space
+                item.addEventListener('keydown', async (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        await copyToClipboard(hex, hex);
+                    }
+                });
+
+                grid.appendChild(item);
+            });
+
+            // Nút copy tất cả
+            copyAllBtn.addEventListener('click', async () => {
+                const allColors = colorList.join(', ');
+                await copyToClipboard(allColors, 'tất cả màu');
+                // Hiệu ứng ngắn trên nút
+                const originalText = copyAllBtn.textContent;
+                copyAllBtn.textContent = '📋 đã copy!';
+                setTimeout(() => {
+                    copyAllBtn.textContent = originalText;
+                }, 1400);
+            });
+
+            // Style focus
+            const style = document.createElement('style');
+            style.textContent = `
+                .color-item:focus-visible {
+                    outline: 3px solid #0066CC;
+                    outline-offset: 3px;
+                    border-radius: 1.8rem;
+                }
+            `;
+            document.head.appendChild(style);
+        })();
+    </script>
+</body>
+</html>
