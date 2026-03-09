@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>孙思邈养生十三法 - 13 Phép Dưỡng Sinh Của Tôn Tư Mạo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #D3D3D3;
+            padding: 30px 20px;
+            line-height: 1.6;
+            color: #000000; /* Màu chữ mặc định */
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        /* Header với gradient màu nâu */
+        .header {
+            background: linear-gradient(145deg, #8B5A2B 0%, #8B4513 100%);
+            color: #FFFFFF;
+            padding: 35px 30px;
+            text-align: center;
+            border-bottom: 5px solid #F5DEB3;
+        }
+        .header h1 {
+            font-size: 2.8em;
+            font-weight: 400;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .header h2 {
+            font-size: 2em;
+            font-weight: 300;
+            color: #F5DEB3;
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        /* Thanh thông tin */
+        .info-bar {
+            background-color: #F5F5DC;
+            padding: 12px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #8B4513;
+            color: #000000; /* Đổi từ #333 */
+        }
+        .author-date {
+            background-color: #8B4513;
+            color: #F5F5DC;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+        .source-link {
+            background-color: #0066CC;
+            color: #FFFFFF;
+            padding: 5px 15px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            border: 1px solid #004488;
+        }
+        .source-link:hover {
+            background-color: #004488;
+            color: #F5DEB3;
+        }
+        /* Phần giới thiệu */
+        .intro {
+            background-color: #F5F5F5;
+            padding: 30px;
+            border-left: 6px solid #8B5A2B;
+            margin: 20px;
+            border-radius: 0 20px 20px 0;
+        }
+        .intro p {
+            color: #000000; /* Đổi từ #333 */
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+        .intro p:last-child {
+            margin-bottom: 0;
+        }
+        .intro strong {
+            color: #8B4513;
+            font-weight: 600;
+        }
+        /* Danh sách các phương pháp */
+        .methods-list {
+            padding: 10px 30px 30px;
+        }
+        .method-item {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #D3D3D3;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .method-number {
+            background-color: #8B5A2B;
+            color: #F5DEB3;
+            font-weight: bold;
+            font-size: 1.8em;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-right: 20px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
+        }
+        .method-content {
+            flex: 1;
+            min-width: 250px;
+        }
+        .method-title {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .method-title h3 {
+            margin: 0;
+            color: #8B4513;
+            font-size: 2em;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+        .method-title .vietnamese {
+            color: #0066CC;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        .chinese-desc {
+            color: #000000;
+            font-style: italic;
+            margin: 8px 0 8px 0;
+            padding-left: 10px;
+            border-left: 3px solid #F5DEB3;
+            font-size: 1em;
+        }
+        .vietnamese-desc {
+            color: #000000; /* Đổi từ #333 */
+            margin: 5px 0 0 0;
+            padding-left: 10px;
+            border-left: 3px solid #8B5A2B;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        /* Phần lưu ý thực hành - sử dụng màu trong danh sách */
+        .practical-note {
+            background-color: #F5F5DC; /* Thay #FFF8E7 */
+            border-left: 4px solid #8B4513; /* Thay #FF8C00 */
+            padding: 10px 15px;
+            margin-top: 12px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95em;
+            color: #000000;
+        }
+        .practical-note strong {
+            color: #8B4513; /* Thay #B22222 */
+            font-weight: 600;
+        }
+        /* Footer */
+        .footer {
+            background-color: #8B5A2B;
+            color: #F5DEB3;
+            padding: 20px 30px;
+            text-align: center;
+            border-top: 4px solid #8B4513;
+            font-size: 1.1em;
+        }
+        .footer a {
+            color: #F5DEB3;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+        .footer a:hover {
+            color: #FFFFFF;
+        }
+        /* Responsive */
+        @media (max-width: 650px) {
+            .header h1 { font-size: 2em; }
+            .header h2 { font-size: 1.5em; }
+            .info-bar { flex-direction: column; gap: 10px; text-align: center; }
+            .method-item { flex-direction: column; }
+            .method-number { margin-bottom: 15px; }
+            .method-title h3 { font-size: 1.8em; }
+            .method-title .vietnamese { font-size: 1.1em; display: block; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>孙思邈养生十三法</h1>
+            <h2>13 Phép Dưỡng Sinh Của Tôn Tư Mạo</h2>
+        </div>
+
+        <!-- Thông tin và link nguồn -->
+        <div class="info-bar">
+            <span class="author-date">作者: 中医药博物馆 | 发布日期: 2014-02-24</span>
+            <a href="https://bowuguan.bucm.edu.cn/kpzl/ysmt/10966.htm" target="_blank" rel="noopener noreferrer" class="source-link">
+                🔗 查看原文 (Xem bài gốc)
+            </a>
+        </div>
+
+        <!-- Giới thiệu -->
+        <div class="intro">
+            <p><strong>孙思邈 (581-682)</strong>，唐朝京兆华原（现陕西铜川市耀州区）人，为唐代著名医药学家。是中国乃至世界史上伟大的医学家和药物学家，被后人誉为“药王”，许多华人奉之为“医神”。孙思邈精通医学，擅长养生，活了101岁，在历史上为罕见的长寿医家。孙思邈一生都过着平民百姓的生活，所以他的养生方法也平民化。不需要苟刻的条件，经济、实用，能融入日常生活中。由其著作中记载的养生十三法一直广受民众欢迎，现介绍于下。</p>
+            <p><strong>Tôn Tư Mạo (581-682)</strong>, người Hoa Nguyên, Kinh Triệu (nay là huyện Diệu Châu, thành phố Đồng Xuyên, Thiểm Tây) thời nhà Đường, là một danh y nổi tiếng. Ông được hậu thế tôn xưng là "Dược Vương", nhiều người Hoa coi ông là "Y Thần". Tôn Tư Mạo tinh thông y học, giỏi dưỡng sinh, sống thọ 101 tuổi, là một y gia hiếm có trong lịch sử. Cuộc đời ông sống cuộc đời bình dân, vì vậy phương pháp dưỡng sinh của ông cũng rất đời thường, không cần điều kiện khắt khe, tiết kiệm, thiết thực và có thể hòa nhập vào cuộc sống hàng ngày. 13 phép dưỡng sinh được ghi chép trong tác phẩm của ông đến nay vẫn được công chúng yêu thích, xin giới thiệu dưới đây.</p>
+        </div>
+
+        <!-- Danh sách 13 phương pháp -->
+        <div class="methods-list">
+            <!-- 1. 头常摇 -->
+            <div class="method-item">
+                <div class="method-number">1</div>
+                <div class="method-content">
+                    <div class="method-title">
+                        <h3>头常摇</h3>
+                        <span class="vietnamese">(Thường xuyên lắc đầu)</span>
+                    </div>
+                    <div class="chinese-desc">双手叉腰，闭目。垂下头，缓缓向右扭动，直至恢复原位一次，共做6次。反方向重复。功效：头脑灵活，且防止颈推增生。注意要慢慢做，以免头晕。</div>
+                    <div class="vietnamese-desc">Chống tay vào hông, nhắm mắt. Cúi đầu, từ từ xoay sang phải rồi quay trở về vị trí ban đầu, làm 6 lần. Lặp lại theo hướng ngược lại. Công hiệu: Đầu óc linh hoạt, phòng ngừa thoái hóa đốt sống cổ. Lưu ý làm chậm để tránh chóng mặt.</div>
+                    <div class="practical-note"><strong>Lưu ý thực hành:</strong> Động tác cần thực hiện thật chậm và nhẹ nhàng. Người có bệnh lý về huyết áp (cao huyết áp), thoái hóa đốt sống cổ nặng, hoặc đang chóng mặt, say xe không nên tập. Nên ngồi vững hoặc đứng dựa lưng để tránh mất thăng bằng. Nếu cảm thấy chóng mặt, hãy dừng lại và nghỉ ngơi.</div>
+                </div>
+            </div>
+
+            <!-- 2. 发常梳 -->
+            <div class="method-item">
+                <div class="method-number">2</div>
+                <div class="method-content">
+                    <div class="method-title">
+                        <h3>发常梳</h3>
+                        <span class="vietnamese">(Thường xuyên chải tóc)</span>
+                    </div>
+                    <div class="chinese-desc">手掌互搓36下，令掌心发热，然后由前额开始扫上去，经后脑扫回颈部。早晚各做10次。头部有很多重要的穴位，经常“梳发”，可以防止头痛、耳鸣、白发和脱发。</div>
+                    <div class="vietnamese-desc">Xoa hai lòng bàn tay vào nhau 36 lần cho đến khi nóng ấm, sau đó bắt đầu từ trán chải ngược lên đỉnh đầu, qua gáy xuống cổ. Ngày làm 2 lần sáng tối, mỗi lần 10 lượt. Trên đầu có nhiều huyệt đạo quan trọng, thường xuyên "chải tóc" có thể ngừa đau đầu, ù tai, bạc tóc và rụng tóc.</div>
+                    <div class="practical-note"><strong>Lưu ý thực hành:</strong> Nên chải tóc khi tóc khô, tránh chải tóc ướt vì dễ gãy rụng. Có thể thay thế động tác chải bằng cách dùng các đầu ngón tay massage da đầu nhẹ nhàng. Không dùng móng tay cào mạnh gây xước da. Người bị viêm da đầu, nấm nên thận trọng và vệ sinh tay sạch trước khi thực hiện.</div>
+                </div>
+            </div>
+
+            <!-- 3. 目常运 -->
+            <div class="method-item">
+                <div class="method-number">3</div>
+                <div class="method-content">
+                    <div class="method-title">
+                        <h3>目常运</h3>
+                        <span class="vietnamese">(Thường xuyên vận động mắt)</span>
+                    </div>
+                    <div class="chinese-desc">合眼，然后用力睁开眼，眼珠打圈，望向左、上、右、下四方；再合眼，用力挣开眼，眼珠打圈，望向右、上、左、下四方。重复3次。有助于眼睛保健，纠正近视。</div>
+                    <div class="vietnamese-desc">Nhắm mắt, sau đó mở mắt thật to, đưa nhãn cầu vòng tròn, nhìn lần lượt các hướng trái, lên, phải, xuống; lại nhắm mắt, mở mắt thật to, đưa nhãn cầu vòng tròn, nhìn lần lượt các hướng phải, lên, trái, xuống. Lặp lại 3 lần. Giúp bảo vệ mắt, điều chỉnh cận thị.</div>
+                    <div class="practical-note"><strong>Lưu ý thực hành:</strong> Giữa các lần tập nên nhắm mắt thư giãn vài giây. Tránh mở mắt quá mạnh nếu mắt khô hoặc nhạy cảm. Người bị tăng nhãn áp (glaucoma), bong võng mạc hoặc đang trong giai đoạn viêm nhiễm mắt nên tham khảo bác sĩ trước khi tập. Không tập khi mắt đang mỏi hoặc thiếu ánh sáng.</div>
+                </div>
+            </div>
+
+            <!-- 4. 齿常叩 -->
+            <div class="method-item">
+                <div class="method-number">4</div>
+                <div class="method-content">
+                    <div class="method-title">
+                        <h3>齿常叩</h3>
+                        <span class="vietnamese">(Thường xuyên cắn răng)</span>
+                    </div>
+                    <div class="chinese-desc">口徽徽合上，上下排牙齿互叩，无需太用力，但牙齿互叩时须发出声响，做36下。可以通上下经络，保持头脑清醒，加强肠胃吸收，防止姓牙和牙骨退化。</div>
+                    <div class="vietnamese-desc">Hơi khép miệng, hàm răng trên và dưới cắn vào nhau, không cần dùng lực quá mạnh, nhưng khi cắn phải phát ra tiếng, làm 36 lần. Có thể thông kinh lạc trên dưới, giữ đầu óc tỉnh táo, tăng cường hấp thu của dạ dày và ruột, ngăn ngừa sâu răng và thoái hóa xương hàm.</div>
+                    <div class="practical-note"><strong>Lưu ý thực hành:</strong> Chỉ nên thực hiện với lực vừa phải, tránh cắn quá mạnh gây tổn thương men răng và nướu. Người có răng yếu, ê buốt, hoặc đang mắc bệnh về nha chu nên tham khảo nha sĩ. Nên tập đều đặn nhưng không nên tập khi vừa ăn xong hoặc khi đói quá.</div>
+                </div>
+            </div>
+
+            <!-- 5. 漱玉津 -->
+            <div class="method-item">
+                <div class="method-number">5</div>
+                <div class="method-content">
+                    <div class="method-title">
+                        <h3>漱玉津</h3>
+                        <span class="vietnamese">(Súc miệng bằng nước bọt)</span>
+                    </div>
+                    <div class="chinese-desc">口徽徽合上，此法舌头不在牙齿外边，而在口腔里，围绕上下颚转动。左转12圈后吞口水，然后再反方向做一次。吞口水时尽量想象将口水带到下丹田。唾液含有大量酵素，能调节荷尔蒙分泌，可以强健肠胃。</div>
+                    <div class="vietnamese-desc">Hơi khép miệng, lưỡi không ở bên ngoài răng mà ở trong khoang miệng, xoay quanh hàm trên và hàm dưới. Xoay trái 12 vòng rồi nuốt nước bọt, sau đó làm ngược lại một lần. Khi nuốt nước bọt, hãy tưởng tượng đưa nước bọt xuống Đan điền. Nước bọt chứa nhiều enzyme, có thể điều hòa hormone, tăng cường sức khỏe dạ dày và ruột.</div>
+                    <div class="practical-note"><strong>Lưu ý thực hành:</strong> Giữ vệ sinh răng miệng sạch sẽ trước khi thực hiện. Không nên làm khi đang có vết loét trong miệng hoặc viêm họng cấp. Nếu cảm thấy khô miệng, có thể uống một ngụm nước ấm trước khi tập. Việc tưởng tượng đưa khí xuống Đan điền giúp tăng hiệu quả thư giãn và tập trung.</div>
+                </div>
+            </div>
+
+            <!-- 6. 耳常鼓 -->
+            <div class="method-item">
+                <div class="method-number">6</div>
+                <div class="method-content">
+                    <div class="method-title">
+                        <h3>耳常鼓</h3>
+                        <span class="vietnamese">(Thường xuyên bịt tai)</span>
+                    </div>
+                    <div class="chinese-desc">手掌掩双耳，用力向内压，放手，发出“噗”的一声。重复做10下。双手掩耳，将耳朵反折，双手食指扣住中指，以食指用力弹后脑风池穴10下。每天临睡前后做，可以增强记忆和听觉。</div>
+                    <div class="vietnamese-desc">Lấy lòng bàn tay bịt chặt hai tai, ấn mạnh vào trong, rồi buông tay ra để nghe tiếng "bốp". Lặp lại 10 lần. Hai tay bịt tai, gập vành tai, ngón trỏ đặt lên ngón giữa, dùng ngón trỏ búng mạnh vào huyệt Phong Trì sau gáy 10 lần. Làm mỗi tối trước khi ngủ có thể tăng cường trí nhớ và thính lực.</div>
+                    <div class="practical-note"><strong>Lưu ý thực hành:</strong> Khi ấn vào tai, không ấn quá mạnh để tránh tổn thương màng nhĩ. Người có tiền sử thủng màng nhĩ, viêm tai giữa hoặc đang bị ù tai cấp tính không nên thực hiện. Động tác búng vào gáy cần dùng lực vừa phải, tránh gây đau. Nên tập ở nơi yên tĩnh.</div>
+                </div>
+            </div>
+
+            <!-- 7. 面常洗 -->
+            <div class="method-item">
+                <div class="method-number">7</div>
+                <div class="method-content">
+                    <div class="method-title">
+                        <h3>面常洗</h3>
+                        <span class="vietnamese">(Thường xuyên rửa mặt)</span>
+                    </div>
+                    <div class="chinese-desc">双手互搓36下，手暖后双手轻轻放在面部，上下抚摩10次。双手互搓36下，暖手后双手轻轻用力由内向外抚摩10次。可使面色红润有光泽，皱纹减少。</div>
+                    <div class="vietnamese-desc">Xoa hai tay 36 lần cho ấm, nhẹ nhàng đặt lên mặt, vuốt lên xuống 10 lần. Xoa hai tay 36 lần cho ấm, sau đó nhẹ nhàng vuốt từ trong ra ngoài 10 lần. Có thể giúp da mặt hồng hào, giảm nếp nhăn.</div>
+                    <div class="practical-note"><strong>Lưu ý thực hành:</strong> Rửa tay sạch trước khi massage. Không kéo căng da mặt, nên thực hiện nhẹ nhàng theo chiều từ dưới lên và từ trong ra ngoài. Có thể kết hợp với kem dưỡng ẩm để tăng hiệu quả. Tránh massage khi da mặt đang bị mụn viêm, dị ứng hoặc có vết thương hở.</div>
+                </div>
+            </div>
+
+            <!-- 8. 腰常摆 -->
+            <div class="method-item">
+                <div class="method-number">8</div>
+                <div class="method-content">
+                    <div class="method-title">
+                        <h3>腰常摆</h3>
+                        <span class="vietnamese">(Thường xuyên lắc lư eo)</span>
+                    </div>
+                    <div class="chinese-desc">身体和双手有韵律地摆动。当身体扭向左时。右手在前，左手在后，在前的右手轻轻拍打小腹，在后的左手轻轻拍打命门穴（在第二腰椎与第三腰椎棘突之间），反方向重复。最少做50下，做够100下更好。可以强化肠胃、固肾气、防止消化不良、胃痛、眼痛。</div>
+                    <div class="vietnamese-desc">Cơ thể và hai tay lắc lư theo nhịp. Khi xoay người sang trái, tay phải đưa ra trước, tay trái ra sau, tay phải vỗ nhẹ vào bụng dưới, tay trái vỗ nhẹ vào huyệt Mệnh Môn (giữa đốt sống thắt lưng thứ 2 và thứ 3). Làm tương tự với hướng ngược lại. Làm ít nhất 50 lần, tốt nhất là 100 lần. Có thể tăng cường chức năng dạ dày, củng cố thận khí, ngăn ngừa khó tiêu, đau dạ dày, đau mắt.</div>
+                    <div class="practical-note"><strong>Lưu ý thực hành:</strong> Động tác cần nhịp nhàng, không vặn mình quá mạnh hoặc đột ngột. Người có bệnh lý cột sống thắt lưng (thoát vị đĩa đệm, đau thần kinh tọa) nên hỏi ý kiến bác sĩ trước khi tập. Vỗ nhẹ vừa phải, không dùng lực mạnh vào vùng thận và bụng. Phụ nữ có thai không nên thực hiện.</div>
+                </div>
+            </div>
+
+            <!-- 9. 腹常揉 -->
+            <div class="method-item">
+                <div class="method-number">9</div>
+                <div class="method-content">
+                    <div class="method-title">
+                        <h3>腹常揉</h3>
+                        <span class="vietnamese">(Thường xuyên xoa bụng)</span>
+                    </div>
+                    <div class="chinese-desc">搓手36下，手暖后两手交叉，围绕肚脐顺时针方向揉。揉的范围由小到大，做36下。可以帮助消化、吸收、消除腹部鼓胀。</div>
+                    <div class="vietnamese-desc">Xoa tay 36 lần, sau khi tay ấm thì đan chéo hai tay, xoa quanh rốn theo chiều kim đồng hồ. Vòng xoa từ nhỏ đến lớn, làm 36 lần. Có thể hỗ trợ tiêu hóa, hấp thu, giảm đầy hơi.</div>
+                    <div class="practical-note"><strong>Lưu ý thực hành:</strong> Không xoa bụng ngay sau khi vừa ăn no (nên chờ ít nhất 30-60 phút). Tránh ấn quá mạnh, đặc biệt ở vùng gan và lách. Phụ nữ có thai, người mới phẫu thuật bụng, hoặc đang có khối u, viêm nhiễm ổ bụng không nên tự ý xoa bóp. Nên xoa theo chiều kim đồng hồ để hỗ trợ nhu động ruột.</div>
+                </div>
+            </div>
+
+            <!-- 10. 摄谷道（即提肛） -->
+            <div class="method-item">
+                <div class="method-number">10</div>
+                <div class="method-content">
+                    <div class="method-title">
+                        <h3>摄谷道（即提肛）</h3>
+                        <span class="vietnamese">(Siết cơ hậu môn)</span>
+                    </div>
+                    <div class="chinese-desc">吸气时，将肛门的肌肉收紧，闭气，维持数秒，直至不能忍受，然后呼气放松。无论何时都可以练习，最好是每天早晚各做20-30次，有固护肾气的作用。</div>
+                    <div class="vietnamese-desc">Khi hít vào, siết chặt cơ hậu môn, nín thở, giữ trong vài giây đến khi không chịu được thì thở ra và thả lỏng. Có thể tập bất cứ lúc nào, tốt nhất là sáng tối mỗi lần 20-30 lần, có tác dụng củng cố thận khí.</div>
+                    <div class="practical-note"><strong>Lưu ý thực hành:</strong> Không nín thở quá lâu, chỉ giữ ở mức thoải mái. Người bị cao huyết áp, bệnh tim mạch, hoặc đang có trĩ nội viêm nhiễm nên thận trọng, tốt nhất tham khảo ý kiến chuyên gia. Nên tập ở tư thế thoải mái (nằm hoặc đứng). Tránh tập khi đang rặn đại tiện.</div>
+                </div>
+            </div>
+
+            <!-- 11. 膝常扭 -->
+            <div class="method-item">
+                <div class="method-number">11</div>
+                <div class="method-content">
+                    <div class="method-title">
+                        <h3>膝常扭</h3>
+                        <span class="vietnamese">(Thường xuyên vận động đầu gối)</span>
+                    </div>
+                    <div class="chinese-desc">双脚并排，膝部紧贴，人徽徽下蹲，双手按膝，向左右扭动，各做20下。可以强化膝关节，所谓“人老腿先老、肾亏膝先软”，要延年益寿，应由双膝做起。</div>
+                    <div class="vietnamese-desc">Hai bàn chân để song song, ép sát hai đầu gối, hơi khuỵu gối, hai tay ấn lên đầu gối, xoay sang trái phải, mỗi bên 20 lần. Có thể tăng cường sức mạnh cho khớp gối. Có câu "Người già chân yếu trước, thận hư gối yếu mềm", muốn sống lâu nên bắt đầu từ việc chăm sóc đầu gối.</div>
+                    <div class="practical-note"><strong>Lưu ý thực hành:</strong> Nếu có đau khớp gối, nên tập nhẹ nhàng, không cố xoay quá mức. Người bị viêm khớp, thoái hóa khớp nặng, hoặc sau chấn thương cần tham khảo bác sĩ vật lý trị liệu. Có thể kết hợp với các bài tập tăng cường cơ tứ đầu đùi để bảo vệ khớp. Không tập khi gối đang sưng đau.</div>
+                </div>
+            </div>
+
+            <!-- 12. 常散步 -->
+            <div class="method-item">
+                <div class="method-number">12</div>
+                <div class="method-content">
+                    <div class="method-title">
+                        <h3>常散步</h3>
+                        <span class="vietnamese">(Thường xuyên đi dạo)</span>
+                    </div>
+                    <div class="chinese-desc">据《千金方》记载，孙思邈每餐食毕，均以热手摩腹散步，天气好时，出门行2-3里。</div>
+                    <div class="vietnamese-desc">Theo "Thiên Kim Phương", Tôn Tư Mạo sau mỗi bữa ăn đều dùng tay ấm xoa bụng và đi dạo, khi thời tiết tốt, thường ra ngoài đi bộ 2-3 dặm (khoảng 1-1.5 km).</div>
+                    <div class="practical-note"><strong>Lưu ý thực hành:</strong> Không đi bộ ngay sau khi ăn. Nên nghỉ ngơi 20-30 phút để máu tập trung tiêu hóa, sau đó mới đi dạo chậm rãi. Kết hợp xoa bụng nhẹ nhàng trong khi đi. Người có bệnh lý tim mạch, huyết áp không ổn định nên tham khảo ý kiến bác sĩ về thời gian và cường độ đi bộ phù hợp. Chọn nơi bằng phẳng, thoáng mát, tránh đi khi trời quá lạnh hoặc nắng gắt.</div>
+                </div>
+            </div>
+
+            <!-- 13. 脚常搓 -->
+            <div class="method-item">
+                <div class="method-number">13</div>
+                <div class="method-content">
+                    <div class="method-title">
+                        <h3>脚常搓</h3>
+                        <span class="vietnamese">(Thường xuyên xoa chân)</span>
+                    </div>
+                    <div class="chinese-desc">右手搓左脚，左手搓右脚。由脚跟至脚趾，再搓回脚跟为一下，共做36下；两手大拇指轮流搓脚心涌泉穴，共做100下。脚底集中了全身器官的反射区，常搓脚可强化各器官功能，治失眠，降血压，消除头痛。</div>
+                    <div class="vietnamese-desc">Tay phải xoa bàn chân trái, tay trái xoa bàn chân phải. Xoa từ gót chân đến ngón chân rồi trở lại gót chân là một lần, làm 36 lần; hai ngón tay cái lần lượt xoa huyệt Dũng Tuyền ở lòng bàn chân, làm 100 lần. Lòng bàn chân tập trung các vùng phản xạ của toàn bộ cơ quan nội tạng, thường xuyên xoa chân có thể tăng cường chức năng các cơ quan, chữa mất ngủ, hạ huyết áp, giảm đau đầu.</div>
+                    <div class="practical-note"><strong>Lưu ý thực hành:</strong> Trước khi xoa, nên rửa sạch chân và làm ấm bàn chân (có thể ngâm nước ấm). Không xoa quá mạnh gây trầy xước da, đặc biệt ở người có bệnh tiểu đường (dễ tổn thương da). Người có vấn đề về tuần hoàn máu, giãn tĩnh mạch chân nên tham khảo ý kiến. Nên tập trung vào huyệt Dũng Tuyền với lực vừa phải, tránh ấn vào vùng đang bị viêm nhiễm.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>（中医药博物馆） | (Bảo tàng Y học Cổ truyền Trung Quốc)</p>
+            <p style="font-size: 0.9em; margin-top: 8px;">
+                📌 Nguồn: <a href="https://bowuguan.bucm.edu.cn/kpzl/ysmt/10966.htm" target="_blank" rel="noopener noreferrer">https://bowuguan.bucm.edu.cn/kpzl/ysmt/10966.htm</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
