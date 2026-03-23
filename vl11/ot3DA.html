@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ĐỀ CƯƠNG ÔN TẬP GIỮA KÌ II - VẬT LÝ 11 (kèm đáp án)</title>
+    <!-- MathJax để hiển thị công thức -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: white;
+            padding: 0.3cm;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.2;
+            color: black;
+            font-size: 18px;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background-color: white;
+        }
+        .exam-header {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .left {
+            text-align: left;
+            line-height: 1.2;
+        }
+        .left .sodt {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .left .truong {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .left .trang {
+            font-size: 17px;
+            font-style: italic;
+            font-weight: normal;
+            margin-top: 3px;
+        }
+        .left .made {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+        .right {
+            text-align: right;
+            line-height: 1.2;
+        }
+        .right .dekt {
+            font-size: 24px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .right .nho {
+            font-size: 19px;
+            margin: 1px 0;
+            white-space: nowrap;
+        }
+        .right .mon {
+            font-size: 19px;
+            margin: 1px 0;
+            white-space: nowrap;
+            font-weight: bold;
+        }
+        .right .thoigian {
+            font-size: 19px;
+            margin: 1px 0;
+            white-space: nowrap;
+            font-style: italic;
+        }
+        .info {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin: 10px 0 15px;
+            font-size: 19px;
+            width: 100%;
+        }
+        .info-item {
+            display: flex;
+            align-items: baseline;
+            flex: 1;
+        }
+        .info-item:first-child {
+            flex: 2;
+        }
+        .info-item span:first-child {
+            white-space: nowrap;
+        }
+        .line {
+            border-bottom: 1px dotted black;
+            flex: 1;
+            margin-left: 8px;
+            height: 1.2em;
+        }
+        .part-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 8px 0 4px;
+            text-transform: uppercase;
+            border-left: 5px solid black;
+            padding-left: 8px;
+            background-color: #f0f0f0;
+        }
+        .part-note {
+            margin-bottom: 5px;
+            font-style: italic;
+            font-size: 16px;
+            padding-left: 10px;
+        }
+        .question-item {
+            margin: 4px 0;
+            padding-left: 10px;
+            position: relative;
+        }
+        .question-item strong {
+            margin-right: 6px;
+            color: #333;
+        }
+        .option-list {
+            display: flex;
+            flex-wrap: wrap;
+            margin-left: 25px;
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
+        .option-item {
+            width: 45%;
+            margin: 1px 0;
+        }
+        .true-false-group {
+            margin: 5px 0 10px 20px;
+            border-left: 3px solid #999;
+            padding-left: 10px;
+            background-color: #f9f9f9;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            border-radius: 0 5px 5px 0;
+        }
+        .true-false-item {
+            margin: 2px 0;
+        }
+        .short-answer-item {
+            margin: 4px 0;
+            padding-left: 10px;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 2px;
+        }
+        .essay-item {
+            margin: 8px 0;
+            padding-left: 10px;
+            background-color: #fcfcfc;
+            padding: 5px;
+            border-radius: 5px;
+            border-left: 3px solid #333;
+        }
+        .essay-item p {
+            font-weight: bold;
+            margin-bottom: 4px;
+            font-size: 18px;
+            color: #333;
+        }
+        .sub-question {
+            margin-left: 20px;
+            margin-top: 2px;
+            font-weight: normal;
+            line-height: 1.2;
+        }
+        .exam-footer {
+            text-align: center;
+            margin-top: 15px;
+            padding-top: 5px;
+            border-top: 2px solid black;
+            font-style: italic;
+            font-weight: bold;
+        }
+        .toggle-btn {
+            margin-left: 20px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            padding: 2px 8px;
+            background-color: #8B5A2B;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .toggle-btn:hover {
+            background-color: #004488;
+        }
+        .answer, .short-answer-result, .true-false-answer {
+            margin-left: 20px;
+            margin-top: 3px;
+            padding: 2px 5px;
+            color: #8B5A2B;
+            font-weight: 600;
+        }
+        .true-false-answer .correct {
+            color: #1C3A5F;
+        }
+        .true-false-answer .incorrect {
+            color: #8B4513;
+        }
+        .solution {
+            margin-left: 20px;
+            margin-top: 3px;
+            margin-bottom: 5px;
+            padding: 8px 12px;
+            background-color: #F5F5F5;
+            border-left: 3px solid #0066CC;
+            font-size: 0.95em;
+            line-height: 1.4;
+            color: #000000;
+        }
+        .essay-solution {
+            margin-left: 30px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            background-color: #F5F5F5;
+            border-left: 3px solid #0066CC;
+            border-radius: 0 5px 5px 0;
+            color: #000000;
+        }
+        .hidden {
+            display: none !important;
+        }
+        @media print {
+            body { padding: 0.2cm; }
+            .option-item { width: 45%; }
+            .part-title { background-color: transparent; }
+            .toggle-btn { display: none; }
+            .answer, .short-answer-result, .true-false-answer, .solution, .essay-solution {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="exam-header">
+            <div class="top-row">
+                <div class="left">
+                    <div class="sodt">SỞ GD & ĐT BẮC NINH</div>
+                    <div class="truong">TRƯỜNG THPT HIỆP HOÀ SỐ 2</div>
+					<hr style="border: 1px solid #8B4513; margin: 5px 0;">
+					<div>Hướng dẫn và đáp án có thể có sai sót</div>
+                </div>
+                
+                <div class="right">
+                    <div class="dekt">ĐỀ CƯƠNG ÔN TẬP GIỮA KÌ II</div>
+                    <div class="nho">Năm học 2025 – 2026</div>
+                    <div class="mon">Môn: Vật Lý 11</div>
+                </div>
+            </div>
+            <hr style="border: 2px solid #8B4513; margin: 5px 0;">
+        </div>
+
+        <!-- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN  -->
+        <div class="part-title">I. TRẮC NGHIỆM NHIỀU PHƯƠNG ÁN LỰA CHỌN</div>
+        <div class="part-note">Thí sinh trả lời từ câu 1 đến câu 32. Mỗi câu chỉ chọn một phương án.</div>
+        
+        <!-- 8 câu đầu từ đề 201 (câu 1-8) -->
+        <div class="question-item"><strong>Câu 1:</strong> Một điện tích thử \(q = +1,6.10^{-19}\) C đặt tại điểm M chịu tác dụng của lực điện \(F = 3,2.10^{-16}\) N. Cường độ điện trường tại M có độ lớn là bao nhiêu?
+            <div class="option-list">
+                <div class="option-item">A. 500 V/m</div>
+                <div class="option-item">B. 1500 V/m</div>
+                <div class="option-item">C. 2000 V/m</div>
+                <div class="option-item">D. 1000 V/m</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>C. 2000 V/m</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(E = \frac{F}{|q|} = \frac{3,2.10^{-16}}{1,6.10^{-19}} = 2000\) V/m.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 2:</strong> Một điện tích thử dương đặt trong điện trường đều sẽ chịu tác dụng của lực điện có đặc điểm gì?
+            <div class="option-list">
+                <div class="option-item">A. cùng hướng \(\vec{E}\)</div>
+                <div class="option-item">B. độ lớn bằng 0</div>
+                <div class="option-item">C. vuông góc \(\vec{E}\)</div>
+                <div class="option-item">D. ngược hướng \(\vec{E}\)</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>A. cùng hướng \(\vec{E}\)</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Lực điện tác dụng lên điện tích dương: \(\vec{F}=q\vec{E}\) → cùng hướng với \(\vec{E}\).
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 3:</strong> Một điện tích điểm Q = 4.10⁻⁸ C đặt trong chân không. Cường độ điện trường do điện tích này gây ra tại điểm cách nó 30 cm có độ lớn là bao nhiêu?
+            <div class="option-list">
+                <div class="option-item">A. 3000 V/m</div>
+                <div class="option-item">B. 2000 V/m</div>
+                <div class="option-item">C. 5000 V/m</div>
+                <div class="option-item">D. 4000 V/m</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>D. 4000 V/m</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(E = k\frac{|Q|}{r^2} = 9.10^9 \times \frac{4.10^{-8}}{(0,3)^2} = 9.10^9 \times \frac{4.10^{-8}}{0,09} = 4000\) V/m.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 4:</strong> Hai điện tích điểm \(q_1 = 2.10^{-9}\) C và \(q_2 = 8.10^{-9}\) C đặt tại hai điểm A và B cách nhau 15 cm trong không khí. Điểm M nằm trên đoạn AB có cường độ điện trường tổng hợp bằng 0. Khoảng cách AM bằng bao nhiêu?
+            <div class="option-list">
+                <div class="option-item">A. 10 cm</div>
+                <div class="option-item">B. 6 cm</div>
+                <div class="option-item">C. 5 cm</div>
+                <div class="option-item">D. 7,5 cm</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>C. 5 cm</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Tại M: \(\vec{E_1}+\vec{E_2}=0\) ⇒ \(E_1=E_2\) và ngược chiều. Vì cùng dấu, M nằm trong đoạn AB.<br>
+                \(k\frac{|q_1|}{AM^2}=k\frac{|q_2|}{BM^2}\) ⇒ \(\frac{AM}{BM}=\sqrt{\frac{q_1}{q_2}}=\sqrt{\frac{2}{8}}=\frac{1}{2}\). Mà \(AM+BM=15\) cm ⇒ \(AM=5\) cm, \(BM=10\) cm.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 5:</strong> Hai điện tích điểm \(q_1 = 2.10^{-8}\) C và \(q_2 = -2.10^{-8}\) C đặt cách nhau 6 cm trong không khí. Độ lớn lực tương tác điện giữa chúng là bao nhiêu?
+            <div class="option-list">
+                <div class="option-item">A. 10⁻³ N</div>
+                <div class="option-item">B. 4.10⁻⁴ N</div>
+                <div class="option-item">C. 5.10⁻⁴ N</div>
+                <div class="option-item">D. 2.10⁻³ N</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>A. 10⁻³ N</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(F = k\frac{|q_1q_2|}{r^2} = 9.10^9 \times \frac{|2.10^{-8} \times (-2.10^{-8})|}{(0,06)^2} = 9.10^9 \times \frac{4.10^{-16}}{0,0036} = 10^{-3}\) N.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 6:</strong> Thế năng của một điện tích q trong điện trường đặc trưng cho điều gì?
+            <div class="option-list">
+                <div class="option-item">A. độ mạnh của điện trường</div>
+                <div class="option-item">B. phương chiều của lực điện</div>
+                <div class="option-item">C. khả năng sinh công của điện trường</div>
+                <div class="option-item">D. khả năng tác dụng lực của điện trường</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>C. khả năng sinh công của điện trường</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Thế năng của một điện tích trong điện trường đặc trưng cho khả năng sinh công của điện trường tại điểm đặt điện tích.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 7:</strong> Một điện tích điểm \(q = 5.10^{-9}\) C đặt trong chân không. Cường độ điện trường do điện tích này gây ra tại điểm cách nó 10 cm có độ lớn là bao nhiêu?
+            <div class="option-list">
+                <div class="option-item">A. 2250 V/m</div>
+                <div class="option-item">B. 450 V/m</div>
+                <div class="option-item">C. 9000 V/m</div>
+                <div class="option-item">D. 4500 V/m</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>D. 4500 V/m</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(E = k\frac{|q|}{r^2} = 9.10^9 \times \frac{5.10^{-9}}{(0,1)^2} = 9.10^9 \times \frac{5.10^{-9}}{0,01} = 4500\) V/m.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 8:</strong> Hai điện tích điểm cùng dấu, cùng độ lớn đặt tại hai điểm A và B trong không khí. Vị trí nào sau đây có cường độ điện trường tổng hợp bằng 0?
+            <div class="option-list">
+                <div class="option-item">A. trên đường trung trực của AB</div>
+                <div class="option-item">B. ngoài đoạn AB, gần B</div>
+                <div class="option-item">C. trung điểm của AB</div>
+                <div class="option-item">D. ngoài đoạn AB, gần A</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>C. trung điểm của AB</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Hai điện tích cùng dấu, cùng độ lớn thì tại trung điểm, hai vectơ cường độ điện trường có cùng độ lớn nhưng ngược chiều nên tổng hợp bằng 0.
+            </div>
+        </div>
+
+        <!-- 8 câu cuối từ đề 202 (câu 9-16) -->
+        <div class="question-item"><strong>Câu 9:</strong> Một tụ điện có ghi thông số 100 µF – 100 V. Điện tích tối đa mà tụ điện có thể tích được là bao nhiêu?
+            <div class="option-list">
+                <div class="option-item">A. 1 mC</div>
+                <div class="option-item">B. 10 C</div>
+                <div class="option-item">C. 0,1 C</div>
+                <div class="option-item">D. 10 mC</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>D. 10 mC</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(Q_{\text{max}} = C.U_{\text{max}} = 100.10^{-6} \times 100 = 10^{-2}\) C = 10 mC.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 10:</strong> Hiệu điện thế giữa hai điểm M và N là \(U_{MN} = 50\) V. Kết luận nào sau đây là đúng?
+            <div class="option-list">
+                <div class="option-item">A. \(V_M = 50\) V</div>
+                <div class="option-item">B. \(V_M\) thấp hơn \(V_N\) 50 V</div>
+                <div class="option-item">C. \(V_M = 50\) V, \(V_N = 0\)</div>
+                <div class="option-item">D. \(V_M\) cao hơn \(V_N\) 50 V</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>D. \(V_M\) cao hơn \(V_N\) 50 V</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(U_{MN}=V_M-V_N=50\) V ⇒ \(V_M = V_N + 50\) V, vậy \(V_M\) cao hơn \(V_N\) 50 V.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 11:</strong> Một tụ điện có ghi thông số 20 µF – 250 V. Điện tích tối đa mà tụ điện có thể tích được là bao nhiêu?
+            <div class="option-list">
+                <div class="option-item">A. 5 mC</div>
+                <div class="option-item">B. 50 µC</div>
+                <div class="option-item">C. 5 µC</div>
+                <div class="option-item">D. 0,5 C</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>A. 5 mC</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(Q_{\text{max}} = C.U_{\text{max}} = 20.10^{-6} \times 250 = 5.10^{-3}\) C = 5 mC.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 12:</strong> Công của lực điện khi điện tích di chuyển trong điện trường không phụ thuộc vào yếu tố nào sau đây?
+            <div class="option-list">
+                <div class="option-item">A. cường độ điện trường</div>
+                <div class="option-item">B. vị trí điểm đầu và điểm cuối</div>
+                <div class="option-item">C. độ lớn của điện tích</div>
+                <div class="option-item">D. hình dạng đường đi</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>D. hình dạng đường đi</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Lực điện là lực thế, công không phụ thuộc hình dạng đường đi mà chỉ phụ thuộc vị trí đầu và cuối.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 13:</strong> Một proton có điện tích \(q = 1,6.10^{-19}\) C di chuyển trong điện trường và nhận được công \(A = 3,2.10^{-18}\) J. Hiệu điện thế giữa điểm đầu và điểm cuối của quãng đường di chuyển là bao nhiêu?
+            <div class="option-list">
+                <div class="option-item">A. 0,2 V</div>
+                <div class="option-item">B. 200 V</div>
+                <div class="option-item">C. 20 V</div>
+                <div class="option-item">D. 2 V</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>C. 20 V</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(A = qU \Rightarrow U = \frac{A}{q} = \frac{3,2.10^{-18}}{1,6.10^{-19}} = 20\) V.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 14:</strong> Hai tụ điện có điện dung \(C_1 = 4\) µF và \(C_2 = 6\) µF được mắc nối tiếp với nhau. Điện dung tương đương của bộ tụ bằng bao nhiêu?
+            <div class="option-list">
+                <div class="option-item">A. 24 µF</div>
+                <div class="option-item">B. 2,4 µF</div>
+                <div class="option-item">C. 1,5 µF</div>
+                <div class="option-item">D. 10 µF</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>B. 2,4 µF</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(\frac{1}{C_{nt}} = \frac{1}{C_1} + \frac{1}{C_2} = \frac{1}{4} + \frac{1}{6} = \frac{5}{12}\) ⇒ \(C_{nt} = \frac{12}{5} = 2,4\) µF.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 15:</strong> Đối với một tụ điện xác định, nếu hiệu điện thế giữa hai bản tụ tăng gấp đôi thì năng lượng điện trường của tụ thay đổi như thế nào?
+            <div class="option-list">
+                <div class="option-item">A. tăng 4 lần</div>
+                <div class="option-item">B. không đổi</div>
+                <div class="option-item">C. tăng 2 lần</div>
+                <div class="option-item">D. giảm 2 lần</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>A. tăng 4 lần</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(W = \frac{1}{2}CU^2\) ⇒ W tỉ lệ với \(U^2\). Khi U tăng gấp đôi thì W tăng 4 lần.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 16:</strong> Một tụ điện có điện dung \(3\,\mu\)F. Để năng lượng điện trường của tụ tăng lên 4 lần thì hiệu điện thế giữa hai bản tụ phải thay đổi như thế nào?
+            <div class="option-list">
+                <div class="option-item">A. giảm 2 lần</div>
+                <div class="option-item">B. tăng 4 lần</div>
+                <div class="option-item">C. tăng 2 lần</div>
+                <div class="option-item">D. giữ nguyên</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>C. tăng 2 lần</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(W \sim U^2\) ⇒ để W tăng 4 lần thì U tăng 2 lần.
+            </div>
+        </div>
+
+        <!-- Bổ sung 16 câu TN nhiều lựa chọn từ ot3.html (câu 17 đến 32) -->
+        <div class="question-item"><strong>Câu 17:</strong> Hai điện tích điểm cùng dấu, cùng độ lớn \(q\), đặt tại hai điểm A và B trong chân không. Lực tương tác giữa chúng là \(F\). Nếu đưa chúng vào môi trường có hằng số điện môi \( \varepsilon = 2\) và giữ nguyên khoảng cách thì lực tương tác điện giữa chúng là bao nhiêu?
+            <div class="option-list">
+                <div class="option-item">A. \(F\)</div>
+                <div class="option-item">B. \(2F\)</div>
+                <div class="option-item">C. \(F/2\)</div>
+                <div class="option-item">D. \(F/4\)</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>C. \(F/2\)</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Lực tương tác tỉ lệ nghịch với hằng số điện môi: \(F' = \frac{F}{\varepsilon} = \frac{F}{2}\).
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 18:</strong> Nếu tăng khoảng cách giữa hai điện tích điểm lên 2 lần thì lực tương tác giữa chúng thay đổi như thế nào?
+            <div class="option-list">
+                <div class="option-item">A. tăng 2 lần</div>
+                <div class="option-item">B. giảm 2 lần</div>
+                <div class="option-item">C. tăng 4 lần</div>
+                <div class="option-item">D. giảm 4 lần</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>D. giảm 4 lần</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(F \sim \frac{1}{r^2}\) ⇒ r tăng 2 lần thì F giảm 4 lần.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 19:</strong> Cho hai điện tích điểm \(q_1 = 4.10^{-8}\) C và \(q_2 = -4.10^{-8}\) C đặt tại hai điểm A và B trong không khí, cách nhau 4 cm. Lực điện tổng hợp do \(q_1\) và \(q_2\) tác dụng lên điện tích \(q_3 = 2.10^{-9}\) C đặt tại trung điểm O của AB có độ lớn là bao nhiêu? (Bỏ qua mọi tác động khác)
+            <div class="option-list">
+                <div class="option-item">A. \(0\) N</div>
+                <div class="option-item">B. \(3,6.10^{-3}\) N</div>
+                <div class="option-item">C. \(7,2.10^{-4}\) N</div>
+                <div class="option-item">D. \(3,6.10^{-2}\) N</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>B. \(3,6.10^{-3}\) N</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Khoảng cách từ O đến mỗi điện tích: \(r = 2\) cm = 0,02 m.<br>
+                Lực do \(q_1\) tác dụng lên \(q_3\): \(F_1 = k\frac{|q_1q_3|}{r^2} = 9.10^9 \times \frac{4.10^{-8} \times 2.10^{-9}}{(0,02)^2} = 9.10^9 \times \frac{8.10^{-17}}{4.10^{-4}} = 1,8.10^{-3}\) N (hướng ra xa A).<br>
+                Lực do \(q_2\) tác dụng lên \(q_3\): \(F_2 = k\frac{|q_2q_3|}{r^2} = 1,8.10^{-3}\) N (hướng về B vì \(q_2\) âm hút \(q_3\) dương).<br>
+                Cả hai lực cùng hướng từ A đến B nên tổng hợp \(F = F_1 + F_2 = 3,6.10^{-3}\) N.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 20:</strong> Một quả cầu nhỏ khối lượng m = 2 g được treo bằng một sợi chỉ cách điện. Quả cầu tích điện q = +5.10⁻⁶ C và đặt trong điện trường đều có phương nằm ngang, cường độ E = 2000 V/m. Lấy g = 10 m/s². Khi quả cầu cân bằng, góc lệch của dây treo so với phương thẳng đứng là bao nhiêu?
+            <div class="option-list">
+                <div class="option-item">A. 30°</div>
+                <div class="option-item">B. 45°</div>
+                <div class="option-item">C. 26,6°</div>
+                <div class="option-item">D. 60°</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>C. 26,6°</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Lực điện: \(F = qE = 5.10^{-6} \times 2000 = 0,01\) N.<br>
+                Trọng lực: \(P = mg = 0,002 \times 10 = 0,02\) N.<br>
+                \(\tan \alpha = \frac{F}{P} = \frac{0,01}{0,02} = 0,5\) ⇒ \(\alpha = \arctan(0,5) \approx 26,6^\circ\).
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 21:</strong> Có hai điện tích điểm \(q_1 = q\) và \(q_2 = 4q\) đặt cách nhau một khoảng r trong chân không. Phải đặt điện tích \(q_3\) ở đâu để nó nằm cân bằng?
+            <div class="option-list">
+                <div class="option-item">A. Trong đoạn nối \(q_1\) và \(q_2\), cách \(q_1\) một khoảng r/3.</div>
+                <div class="option-item">B. Trong đoạn nối \(q_1\) và \(q_2\), cách \(q_1\) một khoảng r/4.</div>
+                <div class="option-item">C. Ngoài đoạn nối, phía \(q_1\), cách \(q_1\) một khoảng r.</div>
+                <div class="option-item">D. Ngoài đoạn nối, phía \(q_2\), cách \(q_2\) một khoảng r.</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>A. Trong đoạn nối, cách \(q_1\) một khoảng r/3.</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Giả sử \(q_3\) nằm trong đoạn nối, cách \(q_1\) đoạn \(x\), cách \(q_2\) đoạn \(r-x\). Điều kiện cân bằng: lực do \(q_1\) và \(q_2\) tác dụng lên \(q_3\) phải cân bằng (cùng phương, ngược chiều). Vì hai điện tích cùng dấu nên \(q_3\) phải nằm trong đoạn nối.<br>
+                \(k\frac{|q_1q_3|}{x^2} = k\frac{|q_2q_3|}{(r-x)^2}\) ⇒ \(\frac{1}{x^2} = \frac{4}{(r-x)^2}\) ⇒ \(\frac{r-x}{x} = 2\) ⇒ \(r-x = 2x\) ⇒ \(x = \frac{r}{3}\).
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 22:</strong> Một điện tích điểm \(Q = -2.10^{-7}\) C đặt trong không khí. Điểm M cách Q một khoảng 10 cm. Vectơ cường độ điện trường tại M có đặc điểm?
+            <div class="option-list">
+                <div class="option-item">A. Hướng ra xa Q, độ lớn \(1,8.10^5\) V/m.</div>
+                <div class="option-item">B. Hướng về phía Q, độ lớn \(1,8.10^5\) V/m.</div>
+                <div class="option-item">C. Hướng ra xa Q, độ lớn \(1,8.10^4\) V/m.</div>
+                <div class="option-item">D. Hướng về phía Q, độ lớn \(1,8.10^4\) V/m.</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>B. Hướng về phía Q, độ lớn \(1,8.10^5\) V/m.</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(E = k\frac{|Q|}{r^2} = 9.10^9 \times \frac{2.10^{-7}}{(0,1)^2} = 9.10^9 \times \frac{2.10^{-7}}{0,01} = 1,8.10^5\) V/m.<br>
+                Vì Q âm nên vectơ cường độ điện trường hướng về phía Q.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 23:</strong> Hai vectơ cường độ điện trường \(\vec{E_1}\) và \(\vec{E_2}\) có độ lớn lần lượt là 300 V/m và 400 V/m, vuông góc với nhau. Độ lớn của vectơ cường độ điện trường tổng hợp bằng bao nhiêu?
+            <div class="option-list">
+                <div class="option-item">A. 100 V/m</div>
+                <div class="option-item">B. 700 V/m</div>
+                <div class="option-item">C. 500 V/m</div>
+                <div class="option-item">D. 600 V/m</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>C. 500 V/m</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Vuông góc: \(E = \sqrt{E_1^2 + E_2^2} = \sqrt{300^2 + 400^2} = 500\) V/m.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 24:</strong> Hai vectơ cường độ điện trường \(\vec{E_1}\) và \(\vec{E_2}\) có độ lớn lần lượt là 500 V/m và 800 V/m, ngược chiều nhau. Độ lớn của vectơ cường độ điện trường tổng hợp bằng bao nhiêu?
+            <div class="option-list">
+                <div class="option-item">A. 1300 V/m</div>
+                <div class="option-item">B. 300 V/m</div>
+                <div class="option-item">C. 600 V/m</div>
+                <div class="option-item">D. 400 V/m</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>B. 300 V/m</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Ngược chiều: \(E = |E_1 - E_2| = |500 - 800| = 300\) V/m.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 25:</strong> Cho hai điểm A và B trong không khí. Đặt điện tích \(q > 0\) tại A thì cường độ điện trường tại B là \(E_B = 9000\) V/m. Nếu đặt điện tích \(2q\) tại B thì cường độ điện trường tại A là bao nhiêu? (Khoảng cách AB không đổi)
+            <div class="option-list">
+                <div class="option-item">A. \(9000\) V/m.</div>
+                <div class="option-item">B. \(18000\) V/m.</div>
+                <div class="option-item">C. \(4500\) V/m.</div>
+                <div class="option-item">D. \(2250\) V/m.</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>B. \(18000\) V/m.</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(E_B = k\frac{q}{AB^2} = 9000\). Khi đặt \(2q\) tại B thì \(E_A = k\frac{2q}{AB^2} = 2 \times 9000 = 18000\) V/m.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 26:</strong> Công thức xác định công của lực điện khi điện tích q di chuyển từ M đến N trong điện trường đều là?
+            <div class="option-list">
+                <div class="option-item">A. \(A = qE\)</div>
+                <div class="option-item">B. \(A = qEd\)</div>
+                <div class="option-item">C. \(A = q \frac{U}{d}\)</div>
+                <div class="option-item">D. \(A = \frac{U}{q}\)</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>B. \(A = qEd\)</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Trong điện trường đều, công của lực điện: \(A = qEd\) với d là hình chiếu của quãng đường lên phương đường sức.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 27:</strong> Mối liên hệ giữa hiệu điện thế \(U\), cường độ điện trường \(E\) và khoảng cách \(d\) trong điện trường đều được biểu diễn bằng công thức nào?
+            <div class="option-list">
+                <div class="option-item">A. \(U = \frac{E}{d}\)</div>
+                <div class="option-item">B. \(U = E.d\)</div>
+                <div class="option-item">C. \(U = \frac{d}{E}\)</div>
+                <div class="option-item">D. \(U = E + d\)</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>B. \(U = E.d\)</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Trong điện trường đều: \(U = E.d\) với d là khoảng cách giữa hai điểm theo phương đường sức.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 28:</strong> Một giọt dầu hình cầu, khối lượng \(m = 4,5.10^{-15}\) kg, nằm lơ lửng trong điện trường đều giữa hai bản kim loại phẳng nằm ngang với cường độ điện trường \(E = 9.10^4\) V/m (hướng từ trên xuống). Biết gia tốc trọng trường \(g = 10 m/s^2\). Điện tích của giọt dầu là
+            <div class="option-list">
+                <div class="option-item">A. \( +5.10^{-19}\) C.</div>
+                <div class="option-item">B. \( -5.10^{-19}\) C.</div>
+                <div class="option-item">C. \( +5.10^{-15}\) C.</div>
+                <div class="option-item">D. \( -5.10^{-15}\) C.</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>B. \( -5.10^{-19}\) C.</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Giọt dầu cân bằng: lực điện hướng lên (ngược chiều trọng lực) vì E hướng xuống. Điện tích âm.<br>
+                \(mg = |q|E \Rightarrow |q| = \frac{mg}{E} = \frac{4,5.10^{-15} \times 10}{9.10^4} = 5.10^{-19}\) C. Vậy \(q = -5.10^{-19}\) C.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 29:</strong> Một electron được thả tự do vào điện trường đều sẽ chuyển động như thế nào?
+            <div class="option-list">
+                <div class="option-item">A. ngược chiều đường sức</div>
+                <div class="option-item">B. cùng chiều đường sức</div>
+                <div class="option-item">C. vuông góc đường sức</div>
+                <div class="option-item">D. quỹ đạo bất kỳ</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>A. ngược chiều đường sức</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Electron mang điện âm, lực điện ngược chiều \(\vec{E}\) nên chuyển động ngược chiều đường sức.
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 30:</strong> Trong điện trường đều có cường độ \(E = 500\) V/m, điểm M và N cách nhau 20 cm theo phương cùng chiều đường sức. Hiệu điện thế \(U_{MN}\) bằng bao nhiêu?
+            <div class="option-list">
+                <div class="option-item">A. 100 V</div>
+                <div class="option-item">B. -100 V</div>
+                <div class="option-item">C. 25 V</div>
+                <div class="option-item">D. -25 V</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>A. 100 V</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(U_{MN} = E.d = 500 \times 0,2 = 100\) V (vì M đến N cùng chiều đường sức nên \(U_{MN}>0\)).
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 31:</strong> Biểu thức nào sau đây dùng để tính công của lực điện trong điện trường đều?
+            <div class="option-list">
+                <div class="option-item">A. \(A = qEd\)</div>
+                <div class="option-item">B. \(A = qU_{MN}\)</div>
+                <div class="option-item">C. \(A = qE\)</div>
+                <div class="option-item">D. Cả A và B đều đúng</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>D. Cả A và B đều đúng</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Trong điện trường đều: \(A = qEd\) (với d là hình chiếu) và cũng bằng \(qU_{MN}\).
+            </div>
+        </div>
+
+        <div class="question-item"><strong>Câu 32:</strong> Một electron bay vào trong một điện trường đều theo hướng ngược chiều đường sức. Nhận xét nào sau đây là đúng về chuyển động của electron?
+            <div class="option-list">
+                <div class="option-item">A. Electron chuyển động chậm dần đều.</div>
+                <div class="option-item">B. Electron chuyển động nhanh dần đều.</div>
+                <div class="option-item">C. Electron chuyển động thẳng đều.</div>
+                <div class="option-item">D. Electron chuyển động theo quỹ đạo parabol.</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="answer hidden">Đáp án: <strong>B. Electron chuyển động nhanh dần đều.</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Electron mang điện âm, lực điện ngược chiều \(\vec{E}\). Khi bay ngược chiều đường sức tức là vận tốc cùng chiều với lực điện → electron chuyển động nhanh dần đều.
+            </div>
+        </div>
+
+        <!-- PHẦN II: ĐÚNG/SAI -->
+        <div class="part-title">II. TRẮC NGHIỆM ĐÚNG/SAI</div>
+        <div class="part-note">Trả lời câu 1, 2, 3, 4. Mỗi ý a, b, c, d chọn đúng hoặc sai.</div>
+        
+        <!-- Câu 1 -->
+        <div class="true-false-group">
+            <p><strong>Câu 1:</strong> Xét một tụ điện có điện dung \(C = 10\) µF được mắc vào hai cực của nguồn điện có hiệu điện thế \(U = 20\) V.</p>
+            <div class="true-false-item">a) Năng lượng của tụ điện là \(W = 2.10^{-3}\) J.</div>
+            <div class="true-false-item">b) Nếu tăng hiệu điện thế lên 40 V thì điện tích của tụ tăng gấp đôi.</div>
+            <div class="true-false-item">c) Điện tích của tụ điện là \(Q = 100\) µC.</div>
+            <div class="true-false-item">d) Nếu ngắt tụ khỏi nguồn và nối hai bản tụ bằng một dây dẫn thì tụ sẽ phóng điện.</div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="true-false-answer hidden">
+                Đáp án: <span class="correct">a) Đúng</span> | <span class="correct">b) Đúng</span> | <span class="incorrect">c) Sai</span> | <span class="correct">d) Đúng</span>
+            </div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                a) \(W = \frac{1}{2}CU^2 = 0,5 \times 10.10^{-6} \times 400 = 2.10^{-3}\) J → Đúng.<br>
+                b) \(Q = CU\), C không đổi, U tăng gấp đôi thì Q tăng gấp đôi → Đúng.<br>
+                c) \(Q = 10.10^{-6} \times 20 = 200\) µC, không phải 100 µC → Sai.<br>
+                d) Đúng: khi nối hai bản bằng dây dẫn, tụ phóng điện.
+            </div>
+        </div>
+
+        <!-- Câu 2 -->
+        <div class="true-false-group">
+            <p><strong>Câu 2:</strong> Hai điện tích điểm \(q_1 = +4.10^{-8}\) C và \(q_2 = -4.10^{-8}\) C đặt tại hai điểm A và B trong không khí, cách nhau 12 cm. Gọi M là trung điểm của đoạn thẳng AB.</p>
+            <div class="true-false-item">a) Đặt tại M một điện tích \(q = +1\) µC thì lực điện tác dụng lên nó có độ lớn là 0,2 N.</div>
+            <div class="true-false-item">b) Độ lớn cường độ điện trường do \(q_2\) gây ra tại M là \(10^5\) V/m.</div>
+            <div class="true-false-item">c) Vectơ cường độ điện trường do \(q_1\) gây ra tại M hướng ra xa A.</div>
+            <div class="true-false-item">d) Cường độ điện trường tổng hợp tại M bằng 0.</div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="true-false-answer hidden">
+                Đáp án: <span class="correct">a) Đúng</span> | <span class="correct">b) Đúng</span> | <span class="correct">c) Đúng</span> | <span class="incorrect">d) Sai</span>
+            </div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                a) Tại M: \(E_1 = E_2 = k\frac{|q|}{r^2} = 9.10^9 \times \frac{4.10^{-8}}{(0,06)^2} = 10^5\) V/m. Vì \(q_1\) dương, \(q_2\) âm nên \(\vec{E_1}\) và \(\vec{E_2}\) cùng chiều (hướng từ A đến B). Tổng hợp \(E = 2.10^5\) V/m. Lực \(F = qE = 10^{-6} \times 2.10^5 = 0,2\) N → Đúng.<br>
+                b) Tính như trên → Đúng.<br>
+                c) \(q_1\) dương, điện trường hướng ra xa A → Đúng.<br>
+                d) Tổng hợp ≠ 0 → Sai.
+            </div>
+        </div>
+
+        <!-- Câu 3 -->
+        <div class="true-false-group">
+            <p><strong>Câu 3:</strong> Trong không khí có một điện tích điểm \(Q = +6.10^{-9}\) C. Xét điểm M cách Q một khoảng 30 cm.</p>
+            <div class="true-false-item">a) Cường độ điện trường tại M có độ lớn 600 V/m.</div>
+            <div class="true-false-item">b) Nếu đặt thêm điện tích \(Q' = -6.10^{-9}\) C đối xứng với M qua Q thì cường độ điện trường tại M tăng lên.</div>
+            <div class="true-false-item">c) Đặt tại M một điện tích \(q = +2e\) (với \(e = 1,6.10^{-19}\) C) thì lực điện tác dụng lên nó có độ lớn xấp xỉ \(1,92.10^{-16}\) N.</div>
+            <div class="true-false-item">d) Điện thế tại M do điện tích Q gây ra là dương.</div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="true-false-answer hidden">
+                Đáp án: <span class="correct">a) Đúng</span> | <span class="incorrect">b) Sai</span> | <span class="correct">c) Đúng</span> | <span class="correct">d) Đúng</span>
+            </div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                a) \(E = k\frac{|Q|}{r^2} = 9.10^9 \times \frac{6.10^{-9}}{(0,3)^2} = 600\) V/m → Đúng.<br>
+                b) Q' đối xứng với M qua Q ⇒ Q nằm giữa M và Q', khoảng cách MQ' = 60 cm. \(E_{Q'} = k\frac{6.10^{-9}}{(0,6)^2} = 150\) V/m, hướng về Q'. \(E_Q\) hướng ra xa Q. Hai vectơ ngược chiều, tổng hợp \(E = 600 - 150 = 450\) V/m < 600 → giảm, không tăng → Sai.<br>
+                c) \(F = qE = 2 \times 1,6.10^{-19} \times 600 = 1,92.10^{-16}\) N → Đúng.<br>
+                d) Điện thế \(V = k\frac{Q}{r} > 0\) vì Q dương → Đúng.
+            </div>
+        </div>
+
+        <!-- Câu 4 -->
+        <div class="true-false-group">
+            <p><strong>Câu 4:</strong> Cho hai điện tích điểm \(q_1 = 4.10^{-8}\) C và \(q_2 = 10^{-8}\) C đặt tại hai điểm A và B trong không khí, cách nhau 20 cm.</p>
+            <div class="true-false-item">a) Lực tương tác giữa hai điện tích là lực đẩy.</div>
+            <div class="true-false-item">b) Độ lớn lực tương tác giữa hai điện tích là \(9.10^{-5}\) N.</div>
+            <div class="true-false-item">c) Cường độ điện trường tổng hợp tại điểm M nằm trên đường trung trực của AB và cách đều A, B một khoảng 20 cm có phương song song với AB.</div>
+            <div class="true-false-item">d) Điện thế do \(q_1\) gây ra tại trung điểm I của AB là \(V_1 = 3600\) V. (Chọn gốc điện thế ở vô cùng, \(k = 9.10^9\))</div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="true-false-answer hidden">
+                Đáp án: <span class="correct">a) Đúng</span> | <span class="correct">b) Đúng</span> | <span class="incorrect">c) Sai</span> | <span class="correct">d) Đúng</span>
+            </div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                a) Hai điện tích cùng dấu (đều dương) nên đẩy nhau → Đúng.<br>
+                b) \(F = k\frac{q_1q_2}{r^2} = 9.10^9 \times \frac{4.10^{-8} \times 10^{-8}}{(0,2)^2} = 9.10^9 \times \frac{4.10^{-16}}{0,04} = 9.10^{-5}\) N → Đúng.<br>
+                c) Xét điểm M trên đường trung trực của AB, cách đều A và B một khoảng 20 cm. Khi đó, cường độ điện trường do \(q_1\) và \(q_2\) gây ra tại M có độ lớn khác nhau (vì \(q_1 \neq q_2\)) và có phương lần lượt là AM và BM. Tổng hợp của chúng sẽ có phương không song song với AB (Véc tơ tổng hợp song song AB chỉ xảy ra khi \(q_1\) , \(q_2\) trái dấu và cùng trị tuyệt đối). Vậy phát biểu "phương song song với AB" là sai.<br>
+                d) \(V_1 = k\frac{q_1}{AI} = 9.10^9 \times \frac{4.10^{-8}}{0,1} = 3600\) V → Đúng.
+            </div>
+        </div>
+
+        <!-- PHẦN III: TRẢ LỜI NGẮN -->
+        <div class="part-title">III. TRẢ LỜI NGẮN</div>
+        <div class="part-note">Thí sinh ghi kết quả vào giấy làm bài. Mỗi câu đúng 0,25 điểm.</div>
+        
+        <div class="short-answer-item"><strong>Câu 1:</strong> Một tụ điện có điện dung 4 µF được tích điện đến hiệu điện thế 300 V. Tính điện tích của tụ điện (đơn vị: mC)?
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="short-answer-result hidden"><i>Đáp án:</i> <strong>1,2</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(Q = C.U = 4.10^{-6} \times 300 = 1,2.10^{-3}\) C = 1,2 mC.
+            </div>
+        </div>
+
+        <div class="short-answer-item"><strong>Câu 2:</strong> Hai điện tích điểm bằng nhau được đặt cách nhau 5 cm trong không khí thì đẩy nhau một lực \(1,44.10^{-5}\) N. Xác định độ lớn mỗi điện tích (đơn vị: nC)?
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="short-answer-result hidden"><i>Đáp án:</i> <strong>2</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(F = k\frac{q^2}{r^2} \Rightarrow q = r\sqrt{\frac{F}{k}} = 0,05 \times \sqrt{\frac{1,44.10^{-5}}{9.10^9}} = 0,05 \times \sqrt{1,6.10^{-15}} = 0,05 \times 4.10^{-8} = 2.10^{-9}\) C = 2 nC.
+            </div>
+        </div>
+
+        <div class="short-answer-item"><strong>Câu 3:</strong> Một electron di chuyển được quãng đường 1 cm dọc theo chiều đường sức trong điện trường đều, công của lực điện là \(1,6.10^{-18}\) J. Cường độ điện trường có dạng \(x.10^3\) V/m. Tìm giá trị của x. (Biết \(e = 1,6.10^{-19}\) C)
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="short-answer-result hidden"><i>Đáp án:</i> <strong>1</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Công của lực điện: \(A = |q|Ed\) (vì electron đi cùng chiều đường sức, công âm nhưng đề cho độ lớn).<br>
+                \(E = \frac{A}{|q|d} = \frac{1,6.10^{-18}}{1,6.10^{-19} \times 0,01} = \frac{1,6.10^{-18}}{1,6.10^{-21}} = 10^3\) V/m ⇒ x = 1.
+            </div>
+        </div>
+
+        <div class="short-answer-item"><strong>Câu 4:</strong> Điện tích \(q = 5.10^{-9}\) C di chuyển từ điểm M đến điểm N trong điện trường, công của lực điện là \(A = -2.10^{-7}\) J. Tính hiệu điện thế \(U_{MN}\) (đơn vị: V)?
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="short-answer-result hidden"><i>Đáp án:</i> <strong>-40</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(U_{MN} = \frac{A}{q} = \frac{-2.10^{-7}}{5.10^{-9}} = -40\) V.
+            </div>
+        </div>
+
+        <div class="short-answer-item"><strong>Câu 5:</strong> Một điện tích \(q = 2.10^{-8}\) C đặt tại điểm M trong điện trường của một điện tích điểm Q, cách Q một khoảng 20 cm. Biết thế năng của điện tích q tại M là \(W_M = -9.10^{-6}\) J. Độ lớn điện tích Q có giá trị là \(x.10^{-8}\) C. Tìm giá trị của \(x\). (Chọn gốc thế năng ở vô cùng, \(k = 9.10^9\))
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="short-answer-result hidden"><i>Đáp án:</i> <strong>1</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Thế năng \(W = k\frac{qQ}{r}\) (với Q là điện tích gây ra trường). Vì W âm, q dương ⇒ Q âm. Độ lớn: \(|W| = k\frac{|q||Q|}{r}\) ⇒ \(|Q| = \frac{|W| r}{k|q|} = \frac{9.10^{-6} \times 0,2}{9.10^9 \times 2.10^{-8}} = \frac{1,8.10^{-6}}{1,8.10^{-1}} = 10^{-8}\) C ⇒ x = 1.
+            </div>
+        </div>
+
+        <div class="short-answer-item"><strong>Câu 6:</strong> Một electron chuyển động không vận tốc đầu từ bản âm sang bản dương của một tụ điện phẳng không khí. Hiệu điện thế giữa hai bản tụ là 100 V, khoảng cách giữa hai bản là 1 cm. Gia tốc của electron trong quá trình chuyển động là \(a.10^{14}\) m/s². Tính giá trị của \(a\). (Biết \(e = 1,6.10^{-19}\) C, \(m_e = 9,1.10^{-31}\) kg. Bỏ qua tác dụng của trọng lực)
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="short-answer-result hidden"><i>Đáp án:</i> <strong>17,6</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                Lực điện: \(F = eE = e\frac{U}{d}\). Gia tốc: \(a = \frac{F}{m} = \frac{eU}{m d} = \frac{1,6.10^{-19} \times 100}{9,1.10^{-31} \times 0,01} = \frac{1,6.10^{-17}}{9,1.10^{-33}} \approx 1,758.10^{15}\) m/s² = \(17,58.10^{14}\) m/s². Vậy a ≈ 17,6.
+            </div>
+        </div>
+
+        <div class="short-answer-item"><strong>Câu 7:</strong> Hai bản kim loại phẳng song song cách nhau 1 cm, được nối với hiệu điện thế \(U = 220\) V. Cường độ điện trường giữa hai bản có dạng \(x.10^4\) V/m. Tìm giá trị của x.
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="short-answer-result hidden"><i>Đáp án:</i> <strong>2,2</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(E = \frac{U}{d} = \frac{220}{0,01} = 22000 = 2,2.10^4\) V/m ⇒ x = 2,2.
+            </div>
+        </div>
+
+        <div class="short-answer-item"><strong>Câu 8:</strong> Một tụ điện có điện dung 5.10⁻⁶ F được tích điện đến hiệu điện thế U. Sau đó, năng lượng của tụ là 0,04 J. Hiệu điện thế U có giá trị bằng \(x\) V. Tìm \(x\).
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="short-answer-result hidden"><i>Đáp án:</i> <strong>126,5</strong></div>
+            <div class="solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                \(W = \frac{1}{2}CU^2 \Rightarrow U = \sqrt{\frac{2W}{C}} = \sqrt{\frac{2 \times 0,04}{5.10^{-6}}} = \sqrt{\frac{0,08}{5.10^{-6}}} = \sqrt{16000} \approx 126,49\) V. Vậy x ≈ 126,5.
+            </div>
+        </div>
+
+        <!-- PHẦN IV: TỰ LUẬN -->
+        <div class="part-title">IV. TỰ LUẬN</div>
+        
+        <!-- Câu 1 -->
+        <div class="essay-item">
+            <p>Câu 1 : Tụ điện</p>
+            <div class="sub-question">a) Cho một tụ điện có điện dung \(C = 20\) µF được mắc vào hai cực của nguồn điện có hiệu điện thế \(U = 50\) V. Tính điện tích Q mà tụ tích được.</div>
+            <div class="sub-question">b) Tính năng lượng điện trường của tụ trong trường hợp trên.</div>
+            <div class="sub-question">c) Nếu tăng hiệu điện thế lên 100 V thì điện tích và năng lượng của tụ thay đổi như thế nào? Tính giá trị mới của điện tích và năng lượng.</div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="essay-solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                <strong>a)</strong> \(Q = C.U = 20.10^{-6} \times 50 = 10^{-3}\) C = 1 mC.<br>
+                <strong>b)</strong> \(W = \frac{1}{2}CU^2 = 0,5 \times 20.10^{-6} \times 2500 = 0,025\) J = 25 mJ.<br>
+                <strong>c)</strong> Khi U tăng lên 100 V (gấp đôi):<br>
+                - Điện tích: \(Q' = C.U' = 20.10^{-6} \times 100 = 2.10^{-3}\) C = 2 mC (tăng gấp đôi).<br>
+                - Năng lượng: \(W' = \frac{1}{2}C.U'^2 = 0,5 \times 20.10^{-6} \times 10000 = 0,1\) J = 100 mJ (tăng gấp 4 lần).
+            </div>
+        </div>
+
+        <!-- Câu 2 -->
+        <div class="essay-item">
+            <p>Câu 2 : Điện trường</p>
+            <div class="sub-question">a) Trong không khí, hai điện tích điểm \(q_1 = 8.10^{-8}\) C và \(q_2 = -2.10^{-8}\) C được đặt lần lượt tại hai điểm A và B cách nhau 20 cm. Gọi M là trung điểm của AB. Tính cường độ điện trường do \(q_1\) gây ra tại M.</div>
+            <div class="sub-question">b) Tính cường độ điện trường do \(q_2\) gây ra tại M.</div>
+            <div class="sub-question">c) Tìm điểm N trên đường thẳng AB sao cho cường độ điện trường tổng hợp tại N bằng 0. Xác định khoảng cách từ A đến N.</div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="essay-solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                <strong>a)</strong> AM = AB/2 = 10 cm = 0,1 m. \(E_1 = k\frac{|q_1|}{AM^2} = 9.10^9 \times \frac{8.10^{-8}}{(0,1)^2} = 9.10^9 \times \frac{8.10^{-8}}{0,01} = 72000\) V/m, hướng từ A ra xa M (vì \(q_1\) dương).<br>
+                <strong>b)</strong> BM = 0,1 m. \(E_2 = k\frac{|q_2|}{BM^2} = 9.10^9 \times \frac{2.10^{-8}}{(0,1)^2} = 9.10^9 \times \frac{2.10^{-8}}{0,01} = 18000\) V/m, hướng về B (vì \(q_2\) âm).<br>
+                <strong>c)</strong> Vì \(q_1\) và \(q_2\) trái dấu, để tổng hợp bằng 0 thì \(\vec{E_1}\) và \(\vec{E_2}\) ngược chiều và cùng độ lớn. Do \(|q_1| > |q_2|\) nên N nằm ngoài đoạn AB về phía B. Gọi NB = x (x>0), khi đó NA = x + AB = x + 20 cm.<br>
+                \(E_1 = E_2 \Rightarrow k\frac{|q_1|}{(x+20)^2} = k\frac{|q_2|}{x^2}\) ⇒ \(\frac{x+20}{x} = \sqrt{\frac{|q_1|}{|q_2|}} = \sqrt{\frac{8}{2}} = 2\) ⇒ x+20 = 2x ⇒ x = 20 cm.<br>
+                Vậy N cách A: NA = 20 + 20 = 40 cm.
+            </div>
+        </div>
+
+        <!-- Câu 3 -->
+        <div class="essay-item">
+            <p>Câu 3 : Chuyển động của electron trong tụ điện</p>
+            <div class="sub-question">a) Một electron bay vào trong một tụ điện phẳng không khí theo phương song song với các bản, tại điểm cách đều hai bản và ở chính giữa chiều dài bản. Vận tốc ban đầu của electron là \(v_0 = 3.10^7\) m/s. Hiệu điện thế giữa hai bản tụ là \(U = 100\) V, khoảng cách giữa hai bản là \(d = 2\) cm, chiều dài mỗi bản là \(l = 5\) cm. Tính cường độ điện trường giữa hai bản tụ.</div>
+            <div class="sub-question">b) Tính gia tốc của electron trong điện trường của tụ. Bỏ qua tác dụng của trọng lực. Cho \(m_e = 9,1.10^{-31}\) kg, \(e = 1,6.10^{-19}\) C.</div>
+            <div class="sub-question">c) Hỏi electron có ra khỏi được tụ điện hay không? Nếu có, tính góc lệch của véc tơ vận tốc so với phương ban đầu tại thời điểm bắt đầu ra khỏi tụ.</div>
+            <button class="toggle-btn" onclick="toggleAnswer(this)">Xem đáp án</button>
+            <div class="essay-solution hidden">
+                <i>Hướng dẫn giải:</i><br>
+                <strong>a)</strong> Cường độ điện trường: \(E = \frac{U}{d} = \frac{100}{0,02} = 5000\) V/m.<br>
+                <strong>b)</strong> Gia tốc: \(a = \frac{F}{m_e} = \frac{eE}{m_e} = \frac{1,6.10^{-19} \times 5000}{9,1.10^{-31}} = \frac{8.10^{-16}}{9,1.10^{-31}} \approx 8,79.10^{14}\) m/s².<br>
+                <strong>c)</strong> Thời gian electron chuyển động trong tụ theo phương ngang: \(t = \frac{l}{v_0} = \frac{0,05}{3.10^7} \approx 1,667.10^{-9}\) s.<br>
+                Độ lệch theo phương thẳng đứng: \(y = \frac{1}{2}at^2 = 0,5 \times 8,79.10^{14} \times (1,667.10^{-9})^2 = 0,5 \times 8,79.10^{14} \times 2,78.10^{-18} \approx 1,22.10^{-3}\) m = 1,22 mm.<br>
+                Khoảng cách từ điểm bay vào đến bản: \(d/2 = 1\) cm = 10 mm. Vì \(y < 10\) mm nên electron chưa chạm bản và ra khỏi tụ.<br>
+                Góc lệch: \(\tan \alpha = \frac{v_y}{v_0} = \frac{at}{v_0} = \frac{8,79.10^{14} \times 1,667.10^{-9}}{3.10^7} = \frac{1,465.10^{6}}{3.10^7} \approx 0,0488\) ⇒ \(\alpha \approx 2,8^\circ\).
+            </div>
+        </div>
+
+        <div class="exam-footer">
+            <p>--- HẾT ---</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleAnswer(button) {
+            const parent = button.parentElement;
+            const answer = parent.querySelector('.answer, .short-answer-result, .true-false-answer');
+            const solution = parent.querySelector('.solution, .essay-solution');
+            if (answer) answer.classList.toggle('hidden');
+            if (solution) solution.classList.toggle('hidden');
+            if (button.textContent === 'Xem đáp án') {
+                button.textContent = 'Ẩn đáp án';
+            } else {
+                button.textContent = 'Xem đáp án';
+            }
+        }
+        if (window.MathJax) {
+            window.MathJax.typesetPromise?.();
+        }
+    </script>
+</body>
+</html>
