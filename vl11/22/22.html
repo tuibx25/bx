@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Trắc nghiệm Vật lí 11: Cường độ dòng điện (Không đáp án)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F5F5F5;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 30px 20px;
+            color: #000000;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            border-radius: 28px;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.1);
+            overflow: hidden;
+            padding: 25px 30px 40px;
+            border: 1px solid #D3D3D3;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            margin-bottom: 0.2em;
+            color: #8B4513;
+            border-left: 6px solid #8B5A2B;
+            padding-left: 20px;
+            letter-spacing: -0.3px;
+        }
+
+        .sub {
+            color: #4a4a4a;
+            margin-bottom: 28px;
+            font-size: 1rem;
+            border-bottom: 2px solid #F5DEB3;
+            padding-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: #F5F5DC;
+            color: #8B4513;
+            padding: 5px 12px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .quiz-card {
+            background: #FFFFFF;
+            margin-bottom: 24px;
+            border-radius: 20px;
+            border: 1px solid #D3D3D3;
+            overflow: hidden;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .question-header {
+            background-color: #F5F5DC;
+            padding: 14px 20px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: #8B4513;
+            border-bottom: 1px solid #F5DEB3;
+        }
+
+        .question-text {
+            padding: 18px 20px 12px 20px;
+            font-weight: 500;
+            font-size: 1rem;
+            background: #FFFFFF;
+            color: #000000;
+            border-bottom: 1px dashed #D3D3D3;
+        }
+
+        .options {
+            padding: 12px 20px 18px 20px;
+            background: #FFFFFF;
+        }
+
+        .option {
+            padding: 6px 0 6px 28px;
+            position: relative;
+            font-size: 0.95rem;
+            color: #111;
+        }
+
+        .option-letter {
+            font-weight: 700;
+            margin-right: 8px;
+            color: #0066CC;
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #8B5A2B;
+            border-top: 1px solid #F5DEB3;
+            padding-top: 20px;
+        }
+
+        @media (max-width: 650px) {
+            .container {
+                padding: 18px 16px;
+            }
+            .question-header {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📘 Bài 22: CƯỜNG ĐỘ DÒNG ĐIỆN</h1>
+    <div class="sub">
+        <span>🔍 25 câu hỏi trắc nghiệm bám sát SGK Vật lí 11 (Kết nối tri thức)</span>
+        <span class="badge">⚡ Không hiển thị đáp án & hướng dẫn</span>
+    </div>
+
+    <div id="questions-container"></div>
+	<hr style="border: 1px solid #8B4513; margin: 5px 0;">
+</div>
+
+<script>
+    // Dữ liệu 25 câu hỏi (chỉ câu hỏi và phương án, không có đáp án/hướng dẫn)
+    const questions = [
+        { //1
+            text: "Cường độ dòng điện được định nghĩa là",
+            options: [
+                "A. điện lượng chuyển qua tiết diện thẳng của dây dẫn.",
+                "B. điện lượng chuyển qua tiết diện thẳng của dây dẫn trong một đơn vị thời gian.",
+                "C. tốc độ dịch chuyển có hướng của các hạt mang điện.",
+                "D. công của dòng điện sinh ra trong một đơn vị thời gian."
+            ]
+        },
+        { //2
+            text: "Công thức nào sau đây là công thức tính cường độ dòng điện?",
+            options: ["A. I = Δq·Δt", "B. I = Δt/Δq", "C. I = Δq/Δt", "D. I = Δq·e"]
+        },
+        { //3
+            text: "Đơn vị của cường độ dòng điện trong hệ SI là",
+            options: ["A. Vôn (V).", "B. Oát (W).", "C. Cu-lông (C).", "D. Ampe (A)."]
+        },
+        { //4
+            text: "Điện lượng 1 Cu-lông được xác định là",
+            options: ["A. điện lượng chuyển qua dây dẫn trong 1 giây.", "B. điện lượng chuyển qua dây dẫn có cường độ 1 A trong thời gian 1 s.", "C. điện lượng của một electron.", "D. điện lượng chuyển qua dây dẫn có hiệu điện thế 1 V."]
+        },
+        { //5
+            text: "Cường độ dòng điện đặc trưng cho tính chất nào của dòng điện?",
+            options: ["A. Khả năng sinh công.", "B. Độ mạnh, yếu của dòng điện.", "C. Khả năng sinh nhiệt.", "D. Chiều của dòng điện."]
+        },
+        { //6
+            text: "Trong thí nghiệm 1 (Hình 22.1a) với bóng đèn, khi dịch chuyển con chạy của biến trở để số chỉ ampe kế tăng dần thì độ sáng của bóng đèn thay đổi như thế nào?",
+            options: ["A. Giảm dần.", "B. Không thay đổi.", "C. Sáng dần lên.", "D. Lúc sáng lúc tối không đều."]
+        },
+        { //7
+            text: "Trong thí nghiệm 2 (Hình 22.1b) với nam châm điện, khi điều chỉnh biến trở để số chỉ ampe kế tăng lên, số lượng ghim giấy bị hút sẽ",
+            options: ["A. giảm xuống.", "B. tăng lên.", "C. không thay đổi.", "D. lúc đầu tăng sau đó giảm."]
+        },
+        { //8
+            text: "Hạt tải điện trong kim loại là",
+            options: ["A. ion dương.", "B. ion âm.", "C. electron tự do.", "D. proton."]
+        },
+        { //9
+            text: "Chiều dòng điện được quy ước là chiều dịch chuyển của",
+            options: ["A. electron tự do.", "B. các ion dương.", "C. các điện tích dương.", "D. các điện tích âm."]
+        },
+        { //10
+            text: "Trong dây dẫn kim loại, các electron tự do dịch chuyển có hướng",
+            options: ["A. cùng chiều với điện trường.", "B. ngược chiều với điện trường.", "C. cùng chiều với chiều dòng điện quy ước.", "D. vuông góc với chiều dòng điện."]
+        },
+        { //11
+            text: "Trong công thức I = S·n·v·e, đại lượng n là",
+            options: ["A. mật độ hạt mang điện (số hạt trong một đơn vị thể tích).", "B. tốc độ dịch chuyển có hướng.", "C. điện tích của hạt mang điện.", "D. tiết diện thẳng của dây dẫn."]
+        },
+        { //12
+            text: "Trong công thức I = S·n·v·e, đại lượng e là",
+            options: ["A. hằng số điện môi.", "B. độ lớn điện tích của hạt mang điện.", "C. điện tích của nguyên tử.", "D. điện tích của hạt nhân."]
+        },
+        { //13
+            text: "Đại lượng v trong công thức I = S·n·v·e là",
+            options: ["A. tốc độ ánh sáng.", "B. tốc độ trung bình của chuyển động nhiệt.", "C. tốc độ dịch chuyển có hướng của hạt mang điện.", "D. tốc độ lan truyền của điện trường."]
+        },
+        { //14
+            text: "Khi tăng tiết diện thẳng của dây dẫn lên 2 lần (giữ nguyên các yếu tố khác), cường độ dòng điện trong dây dẫn sẽ",
+            options: ["A. tăng 2 lần.", "B. giảm 2 lần.", "C. không đổi.", "D. tăng 4 lần."]
+        },
+        { //15
+            text: "Khi tăng mật độ electron tự do của dây dẫn lên 3 lần (giữ nguyên các yếu tố khác), cường độ dòng điện sẽ",
+            options: ["A. tăng 3 lần.", "B. giảm 3 lần.", "C. không đổi.", "D. tăng 9 lần."]
+        },
+        { //16
+            text: "Một dòng điện không đổi, sau 2 phút có điện lượng 120 C chuyển qua tiết diện thẳng của dây dẫn. Cường độ dòng điện là",
+            options: ["A. 1 A.", "B. 2 A.", "C. 60 A.", "D. 240 A."]
+        },
+        { //17
+            text: "Trong dây dẫn kim loại, dòng điện có cường độ 1,6 A chạy qua. Số electron dịch chuyển qua tiết diện thẳng của dây trong 1 giây là bao nhiêu? (Biết e = 1,6×10⁻¹⁹ C)",
+            options: ["A. 10¹⁸ hạt.", "B. 10¹⁹ hạt.", "C. 2,56×10⁻¹⁹ hạt.", "D. 2,56×10¹⁹ hạt."]
+        },
+        { //18
+            text: "Một dây dẫn bằng đồng có tiết diện 1 mm², dòng điện chạy qua có cường độ 2 A. Biết mật độ electron tự do là 8,5×10²⁸ m⁻³. Tốc độ dịch chuyển có hướng của electron gần nhất với giá trị nào?",
+            options: ["A. 1,5×10⁻⁴ m/s", "B. 0,15 m/s", "C. 1,5 m/s", "D. 15 m/s"]
+        },
+        { //19
+            text: "Dựa vào công thức I = S·n·v·e, nhận xét nào sau đây là đúng về tốc độ dịch chuyển có hướng của electron trong dây dẫn?",
+            options: ["A. Rất lớn, xấp xỉ tốc độ ánh sáng.", "B. Rất nhỏ, cỡ vài phần mười mm/s.", "C. Tỉ lệ thuận với cường độ dòng điện và mật độ electron.", "D. Không phụ thuộc vào tiết diện dây."]
+        },
+        { //20
+            text: "Một dây dẫn hình trụ có đường kính 2 mm. Nếu giữ nguyên cường độ dòng điện và vật liệu, tăng đường kính lên 4 mm thì tốc độ dịch chuyển có hướng của electron thay đổi như thế nào?",
+            options: ["A. Tăng 2 lần.", "B. Giảm 2 lần.", "C. Tăng 4 lần.", "D. Giảm 4 lần."]
+        },
+        { //21
+            text: "Thông số 'mAh' (mi-li-ampe-giờ) ghi trên pin, sạc dự phòng cho biết",
+            options: ["A. hiệu điện thế tối đa của pin.", "B. công suất tối đa của pin.", "C. điện lượng mà pin có thể cung cấp.", "D. cường độ dòng điện tức thời của pin."]
+        },
+        { //22
+            text: "Nguyên tắc đo điện tâm đồ (ECG) dựa trên việc ghi nhận",
+            options: ["A. nhiệt độ của cơ thể.", "B. áp suất trong tim.", "C. dòng điện do tim tạo ra.", "D. nhịp thở của bệnh nhân."]
+        },
+        { //23
+            text: "Trong dung dịch điện phân, các hạt tải điện là",
+            options: ["A. electron tự do.", "B. ion dương và ion âm.", "C. lỗ trống.", "D. electron và proton."]
+        },
+        { //24
+            text: "Tia sét có cường độ dòng điện rất lớn, thường lên tới hàng chục nghìn ampe. Điều này chứng tỏ",
+            options: ["A. điện lượng của tia sét rất lớn.", "B. hiệu điện thế của tia sét rất lớn.", "C. tốc độ dịch chuyển của electron rất lớn.", "D. công suất của tia sét rất lớn."]
+        },
+        { //25
+            text: "Một acquy ghi thông số 12V – 50Ah. Điều này có nghĩa là acquy đó có thể cung cấp một dòng điện có cường độ",
+            options: ["A. 12 A trong 50 giờ.", "B. 50 A trong 1 giờ.", "C. 12 A trong 1 giờ.", "D. 50 A trong 12 giờ."]
+        }
+    ];
+
+    // Render toàn bộ câu hỏi (không có nút hiện đáp án, không có phần giải thích)
+    const container = document.getElementById('questions-container');
+    function renderQuestions() {
+        let html = '';
+        questions.forEach((q, idx) => {
+            const qNumber = idx + 1;
+            // Tạo các option
+            let optionsHtml = '';
+            q.options.forEach(opt => {
+                let letter = opt.charAt(0);
+                let content = opt.substring(1);
+                optionsHtml += `
+                    <div class="option">
+                        <span class="option-letter">${letter}</span>${content}
+                    </div>
+                `;
+            });
+
+            html += `
+                <div class="quiz-card">
+                    <div class="question-header">
+                        📌 Câu ${qNumber}
+                    </div>
+                    <div class="question-text">
+                        ${q.text}
+                    </div>
+                    <div class="options">
+                        ${optionsHtml}
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    renderQuestions();
+</script>
+</body>
+</html>
