@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Bài 23: Điện trở. Định luật Ôm - Vật Lí 11</title>
+	<link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
+    <!-- MathJax để hiển thị công thức đúng -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F5F5F5;
+            font-family: 'Segoe UI', Roboto, 'Noto Sans', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+            color: #000000;
+            line-height: 1.55;
+            padding: 1.5rem 1rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            border-radius: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            padding: 1.5rem 1.8rem 2.5rem 1.8rem;
+        }
+
+        .chapter-badge {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #8B5A2B;
+            font-weight: 600;
+            border-left: 4px solid #8B4513;
+            padding-left: 12px;
+            margin-bottom: 0.75rem;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #000000;
+            margin-top: 0.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .sub-title {
+            font-size: 0.95rem;
+            color: #5a4a32;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #F5DEB3;
+            padding-bottom: 0.6rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #004488;
+            margin: 1.2rem 0 0.8rem 0;
+            border-left: 5px solid #0066CC;
+            padding-left: 16px;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #8B4513;
+            margin: 1rem 0 0.6rem 0;
+        }
+
+        h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #8B5A2B;
+            margin: 0.8rem 0 0.4rem 0;
+        }
+
+        .card-note {
+            background-color: #F5F5DC;
+            padding: 1rem 1.2rem;
+            border-radius: 18px;
+            margin: 1.2rem 0;
+            border-left: 5px solid #8B5A2B;
+        }
+
+        .formula-box {
+            background: #F5F5F5;
+            padding: 0.8rem 1.2rem;
+            border-radius: 16px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin: 1rem 0;
+            border: 1px solid #D3D3D3;
+        }
+
+        .formula-box .math {
+            font-size: 1.2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background-color: #FFFFFF;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            font-size: 0.9rem;
+        }
+
+        th {
+            background-color: #F5DEB3;
+            color: #2c2b28;
+            font-weight: 600;
+            padding: 10px 8px;
+            border: 1px solid #D3D3D3;
+        }
+
+        td {
+            border: 1px solid #D3D3D3;
+            padding: 8px 6px;
+            text-align: center;
+        }
+
+        .img-row {
+            margin: 1.2rem 0;
+            text-align: center;
+            background: #F5F5F5;
+            border-radius: 20px;
+            padding: 0.8rem;
+        }
+
+        .img-row img {
+            max-width: 35%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e0e0e0;
+            background: white;
+            transition: transform 0.2s;
+        }
+        
+        /* Ảnh nhỏ hơn trên mobile */
+        @media (max-width: 500px) {
+            .img-row img {
+                max-width: 80%;
+            }
+            .container {
+                padding: 1.2rem;
+            }
+            h1 {
+                font-size: 1.6rem;
+            }
+        }
+
+        .figcaption {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #6b5a42;
+            font-style: italic;
+        }
+
+        .two-columns {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .col {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        hr {
+            margin: 1.5rem 0;
+            border: none;
+            height: 1px;
+            background: #F5DEB3;
+        }
+
+        .badge {
+            background-color: #0066CC20;
+            color: #004488;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            display: inline-block;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #8B5A2B;
+            border-top: 1px solid #F5DEB3;
+            padding-top: 1.2rem;
+        }
+        
+        .math-inline {
+            font-family: monospace;
+        }
+        
+        /* Bảng nhỏ gọn */
+        .compact-table {
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        li {
+            margin: 0.3rem 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="chapter-badge">CHƯƠNG IV: DÒNG ĐIỆN – MẠCH ĐIỆN</div>
+    <h1>Bài 23: ĐIỆN TRỞ. ĐỊNH LUẬT ÔM</h1>
+    <div class="sub-title">⚡ Các thiết bị điện đều có điện trở — Điện trở đặc trưng cho mức độ cản trở dòng điện của vật dẫn</div>
+
+    <!-- I. ĐIỆN TRỞ -->
+    <h2>I. ĐIỆN TRỞ</h2>
+    <h3>1. Thí nghiệm</h3>
+    <p><strong>Chuẩn bị:</strong> ampe kế, vôn kế, nguồn điện điều chỉnh được U, hai vật dẫn X và Y khác nhau, dây nối, khóa K.</p>
+    <p><strong>Tiến hành:</strong> Mắc mạch như Hình 23.1. Đóng khóa K, điều chỉnh hiệu điện thế, đo I<sub>1</sub> qua X, sau đó thay bằng Y đo I<sub>2</sub>. Ghi kết quả vào mẫu Bảng 23.1.</p>
+    
+    <div class="img-row">
+        <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/23.1.png" alt="Sơ đồ mạch điện thí nghiệm Hình 23.1" loading="lazy">
+        <div class="figcaption">Hình 23.1. Sơ đồ thí nghiệm đo cường độ dòng điện và hiệu điện thế với các vật dẫn khác nhau</div>
+    </div>
+
+    <h4>Bảng 23.1 (kết quả thí nghiệm minh họa)</h4>
+    <table style="max-width: 500px;">
+        <thead>
+            <tr><th>U (V)</th><th>I<sub>1</sub> (mA) – Vật X</th><th>I<sub>2</sub> (mA) – Vật Y</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>1,0</td><td>0,43</td><td>0,21</td></tr>
+            <tr><td>2,0</td><td>0,86</td><td>0,43</td></tr>
+            <tr><td>3,0</td><td>1,30</td><td>0,65</td></tr>
+            <tr><td>4,0</td><td>1,73</td><td>0,87</td></tr>
+            <tr><td>5,0</td><td>2,17</td><td>1,09</td></tr>
+        </tbody>
+    </table>
+    <div class="card-note">
+        <p>📌 <strong>Nhận xét:</strong></p>
+        <p>1. Đối với mỗi vật dẫn X và Y, tỉ số \( \frac{U}{I} \) là hằng số.<br>
+        2. Với hai vật dẫn khác nhau, tỉ số \( \frac{U}{I} \) khác nhau.<br>
+        3. Nếu đặt cùng một hiệu điện thế, vật dẫn nào có cường độ dòng điện nhỏ hơn thì có tỉ số \( \frac{U}{I} \) lớn hơn, nghĩa là điện trở lớn hơn.</p>
+    </div>
+
+    <h3>2. Định nghĩa điện trở</h3>
+    <p>Từ kết quả thí nghiệm, với mỗi vật dẫn tỉ số \( \frac{U}{I} \) là hằng số, gọi là <strong>điện trở</strong> \(R\).</p>
+    <div class="formula-box">
+        \[
+        R = \frac{U}{I} \quad \Rightarrow \quad I = \frac{U}{R} \qquad (23.1)
+        \]
+    </div>
+    <p>Với cùng hiệu điện thế, \(R\) càng lớn thì \(I\) càng nhỏ, chứng tỏ vật dẫn cản trở dòng điện mạnh hơn. Điện trở đặc trưng cho mức độ cản trở dòng điện.</p>
+    <p>Đơn vị: <strong>ohm (Ω)</strong>; \(1\ \Omega = \dfrac{1\ \text{V}}{1\ \text{A}}\).<br>
+    Bội số: \(1\ \text{k}\Omega = 1000\ \Omega\), \(1\ \text{M}\Omega = 1\,000\,000\ \Omega\).</p>
+
+    <h3>3. Đường đặc trưng vôn – ampe</h3>
+    <p>Đường đặc trưng vôn – ampe là đồ thị biểu diễn sự phụ thuộc của \(I\) vào \(U\) giữa hai đầu vật dẫn. Với điện trở, đồ thị là đường thẳng qua gốc tọa độ.</p>
+    <div class="img-row">
+        <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/23.2.png" alt="Đường đặc trưng vôn-ampe của hai điện trở R1 và R2">
+        <div class="figcaption">Hình 23.2. Đường đặc trưng vôn-ampe của điện trở \(R_1\) và \(R_2\)</div>
+    </div>
+    <p>Hệ thức: \(I = kU\) với \(k = \dfrac{1}{R}\) là độ dẫn điện. Độ dốc lớn khi điện trở nhỏ.</p>
+    <div class="img-row">
+        <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/23.3.png" alt="Đường đặc trưng vôn-ampe của điện trở R1">
+        <div class="figcaption">Hình 23.3. Đường đặc trưng vôn-ampe của điện trở (hàm bậc nhất)</div>
+    </div>
+
+    <!-- II. ĐỊNH LUẬT ÔM -->
+    <h2>II. ĐỊNH LUẬT ÔM</h2>
+    <p>Nhà bác học người Đức <strong>Georg Simon Ohm</strong> (1789–1854) đã xác định bằng thực nghiệm mối quan hệ giữa U, I và R. Định luật Ôm phát biểu:</p>
+    <div class="card-note">
+        <p>💡 <strong>Định luật Ôm:</strong> Cường độ dòng điện chạy qua vật dẫn kim loại tỉ lệ thuận với hiệu điện thế đặt vào hai đầu vật dẫn và tỉ lệ nghịch với điện trở của vật dẫn.</p>
+    </div>
+    <div class="formula-box">
+        \[
+        I = \frac{U}{R} \qquad (23.3)
+        \]
+    </div>
+    <p>Trong đó: \(I\) (A), \(U\) (V), \(R\) (Ω).</p>
+
+    <!-- III. NGUYÊN NHÂN & ẢNH HƯỞNG NHIỆT ĐỘ -->
+    <h2>III. NGUYÊN NHÂN GÂY RA ĐIỆN TRỞ VÀ ẢNH HƯỞNG CỦA NHIỆT ĐỘ</h2>
+    <h3>1. Nguyên nhân gây ra điện trở trong kim loại</h3>
+    <p>Trong kim loại, các ion dương sắp xếp thành mạng tinh thể. Chuyển động nhiệt của các ion làm mất trật tự mạng tinh thể, cản trở chuyển động của electron tự do → gây điện trở. Nhiệt độ cao → dao động mạnh → điện trở lớn.</p>
+    <div class="img-row">
+        <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/23.4.png" alt="Mô hình nguyên nhân điện trở trong kim loại">
+        <div class="figcaption">Hình 23.4. Mô hình nguyên nhân gây điện trở: (a) nhiệt độ thấp, (b) nhiệt độ cao, (c) tạp chất</div>
+    </div>
+    <p><strong>Vận dụng:</strong> Điện trở của dây dẫn kim loại phụ thuộc chiều dài \(l\), tiết diện \(S\), điện trở suất \(\rho\) theo công thức: 
+    \[
+    R = \rho \frac{l}{S}
+    \]
+    Công thức này được giải thích dựa trên hệ thức \(I = S n v e\).</p>
+
+    <h3>2. Ảnh hưởng của nhiệt độ lên điện trở</h3>
+    <h4>a) Điện trở của đèn sợi đốt</h4>
+    <p>Dòng điện làm nóng dây tóc, nhiệt độ tăng làm điện trở tăng. Ở hiệu điện thế nhỏ đường đặc trưng gần thẳng; ở U cao đường cong lên, điện trở tăng (Hình 23.5).</p>
+    <div class="img-row">
+        <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/23.5.png" alt="Đường đặc trưng vôn-ampe của dây tóc bóng đèn">
+        <div class="figcaption">Hình 23.5. Đường đặc trưng của dây tóc bóng đèn, điện trở phụ thuộc nhiệt độ</div>
+    </div>
+
+    <h4>b) Điện trở nhiệt (Thermistor)</h4>
+    <p>Điện trở nhiệt là linh kiện có điện trở thay đổi rõ rệt theo nhiệt độ. Hai loại phổ biến: <strong>NTC</strong> (Negative Temperature Coefficient: điện trở giảm khi nhiệt độ tăng) và <strong>PTC</strong> (Positive Temperature Coefficient: điện trở tăng khi nhiệt độ tăng).</p>
+    <div class="two-columns">
+        <div class="col">
+            <div class="img-row" style="padding:0.5rem;">
+                <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/23.6.png" alt="Điện trở nhiệt thermistor">
+                <div class="figcaption">Hình 23.6. Điện trở nhiệt (thermistor)</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="img-row" style="padding:0.5rem;">
+                <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/23.7.png" alt="Sơ đồ thí nghiệm khảo sát điện trở nhiệt">
+                <div class="figcaption">Hình 23.7. Sơ đồ thí nghiệm khảo sát sự phụ thuộc nhiệt độ của điện trở nhiệt</div>
+            </div>
+        </div>
+    </div>
+    
+    <h4>Bảng 23.3: Kết quả thí nghiệm với điện trở NTC</h4>
+    <table class="compact-table" style="max-width: 450px;">
+        <thead><tr><th>Nhiệt độ (°C)</th><th>Điện trở (Ω)</th></tr></thead>
+        <tbody>
+            <tr><td>5</td><td>121951,2</td></tr>
+            <tr><td>15</td><td>73529,4</td></tr>
+            <tr><td>26</td><td>43478,3</td></tr>
+            <tr><td>37</td><td>26595,7</td></tr>
+            <tr><td>49</td><td>16077,2</td></tr>
+            <tr><td>62</td><td>9542,0</td></tr>
+            <tr><td>74</td><td>6016,8</td></tr>
+            <tr><td>80</td><td>4807,7</td></tr>
+        </tbody>
+    </table>
+    <p><em>Nhận xét: Nhiệt độ càng tăng, điện trở của NTC càng giảm mạnh.</em></p>
+
+    <div class="img-row">
+        <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/23.8.png" alt="Đồ thị đặc trưng NTC">
+        <div class="figcaption">Hình 23.8. Đặc tuyến điện trở - nhiệt độ của NTC</div>
+    </div>
+
+    <h3>Đường đặc trưng ở các nhiệt độ khác nhau (Hình 23.9)</h3>
+    <div class="img-row">
+        <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/23.9.png" alt="Đường đặc trưng vôn-ampe của dây kim loại ở hai nhiệt độ t1 và t2">
+        <div class="figcaption">Hình 23.9. Đường đặc trưng của dây kim loại ở \(t_1\) và \(t_2\)</div>
+    </div>
+    <div class="card-note">
+        <p><strong>📐 Vận dụng:</strong> a) Tính điện trở ứng với mỗi nhiệt độ dựa vào hệ số góc của đường đặc trưng \(R = \frac{U}{I}\).<br>
+        b) Dây kim loại ở đồ thị có độ dốc nhỏ hơn (điện trở lớn hơn) tương ứng với nhiệt độ cao hơn.</p>
+    </div>
+
+    <h3>So sánh dây tóc bóng đèn và dây kim loại (Hình 23.10)</h3>
+    <div class="img-row">
+        <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/23.10.png" alt="Đường đặc trưng của dây tóc bóng đèn và dây kim loại">
+        <div class="figcaption">Hình 23.10. Đường đặc trưng vôn-ampe của điện trở dây tóc bóng đèn và dây kim loại</div>
+    </div>
+    <p><strong>Phân tích:</strong> a) Đường cong (phi tuyến) là của dây tóc bóng đèn (do điện trở thay đổi theo nhiệt độ). Đường thẳng qua gốc là của dây kim loại (điện trở gần như không đổi trong khoảng khảo sát).<br>
+    b) Xác định giao điểm hai đường → hiệu điện thế mà tại đó hai vật có điện trở bằng nhau.<br>
+    c) Từ giá trị U và I tại giao điểm, tính \(R = U/I\).</p>
+    
+    <!-- Tổng kết bài học -->
+    <hr>
+    <h2 style="color:#004488;">📘 EM ĐÃ HỌC</h2>
+    <ul>
+        <li>Điện trở đặc trưng mức độ cản trở dòng điện, đơn vị Ω.</li>
+        <li>Định luật Ôm: \(I = \dfrac{U}{R}\).</li>
+        <li>Điện trở kim loại phụ thuộc nhiệt độ: \(R = R_0\bigl[1 + \alpha(t - t_0)\bigr]\).</li>
+        <li>Nhiệt điện trở NTC (điện trở giảm khi \(t^\circ\) tăng) và PTC (điện trở tăng khi \(t^\circ\) tăng).</li>
+    </ul>
+
+    <h2>🔍 EM CÓ THỂ</h2>
+    <ul>
+        <li>Giải thích nguyên nhân gây ra điện trở trong kim loại (do sự mất trật tự mạng tinh thể, dao động nhiệt, tạp chất).</li>
+        <li>Hiểu tại sao đèn LED tiết kiệm năng lượng hơn bóng đèn sợi đốt: đèn sợi đốt tiêu hao nhiều năng lượng dưới dạng nhiệt do điện trở lớn ở nhiệt độ cao.</li>
+    </ul>
+
+    <div class="card-note" style="background:#F5DEB3;">
+        <p><strong>✨ EM CÓ BIẾT – HIỆN TƯỢNG SIÊU DẪN</strong><br>
+        Một số kim loại và hợp kim khi nhiệt độ thấp hơn nhiệt độ tới hạn \(T_c\) thì điện trở đột ngột giảm về 0. Ứng dụng: nam châm siêu dẫn, giảm hao phí năng lượng.<br>
+        <strong>Bảng 23.4. Giá trị \(T_c\) (K) của một số kim loại, hợp kim:</strong> Thủy ngân (4,15 K), Nhôm (1,19 K), Chì (7,19 K), Nb\(_3\)Sn (18 K), Nb\(_3\)Ge (23 K).</p>
+    </div>
+
+    <!-- Bảng điện trở suất & hệ số nhiệt điện trở -->
+    <h3>Bảng điện trở suất và hệ số nhiệt điện trở của một số kim loại (20°C)</h3>
+    <table style="font-size:0.85rem;">
+        <thead><tr><th>Kim loại</th><th>\(\rho_0\) (Ω·m)</th><th>\(\alpha\) (K⁻¹)</th></tr></thead>
+        <tbody>
+            <tr><td>Bạc</td><td>\(1,62 \times 10^{-8}\)</td><td>\(4,1 \times 10^{-3}\)</td></tr>
+            <tr><td>Đồng</td><td>\(1,69 \times 10^{-8}\)</td><td>\(4,3 \times 10^{-3}\)</td></tr>
+            <tr><td>Nhôm</td><td>\(2,75 \times 10^{-8}\)</td><td>\(4,4 \times 10^{-3}\)</td></tr>
+            <tr><td>Sắt</td><td>\(9,68 \times 10^{-8}\)</td><td>\(6,5 \times 10^{-3}\)</td></tr>
+            <tr><td>Bạch kim</td><td>\(10,60 \times 10^{-8}\)</td><td>\(3,9 \times 10^{-3}\)</td></tr>
+            <tr><td>Vonfam</td><td>\(5,25 \times 10^{-8}\)</td><td>\(4,5 \times 10^{-3}\)</td></tr>
+        </tbody>
+    </table>
+
+    <div class="formula-box" style="background:#F5F5DC;">
+        🧪 <strong>Vận dụng công thức dòng điện trong kim loại:</strong> \(I = S n v e\) → liên hệ với điện trở \(R = \rho \dfrac{l}{S}\). Điện trở suất \(\rho\) phụ thuộc vào bản chất và nhiệt độ.
+    </div>
+
+    <footer>
+        Bài 23: Điện trở – Định luật Ôm | Vật lí 11 | Chương trình giáo dục phổ thông
+    </footer>
+</div>
+</body>
+</html>

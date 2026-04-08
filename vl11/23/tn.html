@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Trắc nghiệm: Điện trở - Định luật Ôm | Vật Lí 11</title>
+	<link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
+    <!-- Cấu hình MathJax với định dạng rõ ràng -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'none'
+            },
+            svg: {
+                fontCache: 'global'
+            },
+            options: {
+                ignoreHtmlClass: 'no-mathjax',
+                processHtmlClass: 'math'
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F5F5F5;
+            font-family: 'Segoe UI', Roboto, 'Noto Sans', system-ui, sans-serif;
+            color: #000000;
+            line-height: 1.5;
+            padding: 1.5rem 1rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            border-radius: 28px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+            padding: 1.8rem 2rem 2.5rem 2rem;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 0.25rem;
+        }
+
+        .subhead {
+            font-size: 0.9rem;
+            color: #8B5A2B;
+            border-left: 4px solid #8B4513;
+            padding-left: 14px;
+            margin: 0.5rem 0 1.5rem 0;
+        }
+
+        .question-card {
+            background: #FFFFFF;
+            border: 1px solid #D3D3D3;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            padding: 1.2rem 1.5rem;
+            transition: all 0.1s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+        .question-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 0.8rem;
+        }
+
+        .q-num {
+            background-color: #F5DEB3;
+            color: #8B4513;
+            font-weight: 700;
+            font-size: 1rem;
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 40px;
+            flex-shrink: 0;
+        }
+
+        .q-text {
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: #000000;
+            flex: 1;
+        }
+
+        .options {
+            margin: 0.8rem 0 0.8rem 2rem;
+        }
+
+        .option {
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .opt-letter {
+            font-weight: 700;
+            width: 28px;
+            color: #8B5A2B;
+        }
+
+        .opt-text {
+            color: #000000;
+            flex: 1;
+        }
+
+        .answer-hint {
+            background-color: #F5F5DC;
+            border-left: 5px solid #8B5A2B;
+            padding: 0.8rem 1rem;
+            margin-top: 1rem;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .answer-hint.show {
+            display: block;
+        }
+
+        .answer-badge {
+            background-color: #0066CC;
+            color: white;
+            font-weight: 600;
+            padding: 0.2rem 0.8rem;
+            border-radius: 24px;
+            display: inline-block;
+            font-size: 0.8rem;
+            margin-right: 10px;
+        }
+
+        .explanation {
+            margin-top: 0.5rem;
+            color: #2c2c2c;
+            line-height: 1.5;
+        }
+
+        .toggle-btn {
+            background-color: #F5F5F5;
+            border: 1px solid #D3D3D3;
+            color: #8B5A2B;
+            font-weight: 500;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            margin-left: 12px;
+            flex-shrink: 0;
+        }
+
+        .toggle-btn:hover {
+            background-color: #F5DEB3;
+            border-color: #8B5A2B;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 1rem;
+            }
+            .question-card {
+                padding: 1rem;
+            }
+            .options {
+                margin-left: 0.5rem;
+            }
+            .question-header {
+                flex-direction: column;
+            }
+            .toggle-btn {
+                margin-left: 40px;
+                margin-top: 5px;
+            }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #8B5A2B;
+            border-top: 1px solid #F5DEB3;
+            padding-top: 1.2rem;
+        }
+        
+        /* Đảm bảo công thức hiển thị đẹp */
+        mjx-container {
+            display: inline-block;
+            margin: 0 2px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📋 Trắc nghiệm Vật lí 11</h1>
+    <div class="subhead">Bài 23: ĐIỆN TRỞ – ĐỊNH LUẬT ÔM<br>25 câu hỏi bám sát nội dung bài học | Nhấn nút "Hiện đáp án" để xem lời giải chi tiết</div>
+
+    <div id="questions-container"></div>
+
+    <footer>Bài 23 – Điện trở. Định luật Ôm | Vật lí 11 | 25 câu trắc nghiệm có hướng dẫn giải chi tiết</footer>
+</div>
+
+<script>
+    // Dữ liệu câu hỏi - sử dụng công thức với cú pháp chuẩn
+    const questionsData = [
+        { text: "Điện trở của một vật dẫn là đại lượng đặc trưng cho:", 
+          options: ["A. Khả năng tích điện của vật dẫn.", "B. Mức độ cản trở dòng điện của vật dẫn.", "C. Khả năng sinh công của dòng điện.", "D. Mức độ tỏa nhiệt của vật dẫn."],
+          answer: "B", explanation: "Điện trở đặc trưng cho mức độ cản trở dòng điện của vật dẫn. Công thức $R = \\frac{U}{I}$: R càng lớn thì dòng điện càng bị cản trở mạnh." },
+          
+        { text: "Công thức nào sau đây là biểu thức của định luật Ôm?", 
+          options: ["A. $U = I \\cdot R$", "B. $R = \\frac{U}{I}$", "C. $I = \\frac{U}{R}$", "D. $I = U \\cdot R$"],
+          answer: "C", explanation: "Định luật Ôm: Cường độ dòng điện tỉ lệ thuận với hiệu điện thế và tỉ lệ nghịch với điện trở: $I = \\frac{U}{R}$." },
+          
+        { text: "Đơn vị của điện trở là:", 
+          options: ["A. Vôn (V)", "B. Ampe (A)", "C. Ôm (Ω)", "D. Oát (W)"],
+          answer: "C", explanation: "Điện trở có đơn vị là ohm, ký hiệu Ω, $1\\ \\Omega = 1\\ \\text{V} / 1\\ \\text{A}$." },
+          
+        { text: "Với cùng một hiệu điện thế đặt vào hai đầu các vật dẫn khác nhau, vật dẫn nào có điện trở càng lớn thì:", 
+          options: ["A. Cường độ dòng điện qua nó càng lớn.", "B. Cường độ dòng điện qua nó càng nhỏ.", "C. Công suất tiêu thụ càng lớn.", "D. Nhiệt lượng tỏa ra càng nhiều."],
+          answer: "B", explanation: "Từ $I = \\frac{U}{R}$, khi U không đổi, R tăng thì I giảm." },
+          
+        { text: "Theo định nghĩa, điện trở R của vật dẫn được tính bằng:", 
+          options: ["A. $R = I \\cdot U$", "B. $R = \\frac{I}{U}$", "C. $R = \\frac{U}{I}$", "D. $R = U + I$"],
+          answer: "C", explanation: "Điện trở được xác định bởi thương số $R = \\frac{U}{I}$." },
+          
+        { text: "Đường đặc trưng vôn – ampe của một điện trở có dạng:", 
+          options: ["A. Đường parabol đi qua gốc tọa độ.", "B. Đường hypebol.", "C. Đường thẳng đi qua gốc tọa độ.", "D. Đường cong bất kỳ."],
+          answer: "C", explanation: "Với điện trở tuân theo định luật Ôm, đồ thị I theo U là đường thẳng qua gốc (hàm bậc nhất $I = \\frac{1}{R} U$)." },
+          
+        { text: "Độ dốc của đường đặc trưng vôn – ampe càng lớn khi:", 
+          options: ["A. Điện trở càng lớn.", "B. Điện trở càng nhỏ.", "C. Hiệu điện thế càng lớn.", "D. Cường độ dòng điện càng nhỏ."],
+          answer: "B", explanation: "Độ dốc $k = \\frac{1}{R}$. Độ dốc lớn khi R nhỏ, đường đặc trưng dốc hơn." },
+          
+        { text: "Một dây dẫn có điện trở 10 Ω. Đặt vào hai đầu dây một hiệu điện thế 20 V. Cường độ dòng điện chạy qua dây là:", 
+          options: ["A. 0,5 A", "B. 2 A", "C. 10 A", "D. 200 A"],
+          answer: "B", explanation: "$I = \\frac{U}{R} = \\frac{20}{10} = 2\\ \\text{A}$." },
+          
+        { text: "Nguyên nhân chính gây ra điện trở trong kim loại là do:", 
+          options: ["A. Sự chuyển động có hướng của các electron tự do.", "B. Sự dao động nhiệt của các ion trong mạng tinh thể cản trở chuyển động của electron.", "C. Sự thiếu hụt electron tự do trong kim loại.", "D. Sự xuất hiện của từ trường trong kim loại."],
+          answer: "B", explanation: "Các ion dao động quanh nút mạng, cản trở dòng electron tự do → gây điện trở. Nhiệt độ càng cao, dao động càng mạnh." },
+          
+        { text: "Khi nhiệt độ của dây kim loại tăng, điện trở của nó thường:", 
+          options: ["A. Giảm.", "B. Không đổi.", "C. Tăng.", "D. Bằng 0."],
+          answer: "C", explanation: "Ở kim loại, nhiệt độ tăng → dao động ion mạnh → điện trở tăng theo hàm bậc nhất $R = R_0[1+\\alpha(t-t_0)]$." },
+          
+        { text: "Công thức nào sau đây thể hiện sự phụ thuộc của điện trở kim loại vào nhiệt độ?", 
+          options: ["A. $R = R_0[1 + \\alpha(t - t_0)]$", "B. $R = R_0[1 - \\alpha(t - t_0)]$", "C. $R = \\frac{R_0}{1 + \\alpha(t - t_0)}$", "D. $R = R_0 \\alpha (t - t_0)$"],
+          answer: "A", explanation: "Biểu thức gần đúng: $R = R_0(1 + \\alpha \\Delta t)$, với α là hệ số nhiệt điện trở." },
+          
+        { text: "Điện trở nhiệt loại NTC có đặc điểm:", 
+          options: ["A. Điện trở tăng khi nhiệt độ tăng.", "B. Điện trở không đổi theo nhiệt độ.", "C. Điện trở giảm khi nhiệt độ tăng.", "D. Điện trở chỉ phụ thuộc vào hiệu điện thế."],
+          answer: "C", explanation: "NTC (Negative Temperature Coefficient): điện trở giảm khi nhiệt độ tăng, thường dùng làm cảm biến nhiệt." },
+          
+        { text: "Điện trở nhiệt loại PTC có đặc điểm:", 
+          options: ["A. Điện trở tăng khi nhiệt độ tăng.", "B. Điện trở giảm khi nhiệt độ tăng.", "C. Điện trở bằng 0 ở nhiệt độ phòng.", "D. Điện trở không phụ thuộc nhiệt độ."],
+          answer: "A", explanation: "PTC (Positive Temperature Coefficient): điện trở tăng khi nhiệt độ tăng, ứng dụng bảo vệ quá dòng." },
+          
+        { text: "Khi dòng điện chạy qua dây tóc bóng đèn sợi đốt, nhiệt độ dây tóc tăng làm:", 
+          options: ["A. Điện trở dây tóc giảm.", "B. Điện trở dây tóc tăng.", "C. Cường độ dòng điện tăng.", "D. Hiệu điện thế giảm."],
+          answer: "B", explanation: "Dây tóc vonfram có hệ số nhiệt điện trở dương, nóng lên → R tăng, đường đặc trưng bị cong." },
+          
+        { text: "Đường đặc trưng vôn – ampe của dây tóc bóng đèn sợi đốt có dạng:", 
+          options: ["A. Đường thẳng đi qua gốc tọa độ.", "B. Đường parabol.", "C. Đường cong (phi tuyến).", "D. Đường tròn."],
+          answer: "C", explanation: "Vì điện trở thay đổi theo nhiệt độ, đồ thị I-U không phải đường thẳng (đặc trưng phi tuyến)." },
+          
+        { text: "Một dây dẫn có điện trở suất ρ, chiều dài l, tiết diện S. Điện trở của dây được tính bằng:", 
+          options: ["A. $R = \\frac{S}{\\rho l}$", "B. $R = \\frac{\\rho S}{l}$", "C. $R = \\frac{\\rho l}{S}$", "D. $R = \\rho l S$"],
+          answer: "C", explanation: "Công thức: $R = \\rho \\frac{l}{S}$, điện trở tỉ lệ thuận với chiều dài, tỉ lệ nghịch với tiết diện." },
+          
+        { text: "Hiện tượng siêu dẫn xảy ra khi:", 
+          options: ["A. Nhiệt độ của vật dẫn cao hơn nhiệt độ tới hạn.", "B. Nhiệt độ của vật dẫn thấp hơn nhiệt độ tới hạn.", "C. Điện trở của vật dẫn đạt giá trị cực đại.", "D. Cường độ dòng điện qua vật dẫn rất lớn."],
+          answer: "B", explanation: "Ở nhiệt độ dưới $T_c$, điện trở đột ngột giảm về 0 → hiện tượng siêu dẫn." },
+          
+        { text: "Khi vật dẫn ở trạng thái siêu dẫn, điện trở của nó:", 
+          options: ["A. Bằng 0.", "B. Rất lớn.", "C. Không đổi.", "D. Bằng vô cùng."],
+          answer: "A", explanation: "Siêu dẫn có điện trở bằng 0, dòng điện có thể duy trì không hao phí năng lượng." },
+          
+        { text: "Một dây đồng có điện trở 5 Ω ở 20°C. Hệ số nhiệt điện trở của đồng là $4,3 \\times 10^{-3}\\ K^{-1}$. Điện trở của dây ở 100°C xấp xỉ:", 
+          options: ["A. 5,2 Ω", "B. 6,7 Ω", "C. 8,5 Ω", "D. 10,2 Ω"],
+          answer: "B", explanation: "$R = 5[1 + 4,3 \\times 10^{-3}(100-20)] = 5(1 + 0,344) = 6,72\\ \\Omega \\approx 6,7\\ \\Omega$." },
+          
+        { text: "Độ dẫn điện của một vật dẫn được tính bằng:", 
+          options: ["A. $R$", "B. $\\frac{1}{R}$", "C. $U \\cdot I$", "D. $\\frac{U}{I}$"],
+          answer: "B", explanation: "Độ dẫn điện là nghịch đảo của điện trở, ký hiệu $G = \\frac{1}{R}$, đơn vị siemen (S)." },
+          
+        { text: "Trong thí nghiệm khảo sát điện trở, với cùng một hiệu điện thế, cường độ dòng điện qua vật dẫn X nhỏ hơn qua vật dẫn Y. Kết luận nào sau đây đúng?", 
+          options: ["A. Điện trở của X nhỏ hơn của Y.", "B. Điện trở của X lớn hơn của Y.", "C. Hai vật dẫn có điện trở bằng nhau.", "D. Không so sánh được."],
+          answer: "B", explanation: "$R = \\frac{U}{I}$, U bằng nhau, $I_X < I_Y \\Rightarrow R_X > R_Y$." },
+          
+        { text: "Điện trở nhiệt thường được ứng dụng để:", 
+          options: ["A. Làm dây dẫn điện.", "B. Làm cảm biến nhiệt độ.", "C. Làm nam châm điện.", "D. Làm nguồn điện."],
+          answer: "B", explanation: "Điện trở nhiệt (thermistor) dùng làm cảm biến nhiệt trong mạch điện tử, điều khiển nhiệt độ." },
+          
+        { text: "Tỉ số $\\frac{U}{I}$ đối với một vật dẫn xác định:", 
+          options: ["A. Là một hằng số.", "B. Thay đổi theo U.", "C. Thay đổi theo I.", "D. Phụ thuộc vào cả U và I."],
+          answer: "A", explanation: "Đối với vật dẫn tuân theo định luật Ôm, tỉ số U/I là hằng số (bằng điện trở)." },
+          
+        { text: "1 MΩ bằng:", 
+          options: ["A. $10^3\\ \\Omega$", "B. $10^6\\ \\Omega$", "C. $10^9\\ \\Omega$", "D. $10^{-3}\\ \\Omega$"],
+          answer: "B", explanation: "1 MΩ = 1 000 000 Ω = $10^6\\ \\Omega$." },
+          
+        { text: "Phát biểu nào sau đây là đúng về định luật Ôm?", 
+          options: ["A. Cường độ dòng điện tỉ lệ thuận với điện trở.", "B. Cường độ dòng điện tỉ lệ nghịch với hiệu điện thế.", "C. Cường độ dòng điện tỉ lệ thuận với hiệu điện thế và tỉ lệ nghịch với điện trở.", "D. Hiệu điện thế tỉ lệ nghịch với cường độ dòng điện."],
+          answer: "C", explanation: "Định luật Ôm: $I \\propto U$ và $I \\propto \\frac{1}{R}$, tức $I = \\frac{U}{R}$." }
+    ];
+
+    function renderQuestions() {
+        const container = document.getElementById('questions-container');
+        let html = '';
+        questionsData.forEach((q, idx) => {
+            const qNumber = idx + 1;
+            // Tạo options HTML
+            let optionsHtml = '';
+            q.options.forEach(opt => {
+                const letter = opt.charAt(0);
+                const text = opt.substring(2);
+                optionsHtml += `
+                    <div class="option">
+                        <div class="opt-letter">${letter}.</div>
+                        <div class="opt-text">${text}</div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                <div class="question-card" id="q-${qNumber}">
+                    <div class="question-header">
+                        <div class="q-num">${qNumber}</div>
+                        <div class="q-text">${q.text}</div>
+                        <button class="toggle-btn" onclick="toggleAnswer(${qNumber})">🔍 Hiện đáp án</button>
+                    </div>
+                    <div class="options">
+                        ${optionsHtml}
+                    </div>
+                    <div class="answer-hint" id="answer-${qNumber}">
+                        <div><span class="answer-badge">Đáp án: ${q.answer}</span> <strong style="color:#8B4513;">📖 Hướng dẫn giải</strong></div>
+                        <div class="explanation">${q.explanation}</div>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    // Hàm toggle ẩn/hiện đáp án và hướng dẫn
+    window.toggleAnswer = function(questionNumber) {
+        const answerDiv = document.getElementById(`answer-${questionNumber}`);
+        const btn = document.querySelector(`#q-${questionNumber} .toggle-btn`);
+        if (answerDiv.classList.contains('show')) {
+            answerDiv.classList.remove('show');
+            btn.innerHTML = '🔍 Hiện đáp án';
+        } else {
+            answerDiv.classList.add('show');
+            btn.innerHTML = '🙈 Ẩn đáp án';
+        }
+    };
+
+    // Render câu hỏi
+    renderQuestions();
+    
+    // Chờ MathJax load và render lại toàn bộ công thức
+    if (window.MathJax) {
+        // Nếu MathJax đã load
+        if (MathJax.startup && MathJax.startup.promise) {
+            MathJax.startup.promise.then(() => {
+                MathJax.typesetPromise();
+            });
+        } else {
+            setTimeout(() => {
+                if (window.MathJax && MathJax.typesetPromise) {
+                    MathJax.typesetPromise();
+                }
+            }, 300);
+        }
+    }
+    
+    // Dự phòng: sau 1 giây nếu chưa render thì gọi lại
+    setTimeout(() => {
+        if (window.MathJax && MathJax.typesetPromise) {
+            MathJax.typesetPromise();
+        }
+    }, 1000);
+</script>
+</body>
+</html>

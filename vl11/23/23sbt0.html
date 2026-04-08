@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 23 (sbt): Điện trở - Định luật Ohm | Vật Lí 11</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #D3D3D3;
+            font-family: 'Segoe UI', 'Times New Roman', Georgia, serif;
+            padding: 40px 20px;
+            color: #000000;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            padding: 30px 35px 50px 35px;
+        }
+
+        h1 {
+            font-size: 28px;
+            text-align: center;
+            color: #000000;
+            border-bottom: 3px solid #8B5A2B;
+            display: inline-block;
+            padding-bottom: 8px;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+
+        .title-wrapper {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #004488;
+            border-left: 6px solid #8B4513;
+            padding-left: 15px;
+            margin: 25px 0 15px 0;
+            background-color: #F5F5F5;
+            line-height: 1.3;
+        }
+
+        .question-block {
+            margin-bottom: 32px;
+            background: #FFFFFF;
+            padding: 10px 15px 15px 15px;
+            border-left: 3px solid #D3D3D3;
+            transition: all 0.2s;
+            border-radius: 12px;
+        }
+
+        .question-block:hover {
+            border-left-color: #8B5A2B;
+            background-color: #FEFCF5;
+        }
+
+        .q-title {
+            font-weight: bold;
+            font-size: 17px;
+            color: #000000;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .q-num {
+            background-color: #F5DEB3;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 15px;
+            color: #000000;
+        }
+
+        .q-text {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #000000;
+            margin-top: 6px;
+        }
+
+        .options {
+            margin-top: 12px;
+            padding-left: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            row-gap: 8px;
+        }
+
+        .option {
+            font-size: 15.5px;
+            color: #000000;
+            min-width: 140px;
+        }
+
+        /* Công thức toán học */
+        .math {
+            font-family: monospace;
+            font-size: 16px;
+            background: #F5F5F5;
+            padding: 2px 6px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .figure {
+            margin: 18px 0 10px 0;
+            text-align: center;
+            background: #F5F5F5;
+            padding: 12px;
+            border-radius: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .figure img {
+            max-width: 50%;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid #D3D3D3;
+            background: white;
+            padding: 6px;
+        }
+
+        .fig-caption {
+            margin-top: 6px;
+            font-style: italic;
+            color: #004488;
+            font-size: 13px;
+        }
+
+        hr {
+            margin: 25px 0;
+            border: none;
+            height: 1px;
+            background: #D3D3D3;
+        }
+
+        .note {
+            font-size: 14px;
+            color: #8B5A2B;
+            background: #F5F5DC;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 20px;
+            }
+            .options {
+                flex-direction: column;
+                gap: 5px;
+            }
+            .figure img {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="title-wrapper">
+        <h1>BÀI 23 (sbt). ĐIỆN TRỞ. ĐỊNH LUẬT OHM</h1>
+    </div>
+
+    <!-- ================= TRẮC NGHIỆM ================= -->
+    <h2>📘 TRẮC NGHIỆM</h2>
+
+    <!-- CÂU 1 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 1</span></div>
+        <div class="q-text">Đơn vị đo điện trở là:</div>
+        <div class="options">
+            <span class="option">A. ôm (Ω).</span> <span class="option">B. fara (F).</span>
+            <span class="option">C. henry (H).</span> <span class="option">D. oát (W).</span>
+        </div>
+    </div>
+
+    <!-- CÂU 2 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 2</span></div>
+        <div class="q-text">Phát biểu nào sau đây <strong>sai</strong>.</div>
+        <div class="options">
+            <span class="option">A. Điện trở có vạch màu là căn cứ để xác định trị số.</span>
+            <span class="option">B. Đối với điện trở nhiệt có hệ số dương, khi nhiệt độ tăng thì điện trở tăng.</span>
+            <span class="option">C. Đối với điện trở biến đổi theo điện áp, khi U tăng thì điện trở tăng.</span>
+            <span class="option">D. Đối với điện trở quang, khi ánh sáng thích hợp rọi vào thì điện trở giảm.</span>
+        </div>
+    </div>
+
+    <!-- CÂU 3 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 3</span></div>
+        <div class="q-text">Đặc điểm của điện trở nhiệt có hệ số nhiệt điện trở</div>
+        <div class="options">
+            <span class="option">A. dương khi nhiệt độ tăng thì điện trở tăng.</span>
+            <span class="option">B. dương khi nhiệt độ tăng thì điện trở giảm.</span>
+            <span class="option">C. âm khi nhiệt độ tăng thì điện trở tăng.</span>
+            <span class="option">D. âm khi nhiệt độ tăng thì điện trở giảm về bằng 0.</span>
+        </div>
+    </div>
+
+    <!-- CÂU 4 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 4</span></div>
+        <div class="q-text">Nếu chiều dài và đường kính của một dây dẫn bằng đồng có tiết diện tròn được tăng lên gấp đôi thì điện trở của dây dẫn sẽ</div>
+        <div class="options">
+            <span class="option">A. không thay đổi.</span> <span class="option">B. tăng lên hai lần.</span>
+            <span class="option">C. tăng lên gấp bốn lần.</span> <span class="option">D. giảm đi hai lần.</span>
+        </div>
+    </div>
+
+    <!-- CÂU 5 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 5</span></div>
+        <div class="q-text">Chọn biến đổi đúng trong các biến đổi sau.</div>
+        <div class="options">
+            <span class="option">A. 1Ω = 0,001kΩ = 0,0001MΩ.</span>
+            <span class="option">B. 10Ω = 0,1kΩ = 0,00001MΩ.</span>
+            <span class="option">C. 1kΩ = 1000Ω = 0,01MΩ.</span>
+            <span class="option">D. 1MΩ = 1000kΩ = 1000000Ω.</span>
+        </div>
+    </div>
+
+    <!-- CÂU 6 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 6</span></div>
+        <div class="q-text">Biến trở là</div>
+        <div class="options">
+            <span class="option">A. điện trở có thể thay đổi trị số và dùng để điều chỉnh chiều dòng điện trong mạch.</span>
+            <span class="option">B. điện trở có thể thay đổi trị số và dùng để điều chỉnh cường độ và chiều dòng điện trong mạch.</span>
+            <span class="option">C. điện trở có thể thay đổi trị số và dùng để điều chỉnh cường độ dòng điện trong mạch.</span>
+            <span class="option">D. điện trở không thay đổi trị số và dùng để điều chỉnh cường độ dòng điện trong mạch.</span>
+        </div>
+    </div>
+
+    <!-- CÂU 7 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 7</span></div>
+        <div class="q-text">Trước khi mắc biến trở vào mạch điện để điều chỉnh cường độ dòng điện thì cần điều chỉnh biến trở có giá trị nào dưới đây?</div>
+        <div class="options">
+            <span class="option">A. Có giá trị bằng 0.</span> <span class="option">B. Có giá trị nhỏ.</span>
+            <span class="option">C. Có giá trị lớn.</span> <span class="option">D. Có giá trị lớn nhất.</span>
+        </div>
+    </div>
+
+    <!-- CÂU 8 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 8</span></div>
+        <div class="q-text">Chọn phát biểu đúng về định luật Ohm.</div>
+        <div class="options">
+            <span class="option">A. Cường độ dòng điện chạy qua dây dẫn tỉ lệ với hiệu điện thế giữa hai đầu dây dẫn và điện trở của dây.</span>
+            <span class="option">B. Cường độ dòng điện chạy qua dây dẫn tỉ lệ thuận với hiệu điện thế giữa hai đầu dây dẫn và không tỉ lệ với điện trở của dây.</span>
+            <span class="option">C. Cường độ dòng điện chạy qua dây dẫn tỉ lệ thuận với hiệu điện thế giữa hai đầu dây dẫn và tỉ lệ nghịch với điện trở của dây.</span>
+            <span class="option">D. Cường độ dòng điện chạy qua dây dẫn tỉ lệ nghịch với hiệu điện thế giữa hai đầu dây dẫn và tỉ lệ thuận với điện trở của dây.</span>
+        </div>
+    </div>
+
+    <!-- CÂU 9 - ĐÃ SỬA LỖI CÔNG THỨC -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 9</span></div>
+        <div class="q-text">Biểu thức đúng của định luật Ohm là</div>
+        <div class="options">
+            <span class="option">A. <span class="math">I = U/R</span></span>
+            <span class="option">B. <span class="math">I = R/U</span></span>
+            <span class="option">C. <span class="math">U = 1/I</span></span>
+            <span class="option">D. <span class="math">U = I/R</span></span>
+        </div>
+    </div>
+
+    <!-- CÂU 10 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 10</span></div>
+        <div class="q-text">Khi hiệu điện thế giữa hai đầu dây dẫn tăng thì</div>
+        <div class="options">
+            <span class="option">A. cường độ dòng điện chạy qua dây dẫn không thay đổi.</span>
+            <span class="option">B. cường độ dòng điện chạy qua dây dẫn giảm, tỉ lệ với hiệu điện thế.</span>
+            <span class="option">C. cường độ dòng điện chạy qua dây dẫn có lúc tăng, có lúc giảm.</span>
+            <span class="option">D. cường độ dòng điện chạy qua dây dẫn tăng, tỉ lệ với hiệu điện thế.</span>
+        </div>
+    </div>
+
+    <!-- CÂU 11 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 11</span></div>
+        <div class="q-text">Đồ thị biểu diễn sự phụ thuộc của cường độ dòng điện vào hiệu điện thế giữa hai đầu dây dẫn có dạng là</div>
+        <div class="options">
+            <span class="option">A. một đường thẳng đi qua gốc toạ độ.</span>
+            <span class="option">B. một đường cong đi qua gốc toạ độ.</span>
+            <span class="option">C. một đường thẳng không đi qua gốc toạ độ.</span>
+            <span class="option">D. một đường cong không đi qua gốc toạ độ.</span>
+        </div>
+    </div>
+
+    <!-- CÂU 12 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 12</span></div>
+        <div class="q-text">Cường độ dòng điện chạy qua dây dẫn tỉ lệ thuận với hiệu điện thế giữa hai đầu dây dẫn. Nếu tăng hiệu điện thế lên 1,6 lần thì</div>
+        <div class="options">
+            <span class="option">A. cường độ dòng điện tăng 3,2 lần.</span>
+            <span class="option">B. cường độ dòng điện giảm 3,2 lần.</span>
+            <span class="option">C. cường độ dòng điện giảm 1,6 lần.</span>
+            <span class="option">D. cường độ dòng điện tăng 1,6 lần.</span>
+        </div>
+    </div>
+
+    <!-- CÂU 13 (có hình 23.1) -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 13</span></div>
+        <div class="q-text">Từ đồ thị biểu diễn sự phụ thuộc của cường độ dòng điện vào hiệu điện thế đối với hai điện trở R₁, R₂ trong Hình 23.1. Điện trở R₁, R₂ có giá trị là</div>
+        <div class="options">
+            <span class="option">A. R₁ = 5Ω; R₂ = 20Ω</span> <span class="option">B. R₁ = 10Ω; R₂ = 5Ω</span>
+            <span class="option">C. R₁ = 5Ω; R₂ = 10Ω</span> <span class="option">D. R₁ = 20Ω; R₂ = 5Ω</span>
+        </div>
+        <div class="figure">
+            <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.1.png" alt="Hình 23.1 - Đồ thị I-U">
+            <div class="fig-caption">Hình 23.1. Đồ thị biểu diễn I theo U của hai điện trở R₁, R₂</div>
+        </div>
+    </div>
+
+    <!-- CÂU 14 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 14</span></div>
+        <div class="q-text">Muốn đo hiệu điện thế giữa hai cực của một nguồn điện, nhưng không có vôn kế, một học sinh đã sử dụng một ampe kế và một điện trở có giá trị R = 50Ω mắc nối tiếp nhau, sau đó mắc vào nguồn điện, biết ampe kế chỉ 1,2 A. Hiệu điện thế giữa hai cực nguồn điện có giá trị bằng bao nhiêu?</div>
+        <div class="options">
+            <span class="option">A. 120 V</span> <span class="option">B. 50 V</span>
+            <span class="option">C. 12 V</span> <span class="option">D. 60 V</span>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- ================= TỰ LUẬN ================= -->
+    <h2>📝 TỰ LUẬN</h2>
+
+    <!-- Câu 15 + hình 23.2 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 15</span></div>
+        <div class="q-text">Cho mạch điện như Hình 23.2. Các giá trị điện trở R₁ = 6Ω, R₂ = 4Ω, R₃ = 2Ω, R₄ = 3Ω, R₅ = 6Ω.<br>
+        a) Tính hiệu điện thế giữa hai đầu điện trở R₂ nếu cường độ dòng điện qua điện trở R₁ có giá trị 1A.<br>
+        b) Tính hiệu điện thế giữa hai đầu điện trở R₂ nếu cường độ dòng điện qua điện trở R₅ có giá trị 1A.</div>
+        <div class="figure">
+            <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.2.png" alt="Hình 23.2 - Mạch điện câu 15">
+            <div class="fig-caption">Hình 23.2. Sơ đồ mạch điện câu 15</div>
+        </div>
+    </div>
+
+    <!-- Câu 16 + hình 23.3 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 16</span></div>
+        <div class="q-text">Cho một đoạn mạch điện như Hình 23.3. Biết các giá trị điện trở: R₁ = 1Ω; R₂ = 20Ω; R₃ = 5Ω; R₄ = R₅ = 10Ω. Hãy tính điện trở của đoạn mạch AB.</div>
+        <div class="figure">
+            <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.3.png" alt="Hình 23.3 - Mạch cầu">
+            <div class="fig-caption">Hình 23.3. Đoạn mạch AB</div>
+        </div>
+    </div>
+
+    <!-- Câu 17 + hình 23.4 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 17</span></div>
+        <div class="q-text">Cho mạch điện như Hình 23.4. Các giá trị điện trở: R₁ = 2Ω, R₂ = 3Ω, R₃ = 4Ω, R₄ = 6Ω. Hiệu điện thế giữa hai đầu đoạn mạch U<sub>AB</sub> = 18V.<br>
+        a) Tính điện trở của đoạn mạch AB.<br>
+        b) Tìm cường độ dòng điện chạy qua các điện trở và hiệu điện thế trên mỗi điện trở.</div>
+        <div class="figure">
+            <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.4.png" alt="Hình 23.4">
+            <div class="fig-caption">Hình 23.4. Mạch điện câu 17</div>
+        </div>
+    </div>
+
+    <!-- Câu 18 + hình 23.5 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 18</span></div>
+        <div class="q-text">Cho mạch điện như Hình 23.5. Giá trị các điện trở: R₁ = 5Ω, R₂ = 7Ω, R₃ = 1Ω, R₄ = 5Ω, R₅ = 3Ω. Hiệu điện thế giữa hai đầu đoạn mạch U<sub>AB</sub> = 21V.<br>
+        a) Tính điện trở của đoạn mạch AB.<br>
+        b) Tính cường độ dòng điện qua các điện trở.</div>
+        <div class="figure">
+            <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.5.png" alt="Hình 23.5">
+            <div class="fig-caption">Hình 23.5. Mạch điện câu 18</div>
+        </div>
+    </div>
+
+    <!-- Câu 19 + hình 23.6 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 19</span></div>
+        <div class="q-text">Cho mạch điện như Hình 23.6. Cho biết các giá trị điện trở: R₁ = 4Ω, R₂ = R₅ = 20Ω, R₃ = R₆ = 12Ω, R₄ = R₇ = 8Ω. Hiệu điện thế giữa hai đầu đoạn mạch U<sub>AB</sub> = 48V.<br>
+        a) Tính điện trở R<sub>AB</sub> của đoạn mạch AB.<br>
+        b) Tìm cường độ dòng điện và hiệu điện thế của mỗi điện trở.</div>
+        <div class="figure">
+            <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.6.png" alt="Hình 23.6">
+            <div class="fig-caption">Hình 23.6. Mạch điện câu 19</div>
+        </div>
+    </div>
+
+    <!-- Câu 20 + hình 23.7 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 20</span></div>
+        <div class="q-text">Cho mạch điện như Hình 23.7. Giá trị các điện trở: R₁ = R₃ = 3Ω, R₂ = 2Ω, R₄ = 1Ω, R₅ = 4Ω. Cường độ dòng điện chạy qua mạch chính là I = 3A. Tính:<br>
+        a) Hiệu điện thế giữa hai đầu đoạn mạch U<sub>AB</sub> và hiệu điện thế của mỗi điện trở.<br>
+        b) Hiệu điện thế giữa hai điểm A và D; E và D.</div>
+        <div class="figure">
+            <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.7.png" alt="Hình 23.7">
+            <div class="fig-caption">Hình 23.7. Mạch điện câu 20</div>
+        </div>
+    </div>
+
+    <!-- Câu 21 + hình 23.8 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 21</span></div>
+        <div class="q-text">Cho mạch điện như Hình 23.8. Giá trị các điện trở: R₁ = R₃ = R₅ = 1Ω, R₄ = 2Ω, R₂ = 3Ω. Biết dòng điện chạy qua điện trở R₄ là 1A.<br>
+        a) Tính điện trở của đoạn mạch AB.<br>
+        b) Tính cường độ dòng điện qua các điện trở.<br>
+        c) Tính hiệu điện thế giữa hai đầu đoạn mạch AB.</div>
+        <div class="figure">
+            <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.8.png" alt="Hình 23.8">
+            <div class="fig-caption">Hình 23.8. Mạch điện câu 21</div>
+        </div>
+    </div>
+
+    <!-- Câu 22 + hình 23.9 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 22</span></div>
+        <div class="q-text">Cho mạch điện như Hình 23.9. Hiệu điện thế giữa hai đầu đoạn mạch U<sub>AB</sub> = 6V. Khi K mở ampe kế A₁ chỉ 1,2A. Khi K đóng, ampe kế A₁, A₂ chỉ lần lượt 1,4A và 0,5A. Bỏ qua điện trở của các ampe kế. Tính điện trở: R₁, R₂, R₃.</div>
+        <div class="figure">
+            <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.9.png" alt="Hình 23.9">
+            <div class="fig-caption">Hình 23.9. Mạch điện câu 22 (có khóa K)</div>
+        </div>
+    </div>
+
+    <!-- Câu 23 + hình 23.10 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 23</span></div>
+        <div class="q-text">Cho mạch điện như Hình 23.10. Cho biết: R₁ = 15Ω, R₂ = R₃ = R₄ = 10Ω. Điện trở của ampe kế và các dây nối không đáng kể.<br>
+        a) Tìm điện trở của đoạn mạch AB.<br>
+        b) Biết ampe kế chỉ 3A. Tính hiệu điện thế U<sub>AB</sub> và cường độ dòng điện chạy qua các điện trở.</div>
+        <div class="figure">
+            <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.10.png" alt="Hình 23.10">
+            <div class="fig-caption">Hình 23.10. Mạch điện câu 23</div>
+        </div>
+    </div>
+
+    <!-- Câu 24 + hình 23.11 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 24</span></div>
+        <div class="q-text">Cho đoạn mạch như Hình 23.11. Tính điện trở của đoạn mạch AB, biết các điện trở có giá trị bằng nhau và bằng R. Biết dây nối có điện trở không đáng kể.</div>
+        <div class="figure">
+            <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.11.png" alt="Hình 23.11">
+            <div class="fig-caption">Hình 23.11. Mạch điện gồm nhiều điện trở R</div>
+        </div>
+    </div>
+
+    <div class="note">
+        <hr style="border: 1px solid #8B4513; margin: 5px 0;">
+    </div>
+</div>
+</body>
+</html>
