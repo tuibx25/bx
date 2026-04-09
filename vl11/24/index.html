@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Bài 24: Nguồn điện - Vật lý 11 (KNTT)</title>
+	<link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #F5F5DC;
+            font-family: 'Segoe UI', 'Roboto', 'Noto Sans', sans-serif;
+            line-height: 1.6;
+            color: #000000;
+            padding: 30px 20px;
+        }
+        .lesson-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            border-radius: 24px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+            padding: 30px 35px;
+            border: 1px solid #D3D3D3;
+        }
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #8B4513;
+            border-left: 6px solid #8B5A2B;
+            padding-left: 18px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #8B5A2B;
+            margin: 28px 0 12px 0;
+            border-bottom: 2px solid #F5DEB3;
+        }
+        h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #004488;
+            margin: 20px 0 10px 0;
+        }
+        .formula-block {
+            background-color: #F5F5F5;
+            padding: 12px 18px;
+            border-radius: 14px;
+            margin: 18px 0;
+            text-align: center;
+            font-size: 1.2rem;
+            border-left: 4px solid #8B5A2B;
+            overflow-x: auto;
+        }
+        .image-wrapper {
+            text-align: center;
+            margin: 20px 0;
+            background: #F5F5DC;
+            padding: 12px 10px;
+            border-radius: 20px;
+        }
+        /* Kích thước mặc định cho ảnh (sẽ bị ghi đè bởi inline style, nhưng dùng làm dự phòng) */
+        .image-wrapper img {
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+            border: 1px solid #D3D3D3;
+        }
+        .caption {
+            margin-top: 8px;
+            font-style: italic;
+            color: #8B5A2B;
+            font-size: 0.9rem;
+        }
+        .highlight-box {
+            background: #F5DEB3;
+            border-left: 6px solid #8B4513;
+            padding: 16px 20px;
+            border-radius: 18px;
+            margin: 24px 0;
+        }
+        .exercise-area {
+            background-color: #F5F5F5;
+            padding: 20px 25px;
+            border-radius: 24px;
+            margin-top: 30px;
+            border: 1px solid #D3D3D3;
+        }
+        .exercise-item {
+            background: #FFFFFF;
+            padding: 18px 20px;
+            margin-bottom: 28px;
+            border-radius: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            border: 1px solid #D3D3D3;
+        }
+        .exercise-item h4 {
+            font-size: 1.25rem;
+            color: #0066CC;
+            margin-bottom: 12px;
+        }
+        .question-list {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        .question-list li {
+            margin-bottom: 6px;
+        }
+        .solution {
+            background: #F5F5DC;
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin-top: 12px;
+            border-left: 3px solid #8B5A2B;
+        }
+        .solution p {
+            margin: 8px 0;
+        }
+        hr { margin: 25px 0; border: 1px solid #F5DEB3; }
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #8B5A2B;
+            border-top: 1px solid #D3D3D3;
+            padding-top: 18px;
+        }
+        /* Responsive: trên màn hình nhỏ, ảnh chiếm tối đa 90% để không vỡ layout */
+        @media (max-width: 768px) {
+            .lesson-container { padding: 20px 18px; }
+            .image-wrapper img {
+                max-width: 90% !important;  /* Ghi đè mọi inline style khi trên mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="lesson-container">
+    <h1>📘 Bài 24: NGUỒN ĐIỆN</h1>
+    <p>Em đã biết nguồn điện có khả năng cung cấp năng lượng điện để tạo ra dòng điện sử dụng trong đời sống. Vậy nguồn điện là gì? Vì sao nguồn điện có thể tạo ra dòng điện?</p>
+
+    <h2>I. NGUỒN ĐIỆN. SUẤT ĐIỆN ĐỘNG CỦA NGUỒN ĐIỆN</h2>
+    <h3>1. Điều kiện để duy trì dòng điện</h3>
+    <p>Giả sử có hai quả cầu kim loại A và B giống nhau, quả cầu A mang điện tích +q và quả cầu B mang điện tích –q. Giữa A và B có hiệu điện thế \(U_{AB}=V_A-V_B\) (Hình 24.1a). Khi nối A với B bằng dây kim loại, electron tự do dịch chuyển từ B sang A tạo dòng điện (Hình 24.1b). Dòng điện chỉ tồn tại trong thời gian ngắn, khi \(V_A=V_B\) thì dòng điện tắt (Hình 24.1c).</p>
+    <div class="image-wrapper">
+        <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/24/24.1.png" alt="Hình 24.1" style="max-width: 25%;">
+        <div class="caption">Hình 24.1: Sự dịch chuyển điện tích và điều kiện duy trì dòng điện</div>
+    </div>
+
+    <h3>2. Nguồn điện</h3>
+    <p>Nguồn điện là thiết bị tạo ra và duy trì hiệu điện thế, duy trì dòng điện. Mỗi nguồn có cực dương (+) và cực âm (-). Kí hiệu như Hình 24.2. Hiệu điện thế giữa hai cực được duy trì ngay cả khi có dòng điện chạy qua vật dẫn nối liền hai cực.</p>
+    <p>Bên trong nguồn, lực lạ thực hiện công tách electron khỏi nguyên tử, tạo ra cực âm thừa electron, cực dương thiếu electron.</p>
+    <div class="image-wrapper">
+        <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/24/24.2.png" alt="Kí hiệu nguồn điện" style="max-width: 35%;">
+        <div class="caption">Hình 24.2: Kí hiệu nguồn điện</div>
+    </div>
+
+    <h3>3. Suất điện động của nguồn điện</h3>
+    <p>Khi mạch kín, electron di chuyển từ cực âm qua dây dẫn đến cực dương. Bên trong nguồn, lực lạ dịch chuyển hạt tải điện dương ngược chiều điện trường (Hình 24.3). Suất điện động \(\mathcal{E}\) đặc trưng cho khả năng thực hiện công của nguồn:</p>
+    <div class="formula-block">\(\mathcal{E} = \dfrac{A}{q}\) &nbsp;&nbsp;(24.1)</div>
+    <p>Đơn vị: vôn (V). Số vôn ghi trên nguồn cho biết \(\mathcal{E}\), cũng là hiệu điện thế giữa hai cực khi mạch hở.</p>
+    <div class="image-wrapper">
+        <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/24/24.3.png" alt="Hình 24.3" style="max-width: 45%;">
+        <div class="caption">Hình 24.3: Chiều dịch chuyển electron và lực lạ bên trong nguồn</div>
+    </div>
+
+    <h2>II. ẢNH HƯỞNG CỦA ĐIỆN TRỞ TRONG LÊN HIỆU ĐIỆN THẾ GIỮA HAI CỰC</h2>
+    <h3>1. Điện trở trong của nguồn</h3>
+    <p>Nguồn điện có điện trở trong \(r\). Mỗi nguồn được đặc trưng bởi \(\mathcal{E}\) và \(r\). Khi mạch kín, hiệu điện thế hai cực nhỏ hơn \(\mathcal{E}\) do điện trở trong.</p>
+    <h3>2. Ảnh hưởng của điện trở trong</h3>
+    <p>Ta có thể tách điện trở trong \(r\) ra ngoài (Hình 24.4). Mạch gồm \(R\) nối tiếp \(r\). Công của nguồn: \(A = \mathcal{E}It\). Nhiệt lượng: \(Q = RI^2t + rI^2t\). Bảo toàn năng lượng:</p>
+    <div class="formula-block">\(\mathcal{E} = I(R+r)\) &nbsp;&nbsp;(24.4)</div>
+    <div class="highlight-box">
+        <strong>📌 ĐỊNH LUẬT ÔM TOÀN MẠCH</strong><br>
+        \[I = \frac{\mathcal{E}}{R+r}\]<br>
+        Cường độ dòng điện tỉ lệ thuận với suất điện động, tỉ lệ nghịch với điện trở toàn phần.<br>
+        Hiệu điện thế mạch ngoài (cũng là hiệu điện thế hai cực nguồn): \(U = \mathcal{E} - I r\) &nbsp;&nbsp;(24.5)
+    </div>
+    <div class="image-wrapper">
+        <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/24/24.4.png" alt="Hình 24.4" style="max-width: 40%;">
+        <div class="caption">Hình 24.4: Điện trở trong \(r\) trong sơ đồ mạch điện</div>
+    </div>
+
+    <h2>⚠️ HIỆN TƯỢNG ĐOẢN MẠCH</h2>
+    <p>Đoản mạch xảy ra khi mạch ngoài có điện trở rất nhỏ (bằng 0), cực âm nối trực tiếp cực dương. Dòng điện rất lớn, gây nguy hiểm cháy nổ.</p>
+    <div class="highlight-box">
+        ❓ <strong>Câu hỏi:</strong> Vì sao đoản mạch rất nguy hiểm với mạng điện gia đình?<br>
+        ✅ Khi \(R \to 0\), \(I = \mathcal{E}/r\) rất lớn, nhiệt lượng tỏa ra khổng lồ, dây dẫn nóng chảy, gây hỏa hoạn, hư hỏng thiết bị.
+    </div>
+
+    <!-- ================= BÀI TẬP LUYỆN TẬP ================= -->
+    <div class="exercise-area">
+        <h3>📚 BÀI TẬP LUYỆN TẬP</h3>
+        <p><em>Các bài tập dưới đây áp dụng định luật Ôm toàn mạch, công thức suất điện động và điện trở trong. Hình 24.5 và 24.6 minh họa cho Bài tập 1 và Bài tập 2.</em></p>
+
+        <!-- BÀI TẬP 1 (kèm Hình 24.5) -->
+        <div class="exercise-item">
+            <h4>Bài tập 1</h4>
+            <p>Cho mạch điện như <strong>Hình 24.5</strong>. Nguồn điện có suất điện động \(\mathcal{E} = 12\,\text{V}\), điện trở trong \(r = 1\,\Omega\). Điện trở mạch ngoài \(R = 5\,\Omega\). Tính:</p>
+            <ul class="question-list">
+                <li>a) Cường độ dòng điện chạy trong mạch.</li>
+                <li>b) Hiệu điện thế giữa hai cực của nguồn điện.</li>
+                <li>c) Công suất tiêu thụ trên điện trở \(R\).</li>
+            </ul>
+            <div class="image-wrapper">
+                <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/24/24.5.png" alt="Hình 24.5" style="max-width: 30%;">
+                <div class="caption">Hình 24.5: Mạch điện gồm nguồn \(\mathcal{E}, r\) và điện trở \(R\)</div>
+            </div>
+            <div class="solution">
+                <strong>Lời giải:</strong><br>
+                a) Áp dụng định luật Ôm toàn mạch: \(I = \dfrac{\mathcal{E}}{R + r} = \dfrac{12}{5+1} = 2\,\text{A}\).<br>
+                b) Hiệu điện thế hai cực nguồn: \(U = \mathcal{E} - I r = 12 - 2\times1 = 10\,\text{V}\) (hoặc \(U = I R = 2 \times 5 = 10\,\text{V}\)).<br>
+                c) Công suất tiêu thụ trên \(R\): \(P_R = I^2 R = 2^2 \times 5 = 20\,\text{W}\).
+            </div>
+        </div>
+
+        <!-- BÀI TẬP 2 (kèm Hình 24.6) -->
+        <div class="exercise-item">
+            <h4>Bài tập 2</h4>
+            <p>Mạch điện như <strong>Hình 24.6</strong> gồm nguồn \(\mathcal{E} = 9\,\text{V}\), điện trở trong \(r = 0,5\,\Omega\). Mạch ngoài gồm \(R_1 = 4\,\Omega\) nối tiếp với đoạn mạch song song (\(R_2 = 6\,\Omega\) // \(R_3 = 3\,\Omega\)). Tính:</p>
+            <ul class="question-list">
+                <li>a) Điện trở tương đương mạch ngoài \(R_N\).</li>
+                <li>b) Cường độ dòng điện chính chạy qua nguồn.</li>
+                <li>c) Hiệu điện thế giữa hai đầu \(R_1\).</li>
+                <li>d) Cường độ dòng điện qua điện trở \(R_2\).</li>
+            </ul>
+            <div class="image-wrapper">
+                <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/24/24.6.png" alt="Hình 24.6" style="max-width: 50%;">
+                <div class="caption">Hình 24.6: Mạch điện có \(R_1\) nối tiếp với (\(R_2\)//\(R_3\))</div>
+            </div>
+            <div class="solution">
+                <strong>Lời giải:</strong><br>
+                a) Điện trở tương đương của \(R_2\) và \(R_3\): \(R_{23} = \dfrac{R_2 R_3}{R_2+R_3} = \dfrac{6 \times 3}{6+3} = \dfrac{18}{9} = 2\,\Omega\).<br>
+                &nbsp;&nbsp;Điện trở tương đương mạch ngoài: \(R_N = R_1 + R_{23} = 4 + 2 = 6\,\Omega\).<br>
+                b) Cường độ dòng điện chính: \(I = \dfrac{\mathcal{E}}{R_N + r} = \dfrac{9}{6 + 0,5} = \dfrac{9}{6,5} \approx 1,3846\,\text{A}\).<br>
+                c) Hiệu điện thế giữa hai đầu \(R_1\): \(U_1 = I \cdot R_1 = 1,3846 \times 4 \approx 5,538\,\text{V}\).<br>
+                d) Hiệu điện thế hai đầu đoạn \(R_{23}\): \(U_{23} = I \cdot R_{23} = 1,3846 \times 2 \approx 2,7692\,\text{V}\).<br>
+                &nbsp;&nbsp;Vì \(R_2\) mắc song song với \(R_3\) nên \(U_2 = U_{23}\). Cường độ dòng điện qua \(R_2\): \(I_2 = \dfrac{U_2}{R_2} = \dfrac{2,7692}{6} \approx 0,4615\,\text{A}\).
+            </div>
+        </div>
+
+        <!-- BÀI TẬP 3 -->
+        <div class="exercise-item">
+            <h4>Bài tập 3: Xác định suất điện động và điện trở trong</h4>
+            <p>Mắc một bóng đèn có điện trở \(R = 8\,\Omega\) vào hai cực của một nguồn điện, ampe kế chỉ \(0,5\,\text{A}\). Nếu thay bóng đèn bằng điện trở \(R' = 15\,\Omega\) thì dòng điện là \(0,3\,\text{A}\). Tìm:</p>
+            <ul class="question-list">
+                <li>a) Điện trở trong \(r\) của nguồn.</li>
+                <li>b) Suất điện động \(\mathcal{E}\) của nguồn.</li>
+            </ul>
+            <div class="solution">
+                <strong>Lời giải:</strong><br>
+                Áp dụng công thức \(I = \dfrac{\mathcal{E}}{R+r}\):<br>
+                a) Với \(R = 8\,\Omega\): \(0,5 = \dfrac{\mathcal{E}}{8+r}\) &nbsp;&nbsp;(1)<br>
+                &nbsp;&nbsp;Với \(R = 15\,\Omega\): \(0,3 = \dfrac{\mathcal{E}}{15+r}\) &nbsp;&nbsp;(2)<br>
+                &nbsp;&nbsp;Từ (1) và (2) suy ra: \(0,5(8+r) = 0,3(15+r)\)<br>
+                &nbsp;&nbsp;\(\Rightarrow 4 + 0,5r = 4,5 + 0,3r\)<br>
+                &nbsp;&nbsp;\(\Rightarrow 0,2r = 0,5\) &nbsp;\(\Rightarrow r = 2,5\,\Omega\).<br>
+                b) Thay \(r = 2,5\,\Omega\) vào (1): \(\mathcal{E} = 0,5 \times (8+2,5) = 0,5 \times 10,5 = 5,25\,\text{V}\).
+            </div>
+        </div>
+
+        <!-- BÀI TẬP 4 -->
+        <div class="exercise-item">
+            <h4>Bài tập 4: Hiện tượng đoản mạch</h4>
+            <p>Một acquy có suất điện động \(12\,\text{V}\), điện trở trong \(0,1\,\Omega\).</p>
+            <ul class="question-list">
+                <li>a) Tính cường độ dòng điện khi hai cực của acquy bị nối tắt (đoản mạch) bằng dây dẫn có điện trở không đáng kể.</li>
+                <li>b) Giải thích tại sao hiện tượng đoản mạch có thể gây cháy nổ.</li>
+            </ul>
+            <div class="solution">
+                <strong>Lời giải:</strong><br>
+                a) Khi đoản mạch, điện trở mạch ngoài \(R \approx 0\). Dòng điện qua acquy: \(I = \dfrac{\mathcal{E}}{r} = \dfrac{12}{0,1} = 120\,\text{A}\).<br>
+                b) Dòng điện cực lớn (120 A) làm nhiệt lượng tỏa ra trên điện trở trong của acquy và dây dẫn rất lớn (\(Q = rI^2t\)). Nhiệt độ tăng nhanh có thể làm nóng chảy dây dẫn, gây cháy, làm hỏng acquy, thậm chí gây nổ và hỏa hoạn.
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <div style="background-color: #F5F5DC; padding: 14px 18px; border-radius: 20px;">
+        <p style="font-weight: 600; color:#8B4513;">📖 TÓM LƯỢC BÀI HỌC:</p>
+        <ul style="margin-left: 20px;">
+            <li>Nguồn điện có suất điện động \(\mathcal{E}\) và điện trở trong \(r\).</li>
+            <li>Định luật Ôm toàn mạch: \(I = \dfrac{\mathcal{E}}{R+r}\).</li>
+            <li>Hiệu điện thế hai cực nguồn: \(U = \mathcal{E} - I r\).</li>
+            <li>Đoản mạch gây dòng điện rất lớn, nguy hiểm.</li>
+        </ul>
+    </div>
+    <footer>
+<hr style="border: 1px solid #8B4513; margin: 5px 0;">
+    </footer>
+</div>
+</body>
+</html>
