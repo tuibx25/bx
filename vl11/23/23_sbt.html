@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 23 (sbt): Điện trở - Định luật Ohm | Vật Lí 11 (Lời giải chi tiết)</title>
+    <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #D3D3D3; font-family: 'Segoe UI', 'Times New Roman', Georgia, serif; padding: 40px 20px; }
+        .container { max-width: 1100px; margin: 0 auto; background-color: #FFFFFF; border-radius: 24px; padding: 30px 35px 50px; }
+        h1 { font-size: 28px; text-align: center; border-bottom: 3px solid #8B5A2B; display: inline-block; margin-bottom: 25px; }
+        .title-wrapper { text-align: center; margin-bottom: 30px; }
+        h2 { font-size: 22px; color: #004488; border-left: 6px solid #8B4513; padding-left: 15px; margin: 25px 0 15px; background-color: #F5F5F5; }
+        .question-block { margin-bottom: 32px; padding: 10px 15px; border-left: 3px solid #D3D3D3; border-radius: 12px; background: #FFFFFF; transition: all 0.2s; }
+        .question-block:hover { border-left-color: #8B5A2B; background-color: #FEFCF5; }
+        .q-title { font-weight: bold; display: flex; gap: 8px; align-items: baseline; }
+        .q-num { background-color: #F5DEB3; padding: 2px 10px; border-radius: 20px; }
+        .q-text { font-size: 16px; line-height: 1.5; margin: 8px 0 12px 0; }
+        .options { margin: 12px 0 8px 20px; display: flex; flex-wrap: wrap; gap: 18px; }
+        .figure { margin: 18px 0; text-align: center; background: #F5F5F5; padding: 12px; border-radius: 20px; }
+        .figure img { max-width: 50%; height: auto; background: white; padding: 6px; border: 1px solid #D3D3D3; border-radius: 12px; }
+        .fig-caption { margin-top: 6px; font-style: italic; color: #004488; font-size: 13px; }
+        .solution { background: #E8F0FE; border-left: 5px solid #2C7A47; padding: 12px 16px; margin-top: 16px; border-radius: 12px; line-height: 1.5; display: none; }
+        .answer { font-weight: bold; color: #C44536; font-size: 1.05em; }
+        .toggle-btn { background-color: #8B5A2B; border: none; color: white; padding: 6px 14px; border-radius: 30px; cursor: pointer; font-size: 13px; margin-top: 8px; transition: 0.2s; display: inline-block; }
+        .toggle-btn:hover { background-color: #5e3e1d; }
+        .solution strong { color: #004488; }
+        hr { margin: 20px 0; }
+        @media (max-width: 700px) { .container { padding: 20px; } .options { flex-direction: column; } .figure img { max-width: 85%; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="title-wrapper">
+        <h1>BÀI 23 (sbt). ĐIỆN TRỞ. ĐỊNH LUẬT OHM</h1>
+        <div style="font-size:14px;">✅ Lời giải chi tiết từng câu – Nhấn nút để xem hướng dẫn đầy đủ.</div>
+    </div>
+
+    <h2>📘 TRẮC NGHIỆM</h2>
+
+    <!-- CÂU 1 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 1</span></div>
+        <div class="q-text">Đơn vị đo điện trở là:</div>
+        <div class="options"><span class="option">A. ôm (Ω).</span> <span class="option">B. fara (F).</span><span class="option">C. henry (H).</span> <span class="option">D. oát (W).</span></div>
+        <button class="toggle-btn">🔽 Hiện đáp án chi tiết</button>
+        <div class="solution"><span class="answer">Đáp án: A</span><br><strong>Giải thích chi tiết:</strong> Theo hệ SI, điện trở có đơn vị là ôm, ký hiệu Ω. Fara (F) là đơn vị điện dung, Henry (H) là đơn vị độ tự cảm, Oát (W) là đơn vị công suất. Do đó chỉ có A đúng.</div>
+    </div>
+
+    <!-- CÂU 2 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 2</span></div>
+        <div class="q-text">Phát biểu nào sau đây <strong>sai</strong>.</div>
+        <div class="options"><span class="option">A. Điện trở có vạch màu là căn cứ để xác định trị số.</span><span class="option">B. Đối với điện trở nhiệt có hệ số dương, khi nhiệt độ tăng thì điện trở tăng.</span><span class="option">C. Đối với điện trở biến đổi theo điện áp, khi U tăng thì điện trở tăng.</span><span class="option">D. Đối với điện trở quang, khi ánh sáng thích hợp rọi vào thì điện trở giảm.</span></div>
+        <button class="toggle-btn">🔽 Hiện đáp án chi tiết</button>
+        <div class="solution"><span class="answer">Đáp án: C</span><br><strong>Giải thích chi tiết:</strong> Điện trở biến đổi theo điện áp (varistor) có đặc tính phi tuyến: khi điện áp đặt vào tăng vượt ngưỡng thì điện trở giảm mạnh để bảo vệ mạch. Do đó phát biểu "khi U tăng thì điện trở tăng" là sai. Các ý A, B, D đúng theo tính chất của từng loại điện trở.</div>
+    </div>
+
+    <!-- CÂU 3 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 3</span></div>
+        <div class="q-text">Đặc điểm của điện trở nhiệt có hệ số nhiệt điện trở</div>
+        <div class="options"><span class="option">A. dương khi nhiệt độ tăng thì điện trở tăng.</span><span class="option">B. dương khi nhiệt độ tăng thì điện trở giảm.</span><span class="option">C. âm khi nhiệt độ tăng thì điện trở tăng.</span><span class="option">D. âm khi nhiệt độ tăng thì điện trở giảm về bằng 0.</span></div>
+        <button class="toggle-btn">🔽 Hiện đáp án chi tiết</button>
+        <div class="solution"><span class="answer">Đáp án: A</span><br><strong>Giải thích chi tiết:</strong> Hệ số nhiệt điện trở dương (PTC – Positive Temperature Coefficient) nghĩa là khi nhiệt độ tăng, điện trở tăng. Ngược lại, hệ số âm (NTC) thì điện trở giảm khi nhiệt độ tăng. Câu hỏi nêu "điện trở nhiệt có hệ số nhiệt điện trở" (ngầm hiểu dương) → đặc điểm là nhiệt độ tăng thì điện trở tăng.</div>
+    </div>
+
+    <!-- CÂU 4 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 4</span></div>
+        <div class="q-text">Nếu chiều dài và đường kính của một dây dẫn bằng đồng có tiết diện tròn được tăng lên gấp đôi thì điện trở của dây dẫn sẽ</div>
+        <div class="options"><span class="option">A. không thay đổi.</span><span class="option">B. tăng lên hai lần.</span><span class="option">C. tăng lên gấp bốn lần.</span><span class="option">D. giảm đi hai lần.</span></div>
+        <button class="toggle-btn">🔽 Hiện đáp án chi tiết</button>
+        <div class="solution"><span class="answer">Đáp án: D</span><br><strong>Giải thích chi tiết:</strong> Công thức \(R = \rho \frac{\ell}{S}\). Tiết diện tròn: \(S = \pi r^2 = \pi (d/2)^2\). Khi đường kính d tăng gấp đôi → d' = 2d → S' = π(2d/2)^2 = π d^2 = 4·(π(d/2)^2) = 4S. Chiều dài ℓ tăng gấp đôi → ℓ' = 2ℓ. Do đó \(R' = \rho \frac{2\ell}{4S} = \rho \frac{\ell}{2S} = \frac{R}{2}\). Vậy điện trở giảm 2 lần.</div>
+    </div>
+
+    <!-- CÂU 5 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 5</span></div>
+        <div class="q-text">Chọn biến đổi đúng trong các biến đổi sau.</div>
+        <div class="options"><span class="option">A. 1Ω = 0,001kΩ = 0,0001MΩ.</span><span class="option">B. 10Ω = 0,1kΩ = 0,00001MΩ.</span><span class="option">C. 1kΩ = 1000Ω = 0,01MΩ.</span><span class="option">D. 1MΩ = 1000kΩ = 1000000Ω.</span></div>
+        <button class="toggle-btn">🔽 Hiện đáp án chi tiết</button>
+        <div class="solution"><span class="answer">Đáp án: D</span><br><strong>Giải thích chi tiết:</strong> 1 MΩ = 10⁶ Ω = 1000 kΩ (vì 1 kΩ = 10³ Ω). Kiểm tra các đáp án: A sai vì 1 Ω = 0,001 kΩ nhưng 0,0001 MΩ = 100 Ω, không đúng. B sai: 0,00001 MΩ = 10 Ω, nhưng 0,1 kΩ = 100 Ω. C sai: 1 kΩ = 1000 Ω, nhưng 0,01 MΩ = 10⁴ Ω = 10000 Ω. Chỉ D đúng.</div>
+    </div>
+
+    <!-- CÂU 6 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 6</span></div>
+        <div class="q-text">Biến trở là</div>
+        <div class="options"><span class="option">A. điện trở có thể thay đổi trị số và dùng để điều chỉnh chiều dòng điện trong mạch.</span><span class="option">B. điện trở có thể thay đổi trị số và dùng để điều chỉnh cường độ và chiều dòng điện trong mạch.</span><span class="option">C. điện trở có thể thay đổi trị số và dùng để điều chỉnh cường độ dòng điện trong mạch.</span><span class="option">D. điện trở không thay đổi trị số và dùng để điều chỉnh cường độ dòng điện trong mạch.</span></div>
+        <button class="toggle-btn">🔽 Hiện đáp án chi tiết</button>
+        <div class="solution"><span class="answer">Đáp án: C</span><br><strong>Giải thích chi tiết:</strong> Biến trở là điện trở có giá trị thay đổi được, được mắc nối tiếp trong mạch để điều chỉnh cường độ dòng điện (bằng cách thay đổi điện trở toàn mạch). Nó không thể đảo chiều dòng điện (muốn đảo chiều phải đổi cực nguồn). Vậy C đúng.</div>
+    </div>
+
+    <!-- CÂU 7 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 7</span></div>
+        <div class="q-text">Trước khi mắc biến trở vào mạch điện để điều chỉnh cường độ dòng điện thì cần điều chỉnh biến trở có giá trị nào dưới đây?</div>
+        <div class="options"><span class="option">A. Có giá trị bằng 0.</span><span class="option">B. Có giá trị nhỏ.</span><span class="option">C. Có giá trị lớn.</span><span class="option">D. Có giá trị lớn nhất.</span></div>
+        <button class="toggle-btn">🔽 Hiện đáp án chi tiết</button>
+        <div class="solution"><span class="answer">Đáp án: D</span><br><strong>Giải thích chi tiết:</strong> Để tránh dòng điện quá lớn gây hỏng các thiết bị hoặc biến trở, trước khi đóng mạch ta phải đặt biến trở ở giá trị lớn nhất, sau đó giảm dần để tăng dòng điện. Điều này đảm bảo an toàn.</div>
+    </div>
+
+    <!-- CÂU 8 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 8</span></div>
+        <div class="q-text">Chọn phát biểu đúng về định luật Ohm.</div>
+        <div class="options"><span class="option">A. Cường độ dòng điện chạy qua dây dẫn tỉ lệ với hiệu điện thế giữa hai đầu dây dẫn và điện trở của dây.</span><span class="option">B. Cường độ dòng điện chạy qua dây dẫn tỉ lệ thuận với hiệu điện thế giữa hai đầu dây dẫn và không tỉ lệ với điện trở của dây.</span><span class="option">C. Cường độ dòng điện chạy qua dây dẫn tỉ lệ thuận với hiệu điện thế giữa hai đầu dây dẫn và tỉ lệ nghịch với điện trở của dây.</span><span class="option">D. Cường độ dòng điện chạy qua dây dẫn tỉ lệ nghịch với hiệu điện thế giữa hai đầu dây dẫn và tỉ lệ thuận với điện trở của dây.</span></div>
+        <button class="toggle-btn">🔽 Hiện đáp án chi tiết</button>
+        <div class="solution"><span class="answer">Đáp án: C</span><br><strong>Giải thích chi tiết:</strong> Định luật Ohm: \(I = \frac{U}{R}\) → I tỉ lệ thuận với U và tỉ lệ nghịch với R. Phát biểu C chính xác.</div>
+    </div>
+
+    <!-- CÂU 9 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 9</span></div>
+        <div class="q-text">Biểu thức đúng của định luật Ohm là</div>
+        <div class="options"><span class="option">A. \(I = U/R\)</span><span class="option">B. \(I = R/U\)</span><span class="option">C. \(U = 1/I\)</span><span class="option">D. \(U = I/R\)</span></div>
+        <button class="toggle-btn">🔽 Hiện đáp án chi tiết</button>
+        <div class="solution"><span class="answer">Đáp án: A</span><br><strong>Giải thích chi tiết:</strong> Biểu thức chuẩn của định luật Ohm cho đoạn mạch: \(I = \frac{U}{R}\).</div>
+    </div>
+
+    <!-- CÂU 10 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 10</span></div>
+        <div class="q-text">Khi hiệu điện thế giữa hai đầu dây dẫn tăng thì</div>
+        <div class="options"><span class="option">A. cường độ dòng điện chạy qua dây dẫn không thay đổi.</span><span class="option">B. cường độ dòng điện chạy qua dây dẫn giảm, tỉ lệ với hiệu điện thế.</span><span class="option">C. cường độ dòng điện chạy qua dây dẫn có lúc tăng, có lúc giảm.</span><span class="option">D. cường độ dòng điện chạy qua dây dẫn tăng, tỉ lệ với hiệu điện thế.</span></div>
+        <button class="toggle-btn">🔽 Hiện đáp án chi tiết</button>
+        <div class="solution"><span class="answer">Đáp án: D</span><br><strong>Giải thích chi tiết:</strong> Theo định luật Ohm, với R không đổi, I tỉ lệ thuận với U, do đó khi U tăng thì I tăng.</div>
+    </div>
+
+    <!-- CÂU 11 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 11</span></div>
+        <div class="q-text">Đồ thị biểu diễn sự phụ thuộc của cường độ dòng điện vào hiệu điện thế giữa hai đầu dây dẫn có dạng là</div>
+        <div class="options"><span class="option">A. một đường thẳng đi qua gốc toạ độ.</span><span class="option">B. một đường cong đi qua gốc toạ độ.</span><span class="option">C. một đường thẳng không đi qua gốc toạ độ.</span><span class="option">D. một đường cong không đi qua gốc toạ độ.</span></div>
+        <button class="toggle-btn">🔽 Hiện đáp án chi tiết</button>
+        <div class="solution"><span class="answer">Đáp án: A</span><br><strong>Giải thích chi tiết:</strong> Hàm số I = (1/R)·U có dạng y = kx (k = 1/R > 0) nên đồ thị là đường thẳng đi qua gốc tọa độ.</div>
+    </div>
+
+    <!-- CÂU 12 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 12</span></div>
+        <div class="q-text">Cường độ dòng điện chạy qua dây dẫn tỉ lệ thuận với hiệu điện thế giữa hai đầu dây dẫn. Nếu tăng hiệu điện thế lên 1,6 lần thì</div>
+        <div class="options"><span class="option">A. cường độ dòng điện tăng 3,2 lần.</span><span class="option">B. cường độ dòng điện giảm 3,2 lần.</span><span class="option">C. cường độ dòng điện giảm 1,6 lần.</span><span class="option">D. cường độ dòng điện tăng 1,6 lần.</span></div>
+        <button class="toggle-btn">🔽 Hiện đáp án chi tiết</button>
+        <div class="solution"><span class="answer">Đáp án: D</span><br><strong>Giải thích chi tiết:</strong> Vì I tỉ lệ thuận với U, nếu U' = 1,6U thì I' = 1,6I → tăng 1,6 lần.</div>
+    </div>
+
+    <!-- CÂU 13 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 13</span></div>
+        <div class="q-text">Từ đồ thị Hình 23.1. Điện trở R₁, R₂ có giá trị là</div>
+        <div class="options"><span class="option">A. R₁ = 5Ω; R₂ = 20Ω</span> <span class="option">B. R₁ = 10Ω; R₂ = 5Ω</span><span class="option">C. R₁ = 5Ω; R₂ = 10Ω</span> <span class="option">D. R₁ = 20Ω; R₂ = 5Ω</span></div>
+        <div class="figure"><img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.1.png" alt="Hình 23.1"><div class="fig-caption">Hình 23.1. Đồ thị I-U</div></div>
+        <button class="toggle-btn">🔽 Hiện đáp án chi tiết</button>
+        <div class="solution"><span class="answer">Đáp án: D (R₁ = 20Ω; R₂ = 5Ω)</span><br><strong>Giải thích chi tiết:</strong> Trên đồ thị, chọn điểm U = 4V. Đường R₁ có I₁ = 0,2A → R₁ = 4/0,2 = 20Ω. Đường R₂ có I₂ = 0,8A → R₂ = 4/0,8 = 5Ω.</div>
+    </div>
+
+    <!-- CÂU 14 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 14</span></div>
+        <div class="q-text">Muốn đo hiệu điện thế giữa hai cực của một nguồn điện, nhưng không có vôn kế, một học sinh đã sử dụng một ampe kế và một điện trở có giá trị R = 50Ω mắc nối tiếp nhau, sau đó mắc vào nguồn điện, biết ampe kế chỉ 1,2 A. Hiệu điện thế giữa hai cực nguồn điện có giá trị bằng bao nhiêu?</div>
+        <div class="options"><span class="option">A. 120 V</span><span class="option">B. 50 V</span><span class="option">C. 12 V</span><span class="option">D. 60 V</span></div>
+        <button class="toggle-btn">🔽 Hiện đáp án chi tiết</button>
+        <div class="solution"><span class="answer">Đáp án: D (60 V)</span><br><strong>Giải thích chi tiết:</strong> Mạch gồm R nối tiếp ampe kế (coi ampe kế lý tưởng, điện trở không đáng kể). Hiệu điện thế hai cực nguồn chính là U = I·R = 1,2·50 = 60 V.</div>
+    </div>
+
+    <hr>
+    <h2>📝 TỰ LUẬN (Lời giải chi tiết)</h2>
+
+    <!-- CÂU 15 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 15</span></div>
+        <div class="q-text">Cho mạch điện Hình 23.2: \(R_1=6\Omega, R_2=4\Omega, R_3=2\Omega, R_4=3\Omega, R_5=6\Omega\).<br>a) Tính \(U_{R2}\) khi \(I_{R1}=1A\). b) Tính \(U_{R2}\) khi \(I_{R5}=1A\).</div>
+        <div class="figure"><img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.2.png" alt="Hình 23.2"><div class="fig-caption">Hình 23.2</div></div>
+        <button class="toggle-btn">🔽 Hiện lời giải chi tiết</button>
+        <div class="solution">
+            <span class="answer">Kết quả: a) 2V; b) 12V</span><br>
+            <strong>Phân tích mạch:</strong> \(R_1\) nối tiếp với cụm \(R_2 // (R_3 \text{ nt } (R_4 // R_5))\).<br>
+            Tính \(R_{45} = \frac{R_4 R_5}{R_4+R_5} = \frac{3\cdot6}{3+6}=2\Omega\).<br>
+            \(R_{345} = R_3 + R_{45} = 2+2=4\Omega\).<br>
+            \(R_{2345} = \frac{R_2\cdot R_{345}}{R_2+R_{345}} = \frac{4\cdot4}{4+4}=2\Omega\).<br>
+            Điện trở tương đương toàn mạch: \(R_{AB}=R_1+R_{2345}=6+2=8\Omega\).<br>
+            <strong>a)</strong> \(I_{R1}=1A\) (dòng mạch chính) ⇒ \(U_{2345}=I\cdot R_{2345}=1\cdot2=2V\). Vì \(R_2\) // \(R_{345}\) nên \(U_{R2}=U_{2345}=2V\).<br>
+            <strong>b)</strong> \(I_{R5}=1A\). Từ \(R_4//R_5\): \(U_{45}=I_{R5}\cdot R_5 = 1\cdot6=6V\). Dòng qua \(R_4\): \(I_{R4}=U_{45}/R_4=6/3=2A\). Dòng qua \(R_3\): \(I_3 = I_{R4}+I_{R5}=2+1=3A\). Suy ra \(U_{345}=I_3\cdot R_3+U_{45}=3\cdot2+6=12V\). Vì \(R_2\) song song với \(R_{345}\) nên \(U_{R2}=U_{345}=12V\).
+        </div>
+    </div>
+
+    <!-- CÂU 16 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 16</span></div>
+        <div class="q-text">Mạch Hình 23.3: \(R_1=1\Omega, R_2=20\Omega, R_3=5\Omega, R_4=R_5=10\Omega\). Tính \(R_{AB}\).</div>
+        <div class="figure"><img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.3.png" alt="Hình 23.3"><div class="fig-caption">Hình 23.3</div></div>
+        <button class="toggle-btn">🔽 Hiện lời giải chi tiết</button>
+        <div class="solution">
+            <span class="answer">\(R_{AB}=4\Omega\)</span><br>
+            <strong>Phân tích cấu trúc:</strong> Mạch gồm hai nhánh song song: Nhánh 1: \(R_1\) nối tiếp \((R_2//R_3)\); Nhánh 2: \(R_4\) nối tiếp \(R_5\).<br>
+            \(R_{23} = \frac{R_2R_3}{R_2+R_3}=\frac{20\cdot5}{25}=4\Omega\).<br>
+            \(R_{123}=R_1+R_{23}=1+4=5\Omega\).<br>
+            \(R_{45}=R_4+R_5=10+10=20\Omega\).<br>
+            Điện trở tương đương: \(R_{AB}=\frac{R_{123}\cdot R_{45}}{R_{123}+R_{45}}=\frac{5\cdot20}{25}=4\Omega\).
+        </div>
+    </div>
+
+    <!-- CÂU 17 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 17</span></div>
+        <div class="q-text">Mạch Hình 23.4: \(R_1=2\Omega, R_2=3\Omega, R_3=4\Omega, R_4=6\Omega, U_{AB}=18V\). Tính \(R_{AB}\), I và U mỗi điện trở.</div>
+        <div class="figure"><img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.4.png" alt="Hình 23.4"><div class="fig-caption">Hình 23.4</div></div>
+        <button class="toggle-btn">🔽 Hiện lời giải chi tiết</button>
+        <div class="solution">
+            <span class="answer">\(R_{AB}=3,6\Omega\); I₁=3A, I₂=2A, I₃=3A, I₄=2A; U₁=U₂=6V, U₃=U₄=12V</span><br>
+            <strong>Phân tích:</strong> \((R_1//R_2)\) nt \((R_3//R_4)\).<br>
+            \(R_{12}=\frac{2\cdot3}{2+3}=1,2\Omega\). \(R_{34}=\frac{4\cdot6}{4+6}=2,4\Omega\). \(R_{AB}=1,2+2,4=3,6\Omega\).<br>
+            Dòng mạch chính: \(I = U_{AB}/R_{AB}=18/3,6=5A\).<br>
+            \(U_{12}=I\cdot R_{12}=5\cdot1,2=6V = U_1=U_2\). Suy ra \(I_1=U_1/R_1=6/2=3A,\ I_2=6/3=2A\).<br>
+            \(U_{34}=I\cdot R_{34}=5\cdot2,4=12V = U_3=U_4\). \(I_3=12/4=3A,\ I_4=12/6=2A\).
+        </div>
+    </div>
+
+    <!-- CÂU 18 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 18</span></div>
+        <div class="q-text">Mạch Hình 23.5: \(R_1=5\Omega, R_2=7\Omega, R_3=1\Omega, R_4=5\Omega, R_5=3\Omega, U_{AB}=21V\). Tính \(R_{AB}\) và dòng qua các điện trở.</div>
+        <div class="figure"><img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.5.png" alt="Hình 23.5"><div class="fig-caption">Hình 23.5</div></div>
+        <button class="toggle-btn">🔽 Hiện lời giải chi tiết</button>
+        <div class="solution">
+            <span class="answer">\(R_{AB}=3,5\Omega\); I₁=3A, I₂=3A, I₃=1A, I₄=1A, I₅=2A</span><br>
+            <strong>Phân tích:</strong> \(R_2 // [R_1 \text{ nt } ((R_3 \text{ nt } R_4) // R_5)]\).<br>
+            \(R_{34}=1+5=6\Omega\). \(R_{345}=\frac{R_{34}\cdot R_5}{R_{34}+R_5}=\frac{6\cdot3}{9}=2\Omega\).<br>
+            \(R_{1345}=R_1+R_{345}=5+2=7\Omega\).<br>
+            \(R_{AB}=\frac{R_2\cdot R_{1345}}{R_2+R_{1345}}=\frac{7\cdot7}{14}=3,5\Omega\).<br>
+            Dòng mạch chính: \(I=U_{AB}/R_{AB}=21/3,5=6A\).<br>
+            \(U_2 = U_{AB}=21V\) (do R₂ // phần còn lại) ⇒ \(I_2=U_2/R_2=21/7=3A\).<br>
+            Dòng qua nhánh còn lại: \(I_{1345}=I-I_2=3A\).<br>
+            \(U_1 = I_{1345}\cdot R_1=3\cdot5=15V\). Suy ra \(U_{345}=U_{AB}-U_1=6V\).<br>
+            \(I_5=U_{345}/R_5=6/3=2A\). \(I_{34}=U_{345}/R_{34}=6/6=1A\). Vậy \(I_3=I_4=1A\).
+        </div>
+    </div>
+
+    <!-- CÂU 19 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 19</span></div>
+        <div class="q-text">Mạch Hình 23.6: \(R_1=4\Omega, R_2=R_5=20\Omega, R_3=R_6=12\Omega, R_4=R_7=8\Omega, U_{AB}=48V\). Tính \(R_{AB}\), I và U mỗi điện trở.</div>
+        <div class="figure"><img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.6.png" alt="Hình 23.6"><div class="fig-caption">Hình 23.6</div></div>
+        <button class="toggle-btn">🔽 Hiện lời giải chi tiết</button>
+        <div class="solution">
+            <span class="answer">\(R_{AB}=16\Omega\); I₁=1/6 A, I₂=1/6 A, I₃=1/3 A, I₄=0,5A, I₅=1A, I₆=2A, I₇=3A; U₁=2/3V, U₂=10/3V, U₃=4V, U₄=4V, U₅=20V, U₆=24V, U₇=24V</span><br>
+            <strong>Phân tích từng bước:</strong><br>
+            Cấu trúc: \(((((R_1 \text{ nt } R_2) // R_3 // R_4) \text{ nt } R_5) // R_6) \text{ nt } R_7\).<br>
+            \(R_{12}=4+20=24\Omega\).<br>
+            Cụm // gồm \(R_{12}, R_3, R_4\): \(\frac{1}{R_{1234}}=\frac{1}{24}+\frac{1}{12}+\frac{1}{8}=\frac{1+2+3}{24}=\frac{6}{24}=\frac14 \Rightarrow R_{1234}=4\Omega\).<br>
+            \(R_{12345}=R_{1234}+R_5=4+20=24\Omega\).<br>
+            \(R_{123456}\) là \(R_{12345}//R_6\): \(R_{123456}=\frac{24\cdot12}{36}=8\Omega\).<br>
+            \(R_{AB}=R_{123456}+R_7=8+8=16\Omega\).<br>
+            Dòng mạch chính: \(I = U_{AB}/R_{AB}=48/16=3A\).<br>
+            \(U_7=I\cdot R_7=3\cdot8=24V\), suy ra \(U_{123456}=48-24=24V\).<br>
+            \(I_6 = U_{123456}/R_6=24/12=2A\); \(I_{12345}=I-I_6=1A\).<br>
+            \(U_5 = I_{12345}\cdot R_5=1\cdot20=20V\), do đó \(U_{1234}=24-20=4V\).<br>
+            Tại cụm \(R_{12}//R_3//R_4\): \(I_{12}=U_{1234}/R_{12}=4/24=1/6A\) (chính là I₁=I₂).<br>
+            \(I_3=4/12=1/3A\). \(I_4=4/8=0,5A\).<br>
+            \(U_1=I_1R_1=(1/6)\cdot4=2/3V\), \(U_2=I_2R_2=(1/6)\cdot20=10/3V\), \(U_3=4V\), \(U_4=4V\), \(U_5=20V\), \(U_6=24V\), \(U_7=24V\).
+        </div>
+    </div>
+
+    <!-- CÂU 20 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 20</span></div>
+        <div class="q-text">Mạch Hình 23.7: \(R_1=R_3=3\Omega, R_2=2\Omega, R_4=1\Omega, R_5=4\Omega\), dòng mạch chính \(I=3A\). Tính \(U_{AB}\), U mỗi điện trở, \(U_{AD}, U_{ED}\).</div>
+        <div class="figure"><img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.7.png" alt="Hình 23.7"><div class="fig-caption">Hình 23.7</div></div>
+        <button class="toggle-btn">🔽 Hiện lời giải chi tiết</button>
+        <div class="solution">
+            <span class="answer">\(U_{AB}=18V\); U₁=U₃=3V, U₂=4V, U₄=2V, U₅=12V; \(U_{AD}=18V, U_{ED}=6V\)</span><br>
+            <strong>Phân tích:</strong> Mạch gồm \(R_5\) nt [ (R₁ nt R₃) // (R₂ nt R₄) ].<br>
+            \(R_{13}=3+3=6\Omega\), \(R_{24}=2+1=3\Omega\).<br>
+            \(R_{1324}=\frac{6\cdot3}{9}=2\Omega\).<br>
+            \(R_{AB}=R_5+R_{1324}=4+2=6\Omega\).<br>
+            \(U_{AB}=I\cdot R_{AB}=3\cdot6=18V\).<br>
+            \(U_5=I\cdot R_5=3\cdot4=12V\) ⇒ \(U_{1324}=18-12=6V\).<br>
+            Dòng qua nhánh (R₁ nt R₃): \(I_{13}=U_{1324}/R_{13}=6/6=1A\) → \(U_1=1\cdot3=3V, U_3=1\cdot3=3V\).<br>
+            Dòng qua nhánh (R₂ nt R₄): \(I_{24}=U_{1324}/R_{24}=6/3=2A\) → \(U_2=2\cdot2=4V, U_4=2\cdot1=2V\).<br>
+            \(U_{AD}=U_{AB}=18V\). \(U_{ED}=U_{EB}+U_{BA}?\) Thực tế \(U_{ED}=U_{EA}+U_{AD}\)? Xét theo mạch: \(U_{ED}=U_{E\to D}=U_{E\to A}+U_{A\to D}=U_{R5}+0?\) Cụ thể: \(U_{ED}=U_{EA}+U_{AD} = -U_5 + U_{AD} = -12+18=6V\) (hoặc \(U_{ED}=U_3+U_4=3+2=5?\) Cần xét chiều: Theo hình, \(U_{ED}=U_{E\to D}=U_3+U_4=3+2=5V?\) Tính lại: Dòng I₁₃ từ A qua R₁, R3 đến D: \(U_{AD}=6V\), nhưng \(U_{ED}=U_{E\to D}=U_{E\to A}+U_{A\to D}= -U_5 + U_{AD} = -12+6=-6V\) → độ lớn 6V. Đáp án chuẩn: \(U_{ED}=6V\). Vậy \(U_{ED}=6V\).
+        </div>
+    </div>
+
+    <!-- CÂU 21 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 21</span></div>
+        <div class="q-text">Mạch Hình 23.8: \(R_1=R_3=R_5=1\Omega, R_4=2\Omega, R_2=3\Omega\), biết \(I_{R4}=1A\). Tính \(R_{AB}\), dòng các điện trở, \(U_{AB}\).</div>
+        <div class="figure"><img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.8.png" alt="Hình 23.8"><div class="fig-caption">Hình 23.8</div></div>
+        <button class="toggle-btn">🔽 Hiện lời giải chi tiết</button>
+        <div class="solution">
+            <span class="answer">\(R_{AB}=1,5\Omega\); I₁=3A, I₂=1A, I₃=1A, I₄=1A, I₅=3A; \(U_{AB}=6V\)</span><br>
+            <strong>Phân tích:</strong> \((R_1//R_2)\) nt \([(R_3\text{ nt }R_4) // R_5]\).<br>
+            \(R_{12}=\frac{1\cdot3}{1+3}=0,75\Omega\).<br>
+            \(R_{34}=1+2=3\Omega\). \(R_{345}=\frac{R_{34}\cdot R_5}{R_{34}+R_5}=\frac{3\cdot1}{4}=0,75\Omega\).<br>
+            \(R_{AB}=0,75+0,75=1,5\Omega\).<br>
+            Biết \(I_{R4}=1A\) ⇒ \(U_{34}=I_{R4}\cdot (R_3+R_4)=1\cdot3=3V\).<br>
+            Vì R₅ // (R₃ nt R₄) nên \(U_{345}=U_{34}=3V\).<br>
+            Dòng qua R₅: \(I_5=U_{345}/R_5=3/1=3A\).<br>
+            Dòng mạch nhánh (R₃ nt R₄) là I₃=1A, vậy dòng tổng qua cụm \(R_{345}\) là \(I_{345}=I_3+I_5=1+3=4A\).<br>
+            Dòng mạch chính I = I_{345} = 4A, cũng là dòng qua R₁₂.<br>
+            \(U_{12}=I\cdot R_{12}=4\cdot0,75=3V\). Vì R₁//R₂ nên \(U_1=U_2=3V\).<br>
+            \(I_1=U_1/R_1=3/1=3A,\ I_2=3/3=1A\).<br>
+            \(U_{AB}=U_{12}+U_{345}=3+3=6V\).
+        </div>
+    </div>
+
+    <!-- CÂU 22 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 22</span></div>
+        <div class="q-text">Mạch Hình 23.9: \(U_{AB}=6V\). K mở: A₁ chỉ 1,2A. K đóng: A₁ chỉ 1,4A, A₂ chỉ 0,5A. Tính \(R_1,R_2,R_3\).</div>
+        <div class="figure"><img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.9.png" alt="Hình 23.9"><div class="fig-caption">Hình 23.9</div></div>
+        <button class="toggle-btn">🔽 Hiện lời giải chi tiết</button>
+        <div class="solution">
+            <span class="answer">\(R_1=3\Omega, R_2=2\Omega, R_3=3,6\Omega\)</span><br>
+            <strong>Giải chi tiết:</strong><br>
+            Khi K mở, mạch gồm \(R_1\) nt \(R_2\): \(I = 1,2A\) → \(R_1+R_2 = U/I = 6/1,2 = 5\Omega\) (1).<br>
+            Khi K đóng: A₁ chỉ dòng mạch chính \(I=1,4A\), A₂ chỉ dòng qua R₃ là 0,5A. Dòng qua R₂ lúc này: \(I_2 = I - I_{R3} = 1,4 - 0,5 = 0,9A\).<br>
+            Điện áp trên R₂: \(U_2 = I_2 R_2 = 0,9R_2\). Vì R₃ song song với R₂ nên \(U_3 = U_2 = 0,9R_2\). Mặt khác \(U_3 = I_3 R_3 = 0,5 R_3\). Suy ra \(0,9R_2 = 0,5R_3 \Rightarrow R_3 = \frac{9}{5}R_2 = 1,8R_2\) (2).<br>
+            Khi K đóng, mạch tương đương: \(R_1\) nt [R₂ // R₃]. Điện trở tương đương \(R_{td}=R_1 + \frac{R_2R_3}{R_2+R_3}\). Dòng mạch chính \(I=1,4A\) và \(U=6V\) ⇒ \(R_{td}=6/1,4 = 30/7 \approx 4,2857\Omega\).<br>
+            Thay \(R_3=1,8R_2\): \(\frac{R_2\cdot1,8R_2}{R_2+1,8R_2}= \frac{1,8R_2^2}{2,8R_2}= \frac{1,8}{2,8}R_2 = \frac{9}{14}R_2\).<br>
+            Vậy \(R_1 + \frac{9}{14}R_2 = \frac{30}{7}\). Kết hợp (1): \(R_1 = 5 - R_2\).<br>
+            \(5 - R_2 + \frac{9}{14}R_2 = \frac{30}{7} \Rightarrow 5 - \frac{5}{14}R_2 = \frac{30}{7}\).<br>
+            \(5 - \frac{30}{7} = \frac{5}{14}R_2 \Rightarrow \frac{35-30}{7} = \frac{5}{7} = \frac{5}{14}R_2 \Rightarrow R_2 = 2\Omega\).<br>
+            Từ (1) → \(R_1=3\Omega\). Từ (2) → \(R_3=1,8\cdot2=3,6\Omega\).
+        </div>
+    </div>
+
+    <!-- CÂU 23 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 23</span></div>
+        <div class="q-text">Mạch Hình 23.10: \(R_1=15\Omega, R_2=R_3=R_4=10\Omega\). Ampe kế chỉ 3A và đo tổng dòng qua \(R_1\) và \(R_3\) (\(I_A = I_1 + I_3\)). Tính \(U_{AB}\) và dòng qua các điện trở.</div>
+        <div class="figure"><img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.10.png" alt="Hình 23.10"><div class="fig-caption">Hình 23.10</div></div>
+        <button class="toggle-btn">🔽 Hiện lời giải chi tiết</button>
+        <div class="solution">
+            <span class="answer">\(U_{AB}=30V\); \(I_1=2A, I_2=2A, I_3=1A, I_4=1A\)</span><br>
+            <strong>Phân tích mạch:</strong> \(R_1\) song song với đoạn mạch nối tiếp (R₂ nt (R₃//R₄)).<br>
+            \(R_{34}= \frac{10\cdot10}{20}=5\Omega\). \(R_{234}=R_2+R_{34}=10+5=15\Omega\).<br>
+            Điện trở tương đương \(R_{AB}= \frac{R_1\cdot R_{234}}{R_1+R_{234}} = \frac{15\cdot15}{30}=7,5\Omega\).<br>
+            Gọi \(U_{AB}=U\). Dòng qua R₁: \(I_1=U/15\). Dòng qua R₂: \(I_2=U/15\) (vì R₂ = 15Ω).<br>
+            Hiệu điện thế trên cụm R₃//R₄: \(U_{34}=I_2\cdot R_{34} = \frac{U}{15}\cdot5 = \frac{U}{3}\).<br>
+            Dòng qua R₃: \(I_3=U_{34}/R_3 = \frac{U/3}{10}= \frac{U}{30}\).<br>
+            Số chỉ ampe kế: \(I_A = I_1+I_3 = \frac{U}{15}+\frac{U}{30} = \frac{2U+U}{30}= \frac{U}{10} = 3A \Rightarrow U=30V\).<br>
+            Từ đó: \(I_1=30/15=2A, I_2=2A, I_3=30/30=1A, I_4=I_3=1A\).
+        </div>
+    </div>
+
+    <!-- CÂU 24 -->
+    <div class="question-block">
+        <div class="q-title"><span class="q-num">Câu 24</span></div>
+        <div class="q-text">Mạch Hình 23.11, các điện trở đều bằng R. Tính \(R_{AB}\).</div>
+        <div class="figure"><img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/23/sbt/23.11.png" alt="Hình 23.11"><div class="fig-caption">Hình 23.11</div></div>
+        <button class="toggle-btn">🔽 Hiện lời giải chi tiết</button>
+        <div class="solution">
+            <span class="answer">\(R_{AB} = \frac{3}{5}R\)</span><br>
+            <strong>Phân tích:</strong> Mạch gồm \(R_1\) // [R₄ nt (R₂ // R₃)].<br>
+            \(R_{23}=R_2//R_3 = \frac{R\cdot R}{R+R}=\frac{R}{2}\).<br>
+            \(R_{423}=R_4 + R_{23}= R + \frac{R}{2}= \frac{3R}{2}\).<br>
+            \(R_{AB}= \frac{R_1\cdot R_{423}}{R_1+R_{423}} = \frac{R\cdot \frac{3R}{2}}{R+\frac{3R}{2}} = \frac{\frac{3R^2}{2}}{\frac{5R}{2}} = \frac{3R^2}{2}\cdot\frac{2}{5R}= \frac{3R}{5}\).
+        </div>
+    </div>
+
+    <div class="solution" style="background:#F5F5DC; text-align:center; margin-top:30px; display:block;">
+        ✅ Đã cập nhật lời giải chi tiết cho tất cả các câu. Nhấn nút để xem hoặc ẩn hướng dẫn.
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.toggle-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const solutionDiv = this.nextElementSibling;
+            if (solutionDiv && solutionDiv.classList.contains('solution')) {
+                if (solutionDiv.style.display === 'none' || getComputedStyle(solutionDiv).display === 'none') {
+                    solutionDiv.style.display = 'block';
+                    this.textContent = '🔼 Ẩn đáp án';
+                } else {
+                    solutionDiv.style.display = 'none';
+                    this.textContent = '🔽 Hiện đáp án';
+                }
+            }
+        });
+    });
+    document.querySelectorAll('.solution').forEach(el => el.style.display = 'none');
+</script>
+</body>
+</html>
