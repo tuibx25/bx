@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Bài 24: Nguồn điện (SBT) - Vật Lý 11 (Kết nối tri thức)</title>
+    <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
+    <!-- MathJax để hiển thị công thức -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #F5F5F5;
+            font-family: 'Segoe UI', 'Roboto', 'Noto Sans', system-ui, -apple-system, sans-serif;
+            /* Giảm khoảng cách giữa các dòng: từ 1.5 xuống 1.35 */
+            line-height: 1.35;
+            padding: 2rem 1rem;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.1);
+            overflow: hidden;
+            padding: 2rem 1.5rem;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e3c72, #2b4c7c);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            border-left: 6px solid #0066CC;
+            padding-left: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sub {
+            color: #004488;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #D3D3D3;
+            padding-bottom: 0.75rem;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 1.5rem 0 1rem 0;
+            color: #0f3b5f;
+            border-bottom: 3px solid #8B5A2B;
+            display: inline-block;
+            padding-right: 1rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 1.2rem 0 0.8rem 0;
+            color: #004488;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .question-block {
+            background: #FFFFFF;
+            border-radius: 1.2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #D3D3D3;
+            transition: all 0.1s ease;
+            background-color: #F5F5F5;
+        }
+
+        .question {
+            padding: 1rem 1.2rem;
+            background: #F5F5DC;
+            border-radius: 1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #000000;
+            border-left: 4px solid #8B5A2B;
+            /* Đảm bảo line-height đồng nhất */
+            line-height: 1.35;
+        }
+
+        .options {
+            padding: 0.5rem 1.2rem 0.8rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            background: #FFFFFF;
+        }
+
+        .option-item {
+            width: calc(50% - 0.8rem);
+            font-family: monospace;
+            font-size: 0.95rem;
+            color: #000000;
+        }
+
+        /* Căn chỉnh font chữ lời giải (phần trắc nghiệm) to bằng font câu hỏi */
+        .answer {
+            background: #F5F5DC;
+            padding: 0.8rem 1.2rem;
+            margin: 0.5rem 1rem 1rem 1rem;
+            border-radius: 1rem;
+            border-left: 5px solid #8B4513;
+            /* font-size bằng với font câu hỏi (khoảng 1rem) */
+            font-size: 1rem;
+            color: #000000;
+            display: none;
+            line-height: 1.35;
+        }
+
+        .answer strong {
+            color: #004488;
+        }
+
+        .tuluan-item {
+            background: #F5F5F5;
+            border-left: 6px solid #8B5A2B;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .tuluan-question {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #000000;
+            background: #F5DEB3;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.35;
+        }
+
+        /* Lời giải tự luận: font-size bằng với font câu hỏi (.tuluan-question: 1.05rem) */
+        .solution {
+            margin-top: 0.75rem;
+            padding-top: 0.5rem;
+            border-top: 1px dashed #D3D3D3;
+            color: #000000;
+            display: none;
+            background: #FFFFFF;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            font-size: 1.05rem;
+            line-height: 1.35;
+        }
+
+        .fig {
+            text-align: center;
+            margin: 1rem 0;
+            background: #F5F5F5;
+            padding: 1rem;
+            border-radius: 1rem;
+        }
+
+        /* Ảnh được điều chỉnh kích thước theo phần trăm (%) - responsive */
+        .fig img {
+            width: 100%;
+            height: auto;
+            max-height: 320px;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .fig-caption {
+            font-size: 0.85rem;
+            color: #004488;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .note {
+            background: #F5F5DC;
+            padding: 0.6rem 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            border-left: 4px solid #8B5A2B;
+            color: #000000;
+        }
+
+        hr {
+            margin: 1.5rem 0;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, #D3D3D3, transparent);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: #004488;
+            border-top: 1px solid #D3D3D3;
+            padding-top: 1.5rem;
+        }
+
+        /* Nút ẩn/hiện với màu #004488 (xanh đậm) */
+        .toggle-btn {
+            background-color: #004488;
+            border: 1px solid #002c5a;
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0.5rem 1rem 0.2rem 1rem;
+            transition: all 0.2s ease;
+            display: inline-block;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .toggle-btn:hover {
+            background-color: #002c5a;
+            border-color: #001a3a;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .toggle-btn:active {
+            transform: translateY(1px);
+        }
+
+        @media (max-width: 680px) {
+            .container {
+                padding: 1rem;
+            }
+            .option-item {
+                width: 100%;
+            }
+            .fig img {
+                max-height: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📘 BÀI 24 (SBT): NGUỒN ĐIỆN</h1>
+    <div class="sub">Vật Lý 11 - Kết nối tri thức | Bài tập & hướng dẫn giải chi tiết</div>
+
+    <!-- ================= TRẮC NGHIỆM ================= -->
+    <h2>🔘 TRẮC NGHIỆM</h2>
+    <div id="trac-nghiem">
+        <!-- CÂU 1 -->
+        <div class="question-block">
+            <div class="question"><strong>Câu 1.</strong> Kết luận nào sau đây đúng khi nói về tác dụng của nguồn điện?</div>
+            <div class="options">
+                <div class="option-item">A. dùng để tạo ra và duy trì hiệu điện thế nhằm duy trì dòng điện trong mạch.</div>
+                <div class="option-item">B. dùng để tạo ra các ion âm.</div>
+                <div class="option-item">C. dùng để tạo ra các ion dương.</div>
+                <div class="option-item">D. dùng để tạo ra các ion âm chạy trong vật dẫn.</div>
+            </div>
+            <div class="answer"><strong>✅ Đáp án: A</strong><br> <strong>Giải thích:</strong> Nguồn điện tạo ra và duy trì hiệu điện thế giữa hai cực, nhờ đó duy trì dòng điện trong mạch kín.</div>
+        </div>
+        <!-- CÂU 2 -->
+        <div class="question-block">
+            <div class="question"><strong>Câu 2.</strong> Kết luận nào sau đây <em>sai</em> khi nói về suất điện động của nguồn điện?</div>
+            <div class="options">
+                <div class="option-item">A. Suất điện động đặc trưng cho khả năng thực hiện công của nguồn điện.</div>
+                <div class="option-item">B. Suất điện động được đo bằng thương số \( \frac{A}{q} \).</div>
+                <div class="option-item">C. Đơn vị của suất điện động là vôn (V).</div>
+                <div class="option-item">D. Suất điện động đặc trưng cho khả năng tích điện của nguồn điện.</div>
+            </div>
+            <div class="answer"><strong>✅ Đáp án: D</strong><br> <strong>Giải thích:</strong> Suất điện động không đặc trưng cho khả năng tích điện (liên quan đến điện dung). Nó đặc trưng cho khả năng sinh công của nguồn.</div>
+        </div>
+        <!-- CÂU 3 -->
+        <div class="question-block">
+            <div class="question"><strong>Câu 3.</strong> Biểu thức tính công của nguồn điện có dòng điện không đổi là</div>
+            <div class="options">
+                <div class="option-item">A. \( A = UIt \)</div>
+                <div class="option-item">B. \( A = \mathcal{E} I t \)</div>
+                <div class="option-item">C. \( \mathcal{E} I t - r I^2 t \)</div>
+                <div class="option-item">D. \( \mathcal{E} I t + r I^2 t \)</div>
+            </div>
+            <div class="answer"><strong>✅ Đáp án: B</strong><br> <strong>Giải thích:</strong> Công của nguồn điện: \( A = \mathcal{E} I t \), trong đó \(\mathcal{E}\) là suất điện động, I là cường độ dòng điện, t là thời gian.</div>
+        </div>
+        <!-- CÂU 4 -->
+        <div class="question-block">
+            <div class="question"><strong>Câu 4.</strong> Khi nói về nguồn điện, phát biểu nào dưới đây <em>sai</em>?</div>
+            <div class="options">
+                <div class="option-item">A. Mỗi nguồn có hai cực luôn ở trạng thái nhiễm điện khác nhau.</div>
+                <div class="option-item">B. Nguồn điện là cơ cấu tạo ra và duy trì hiệu điện thế.</div>
+                <div class="option-item">C. Để tạo cực nhiễm điện cần lực lạ thực hiện công.</div>
+                <div class="option-item">D. Nguồn điện là pin có lực lạ là lực tĩnh điện.</div>
+            </div>
+            <div class="answer"><strong>✅ Đáp án: D</strong><br> <strong>Giải thích:</strong> Trong pin, lực lạ là lực hóa học, không phải lực tĩnh điện.</div>
+        </div>
+        <!-- CÂU 5 -->
+        <div class="question-block">
+            <div class="question"><strong>Câu 5.</strong> Nguồn điện tạo ra hiệu điện thế giữa hai cực bằng cách</div>
+            <div class="options">
+                <div class="option-item">A. tách electron ra khỏi nguyên tử và chuyển electron, ion ra khỏi các cực.</div>
+                <div class="option-item">B. sinh ra ion dương ở cực âm.</div>
+                <div class="option-item">C. sinh ra electron ở cực dương.</div>
+                <div class="option-item">D. làm biến mất electron ở cực dương.</div>
+            </div>
+            <div class="answer"><strong>✅ Đáp án: A</strong><br> <strong>Giải thích:</strong> Nguồn điện dùng lực lạ tách electron, làm hai cực tích điện trái dấu, tạo hiệu điện thế.</div>
+        </div>
+        <!-- CÂU 6 -->
+        <div class="question-block">
+            <div class="question"><strong>Câu 6.</strong> Câu nào sau đây <em>sai</em>?</div>
+            <div class="options">
+                <div class="option-item">A. Suất điện động đặc trưng cho khả năng sinh công của nguồn.</div>
+                <div class="option-item">B. Suất điện động được xác định bằng công suất dịch chuyển vòng kín.</div>
+                <div class="option-item">C. Suất điện động bằng công dịch chuyển 1C từ cực âm đến cực dương bên trong nguồn.</div>
+                <div class="option-item">D. Suất điện động là thương số giữa công của lực lạ và độ lớn điện tích.</div>
+            </div>
+            <div class="answer"><strong>✅ Đáp án: B</strong><br> <strong>Giải thích:</strong> Suất điện động không phải công suất (đơn vị oát). Công suất khác với suất điện động.</div>
+        </div>
+        <!-- CÂU 7 -->
+        <div class="question-block">
+            <div class="question"><strong>Câu 7.</strong> Công của nguồn điện là</div>
+            <div class="options">
+                <div class="option-item">A. lượng điện tích sinh ra trong 1s.</div>
+                <div class="option-item">B. công của lực lạ làm dịch chuyển điện tích bên trong nguồn.</div>
+                <div class="option-item">C. công của dòng điện trong mạch kín sinh ra trong 1s.</div>
+                <div class="option-item">D. công của dòng điện khi dịch chuyển một đơn vị điện tích.</div>
+            </div>
+            <div class="answer"><strong>✅ Đáp án: B</strong><br> <strong>Giải thích:</strong> Công của nguồn chính là công do lực lạ thực hiện bên trong nguồn để dịch chuyển điện tích.</div>
+        </div>
+        <!-- CÂU 8 -->
+        <div class="question-block">
+            <div class="question"><strong>Câu 8.</strong> Suất điện động \( \mathcal{E}=4V \), điện tích \( q=5mC \). Công của lực lạ là</div>
+            <div class="options">
+                <div class="option-item">A. 1,5 mJ</div>
+                <div class="option-item">B. 0,8 mJ</div>
+                <div class="option-item">C. 20 mJ</div>
+                <div class="option-item">D. 5 mJ</div>
+            </div>
+            <div class="answer"><strong>✅ Đáp án: C</strong><br> <strong>Giải thích:</strong> \( A = \mathcal{E} q = 4 \times 5\cdot10^{-3} = 0,02\,J = 20\,mJ \).</div>
+        </div>
+        <!-- CÂU 9 -->
+        <div class="question-block">
+            <div class="question"><strong>Câu 9.</strong> Acquy có \( \mathcal{E}=12V \), sinh công 720 J trong 1 phút. Cường độ dòng điện?</div>
+            <div class="options">
+                <div class="option-item">A. 1,2 A</div>
+                <div class="option-item">B. 5,0 A</div>
+                <div class="option-item">C. 0,2 A</div>
+                <div class="option-item">D. 2,4 A</div>
+            </div>
+            <div class="answer"><strong>✅ Đáp án: 1 A (không có trong đáp án, tính đúng là 1A)</strong><br> <strong>Giải thích:</strong> \( q = A/\mathcal{E}=720/12=60C \); \( t=60s \Rightarrow I=60/60=1A \).</div>
+        </div>
+        <!-- CÂU 10 -->
+        <div class="question-block">
+            <div class="question"><strong>Câu 10.</strong> Dung lượng 20Ah, cung cấp I=0,5A. Thời gian sử dụng?</div>
+            <div class="options">
+                <div class="option-item">A. 5 h</div>
+                <div class="option-item">B. 40 h</div>
+                <div class="option-item">C. 20 h</div>
+                <div class="option-item">D. 50 h</div>
+            </div>
+            <div class="answer"><strong>✅ Đáp án: B</strong><br> <strong>Giải thích:</strong> \( t = \frac{20\,Ah}{0,5A} = 40\,h \).</div>
+        </div>
+        <!-- CÂU 11 -->
+        <div class="question-block">
+            <div class="question"><strong>Câu 11.</strong> Suất điện động được đo bằng</div>
+            <div class="options">
+                <div class="option-item">A. công của lực lạ tác dụng lên q.</div>
+                <div class="option-item">B. thương số công và lực lạ.</div>
+                <div class="option-item">C. thương số lực lạ và điện tích.</div>
+                <div class="option-item">D. thương số công của lực lạ và độ lớn điện tích.</div>
+            </div>
+            <div class="answer"><strong>✅ Đáp án: D</strong><br> <strong>Giải thích:</strong> \( \mathcal{E} = A/q \) theo định nghĩa.</div>
+        </div>
+        <!-- CÂU 12 -->
+        <div class="question-block">
+            <div class="question"><strong>Câu 12.</strong> Trong mạch ngoài, hạt mang điện chuyển động có hướng dưới tác dụng của lực</div>
+            <div class="options">
+                <div class="option-item">A. Coulomb</div>
+                <div class="option-item">B. hấp dẫn</div>
+                <div class="option-item">C. lạ</div>
+                <div class="option-item">D. điện trường</div>
+            </div>
+            <div class="answer"><strong>✅ Đáp án: D</strong><br> <strong>Giải thích:</strong> Trong mạch ngoài, lực điện trường từ hiệu điện thế hai cực đẩy electron chuyển động.</div>
+        </div>
+        <!-- CÂU 13 -->
+        <div class="question-block">
+            <div class="question"><strong>Câu 13.</strong> Bên trong nguồn, hạt mang điện chuyển động có hướng dưới tác dụng của lực</div>
+            <div class="options">
+                <div class="option-item">A. Coulomb</div>
+                <div class="option-item">B. hấp dẫn</div>
+                <div class="option-item">C. lạ</div>
+                <div class="option-item">D. điện trường</div>
+            </div>
+            <div class="answer"><strong>✅ Đáp án: C</strong><br> <strong>Giải thích:</strong> Lực lạ (hóa học, cơ học,…) giúp dịch chuyển điện tích ngược chiều điện trường trong nguồn.</div>
+        </div>
+        <!-- CÂU 14 -->
+        <div class="question-block">
+            <div class="question"><strong>Câu 14.</strong> Hệ thức liên hệ giữa \( \mathcal{E}, A, q \) là</div>
+            <div class="options">
+                <div class="option-item">A. \( A = q\mathcal{E} \)</div>
+                <div class="option-item">B. \( q = A\mathcal{E} \)</div>
+                <div class="option-item">C. \( \mathcal{E} = q \)</div>
+                <div class="option-item">D. \( A = q^2\mathcal{E} \)</div>
+            </div>
+            <div class="answer"><strong>✅ Đáp án: A</strong><br> <strong>Giải thích:</strong> Công thức cơ bản: \( A = q\mathcal{E} \).</div>
+        </div>
+    </div>
+
+    <!-- ================= TỰ LUẬN ================= -->
+    <h2>📝 TỰ LUẬN</h2>
+    
+    <!-- Câu 15 (có hình 24.1) -->
+    <div class="tuluan-item">
+        <div class="tuluan-question">Câu 15. Cho mạch điện có sơ đồ như Hình 24.1. Biết \( \mathcal{E}=1,2V; r=0,5\Omega; R_1=R_3=2\Omega; R_2=R_4=4\Omega \). Tính hiệu điện thế giữa hai điểm A, B biết: A là điểm nối giữa R1 và R2, B nối với cực âm của nguồn. Sơ đồ mạch ngoài: ((R1 nt R2) // R3) nt R4.</div>
+        <div class="fig">
+            <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/24/sbt/24.1.png" alt="Hình 24.1 - Sơ đồ mạch điện câu 15" loading="lazy" style="max-width: 40%;">
+            <div class="fig-caption">Hình 24.1: Sơ đồ mạch điện câu 15</div>
+        </div>
+        <div class="solution">
+            <strong>🔎 Hướng dẫn giải chi tiết:</strong><br>
+            - Phân tích mạch: Theo đề, mạch ngoài có dạng \(((R_1 \text{ nt } R_2) \parallel R_3) \text{ nt } R_4\).<br>
+            - Tính \(R_1 + R_2 = 2 + 4 = 6 \Omega\). Đoạn này song song với \(R_3 = 2\Omega\):<br>
+            \[
+            R_{123} = \frac{6 \times 2}{6 + 2} = \frac{12}{8} = 1,5 \Omega.
+            \]
+            - Điện trở tương đương mạch ngoài: \(R_N = R_{123} + R_4 = 1,5 + 4 = 5,5 \Omega\).<br>
+            - Dòng điện chính trong mạch: 
+            \[
+            I = \frac{\mathcal{E}}{R_N + r} = \frac{1,2}{5,5 + 0,5} = \frac{1,2}{6} = 0,2 A.
+            \]
+            - Hiệu điện thế hai đầu \(R_4\): \(U_{NB} = I \cdot R_4 = 0,2 \times 4 = 0,8 V\) (với N là điểm nối giữa cụm R123 và R4, B là cực âm).<br>
+            - Hiệu điện thế giữa hai đầu đoạn mạch song song (R1 nt R2) // R3: \(U_{AN} = I \cdot R_{123} = 0,2 \times 1,5 = 0,3 V\).<br>
+            - Dòng điện qua nhánh R1 nt R2: \(I_{12} = \frac{U_{AN}}{R_1+R_2} = \frac{0,3}{6} = 0,05 A\).<br>
+            - Hiệu điện thế trên R2 (từ A đến N): \(U_{AN\_R2} = I_{12} \cdot R_2 = 0,05 \times 4 = 0,2 V\).<br>
+            - Theo sơ đồ: \(U_{AB} = U_{AN} + U_{NB} = 0,2 + 0,8 = 1,0 V\).<br>
+            <strong>Đáp số: \(U_{AB}=1,0 V\).</strong>
+        </div>
+    </div>
+
+    <!-- Câu 16 (có hình 24.2) -->
+    <div class="tuluan-item">
+        <div class="tuluan-question">Câu 16. Cho mạch điện như Hình 24.2. Biết \( R_2=2\Omega, R_3=3\Omega \). Khi K mở, vôn kế chỉ 6V. Khi K đóng, vôn kế chỉ 5,6V và ampe kế chỉ 2A (ampe kế đo dòng mạch chính, vôn kế đo hiệu điện thế hai cực nguồn, khóa K ở mạch chính). <br> a) Tính suất điện động và điện trở trong của nguồn. <br> b) Tính \(R_1\) và cường độ dòng điện qua \(R_2, R_3\).</div>
+        <div class="fig">
+            <img src="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/vl11/24/sbt/24.2.png" alt="Hình 24.2 - Sơ đồ mạch điện câu 16" loading="lazy" style="max-width: 40%;">
+            <div class="fig-caption">Hình 24.2: Sơ đồ mạch điện câu 16</div>
+        </div>
+        <div class="solution">
+            <strong>🔎 Hướng dẫn giải chi tiết:</strong><br>
+            a) Khi K mở, vôn kế chỉ 6V (mạch hở) → đó là suất điện động: \(\mathcal{E}=6V\).<br>
+            Khi K đóng, vôn kế chỉ \(U=5,6V\), ampe kế chỉ \(I=2A\) (dòng mạch chính).<br>
+            - Điện trở trong của nguồn: 
+            \[
+            r = \frac{\mathcal{E} - U}{I} = \frac{6 - 5,6}{2} = 0,2\Omega.
+            \]
+            - Điện trở tương đương mạch ngoài: 
+            \[
+            R_N = \frac{U}{I} = \frac{5,6}{2} = 2,8\Omega.
+            \]
+            b) Mạch ngoài có cấu trúc \(R_1\) nối tiếp với \((R_2 // R_3)\).<br>
+            - Điện trở tương đương của \(R_2\) và \(R_3\):
+            \[
+            R_{23} = \frac{R_2 R_3}{R_2+R_3} = \frac{2\cdot 3}{2+3} = \frac{6}{5}=1,2\Omega.
+            \]
+            - Ta có \(R_N = R_1 + R_{23} \Rightarrow R_1 = 2,8 - 1,2 = 1,6\Omega\).<br>
+            - Hiệu điện thế hai đầu đoạn mạch song song \(R_{23}\): 
+            \[
+            U_{23} = I \cdot R_{23} = 2 \times 1,2 = 2,4V.
+            \]
+            - Dòng điện qua \(R_2\): 
+            \[
+            I_2 = \frac{U_{23}}{R_2} = \frac{2,4}{2} = 1,2A.
+            \]
+            - Dòng điện qua \(R_3\): 
+            \[
+            I_3 = \frac{U_{23}}{R_3} = \frac{2,4}{3} = 0,8A.
+            \]
+            (Kiểm tra: \(I_2 + I_3 = 2A\) đúng với dòng mạch chính).<br>
+            <strong>Đáp số:</strong> a) \(\mathcal{E}=6V, r=0,2\Omega\); b) \(R_1=1,6\Omega, I_2=1,2A, I_3=0,8A\).
+        </div>
+    </div>
+
+    <!-- Câu 17 -->
+    <div class="tuluan-item">
+        <div class="tuluan-question">Câu 17. Suất điện động của nguồn là 12V. Tính công của lực lạ khi dịch chuyển điện tích 0,5C bên trong nguồn từ cực âm đến cực dương.</div>
+        <div class="solution">
+            <strong>🔎 Giải chi tiết:</strong><br>
+            Công của lực lạ: \( A = \mathcal{E} q = 12 \times 0,5 = 6 \, \text{J} \).<br>
+            <strong>Đáp số: 6 J</strong>
+        </div>
+    </div>
+
+    <!-- Câu 18 -->
+    <div class="tuluan-item">
+        <div class="tuluan-question">Câu 18. Một acquy có suất điện động 6V, sinh công 360J khi phát điện trong 5 phút. <br> a) Tính điện lượng dịch chuyển trong acquy. <br> b) Tính cường độ dòng điện chạy qua acquy.</div>
+        <div class="solution">
+            <strong>🔎 Giải chi tiết:</strong><br>
+            a) \( A = \mathcal{E} q \Rightarrow q = \frac{A}{\mathcal{E}} = \frac{360}{6} = 60 \, \text{C} \).<br>
+            b) \( t = 5 \, \text{phút} = 300 \, \text{s} \Rightarrow I = \frac{q}{t} = \frac{60}{300} = 0,2 \, \text{A} \).<br>
+            <strong>Đáp số:</strong> a) 60 C; b) 0,2 A.
+        </div>
+    </div>
+
+    <!-- Câu 19 -->
+    <div class="tuluan-item">
+        <div class="tuluan-question">Câu 19. Một bộ acquy đầy điện có thể cung cấp dòng 4A liên tục trong 2 giờ thì phải nạp lại. <br> a) Tính cường độ dòng điện acquy có thể cung cấp liên tục trong 40 giờ. <br> b) Tính suất điện động của acquy biết trong thời gian hoạt động nó sinh công 172,8 kJ.</div>
+        <div class="solution">
+            <strong>🔎 Giải chi tiết:</strong><br>
+            a) Điện lượng tích trữ: \( Q = I_1 t_1 = 4 \times 2 = 8 \, \text{Ah} \).<br>
+            Với thời gian 40h: \( I_2 = Q / t_2 = 8 / 40 = 0,2 \, \text{A} \).<br>
+            b) Công \( A = 172,8 \, \text{kJ} = 172800 \, \text{J} \), thời gian 2h = 7200s, dòng 4A.<br>
+            Suất điện động: \( \mathcal{E} = \frac{A}{I t} = \frac{172800}{4 \times 7200} = \frac{172800}{28800} = 6 \, \text{V} \).<br>
+            <strong>Đáp số:</strong> a) 0,2 A; b) 6 V.
+        </div>
+    </div>
+
+    <footer>
+        © Tài liệu tham khảo - Bài 24 Nguồn điện (SBT Vật Lí 11 KNTT) | Đáp án và hướng dẫn giải chi tiết.
+    </footer>
+</div>
+
+<script>
+    (function() {
+        // Tạo nút ẩn/hiện cho từng câu trắc nghiệm
+        const questionBlocks = document.querySelectorAll('.question-block');
+        questionBlocks.forEach(block => {
+            const optionsDiv = block.querySelector('.options');
+            const answerDiv = block.querySelector('.answer');
+            if (optionsDiv && answerDiv) {
+                const btn = document.createElement('button');
+                btn.textContent = '🔘 Hiện đáp án';
+                btn.className = 'toggle-btn';
+                // Chèn nút sau options
+                optionsDiv.insertAdjacentElement('afterend', btn);
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (answerDiv.style.display === 'none' || getComputedStyle(answerDiv).display === 'none') {
+                        answerDiv.style.display = 'block';
+                        btn.textContent = '🔽 Ẩn đáp án';
+                    } else {
+                        answerDiv.style.display = 'none';
+                        btn.textContent = '🔘 Hiện đáp án';
+                    }
+                });
+                // Đảm bảo trạng thái ban đầu là ẩn
+                answerDiv.style.display = 'none';
+            }
+        });
+
+        // Tạo nút ẩn/hiện cho từng câu tự luận
+        const tuLuanItems = document.querySelectorAll('.tuluan-item');
+        tuLuanItems.forEach(item => {
+            const questionDiv = item.querySelector('.tuluan-question');
+            const solutionDiv = item.querySelector('.solution');
+            if (questionDiv && solutionDiv) {
+                const btn = document.createElement('button');
+                btn.textContent = '📖 Hiện lời giải';
+                btn.className = 'toggle-btn';
+                // Chèn nút sau phần câu hỏi
+                questionDiv.insertAdjacentElement('afterend', btn);
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (solutionDiv.style.display === 'none' || getComputedStyle(solutionDiv).display === 'none') {
+                        solutionDiv.style.display = 'block';
+                        btn.textContent = '🙈 Ẩn lời giải';
+                    } else {
+                        solutionDiv.style.display = 'none';
+                        btn.textContent = '📖 Hiện lời giải';
+                    }
+                });
+                // Ẩn lời giải ban đầu
+                solutionDiv.style.display = 'none';
+            }
+        });
+    })();
+</script>
+</body>
+</html>
