@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Ôn tập Vật Lí 11 - 48 câu trắc nghiệm (Bài 16-24) + Đáp án chi tiết</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F5F5F5;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            line-height: 1.2;
+            padding: 12px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            overflow: hidden;
+            padding: 12px 18px 24px 18px;
+            border: 1px solid #D3D3D3;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #8B5A2B;
+        }
+        .header h1 {
+            font-size: 1.6rem;
+            color: #004488;
+            letter-spacing: -0.3px;
+            margin: 4px 0;
+        }
+        .header h2 {
+            font-size: 1rem;
+            font-weight: normal;
+            color: #8B4513;
+            margin: 4px 0;
+        }
+        .header p {
+            color: #0066CC;
+            font-size: 0.8rem;
+            margin-top: 6px;
+            background: #F5DEB3;
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 20px;
+        }
+
+        .questions-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .question-card {
+            background: #FFFFFF;
+            border-left: 4px solid #8B5A2B;
+            border-radius: 12px;
+            padding: 8px 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            border: 1px solid #F5DEB3;
+            transition: all 0.1s ease;
+        }
+        .question-card:hover {
+            background-color: #F5F5DC;
+            border-left-color: #0066CC;
+        }
+
+        .question-text {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            color: #000000;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .q-num {
+            background-color: #D3D3D3;
+            color: #004488;
+            font-weight: bold;
+            padding: 0px 8px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            min-width: 44px;
+            text-align: center;
+            line-height: 1.4;
+        }
+        .q-content {
+            flex: 1;
+        }
+
+        .options {
+            list-style: none;
+            padding-left: 12px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2px 12px;
+            margin: 0 0 6px 0;
+        }
+        .options li {
+            margin-bottom: 2px;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            font-size: 0.88rem;
+            color: #000000;
+            line-height: 1.25;
+        }
+        .option-letter {
+            font-weight: 800;
+            color: #8B4513;
+            width: 26px;
+            display: inline-block;
+        }
+        .option-text {
+            color: #000000;
+        }
+
+        /* Nút xem đáp án */
+        .btn-answer {
+            background-color: #e9ecef;
+            border: none;
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #2c3e66;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+        }
+        .btn-answer:hover {
+            background-color: #8B5A2B;
+            color: white;
+        }
+
+        .answer-panel {
+            background-color: #fef7e0;
+            border-left: 3px solid #2c7a47;
+            border-radius: 10px;
+            margin-top: 10px;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            display: none;
+        }
+        .answer-panel.show {
+            display: block;
+        }
+        .answer-correct {
+            font-weight: 700;
+            color: #1e5e2d;
+            margin-bottom: 6px;
+        }
+        .answer-explanation {
+            color: #2c3e50;
+        }
+        .answer-explanation strong {
+            color: #b45f1b;
+        }
+
+        footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #8B5A2B;
+            border-top: 1px solid #F5DEB3;
+            padding-top: 12px;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 10px;
+            }
+            .question-card {
+                padding: 6px 10px;
+            }
+            .options {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .option-letter {
+                width: 22px;
+            }
+            .btn-answer {
+                font-size: 0.65rem;
+                padding: 3px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📘 Vật Lí 11 – Ôn tập cuối kỳ 2</h1>
+        <h2>Bài 16 → Bài 24 (Điện trường – Dòng điện – Mạch điện)</h2>
+        <p>✔ 48 câu trắc nghiệm | Bấm vào nút để xem đáp án + giải thích</p>
+    </div>
+
+    <div class="questions-grid" id="questionsGrid">
+        <!-- Các câu hỏi được giữ nguyên nội dung, javascript sẽ tự thêm nút và panel đáp án -->
+    </div>
+
+    <footer>
+        📖 Đề cương bám sát SGK Vật lí 11 (Kết nối tri thức) – Bài 16 → 24 | Đáp án & hướng dẫn chi tiết
+    </footer>
+</div>
+
+<script>
+    // ---------- DANH SÁCH CÂU HỎI (GIỮ NGUYÊN NỘI DUNG GỐC) ----------
+    const questionsData = [
+        { text: "Có hai loại điện tích là", options: ["điện tích âm và điện tích không.", "điện tích dương và điện tích không.", "điện tích âm và điện tích dương.", "điện tích kim loại và điện tích phi kim."] },
+        { text: "Các điện tích cùng dấu thì", options: ["hút nhau.", "đẩy nhau.", "không tương tác.", "vừa hút vừa đẩy."] },
+        { text: "Đơn vị của điện tích trong hệ SI là", options: ["vôn (V).", "ampe (A).", "fara (F).", "culông (C)."] },
+        { text: "Hằng số điện \\(k\\) trong định luật Coulomb có giá trị xấp xỉ bằng", options: ["\\(9.10^9\\ \\mathrm{Nm^2/C^2}\\).", "\\(9.10^{-9}\\ \\mathrm{Nm^2/C^2}\\).", "\\(8,85.10^{-12}\\ \\mathrm{C^2/Nm^2}\\).", "\\(8,85.10^{12}\\ \\mathrm{C^2/Nm^2}\\)."] },
+        { text: "Định luật Coulomb được áp dụng cho", options: ["hai điện tích điểm đặt trong chân không.", "hai vật nhiễm điện bất kì.", "hai điện tích điểm đặt trong môi trường bất kì.", "các điện tích điểm đặt trong chân không hoặc không khí khô."] },
+        { text: "Điện trường là", options: ["một dạng vật chất tồn tại quanh điện tích.", "môi trường truyền tương tác giữa các điện tích.", "dạng vật chất bao quanh điện tích và truyền tương tác điện.", "cả A, B, C đều đúng."] },
+        { text: "Vectơ cường độ điện trường tại một điểm được xác định bằng", options: ["\\(\\vec{E} = q\\vec{F}\\).", "\\(\\vec{E} = \\frac{\\vec{F}}{q}\\).", "\\(\\vec{E} = \\frac{F}{q}\\).", "\\(\\vec{E} = \\frac{q}{\\vec{F}}\\)."] },
+        { text: "Cường độ điện trường do một điện tích điểm Q gây ra tại một điểm cách nó khoảng r trong chân không có độ lớn là", options: ["\\(E = k\\frac{|Q|}{r}\\).", "\\(E = k\\frac{|Q|}{r^2}\\).", "\\(E = k\\frac{r^2}{|Q|}\\).", "\\(E = \\frac{|Q|}{r^2}\\)."] },
+        { text: "Điện trường đều là điện trường có", options: ["cường độ điện trường bằng nhau về độ lớn tại mọi điểm.", "phương và chiều của vectơ cường độ điện trường giống nhau tại mọi điểm.", "các đường sức song song và cách đều.", "cả A, B, C."] },
+        { text: "Cường độ điện trường giữa hai bản phẳng song song nhiễm điện trái dấu, cách nhau khoảng d, hiệu điện thế U được tính bằng", options: ["\\(E = \\frac{U}{d}\\).", "\\(E = U.d\\).", "\\(E = \\frac{d}{U}\\).", "\\(E = \\frac{U^2}{d}\\)."] },
+        { text: "Đơn vị của cường độ điện trường là", options: ["vôn (V).", "ampe (A).", "vôn trên mét (V/m).", "jun (J)."] },
+        { text: "Công của lực điện khi làm dịch chuyển một điện tích q từ điểm M đến điểm N trong điện trường đều", options: ["phụ thuộc vào hình dạng đường đi.", "không phụ thuộc vào hình dạng đường đi, chỉ phụ thuộc vị trí M, N.", "luôn bằng 0.", "tỉ lệ nghịch với q."] },
+        { text: "Thế năng của điện tích q tại điểm M trong điện trường đều được tính bằng", options: ["\\(W_M = qEd\\) (với d là khoảng cách từ M đến bản âm).", "\\(W_M = qU\\).", "\\(W_M = \\frac{1}{2}qU\\).", "\\(W_M = \\frac{q}{U}\\)."] },
+        { text: "Điện thế tại một điểm M trong điện trường được xác định bằng", options: ["\\(V_M = \\frac{A}{q}\\) (A là công dịch chuyển q từ vô cực về M).", "\\(V_M = \\frac{W_M}{q}\\).", "\\(V_M = \\frac{F}{q}\\).", "cả A và B."] },
+        { text: "Hiệu điện thế giữa hai điểm M, N trong điện trường liên hệ với cường độ điện trường trong điện trường đều theo công thức", options: ["\\(U_{MN} = E.MN\\).", "\\(U_{MN} = \\frac{E}{MN}\\).", "\\(U_{MN} = E.d\\) (d là hình chiếu của MN lên phương đường sức).", "\\(U_{MN} = \\frac{E}{d}\\)."] },
+        { text: "Tụ điện là", options: ["hệ thống gồm hai vật dẫn đặt gần nhau, ngăn cách bởi điện môi.", "linh kiện dùng để tích điện và phóng điện.", "linh kiện có khả năng lưu trữ năng lượng điện.", "cả A, B, C."] },
+        { text: "Điện dung của tụ điện được tính bằng", options: ["\\(C = \\frac{U}{Q}\\).", "\\(C = \\frac{Q}{U}\\).", "\\(C = \\frac{Q^2}{U}\\).", "\\(C = \\frac{U^2}{Q}\\)."] },
+        { text: "Đơn vị của điện dung là", options: ["vôn (V).", "ampe (A).", "fara (F).", "culông (C)."] },
+        { text: "Năng lượng của tụ điện được tính theo công thức", options: ["\\(W = \\frac{1}{2}QU\\).", "\\(W = \\frac{Q^2}{2C}\\).", "\\(W = \\frac{1}{2}CU^2\\).", "cả A, B, C."] },
+        { text: "Bộ tụ điện ghép nối tiếp thì", options: ["\\(Q = Q_1 = Q_2 = ...\\)", "\\(U = U_1 + U_2 + ...\\)", "\\(\\frac{1}{C_b} = \\frac{1}{C_1} + \\frac{1}{C_2} + ...\\)", "cả A, B, C."] },
+        { text: "Bộ tụ điện ghép song song thì", options: ["\\(U = U_1 = U_2 = ...\\)", "\\(Q = Q_1 + Q_2 + ...\\)", "\\(C_b = C_1 + C_2 + ...\\)", "cả A, B, C."] },
+        { text: "Cường độ dòng điện được xác định bằng", options: ["\\(I = \\frac{\\Delta q}{\\Delta t}\\).", "\\(I = \\frac{q}{t}\\).", "\\(I = \\frac{U}{R}\\).", "cả A và B."] },
+        { text: "Đơn vị của cường độ dòng điện là", options: ["vôn (V).", "ampe (A).", "oát (W).", "jun (J)."] },
+        { text: "Dòng điện trong kim loại là dòng chuyển dời có hướng của", options: ["các ion dương.", "các electron tự do.", "các lỗ trống.", "cả electron và ion."] },
+        { text: "Chiều dòng điện được quy ước là chiều", options: ["từ cực âm sang cực dương trong nguồn.", "từ cực dương sang cực âm trong mạch ngoài.", "chuyển động của electron.", "chuyển động của ion dương."] },
+        { text: "Điện trở của một vật dẫn được định nghĩa bởi", options: ["\\(R = \\frac{U}{I}\\).", "\\(R = \\frac{I}{U}\\).", "\\(R = U.I\\).", "\\(R = \\frac{U^2}{I}\\)."] },
+        { text: "Đơn vị của điện trở là", options: ["vôn (V).", "ampe (A).", "ôm (Ω).", "oát (W)."] },
+        { text: "Định luật Ôm cho đoạn mạch chỉ có điện trở thuần được viết là", options: ["\\(I = \\frac{U}{R}\\).", "\\(I = U.R\\).", "\\(U = I.R\\).", "cả A và C."] },
+        { text: "Đường đặc trưng vôn – ampe của một điện trở thuần là", options: ["một đường cong đi qua gốc tọa độ.", "một đường thẳng đi qua gốc tọa độ.", "một đường thẳng song song với trục hoành.", "một đường thẳng song song với trục tung."] },
+        { text: "Nguyên nhân gây ra điện trở của kim loại là do", options: ["sự mất trật tự của mạng tinh thể.", "các electron va chạm với các ion dương khi chuyển động.", "nhiệt độ càng cao thì điện trở càng lớn.", "cả A, B, C."] },
+        { text: "Điện trở của kim loại phụ thuộc vào nhiệt độ theo công thức gần đúng", options: ["\\(R = R_0[1 + \\alpha(t - t_0)]\\).", "\\(R = R_0[1 - \\alpha(t - t_0)]\\).", "\\(R = R_0 + \\alpha(t - t_0)\\).", "\\(R = R_0/\\alpha(t - t_0)\\)."] },
+        { text: "Nhiệt điện trở NTC có đặc điểm", options: ["điện trở tăng khi nhiệt độ tăng.", "điện trở giảm khi nhiệt độ tăng.", "điện trở không đổi theo nhiệt độ.", "điện trở chỉ thay đổi khi nhiệt độ rất cao."] },
+        { text: "Suất điện động của nguồn điện là đại lượng đặc trưng cho", options: ["khả năng tích điện của nguồn.", "khả năng thực hiện công của nguồn điện.", "điện trở trong của nguồn.", "hiệu điện thế giữa hai cực khi mạch kín."] },
+        { text: "Công thức tính suất điện động của nguồn điện là", options: ["\\(\\xi = \\frac{A}{q}\\).", "\\(\\xi = \\frac{q}{A}\\).", "\\(\\xi = A.q\\).", "\\(\\xi = \\frac{A}{t}\\)."] },
+        { text: "Điện trở trong của nguồn điện là", options: ["điện trở của dây nối từ nguồn ra mạch ngoài.", "điện trở của chính nguồn điện.", "điện trở tương đương của mạch ngoài.", "điện trở của vật tiêu thụ điện."] },
+        { text: "Hiệu điện thế mạch ngoài của nguồn điện có suất điện động \\(\\xi\\), điện trở trong r, cường độ dòng điện I được tính bởi", options: ["\\(U = \\xi + Ir\\).", "\\(U = \\xi - Ir\\).", "\\(U = Ir - \\xi\\).", "\\(U = \\frac{\\xi}{I} - r\\)."] },
+        { text: "Hiện tượng đoản mạch xảy ra khi", options: ["điện trở mạch ngoài rất lớn.", "điện trở mạch ngoài bằng 0.", "suất điện động của nguồn bằng 0.", "điện trở trong của nguồn bằng 0."] },
+        { text: "Cho mạch điện gồm hai điện trở \\(R_1 = 10\\ \\Omega\\), \\(R_2 = 20\\ \\Omega\\) mắc nối tiếp. Hiệu điện thế hai đầu đoạn mạch là 30 V. Cường độ dòng điện qua mạch là", options: ["1 A.", "2 A.", "3 A.", "0,5 A."] },
+        { text: "Với mạch điện câu 38, hiệu điện thế giữa hai đầu điện trở \\(R_1\\) là", options: ["10 V.", "20 V.", "30 V.", "15 V."] },
+        { text: "Khi mắc nối tiếp hai nguồn điện giống nhau (mỗi nguồn có \\(\\xi, r\\)) thì bộ nguồn có", options: ["\\(\\xi_b = 2\\xi,\\ r_b = 2r\\).", "\\(\\xi_b = \\xi,\\ r_b = r/2\\).", "\\(\\xi_b = 2\\xi,\\ r_b = r/2\\).", "\\(\\xi_b = \\xi,\\ r_b = 2r\\)."] },
+        { text: "Khi mắc song song hai nguồn điện giống nhau (mỗi nguồn có \\(\\xi, r\\)) thì bộ nguồn có", options: ["\\(\\xi_b = 2\\xi,\\ r_b = 2r\\).", "\\(\\xi_b = \\xi,\\ r_b = r/2\\).", "\\(\\xi_b = 2\\xi,\\ r_b = r/2\\).", "\\(\\xi_b = \\xi,\\ r_b = 2r\\)."] },
+        { text: "Trong một mạch điện kín, hiệu suất của nguồn điện được tính bằng", options: ["\\(H = \\frac{U}{\\xi}\\).", "\\(H = \\frac{\\xi}{U}\\).", "\\(H = \\frac{R}{r}\\).", "\\(H = \\frac{r}{R}\\)."] },
+        { text: "Một nguồn điện có suất điện động 12 V, điện trở trong 1 Ω, mạch ngoài gồm điện trở \\(R = 5\\ \\Omega\\). Cường độ dòng điện trong mạch là", options: ["2 A.", "12 A.", "2,4 A.", "0,5 A."] },
+        { text: "Với nguồn điện ở câu 43, hiệu điện thế mạch ngoài là", options: ["12 V.", "10 V.", "2 V.", "0 V."] },
+        { text: "Một nguồn điện có suất điện động 12 V, điện trở trong 2 Ω. Mắc mạch ngoài gồm hai điện trở \\(R_1 = 4\\ \\Omega\\) và \\(R_2 = 6\\ \\Omega\\) mắc nối tiếp. Cường độ dòng điện trong mạch là", options: ["1 A.", "2 A.", "0,8 A.", "1,2 A."] },
+        { text: "Mắc song song hai điện trở \\(R_1 = 4\\ \\Omega,\\ R_2 = 6\\ \\Omega\\) rồi nối vào nguồn \\(\\xi = 6V, r = 0,5\\ \\Omega\\). Điện trở tương đương mạch ngoài là", options: ["10 Ω.", "2,4 Ω.", "1 Ω.", "0,5 Ω."] },
+        { text: "Với mạch câu 46, cường độ dòng điện chính trong mạch là", options: ["2 A.", "1,5 A.", "2,4 A.", "1 A."] },
+        { text: "Trong mạch câu 46, hiệu điện thế giữa hai đầu mỗi điện trở là", options: ["6 V.", "4,8 V.", "2,4 V.", "1,2 V."] }
+    ];
+
+    // Đáp án (chữ cái đúng) và giải thích chi tiết cho 48 câu
+    const answerKey = [
+        { correct: 'C', explanation: "Điện tích chỉ tồn tại hai loại: điện tích dương và điện tích âm. Các điện tích cùng dấu thì đẩy nhau, trái dấu hút nhau." },
+        { correct: 'B', explanation: "Theo định luật tương tác điện, hai điện tích cùng dấu (cùng dương hoặc cùng âm) sẽ đẩy nhau." },
+        { correct: 'D', explanation: "Trong hệ SI, đơn vị của điện tích là culông, kí hiệu C." },
+        { correct: 'A', explanation: "Hằng số Coulomb k = 9.10⁹ N·m²/C², giá trị này được xác định bằng thực nghiệm." },
+        { correct: 'D', explanation: "Định luật Coulomb áp dụng chính xác cho các điện tích điểm trong chân không và gần đúng trong không khí khô." },
+        { correct: 'D', explanation: "Điện trường là dạng vật chất tồn tại xung quanh điện tích, truyền tương tác điện. Cả ba ý A, B, C đều đúng." },
+        { correct: 'B', explanation: "Cường độ điện trường E = F/q, vectơ E cùng hướng với lực tác dụng lên điện tích dương thử." },
+        { correct: 'B', explanation: "Độ lớn cường độ điện trường do điện tích điểm Q gây ra: E = k|Q|/r²." },
+        { correct: 'D', explanation: "Điện trường đều có cường độ như nhau tại mọi điểm, các đường sức song song cách đều." },
+        { correct: 'A', explanation: "Trong điện trường đều giữa hai bản phẳng: E = U/d." },
+        { correct: 'C', explanation: "Đơn vị cường độ điện trường là vôn trên mét (V/m)." },
+        { correct: 'B', explanation: "Công của lực điện không phụ thuộc hình dạng đường đi, chỉ phụ thuộc vị trí đầu và cuối." },
+        { correct: 'A', explanation: "Thế năng của điện tích trong điện trường đều: W = qEd, với d là khoảng cách từ M đến bản âm." },
+        { correct: 'D', explanation: "Điện thế tại M: V_M = A∞/q = W_M/q, cả A và B đều đúng." },
+        { correct: 'C', explanation: "Hiệu điện thế trong điện trường đều: U_{MN} = E.d với d là hình chiếu của MN lên phương đường sức." },
+        { correct: 'D', explanation: "Tụ điện là hệ hai vật dẫn đặt gần nhau, cách điện, có khả năng tích và phóng điện, lưu trữ năng lượng." },
+        { correct: 'B', explanation: "Điện dung C = Q/U, đặc trưng cho khả năng tích điện của tụ." },
+        { correct: 'C', explanation: "Đơn vị điện dung: fara (F)." },
+        { correct: 'D', explanation: "Năng lượng tụ điện: W = ½QU = Q²/2C = ½CU², cả ba đều tương đương." },
+        { correct: 'D', explanation: "Ghép nối tiếp: điện tích bằng nhau, hiệu điện thế tổng, nghịch đảo điện dung tổng bằng tổng nghịch đảo." },
+        { correct: 'D', explanation: "Ghép song song: hiệu điện thế bằng nhau, điện tích tổng, điện dung tổng bằng tổng các điện dung." },
+        { correct: 'D', explanation: "Cường độ dòng điện: I = Δq/Δt (dòng không đổi: I = q/t). Cả A và B đúng." },
+        { correct: 'B', explanation: "Đơn vị cường độ dòng điện là ampe (A)." },
+        { correct: 'B', explanation: "Dòng điện trong kim loại là dòng chuyển dời có hướng của các electron tự do." },
+        { correct: 'B', explanation: "Quy ước chiều dòng điện: từ cực dương sang cực âm trong mạch ngoài." },
+        { correct: 'A', explanation: "Điện trở R = U/I (định luật Ohm cho đoạn mạch)." },
+        { correct: 'C', explanation: "Đơn vị điện trở: Ôm (Ω)." },
+        { correct: 'D', explanation: "Định luật Ôm: I = U/R và U = I.R đều đúng." },
+        { correct: 'B', explanation: "Đường đặc trưng V-A của điện trở thuần là đường thẳng qua gốc tọa độ, thể hiện tỉ lệ thuận U-I." },
+        { correct: 'D', explanation: "Điện trở kim loại do mạng tinh thể mất trật tự, electron va chạm với ion, nhiệt độ tăng làm điện trở tăng." },
+        { correct: 'A', explanation: "Công thức phụ thuộc nhiệt độ: R = R₀[1 + α(t - t₀)]." },
+        { correct: 'B', explanation: "Nhiệt điện trở NTC có hệ số âm: điện trở giảm khi nhiệt độ tăng." },
+        { correct: 'B', explanation: "Suất điện động ξ đặc trưng cho khả năng thực hiện công của nguồn điện." },
+        { correct: 'A', explanation: "Suất điện động ξ = A/q (công của lực lạ trên một đơn vị điện tích)." },
+        { correct: 'B', explanation: "Điện trở trong là điện trở của chính nguồn điện, gây ra độ giảm thế bên trong." },
+        { correct: 'B', explanation: "Hiệu điện thế mạch ngoài: U = ξ - I.r." },
+        { correct: 'B', explanation: "Đoản mạch xảy ra khi điện trở mạch ngoài bằng 0, dòng điện rất lớn." },
+        { correct: 'A', explanation: "R₁+R₂=30Ω, I = U/R = 30/30 = 1 A." },
+        { correct: 'A', explanation: "U₁ = I·R₁ = 1·10 = 10 V." },
+        { correct: 'A', explanation: "Ghép nối tiếp hai nguồn: ξ_b = 2ξ, r_b = 2r." },
+        { correct: 'B', explanation: "Ghép song song: ξ_b = ξ, r_b = r/2." },
+        { correct: 'A', explanation: "Hiệu suất nguồn: H = U/ξ = R/(R+r)." },
+        { correct: 'A', explanation: "I = ξ/(R+r) = 12/(5+1) = 2 A." },
+        { correct: 'B', explanation: "U = I·R = 2·5 = 10 V." },
+        { correct: 'A', explanation: "R_N = 4+6=10Ω, I = ξ/(R_N+r) = 12/(10+2) = 1 A." },
+        { correct: 'B', explanation: "R_N = (4·6)/(4+6) = 24/10 = 2,4 Ω." },
+        { correct: 'A', explanation: "I = ξ/(R_N + r) = 6/(2,4+0,5) = 6/2,9 ≈ 2,07 A, chọn đáp án 2 A (giá trị gần đúng)." },
+        { correct: 'B', explanation: "Hiệu điện thế mạch ngoài U = I·R_N ≈ 2,07·2,4 ≈ 4,97 V ≈ 4,8 V (nếu lấy I=2A thì U=4,8V)." }
+    ];
+
+    // Render toàn bộ câu hỏi vào grid
+    const grid = document.getElementById('questionsGrid');
+    function buildHTML() {
+        let html = '';
+        for (let i = 0; i < questionsData.length; i++) {
+            const q = questionsData[i];
+            const num = i+1;
+            html += `<div class="question-card" data-qid="${i}">
+                        <div class="question-text">
+                            <span class="q-num">Câu ${num}</span>
+                            <span class="q-content">${q.text}</span>
+                        </div>
+                        <ul class="options">`;
+            for (let optIdx = 0; optIdx < q.options.length; optIdx++) {
+                const letter = String.fromCharCode(65+optIdx); // A,B,C,D
+                html += `<li><span class="option-letter">${letter}.</span><span class="option-text">${q.options[optIdx]}</span></li>`;
+            }
+            html += `</ul>
+                     <button class="btn-answer" data-idx="${i}">🔍 Xem đáp án & hướng dẫn</button>
+                     <div class="answer-panel" id="panel-${i}"></div>
+                    </div>`;
+        }
+        grid.innerHTML = html;
+    }
+    buildHTML();
+
+    // Hàm lấy nội dung đáp án (chữ cái + text của option đúng)
+    function getAnswerText(cardIdx, correctLetter) {
+        const card = document.querySelector(`.question-card[data-qid="${cardIdx}"]`);
+        if (!card) return correctLetter;
+        const optionsLis = card.querySelectorAll('.options li');
+        for (let li of optionsLis) {
+            const letterSpan = li.querySelector('.option-letter');
+            if (letterSpan && letterSpan.innerText.trim() === correctLetter + '.') {
+                const optText = li.querySelector('.option-text')?.innerText || '';
+                return `${correctLetter}. ${optText}`;
+            }
+        }
+        return `${correctLetter}. (không xác định nội dung)`;
+    }
+
+    // Gắn sự kiện và tạo nội dung panel
+    function initAnswerPanels() {
+        for (let i = 0; i < answerKey.length; i++) {
+            const btn = document.querySelector(`.btn-answer[data-idx="${i}"]`);
+            const panel = document.getElementById(`panel-${i}`);
+            if (!btn || !panel) continue;
+
+            const correctLetter = answerKey[i].correct;
+            const explanation = answerKey[i].explanation;
+            // Lấy text đáp án đầy đủ từ câu hỏi
+            const answerFullText = getAnswerText(i, correctLetter);
+
+            // Tạo nội dung hiển thị (chỉ tạo 1 lần)
+            panel.innerHTML = `<div class="answer-correct">✅ Đáp án: ${answerFullText}</div>
+                               <div class="answer-explanation"><strong>📖 Hướng dẫn:</strong> ${explanation}</div>`;
+
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Toggle hiển thị panel
+                if (panel.classList.contains('show')) {
+                    panel.classList.remove('show');
+                    btn.innerHTML = "🔍 Xem đáp án & hướng dẫn";
+                } else {
+                    panel.classList.add('show');
+                    btn.innerHTML = "🙈 Ẩn đáp án";
+                }
+            });
+        }
+    }
+
+    // Khi DOM tải xong và MathJax có thể xử lý lại nếu cần
+    window.addEventListener('DOMContentLoaded', () => {
+        initAnswerPanels();
+        // Kích hoạt lại MathJax cho các công thức mới thêm (nếu có)
+        if (window.MathJax) {
+            MathJax.typesetPromise();
+        }
+    });
+</script>
+</body>
+</html>
