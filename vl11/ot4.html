@@ -2,9 +2,8 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ôn Cuối Kỳ II Vật Lý 11</title>
-	<link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tab Vật Lý 11</title>
     <style>
         :root {
             --brown-gold: #8B5A2B;
@@ -22,67 +21,76 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--light-gray);
             color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
         }
 
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
+            width: 100%;
+            max-width: 100vw;
         }
 
-        /* Tab Navigation */
+        /* Tab Navigation - Mobile First */
         .tab-nav {
             display: flex;
-            flex-wrap: wrap;
-            gap: 2px;
+            gap: 4px;
             background: var(--gray-light);
-            padding: 5px 5px 0 5px;
-            border-radius: 8px 8px 0 0;
+            padding: 8px;
             border-bottom: 3px solid var(--brown-dark);
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+        }
+        
+        .tab-nav::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
         }
 
         .tab-btn {
-            padding: 12px 20px;
+            padding: 14px 18px;
             background: var(--wheat);
             border: none;
             cursor: pointer;
             font-weight: 600;
+            font-size: 14px;
             color: var(--brown-dark);
-            border-radius: 8px 8px 0 0;
-            transition: all 0.3s ease;
-            min-width: 100px;
-            flex: 1;
-            max-width: 150px;
-            position: relative;
-            top: 3px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+            min-height: 44px; /* Minimum touch target */
+            min-width: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .tab-btn:hover {
-            background: var(--beige-light);
-            color: var(--blue-dark);
-            transform: translateY(-2px);
+        .tab-btn:active {
+            transform: scale(0.98);
+            opacity: 0.9;
         }
 
         .tab-btn.active {
             background: var(--white);
             color: var(--blue-primary);
             border-bottom: 3px solid var(--blue-primary);
-            top: 0;
             font-weight: 700;
-            box-shadow: 0 -2px 10px rgba(0,102,204,0.2);
+            box-shadow: 0 2px 8px rgba(0,102,204,0.25);
         }
 
         /* Tab Content */
         .tab-content {
             background: var(--white);
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            min-height: 100vh;
+            min-height: calc(100vh - 52px);
         }
 
         .tab-pane {
@@ -96,44 +104,96 @@
 
         .iframe-container {
             width: 100%;
-            height: calc(100vh - 50px);
+            height: calc(100vh - 52px);
+            height: 100dvh; /* Dynamic viewport height for mobile */
             border: none;
-            border-radius: 0 0 8px 8px;
+            display: block;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
+        /* Desktop styles */
+        @media (min-width: 768px) {
             .tab-nav {
-                flex-direction: column;
-                padding: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 5px 5px 0 5px;
+                border-radius: 8px 8px 0 0;
             }
             
             .tab-btn {
-                max-width: none;
-                border-radius: 8px;
-                top: 0;
-                margin: 2px 0;
+                flex: 1;
+                max-width: 150px;
+                border-radius: 8px 8px 0 0;
+                position: relative;
+                top: 3px;
             }
             
             .tab-btn.active {
-                border-bottom: none;
-                border-left: 4px solid var(--blue-primary);
+                border-bottom: 3px solid var(--blue-primary);
+                top: 0;
             }
             
             .tab-content {
-                border-radius: 10px;
+                border-radius: 0 0 10px 10px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             }
             
             .iframe-container {
-                height: calc(100vh - 60px);
+                border-radius: 0 0 8px 8px;
             }
+        }
+
+        /* Mobile enhancements */
+        @media (max-width: 767px) {
+            .tab-btn {
+                font-size: 13px;
+                padding: 12px 14px;
+            }
+            
+            /* Add visual indicator for scrollable tabs */
+            .tab-nav::after {
+                content: '';
+                position: absolute;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                width: 30px;
+                background: linear-gradient(to right, transparent, var(--gray-light));
+                pointer-events: none;
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+            
+            .tab-nav.scrollable::after {
+                opacity: 1;
+            }
+        }
+
+        /* Prevent iframe zoom on double-tap */
+        iframe {
+            touch-action: manipulation;
+        }
+
+        /* Loading state */
+        .tab-pane::before {
+            content: 'Đang tải...';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--brown-gold);
+            font-style: italic;
+            display: none;
+        }
+        
+        .tab-pane:not(.active)::before {
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Tab Navigation -->
-        <nav class="tab-nav">
+        <nav class="tab-nav" id="tabNav">
             <button class="tab-btn active" data-tab="tab1">Bài 16</button>
             <button class="tab-btn" data-tab="tab2">Bài 17</button>
             <button class="tab-btn" data-tab="tab3">Bài 18</button>
@@ -147,81 +207,106 @@
 
         <!-- Tab Content -->
         <div class="tab-content">
-            <!-- Tab 1 -->
             <div id="tab1" class="tab-pane active">
-                <iframe src="https://tuibx25.github.io/bx/vl11/16/d" class="iframe-container" title="Bài 16" loading="lazy"></iframe>
+                <iframe src="https://tuibx25.github.io/bx/vl11/16/d" class="iframe-container" title="Bài 16" loading="lazy" allowfullscreen></iframe>
             </div>
-
-            <!-- Tab 2 -->
             <div id="tab2" class="tab-pane">
-                <iframe src="https://tuibx25.github.io/bx/vl11/17/d" class="iframe-container" title="Bài 17" loading="lazy"></iframe>
+                <iframe src="https://tuibx25.github.io/bx/vl11/17/d" class="iframe-container" title="Bài 17" loading="lazy" allowfullscreen></iframe>
             </div>
-
-            <!-- Tab 3 -->
             <div id="tab3" class="tab-pane">
-                <iframe src="https://tuibx25.github.io/bx/vl11/18/d" class="iframe-container" title="Bài 18" loading="lazy"></iframe>
+                <iframe src="https://tuibx25.github.io/bx/vl11/18/d" class="iframe-container" title="Bài 18" loading="lazy" allowfullscreen></iframe>
             </div>
-
-            <!-- Tab 4 -->
             <div id="tab4" class="tab-pane">
-                <iframe src="https://tuibx25.github.io/bx/vl11/19/d" class="iframe-container" title="Bài 19" loading="lazy"></iframe>
+                <iframe src="https://tuibx25.github.io/bx/vl11/19/d" class="iframe-container" title="Bài 19" loading="lazy" allowfullscreen></iframe>
             </div>
-
-            <!-- Tab 5 -->
             <div id="tab5" class="tab-pane">
-                <iframe src="https://tuibx25.github.io/bx/vl11/20/d" class="iframe-container" title="Bài 20" loading="lazy"></iframe>
+                <iframe src="https://tuibx25.github.io/bx/vl11/20/d" class="iframe-container" title="Bài 20" loading="lazy" allowfullscreen></iframe>
             </div>
-
-            <!-- Tab 6 -->
             <div id="tab6" class="tab-pane">
-                <iframe src="https://tuibx25.github.io/bx/vl11/21/d" class="iframe-container" title="Bài 21" loading="lazy"></iframe>
+                <iframe src="https://tuibx25.github.io/bx/vl11/21/d" class="iframe-container" title="Bài 21" loading="lazy" allowfullscreen></iframe>
             </div>
-
-            <!-- Tab 7 -->
             <div id="tab7" class="tab-pane">
-                <iframe src="https://tuibx25.github.io/bx/vl11/22/d" class="iframe-container" title="Bài 22" loading="lazy"></iframe>
+                <iframe src="https://tuibx25.github.io/bx/vl11/22/d" class="iframe-container" title="Bài 22" loading="lazy" allowfullscreen></iframe>
             </div>
-
-            <!-- Tab 8 -->
             <div id="tab8" class="tab-pane">
-                <iframe src="https://tuibx25.github.io/bx/vl11/23/d" class="iframe-container" title="Bài 23" loading="lazy"></iframe>
+                <iframe src="https://tuibx25.github.io/bx/vl11/23/d" class="iframe-container" title="Bài 23" loading="lazy" allowfullscreen></iframe>
             </div>
-
-            <!-- Tab 9 -->
             <div id="tab9" class="tab-pane">
-                <iframe src="https://tuibx25.github.io/bx/vl11/24/d" class="iframe-container" title="Bài 24" loading="lazy"></iframe>
+                <iframe src="https://tuibx25.github.io/bx/vl11/24/d" class="iframe-container" title="Bài 24" loading="lazy" allowfullscreen></iframe>
             </div>
         </div>
     </div>
 
     <script>
-        // Tab switching functionality
         document.addEventListener('DOMContentLoaded', function() {
             const tabBtns = document.querySelectorAll('.tab-btn');
             const tabPanes = document.querySelectorAll('.tab-pane');
+            const tabNav = document.getElementById('tabNav');
 
+            // Check if tab nav is scrollable (mobile)
+            function updateScrollIndicator() {
+                if (window.innerWidth < 768) {
+                    if (tabNav.scrollWidth > tabNav.clientWidth) {
+                        tabNav.classList.add('scrollable');
+                    } else {
+                        tabNav.classList.remove('scrollable');
+                    }
+                }
+            }
+            
+            updateScrollIndicator();
+            window.addEventListener('resize', updateScrollIndicator);
+
+            // Tab switching
             tabBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
-                    // Remove active class from all
+                    // Deactivate all
                     tabBtns.forEach(b => b.classList.remove('active'));
                     tabPanes.forEach(p => p.classList.remove('active'));
                     
-                    // Add active class to clicked button
+                    // Activate selected
                     btn.classList.add('active');
-                    
-                    // Show corresponding tab pane
                     const tabId = btn.getAttribute('data-tab');
                     document.getElementById(tabId).classList.add('active');
+                    
+                    // Scroll active button into view on mobile
+                    if (window.innerWidth < 768) {
+                        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    }
                 });
+                
+                // Add touch feedback
+                btn.addEventListener('touchstart', function() {
+                    this.style.opacity = '0.85';
+                }, { passive: true });
+                
+                btn.addEventListener('touchend', function() {
+                    this.style.opacity = '';
+                }, { passive: true });
             });
 
-            // Smooth fade-in for iframes
+            // Handle mobile viewport height (address bar hide/show)
+            function setVh() {
+                const vh = window.innerHeight * 0.01;
+                document.documentElement.style.setProperty('--vh', `${vh}px`);
+                document.querySelectorAll('.iframe-container').forEach(iframe => {
+                    iframe.style.height = `calc(100vh - 52px)`;
+                });
+            }
+            
+            setVh();
+            window.addEventListener('resize', setVh);
+            window.addEventListener('orientationchange', () => {
+                setTimeout(setVh, 300);
+            });
+
+            // Iframe loading feedback
             document.querySelectorAll('iframe').forEach(iframe => {
                 iframe.addEventListener('load', function() {
                     this.style.opacity = '1';
                 });
                 iframe.style.opacity = '0';
-                iframe.style.transition = 'opacity 0.3s ease';
+                iframe.style.transition = 'opacity 0.2s ease';
             });
         });
     </script>
