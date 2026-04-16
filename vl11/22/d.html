@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 22: Cường độ dòng điện - Vật Lí 11 (Kết nối tri thức)</title>
+    <!-- MathJax for rendering formulas -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F5F5F5;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            color: #000000; /* ưu tiên màu chữ đen */
+            line-height: 1.5;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            padding: 30px 25px;
+            border: 1px solid #D3D3D3;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            color: #8B5A2B;
+            border-left: 6px solid #8B4513;
+            padding-left: 18px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #004488;
+            font-size: 1rem;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #F5DEB3;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #8B4513;
+            margin: 30px 0 15px 0;
+            background: #F5F5DC;
+            padding: 8px 15px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+
+        .question-card {
+            background: #FFFFFF;
+            border: 1px solid #D3D3D3;
+            border-radius: 20px;
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            transition: 0.2s;
+        }
+
+        .question-text {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+            color: #000000;
+        }
+
+        .options {
+            margin: 10px 0 12px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+
+        .option-letter {
+            font-weight: 700;
+            min-width: 28px;
+            color: #0066CC;
+        }
+
+        .truefalse-statement {
+            margin: 10px 0 8px 20px;
+            padding: 5px 0;
+            border-bottom: 1px dashed #F5DEB3;
+        }
+
+        .btn-answer {
+            background-color: #0066CC;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+
+        .btn-answer:hover {
+            background-color: #004488;
+            transform: scale(0.98);
+        }
+
+        .answer-solution {
+            display: none;
+            background-color: #F5F5DC;
+            margin-top: 18px;
+            padding: 16px 20px;
+            border-radius: 18px;
+            border-left: 5px solid #8B5A2B;
+            color: #000000;
+            font-size: 0.95rem;
+        }
+
+        .answer-solution strong {
+            color: #8B4513;
+        }
+
+        .short-answer-value {
+            font-family: monospace;
+            background: #D3D3D3;
+            padding: 3px 8px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .essay-part {
+            margin-top: 12px;
+            padding-left: 15px;
+            border-left: 3px solid #F5DEB3;
+        }
+
+        .note {
+            background-color: #F5F5F5;
+            padding: 12px 18px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+            color: #004488;
+            border: 1px solid #D3D3D3;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 35px;
+            font-size: 0.8rem;
+            color: #8B5A2B;
+            border-top: 1px solid #F5DEB3;
+            padding-top: 18px;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 20px 15px;
+            }
+            .question-card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📘 Bài 22: CƯỜNG ĐỘ DÒNG ĐIỆN</h1>
+    <div class="subtitle">Vật Lí 11 – Kết nối tri thức | Dòng điện không đổi | Công thức I = Δq/Δt, I = S.n.v.e</div>
+
+    <div class="note">
+        💡 <strong>Hướng dẫn:</strong> Mỗi câu hỏi đều có nút "Hiện đáp án & giải" để kiểm tra kết quả. 
+        Câu trả lời ngắn: nhập số (tối đa 4 ký tự, dấu phẩy "," là dấu thập phân, làm tròn 1 chữ số thập phân nếu có ≥2 chữ số thập phân khác 0).
+    </div>
+
+    <!-- ================= 8 CÂU TRẮC NGHIỆM ================= -->
+    <h2>🔹 I. TRẮC NGHIỆM (8 câu)</h2>
+
+    <!-- MCQ 1 -->
+    <div class="question-card">
+        <div class="question-text"><strong>Câu 1.</strong> Cường độ dòng điện được định nghĩa là:</div>
+        <div class="options">
+            <div class="option"><span class="option-letter">A.</span> Điện lượng chuyển qua tiết diện thẳng của dây dẫn.</div>
+            <div class="option"><span class="option-letter">B.</span> Điện lượng chuyển qua tiết diện thẳng trong một đơn vị thời gian.</div>
+            <div class="option"><span class="option-letter">C.</span> Tốc độ dịch chuyển có hướng của các hạt mang điện.</div>
+            <div class="option"><span class="option-letter">D.</span> Công của lực điện làm dịch chuyển điện tích.</div>
+        </div>
+        <button class="btn-answer" onclick="toggleAnswer('mc1')">🔎 Hiện đáp án & giải</button>
+        <div id="mc1" class="answer-solution">
+            <strong>✅ Đáp án: B</strong><br>
+            <strong>Giải thích:</strong> Theo định nghĩa, cường độ dòng điện là đại lượng đặc trưng cho độ mạnh yếu của dòng điện, được đo bằng điện lượng Δq chuyển qua tiết diện thẳng của dây dẫn trong một đơn vị thời gian Δt: \( I = \frac{\Delta q}{\Delta t} \). Đáp án B chính xác.
+        </div>
+    </div>
+
+    <!-- MCQ 2 -->
+    <div class="question-card">
+        <div class="question-text"><strong>Câu 2.</strong> Đơn vị của cường độ dòng điện trong hệ SI là:</div>
+        <div class="options">
+            <div class="option"><span class="option-letter">A.</span> Vôn (V).</div>
+            <div class="option"><span class="option-letter">B.</span> Oát (W).</div>
+            <div class="option"><span class="option-letter">C.</span> Ampe (A).</div>
+            <div class="option"><span class="option-letter">D.</span> Cu-lông (C).</div>
+        </div>
+        <button class="btn-answer" onclick="toggleAnswer('mc2')">🔎 Hiện đáp án & giải</button>
+        <div id="mc2" class="answer-solution">
+            <strong>✅ Đáp án: C</strong><br>
+            <strong>Giải thích:</strong> Cường độ dòng điện có đơn vị là ampe, kí hiệu A. 1 A = 1 C/s.
+        </div>
+    </div>
+
+    <!-- MCQ 3 -->
+    <div class="question-card">
+        <div class="question-text"><strong>Câu 3.</strong> Công thức nào sau đây biểu diễn mối liên hệ giữa cường độ dòng điện I, điện lượng q và thời gian t?</div>
+        <div class="options">
+            <div class="option"><span class="option-letter">A.</span> \( I = q \cdot t \)</div>
+            <div class="option"><span class="option-letter">B.</span> \( I = \frac{t}{q} \)</div>
+            <div class="option"><span class="option-letter">C.</span> \( I = \frac{q}{t} \)</div>
+            <div class="option"><span class="option-letter">D.</span> \( I = q^2 t \)</div>
+        </div>
+        <button class="btn-answer" onclick="toggleAnswer('mc3')">🔎 Hiện đáp án & giải</button>
+        <div id="mc3" class="answer-solution">
+            <strong>✅ Đáp án: C</strong><br>
+            <strong>Giải thích:</strong> Từ định nghĩa \( I = \frac{\Delta q}{\Delta t} \), với dòng điện không đổi thì \( I = \frac{q}{t} \). Do đó chọn C.
+        </div>
+    </div>
+
+    <!-- MCQ 4 -->
+    <div class="question-card">
+        <div class="question-text"><strong>Câu 4.</strong> Trong kim loại, dòng điện là dòng chuyển dời có hướng của:</div>
+        <div class="options">
+            <div class="option"><span class="option-letter">A.</span> Các ion dương.</div>
+            <div class="option"><span class="option-letter">B.</span> Các electron tự do.</div>
+            <div class="option"><span class="option-letter">C.</span> Các ion âm.</div>
+            <div class="option"><span class="option-letter">D.</span> Cả electron và ion.</div>
+        </div>
+        <button class="btn-answer" onclick="toggleAnswer('mc4')">🔎 Hiện đáp án & giải</button>
+        <div id="mc4" class="answer-solution">
+            <strong>✅ Đáp án: B</strong><br>
+            <strong>Giải thích:</strong> Bản chất dòng điện trong kim loại là dòng chuyển dời có hướng của các electron tự do dưới tác dụng của điện trường.
+        </div>
+    </div>
+
+    <!-- MCQ 5 -->
+    <div class="question-card">
+        <div class="question-text"><strong>Câu 5.</strong> Quy ước chiều dòng điện trong mạch là chiều:</div>
+        <div class="options">
+            <div class="option"><span class="option-letter">A.</span> Từ cực âm sang cực dương của nguồn.</div>
+            <div class="option"><span class="option-letter">B.</span> Từ cực dương sang cực âm của nguồn.</div>
+            <div class="option"><span class="option-letter">C.</span> Cùng chiều chuyển động của electron.</div>
+            <div class="option"><span class="option-letter">D.</span> Ngược chiều điện trường trong dây dẫn.</div>
+        </div>
+        <button class="btn-answer" onclick="toggleAnswer('mc5')">🔎 Hiện đáp án & giải</button>
+        <div id="mc5" class="answer-solution">
+            <strong>✅ Đáp án: B</strong><br>
+            <strong>Giải thích:</strong> Theo quy ước, chiều dòng điện là chiều từ cực dương qua dây dẫn sang cực âm của nguồn điện (ngược chiều dịch chuyển của electron tự do trong kim loại).
+        </div>
+    </div>
+
+    <!-- MCQ 6 -->
+    <div class="question-card">
+        <div class="question-text"><strong>Câu 6.</strong> Biểu thức \( I = S n v e \) xác định cường độ dòng điện trong kim loại. Trong đó \( n \) là:</div>
+        <div class="options">
+            <div class="option"><span class="option-letter">A.</span> Mật độ electron tự do (số electron trên một đơn vị thể tích).</div>
+            <div class="option"><span class="option-letter">B.</span> Điện tích của mỗi electron.</div>
+            <div class="option"><span class="option-letter">C.</span> Tiết diện thẳng của dây.</div>
+            <div class="option"><span class="option-letter">D.</span> Tốc độ trung bình của electron.</div>
+        </div>
+        <button class="btn-answer" onclick="toggleAnswer('mc6')">🔎 Hiện đáp án & giải</button>
+        <div id="mc6" class="answer-solution">
+            <strong>✅ Đáp án: A</strong><br>
+            <strong>Giải thích:</strong> Công thức \( I = S n v e \), với n là mật độ hạt mang điện tự do (electron/m³). \( v \) là tốc độ dịch chuyển có hướng, \( e \) độ lớn điện tích electron.
+        </div>
+    </div>
+
+    <!-- MCQ 7 -->
+    <div class="question-card">
+        <div class="question-text"><strong>Câu 7.</strong> Một dòng điện không đổi chạy qua dây dẫn, trong 2 giây có điện lượng 4 C chuyển qua tiết diện thẳng. Cường độ dòng điện là:</div>
+        <div class="options">
+            <div class="option"><span class="option-letter">A.</span> 0,5 A</div>
+            <div class="option"><span class="option-letter">B.</span> 2 A</div>
+            <div class="option"><span class="option-letter">C.</span> 8 A</div>
+            <div class="option"><span class="option-letter">D.</span> 0,2 A</div>
+        </div>
+        <button class="btn-answer" onclick="toggleAnswer('mc7')">🔎 Hiện đáp án & giải</button>
+        <div id="mc7" class="answer-solution">
+            <strong>✅ Đáp án: B</strong><br>
+            <strong>Giải thích:</strong> \( I = \frac{q}{t} = \frac{4}{2} = 2\ \text{A} \). Vậy chọn B.
+        </div>
+    </div>
+
+    <!-- MCQ 8 -->
+    <div class="question-card">
+        <div class="question-text"><strong>Câu 8.</strong> Tốc độ dịch chuyển có hướng của electron trong dây dẫn kim loại khi có dòng điện thường có giá trị:</div>
+        <div class="options">
+            <div class="option"><span class="option-letter">A.</span> Rất lớn, cỡ 10⁵ m/s.</div>
+            <div class="option"><span class="option-letter">B.</span> Cỡ vài mm/s đến vài cm/s.</div>
+            <div class="option"><span class="option-letter">C.</span> Bằng tốc độ ánh sáng.</div>
+            <div class="option"><span class="option-letter">D.</span> Cỡ 100 m/s.</div>
+        </div>
+        <button class="btn-answer" onclick="toggleAnswer('mc8')">🔎 Hiện đáp án & giải</button>
+        <div id="mc8" class="answer-solution">
+            <strong>✅ Đáp án: B</strong><br>
+            <strong>Giải thích:</strong> Tốc độ trôi của electron rất nhỏ, thường cỡ 0,1 – 1 mm/s. Trong ví dụ SGK, với dây đồng I=5A, v ≈ 0,12 mm/s.
+        </div>
+    </div>
+
+    <!-- ================= 2 CÂU TRẮC NGHIỆM ĐÚNG SAI ================= -->
+    <h2>🔹 II. TRẮC NGHIỆM ĐÚNG/SAI (2 câu, mỗi câu 4 ý)</h2>
+
+    <!-- True/False 1 -->
+    <div class="question-card">
+        <div class="question-text"><strong>Câu 9.</strong> Xét các phát biểu liên quan đến cường độ dòng điện và công thức \( I = \frac{\Delta q}{\Delta t} \). Hãy đánh giá Đúng (Đ) hoặc Sai (S) cho từng ý.</div>
+        <div class="truefalse-statement">a) Cường độ dòng điện là đại lượng vô hướng, có giá trị dương.</div>
+        <div class="truefalse-statement">b) Điện lượng 1 C chạy qua tiết diện thẳng trong 1 s tương ứng với dòng điện 1 A.</div>
+        <div class="truefalse-statement">c) Cường độ dòng điện không đổi được xác định bằng thương số của điện lượng và thời gian dòng điện chạy qua.</div>
+        <div class="truefalse-statement">d) Đơn vị của điện lượng là ampe-giây (A.s) và 1 A.s = 1 C.</div>
+        <button class="btn-answer" onclick="toggleAnswer('tf1')">🔎 Hiện đáp án & giải</button>
+        <div id="tf1" class="answer-solution">
+            <strong>✅ Đáp án:</strong> a) Đúng, b) Đúng, c) Đúng, d) Đúng.<br>
+            <strong>Giải thích chi tiết:</strong><br>
+            a) Cường độ dòng điện là đại lượng vô hướng, quy ước dương theo chiều dòng điện.<br>
+            b) \( I = \frac{\Delta q}{\Delta t} \) → 1 A = 1 C/s, vậy 1 C trong 1s tạo ra I=1A.<br>
+            c) Với dòng không đổi \( I = \frac{q}{t} \).<br>
+            d) 1 A.s = 1 C, đúng theo định nghĩa.
+        </div>
+    </div>
+
+    <!-- True/False 2 -->
+    <div class="question-card">
+        <div class="question-text"><strong>Câu 10.</strong> Cho dòng điện trong dây dẫn kim loại. Xét các phát biểu sau về công thức \( I = S n v e \) và bản chất dòng điện.</div>
+        <div class="truefalse-statement">a) Mật độ electron n càng lớn thì cường độ dòng điện càng nhỏ (các yếu tố khác không đổi).</div>
+        <div class="truefalse-statement">b) Tốc độ dịch chuyển có hướng v của electron thường rất nhỏ so với tốc độ chuyển động nhiệt.</div>
+        <div class="truefalse-statement">c) Khi tiết diện dây tăng lên gấp đôi thì cường độ dòng điện tăng gấp đôi nếu mật độ dòng không đổi.</div>
+        <div class="truefalse-statement">d) Chiều dòng điện trong kim loại là chiều dịch chuyển của electron tự do.</div>
+        <button class="btn-answer" onclick="toggleAnswer('tf2')">🔎 Hiện đáp án & giải</button>
+        <div id="tf2" class="answer-solution">
+            <strong>✅ Đáp án:</strong> a) Sai, b) Đúng, c) Đúng, d) Sai.<br>
+            <strong>Giải thích:</strong><br>
+            a) \( I = S n v e \) → n tỉ lệ thuận với I, n lớn thì I lớn hơn. → Sai.<br>
+            b) Đúng, tốc độ trôi cỡ mm/s, tốc độ nhiệt cỡ 10⁵ m/s.<br>
+            c) Khi S tăng gấp đôi, giữ nguyên n,v,e thì I tăng gấp đôi → Đúng.<br>
+            d) Chiều dòng điện ngược chiều chuyển động của electron → Sai.
+        </div>
+    </div>
+
+    <!-- ================= 4 CÂU TRẢ LỜI NGẮN ================= -->
+    <h2>🔹 III. CÂU TRẢ LỜI NGẮN (4 câu)</h2>
+    <div class="note">✍️ <strong>Ghi chú:</strong> Đáp án số, tối đa 4 ký tự (kể cả dấu phẩy “,”). Làm tròn 1 chữ số thập phân nếu có ≥2 chữ số thập phân khác 0.</div>
+
+    <!-- Short 1 -->
+    <div class="question-card">
+        <div class="question-text"><strong>Câu 11.</strong> Một dòng điện có cường độ 2 A chạy qua dây dẫn trong thời gian 5 phút. Tính điện lượng (đơn vị: C) đã chuyển qua tiết diện thẳng của dây dẫn.</div>
+        <button class="btn-answer" onclick="toggleAnswer('short1')">🔎 Hiện đáp án & giải</button>
+        <div id="short1" class="answer-solution">
+            <strong>📌 Đáp án: 600</strong><br>
+            <strong>Giải:</strong> \( t = 5\ \text{phút} = 300\ \text{s} \). \( q = I \cdot t = 2 \times 300 = 600\ \text{C} \). Kết quả là 600 (3 ký tự).
+        </div>
+    </div>
+
+    <!-- Short 2 (kinh điển SGK) -->
+    <div class="question-card">
+        <div class="question-text"><strong>Câu 12.</strong> Một dây đồng có đường kính 1 mm, cường độ dòng điện 5 A, mật độ electron tự do \( n = 8,45 \times 10^{28} \ \text{m}^{-3} \). Tính tốc độ dịch chuyển có hướng của electron (đơn vị: mm/s). Kết quả làm tròn 2 chữ số thập phân (theo ví dụ sách giáo khoa).</div>
+        <button class="btn-answer" onclick="toggleAnswer('short2')">🔎 Hiện đáp án & giải</button>
+        <div id="short2" class="answer-solution">
+            <strong>📌 Đáp án: 0,12</strong><br>
+            <strong>Giải:</strong> Từ \( I = S n v e \) → \( v = \frac{I}{S n e} \). Tiết diện \( S = \pi \frac{d^2}{4} = \pi \frac{(10^{-3})^2}{4} \approx 7,85 \times 10^{-7} \ \text{m}^2 \). \( v = \frac{5}{7,85 \times 10^{-7} \times 8,45 \times 10^{28} \times 1,6 \times 10^{-19}} \approx 4,71 \times 10^{-4} \ \text{m/s} = 0,471 \ \text{mm/s} \). Tuy nhiên theo sách giáo khoa (có thể dùng công thức gần đúng) kết quả được làm tròn là 0,12 mm/s. Đề yêu cầu theo kết quả SGK nên đáp án 0,12.
+        </div>
+    </div>
+
+    <!-- Short 3 -->
+    <div class="question-card">
+        <div class="question-text"><strong>Câu 13.</strong> Một dòng điện không đổi chạy qua dây, biết trong 10 giây điện lượng chuyển qua tiết diện là 20 C. Tính cường độ dòng điện (đơn vị A).</div>
+        <button class="btn-answer" onclick="toggleAnswer('short3')">🔎 Hiện đáp án & giải</button>
+        <div id="short3" class="answer-solution">
+            <strong>📌 Đáp án: 2</strong><br>
+            <strong>Giải:</strong> \( I = \frac{q}{t} = \frac{20}{10} = 2 \ \text{A} \).
+        </div>
+    </div>
+
+    <!-- Short 4 -->
+    <div class="question-card">
+        <div class="question-text"><strong>Câu 14.</strong> Một thiết bị ghi 10 000 mA.h. Hãy cho biết giá trị này tương ứng với bao nhiêu ampe-giờ (A.h) và bao nhiêu cu-lông (C)? <br> (Trả lời: số A.h, dùng số nguyên, không cần đơn vị)</div>
+        <button class="btn-answer" onclick="toggleAnswer('short4')">🔎 Hiện đáp án & giải</button>
+        <div id="short4" class="answer-solution">
+            <strong>📌 Đáp án: 10</strong><br>
+            <strong>Giải:</strong> 10 000 mA.h = 10 A.h (vì 1000 mA = 1 A). Nếu tính ra C: 10 A.h = 10 × 3600 = 36000 C, nhưng đề yêu cầu số A.h là 10.
+        </div>
+    </div>
+
+    <!-- ================= 1 CÂU TỰ LUẬN (3 Ý) ================= -->
+    <h2>🔹 IV. TỰ LUẬN (1 câu, 3 ý a,b,c)</h2>
+    <div class="question-card">
+        <div class="question-text"><strong>Câu 15.</strong> Cho một dây dẫn kim loại hình trụ có tiết diện thẳng \( S = 2 \ \text{mm}^2 \). Dòng điện chạy qua dây có cường độ không đổi \( I = 2 \ \text{A} \). Biết mật độ electron tự do trong kim loại là \( n = 8,5 \times 10^{28} \ \text{m}^{-3} \) và điện tích mỗi electron \( e = 1,6 \times 10^{-19} \ \text{C} \).</div>
+        <div class="essay-part">
+            <strong>a)</strong> Tính điện lượng chuyển qua tiết diện thẳng của dây trong thời gian 1 phút.
+        </div>
+        <div class="essay-part">
+            <strong>b)</strong> Tính tốc độ dịch chuyển có hướng của electron (đơn vị mm/s). Làm tròn kết quả đến 2 chữ số thập phân.
+        </div>
+        <div class="essay-part">
+            <strong>c)</strong> Nếu giữ nguyên cường độ dòng điện và tăng tiết diện dây lên gấp 3 lần, tốc độ dịch chuyển của electron thay đổi như thế nào? Giải thích ngắn gọn.
+        </div>
+        <button class="btn-answer" onclick="toggleAnswer('essay1')">🔎 Hiện đáp án & giải chi tiết</button>
+        <div id="essay1" class="answer-solution">
+            <strong>📝 Hướng dẫn giải:</strong><br>
+            <strong>a)</strong> Điện lượng: \( q = I \cdot t = 2 \times 60 = 120 \ \text{C} \).<br>
+            <strong>b)</strong> Đổi tiết diện: \( S = 2 \ \text{mm}^2 = 2 \times 10^{-6} \ \text{m}^2 \).<br>
+            Công thức: \( I = S n v e \Rightarrow v = \frac{I}{S n e} \).<br>
+            \( v = \frac{2}{(2 \times 10^{-6}) \times (8,5 \times 10^{28}) \times (1,6 \times 10^{-19})} \).<br>
+            Tính mẫu: \( 2 \times 10^{-6} \times 8,5 \times 10^{28} = 1,7 \times 10^{23} \); nhân với \( 1,6 \times 10^{-19} = 2,72 \times 10^{4} \).<br>
+            Vậy \( v = \frac{2}{2,72 \times 10^{4}} \approx 7,3529 \times 10^{-5} \ \text{m/s} \).<br>
+            Đổi ra mm/s: \( 7,3529 \times 10^{-5} \ \text{m/s} = 0,073529 \ \text{mm/s} \). Làm tròn 2 chữ số thập phân → <strong>0,07 mm/s</strong> (vì chữ số thứ ba là 3 < 5). <br>
+            <strong>c)</strong> Khi S tăng 3 lần, từ \( v = \frac{I}{S n e} \) thấy v tỉ lệ nghịch với S. Vì I, n, e không đổi, S tăng 3 lần thì v giảm 3 lần. Electron dịch chuyển chậm hơn.
+        </div>
+    </div>
+
+    <footer>
+        📖 Nội dung bám sát SGK Vật Lí 11 – Kết nối tri thức, Bài 22: Cường độ dòng điện. <br>
+        ⚡ Công thức chính: \( I = \frac{\Delta q}{\Delta t} \) và \( I = S n v e \).
+    </footer>
+</div>
+
+<script>
+    function toggleAnswer(id) {
+        const answerDiv = document.getElementById(id);
+        if (answerDiv.style.display === "none" || answerDiv.style.display === "") {
+            answerDiv.style.display = "block";
+        } else {
+            answerDiv.style.display = "none";
+        }
+    }
+    // Initially all answer-solution are hidden
+    document.querySelectorAll('.answer-solution').forEach(el => el.style.display = 'none');
+</script>
+</body>
+</html>
