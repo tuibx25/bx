@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Bài 24: Nguồn điện - Vật lí 11 | Bộ câu hỏi có đáp án chi tiết</title>
+    <!-- MathJax for rendering formulas -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F5F5F5;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            color: #000000;
+            line-height: 1.5;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            border-radius: 28px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+            padding: 2rem 2rem 3rem;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: #8B4513;
+            border-left: 8px solid #8B5A2B;
+            padding-left: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .sub {
+            color: #004488;
+            margin-bottom: 2rem;
+            padding-left: 2rem;
+            font-style: italic;
+            border-bottom: 1px solid #D3D3D3;
+            padding-bottom: 0.75rem;
+        }
+
+        h2 {
+            background: #F5DEB3;
+            color: #8B4513;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            font-size: 1.6rem;
+            margin: 1.8rem 0 1rem 0;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .section-card {
+            background: #FEFEF7;
+            border-radius: 24px;
+            padding: 1.2rem 1.8rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            border: 1px solid #F5DEB3;
+        }
+
+        .question-wrapper {
+            margin-bottom: 2rem;
+            border-left: 4px solid #0066CC;
+            padding-left: 1.2rem;
+            background: #FFFFFF;
+            border-radius: 16px;
+            transition: all 0.1s ease;
+        }
+
+        .question-text {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 0.75rem;
+            color: #000000;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-left: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #F5F5F5;
+            padding: 0.3rem 1rem;
+            border-radius: 32px;
+            border: 1px solid #D3D3D3;
+        }
+
+        .option input {
+            accent-color: #0066CC;
+            width: 18px;
+            height: 18px;
+            margin: 0;
+        }
+
+        .option label {
+            font-weight: normal;
+            color: #1e1e1e;
+        }
+
+        .tf-statement {
+            margin: 0.8rem 0 0.8rem 1.5rem;
+            display: flex;
+            align-items: baseline;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            border-bottom: 1px dashed #E0E0E0;
+            padding-bottom: 0.5rem;
+        }
+
+        .tf-letter {
+            font-weight: 800;
+            min-width: 28px;
+            color: #8B5A2B;
+            font-size: 1.05rem;
+        }
+
+        .tf-text {
+            flex: 1;
+        }
+
+        .short-box {
+            margin-top: 0.5rem;
+        }
+
+        .short-note {
+            background: #F5F5DC;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #004488;
+            display: inline-block;
+            margin-top: 0.3rem;
+        }
+
+        .essay-sub {
+            background: #F9F9F5;
+            margin: 0.8rem 0 0.8rem 1rem;
+            padding: 0.5rem 1rem;
+            border-left: 3px solid #8B4513;
+        }
+
+        .badge {
+            background-color: #0066CC;
+            color: white;
+            font-size: 0.8rem;
+            border-radius: 30px;
+            padding: 0.2rem 0.8rem;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        .answer-btn {
+            background-color: #8B5A2B;
+            border: none;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 0 8px 0;
+            transition: 0.2s;
+            display: inline-block;
+        }
+
+        .answer-btn:hover {
+            background-color: #6b3e1a;
+            transform: scale(0.97);
+        }
+
+        .answer-detail {
+            display: none;
+            background: #F5F5DC;
+            padding: 1rem 1.2rem;
+            border-radius: 20px;
+            margin-top: 12px;
+            border-left: 5px solid #8B4513;
+            font-size: 0.95rem;
+            color: #1e2a2e;
+        }
+
+        .answer-detail strong {
+            color: #8B4513;
+        }
+
+        .formula {
+            font-family: monospace;
+            background: #F5F5DC;
+            padding: 0.1rem 0.3rem;
+            border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2.5rem;
+            font-size: 0.85rem;
+            color: #5a5a5a;
+            border-top: 1px solid #D3D3D3;
+            padding-top: 1.5rem;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 1.2rem;
+            }
+            .options {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>⚡ Bài 24: NGUỒN ĐIỆN</h1>
+    <div class="sub">Suất điện động – Điện trở trong – Định luật Ôm cho toàn mạch</div>
+    <p style="margin-bottom: 1.5rem;">📘 <em>Câu hỏi bám sát nội dung SGK Vật lí 11 – Kết nối tri thức.</em> Mỗi câu đều có nút "Hiện đáp án & giải thích" để xem lời giải chi tiết.</p>
+
+    <!-- ================= 8 CÂU TRẮC NGHIỆM NHIỀU LỰA CHỌN ================= -->
+    <h2>I. TRẮC NGHIỆM NHIỀU LỰA CHỌN (8 câu)</h2>
+    <div class="section-card">
+        <!-- Câu 1 -->
+        <div class="question-wrapper">
+            <div class="question-text"><span class="badge">Câu 1</span> Suất điện động của nguồn điện là đại lượng đặc trưng cho:</div>
+            <div class="options">
+                <label class="option"><input type="radio" name="q1" value="A"> A. Khả năng tích điện của nguồn.</label>
+                <label class="option"><input type="radio" name="q1" value="B"> B. Khả năng thực hiện công của nguồn.</label>
+                <label class="option"><input type="radio" name="q1" value="C"> C. Độ lớn hiệu điện thế giữa hai cực khi mạch kín.</label>
+                <label class="option"><input type="radio" name="q1" value="D"> D. Điện trở trong của nguồn.</label>
+            </div>
+            <button class="answer-btn" onclick="toggleAnswer(this)">📖 Hiện đáp án & giải thích</button>
+            <div class="answer-detail">
+                <strong>✅ Đáp án: B</strong><br>
+                <strong>Giải thích:</strong> Suất điện động \(\xi = A/q\) đặc trưng cho khả năng thực hiện công của nguồn điện (công của lực lạ). Nó không phải là hiệu điện thế khi mạch kín (U < ξ), cũng không phải điện trở trong.
+            </div>
+        </div>
+
+        <!-- Câu 2 -->
+        <div class="question-wrapper">
+            <div class="question-text"><span class="badge">Câu 2</span> Đơn vị của suất điện động trong hệ SI là:</div>
+            <div class="options">
+                <label class="option"><input type="radio" name="q2" value="A"> A. Jun (J)</label>
+                <label class="option"><input type="radio" name="q2" value="B"> B. Vôn (V)</label>
+                <label class="option"><input type="radio" name="q2" value="C"> C. Ampe (A)</label>
+                <label class="option"><input type="radio" name="q2" value="D"> D. Ôm (Ω)</label>
+            </div>
+            <button class="answer-btn" onclick="toggleAnswer(this)">📖 Hiện đáp án & giải thích</button>
+            <div class="answer-detail">
+                <strong>✅ Đáp án: B</strong><br>
+                <strong>Giải thích:</strong> Suất điện động đo bằng vôn (V). Từ \(\xi = A/q\), 1 V = 1 J/C.
+            </div>
+        </div>
+
+        <!-- Câu 3 -->
+        <div class="question-wrapper">
+            <div class="question-text"><span class="badge">Câu 3</span> Công thức nào sau đây biểu diễn đúng định nghĩa suất điện động \(\xi\) của nguồn điện?</div>
+            <div class="options">
+                <label class="option"><input type="radio" name="q3" value="A"> A. \(\xi = A \cdot q\)</label>
+                <label class="option"><input type="radio" name="q3" value="B"> B. \(\xi = \frac{q}{A}\)</label>
+                <label class="option"><input type="radio" name="q3" value="C"> C. \(\xi = \frac{A}{q}\)</label>
+                <label class="option"><input type="radio" name="q3" value="D"> D. \(\xi = q + A\)</label>
+            </div>
+            <button class="answer-btn" onclick="toggleAnswer(this)">📖 Hiện đáp án & giải thích</button>
+            <div class="answer-detail">
+                <strong>✅ Đáp án: C</strong><br>
+                <strong>Giải thích:</strong> Theo định nghĩa: \(\xi = \dfrac{A}{q}\), trong đó A là công của lực lạ dịch chuyển điện tích dương q bên trong nguồn.
+            </div>
+        </div>
+
+        <!-- Câu 4 -->
+        <div class="question-wrapper">
+            <div class="question-text"><span class="badge">Câu 4</span> Trong mạch điện kín, hiệu điện thế giữa hai cực của nguồn điện được xác định bằng:</div>
+            <div class="options">
+                <label class="option"><input type="radio" name="q4" value="A"> A. \(U = \xi + I r\)</label>
+                <label class="option"><input type="radio" name="q4" value="B"> B. \(U = \xi - I r\)</label>
+                <label class="option"><input type="radio" name="q4" value="C"> C. \(U = I r - \xi\)</label>
+                <label class="option"><input type="radio" name="q4" value="D"> D. \(U = \frac{\xi}{I r}\)</label>
+            </div>
+            <button class="answer-btn" onclick="toggleAnswer(this)">📖 Hiện đáp án & giải thích</button>
+            <div class="answer-detail">
+                <strong>✅ Đáp án: B</strong><br>
+                <strong>Giải thích:</strong> Định luật Ôm cho toàn mạch: \(I = \frac{\xi}{R+r}\) suy ra \(U = \xi - I r\). Hiệu điện thế mạch ngoài bằng suất điện động trừ đi độ giảm thế trong.
+            </div>
+        </div>
+
+        <!-- Câu 5 -->
+        <div class="question-wrapper">
+            <div class="question-text"><span class="badge">Câu 5</span> Khi mạch ngoài để hở (cường độ dòng điện bằng 0), hiệu điện thế giữa hai cực của nguồn điện:</div>
+            <div class="options">
+                <label class="option"><input type="radio" name="q5" value="A"> A. bằng 0.</label>
+                <label class="option"><input type="radio" name="q5" value="B"> B. nhỏ hơn suất điện động.</label>
+                <label class="option"><input type="radio" name="q5" value="C"> C. lớn hơn suất điện động.</label>
+                <label class="option"><input type="radio" name="q5" value="D"> D. bằng suất điện động.</label>
+            </div>
+            <button class="answer-btn" onclick="toggleAnswer(this)">📖 Hiện đáp án & giải thích</button>
+            <div class="answer-detail">
+                <strong>✅ Đáp án: D</strong><br>
+                <strong>Giải thích:</strong> Khi mạch hở \(I=0\), từ \(U = \xi - I r = \xi\). Số vôn ghi trên nguồn chính là suất điện động.
+            </div>
+        </div>
+
+        <!-- Câu 6 -->
+        <div class="question-wrapper">
+            <div class="question-text"><span class="badge">Câu 6</span> Điện trở trong của nguồn điện là:</div>
+            <div class="options">
+                <label class="option"><input type="radio" name="q6" value="A"> A. Điện trở của dây nối từ cực âm sang cực dương bên ngoài.</label>
+                <label class="option"><input type="radio" name="q6" value="B"> B. Điện trở của các vật dẫn bên trong nguồn, cản trở dòng điện chạy qua nguồn.</label>
+                <label class="option"><input type="radio" name="q6" value="C"> C. Điện trở tương đương của mạch ngoài.</label>
+                <label class="option"><input type="radio" name="q6" value="D"> D. Điện trở toàn mạch.</label>
+            </div>
+            <button class="answer-btn" onclick="toggleAnswer(this)">📖 Hiện đáp án & giải thích</button>
+            <div class="answer-detail">
+                <strong>✅ Đáp án: B</strong><br>
+                <strong>Giải thích:</strong> Điện trở trong r là điện trở của chính bản thân nguồn (do các vật liệu bên trong), gây sụt áp khi có dòng điện.
+            </div>
+        </div>
+
+        <!-- Câu 7 -->
+        <div class="question-wrapper">
+            <div class="question-text"><span class="badge">Câu 7</span> Một nguồn điện có suất điện động \(\xi = 12\,\text{V}\), điện trở trong \(r = 1\,\Omega\). Mắc với mạch ngoài gồm điện trở \(R = 5\,\Omega\). Cường độ dòng điện chạy trong mạch là:</div>
+            <div class="options">
+                <label class="option"><input type="radio" name="q7" value="A"> A. \(2\,\text{A}\)</label>
+                <label class="option"><input type="radio" name="q7" value="B"> B. \(2,4\,\text{A}\)</label>
+                <label class="option"><input type="radio" name="q7" value="C"> C. \(1,5\,\text{A}\)</label>
+                <label class="option"><input type="radio" name="q7" value="D"> D. \(3\,\text{A}\)</label>
+            </div>
+            <button class="answer-btn" onclick="toggleAnswer(this)">📖 Hiện đáp án & giải thích</button>
+            <div class="answer-detail">
+                <strong>✅ Đáp án: A</strong><br>
+                <strong>Giải thích:</strong> \(I = \frac{\xi}{R+r} = \frac{12}{5+1} = 2\,\text{A}\).
+            </div>
+        </div>
+
+        <!-- Câu 8 -->
+        <div class="question-wrapper">
+            <div class="question-text"><span class="badge">Câu 8</span> Cho nguồn điện \(\xi = 9\,\text{V}\), điện trở trong \(r = 0,5\,\Omega\). Khi dòng điện qua nguồn là \(I = 2\,\text{A}\), hiệu điện thế giữa hai cực của nguồn bằng:</div>
+            <div class="options">
+                <label class="option"><input type="radio" name="q8" value="A"> A. \(10\,\text{V}\)</label>
+                <label class="option"><input type="radio" name="q8" value="B"> B. \(8\,\text{V}\)</label>
+                <label class="option"><input type="radio" name="q8" value="C"> C. \(9\,\text{V}\)</label>
+                <label class="option"><input type="radio" name="q8" value="D"> D. \(7\,\text{V}\)</label>
+            </div>
+            <button class="answer-btn" onclick="toggleAnswer(this)">📖 Hiện đáp án & giải thích</button>
+            <div class="answer-detail">
+                <strong>✅ Đáp án: B</strong><br>
+                <strong>Giải thích:</strong> \(U = \xi - I r = 9 - 2\cdot 0,5 = 8\,\text{V}\).
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 2 CÂU TRẮC NGHIỆM ĐÚNG SAI ================= -->
+    <h2>II. TRẮC NGHIỆM ĐÚNG/SAI (2 câu – 4 ý mỗi câu)</h2>
+    <div class="section-card">
+        <!-- Câu TF 1 -->
+        <div class="question-wrapper">
+            <div class="question-text"><span class="badge">Câu 1 (Đúng/Sai)</span> Các phát biểu sau đây về nguồn điện và suất điện động.</div>
+            <div class="tf-statement"><span class="tf-letter">a)</span><span class="tf-text"> Nguồn điện có tác dụng tạo ra và duy trì hiệu điện thế giữa hai cực, nhờ đó duy trì dòng điện lâu dài trong mạch kín.</span></div>
+            <div class="tf-statement"><span class="tf-letter">b)</span><span class="tf-text"> Lực lạ bên trong nguồn điện có bản chất là lực tĩnh điện, sinh công đưa điện tích từ cực âm sang cực dương.</span></div>
+            <div class="tf-statement"><span class="tf-letter">c)</span><span class="tf-text"> Suất điện động của nguồn có độ lớn bằng hiệu điện thế giữa hai cực khi mạch ngoài hở (không có dòng điện).</span></div>
+            <div class="tf-statement"><span class="tf-letter">d)</span><span class="tf-text"> Đơn vị của suất điện động là vôn (V), đồng thời \(1\,\text{V} = 1\,\text{J/C}\).</span></div>
+            <button class="answer-btn" onclick="toggleAnswer(this)">📖 Hiện đáp án & giải thích</button>
+            <div class="answer-detail">
+                <strong>✅ Đáp án:</strong><br>
+                a) <strong>Đúng</strong> – Nguồn điện duy trì hiệu điện thế, tạo dòng điện lâu dài.<br>
+                b) <strong>Sai</strong> – Lực lạ có bản chất khác lực tĩnh điện (hóa học, cơ học...), không phải lực tĩnh điện.<br>
+                c) <strong>Đúng</strong> – Khi hở, \(I=0 \Rightarrow U=\xi\).<br>
+                d) <strong>Đúng</strong> – Vì \(\xi = A/q\) nên 1 V = 1 J/C.<br>
+                <strong>Giải thích chi tiết:</strong> Lực lạ thực hiện công tách các điện tích, tạo ra sự chênh lệch điện thế. Khi mạch hở, hiệu điện thế hai cực đúng bằng suất điện động.
+            </div>
+        </div>
+
+        <!-- Câu TF 2 -->
+        <div class="question-wrapper">
+            <div class="question-text"><span class="badge">Câu 2 (Đúng/Sai)</span> Về mạch điện kín có nguồn điện với suất điện động \(\xi\) và điện trở trong \(r\).</div>
+            <div class="tf-statement"><span class="tf-letter">a)</span><span class="tf-text"> Khi mạch kín, hiệu điện thế hai cực nguồn luôn bằng suất điện động \(\xi\) bất kể điện trở mạch ngoài.</span></div>
+            <div class="tf-statement"><span class="tf-letter">b)</span><span class="tf-text"> Điện trở trong \(r\) gây ra độ giảm thế trên mạch trong: \(\Delta U = I r\).</span></div>
+            <div class="tf-statement"><span class="tf-letter">c)</span><span class="tf-text"> Nếu điện trở trong \(r = 0\) thì hiệu điện thế hai cực nguồn luôn bằng suất điện động, không phụ thuộc vào dòng điện.</span></div>
+            <div class="tf-statement"><span class="tf-letter">d)</span><span class="tf-text"> Khi cường độ dòng điện trong mạch tăng lên, hiệu điện thế giữa hai cực của nguồn cũng tăng theo.</span></div>
+            <button class="answer-btn" onclick="toggleAnswer(this)">📖 Hiện đáp án & giải thích</button>
+            <div class="answer-detail">
+                <strong>✅ Đáp án:</strong><br>
+                a) <strong>Sai</strong> – Khi mạch kín \(U = \xi - Ir < \xi\) (trừ khi \(r=0\)).<br>
+                b) <strong>Đúng</strong> – Độ giảm thế trong nguồn là \(I r\).<br>
+                c) <strong>Đúng</strong> – Nếu \(r=0\) thì \(U=\xi\) với mọi I (nguồn lí tưởng).<br>
+                d) <strong>Sai</strong> – Khi I tăng, độ giảm thế \(I r\) tăng nên \(U = \xi - I r\) giảm.<br>
+                <strong>Giải thích:</strong> Dựa vào biểu thức \(U = \xi - I r\), khi dòng càng lớn thì điện áp hai cực càng giảm.
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 4 CÂU TRẢ LỜI NGẮN ================= -->
+    <h2>III. CÂU TRẢ LỜI NGẮN (4 câu)</h2>
+    <div class="section-card">
+        <div class="short-note" style="margin-bottom: 1rem;">📌 <strong>Ghi chú:</strong> Đáp án là số, tối đa 4 ký tự (kể cả dấu phẩy). Làm tròn 1 chữ số thập phân nếu cần.</div>
+        
+        <div class="question-wrapper">
+            <div class="question-text">📐 <strong>Câu 1.</strong> Một nguồn điện có suất điện động \(6\,\text{V}\), điện trở trong \(0,5\,\Omega\). Mắc nguồn với điện trở ngoài \(R = 2,5\,\Omega\). Tính cường độ dòng điện trong mạch (đơn vị A).</div>
+            <button class="answer-btn" onclick="toggleAnswer(this)">📖 Hiện đáp án & giải thích</button>
+            <div class="answer-detail">
+                <strong>✅ Đáp án: 2,0 A</strong><br>
+                <strong>Giải thích:</strong> \(I = \frac{\xi}{R+r} = \frac{6}{2,5+0,5} = \frac{6}{3} = 2,0\,\text{A}\).
+            </div>
+        </div>
+
+        <div class="question-wrapper">
+            <div class="question-text">📐 <strong>Câu 2.</strong> Khi mạch ngoài hở, vôn kế mắc vào hai cực nguồn chỉ \(12\,\text{V}\). Cho mạch kín với \(R = 4\,\Omega\), vôn kế chỉ \(10\,\text{V}\). Tìm điện trở trong \(r\) của nguồn (đơn vị \(\Omega\)).</div>
+            <button class="answer-btn" onclick="toggleAnswer(this)">📖 Hiện đáp án & giải thích</button>
+            <div class="answer-detail">
+                <strong>✅ Đáp án: 0,8 Ω</strong><br>
+                <strong>Giải thích:</strong> \(\xi = 12\,\text{V}\). Khi mạch kín: \(U = 10\,\text{V}\), \(I = U/R = 10/4 = 2,5\,\text{A}\). Mà \(U = \xi - I r \Rightarrow 10 = 12 - 2,5r \Rightarrow r = (12-10)/2,5 = 0,8\,\Omega\).
+            </div>
+        </div>
+
+        <div class="question-wrapper">
+            <div class="question-text">📐 <strong>Câu 3.</strong> Nguồn điện có \(\xi = 9\,\text{V}\), \(r = 1\,\Omega\), mạch ngoài \(R = 2\,\Omega\). Tính hiệu điện thế giữa hai cực của nguồn (V).</div>
+            <button class="answer-btn" onclick="toggleAnswer(this)">📖 Hiện đáp án & giải thích</button>
+            <div class="answer-detail">
+                <strong>✅ Đáp án: 6,0 V</strong><br>
+                <strong>Giải thích:</strong> \(I = \frac{9}{2+1} = 3\,\text{A}\). \(U = \xi - I r = 9 - 3\cdot1 = 6,0\,\text{V}\).
+            </div>
+        </div>
+
+        <div class="question-wrapper">
+            <div class="question-text">📐 <strong>Câu 4.</strong> Một nguồn có \(\xi = 24\,\text{V}\), \(r = 2\,\Omega\) được mắc với biến trở \(R\). Điều chỉnh \(R\) để công suất tiêu thụ trên mạch ngoài đạt cực đại. Tìm giá trị của \(R\) khi đó (đơn vị \(\Omega\)).</div>
+            <button class="answer-btn" onclick="toggleAnswer(this)">📖 Hiện đáp án & giải thích</button>
+            <div class="answer-detail">
+                <strong>✅ Đáp án: 2,0 Ω</strong><br>
+                <strong>Giải thích:</strong> Công suất mạch ngoài \(P = I^2 R = \frac{\xi^2 R}{(R+r)^2}\) đạt cực đại khi \(R = r = 2\,\Omega\) (bất đẳng thức Cauchy). Khi đó \(P_{max} = \frac{\xi^2}{4r} = \frac{24^2}{4\cdot2}=72\,\text{W}\).
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 1 CÂU TỰ LUẬN ================= -->
+    <h2>IV. TỰ LUẬN (1 câu – 3 ý a, b, c)</h2>
+    <div class="section-card">
+        <div class="question-wrapper">
+            <div class="question-text" style="font-size:1.1rem;">🔎 <strong>Bài toán:</strong> Cho mạch điện kín gồm nguồn điện có suất điện động \(\xi = 12\,\text{V}\), điện trở trong \(r = 1\,\Omega\). Mạch ngoài gồm điện trở thuần \(R = 5\,\Omega\).</div>
+            <div class="essay-sub"><strong>a)</strong> Tính cường độ dòng điện chạy trong mạch và hiệu điện thế giữa hai cực của nguồn điện.</div>
+            <div class="essay-sub"><strong>b)</strong> Tính công suất tiêu thụ trên điện trở \(R\) và công suất của nguồn điện (công suất toàn phần).</div>
+            <div class="essay-sub"><strong>c)</strong> Nếu thay điện trở \(R\) bằng một biến trở \(R_x\). Hãy xác định giá trị của \(R_x\) để công suất tiêu thụ trên \(R_x\) đạt cực đại. Tính công suất cực đại đó.</div>
+            <button class="answer-btn" onclick="toggleAnswer(this)">📖 Hiện đáp án & giải thích chi tiết</button>
+            <div class="answer-detail">
+                <strong>✅ Lời giải chi tiết:</strong><br>
+                <strong>a)</strong> Dòng điện: \(I = \frac{\xi}{R+r} = \frac{12}{5+1} = 2\,\text{A}\).<br>
+                Hiệu điện thế hai cực nguồn: \(U = \xi - I r = 12 - 2\cdot1 = 10\,\text{V}\) (cũng chính là \(U = I R = 2\cdot5=10\,\text{V}\)).<br>
+                <strong>b)</strong> Công suất tiêu thụ trên R: \(P_R = I^2 R = 2^2 \cdot 5 = 20\,\text{W}\).<br>
+                Công suất của nguồn (toàn phần): \(P_{ng} = \xi I = 12\cdot2 = 24\,\text{W}\).<br>
+                <strong>c)</strong> Công suất trên biến trở \(R_x\): \(P_x = I^2 R_x = \frac{\xi^2 R_x}{(R_x + r)^2}\).<br>
+                Để \(P_x\) cực đại thì \(R_x = r = 1\,\Omega\). Khi đó \(P_{x,max} = \frac{\xi^2}{4r} = \frac{144}{4} = 36\,\text{W}\).<br>
+                <em>Nhận xét:</em> Công suất mạch ngoài cực đại khi điện trở ngoài bằng điện trở trong.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        📖 Ngân hàng câu hỏi bám sát nội dung Bài 24 – Vật lí 11 (Bộ Kết nối tri thức với cuộc sống).<br>
+        📌 Nhấn nút bên cạnh mỗi câu để xem đáp án và hướng dẫn giải chi tiết.
+    </footer>
+</div>
+
+<script>
+    function toggleAnswer(btn) {
+        const answerDiv = btn.nextElementSibling;
+        if (answerDiv && answerDiv.classList.contains('answer-detail')) {
+            if (answerDiv.style.display === 'none' || answerDiv.style.display === '') {
+                answerDiv.style.display = 'block';
+                btn.textContent = '🙈 Ẩn đáp án & giải thích';
+                // Kích hoạt MathJax hiển thị lại nếu có công thức mới (hữu ích cho các trường hợp)
+                if (window.MathJax) {
+                    MathJax.typesetPromise ? MathJax.typesetPromise([answerDiv]) : MathJax.Hub.Queue(["Typeset", MathJax.Hub, answerDiv]);
+                }
+            } else {
+                answerDiv.style.display = 'none';
+                btn.textContent = '📖 Hiện đáp án & giải thích';
+            }
+        }
+    }
+    // Ẩn tất cả answer-detail ban đầu
+    document.querySelectorAll('.answer-detail').forEach(detail => {
+        detail.style.display = 'none';
+    });
+</script>
+</body>
+</html>
