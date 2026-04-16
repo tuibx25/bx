@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Bài 21: Tụ Điện - Vật Lí 11 Kết Nối Tri Thức</title>
-    <!-- MathJax for rendering formulas -->
+    <title>Bài 20: Điện Thế - Bộ câu hỏi Vật Lý 11</title>
+    <!-- MathJax for proper formula rendering -->
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
     <style>
         * {
@@ -12,447 +12,369 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             background-color: #F5F5F5;
             font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
             color: #000000;
-            padding: 30px 20px;
+            padding: 24px 20px;
             line-height: 1.5;
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background-color: #FFFFFF;
+            background: #FFFFFF;
             border-radius: 28px;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            padding: 30px 32px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+            padding: 28px 32px;
         }
-
         h1 {
-            font-size: 2rem;
+            font-size: 1.9rem;
             color: #004488;
-            border-left: 6px solid #8B5A2B;
+            border-left: 6px solid #0066CC;
             padding-left: 20px;
             margin-bottom: 8px;
+            font-weight: 600;
         }
-
-        .subhead {
-            color: #4a5568;
+        .sub {
+            color: #5a5a5a;
             margin-bottom: 32px;
             border-bottom: 2px solid #F5DEB3;
             padding-bottom: 12px;
-            font-style: italic;
+            font-size: 1rem;
         }
-
-        h2 {
+        .section-title {
             font-size: 1.6rem;
-            margin: 28px 0 16px 0;
-            color: #8B4513;
+            margin: 28px 0 18px 0;
             background: #F5F5DC;
-            display: inline-block;
-            padding: 6px 18px;
+            padding: 8px 18px;
             border-radius: 40px;
+            color: #8B4513;
             font-weight: 600;
+            border-left: 5px solid #8B5A2B;
         }
-
         .question-card {
             background: #FFFFFF;
             border: 1px solid #D3D3D3;
             border-radius: 24px;
             padding: 20px 24px;
             margin-bottom: 28px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            transition: all 0.1s ease;
         }
-
         .question-text {
             font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 16px;
-            color: #000000;
-        }
-
-        .options {
-            margin: 12px 0 8px 20px;
-        }
-
-        .option-item {
-            margin: 8px 0;
-        }
-
-        .truefalse-sub {
-            margin-left: 24px;
-            margin-top: 8px;
+            font-size: 1.08rem;
+            margin-bottom: 14px;
             background: #F9F9F9;
-            padding: 8px 12px;
+            padding: 8px 14px;
+            border-radius: 20px;
+            color: #000;
+        }
+        .options {
+            margin: 12px 0 16px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .option-item {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+        .truefalse-statement {
+            margin: 10px 0 6px 20px;
+            padding: 6px 12px;
+            background: #F5F5F5;
             border-radius: 16px;
         }
-
-        .btn-answer {
+        .btn-toggle {
             background-color: #0066CC;
             color: white;
             border: none;
             padding: 8px 20px;
-            border-radius: 40px;
-            font-weight: 600;
+            border-radius: 36px;
+            font-weight: 500;
             cursor: pointer;
             font-size: 0.85rem;
-            margin-top: 16px;
+            margin-top: 12px;
             transition: 0.2s;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
-
-        .btn-answer:hover {
+        .btn-toggle:hover {
             background-color: #004488;
-            transform: scale(0.98);
+            transform: scale(0.97);
         }
-
-        .answer-box {
-            background-color: #F5F5DC;
-            border-left: 5px solid #8B5A2B;
+        .answer-area {
+            display: none;
+            background: #F5F5DC;
+            border-left: 6px solid #8B5A2B;
             padding: 16px 20px;
             margin-top: 18px;
             border-radius: 20px;
-            display: none;
             font-size: 0.95rem;
-            color: #1e2a3a;
+            color: #1e1e1e;
         }
-
-        .answer-box p {
-            margin: 6px 0;
+        .answer-area strong {
+            color: #8B4513;
         }
-
-        .short-note {
+        .numeric-answer {
+            font-family: monospace;
+            font-size: 1.05rem;
             background: #D3D3D3;
-            padding: 12px 20px;
+            display: inline-block;
+            padding: 2px 12px;
             border-radius: 28px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            color: #2c3e2f;
-            font-weight: 500;
         }
-
+        .footnote {
+            font-size: 0.85rem;
+            background: #F5F5F5;
+            padding: 10px 18px;
+            border-radius: 28px;
+            margin: 20px 0 10px;
+            color: #2c3e4e;
+        }
+        hr {
+            margin: 18px 0;
+            border-color: #F5DEB3;
+        }
+        @media (max-width: 700px) {
+            .container {
+                padding: 16px;
+            }
+            .question-card {
+                padding: 14px 16px;
+            }
+        }
         .essay-part {
             margin-top: 12px;
             padding-left: 12px;
-            border-left: 3px solid #8B4513;
+            border-left: 3px solid #D3D3D3;
         }
-
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            color: #4b5563;
-            border-top: 1px solid #F5DEB3;
-            font-size: 0.8rem;
-        }
-
-        @media (max-width: 680px) {
-            .container {
-                padding: 20px 16px;
-            }
-            .question-card {
-                padding: 16px;
-            }
-        }
-
-        .badge {
-            background-color: #F5DEB3;
-            color: #5a3e1b;
-            border-radius: 20px;
-            padding: 2px 10px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            display: inline-block;
-            margin-right: 10px;
+        .katex, .MathJax {
+            font-size: 1.05em;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>📘 Bài 21: Tụ Điện</h1>
-    <div class="subhead">Vật lí 11 - Kết nối tri thức | Câu hỏi trắc nghiệm, đúng sai, tự luận bám sát nội dung SGK</div>
+    <h1>📘 Bài 20: ĐIỆN THẾ</h1>
+    <div class="sub">🌿 Câu hỏi trắc nghiệm & tự luận bám sát nội dung Vật lí 11 – Kết nối tri thức</div>
 
-    <!-- Ghi chú chung cho câu trả lời ngắn -->
-    <div class="short-note">
-        📌 <strong>Ghi chú câu trả lời ngắn:</strong> Đáp án là số có tối đa 4 ký tự (bao gồm cả dấu phẩy thập phân).  
-        Nếu kết quả có từ 2 chữ số thập phân khác 0 trở lên thì làm tròn đến 1 chữ số thập phân.
-    </div>
+    <!-- ========= 8 CÂU TRẮC NGHIỆM NHIỀU LỰA CHỌN ========= -->
+    <div class="section-title">🔹 I. TRẮC NGHIỆM (8 câu)</div>
 
-    <!-- ================= 8 CÂU TRẮC NGHIỆM NHIỀU LỰA CHỌN ================= -->
-    <h2>🔹 I. Trắc nghiệm nhiều lựa chọn (8 câu)</h2>
-
-    <!-- Câu 1 -->
-    <div class="question-card">
-        <div class="question-text"><span class="badge">Câu 1</span> Tụ điện là một linh kiện điện tử gồm:</div>
+    <!-- MCQ 1 -->
+    <div class="question-card" id="mcq1">
+        <div class="question-text"><strong>Câu 1.</strong> Điện thế tại một điểm trong điện trường đặc trưng cho điều gì?</div>
         <div class="options">
-            <div class="option-item">A. Hai vật dẫn đặt tiếp xúc với nhau, bọc trong lớp cách điện.</div>
-            <div class="option-item">B. Hai vật dẫn đặt gần nhau và ngăn cách bởi môi trường cách điện (điện môi).</div>
-            <div class="option-item">C. Một cuộn dây quấn quanh lõi thép.</div>
-            <div class="option-item">D. Một điện trở có giá trị thay đổi theo điện áp.</div>
+            <div class="option-item">A. Khả năng sinh công của điện trường tại điểm đó.</div>
+            <div class="option-item">B. Cường độ điện trường tại điểm đó.</div>
+            <div class="option-item">C. Điện tích đặt tại điểm đó.</div>
+            <div class="option-item">D. Năng lượng điện trường tại điểm đó.</div>
         </div>
-        <button class="btn-answer" onclick="toggleAnswer(this)">🔎 Hiển thị đáp án & giải thích</button>
-        <div class="answer-box">
-            <p><strong>Đáp án:</strong> B</p>
-            <p><strong>Hướng dẫn giải:</strong> Theo định nghĩa SGK bài 21, tụ điện gồm hai vật dẫn đặt gần nhau, ngăn cách bởi điện môi. Hai vật dẫn đó gọi là các bản tụ. Đáp án A sai vì chúng không tiếp xúc, C là cuộn cảm, D là biến trở.</p>
-        </div>
+        <button class="btn-toggle" data-target="ans1">📌 Xem đáp án & giải thích</button>
+        <div id="ans1" class="answer-area"><strong>Đáp án: A</strong><br>🔎 Điện thế tại một điểm đặc trưng cho điện trường về mặt thế năng, thể hiện khả năng sinh công của điện trường khi đặt điện tích tại điểm đó. Công thức \(V = \frac{A}{q}\) cho thấy điện thế là thương số giữa công và điện tích thử.</div>
     </div>
-
-    <!-- Câu 2 -->
-    <div class="question-card">
-        <div class="question-text"><span class="badge">Câu 2</span> Đơn vị của điện dung trong hệ SI là:</div>
+    <!-- MCQ 2 -->
+    <div class="question-card" id="mcq2">
+        <div class="question-text"><strong>Câu 2.</strong> Công thức xác định điện thế tại điểm M trong điện trường (lấy mốc ở vô cực) là?</div>
         <div class="options">
-            <div class="option-item">A. Vôn (V)</div>
-            <div class="option-item">B. Cu-lông (C)</div>
-            <div class="option-item">C. Fara (F)</div>
-            <div class="option-item">D. Ôm (Ω)</div>
+            <div class="option-item">A. \(V_M = \dfrac{A_{M\infty}}{q}\)</div>
+            <div class="option-item">B. \(V_M = q \cdot A_{M\infty}\)</div>
+            <div class="option-item">C. \(V_M = k\dfrac{|Q|}{r}\)</div>
+            <div class="option-item">D. \(V_M = E \cdot d\)</div>
         </div>
-        <button class="btn-answer" onclick="toggleAnswer(this)">🔎 Hiển thị đáp án & giải thích</button>
-        <div class="answer-box">
-            <p><strong>Đáp án:</strong> C</p>
-            <p><strong>Hướng dẫn giải:</strong> Điện dung có đơn vị là fara (F). 1F = 1C/1V. Vôn là đơn vị hiệu điện thế, Cu-lông là điện tích, Ôm là điện trở.</p>
-        </div>
+        <button class="btn-toggle" data-target="ans2">📌 Xem đáp án & giải thích</button>
+        <div id="ans2" class="answer-area"><strong>Đáp án: A</strong><br>🔎 Điện thế tại M được xác định bằng công của lực điện làm dịch chuyển điện tích dương từ M ra vô cực (hoặc từ vô cực đến M) chia cho độ lớn điện tích: \(V_M = \frac{A_{M\infty}}{q}\).</div>
     </div>
-
-    <!-- Câu 3 -->
-    <div class="question-card">
-        <div class="question-text"><span class="badge">Câu 3</span> Biểu thức nào sau đây là <strong>đúng</strong> với định nghĩa điện dung của tụ điện?</div>
+    <!-- MCQ 3 -->
+    <div class="question-card" id="mcq3">
+        <div class="question-text"><strong>Câu 3.</strong> Đơn vị của điện thế là vôn (V). 1 V bằng:</div>
         <div class="options">
-            <div class="option-item">A. \(C = \frac{U}{Q}\)</div>
-            <div class="option-item">B. \(C = \frac{Q}{U}\)</div>
-            <div class="option-item">C. \(C = \frac{1}{2}QU\)</div>
-            <div class="option-item">D. \(C = \frac{Q^2}{2U}\)</div>
+            <div class="option-item">A. 1 J/C</div>
+            <div class="option-item">B. 1 N/C</div>
+            <div class="option-item">C. 1 J/s</div>
+            <div class="option-item">D. 1 N.m</div>
         </div>
-        <button class="btn-answer" onclick="toggleAnswer(this)">🔎 Hiển thị đáp án & giải thích</button>
-        <div class="answer-box">
-            <p><strong>Đáp án:</strong> B</p>
-            <p><strong>Hướng dẫn giải:</strong> Điện dung C = Q/U, đặc trưng cho khả năng tích điện của tụ khi đặt hiệu điện thế U. Công thức năng lượng: \(W = \frac{1}{2}QU = \frac{Q^2}{2C} = \frac{CU^2}{2}\).</p>
-        </div>
+        <button class="btn-toggle" data-target="ans3">📌 Xem đáp án & giải thích</button>
+        <div id="ans3" class="answer-area"><strong>Đáp án: A</strong><br>🔎 1 Vôn = 1 Jun trên 1 Cu-lông (J/C). Vì \(V = \dfrac{A}{q}\) nên đơn vị V tương đương J/C.</div>
     </div>
-
-    <!-- Câu 4: Ghép nối tiếp -->
-    <div class="question-card">
-        <div class="question-text"><span class="badge">Câu 4</span> Hai tụ điện có điện dung \(C_1 = 6\,\mu F\) và \(C_2 = 12\,\mu F\) ghép nối tiếp. Điện dung tương đương của bộ là:</div>
+    <!-- MCQ 4 -->
+    <div class="question-card" id="mcq4">
+        <div class="question-text"><strong>Câu 4.</strong> Trong điện trường đều, hiệu điện thế giữa hai điểm M và N cách nhau đoạn d (dọc theo đường sức) được tính bằng \(U_{MN} = E \cdot d\). Phát biểu nào sau đây là <strong>đúng</strong>?</div>
         <div class="options">
-            <div class="option-item">A. 18 μF</div>
-            <div class="option-item">B. 4 μF</div>
-            <div class="option-item">C. 8 μF</div>
-            <div class="option-item">D. 2 μF</div>
+            <div class="option-item">A. d là khoảng cách hình chiếu của MN lên phương đường sức.</div>
+            <div class="option-item">B. d là độ dài đoạn MN bất kỳ.</div>
+            <div class="option-item">C. U<sub>MN</sub> luôn có giá trị dương.</div>
+            <div class="option-item">D. Cường độ điện trường E tỉ lệ nghịch với U<sub>MN</sub>.</div>
         </div>
-        <button class="btn-answer" onclick="toggleAnswer(this)">🔎 Hiển thị đáp án & giải thích</button>
-        <div class="answer-box">
-            <p><strong>Đáp án:</strong> B (4 μF)</p>
-            <p><strong>Giải:</strong> \(\frac{1}{C_{nt}} = \frac{1}{6} + \frac{1}{12} = \frac{2+1}{12}=\frac{3}{12}=\frac{1}{4}\) ⇒ \(C_{nt}=4\,\mu F\).</p>
-        </div>
+        <button class="btn-toggle" data-target="ans4">📌 Xem đáp án & giải thích</button>
+        <div id="ans4" class="answer-area"><strong>Đáp án: A</strong><br>🔎 Công thức đúng: \(U_{MN} = E \cdot d\) với d là hình chiếu của MN lên phương đường sức (độ dài đại số). Nếu MN không song song với đường sức thì phải lấy hình chiếu.</div>
     </div>
-
-    <!-- Câu 5: Năng lượng tụ -->
-    <div class="question-card">
-        <div class="question-text"><span class="badge">Câu 5</span> Công thức nào dưới đây <strong>không phải</strong> công thức tính năng lượng của tụ điện?</div>
+    <!-- MCQ 5 -->
+    <div class="question-card" id="mcq5">
+        <div class="question-text"><strong>Câu 5.</strong> Một điện tích q dịch chuyển từ M đến N trong điện trường, công của lực điện là A. Hiệu điện thế \(U_{MN} = V_M - V_N\) được tính bằng:</div>
         <div class="options">
-            <div class="option-item">A. \(W = \frac{1}{2}CU^2\)</div>
-            <div class="option-item">B. \(W = \frac{Q^2}{2C}\)</div>
-            <div class="option-item">C. \(W = \frac{1}{2}QU\)</div>
-            <div class="option-item">D. \(W = \frac{U^2}{2Q}\)</div>
+            <div class="option-item">A. \(\dfrac{A}{q}\)</div>
+            <div class="option-item">B. \(\dfrac{q}{A}\)</div>
+            <div class="option-item">C. \(A \cdot q\)</div>
+            <div class="option-item">D. \(\dfrac{A}{q^2}\)</div>
         </div>
-        <button class="btn-answer" onclick="toggleAnswer(this)">🔎 Hiển thị đáp án & giải thích</button>
-        <div class="answer-box">
-            <p><strong>Đáp án:</strong> D</p>
-            <p><strong>Hướng dẫn giải:</strong> Năng lượng tụ: \(W = \frac{1}{2}CU^2 = \frac{Q^2}{2C} = \frac{1}{2}QU\). Công thức D không đúng thứ nguyên.</p>
-        </div>
+        <button class="btn-toggle" data-target="ans5">📌 Xem đáp án & giải thích</button>
+        <div id="ans5" class="answer-area"><strong>Đáp án: A</strong><br>🔎 Công của lực điện: \(A = qU_{MN} \Rightarrow U_{MN} = \dfrac{A}{q}\). Đây là mối liên hệ cơ bản giữa công, điện tích và hiệu điện thế.</div>
     </div>
-
-    <!-- Câu 6: Điện tích tối đa -->
-    <div class="question-card">
-        <div class="question-text"><span class="badge">Câu 6</span> Trên vỏ một tụ điện ghi 10 μF – 200 V. Điện tích tối đa mà tụ có thể tích được là:</div>
+    <!-- MCQ 6 -->
+    <div class="question-card" id="mcq6">
+        <div class="question-text"><strong>Câu 6.</strong> Điện thế tại điểm M cách điện tích điểm Q một khoảng r trong chân không được xác định bởi \(V = k\dfrac{Q}{r}\). Dấu của điện thế V phụ thuộc vào:</div>
         <div class="options">
-            <div class="option-item">A. 2000 C</div>
-            <div class="option-item">B. 2.10⁻³ C</div>
-            <div class="option-item">C. 2.10⁻² C</div>
-            <div class="option-item">D. 20 C</div>
+            <div class="option-item">A. Dấu của điện tích Q.</div>
+            <div class="option-item">B. Dấu của điện tích thử q.</div>
+            <div class="option-item">C. Khoảng cách r.</div>
+            <div class="option-item">D. Hằng số điện môi.</div>
         </div>
-        <button class="btn-answer" onclick="toggleAnswer(this)">🔎 Hiển thị đáp án & giải thích</button>
-        <div class="answer-box">
-            <p><strong>Đáp án:</strong> B (2.10⁻³ C)</p>
-            <p><strong>Giải:</strong> \(Q_{max}=C\cdot U_{max}=10\cdot10^{-6}F \cdot 200V = 2\cdot10^{-3}C\).</p>
-        </div>
+        <button class="btn-toggle" data-target="ans6">📌 Xem đáp án & giải thích</button>
+        <div id="ans6" class="answer-area"><strong>Đáp án: A</strong><br>🔎 Vì \(V = kQ/r\), dấu của V phụ thuộc hoàn toàn vào dấu của Q (nếu Q > 0 thì V > 0, Q < 0 thì V < 0).</div>
     </div>
-
-    <!-- Câu 7: Ghép song song -->
-    <div class="question-card">
-        <div class="question-text"><span class="badge">Câu 7</span> Ghép song song hai tụ \(C_1 = 2\mu F, C_2 = 3\mu F\) thì điện dung tương đương bằng:</div>
+    <!-- MCQ 7 -->
+    <div class="question-card" id="mcq7">
+        <div class="question-text"><strong>Câu 7.</strong> Trong điện trường đều, chiều của vectơ cường độ điện trường có hướng:</div>
         <div class="options">
-            <div class="option-item">A. 5 μF</div>
-            <div class="option-item">B. 1,2 μF</div>
-            <div class="option-item">C. 6 μF</div>
-            <div class="option-item">D. 0,5 μF</div>
+            <div class="option-item">A. Từ nơi có điện thế cao sang nơi có điện thế thấp.</div>
+            <div class="option-item">B. Từ nơi có điện thế thấp sang nơi có điện thế cao.</div>
+            <div class="option-item">C. Vuông góc với đường sức.</div>
+            <div class="option-item">D. Cùng hướng với lực điện tác dụng lên electron.</div>
         </div>
-        <button class="btn-answer" onclick="toggleAnswer(this)">🔎 Hiển thị đáp án & giải thích</button>
-        <div class="answer-box">
-            <p><strong>Đáp án:</strong> A</p>
-            <p><strong>Hướng dẫn:</strong> \(C_{ss}=C_1+C_2 = 2+3 =5\,\mu F\).</p>
-        </div>
+        <button class="btn-toggle" data-target="ans7">📌 Xem đáp án & giải thích</button>
+        <div id="ans7" class="answer-area"><strong>Đáp án: A</strong><br>🔎 Điện trường hướng từ nơi có điện thế cao sang nơi có điện thế thấp. Công thức \(E = \dfrac{V_M - V_N}{MN}\) với chiều dương là chiều đường sức cho thấy điều này.</div>
     </div>
-
-    <!-- Câu 8: Năng lượng từ C và U -->
-    <div class="question-card">
-        <div class="question-text"><span class="badge">Câu 8</span> Một tụ điện có điện dung 4,7 μF được tích điện đến hiệu điện thế 100 V. Năng lượng trữ trong tụ xấp xỉ:</div>
+    <!-- MCQ 8 -->
+    <div class="question-card" id="mcq8">
+        <div class="question-text"><strong>Câu 8.</strong> Một điện tích dương q di chuyển trong điện trường từ điểm có điện thế cao đến điểm có điện thế thấp. Công của lực điện:</div>
         <div class="options">
-            <div class="option-item">A. 23,5 mJ</div>
-            <div class="option-item">B. 47 mJ</div>
-            <div class="option-item">C. 2,35 J</div>
-            <div class="option-item">D. 0,235 J</div>
+            <div class="option-item">A. Dương.</div>
+            <div class="option-item">B. Âm.</div>
+            <div class="option-item">C. Bằng 0.</div>
+            <div class="option-item">D. Phụ thuộc vào độ lớn q nhưng không phụ thuộc vào hiệu điện thế.</div>
         </div>
-        <button class="btn-answer" onclick="toggleAnswer(this)">🔎 Hiển thị đáp án & giải thích</button>
-        <div class="answer-box">
-            <p><strong>Đáp án:</strong> A (23,5 mJ)</p>
-            <p><strong>Giải:</strong> \(W = \frac{1}{2}CU^2 = 0,5 \cdot 4,7\cdot10^{-6} \cdot 100^2 = 0,5\cdot4,7\cdot10^{-6}\cdot10^4 = 0,5\cdot4,7\cdot10^{-2}=0,0235 J = 23,5 mJ\).</p>
+        <button class="btn-toggle" data-target="ans8">📌 Xem đáp án & giải thích</button>
+        <div id="ans8" class="answer-area"><strong>Đáp án: A</strong><br>🔎 \(A = q(V_M - V_N)\). Với q > 0 và \(V_M > V_N\) thì \(A > 0\), lực điện sinh công dương (cùng chiều chuyển động).</div>
+    </div>
+
+    <!-- ========= 2 CÂU TRẮC NGHIỆM ĐÚNG SAI (4 ý) ========= -->
+    <div class="section-title">🔹 II. TRẮC NGHIỆM ĐÚNG/SAI (2 câu)</div>
+
+    <!-- True/False 1 -->
+    <div class="question-card" id="tf1">
+        <div class="question-text"><strong>Câu 9 (Đúng/Sai).</strong> Cho điện trường đều có cường độ \(E = 5000\ \text{V/m}\). Hai điểm A và B nằm trên cùng một đường sức, cách nhau 10 cm. Xét các phát biểu sau:</div>
+        <div class="truefalse-statement">a) Hiệu điện thế \(U_{AB} = 500\ \text{V}\).</div>
+        <div class="truefalse-statement">b) Nếu chọn mốc điện thế tại B, điện thế tại A là 500 V.</div>
+        <div class="truefalse-statement">c) Công của lực điện khi di chuyển một electron từ A đến B là \(8\cdot10^{-17}\ \text{J}\).</div>
+        <div class="truefalse-statement">d) Trong điện trường đều, các đường sức điện là những đường thẳng song song và cách đều nhau.</div>
+        <button class="btn-toggle" data-target="anstf1">📌 Xem đáp án & giải thích</button>
+        <div id="anstf1" class="answer-area">
+            <strong>a) ĐÚNG</strong> – \(U_{AB} = E \cdot d = 5000 \times 0,1 = 500\ \text{V}\).<br>
+            <strong>b) ĐÚNG</strong> – Vì \(V_A - V_B = 500\), chọn \(V_B = 0\) thì \(V_A = 500\ \text{V}\).<br>
+            <strong>c) SAI</strong> – Electron có điện tích \(q_e = -1,6\cdot10^{-19}\ \text{C}\), công \(A = q_e U_{AB} = -1,6\cdot10^{-19} \times 500 = -8\cdot10^{-17}\ \text{J}\) (công âm, không phải \(8\cdot10^{-17}\)).<br>
+            <strong>d) ĐÚNG</strong> – Đặc điểm của điện trường đều: các đường sức song song, cách đều.
         </div>
     </div>
 
-    <!-- ================= 2 CÂU TRẮC NGHIỆM ĐÚNG SAI ================= -->
-    <h2>🔹 II. Trắc nghiệm đúng / sai (2 câu, mỗi câu 4 ý)</h2>
+    <!-- True/False 2 -->
+    <div class="question-card" id="tf2">
+        <div class="question-text"><strong>Câu 10 (Đúng/Sai).</strong> Một điện tích điểm \(Q = 2\cdot10^{-8}\ \text{C}\) đặt trong chân không. Xét điểm M cách Q một khoảng 10 cm. Các phát biểu:</div>
+        <div class="truefalse-statement">a) Điện thế tại M bằng 1800 V.</div>
+        <div class="truefalse-statement">b) Công của lực điện khi đưa điện tích thử \(q = 1\ \mu\text{C}\) từ vô cực đến M là \(1,8\ \text{mJ}\).</div>
+        <div class="truefalse-statement">c) Điện thế tại một điểm do điện tích điểm gây ra luôn luôn dương.</div>
+        <div class="truefalse-statement">d) Nếu tăng khoảng cách từ M đến Q lên gấp đôi thì điện thế tại M giảm đi một nửa.</div>
+        <button class="btn-toggle" data-target="anstf2">📌 Xem đáp án & giải thích</button>
+        <div id="anstf2" class="answer-area">
+            <strong>a) ĐÚNG</strong> – \(V = k\frac{Q}{r} = 9\cdot10^9 \cdot \frac{2\cdot10^{-8}}{0,1} = 1800\ \text{V}\).<br>
+            <strong>b) ĐÚNG</strong> – \(A = qV = 10^{-6} \cdot 1800 = 1,8\cdot10^{-3}\ \text{J} = 1,8\ \text{mJ}\).<br>
+            <strong>c) SAI</strong> – Điện thế có thể âm nếu điện tích Q âm. Ở đây Q dương nên V dương, nhưng phát biểu tổng quát “luôn dương” là sai.<br>
+            <strong>d) ĐÚNG</strong> – Vì \(V \sim \frac{1}{r}\), khi r tăng gấp đôi thì V giảm còn một nửa.
+        </div>
+    </div>
 
-    <!-- Câu Đ/S 1 -->
+    <!-- ========= 4 CÂU TRẢ LỜI NGẮN ========= -->
+    <div class="section-title">🔹 III. CÂU TRẢ LỜI NGẮN (4 câu)</div>
+    <div class="footnote">📌 Ghi chú: Đáp án là số có tối đa 4 ký tự (bao gồm dấu phẩy thập phân). Nếu kết quả có từ 2 chữ số thập phân trở lên thì làm tròn đến 1 chữ số thập phân.</div>
+
+    <!-- Short answer 1 -->
     <div class="question-card">
-        <div class="question-text"><span class="badge">Câu 9 (Đ/S)</span> Cho các phát biểu về tụ điện. Đánh giá đúng (Đ) hoặc sai (S) cho từng ý.</div>
-        <div class="truefalse-sub">
-            a) Điện dung của tụ điện phẳng phụ thuộc vào hiệu điện thế đặt vào hai bản tụ.<br>
-            b) Khi đưa một tấm điện môi vào giữa hai bản tụ (vẫn giữ nguyên khoảng cách) thì điện dung của tụ tăng lên.<br>
-            c) Năng lượng của tụ điện được tính bằng công thức \(W = \frac{Q^2}{2C}\) luôn đúng cho mọi tụ.<br>
-            d) Ghép song song nhiều tụ điện làm tăng khả năng chịu điện áp tối đa của bộ tụ.
-        </div>
-        <button class="btn-answer" onclick="toggleAnswer(this)">🔎 Hiển thị đáp án & giải thích</button>
-        <div class="answer-box">
-            <p><strong>Đáp án:</strong> a) S ; b) Đ ; c) Đ ; d) S</p>
-            <p><strong>Giải thích chi tiết:</strong><br>
-            a) Sai, điện dung là hằng số cấu tạo (phụ thuộc vào diện tích bản, khoảng cách, hằng số điện môi) không phụ thuộc U.<br>
-            b) Đúng, điện môi làm tăng hằng số điện môi ε ⇒ C tăng.<br>
-            c) Đúng, năng lượng tụ có thể biểu diễn dạng đó.<br>
-            d) Sai, khi ghép song song điện áp giới hạn của bộ bằng điện áp nhỏ nhất của tụ thành phần, không tăng khả năng chịu áp.
-            </p>
-        </div>
+        <div class="question-text"><strong>Câu 11.</strong> Một điện tích \(q = 2\ \mu\text{C}\) di chuyển từ điểm M đến điểm N trong điện trường, công của lực điện là \(A = 0,4\ \text{mJ}\). Tính hiệu điện thế \(U_{MN}\) (đơn vị V).</div>
+        <button class="btn-toggle" data-target="ans11">📌 Xem đáp án & hướng dẫn</button>
+        <div id="ans11" class="answer-area"><strong>Đáp án: 200</strong><br>✏️ \(U_{MN} = \dfrac{A}{q} = \dfrac{0,4\cdot10^{-3}}{2\cdot10^{-6}} = 200\ \text{V}\).</div>
     </div>
-
-    <!-- Câu Đ/S 2 -->
+    <!-- Short answer 2 -->
     <div class="question-card">
-        <div class="question-text"><span class="badge">Câu 10 (Đ/S)</span> Một tụ điện có ghi \(C = 5\,\mu F\), được tích điện với hiệu điện thế \(U = 200\,V\). Xét các nhận định sau:</div>
-        <div class="truefalse-sub">
-            a) Điện tích của tụ khi đó là \(Q = 1000\,\mu C\).<br>
-            b) Năng lượng của tụ điện là \(W = 0,1\,J\).<br>
-            c) Nếu tăng hiệu điện thế lên gấp đôi (400 V) thì năng lượng tăng gấp đôi.<br>
-            d) Mắc nối tiếp tụ này với tụ \(5\,\mu F\) khác thì điện dung tương đương bằng \(2,5\,\mu F\).
-        </div>
-        <button class="btn-answer" onclick="toggleAnswer(this)">🔎 Hiển thị đáp án & giải thích</button>
-        <div class="answer-box">
-            <p><strong>Đáp án:</strong> a) Đ ; b) Đ ; c) S ; d) Đ</p>
-            <p><strong>Giải thích:</strong><br>
-            a) \(Q = C\cdot U = 5\cdot10^{-6}\cdot200 = 1000\cdot10^{-6}C = 1000\,\mu C\) → Đúng.<br>
-            b) \(W = \frac{1}{2}CU^2 = 0,5\cdot5\cdot10^{-6}\cdot(200)^2 = 0,5\cdot5\cdot10^{-6}\cdot40000 = 0,5\cdot0,2 = 0,1J\) → Đúng.<br>
-            c) Sai, vì \(W\) tỉ lệ với \(U^2\) nên tăng U gấp đôi thì W tăng 4 lần.<br>
-            d) \(C_{nt} = \frac{C_1C_2}{C_1+C_2} = \frac{5\cdot5}{5+5} = \frac{25}{10}=2,5\,\mu F\) → Đúng.
-            </p>
-        </div>
+        <div class="question-text"><strong>Câu 12.</strong> Trong điện trường đều, hai điểm A, B cách nhau 5 cm dọc theo đường sức, hiệu điện thế \(U_{AB} = 100\ \text{V}\). Tính cường độ điện trường \(E\) (V/m).</div>
+        <button class="btn-toggle" data-target="ans12">📌 Xem đáp án & hướng dẫn</button>
+        <div id="ans12" class="answer-area"><strong>Đáp án: 2000</strong><br>✏️ \(E = \dfrac{U}{d} = \dfrac{100}{0,05} = 2000\ \text{V/m}\).</div>
     </div>
-
-    <!-- ================= 4 CÂU TRẢ LỜI NGẮN ================= -->
-    <h2>🔹 III. Câu trả lời ngắn (4 câu)</h2>
-
-    <!-- Short 1 -->
+    <!-- Short answer 3 -->
     <div class="question-card">
-        <div class="question-text"><span class="badge">Câu 11</span> Một tụ điện có điện dung \(C = 4,7\,\mu F\) được tích điện với hiệu điện thế \(U = 50\,V\). Tính điện tích (theo μC) mà tụ tích được.</div>
-        <button class="btn-answer" onclick="toggleAnswer(this)">🔎 Hiển thị đáp án & giải thích</button>
-        <div class="answer-box">
-            <p><strong>Đáp án:</strong> 235</p>
-            <p><strong>Hướng dẫn:</strong> \(Q = C\cdot U = 4,7\cdot 50 = 235\,\mu C\). (Đáp án 235 gồm 3 ký tự)</p>
-        </div>
+        <div class="question-text"><strong>Câu 13.</strong> Điện thế tại điểm M là 300 V, tại điểm N là 100 V. Tính công của lực điện khi di chuyển điện tích \(q = 0,5\ \mu\text{C}\) từ M đến N (đơn vị mJ).</div>
+        <button class="btn-toggle" data-target="ans13">📌 Xem đáp án & hướng dẫn</button>
+        <div id="ans13" class="answer-area"><strong>Đáp án: 0,1</strong><br>✏️ \(A = q(V_M - V_N) = 0,5\cdot10^{-6} \cdot (300-100) = 10^{-4}\ \text{J} = 0,1\ \text{mJ}\).</div>
     </div>
-
-    <!-- Short 2 -->
+    <!-- Short answer 4 -->
     <div class="question-card">
-        <div class="question-text"><span class="badge">Câu 12</span> Một tụ điện tích được điện tích \(Q = 2,5\,mC\) dưới hiệu điện thế \(U = 500\,V\). Tính điện dung của tụ theo đơn vị μF.</div>
-        <button class="btn-answer" onclick="toggleAnswer(this)">🔎 Hiển thị đáp án & giải thích</button>
-        <div class="answer-box">
-            <p><strong>Đáp án:</strong> 5</p>
-            <p><strong>Hướng dẫn:</strong> \(C = \frac{Q}{U} = \frac{2,5\cdot10^{-3}}{500} = 5\cdot10^{-6}F = 5\,\mu F\).</p>
-        </div>
+        <div class="question-text"><strong>Câu 14.</strong> Một điện tích điểm \(Q = -4\cdot10^{-9}\ \text{C}\) gây ra điện thế tại điểm cách nó 20 cm. Tính điện thế đó (đơn vị V).</div>
+        <button class="btn-toggle" data-target="ans14">📌 Xem đáp án & hướng dẫn</button>
+        <div id="ans14" class="answer-area"><strong>Đáp án: -180</strong><br>✏️ \(V = k\dfrac{Q}{r} = 9\cdot10^9 \cdot \dfrac{-4\cdot10^{-9}}{0,2} = -180\ \text{V}\).</div>
     </div>
 
-    <!-- Short 3 -->
+    <!-- ========= 1 CÂU TỰ LUẬN (3 ý) ========= -->
+    <div class="section-title">🔹 IV. TỰ LUẬN (3 ý)</div>
     <div class="question-card">
-        <div class="question-text"><span class="badge">Câu 13</span> Một tụ điện phẳng có điện dung \(20\,nF\), được tích điện với điện tích \(0,2\,\mu C\). Hiệu điện thế giữa hai bản tụ bằng bao nhiêu vôn (V)?</div>
-        <button class="btn-answer" onclick="toggleAnswer(this)">🔎 Hiển thị đáp án & giải thích</button>
-        <div class="answer-box">
-            <p><strong>Đáp án:</strong> 10</p>
-            <p><strong>Giải:</strong> \(U = \frac{Q}{C} = \frac{0,2\cdot10^{-6}}{20\cdot10^{-9}} = \frac{0,2\cdot10^{-6}}{2\cdot10^{-8}} = 10\,V\).</p>
+        <div class="question-text"><strong>Câu 15.</strong> Một điện trường đều được tạo ra giữa hai bản phẳng song song tích điện trái dấu, cách nhau \(d = 10\ \text{cm}\), cường độ điện trường \(E = 2000\ \text{V/m}\). Bản A tích điện dương, bản B tích điện âm. Chọn mốc điện thế tại bản B.</div>
+        <div class="essay-part">a) Tính hiệu điện thế \(U_{AB}\), điện thế tại bản A và điện thế tại điểm M cách bản B một đoạn 4 cm (theo chiều từ B sang A).</div>
+        <div class="essay-part">b) Tính công của lực điện khi di chuyển một electron \((q_e = -1,6\cdot10^{-19}\ \text{C})\) từ bản A đến bản B.</div>
+        <div class="essay-part">c) Nếu thay electron bằng proton \((q_p = +1,6\cdot10^{-19}\ \text{C})\), công của lực điện thay đổi thế nào? Tính công trong trường hợp này.</div>
+        <button class="btn-toggle" data-target="ansEssay">📌 Xem bài giải chi tiết</button>
+        <div id="ansEssay" class="answer-area">
+            <strong>Lời giải:</strong><br>
+            a) Hiệu điện thế \(U_{AB} = E \cdot d = 2000 \times 0,1 = 200\ \text{V}\).<br>
+            &nbsp;&nbsp;Chọn mốc tại B: \(V_B = 0\). Vì \(U_{AB} = V_A - V_B = 200\) nên \(V_A = 200\ \text{V}\).<br>
+            &nbsp;&nbsp;Điểm M cách B 4 cm = 0,04 m, hướng từ B sang A (cùng chiều đường sức): \(V_M = V_B + E \cdot MB = 0 + 2000 \times 0,04 = 80\ \text{V}\).<br><br>
+            b) Electron di chuyển từ A (điện thế cao) sang B (thấp). Công của lực điện: \(A_{AB} = q_e \cdot U_{AB} = (-1,6\cdot10^{-19}) \times 200 = -3,2\cdot10^{-17}\ \text{J}\). (Công âm, lực điện cản trở chuyển động của electron).<br><br>
+            c) Proton có điện tích dương: \(q_p = +1,6\cdot10^{-19}\ \text{C}\). Công lực điện: \(A' = q_p \cdot U_{AB} = 1,6\cdot10^{-19} \times 200 = 3,2\cdot10^{-17}\ \text{J}\). Công dương, cùng chiều với lực điện. So với electron, độ lớn bằng nhau nhưng trái dấu.
         </div>
     </div>
 
-    <!-- Short 4 -->
-    <div class="question-card">
-        <div class="question-text"><span class="badge">Câu 14</span> Hai tụ điện \(C_1 = 10\,\mu F\) và \(C_2 = 20\,\mu F\) ghép nối tiếp. Tính điện dung tương đương của bộ tụ (μF). Làm tròn đến 1 chữ số thập phân nếu cần.</div>
-        <button class="btn-answer" onclick="toggleAnswer(this)">🔎 Hiển thị đáp án & giải thích</button>
-        <div class="answer-box">
-            <p><strong>Đáp án:</strong> 6,7</p>
-            <p><strong>Giải chi tiết:</strong> \(\frac{1}{C_{nt}} = \frac{1}{10}+\frac{1}{20} = \frac{2+1}{20} = \frac{3}{20} \Rightarrow C_{nt}=\frac{20}{3}\approx 6,666...\mu F\). Làm tròn đến 1 chữ số thập phân: 6,7 (dùng dấu phẩy).</p>
-        </div>
-    </div>
-
-    <!-- ================= 1 CÂU TỰ LUẬN (3 Ý) ================= -->
-    <h2>🔹 IV. Tự luận (1 câu, 3 ý a, b, c)</h2>
-    <div class="question-card">
-        <div class="question-text"><span class="badge">Câu 15</span> Cho bộ tụ điện gồm hai tụ \(C_1 = 6\,\mu F\), \(C_2 = 12\,\mu F\).</div>
-        <div class="essay-part">
-            <strong>a)</strong> Tính điện dung tương đương khi mắc nối tiếp và khi mắc song song.<br>
-            <strong>b)</strong> Đặt vào bộ tụ mắc nối tiếp một hiệu điện thế \(U = 18\,V\). Tính điện tích của bộ tụ và hiệu điện thế trên mỗi tụ.<br>
-            <strong>c)</strong> Tính năng lượng của bộ tụ khi mắc nối tiếp.
-        </div>
-        <button class="btn-answer" onclick="toggleAnswer(this)">🔎 Hiển thị đáp án & lời giải chi tiết</button>
-        <div class="answer-box">
-            <p><strong>Đáp án & Lời giải:</strong></p>
-            <p><strong>a)</strong> Ghép nối tiếp: \(\frac{1}{C_{nt}} = \frac{1}{6} + \frac{1}{12} = \frac{3}{12} = \frac{1}{4} \Rightarrow C_{nt}=4\,\mu F\). <br>
-            Ghép song song: \(C_{ss}=C_1+C_2=6+12=18\,\mu F\).</p>
-            <p><strong>b)</strong> Khi mắc nối tiếp, điện tích của bộ tụ: \(Q_b = C_{nt}\cdot U = 4\cdot10^{-6}\cdot18 = 72\cdot10^{-6}C = 72\,\mu C\). Vì mắc nối tiếp nên \(Q_1=Q_2=Q_b=72\,\mu C\).<br>
-            Hiệu điện thế trên mỗi tụ: \(U_1 = \frac{Q_1}{C_1} = \frac{72}{6}=12\,V\); \(U_2 = \frac{Q_2}{C_2} = \frac{72}{12}=6\,V\). (Kiểm tra \(U_1+U_2=18V\)).</p>
-            <p><strong>c)</strong> Năng lượng bộ tụ nối tiếp: \(W = \frac{1}{2}C_{nt}U^2 = 0,5\cdot4\cdot10^{-6}\cdot18^2 = 0,5\cdot4\cdot10^{-6}\cdot324 = 2\cdot10^{-6}\cdot324 = 648\cdot10^{-6}J = 0,648\,mJ\).<br>
-            Hoặc \(W = \frac{Q_b^2}{2C_{nt}} = \frac{(72\cdot10^{-6})^2}{2\cdot4\cdot10^{-6}} = \frac{5184\cdot10^{-12}}{8\cdot10^{-6}} = 648\cdot10^{-6}J\).</p>
-            <p><em>Kết luận:</em> a) Nối tiếp: 4 μF, song song: 18 μF. b) Q<sub>bộ</sub>=72 μC, U<sub>1</sub>=12 V, U<sub>2</sub>=6 V. c) W = 0,648 mJ.</p>
-        </div>
-    </div>
-
-    <footer>
-        📚 Bộ câu hỏi bám sát Bài 21: Tụ điện – Vật lí 11 (Kết nối tri thức) | Nút "Hiển thị đáp án" để kiểm tra kết quả và lời giải chi tiết.
-    </footer>
+    <hr>
+    <div class="footnote">✨ Các câu hỏi được biên soạn dựa trên nội dung Bài 20 (Điện thế) – SGK Vật lí 11 Kết nối tri thức. Mọi công thức hiển thị bằng MathJax để rõ ràng.</div>
 </div>
 
 <script>
-    // toggle answer visibility
-    function toggleAnswer(btn) {
-        let answerDiv = btn.nextElementSibling;
-        if (answerDiv && answerDiv.classList.contains('answer-box')) {
-            if (answerDiv.style.display === 'none' || answerDiv.style.display === '') {
-                answerDiv.style.display = 'block';
-                btn.textContent = '🙈 Ẩn đáp án & giải thích';
-            } else {
-                answerDiv.style.display = 'none';
-                btn.textContent = '🔎 Hiển thị đáp án & giải thích';
+    // toggle cho tất cả các nút có class .btn-toggle
+    const btns = document.querySelectorAll('.btn-toggle');
+    btns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const answerDiv = document.getElementById(targetId);
+            if (answerDiv) {
+                if (answerDiv.style.display === 'none' || answerDiv.style.display === '') {
+                    answerDiv.style.display = 'block';
+                    this.textContent = '📖 Ẩn đáp án & giải thích';
+                } else {
+                    answerDiv.style.display = 'none';
+                    this.textContent = '📌 Xem đáp án & giải thích';
+                }
             }
+        });
+    });
+    // Khởi tạo tất cả answer-area ẩn
+    const allAnswers = document.querySelectorAll('.answer-area');
+    allAnswers.forEach(ans => {
+        ans.style.display = 'none';
+    });
+    // Sửa lại text mặc định cho nút (do ban đầu đã set nhưng nếu có nội dung)
+    btns.forEach(btn => {
+        if (btn.textContent.includes('Xem đáp án')) {
+            // giữ nguyên
         }
-    }
-    // ensure all answer boxes are hidden on load
-    window.onload = function() {
-        let allAnswers = document.querySelectorAll('.answer-box');
-        allAnswers.forEach(box => {
-            box.style.display = 'none';
-        });
-        let allBtns = document.querySelectorAll('.btn-answer');
-        allBtns.forEach(btn => {
-            if(btn.textContent.includes('Ẩn')) btn.textContent = '🔎 Hiển thị đáp án & giải thích';
-        });
-    };
+    });
 </script>
 </body>
 </html>
