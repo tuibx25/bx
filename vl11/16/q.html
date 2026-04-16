@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Tập Vật Lí 11 - Bài 16: Lực tương tác giữa hai điện tích</title>
+    <!-- MathJax for formula rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <style>
+        :root {
+            --text-main: #000000;
+            --accent-brown: #8B5A2B;
+            --accent-saddle: #8B4513;
+            --white: #FFFFFF;
+            --bg-main: #F5F5F5;
+            --bg-note: #F5F5DC;
+            --bg-answer: #F5DEB3;
+            --border-gray: #D3D3D3;
+            --btn-main: #0066CC;
+            --header-blue: #004488;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: var(--header-blue);
+            text-align: center;
+            border-bottom: 3px solid var(--accent-saddle);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: var(--accent-brown);
+            margin-top: 30px;
+        }
+        .note-box {
+            background-color: var(--bg-note);
+            border: 2px solid var(--accent-brown);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            font-weight: bold;
+            color: var(--accent-saddle);
+        }
+        .question-block {
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .q-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: var(--header-blue);
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .options li {
+            margin: 5px 0;
+            padding-left: 10px;
+        }
+        .tf-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        .tf-item {
+            background: var(--bg-main);
+            padding: 10px;
+            border-left: 4px solid var(--accent-brown);
+        }
+        .toggle-btn {
+            background-color: var(--btn-main);
+            color: var(--white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        .toggle-btn:hover {
+            background-color: #004488;
+        }
+        .answer-box {
+            display: none;
+            background-color: var(--bg-answer);
+            border: 1px dashed var(--accent-saddle);
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+            animation: fadeIn 0.4s;
+        }
+        .answer-box.show {
+            display: block;
+        }
+        .correct { color: #006600; font-weight: bold; }
+        .incorrect { color: #CC0000; font-weight: bold; }
+        .short-ans {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 1.2em;
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .sub-part { margin-top: 8px; font-weight: bold; color: var(--accent-saddle); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>BÀI TẬP VẬT LÍ 11 - BÀI 16<br><span style="font-size:0.8em; color:#8B4513;">Lực tương tác giữa hai điện tích</span></h1>
+
+        <div class="note-box">
+            📌 GHI CHÚ CHUNG CHO CÂU TRẢ LỜI NGẮN:<br>
+            Nếu đáp án có từ 2 chữ số thập phân trở lên thì làm tròn đến 1 chữ số thập phân.
+        </div>
+
+        <!-- TRẮC NGHIỆM NHIỀU LỰA CHỌN (8 câu) -->
+        <h2>🔹 Phần 1: Trắc nghiệm nhiều lựa chọn</h2>
+
+        <div class="question-block">
+            <div class="q-title">Câu 1: Đơn vị của điện tích trong hệ SI là gì?</div>
+            <ul class="options">
+                <li>A. Ampe (A)</li>
+                <li>B. Vôn (V)</li>
+                <li>C. Cu-lông (C)</li>
+                <li>D. Oát (W)</li>
+            </ul>
+            <button class="toggle-btn" onclick="toggle('a1')">Xem đáp án & Hướng dẫn</button>
+            <div id="a1" class="answer-box">
+                <strong>Đáp án:</strong> <span class="correct">C</span><br>
+                <strong>Hướng dẫn:</strong> Theo quy ước quốc tế, đơn vị đo điện tích trong hệ SI là Cu-lông (ký hiệu C), đặt tên theo nhà vật lý Charles-Augustin de Coulomb.
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 2: Hai điện tích điểm đặt trong chân không có cùng dấu. Lực tương tác giữa chúng là:</div>
+            <ul class="options">
+                <li>A. Lực hút</li>
+                <li>B. Lực đẩy</li>
+                <li>C. Không có lực tương tác</li>
+                <li>D. Lực hút nếu cách xa, lực đẩy nếu lại gần</li>
+            </ul>
+            <button class="toggle-btn" onclick="toggle('a2')">Xem đáp án & Hướng dẫn</button>
+            <div id="a2" class="answer-box">
+                <strong>Đáp án:</strong> <span class="correct">B</span><br>
+                <strong>Hướng dẫn:</strong> Theo định luật Coulomb và thực nghiệm, các điện tích cùng dấu đẩy nhau, khác dấu hút nhau.
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 3: Công thức định luật Coulomb xác định độ lớn lực tương tác giữa hai điện tích điểm \(q_1, q_2\) cách nhau khoảng \(r\) trong chân không là:</div>
+            <ul class="options">
+                <li>A. \(F = k \frac{q_1 q_2}{r}\)</li>
+                <li>B. \(F = k \frac{|q_1 q_2|}{r^2}\)</li>
+                <li>C. \(F = k \frac{|q_1 q_2|}{r}\)</li>
+                <li>D. \(F = \frac{|q_1 q_2|}{4\pi \varepsilon_0 r}\)</li>
+            </ul>
+            <button class="toggle-btn" onclick="toggle('a3')">Xem đáp án & Hướng dẫn</button>
+            <div id="a3" class="answer-box">
+                <strong>Đáp án:</strong> <span class="correct">B</span><br>
+                <strong>Hướng dẫn:</strong> Định luật Coulomb phát biểu độ lớn lực tương tác tỉ lệ thuận với tích độ lớn hai điện tích và tỉ lệ nghịch với bình phương khoảng cách: \(F = k \frac{|q_1 q_2|}{r^2}\).
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 4: Nếu giữ nguyên độ lớn hai điện tích nhưng giảm khoảng cách giữa chúng đi 2 lần thì lực tương tác sẽ:</div>
+            <ul class="options">
+                <li>A. Tăng 2 lần</li>
+                <li>B. Giảm 2 lần</li>
+                <li>C. Tăng 4 lần</li>
+                <li>D. Giảm 4 lần</li>
+            </ul>
+            <button class="toggle-btn" onclick="toggle('a4')">Xem đáp án & Hướng dẫn</button>
+            <div id="a4" class="answer-box">
+                <strong>Đáp án:</strong> <span class="correct">C</span><br>
+                <strong>Hướng dẫn:</strong> Vì \(F \sim \frac{1}{r^2}\), nên khi \(r' = \frac{r}{2} \Rightarrow F' = k\frac{|q_1 q_2|}{(r/2)^2} = 4F\). Lực tăng 4 lần.
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 5: Giá trị xấp xỉ của hằng số Coulomb \(k\) trong chân không là:</div>
+            <ul class="options">
+                <li>A. \(9.10^9 \, \text{N.m}^2/\text{C}^2\)</li>
+                <li>B. \(6,67.10^{-11} \, \text{N.m}^2/\text{kg}^2\)</li>
+                <li>C. \(1,6.10^{-19} \, \text{C}\)</li>
+                <li>D. \(8,85.10^{-12} \, \text{C}^2/(\text{N.m}^2)\)</li>
+            </ul>
+            <button class="toggle-btn" onclick="toggle('a5')">Xem đáp án & Hướng dẫn</button>
+            <div id="a5" class="answer-box">
+                <strong>Đáp án:</strong> <span class="correct">A</span><br>
+                <strong>Hướng dẫn:</strong> Trong hệ SI, \(k = \frac{1}{4\pi \varepsilon_0} \approx 9.10^9 \, \text{N.m}^2/\text{C}^2\).
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 6: Điện tích điểm được hiểu là:</div>
+            <ul class="options">
+                <li>A. Vật tích điện có kích thước bằng không tuyệt đối.</li>
+                <li>B. Vật tích điện có kích thước rất nhỏ so với khoảng cách đến điểm khảo sát.</li>
+                <li>C. Vật tích điện nằm yên trong không khí.</li>
+                <li>D. Vật tích điện có điện lượng nhỏ hơn \(10^{-6}\) C.</li>
+            </ul>
+            <button class="toggle-btn" onclick="toggle('a6')">Xem đáp án & Hướng dẫn</button>
+            <div id="a6" class="answer-box">
+                <strong>Đáp án:</strong> <span class="correct">B</span><br>
+                <strong>Hướng dẫn:</strong> Điện tích điểm là mô hình lý tưởng, áp dụng khi kích thước vật tích điện rất nhỏ so với khoảng cách giữa chúng và điểm đang xét.
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 7: Vectơ lực tương tác giữa hai điện tích trái dấu có đặc điểm:</div>
+            <ul class="options">
+                <li>A. Cùng phương, ngược chiều, hướng ra xa nhau.</li>
+                <li>B. Cùng phương, cùng chiều, hướng vào nhau.</li>
+                <li>C. Cùng phương, ngược chiều, hướng vào nhau.</li>
+                <li>D. Vuông góc với đường nối hai điện tích.</li>
+            </ul>
+            <button class="toggle-btn" onclick="toggle('a7')">Xem đáp án & Hướng dẫn</button>
+            <div id="a7" class="answer-box">
+                <strong>Đáp án:</strong> <span class="correct">C</span><br>
+                <strong>Hướng dẫn:</strong> Lực tương tác giữa hai điện tích luôn nằm trên đường thẳng nối hai điện tích. Trái dấu thì hút nhau nên hai vectơ lực hướng vào nhau (ngược chiều).
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 8: Khi đặt hai điện tích điểm trong môi trường điện môi đồng chất có hằng số điện môi \(\varepsilon > 1\), lực tương tác giữa chúng so với trong chân không sẽ:</div>
+            <ul class="options">
+                <li>A. Tăng \(\varepsilon\) lần</li>
+                <li>B. Giảm \(\varepsilon\) lần</li>
+                <li>C. Không thay đổi</li>
+                <li>D. Giảm \(\varepsilon^2\) lần</li>
+            </ul>
+            <button class="toggle-btn" onclick="toggle('a8')">Xem đáp án & Hướng dẫn</button>
+            <div id="a8" class="answer-box">
+                <strong>Đáp án:</strong> <span class="correct">B</span><br>
+                <strong>Hướng dẫn:</strong> Công thức trong điện môi: \(F_\varepsilon = \frac{F_0}{\varepsilon}\). Vì \(\varepsilon > 1\) nên lực tương tác giảm đi \(\varepsilon\) lần.
+            </div>
+        </div>
+
+        <!-- TRẮC NGHIỆM ĐÚNG SAI (2 câu, mỗi câu 4 ý) -->
+        <h2>🔹 Phần 2: Trắc nghiệm Đúng/Sai</h2>
+
+        <div class="question-block">
+            <div class="q-title">Câu 9: Xét các phát biểu sau về lực tương tác giữa hai điện tích điểm trong không khí. Mỗi ý chọn ĐÚNG hoặc SAI.</div>
+            <div class="tf-grid">
+                <div class="tf-item">a) Lực tương tác luôn là lực hút.</div>
+                <div class="tf-item">b) Độ lớn lực tỉ lệ thuận với tích độ lớn hai điện tích.</div>
+                <div class="tf-item">c) Khi khoảng cách giảm một nửa, độ lớn lực tăng 4 lần.</div>
+                <div class="tf-item">d) Đơn vị của hằng số tỉ lệ \(k\) là \(\text{N.m}^2/\text{C}^2\).</div>
+            </div>
+            <button class="toggle-btn" onclick="toggle('a9')">Xem đáp án & Hướng dẫn</button>
+            <div id="a9" class="answer-box">
+                <strong>Đáp án:</strong> a) <span class="incorrect">Sai</span> | b) <span class="correct">Đúng</span> | c) <span class="correct">Đúng</span> | d) <span class="correct">Đúng</span><br>
+                <strong>Hướng dẫn:</strong><br>
+                a) Sai. Lực có thể là lực đẩy nếu hai điện tích cùng dấu.<br>
+                b) Đúng. Theo định luật Coulomb: \(F = k\frac{|q_1 q_2|}{r^2}\).<br>
+                c) Đúng. \(F \sim 1/r^2 \Rightarrow r\) giảm 2 lần thì \(F\) tăng \(2^2 = 4\) lần.<br>
+                d) Đúng. Thay đơn vị vào công thức suy ra đơn vị của \(k\) là \(\text{N.m}^2/\text{C}^2\).
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 10: Xét các phát biểu sau về tính chất điện tích và môi trường. Mỗi ý chọn ĐÚNG hoặc SAI.</div>
+            <div class="tf-grid">
+                <div class="tf-item">a) Điện tích điểm là vật tích điện có kích thước bằng không tuyệt đối.</div>
+                <div class="tf-item">b) Trong không khí, có thể dùng gần đúng công thức Coulomb như trong chân không.</div>
+                <div class="tf-item">c) Lực tĩnh điện tuân theo định luật III Newton (lực và phản lực).</div>
+                <div class="tf-item">d) Nếu \(q_1\) gấp đôi, \(q_2\) giảm một nửa thì lực tương tác không đổi.</div>
+            </div>
+            <button class="toggle-btn" onclick="toggle('a10')">Xem đáp án & Hướng dẫn</button>
+            <div id="a10" class="answer-box">
+                <strong>Đáp án:</strong> a) <span class="incorrect">Sai</span> | b) <span class="correct">Đúng</span> | c) <span class="correct">Đúng</span> | d) <span class="correct">Đúng</span><br>
+                <strong>Hướng dẫn:</strong><br>
+                a) Sai. Điện tích điểm có kích thước <em>rất nhỏ</em> so với khoảng cách, không phải bằng 0 tuyệt đối.<br>
+                b) Đúng. Hằng số điện môi của không khí \(\approx 1,0006 \approx 1\).<br>
+                c) Đúng. Lực do \(q_1\) tác dụng lên \(q_2\) và ngược lại luôn trực đối, cùng độ lớn, cùng phương.<br>
+                d) Đúng. Tích \(|q_1' q_2'| = |2q_1 \cdot 0,5q_2| = |q_1 q_2|\) nên lực không đổi.
+            </div>
+        </div>
+
+        <!-- CÂU TRẢ LỜI NGẮN (4 câu) -->
+        <h2>🔹 Phần 3: Câu trả lời ngắn</h2>
+
+        <div class="question-block">
+            <div class="q-title">Câu 11: Hai điện tích \(q_1 = 2 \, \mu\text{C}\) và \(q_2 = 2 \, \mu\text{C}\) đặt cách nhau \(0,1\) m trong chân không. Tính độ lớn lực tương tác (đơn vị N).</div>
+            <button class="toggle-btn" onclick="toggle('a11')">Xem đáp án & Hướng dẫn</button>
+            <div id="a11" class="answer-box">
+                <strong>Đáp án:</strong> <span class="short-ans">3,6</span><br>
+                <strong>Hướng dẫn:</strong><br>
+                Áp dụng định luật Coulomb: \(F = k \frac{|q_1 q_2|}{r^2} = 9.10^9 \cdot \frac{(2.10^{-6})^2}{(0,1)^2}\)<br>
+                \(F = 9.10^9 \cdot \frac{4.10^{-12}}{0,01} = 36.10^{-3} / 0,01 = 3,6 \, \text{N}\).
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 12: Nếu giữ nguyên điện tích nhưng giảm khoảng cách giữa chúng đi 3 lần thì lực tương tác tăng lên bao nhiêu lần?</div>
+            <button class="toggle-btn" onclick="toggle('a12')">Xem đáp án & Hướng dẫn</button>
+            <div id="a12" class="answer-box">
+                <strong>Đáp án:</strong> <span class="short-ans">9</span><br>
+                <strong>Hướng dẫn:</strong><br>
+                Vì \(F \sim \frac{1}{r^2}\), khi \(r' = r/3 \Rightarrow F' = \frac{k|q_1 q_2|}{(r/3)^2} = 9 \cdot \frac{k|q_1 q_2|}{r^2} = 9F\). Lực tăng 9 lần.
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 13: Điện tích \(q = 4 \, \mu\text{C}\) chịu lực \(F = 0,09\) N từ điện tích điểm \(Q\) cách nó \(0,2\) m trong chân không. Tính \(Q\) (đơn vị \(\mu\text{C}\)).</div>
+            <button class="toggle-btn" onclick="toggle('a13')">Xem đáp án & Hướng dẫn</button>
+            <div id="a13" class="answer-box">
+                <strong>Đáp án:</strong> <span class="short-ans">0,1</span><br>
+                <strong>Hướng dẫn:</strong><br>
+                Từ \(F = k \frac{|q Q|}{r^2} \Rightarrow |Q| = \frac{F r^2}{k |q|}\)<br>
+                \(|Q| = \frac{0,09 \cdot (0,2)^2}{9.10^9 \cdot 4.10^{-6}} = \frac{0,0036}{36000} = 10^{-7} \, \text{C} = 0,1 \, \mu\text{C}\).
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 14: Hai điện tích bằng nhau đặt cách nhau \(0,3\) m trong chân không, lực đẩy là \(10\) N. Tính độ lớn mỗi điện tích (đơn vị \(\mu\text{C}\)).</div>
+            <button class="toggle-btn" onclick="toggle('a14')">Xem đáp án & Hướng dẫn</button>
+            <div id="a14" class="answer-box">
+                <strong>Đáp án:</strong> <span class="short-ans">10</span><br>
+                <strong>Hướng dẫn:</strong><br>
+                \(F = k \frac{q^2}{r^2} \Rightarrow q^2 = \frac{F r^2}{k} = \frac{10 \cdot (0,3)^2}{9.10^9} = \frac{0,9}{9.10^9} = 10^{-10}\)<br>
+                \(\Rightarrow q = 10^{-5} \, \text{C} = 10 \, \mu\text{C}\).
+            </div>
+        </div>
+
+        <!-- CÂU TỰ LUẬN (1 câu 3 ý) -->
+        <h2>🔹 Phần 4: Tự luận</h2>
+
+        <div class="question-block">
+            <div class="q-title">Câu 15: Hai quả cầu nhỏ tích điện \(q_1 = 3.10^{-8}\) C và \(q_2 = -1.10^{-8}\) C đặt tại A và B trong không khí, cách nhau AB = 10 cm.<br>
+            a) Xác định độ lớn lực tương tác giữa chúng.<br>
+            b) Mô tả phương, chiều của vectơ lực tác dụng lên mỗi quả cầu.<br>
+            c) Nếu cho hai quả cầu tiếp xúc nhau rồi đặt lại tại A và B, lực tương tác mới có độ lớn là bao nhiêu?</div>
+            <button class="toggle-btn" onclick="toggle('a15')">Xem đáp án & Hướng dẫn</button>
+            <div id="a15" class="answer-box">
+                <strong>Hướng dẫn giải chi tiết:</strong><br><br>
+                <span class="sub-part">a) Độ lớn lực tương tác ban đầu:</span><br>
+                Áp dụng định luật Coulomb trong không khí (\(k \approx 9.10^9\)):<br>
+                \(F = k \frac{|q_1 q_2|}{r^2} = 9.10^9 \cdot \frac{|3.10^{-8} \cdot (-1.10^{-8})|}{(0,1)^2}\)<br>
+                \(F = 9.10^9 \cdot \frac{3.10^{-16}}{0,01} = 2,7.10^{-4} \, \text{N}\).<br><br>
+                
+                <span class="sub-part">b) Phương, chiều vectơ lực:</span><br>
+                Vì \(q_1\) và \(q_2\) trái dấu nên lực tương tác là lực hút.<br>
+                Vectơ lực \(\vec{F}_{12}\) (lực do \(q_1\) tác dụng lên \(q_2\)) có phương trùng đường thẳng AB, chiều hướng từ B về A.<br>
+                Vectơ lực \(\vec{F}_{21}\) (lực do \(q_2\) tác dụng lên \(q_1\)) có phương trùng đường thẳng AB, chiều hướng từ A về B. Hai lực trực đối nhau.<br><br>
+                
+                <span class="sub-part">c) Lực tương tác sau khi tiếp xúc:</span><br>
+                Khi tiếp xúc, điện tích phân bố đều trên hai quả cầu giống hệt nhau. Điện tích mới mỗi quả cầu là:<br>
+                \(q' = \frac{q_1 + q_2}{2} = \frac{3.10^{-8} + (-1.10^{-8})}{2} = 1.10^{-8} \, \text{C}\).<br>
+                Đặt lại tại A, B (khoảng cách không đổi \(r = 0,1\) m), lực tương tác mới:<br>
+                \(F' = k \frac{|q' \cdot q'|}{r^2} = 9.10^9 \cdot \frac{(1.10^{-8})^2}{(0,1)^2}\)<br>
+                \(F' = 9.10^9 \cdot \frac{1.10^{-16}}{0,01} = 9.10^{-5} \, \text{N}\).<br>
+                Lực mới là lực đẩy (vì hai điện tích cùng dấu sau khi tiếp xúc).
+            </div>
+        </div>
+
+        <footer style="text-align:center; margin-top:30px; color:#8B5A2B; font-size:0.9em; border-top:1px solid #D3D3D3; padding-top:10px;">
+            📚 Tài liệu biên soạn bám sát chương trình Vật lí 11 - Kết nối tri thức với cuộc sống (Bài 16).
+        </footer>
+    </div>
+
+    <script>
+        function toggle(id) {
+            const el = document.getElementById(id);
+            if (el.style.display === 'block') {
+                el.style.display = 'none';
+            } else {
+                el.style.display = 'block';
+                el.classList.add('show');
+            }
+        }
+    </script>
+</body>
+</html>
