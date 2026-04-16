@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 17: Khái niệm điện trường</title>
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            startup: { typeset: true }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #000; background-color: #F5F5F5; margin: 0; padding: 20px; line-height: 1.6; }
+        .container { max-width: 900px; margin: auto; background: #FFFFFF; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h1 { color: #004488; text-align: center; border-bottom: 3px solid #0066CC; padding-bottom: 12px; margin-bottom: 25px; }
+        h2 { color: #8B5A2B; margin-top: 35px; margin-bottom: 15px; border-left: 5px solid #8B4513; padding-left: 10px; }
+        .question-block { margin-bottom: 25px; padding: 18px; background: #F5F5DC; border-left: 4px solid #0066CC; border-radius: 6px; }
+        .q-title { font-weight: bold; margin-bottom: 10px; color: #000; }
+        .options { margin-left: 20px; margin-bottom: 10px; }
+        .options div { margin: 6px 0; }
+        .tf-list { margin-left: 25px; }
+        .tf-item { margin: 8px 0; padding: 6px; background: #FFFFFF; border: 1px solid #D3D3D3; border-radius: 4px; }
+        .toggle-btn { background-color: #0066CC; color: #FFFFFF; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: 8px; transition: all 0.3s; }
+        .toggle-btn:hover { background-color: #004488; }
+        .answer-box { display: none; margin-top: 12px; padding: 15px; background: #F5DEB3; border-radius: 4px; border: 1px solid #D3D3D3; }
+        .answer-box p { margin: 6px 0; }
+        .note-box { font-style: italic; color: #8B4513; background: #D3D3D3; padding: 12px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #8B5A2B; }
+        .essay-part { margin-left: 15px; margin-bottom: 12px; border-left: 2px solid #8B5A2B; padding-left: 10px; }
+        strong { color: #004488; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>BÀI 17: KHÁI NIỆM ĐIỆN TRƯỜNG</h1>
+
+        <h2>I. CÂU HỎI TRẮC NGHIỆM NHIỀU LỰA CHỌN (8 câu)</h2>
+
+        <div class="question-block">
+            <div class="q-title">Câu 1. Điện trường là:</div>
+            <div class="options">
+                <div>A. Môi trường vật chất bao quanh điện tích, truyền tương tác điện giữa các điện tích.</div>
+                <div>B. Lực đẩy hoặc lực hút tác dụng giữa hai điện tích điểm.</div>
+                <div>C. Đường cong biểu diễn quỹ đạo chuyển động của điện tích trong chân không.</div>
+                <div>D. Khoảng không gian không có vật chất, chỉ tồn tại năng lượng.</div>
+            </div>
+            <button class="toggle-btn" onclick="toggle('ans1')">Hiện đáp án & Hướng dẫn</button>
+            <div id="ans1" class="answer-box">
+                <p><strong>Đáp án:</strong> A</p>
+                <p><strong>Hướng dẫn:</strong> Theo SGK, điện trường là dạng vật chất tồn tại xung quanh điện tích và truyền tương tác giữa các điện tích. Nó không phải là lực hay đường quỹ đạo, mà là một môi trường vật chất đặc biệt.</p>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 2. Đơn vị đo cường độ điện trường trong hệ SI là:</div>
+            <div class="options">
+                <div>A. Niutơn trên mét (N/m)</div>
+                <div>B. Vôn trên mét (V/m)</div>
+                <div>C. Jun trên culông (J/C)</div>
+                <div>D. Cả B và C đều đúng</div>
+            </div>
+            <button class="toggle-btn" onclick="toggle('ans2')">Hiện đáp án & Hướng dẫn</button>
+            <div id="ans2" class="answer-box">
+                <p><strong>Đáp án:</strong> D</p>
+                <p><strong>Hướng dẫn:</strong> SGK quy định đơn vị của cường độ điện trường là Vôn trên mét (V/m). Mặt khác, từ công thức \(E = \frac{F}{q}\), đơn vị cũng có thể là N/C. Vì \(1 \text{ V} = 1 \text{ J/C}\) và \(1 \text{ V/m} = 1 \text{ N/C}\), nên cả V/m và J/C đều đúng về mặt thứ nguyên, nhưng V/m là đơn vị chuẩn được nêu trong bài.</p>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 3. Vectơ cường độ điện trường \(\vec{E}\) do một điện tích điểm \(Q > 0\) gây ra tại điểm M có:</div>
+            <div class="options">
+                <div>A. Phương tiếp tuyến với đường tròn tâm Q, chiều ngược chiều kim đồng hồ.</div>
+                <div>B. Phương trùng với đường thẳng nối Q và M, chiều hướng ra xa Q.</div>
+                <div>C. Phương trùng với đường thẳng nối Q và M, chiều hướng về Q.</div>
+                <div>D. Phương vuông góc với đường thẳng nối Q và M.</div>
+            </div>
+            <button class="toggle-btn" onclick="toggle('ans3')">Hiện đáp án & Hướng dẫn</button>
+            <div id="ans3" class="answer-box">
+                <p><strong>Đáp án:</strong> B</p>
+                <p><strong>Hướng dẫn:</strong> Điện tích dương \(Q>0\) tạo ra điện trường có các đường sức hướng ra xa nó. Vectơ \(\vec{E}\) tại M nằm trên đường thẳng nối QM và cùng chiều với lực tác dụng lên điện tích thử dương, tức là hướng ra xa Q.</p>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 4. Công thức tính độ lớn cường độ điện trường do điện tích điểm \(Q\) gây ra trong chân không tại điểm cách nó khoảng \(r\) là:</div>
+            <div class="options">
+                <div>A. \(E = k\frac{|Q|}{r}\)</div>
+                <div>B. \(E = k\frac{Q^2}{r^2}\)</div>
+                <div>C. \(E = k\frac{|Q|}{r^2}\)</div>
+                <div>D. \(E = \frac{Q}{4\pi\varepsilon_0 r}\)</div>
+            </div>
+            <button class="toggle-btn" onclick="toggle('ans4')">Hiện đáp án & Hướng dẫn</button>
+            <div id="ans4" class="answer-box">
+                <p><strong>Đáp án:</strong> C</p>
+                <p><strong>Hướng dẫn:</strong> Áp dụng trực tiếp định luật Coulomb và định nghĩa cường độ điện trường \(E = \frac{F}{q}\), ta có \(E = k\frac{|Q|}{r^2}\) với \(k \approx 9.10^9 \, \text{N.m}^2/\text{C}^2\).</p>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 5. Phát biểu nào sau đây về đặc điểm của đường sức điện là <em>sai</em>?</div>
+            <div class="options">
+                <div>A. Tại mỗi điểm trong điện trường chỉ vẽ được một đường sức đi qua.</div>
+                <div>B. Các đường sức điện là những đường cong không khép kín, xuất phát từ điện tích dương và kết thúc ở điện tích âm.</div>
+                <div>C. Nơi nào cường độ điện trường lớn hơn thì các đường sức ở đó được vẽ thưa hơn.</div>
+                <div>D. Chiều của đường sức điện tại một điểm là chiều của vectơ cường độ điện trường tại điểm đó.</div>
+            </div>
+            <button class="toggle-btn" onclick="toggle('ans5')">Hiện đáp án & Hướng dẫn</button>
+            <div id="ans5" class="answer-box">
+                <p><strong>Đáp án:</strong> C</p>
+                <p><strong>Hướng dẫn:</strong> Quy ước vẽ đường sức: nơi cường độ điện trường lớn thì đường sức được vẽ dày (sát nhau), nơi cường độ điện trường nhỏ thì vẽ thưa. Do đó phát biểu C sai.</p>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 6. Đặt một điện tích thử \(q = 2.10^{-6} \, \text{C}\) tại điểm M trong điện trường đều, nó chịu lực điện \(F = 4.10^{-3} \, \text{N}\). Cường độ điện trường tại M có độ lớn là:</div>
+            <div class="options">
+                <div>A. \(2000 \, \text{V/m}\)</div>
+                <div>B. \(8.10^{-9} \, \text{V/m}\)</div>
+                <div>C. \(500 \, \text{V/m}\)</div>
+                <div>D. \(2.10^3 \, \text{N/C}\)</div>
+            </div>
+            <button class="toggle-btn" onclick="toggle('ans6')">Hiện đáp án & Hướng dẫn</button>
+            <div id="ans6" class="answer-box">
+                <p><strong>Đáp án:</strong> A</p>
+                <p><strong>Hướng dẫn:</strong> Áp dụng công thức \(E = \frac{F}{q} = \frac{4.10^{-3}}{2.10^{-6}} = 2000 \, \text{V/m}\).</p>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 7. Hai điện tích điểm \(q_1 = 3.10^{-9} \, \text{C}\) và \(q_2 = -3.10^{-9} \, \text{C}\) đặt cách nhau 10 cm trong chân không. Độ lớn cường độ điện trường tại trung điểm của đoạn thẳng nối hai điện tích là:</div>
+            <div class="options">
+                <div>A. \(0 \, \text{V/m}\)</div>
+                <div>B. \(2,16.10^4 \, \text{V/m}\)</div>
+                <div>C. \(1,08.10^4 \, \text{V/m}\)</div>
+                <div>D. \(4,32.10^4 \, \text{V/m}\)</div>
+            </div>
+            <button class="toggle-btn" onclick="toggle('ans7')">Hiện đáp án & Hướng dẫn</button>
+            <div id="ans7" class="answer-box">
+                <p><strong>Đáp án:</strong> B</p>
+                <p><strong>Hướng dẫn:</strong> Tại trung điểm, \(r = 0,05 \, \text{m}\). \(E_1\) hướng ra xa \(q_1\), \(E_2\) hướng về \(q_2\). Vì hai điện tích trái dấu nên \(\vec{E}_1\) và \(\vec{E}_2\) cùng chiều. \(E = E_1 + E_2 = 2 \times \left(9.10^9 \frac{3.10^{-9}}{0,05^2}\right) = 2 \times 10800 = 21600 \, \text{V/m} = 2,16.10^4 \, \text{V/m}\).</p>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 8. Theo nội dung bài học, cường độ điện trường ngay sát bề mặt Trái Đất có đặc điểm:</div>
+            <div class="options">
+                <div>A. Phương nằm ngang, độ lớn khoảng 50 V/m.</div>
+                <div>B. Phương thẳng đứng, hướng từ dưới lên trên, độ lớn 10 V/m.</div>
+                <div>C. Phương thẳng đứng, hướng từ trên xuống dưới, độ lớn khoảng 100 V/m đến 200 V/m.</div>
+                <div>D. Phương xiên góc, độ lớn thay đổi theo mùa.</div>
+            </div>
+            <button class="toggle-btn" onclick="toggle('ans8')">Hiện đáp án & Hướng dẫn</button>
+            <div id="ans8" class="answer-box">
+                <p><strong>Đáp án:</strong> C</p>
+                <p><strong>Hướng dẫn:</strong> SGK ghi rõ: Ngay sát bề mặt Trái Đất luôn có một điện trường có phương thẳng đứng, hướng từ trên xuống dưới và cường độ vào khoảng từ 100 V/m đến 200 V/m.</p>
+            </div>
+        </div>
+
+        <h2>II. CÂU HỎI TRẮC NGHIỆM ĐÚNG SAI (2 câu)</h2>
+
+        <div class="question-block">
+            <div class="q-title">Câu 9. Xét một điện tích điểm dương \(Q\) đặt trong chân không. Hãy xác định tính Đúng (Đ) / Sai (S) của các phát biểu sau:</div>
+            <div class="tf-list">
+                <div class="tf-item">a) Vectơ cường độ điện trường do \(Q\) gây ra tại mọi điểm đều hướng ra xa \(Q\).</div>
+                <div class="tf-item">b) Độ lớn cường độ điện trường tỉ lệ thuận với khoảng cách \(r\) từ điểm xét đến \(Q\).</div>
+                <div class="tf-item">c) Nếu đặt điện tích thử \(q < 0\) tại điểm M thì vectơ lực điện tác dụng lên \(q\) ngược chiều với vectơ cường độ điện trường tại M.</div>
+                <div class="tf-item">d) Đơn vị đo cường độ điện trường trong hệ SI là Niutơn trên mét (N/m).</div>
+            </div>
+            <button class="toggle-btn" onclick="toggle('ans9')">Hiện đáp án & Hướng dẫn</button>
+            <div id="ans9" class="answer-box">
+                <p><strong>Đáp án:</strong> a) Đ; b) S; c) Đ; d) S</p>
+                <p><strong>Hướng dẫn:</strong></p>
+                <p>a) Đ: Điện tích dương tạo điện trường hướng tâm ra xa.</p>
+                <p>b) S: \(E = k\frac{|Q|}{r^2}\) nên \(E\) tỉ lệ nghịch với \(r^2\), không phải tỉ lệ thuận với \(r\).</p>
+                <p>c) Đ: Theo công thức \(\vec{F} = q\vec{E}\), khi \(q < 0\) thì \(\vec{F}\) ngược chiều \(\vec{E}\).</p>
+                <p>d) S: Đơn vị chuẩn là Vôn trên mét (V/m) hoặc Niutơn trên Culông (N/C). N/m là đơn vị của hệ số đàn hồi lò xo.</p>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 10. Về nguyên lý chồng chất điện trường và đường sức điện:</div>
+            <div class="tf-list">
+                <div class="tf-item">a) Vectơ cường độ điện trường tổng hợp tại một điểm bằng tổng đại số các cường độ điện trường do từng điện tích gây ra.</div>
+                <div class="tf-item">b) Các đường sức điện không bao giờ cắt nhau.</div>
+                <div class="tf-item">c) Tại vị trí đặt điện tích điểm, đường sức điện xuất phát từ điện tích âm và kết thúc ở điện tích dương.</div>
+                <div class="tf-item">d) Trong điện trường đều, các đường sức là những đường thẳng song song và cách đều nhau.</div>
+            </div>
+            <button class="toggle-btn" onclick="toggle('ans10')">Hiện đáp án & Hướng dẫn</button>
+            <div id="ans10" class="answer-box">
+                <p><strong>Đáp án:</strong> a) S; b) Đ; c) S; d) Đ</p>
+                <p><strong>Hướng dẫn:</strong></p>
+                <p>a) S: \(\vec{E} = \vec{E}_1 + \vec{E}_2 + \dots\) là tổng <em>vectơ</em>, không phải tổng đại số (trừ khi các vectơ cùng phương).</p>
+                <p>b) Đ: Nếu cắt nhau thì tại giao điểm sẽ có hai hướng của \(\vec{E}\), vô lý.</p>
+                <p>c) S: Đường sức xuất phát từ điện tích dương (+) và kết thúc ở điện tích âm (-).</p>
+                <p>d) Đ: Đây là định nghĩa đặc trưng của điện trường đều.</p>
+            </div>
+        </div>
+
+        <h2>III. CÂU HỎI TRẢ LỜI NGẮN (4 câu)</h2>
+        <div class="note-box">
+            <strong>Lưu ý:</strong> Nếu đáp án có từ 2 chữ số thập phân trở lên thì làm tròn đến 1 chữ số thập phân.
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 11. Một điện tích điểm \(Q = 2.10^{-9} \, \text{C}\) đặt trong chân không. Tính độ lớn cường độ điện trường tại điểm cách nó \(20 \, \text{cm}\). (Lấy \(k = 9.10^9 \, \text{N.m}^2/\text{C}^2\)). Đơn vị: \(10^2 \, \text{V/m}\).</div>
+            <button class="toggle-btn" onclick="toggle('ans11')">Hiện đáp án & Hướng dẫn</button>
+            <div id="ans11" class="answer-box">
+                <p><strong>Đáp án:</strong> 45</p>
+                <p><strong>Hướng dẫn:</strong> \(r = 0,2 \, \text{m}\). \(E = 9.10^9 \times \frac{2.10^{-9}}{0,2^2} = \frac{18}{0,04} = 450 \, \text{V/m}\). Đổi ra đơn vị đề yêu cầu: \(450 / 10^2 = 4,5 \times 10^1\). Đề bài yêu cầu điền số, đáp án là 45 (nếu đơn vị là \(10^1\) V/m) hoặc giữ nguyên 450. Để khớp ≤4 ký tự, đáp án chuẩn là: <strong>450</strong>.</p>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 12. Điện tích \(q = 4.10^{-6} \, \text{C}\) chịu lực điện \(F = 0,02 \, \text{N}\) trong điện trường đều. Tính cường độ điện trường \(E\) (đơn vị \(10^3 \, \text{V/m}\)).</div>
+            <button class="toggle-btn" onclick="toggle('ans12')">Hiện đáp án & Hướng dẫn</button>
+            <div id="ans12" class="answer-box">
+                <p><strong>Đáp án:</strong> 5</p>
+                <p><strong>Hướng dẫn:</strong> \(E = \frac{F}{q} = \frac{0,02}{4.10^{-6}} = 5000 \, \text{V/m} = 5 \times 10^3 \, \text{V/m}\). Số cần điền là 5.</p>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 13. Hai điện tích bằng nhau \(q_1 = q_2\) đặt cách nhau 12 cm trong chân không. Độ lớn cường độ điện trường do \(q_1\) gây ra tại điểm cách nó 4 cm là \(E_1 = 9000 \, \text{V/m}\). Tính \(E_2\) do \(q_2\) gây ra tại điểm đó (điểm nằm giữa hai điện tích). Đơn vị: \(10^3 \, \text{V/m}\).</div>
+            <button class="toggle-btn" onclick="toggle('ans13')">Hiện đáp án & Hướng dẫn</button>
+            <div id="ans13" class="answer-box">
+                <p><strong>Đáp án:</strong> 2,25</p>
+                <p><strong>Hướng dẫn:</strong> Khoảng cách từ điểm đó đến \(q_2\) là \(12 - 4 = 8 \, \text{cm}\). Vì \(E \propto 1/r^2\) nên \(E_2 = E_1 \times (r_1/r_2)^2 = 9000 \times (4/8)^2 = 9000 \times 0,25 = 2250 \, \text{V/m}\). Đổi ra \(10^3 \, \text{V/m}\) ta được 2,25.</p>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="q-title">Câu 14. Một điện tích thử \(q = 1,5.10^{-7} \, \text{C}\) đặt tại điểm có cường độ điện trường \(E = 8000 \, \text{V/m}\). Tính độ lớn lực điện tác dụng lên \(q\) (đơn vị mN).</div>
+            <button class="toggle-btn" onclick="toggle('ans14')">Hiện đáp án & Hướng dẫn</button>
+            <div id="ans14" class="answer-box">
+                <p><strong>Đáp án:</strong> 1,2</p>
+                <p><strong>Hướng dẫn:</strong> \(F = |q|E = 1,5.10^{-7} \times 8000 = 1,2.10^{-3} \, \text{N} = 1,2 \, \text{mN}\).</p>
+            </div>
+        </div>
+
+        <h2>IV. CÂU HỎI TỰ LUẬN (1 câu, 3 ý)</h2>
+
+        <div class="question-block">
+            <div class="q-title">Câu 15. Cho hai điện tích điểm \(q_1 = 4.10^{-9} \, \text{C}\) và \(q_2 = -4.10^{-9} \, \text{C}\) đặt tại hai điểm A và B cách nhau 20 cm trong chân không. Gọi M là trung điểm của AB.</div>
+            <div class="essay-part">
+                <strong>a)</strong> Tính độ lớn cường độ điện trường \(E_1\) do \(q_1\) gây ra tại M và \(E_2\) do \(q_2\) gây ra tại M.<br>
+                <strong>b)</strong> Xác định vectơ cường độ điện trường tổng hợp \(\vec{E}\) tại M (độ lớn và hướng).<br>
+                <strong>c)</strong> Mô tả đặc điểm đường sức điện đi qua M trong hệ hai điện tích này.
+            </div>
+            <button class="toggle-btn" onclick="toggle('ans15')">Hiện đáp án & Hướng dẫn</button>
+            <div id="ans15" class="answer-box">
+                <p><strong>Đáp án & Hướng dẫn chi tiết:</strong></p>
+                <p><strong>a) Tính \(E_1\) và \(E_2\):</strong><br>
+                Khoảng cách từ M đến mỗi điện tích: \(r = \frac{AB}{2} = 10 \, \text{cm} = 0,1 \, \text{m}\).<br>
+                \(E_1 = k\frac{|q_1|}{r^2} = 9.10^9 \times \frac{4.10^{-9}}{0,1^2} = 3600 \, \text{V/m}\).<br>
+                \(E_2 = k\frac{|q_2|}{r^2} = 9.10^9 \times \frac{4.10^{-9}}{0,1^2} = 3600 \, \text{V/m}\).</p>
+                <p><strong>b) Xác định \(\vec{E}\) tổng hợp:</strong><br>
+                \(\vec{E}_1\) hướng ra xa \(q_1\) (từ A đến M). \(\vec{E}_2\) hướng về \(q_2\) (từ M đến B). Do đó \(\vec{E}_1\) và \(\vec{E}_2\) cùng hướng (từ A sang B).<br>
+                \(\vec{E} = \vec{E}_1 + \vec{E}_2 \Rightarrow E = E_1 + E_2 = 3600 + 3600 = 7200 \, \text{V/m}\).<br>
+                Hướng: Từ A đến B.</p>
+                <p><strong>c) Đặc điểm đường sức:</strong><br>
+                Đường sức đi qua M là đường thẳng nối AB. Chiều đường sức đi từ điện tích dương (\(q_1\)) sang điện tích âm (\(q_2\)), trùng với hướng của \(\vec{E}\). Tại vùng giữa hai điện tích trái dấu, các đường sức tập trung dày đặc nhất, thể hiện cường độ điện trường mạnh.</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; color: #8B4513; font-size: 0.9em;">
+            <p>Bài tập được biên soạn bám sát nội dung SGK Vật lí 11 - Kết nối tri thức với cuộc sống, Bài 17.</p>
+        </div>
+    </div>
+
+    <script>
+        function toggle(id) {
+            var el = document.getElementById(id);
+            if (el.style.display === "none" || el.style.display === "") {
+                el.style.display = "block";
+            } else {
+                el.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
