@@ -3,227 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ôn Cuối Kỳ II Vật Lý 11</title>
-	<link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
+    <title>Đề Cương Ôn Tập Vật Lí 11 - Bài 16 đến Bài 24</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
     <style>
-        :root {
-            --brown-gold: #8B5A2B;
-            --brown-dark: #8B4513;
-            --white: #FFFFFF;
-            --light-gray: #F5F5F5;
-            --beige-light: #F5F5DC;
-            --wheat: #F5DEB3;
-            --gray-light: #D3D3D3;
-            --blue-primary: #0066CC;
-            --blue-dark: #004488;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--light-gray);
-            color: #333;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        /* Tab Navigation */
-        .tab-nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2px;
-            background: var(--gray-light);
-            padding: 5px 5px 0 5px;
-            border-radius: 8px 8px 0 0;
-            border-bottom: 3px solid var(--brown-dark);
-        }
-
-        .tab-btn {
-            padding: 12px 20px;
-            background: var(--wheat);
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--brown-dark);
-            border-radius: 8px 8px 0 0;
-            transition: all 0.3s ease;
-            min-width: 100px;
-            flex: 1;
-            max-width: 150px;
-            position: relative;
-            top: 3px;
-        }
-
-        .tab-btn:hover {
-            background: var(--beige-light);
-            color: var(--blue-dark);
-            transform: translateY(-2px);
-        }
-
-        .tab-btn.active {
-            background: var(--white);
-            color: var(--blue-primary);
-            border-bottom: 3px solid var(--blue-primary);
-            top: 0;
-            font-weight: 700;
-            box-shadow: 0 -2px 10px rgba(0,102,204,0.2);
-        }
-
-        /* Tab Content */
-        .tab-content {
-            background: var(--white);
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            min-height: 100vh;
-        }
-
-        .tab-pane {
-            display: none;
-            height: 100%;
-        }
-
-        .tab-pane.active {
-            display: block;
-        }
-
-        .iframe-container {
-            width: 100%;
-            height: calc(100vh - 50px);
-            border: none;
-            border-radius: 0 0 8px 8px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .tab-nav {
-                flex-direction: column;
-                padding: 10px;
-            }
-            
-            .tab-btn {
-                max-width: none;
-                border-radius: 8px;
-                top: 0;
-                margin: 2px 0;
-            }
-            
-            .tab-btn.active {
-                border-bottom: none;
-                border-left: 4px solid var(--blue-primary);
-            }
-            
-            .tab-content {
-                border-radius: 10px;
-            }
-            
-            .iframe-container {
-                height: calc(100vh - 60px);
-            }
-        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Times New Roman',Times,serif;background:#F5F5DC;color:#000;line-height:1.25;padding:8px;font-size:12.5px}
+        .container{max-width:1100px;margin:0 auto;background:#FFF;padding:12px;border-radius:5px;box-shadow:0 1px 4px rgba(0,0,0,0.1)}
+        h1{text-align:center;color:#004488;margin:4px 0;font-size:17px;border-bottom:2px solid #0066CC;padding-bottom:6px}
+        .subtitle{text-align:center;color:#8B4513;font-style:italic;margin:4px 0 8px;font-size:11px}
+        .lesson-title{background:#0066CC;color:#FFF;padding:5px 10px;margin:10px 0 6px;border-radius:3px;font-size:12.5px;font-weight:bold;cursor:pointer;user-select:none}
+        .lesson-content{display:none}
+        .lesson-content.show{display:block}
+        .part-title{background:#8B4513;color:#FFF;padding:3px 8px;margin:8px 0 5px;border-left:3px solid #8B5A2B;font-size:11.5px;font-weight:bold}
+        .question{margin:5px 0;padding:5px;background:#F5F5F5;border-left:2px solid #D3D3D3;border-radius:2px}
+        .question-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
+        .question-number{font-weight:bold;color:#004488;margin-right:3px}
+        .toggle-btn{background:#0066CC;color:#FFF;border:none;padding:2px 7px;border-radius:2px;cursor:pointer;font-size:9.5px}
+        .toggle-btn:hover{background:#004488}
+        .options{margin-left:18px;margin-top:2px}
+        .option{margin:1.5px 0;padding-left:14px}
+        .tf-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:4px}
+        .tf-item{background:#F5DEB3;padding:4px;border-radius:2px;border:1px solid #D3D3D3}
+        .tf-statement{font-weight:bold;color:#8B4513;margin-bottom:1px}
+        .short-answer,.essay{background:#F5F5F5;padding:5px;margin:4px 0;border-radius:2px}
+        .essay{background:#FFF;border:1px solid #004488;min-height:45px}
+        .answer-section{display:none;margin-top:5px;padding:5px;background:#F5F5DC;border-left:3px solid #8B5A2B;border-radius:2px;font-size:11px}
+        .answer-section.show{display:block}
+        .answer-title{font-weight:bold;color:#8B4513;margin-bottom:2px;border-bottom:1px dashed #8B5A2B;padding-bottom:1px}
+        .note{background:#F5F5DC;padding:5px;margin:6px 0;border-left:3px solid #8B5A2B;font-size:10.5px;color:#8B4513}
+        .answer-note{background:#FFF3CD;padding:3px 6px;margin:3px 0;border-left:2px solid #FFC107;font-size:10px;color:#856404}
+        .footer{text-align:center;margin-top:12px;padding-top:8px;border-top:1px solid #D3D3D3;color:#8B4513;font-size:10px}
+        .expand-all{text-align:center;margin:6px 0}
+        .expand-all button{background:#8B4513;color:#FFF;border:none;padding:3px 8px;border-radius:2px;cursor:pointer;margin:0 2px;font-size:9.5px}
+        .expand-all button:hover{background:#8B5A2B}
+        @media print{body{background:#FFF}.container{box-shadow:none}.toggle-btn,.expand-all{display:none}.answer-section{display:block!important}}
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Tab Navigation -->
-        <nav class="tab-nav">
-            <button class="tab-btn active" data-tab="tab1">Bài 16</button>
-            <button class="tab-btn" data-tab="tab2">Bài 17</button>
-            <button class="tab-btn" data-tab="tab3">Bài 18</button>
-            <button class="tab-btn" data-tab="tab4">Bài 19</button>
-            <button class="tab-btn" data-tab="tab5">Bài 20</button>
-            <button class="tab-btn" data-tab="tab6">Bài 21</button>
-            <button class="tab-btn" data-tab="tab7">Bài 22</button>
-            <button class="tab-btn" data-tab="tab8">Bài 23</button>
-            <button class="tab-btn" data-tab="tab9">Bài 24</button>
-        </nav>
-
-        <!-- Tab Content -->
-        <div class="tab-content">
-            <!-- Tab 1 -->
-            <div id="tab1" class="tab-pane active">
-                <iframe src="https://tuibx25.github.io/bx/vl11/16/d" class="iframe-container" title="Bài 16" loading="lazy"></iframe>
-            </div>
-
-            <!-- Tab 2 -->
-            <div id="tab2" class="tab-pane">
-                <iframe src="https://tuibx25.github.io/bx/vl11/17/d" class="iframe-container" title="Bài 17" loading="lazy"></iframe>
-            </div>
-
-            <!-- Tab 3 -->
-            <div id="tab3" class="tab-pane">
-                <iframe src="https://tuibx25.github.io/bx/vl11/18/d" class="iframe-container" title="Bài 18" loading="lazy"></iframe>
-            </div>
-
-            <!-- Tab 4 -->
-            <div id="tab4" class="tab-pane">
-                <iframe src="https://tuibx25.github.io/bx/vl11/19/d" class="iframe-container" title="Bài 19" loading="lazy"></iframe>
-            </div>
-
-            <!-- Tab 5 -->
-            <div id="tab5" class="tab-pane">
-                <iframe src="https://tuibx25.github.io/bx/vl11/20/d" class="iframe-container" title="Bài 20" loading="lazy"></iframe>
-            </div>
-
-            <!-- Tab 6 -->
-            <div id="tab6" class="tab-pane">
-                <iframe src="https://tuibx25.github.io/bx/vl11/21/d" class="iframe-container" title="Bài 21" loading="lazy"></iframe>
-            </div>
-
-            <!-- Tab 7 -->
-            <div id="tab7" class="tab-pane">
-                <iframe src="https://tuibx25.github.io/bx/vl11/22/d" class="iframe-container" title="Bài 22" loading="lazy"></iframe>
-            </div>
-
-            <!-- Tab 8 -->
-            <div id="tab8" class="tab-pane">
-                <iframe src="https://tuibx25.github.io/bx/vl11/23/d" class="iframe-container" title="Bài 23" loading="lazy"></iframe>
-            </div>
-
-            <!-- Tab 9 -->
-            <div id="tab9" class="tab-pane">
-                <iframe src="https://tuibx25.github.io/bx/vl11/24/d" class="iframe-container" title="Bài 24" loading="lazy"></iframe>
-            </div>
-        </div>
+<div class="container">
+    <h1>ĐỀ CƯƠNG ÔN TẬP VẬT LÍ 11</h1>
+    <p class="subtitle">Chương 3: Điện trường & Chương 4: Dòng điện - Mạch điện<br>(Bài 16-24 - SGK Kết nối tri thức)</p>
+    <div class="note"><b>Hướng dẫn:</b> • Phần I: 5 câu TN • Phần II: 1 câu Đ/S (4 ý) • Phần III: 2 câu trả lời ngắn • Phần IV: 1 câu tự luận • Nhấn "Xem đáp án" để xem lời giải</div>
+    <div class="expand-all">
+        <button onclick="toggleAll('lesson',true)">Mở tất cả</button><button onclick="toggleAll('lesson',false)">Thu tất cả</button>
+        <button onclick="toggleAll('answer',true)">Hiện đáp án</button><button onclick="toggleAll('answer',false)">Ẩn đáp án</button>
     </div>
 
-    <script>
-        // Tab switching functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabBtns = document.querySelectorAll('.tab-btn');
-            const tabPanes = document.querySelectorAll('.tab-pane');
+<!-- BÀI 16 -->
+<div class="lesson-title" onclick="toggleLesson('l16')">BÀI 16: LỰC TƯƠNG TÁC GIỮA HAI ĐIỆN TÍCH - ĐỊNH LUẬT COULOMB ▼</div>
+<div id="l16" class="lesson-content">
+    <div class="part-title">PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN (5 câu)</div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 1:</span> Phát biểu nào <b>không đúng</b> về điện tích?</span><button class="toggle-btn" onclick="toggleAns('a16-1')">Xem đáp án</button></div><div class="options"><div class="option">A. Có hai loại điện tích: dương và âm</div><div class="option">B. Các điện tích cùng dấu hút nhau</div><div class="option">C. Đơn vị điện tích trong hệ SI là Coulomb (C)</div><div class="option">D. Điện tích điểm là vật tích điện có kích thước rất nhỏ so với khoảng cách xét</div></div><div id="a16-1" class="answer-section"><div class="answer-title">Đáp án: B</div><div class="answer-content">Các điện tích cùng dấu <b>đẩy nhau</b>, khác dấu hút nhau.</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 2:</span> Theo định luật Coulomb, lực tương tác giữa hai điện tích điểm trong chân không tỉ lệ:</span><button class="toggle-btn" onclick="toggleAns('a16-2')">Xem đáp án</button></div><div class="options"><div class="option">A. Thuận với khoảng cách</div><div class="option">B. Nghịch với bình phương khoảng cách</div><div class="option">C. Thuận với tổng giá trị hai điện tích</div><div class="option">D. Nghịch với tích giá trị hai điện tích</div></div><div id="a16-2" class="answer-section"><div class="answer-title">Đáp án: B</div><div class="answer-content">\(\displaystyle F = k\frac{|q_1 q_2|}{r^2}\) → F tỉ lệ nghịch với \(r^2\).</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 3:</span> Hai điện tích \(q_1=2\times10^{-7}\text{C}\), \(q_2=-3\times10^{-7}\text{C}\) cách nhau 10cm trong không khí. Lực tương tác có độ lớn:</span><button class="toggle-btn" onclick="toggleAns('a16-3')">Xem đáp án</button></div><div class="options"><div class="option">A. \(5,4\times10^{-2}\text{N}\)</div><div class="option">B. \(5,4\times10^{-3}\text{N}\)</div><div class="option">C. \(5,4\times10^{-1}\text{N}\)</div><div class="option">D. \(5,4\times10^{-4}\text{N}\)</div></div><div id="a16-3" class="answer-section"><div class="answer-title">Đáp án: A</div><div class="answer-content">\(\displaystyle F = 9\times10^9\times\frac{|2\times10^{-7}\times(-3\times10^{-7})|}{(0,1)^2} = 5,4\times10^{-2}\text{N}\).</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 4:</span> Nếu khoảng cách giữa hai điện tích điểm tăng 3 lần thì lực tương tác sẽ:</span><button class="toggle-btn" onclick="toggleAns('a16-4')">Xem đáp án</button></div><div class="options"><div class="option">A. Tăng 3 lần</div><div class="option">B. Giảm 3 lần</div><div class="option">C. Tăng 9 lần</div><div class="option">D. Giảm 9 lần</div></div><div id="a16-4" class="answer-section"><div class="answer-title">Đáp án: D</div><div class="answer-content">\(F \propto \frac{1}{r^2}\) → \(r' = 3r \Rightarrow F' = F/9\).</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 5:</span> Hằng số điện môi của một môi trường cho biết:</span><button class="toggle-btn" onclick="toggleAns('a16-5')">Xem đáp án</button></div><div class="options"><div class="option">A. Lực trong môi trường lớn hơn chân không</div><div class="option">B. Lực trong môi trường nhỏ hơn chân không</div><div class="option">C. Điện tích trong môi trường lớn hơn</div><div class="option">D. Khoảng cách trong môi trường nhỏ hơn</div></div><div id="a16-5" class="answer-section"><div class="answer-title">Đáp án: B</div><div class="answer-content">\(\displaystyle F = \frac{k|q_1 q_2|}{\varepsilon r^2}\), \(\varepsilon\ge1\) → lực trong môi trường nhỏ hơn \(\varepsilon\) lần.</div></div></div>
+    <div class="part-title">PHẦN II: TRẮC NGHIỆM ĐÚNG - SAI (1 câu, 4 ý)</div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 6:</span> Xét hai điện tích điểm trong không khí. Đánh dấu Đ/S:</span><button class="toggle-btn" onclick="toggleAns('a16-6')">Xem đáp án</button></div><div class="tf-grid"><div class="tf-item"><div class="tf-statement">a)</div><div>Lực Coulomb luôn là lực hút</div></div><div class="tf-item"><div class="tf-statement">b)</div><div>Phương lực trùng đường thẳng nối hai điện tích</div></div><div class="tf-item"><div class="tf-statement">c)</div><div>Độ lớn lực tỉ lệ thuận với khoảng cách</div></div><div class="tf-item"><div class="tf-statement">d)</div><div>Trong nước, lực nhỏ hơn trong không khí</div></div></div><div id="a16-6" class="answer-section"><div class="answer-title">Đáp án: a-S, b-Đ, c-S, d-Đ</div><div class="answer-content">a) Sai: cùng dấu đẩy, khác dấu hút. b) Đúng. c) Sai: \(F \propto 1/r^2\). d) Đúng: \(\varepsilon_{\text{nước}}\approx81\).</div></div></div>
+    <div class="part-title">PHẦN III: TRẢ LỜI NGẮN (2 câu)</div>
+    <div class="answer-note"><b>Lưu ý:</b> Đáp án là số có tối đa 4 ký tự (bao gồm dấu phẩy). Nếu đáp án có từ 2 chữ số thập phân khác 0 trở lên thì làm tròn đến 1 chữ số thập phân. Nếu sau dấu phẩy là số 0 thì có thể bỏ qua.</div>
+    <div class="short-answer"><div class="question-header"><span><span class="question-number">Câu 7:</span> Hai điện tích cùng độ lớn \(4\times10^{-8}\text{C}\) cách nhau 20cm trong chân không. Tính lực tương tác (đơn vị là \(10^{-4}\text{N}\)).</span><button class="toggle-btn" onclick="toggleAns('a16-7')">Xem đáp án</button></div><div id="a16-7" class="answer-section"><div class="answer-title">Đáp án: 3,6</div><div class="answer-content">\(\displaystyle F = 9\times10^9\times\frac{(4\times10^{-8})^2}{(0,2)^2} = 3,6\times10^{-4}\text{N}\) → Viết hệ số: <b>3,6</b></div></div></div>
+    <div class="short-answer"><div class="question-header"><span><span class="question-number">Câu 8:</span> Lực tương tác là \(9\times10^{-3}\text{N}\) khi cách nhau 10cm. Nếu khoảng cách giảm còn 5cm thì lực mới bằng bao nhiêu? (đơn vị là \(10^{-2}\text{N}\))</span><button class="toggle-btn" onclick="toggleAns('a16-8')">Xem đáp án</button></div><div id="a16-8" class="answer-section"><div class="answer-title">Đáp án: 3,6</div><div class="answer-content">\(\displaystyle F' = F\times\left(\frac{10}{5}\right)^2 = 4\times9\times10^{-3} = 3,6\times10^{-2}\text{N}\) → Viết hệ số: <b>3,6</b></div></div></div>
+    <div class="part-title">PHẦN IV: TỰ LUẬN (1 câu)</div>
+    <div class="essay"><div class="question-header"><span><span class="question-number">Câu 9:</span> Ba điện tích \(q_1=q_2=q_3=2\times10^{-7}\text{C}\) đặt tại ba đỉnh tam giác đều cạnh 30cm trong không khí. Xác định độ lớn hợp lực tác dụng lên \(q_1\).</span><button class="toggle-btn" onclick="toggleAns('a16-9')">Xem đáp án</button></div><div id="a16-9" class="answer-section"><div class="answer-title">Hướng dẫn giải</div><div class="answer-content">\(\displaystyle F_{12}=F_{13}=\frac{kq^2}{a^2}=4\times10^{-3}\text{N}\). Góc giữa \(F_{12}\) và \(F_{13}\) là \(60^\circ\). \(\displaystyle F = \sqrt{F_{12}^2 + F_{13}^2 + 2F_{12}F_{13}\cos60^\circ} = 4\times10^{-3}\times\sqrt{3} \approx 6,9\times10^{-3}\text{N}\). Phương: phân giác góc ngoài tại A, chiều hướng ra ngoài.</div></div></div>
+</div>
 
-            tabBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    // Remove active class from all
-                    tabBtns.forEach(b => b.classList.remove('active'));
-                    tabPanes.forEach(p => p.classList.remove('active'));
-                    
-                    // Add active class to clicked button
-                    btn.classList.add('active');
-                    
-                    // Show corresponding tab pane
-                    const tabId = btn.getAttribute('data-tab');
-                    document.getElementById(tabId).classList.add('active');
-                });
-            });
+<!-- BÀI 17 -->
+<div class="lesson-title" onclick="toggleLesson('l17')">BÀI 17: KHÁI NIỆM ĐIỆN TRƯỜNG ▼</div>
+<div id="l17" class="lesson-content">
+    <div class="part-title">PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN (5 câu)</div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 1:</span> Điện trường là:</span><button class="toggle-btn" onclick="toggleAns('a17-1')">Xem đáp án</button></div><div class="options"><div class="option">A. Môi trường chứa các điện tích</div><div class="option">B. Dạng vật chất tồn tại xung quanh điện tích và truyền tương tác điện</div><div class="option">C. Lực tác dụng lên điện tích thử</div><div class="option">D. Khoảng cách giữa các điện tích</div></div><div id="a17-1" class="answer-section"><div class="answer-title">Đáp án: B</div><div class="answer-content">Điện trường là dạng vật chất tồn tại xung quanh điện tích, truyền tương tác điện.</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 2:</span> Cường độ điện trường tại một điểm được xác định bằng:</span><button class="toggle-btn" onclick="toggleAns('a17-2')">Xem đáp án</button></div><div class="options"><div class="option">A. Lực điện tác dụng lên điện tích</div><div class="option">B. Thương số giữa lực điện và điện tích thử</div><div class="option">C. Tích của lực điện và điện tích thử</div><div class="option">D. Khoảng cách đến điện tích nguồn</div></div><div id="a17-2" class="answer-section"><div class="answer-title">Đáp án: B</div><div class="answer-content">\(\displaystyle E = \frac{F}{q}\) (với q là điện tích thử dương).</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 3:</span> Đơn vị của cường độ điện trường là:</span><button class="toggle-btn" onclick="toggleAns('a17-3')">Xem đáp án</button></div><div class="options"><div class="option">A. Newton (N)</div><div class="option">B. Coulomb (C)</div><div class="option">C. Vôn trên mét (V/m)</div><div class="option">D. Joule (J)</div></div><div id="a17-3" class="answer-section"><div class="answer-title">Đáp án: C</div><div class="answer-content">[E] = N/C = V/m.</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 4:</span> Cường độ điện trường do điện tích điểm Q gây ra tại điểm cách nó khoảng r trong chân không:</span><button class="toggle-btn" onclick="toggleAns('a17-4')">Xem đáp án</button></div><div class="options"><div class="option">A. \(E = kQ/r\)</div><div class="option">B. \(E = kQ/r^2\)</div><div class="option">C. \(E = kQ^2/r\)</div><div class="option">D. \(E = kr/Q^2\)</div></div><div id="a17-4" class="answer-section"><div class="answer-title">Đáp án: B</div><div class="answer-content">\(\displaystyle E = \frac{F}{q} = \frac{k|Q|}{r^2}\).</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 5:</span> Vectơ cường độ điện trường do điện tích điểm dương gây ra tại một điểm:</span><button class="toggle-btn" onclick="toggleAns('a17-5')">Xem đáp án</button></div><div class="options"><div class="option">A. Hướng về phía điện tích</div><div class="option">B. Hướng ra xa điện tích</div><div class="option">C. Vuông góc với đường nối</div><div class="option">D. Phụ thuộc vào dấu điện tích thử</div></div><div id="a17-5" class="answer-section"><div class="answer-title">Đáp án: B</div><div class="answer-content">Với Q>0, lực đẩy điện tích thử dương → E hướng ra xa Q.</div></div></div>
+    <div class="part-title">PHẦN II: TRẮC NGHIỆM ĐÚNG - SAI</div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 6:</span> Xét điện trường do điện tích điểm dương Q. Đánh dấu Đ/S:</span><button class="toggle-btn" onclick="toggleAns('a17-6')">Xem đáp án</button></div><div class="tf-grid"><div class="tf-item"><div class="tf-statement">a)</div><div>Cường độ điện trường giảm khi khoảng cách tăng</div></div><div class="tf-item"><div class="tf-statement">b)</div><div>Đường sức điện trường là các đường cong kín</div></div><div class="tf-item"><div class="tf-statement">c)</div><div>Điện trường tại các điểm cùng cách Q có cùng độ lớn</div></div><div class="tf-item"><div class="tf-statement">d)</div><div>Đường sức điện xuất phát từ điện tích âm</div></div></div><div id="a17-6" class="answer-section"><div class="answer-title">Đáp án: a-Đ, b-S, c-Đ, d-S</div><div class="answer-content">a) Đúng: \(E=kQ/r^2\). b) Sai: đường sức là đường thẳng. c) Đúng: cùng bán kính. d) Sai: xuất phát từ điện tích dương.</div></div></div>
+    <div class="part-title">PHẦN III: TRẢ LỜI NGẮN</div>
+    <div class="answer-note"><b>Lưu ý:</b> Đáp án là số có tối đa 4 ký tự (bao gồm dấu phẩy). Nếu đáp án có từ 2 chữ số thập phân khác 0 trở lên thì làm tròn đến 1 chữ số thập phân. Nếu sau dấu phẩy là số 0 thì có thể bỏ qua.</div>
+    <div class="short-answer"><div class="question-header"><span><span class="question-number">Câu 7:</span> Điện tích \(Q=6\times10^{-9}\text{C}\) trong chân không. Tính E tại điểm cách Q 3cm (đơn vị là \(10^4\text{V/m}\)).</span><button class="toggle-btn" onclick="toggleAns('a17-7')">Xem đáp án</button></div><div id="a17-7" class="answer-section"><div class="answer-title">Đáp án: 6</div><div class="answer-content">\(\displaystyle E = 9\times10^9\times\frac{6\times10^{-9}}{(0,03)^2} = 6\times10^4 \text{ V/m}\) → Viết hệ số: <b>6</b></div></div></div>
+    <div class="short-answer"><div class="question-header"><span><span class="question-number">Câu 8:</span> E=2000V/m. Lực điện tác dụng lên \(q=5\times10^{-6}\text{C}\) bằng bao nhiêu? (đơn vị là \(10^{-2}\text{N}\))</span><button class="toggle-btn" onclick="toggleAns('a17-8')">Xem đáp án</button></div><div id="a17-8" class="answer-section"><div class="answer-title">Đáp án: 1</div><div class="answer-content">\(F = qE = 5\times10^{-6}\times2000 = 1\times10^{-2} \text{ N}\) → Viết hệ số: <b>1</b></div></div></div>
+    <div class="part-title">PHẦN IV: TỰ LUẬN</div>
+    <div class="essay"><div class="question-header"><span><span class="question-number">Câu 9:</span> Hai điện tích \(q_1=4\times10^{-8}\text{C}\), \(q_2=-9\times10^{-8}\text{C}\) đặt tại A, B cách nhau 10cm. Xác định vị trí điểm M trên AB mà E=0.</span><button class="toggle-btn" onclick="toggleAns('a17-9')">Xem đáp án</button></div><div id="a17-9" class="answer-section"><div class="answer-title">Hướng dẫn giải</div><div class="answer-content">\(q_1>0, q_2<0 \Rightarrow E_1\) hướng ra xa A, \(E_2\) hướng về B. Để E=0: M phải nằm ngoài AB về phía A (vì \(|q_1|<|q_2|\)). Gọi AM=x, BM=x+10. \(\displaystyle E_1=E_2 \Rightarrow \frac{4}{x^2}=\frac{9}{(x+10)^2} \Rightarrow x=20\text{cm}\). Kết luận: M cách A 20cm, phía ngoài đoạn AB về phía A.</div></div></div>
+</div>
 
-            // Smooth fade-in for iframes
-            document.querySelectorAll('iframe').forEach(iframe => {
-                iframe.addEventListener('load', function() {
-                    this.style.opacity = '1';
-                });
-                iframe.style.opacity = '0';
-                iframe.style.transition = 'opacity 0.3s ease';
-            });
-        });
-    </script>
+<!-- BÀI 18 -->
+<div class="lesson-title" onclick="toggleLesson('l18')">BÀI 18: ĐIỆN TRƯỜNG ĐỀU ▼</div>
+<div id="l18" class="lesson-content">
+    <div class="part-title">PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN (5 câu)</div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 1:</span> Điện trường đều là điện trường có:</span><button class="toggle-btn" onclick="toggleAns('a18-1')">Xem đáp án</button></div><div class="options"><div class="option">A. E=0 tại mọi điểm</div><div class="option">B. E có cùng độ lớn, phương, chiều tại mọi điểm</div><div class="option">C. Đường sức là đường cong</div><div class="option">D. Chỉ tồn tại giữa hai điện tích điểm</div></div><div id="a18-1" class="answer-section"><div class="answer-title">Đáp án: B</div><div class="answer-content">Điện trường đều: E không đổi về độ lớn, phương, chiều.</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 2:</span> Giữa hai bản kim loại phẳng song song tích điện trái dấu, điện trường là:</span><button class="toggle-btn" onclick="toggleAns('a18-2')">Xem đáp án</button></div><div class="options"><div class="option">A. Không đều</div><div class="option">B. Điện trường đều</div><div class="option">C. Không có điện trường</div><div class="option">D. Điện trường xoáy</div></div><div id="a18-2" class="answer-section"><div class="answer-title">Đáp án: B</div><div class="answer-content">Giữa hai bản phẳng song song tích điện trái dấu là điện trường đều.</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 3:</span> Công thức tính E giữa hai bản phẳng cách nhau d, hiệu điện thế U:</span><button class="toggle-btn" onclick="toggleAns('a18-3')">Xem đáp án</button></div><div class="options"><div class="option">A. E = U×d</div><div class="option">B. E = U/d</div><div class="option">C. E = d/U</div><div class="option">D. E = U²/d</div></div><div id="a18-3" class="answer-section"><div class="answer-title">Đáp án: B</div><div class="answer-content">\(\displaystyle E = \frac{U}{d}\) trong điện trường đều.</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 4:</span> Điện tích dương bay vào điện trường đều vuông góc đường sức. Quỹ đạo là:</span><button class="toggle-btn" onclick="toggleAns('a18-4')">Xem đáp án</button></div><div class="options"><div class="option">A. Đường thẳng</div><div class="option">B. Đường tròn</div><div class="option">C. Đường parabol</div><div class="option">D. Đường elip</div></div><div id="a18-4" class="answer-section"><div class="answer-title">Đáp án: C</div><div class="answer-content">Chuyển động tương tự ném ngang: parabol.</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 5:</span> Đường sức của điện trường đều có đặc điểm:</span><button class="toggle-btn" onclick="toggleAns('a18-5')">Xem đáp án</button></div><div class="options"><div class="option">A. Đường cong khép kín</div><div class="option">B. Đường thẳng song song, cách đều</div><div class="option">C. Đường thẳng đồng quy</div><div class="option">D. Đường tròn đồng tâm</div></div><div id="a18-5" class="answer-section"><div class="answer-title">Đáp án: B</div><div class="answer-content">Đường sức điện trường đều: thẳng, song song, cách đều.</div></div></div>
+    <div class="part-title">PHẦN II: TRẮC NGHIỆM ĐÚNG - SAI</div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 6:</span> Xét điện trường đều giữa hai bản phẳng. Đánh dấu Đ/S:</span><button class="toggle-btn" onclick="toggleAns('a18-6')">Xem đáp án</button></div><div class="tf-grid"><div class="tf-item"><div class="tf-statement">a)</div><div>Đường sức vuông góc với các bản phẳng</div></div><div class="tf-item"><div class="tf-statement">b)</div><div>Cường độ điện trường phụ thuộc vị trí điểm xét</div></div><div class="tf-item"><div class="tf-statement">c)</div><div>Điện tích âm chuyển động ngược chiều đường sức</div></div><div class="tf-item"><div class="tf-statement">d)</div><div>Lực điện tác dụng lên điện tích không đổi</div></div></div><div id="a18-6" class="answer-section"><div class="answer-title">Đáp án: a-Đ, b-S, c-Đ, d-Đ</div><div class="answer-content">a) Đúng. b) Sai: E không đổi trong điện trường đều. c) Đúng: \(F=qE\), q<0 → F ngược E. d) Đúng: F=qE không đổi.</div></div></div>
+    <div class="part-title">PHẦN III: TRẢ LỜI NGẮN</div>
+    <div class="answer-note"><b>Lưu ý:</b> Đáp án là số có tối đa 4 ký tự (bao gồm dấu phẩy). Nếu đáp án có từ 2 chữ số thập phân khác 0 trở lên thì làm tròn đến 1 chữ số thập phân. Nếu sau dấu phẩy là số 0 thì có thể bỏ qua.</div>
+    <div class="short-answer"><div class="question-header"><span><span class="question-number">Câu 7:</span> Hai bản cách nhau 4cm, U=200V. Tính E giữa hai bản (V/m).</span><button class="toggle-btn" onclick="toggleAns('a18-7')">Xem đáp án</button></div><div id="a18-7" class="answer-section"><div class="answer-title">Đáp án: 5000</div><div class="answer-content">\(\displaystyle E = \frac{U}{d} = \frac{200}{0,04} = 5000 \text{ V/m}\) → <b>5000</b> (4 ký tự)</div></div></div>
+    <div class="short-answer"><div class="question-header"><span><span class="question-number">Câu 8:</span> Electron (\(q=-1,6\times10^{-19}\text{C}\)) trong E=5000V/m. Tính độ lớn lực điện (đơn vị là \(10^{-16}\text{N}\)).</span><button class="toggle-btn" onclick="toggleAns('a18-8')">Xem đáp án</button></div><div id="a18-8" class="answer-section"><div class="answer-title">Đáp án: 8</div><div class="answer-content">\(F = |q|E = 1,6\times10^{-19}\times5000 = 8\times10^{-16} \text{ N}\) → Viết hệ số: <b>8</b></div></div></div>
+    <div class="part-title">PHẦN IV: TỰ LUẬN</div>
+    <div class="essay"><div class="question-header"><span><span class="question-number">Câu 9:</span> Hạt bụi \(q=3,2\times10^{-19}\text{C}\), \(m=1,6\times10^{-15}\text{kg}\) trong \(E=10^4\text{V/m}\) hướng thẳng đứng từ trên xuống. Bỏ qua sức cản, g=10m/s². Tính gia tốc.</span><button class="toggle-btn" onclick="toggleAns('a18-9')">Xem đáp án</button></div><div id="a18-9" class="answer-section"><div class="answer-title">Hướng dẫn giải</div><div class="answer-content">\(F_{\text{điện}} = qE = 3,2\times10^{-19}\times10^4 = 3,2\times10^{-15}\text{N}\) (hướng xuống). \(P = mg = 1,6\times10^{-15}\times10 = 1,6\times10^{-14}\text{N}\) (hướng xuống). \(F_{\text{hợp}} = F_{\text{điện}} + P = 1,92\times10^{-14}\text{N}\). \(\displaystyle a = \frac{F_{\text{hợp}}}{m} = \frac{1,92\times10^{-14}}{1,6\times10^{-15}} = 12 \text{ m/s}^2\) (hướng xuống).</div></div></div>
+</div>
+
+<!-- BÀI 19-24: Cấu trúc tương tự, giữ nguyên đáp án Phần III -->
+<div class="lesson-title" onclick="toggleLesson('l19')">BÀI 19: THẾ NĂNG ĐIỆN ▼</div>
+<div id="l19" class="lesson-content">
+    <div class="part-title">PHẦN I: TRẮC NGHIỆM (5 câu)</div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 1:</span> Thế năng điện đặc trưng cho:</span><button class="toggle-btn" onclick="toggleAns('a19-1')">Xem đáp án</button></div><div class="options"><div class="option">A. Khả năng sinh công của điện trường</div><div class="option">B. Độ lớn điện tích</div><div class="option">C. Cường độ điện trường</div><div class="option">D. Khoảng cách đến điện tích nguồn</div></div><div id="a19-1" class="answer-section"><div class="answer-title">Đáp án: A</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 2:</span> Công của lực điện khi dịch chuyển điện tích từ M đến N:</span><button class="toggle-btn" onclick="toggleAns('a19-2')">Xem đáp án</button></div><div class="options"><div class="option">A. Phụ thuộc hình dạng đường đi</div><div class="option">B. Chỉ phụ thuộc điểm đầu và cuối</div><div class="option">C. Luôn bằng 0</div><div class="option">D. Phụ thuộc tốc độ</div></div><div id="a19-2" class="answer-section"><div class="answer-title">Đáp án: B</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 3:</span> Trong điện trường đều, thế năng của q cách bản âm khoảng d:</span><button class="toggle-btn" onclick="toggleAns('a19-3')">Xem đáp án</button></div><div class="options"><div class="option">A. W = qEd</div><div class="option">B. W = qE/d</div><div class="option">C. W = Ed/q</div><div class="option">D. W = q/dE</div></div><div id="a19-3" class="answer-section"><div class="answer-title">Đáp án: A</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 4:</span> Khi điện tích dương dịch chuyển cùng chiều điện trường thì:</span><button class="toggle-btn" onclick="toggleAns('a19-4')">Xem đáp án</button></div><div class="options"><div class="option">A. Thế năng điện tăng</div><div class="option">B. Thế năng điện giảm</div><div class="option">C. Thế năng không đổi</div><div class="option">D. Lực điện sinh công âm</div></div><div id="a19-4" class="answer-section"><div class="answer-title">Đáp án: B</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 5:</span> Mốc thế năng điện thường được chọn tại:</span><button class="toggle-btn" onclick="toggleAns('a19-5')">Xem đáp án</button></div><div class="options"><div class="option">A. Điểm có E lớn nhất</div><div class="option">B. Vô cực hoặc bản tích điện âm</div><div class="option">C. Vị trí điện tích nguồn</div><div class="option">D. Điểm bất kỳ</div></div><div id="a19-5" class="answer-section"><div class="answer-title">Đáp án: B</div></div></div>
+    <div class="part-title">PHẦN II: TRẮC NGHIỆM ĐÚNG - SAI</div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 6:</span> Xét thế năng điện. Đánh dấu Đ/S:</span><button class="toggle-btn" onclick="toggleAns('a19-6')">Xem đáp án</button></div><div class="tf-grid"><div class="tf-item"><div class="tf-statement">a)</div><div>Thế năng điện tỉ lệ với độ lớn điện tích</div></div><div class="tf-item"><div class="tf-statement">b)</div><div>Công của lực điện bằng độ giảm thế năng</div></div><div class="tf-item"><div class="tf-statement">c)</div><div>Thế năng điện luôn dương</div></div><div class="tf-item"><div class="tf-statement">d)</div><div>Điện tích âm có thế năng âm khi mốc ở vô cực</div></div></div><div id="a19-6" class="answer-section"><div class="answer-title">Đáp án: a-Đ, b-Đ, c-S, d-Đ</div></div></div>
+    <div class="part-title">PHẦN III: TRẢ LỜI NGẮN</div>
+    <div class="answer-note"><b>Lưu ý:</b> Đáp án là số có tối đa 4 ký tự (bao gồm dấu phẩy). Nếu đáp án có từ 2 chữ số thập phân khác 0 trở lên thì làm tròn đến 1 chữ số thập phân. Nếu sau dấu phẩy là số 0 thì có thể bỏ qua.</div>
+    <div class="short-answer"><div class="question-header"><span><span class="question-number">Câu 7:</span> \(q=2\times10^{-6}\text{C}\), E=1000V/m, dịch chuyển từ 5cm đến 15cm cách bản âm. Tính công lực điện (đơn vị là \(10^{-4}\text{J}\)).</span><button class="toggle-btn" onclick="toggleAns('a19-7')">Xem đáp án</button></div><div id="a19-7" class="answer-section"><div class="answer-title">Đáp án: 2</div><div class="answer-content">\(A = qE(d_2-d_1) = 2\times10^{-6}\times1000\times(0,15-0,05) = 2\times10^{-4} \text{ J}\) → Viết hệ số: <b>2</b></div></div></div>
+    <div class="short-answer"><div class="question-header"><span><span class="question-number">Câu 8:</span> \(W=6\times10^{-5}\text{J}\), \(q=3\times10^{-8}\text{C}\), E=2000V/m. Tính khoảng cách đến bản âm (cm).</span><button class="toggle-btn" onclick="toggleAns('a19-8')">Xem đáp án</button></div><div id="a19-8" class="answer-section"><div class="answer-title">Đáp án: 10</div><div class="answer-content">\(W=qEd \Rightarrow d=\frac{W}{qE}=\frac{6\times10^{-5}}{3\times10^{-8}\times2000}=0,1\text{m}=10\text{cm}\) → <b>10</b> (2 ký tự)</div></div></div>
+    <div class="part-title">PHẦN IV: TỰ LUẬN</div>
+    <div class="essay"><div class="question-header"><span><span class="question-number">Câu 9:</span> \(q=10^{-7}\text{C}\) thả không vận tốc đầu trong \(E=10^4\text{V/m}\). Sau khi dịch chuyển 10cm, tính động năng. Bỏ qua trọng lực.</span><button class="toggle-btn" onclick="toggleAns('a19-9')">Xem đáp án</button></div><div id="a19-9" class="answer-section"><div class="answer-title">Hướng dẫn giải</div><div class="answer-content">Định luật bảo toàn cơ năng: \(W_{\text{đ}} = A_{\text{lực điện}} = qEd = 10^{-7}\times10^4\times0,1 = 10^{-4} \text{ J}\).</div></div></div>
+</div>
+
+<!-- BÀI 20-24: Tương tự -->
+<div class="lesson-title" onclick="toggleLesson('l20')">BÀI 20: ĐIỆN THẾ ▼</div>
+<div id="l20" class="lesson-content">
+    <div class="part-title">PHẦN I: TRẮC NGHIỆM (5 câu)</div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 1:</span> Điện thế tại một điểm đặc trưng cho:</span><button class="toggle-btn" onclick="toggleAns('a20-1')">Xem đáp án</button></div><div class="options"><div class="option">A. Lực điện</div><div class="option">B. Thế năng của một đơn vị điện tích dương</div><div class="option">C. Cường độ điện trường</div><div class="option">D. Khoảng cách</div></div><div id="a20-1" class="answer-section"><div class="answer-title">Đáp án: B</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 2:</span> Đơn vị của điện thế là:</span><button class="toggle-btn" onclick="toggleAns('a20-2')">Xem đáp án</button></div><div class="options"><div class="option">A. Newton</div><div class="option">B. Coulomb</div><div class="option">C. Vôn</div><div class="option">D. Joule</div></div><div id="a20-2" class="answer-section"><div class="answer-title">Đáp án: C</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 3:</span> Hiệu điện thế \(U_{MN}\) được xác định bằng:</span><button class="toggle-btn" onclick="toggleAns('a20-3')">Xem đáp án</button></div><div class="options"><div class="option">A. \(U_{MN} = V_M + V_N\)</div><div class="option">B. \(U_{MN} = V_M - V_N\)</div><div class="option">C. \(U_{MN} = V_N - V_M\)</div><div class="option">D. \(U_{MN} = V_M \times V_N\)</div></div><div id="a20-3" class="answer-section"><div class="answer-title">Đáp án: B</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 4:</span> Trong điện trường đều, mối liên hệ giữa E và U:</span><button class="toggle-btn" onclick="toggleAns('a20-4')">Xem đáp án</button></div><div class="options"><div class="option">A. E = U×d</div><div class="option">B. E = U/d</div><div class="option">C. E = d/U</div><div class="option">D. E = U²/d</div></div><div id="a20-4" class="answer-section"><div class="answer-title">Đáp án: B</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 5:</span> Công của lực điện khi dịch chuyển q từ M đến N:</span><button class="toggle-btn" onclick="toggleAns('a20-5')">Xem đáp án</button></div><div class="options"><div class="option">A. \(A = q(V_M + V_N)\)</div><div class="option">B. \(A = q(V_M - V_N)\)</div><div class="option">C. \(A = (V_M - V_N)/q\)</div><div class="option">D. \(A = q/(V_M - V_N)\)</div></div><div id="a20-5" class="answer-section"><div class="answer-title">Đáp án: B</div></div></div>
+    <div class="part-title">PHẦN II: TRẮC NGHIỆM ĐÚNG - SAI</div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 6:</span> Xét điện thế và hiệu điện thế. Đánh dấu Đ/S:</span><button class="toggle-btn" onclick="toggleAns('a20-6')">Xem đáp án</button></div><div class="tf-grid"><div class="tf-item"><div class="tf-statement">a)</div><div>Điện thế là đại lượng vô hướng</div></div><div class="tf-item"><div class="tf-statement">b)</div><div>Hiệu điện thế phụ thuộc vào mốc chọn</div></div><div class="tf-item"><div class="tf-statement">c)</div><div>Điện thế giảm dần theo chiều đường sức</div></div><div class="tf-item"><div class="tf-statement">d)</div><div>Trên mặt đẳng thế, điện thế có cùng giá trị</div></div></div><div id="a20-6" class="answer-section"><div class="answer-title">Đáp án: a-Đ, b-S, c-Đ, d-Đ</div></div></div>
+    <div class="part-title">PHẦN III: TRẢ LỜI NGẮN</div>
+    <div class="answer-note"><b>Lưu ý:</b> Đáp án là số có tối đa 4 ký tự (bao gồm dấu phẩy). Nếu đáp án có từ 2 chữ số thập phân khác 0 trở lên thì làm tròn đến 1 chữ số thập phân. Nếu sau dấu phẩy là số 0 thì có thể bỏ qua.</div>
+    <div class="short-answer"><div class="question-header"><span><span class="question-number">Câu 7:</span> \(q=5\times10^{-9}\text{C}\) dịch chuyển từ V=200V đến V=500V. Tính công lực điện (đơn vị là \(10^{-6}\text{J}\)).</span><button class="toggle-btn" onclick="toggleAns('a20-7')">Xem đáp án</button></div><div id="a20-7" class="answer-section"><div class="answer-title">Đáp án: -1,5</div><div class="answer-content">\(A = q(V_M-V_N) = 5\times10^{-9}\times(200-500) = -1,5\times10^{-6} \text{ J}\) → Viết hệ số: <b>-1,5</b> (4 ký tự)</div></div></div>
+    <div class="short-answer"><div class="question-header"><span><span class="question-number">Câu 8:</span> Trong điện trường đều, hai điểm cách 10cm có U=200V. Tính E (V/m).</span><button class="toggle-btn" onclick="toggleAns('a20-8')">Xem đáp án</button></div><div id="a20-8" class="answer-section"><div class="answer-title">Đáp án: 2000</div><div class="answer-content">\(\displaystyle E = \frac{U}{d} = \frac{200}{0,1} = 2000 \text{ V/m}\) → <b>2000</b> (4 ký tự)</div></div></div>
+    <div class="part-title">PHẦN IV: TỰ LUẬN</div>
+    <div class="essay"><div class="question-header"><span><span class="question-number">Câu 9:</span> Electron được tăng tốc bởi U=100V. Tính vận tốc khi đến bản dương. \(m=9,1\times10^{-31}\text{kg}\), \(e=1,6\times10^{-19}\text{C}\). Bỏ qua vận tốc ban đầu.</span><button class="toggle-btn" onclick="toggleAns('a20-9')">Xem đáp án</button></div><div id="a20-9" class="answer-section"><div class="answer-title">Hướng dẫn giải</div><div class="answer-content">Định lí động năng: \(\displaystyle \frac{1}{2}mv^2 = eU \Rightarrow v = \sqrt{\frac{2eU}{m}} = \sqrt{\frac{2\times1,6\times10^{-19}\times100}{9,1\times10^{-31}}} \approx 5,9\times10^6 \text{ m/s}\).</div></div></div>
+</div>
+
+<!-- BÀI 21-24 -->
+<div class="lesson-title" onclick="toggleLesson('l21')">BÀI 21: TỤ ĐIỆN ▼</div>
+<div id="l21" class="lesson-content">
+    <div class="part-title">PHẦN I: TRẮC NGHIỆM (5 câu)</div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 1:</span> Tụ điện là hệ gồm:</span><button class="toggle-btn" onclick="toggleAns('a21-1')">Xem đáp án</button></div><div class="options"><div class="option">A. Một vật dẫn</div><div class="option">B. Hai vật dẫn đặt gần nhau, ngăn cách bởi điện môi</div><div class="option">C. Hai vật dẫn tiếp xúc</div><div class="option">D. Một vật dẫn và điện môi</div></div><div id="a21-1" class="answer-section"><div class="answer-title">Đáp án: B</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 2:</span> Điện dung đặc trưng cho:</span><button class="toggle-btn" onclick="toggleAns('a21-2')">Xem đáp án</button></div><div class="options"><div class="option">A. Khả năng tích điện ở một hiệu điện thế xác định</div><div class="option">B. Độ lớn điện tích</div><div class="option">C. Hiệu điện thế</div><div class="option">D. Năng lượng</div></div><div id="a21-2" class="answer-section"><div class="answer-title">Đáp án: A</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 3:</span> Công thức tính điện dung:</span><button class="toggle-btn" onclick="toggleAns('a21-3')">Xem đáp án</button></div><div class="options"><div class="option">A. C = Q×U</div><div class="option">B. C = Q/U</div><div class="option">C. C = U/Q</div><div class="option">D. C = Q²/U</div></div><div id="a21-3" class="answer-section"><div class="answer-title">Đáp án: B</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 4:</span> Đơn vị của điện dung là:</span><button class="toggle-btn" onclick="toggleAns('a21-4')">Xem đáp án</button></div><div class="options"><div class="option">A. Vôn</div><div class="option">B. Coulomb</div><div class="option">C. Fara</div><div class="option">D. Joule</div></div><div id="a21-4" class="answer-section"><div class="answer-title">Đáp án: C</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 5:</span> Năng lượng điện trường trong tụ điện:</span><button class="toggle-btn" onclick="toggleAns('a21-5')">Xem đáp án</button></div><div class="options"><div class="option">A. W = C×U</div><div class="option">B. W = ½CU²</div><div class="option">C. W = CU²</div><div class="option">D. W = ½C/U</div></div><div id="a21-5" class="answer-section"><div class="answer-title">Đáp án: B</div></div></div>
+    <div class="part-title">PHẦN II: TRẮC NGHIỆM ĐÚNG - SAI</div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 6:</span> Xét tụ điện phẳng. Đánh dấu Đ/S:</span><button class="toggle-btn" onclick="toggleAns('a21-6')">Xem đáp án</button></div><div class="tf-grid"><div class="tf-item"><div class="tf-statement">a)</div><div>Điện dung tỉ lệ thuận với diện tích bản tụ</div></div><div class="tf-item"><div class="tf-statement">b)</div><div>Điện dung tỉ lệ nghịch với khoảng cách giữa hai bản</div></div><div class="tf-item"><div class="tf-statement">c)</div><div>Khi ghép nối tiếp, điện dung bộ tụ tăng</div></div><div class="tf-item"><div class="tf-statement">d)</div><div>Năng lượng tụ tỉ lệ với bình phương điện tích</div></div></div><div id="a21-6" class="answer-section"><div class="answer-title">Đáp án: a-Đ, b-Đ, c-S, d-Đ</div></div></div>
+    <div class="part-title">PHẦN III: TRẢ LỜI NGẮN</div>
+    <div class="answer-note"><b>Lưu ý:</b> Đáp án là số có tối đa 4 ký tự (bao gồm dấu phẩy). Nếu đáp án có từ 2 chữ số thập phân khác 0 trở lên thì làm tròn đến 1 chữ số thập phân. Nếu sau dấu phẩy là số 0 thì có thể bỏ qua.</div>
+    <div class="short-answer"><div class="question-header"><span><span class="question-number">Câu 7:</span> Tụ C=10μF, U=100V. Tính điện tích (đơn vị là \(10^{-3}\text{C}\)).</span><button class="toggle-btn" onclick="toggleAns('a21-7')">Xem đáp án</button></div><div id="a21-7" class="answer-section"><div class="answer-title">Đáp án: 1</div><div class="answer-content">\(Q = CU = 10\times10^{-6}\times100 = 1\times10^{-3} \text{ C}\) → Viết hệ số: <b>1</b></div></div></div>
+    <div class="short-answer"><div class="question-header"><span><span class="question-number">Câu 8:</span> Tụ C=20μF, U=50V. Tính năng lượng (đơn vị là \(10^{-2}\text{J}\)).</span><button class="toggle-btn" onclick="toggleAns('a21-8')">Xem đáp án</button></div><div id="a21-8" class="answer-section"><div class="answer-title">Đáp án: 2,5</div><div class="answer-content">\(\displaystyle W = \frac{1}{2}CU^2 = \frac{1}{2}\times20\times10^{-6}\times50^2 = 2,5\times10^{-2} \text{ J}\) → Viết hệ số: <b>2,5</b></div></div></div>
+    <div class="part-title">PHẦN IV: TỰ LUẬN</div>
+    <div class="essay"><div class="question-header"><span><span class="question-number">Câu 9:</span> Hai tụ \(C_1=2\mu\text{F}\), \(C_2=3\mu\text{F}\) ghép nối tiếp, mắc vào U=100V. Tính điện tích và hiệu điện thế trên mỗi tụ.</span><button class="toggle-btn" onclick="toggleAns('a21-9')">Xem đáp án</button></div><div id="a21-9" class="answer-section"><div class="answer-title">Hướng dẫn giải</div><div class="answer-content">\(\displaystyle C_{\text{nt}} = \frac{C_1 C_2}{C_1 + C_2} = 1,2\mu\text{F}\). \(\displaystyle Q = C_{\text{nt}}\times U = 1,2\times10^{-6}\times100 = 1,2\times10^{-4} \text{ C}\). \(\displaystyle U_1 = \frac{Q}{C_1} = 60\text{V}\), \(\displaystyle U_2 = \frac{Q}{C_2} = 40\text{V}\).</div></div></div>
+</div>
+
+<div class="lesson-title" onclick="toggleLesson('l22')">BÀI 22: CƯỜNG ĐỘ DÒNG ĐIỆN ▼</div>
+<div id="l22" class="lesson-content">
+    <div class="part-title">PHẦN I: TRẮC NGHIỆM (5 câu)</div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 1:</span> Cường độ dòng điện đặc trưng cho:</span><button class="toggle-btn" onclick="toggleAns('a22-1')">Xem đáp án</button></div><div class="options"><div class="option">A. Tác dụng mạnh, yếu của dòng điện</div><div class="option">B. Chiều chuyển động</div><div class="option">C. Tốc độ chuyển động</div><div class="option">D. Mật độ điện tích</div></div><div id="a22-1" class="answer-section"><div class="answer-title">Đáp án: A</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 2:</span> Công thức định nghĩa cường độ dòng điện:</span><button class="toggle-btn" onclick="toggleAns('a22-2')">Xem đáp án</button></div><div class="options"><div class="option">A. I = Δq×Δt</div><div class="option">B. I = Δq/Δt</div><div class="option">C. I = Δt/Δq</div><div class="option">D. I = Δq²/Δt</div></div><div id="a22-2" class="answer-section"><div class="answer-title">Đáp án: B</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 3:</span> Đơn vị của cường độ dòng điện là:</span><button class="toggle-btn" onclick="toggleAns('a22-3')">Xem đáp án</button></div><div class="options"><div class="option">A. Coulomb</div><div class="option">B. Vôn</div><div class="option">C. Ampe</div><div class="option">D. Ohm</div></div><div id="a22-3" class="answer-section"><div class="answer-title">Đáp án: C</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 4:</span> Trong kim loại, dòng điện là dòng chuyển dời có hướng của:</span><button class="toggle-btn" onclick="toggleAns('a22-4')">Xem đáp án</button></div><div class="options"><div class="option">A. Ion dương</div><div class="option">B. Ion âm</div><div class="option">C. Electron tự do</div><div class="option">D. Nguyên tử</div></div><div id="a22-4" class="answer-section"><div class="answer-title">Đáp án: C</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 5:</span> Chiều quy ước của dòng điện trong mạch là:</span><button class="toggle-btn" onclick="toggleAns('a22-5')">Xem đáp án</button></div><div class="options"><div class="option">A. Chiều chuyển động của electron</div><div class="option">B. Từ cực âm sang cực dương</div><div class="option">C. Từ cực dương sang cực âm</div><div class="option">D. Chiều bất kỳ</div></div><div id="a22-5" class="answer-section"><div class="answer-title">Đáp án: C</div></div></div>
+    <div class="part-title">PHẦN II: TRẮC NGHIỆM ĐÚNG - SAI</div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 6:</span> Xét dòng điện trong kim loại. Đánh dấu Đ/S:</span><button class="toggle-btn" onclick="toggleAns('a22-6')">Xem đáp án</button></div><div class="tf-grid"><div class="tf-item"><div class="tf-statement">a)</div><div>I tỉ lệ với số electron qua tiết diện trong 1 giây</div></div><div class="tf-item"><div class="tf-statement">b)</div><div>Electron chuyển động cùng chiều dòng điện quy ước</div></div><div class="tf-item"><div class="tf-statement">c)</div><div>1 C = 1 A×1 s</div></div><div class="tf-item"><div class="tf-statement">d)</div><div>I = nSve với n là mật độ electron tự do</div></div></div><div id="a22-6" class="answer-section"><div class="answer-title">Đáp án: a-Đ, b-S, c-Đ, d-Đ</div></div></div>
+    <div class="part-title">PHẦN III: TRẢ LỜI NGẮN</div>
+    <div class="answer-note"><b>Lưu ý:</b> Đáp án là số có tối đa 4 ký tự (bao gồm dấu phẩy). Nếu đáp án có từ 2 chữ số thập phân khác 0 trở lên thì làm tròn đến 1 chữ số thập phân. Nếu sau dấu phẩy là số 0 thì có thể bỏ qua.</div>
+    <div class="short-answer"><div class="question-header"><span><span class="question-number">Câu 7:</span> Trong 2 phút có Δq=240C. Tính I (A).</span><button class="toggle-btn" onclick="toggleAns('a22-7')">Xem đáp án</button></div><div id="a22-7" class="answer-section"><div class="answer-title">Đáp án: 2</div><div class="answer-content">\(\displaystyle I = \frac{\Delta q}{\Delta t} = \frac{240}{120} = 2 \text{ A}\) → <b>2</b> (1 ký tự)</div></div></div>
+    <div class="short-answer"><div class="question-header"><span><span class="question-number">Câu 8:</span> I=0,5A. Tính Δq trong 10 phút (C).</span><button class="toggle-btn" onclick="toggleAns('a22-8')">Xem đáp án</button></div><div id="a22-8" class="answer-section"><div class="answer-title">Đáp án: 300</div><div class="answer-content">\(\Delta q = I\times\Delta t = 0,5\times600 = 300 \text{ C}\) → <b>300</b> (3 ký tự)</div></div></div>
+    <div class="part-title">PHẦN IV: TỰ LUẬN</div>
+    <div class="essay"><div class="question-header"><span><span class="question-number">Câu 9:</span> Dây dẫn S=1mm², \(n=8,5\times10^{28}\) electron/m³, I=2A. Tính tốc độ drift của electron. \(e=1,6\times10^{-19}\text{C}\).</span><button class="toggle-btn" onclick="toggleAns('a22-9')">Xem đáp án</button></div><div id="a22-9" class="answer-section"><div class="answer-title">Hướng dẫn giải</div><div class="answer-content">\(I = nSve \Rightarrow \displaystyle v = \frac{I}{nSe} = \frac{2}{8,5\times10^{28}\times10^{-6}\times1,6\times10^{-19}} \approx 1,47\times10^{-4} \text{ m/s}\).</div></div></div>
+</div>
+
+<div class="lesson-title" onclick="toggleLesson('l23')">BÀI 23: ĐIỆN TRỞ - ĐỊNH LUẬT OHM ▼</div>
+<div id="l23" class="lesson-content">
+    <div class="part-title">PHẦN I: TRẮC NGHIỆM (5 câu)</div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 1:</span> Điện trở đặc trưng cho:</span><button class="toggle-btn" onclick="toggleAns('a23-1')">Xem đáp án</button></div><div class="options"><div class="option">A. Khả năng dẫn điện</div><div class="option">B. Mức độ cản trở dòng điện</div><div class="option">C. Độ lớn dòng điện</div><div class="option">D. Hiệu điện thế</div></div><div id="a23-1" class="answer-section"><div class="answer-title">Đáp án: B</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 2:</span> Định luật Ohm cho đoạn mạch chỉ chứa điện trở:</span><button class="toggle-btn" onclick="toggleAns('a23-2')">Xem đáp án</button></div><div class="options"><div class="option">A. I ∝ R, I ∝ 1/U</div><div class="option">B. I ∝ U, I ∝ 1/R</div><div class="option">C. U ∝ 1/I, U ∝ R</div><div class="option">D. R ∝ U, R ∝ I</div></div><div id="a23-2" class="answer-section"><div class="answer-title">Đáp án: B</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 3:</span> Công thức định luật Ohm:</span><button class="toggle-btn" onclick="toggleAns('a23-3')">Xem đáp án</button></div><div class="options"><div class="option">A. I = U×R</div><div class="option">B. I = U/R</div><div class="option">C. I = R/U</div><div class="option">D. I = U²/R</div></div><div id="a23-3" class="answer-section"><div class="answer-title">Đáp án: B</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 4:</span> Điện trở suất của kim loại phụ thuộc chủ yếu vào:</span><button class="toggle-btn" onclick="toggleAns('a23-4')">Xem đáp án</button></div><div class="options"><div class="option">A. Chiều dài</div><div class="option">B. Tiết diện</div><div class="option">C. Nhiệt độ</div><div class="option">D. Hiệu điện thế</div></div><div id="a23-4" class="answer-section"><div class="answer-title">Đáp án: C</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 5:</span> Đường V-A của điện trở kim loại ở nhiệt độ không đổi là:</span><button class="toggle-btn" onclick="toggleAns('a23-5')">Xem đáp án</button></div><div class="options"><div class="option">A. Parabol</div><div class="option">B. Đường thẳng qua gốc</div><div class="option">C. Hyperbol</div><div class="option">D. Gấp khúc</div></div><div id="a23-5" class="answer-section"><div class="answer-title">Đáp án: B</div></div></div>
+    <div class="part-title">PHẦN II: TRẮC NGHIỆM ĐÚNG - SAI</div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 6:</span> Xét điện trở dây dẫn kim loại. Đánh dấu Đ/S:</span><button class="toggle-btn" onclick="toggleAns('a23-6')">Xem đáp án</button></div><div class="tf-grid"><div class="tf-item"><div class="tf-statement">a)</div><div>R = ρl/S</div></div><div class="tf-item"><div class="tf-statement">b)</div><div>Điện trở kim loại tăng khi nhiệt độ tăng</div></div><div class="tf-item"><div class="tf-statement">c)</div><div>Đường V-A của bóng đèn dây tóc là đường thẳng</div></div><div class="tf-item"><div class="tf-statement">d)</div><div>Nhiệt điện trở NTC có R giảm khi nhiệt độ tăng</div></div></div><div id="a23-6" class="answer-section"><div class="answer-title">Đáp án: a-Đ, b-Đ, c-S, d-Đ</div></div></div>
+    <div class="part-title">PHẦN III: TRẢ LỜI NGẮN</div>
+    <div class="answer-note"><b>Lưu ý:</b> Đáp án là số có tối đa 4 ký tự (bao gồm dấu phẩy). Nếu đáp án có từ 2 chữ số thập phân khác 0 trở lên thì làm tròn đến 1 chữ số thập phân. Nếu sau dấu phẩy là số 0 thì có thể bỏ qua.</div>
+    <div class="short-answer"><div class="question-header"><span><span class="question-number">Câu 7:</span> U=12V, I=0,3A. Tính R (Ω).</span><button class="toggle-btn" onclick="toggleAns('a23-7')">Xem đáp án</button></div><div id="a23-7" class="answer-section"><div class="answer-title">Đáp án: 40</div><div class="answer-content">\(\displaystyle R = \frac{U}{I} = \frac{12}{0,3} = 40 \text{ Ω}\) → <b>40</b> (2 ký tự)</div></div></div>
+    <div class="short-answer"><div class="question-header"><span><span class="question-number">Câu 8:</span> R=50Ω, I=0,2A. Tính U (V).</span><button class="toggle-btn" onclick="toggleAns('a23-8')">Xem đáp án</button></div><div id="a23-8" class="answer-section"><div class="answer-title">Đáp án: 10</div><div class="answer-content">\(U = IR = 0,2\times50 = 10 \text{ V}\) → <b>10</b> (2 ký tự)</div></div></div>
+    <div class="part-title">PHẦN IV: TỰ LUẬN</div>
+    <div class="essay"><div class="question-header"><span><span class="question-number">Câu 9:</span> Bóng đèn \(R_0=20\Omega\) ở 20°C, \(\alpha=4,5\times10^{-3}\text{K}^{-1}\). Tính R khi nhiệt độ dây tóc là 2000°C.</span><button class="toggle-btn" onclick="toggleAns('a23-9')">Xem đáp án</button></div><div id="a23-9" class="answer-section"><div class="answer-title">Hướng dẫn giải</div><div class="answer-content">\(R = R_0[1+\alpha(t-t_0)] = 20[1+4,5\times10^{-3}\times(2000-20)] \approx 20\times9,91 = 198,2 \text{ Ω}\).</div></div></div>
+</div>
+
+<div class="lesson-title" onclick="toggleLesson('l24')">BÀI 24: NGUỒN ĐIỆN ▼</div>
+<div id="l24" class="lesson-content">
+    <div class="part-title">PHẦN I: TRẮC NGHIỆM (5 câu)</div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 1:</span> Nguồn điện có tác dụng:</span><button class="toggle-btn" onclick="toggleAns('a24-1')">Xem đáp án</button></div><div class="options"><div class="option">A. Tạo ra và duy trì hiệu điện thế</div><div class="option">B. Tiêu thụ điện năng</div><div class="option">C. Làm giảm cường độ dòng điện</div><div class="option">D. Chuyển điện năng thành nhiệt</div></div><div id="a24-1" class="answer-section"><div class="answer-title">Đáp án: A</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 2:</span> Suất điện động đặc trưng cho:</span><button class="toggle-btn" onclick="toggleAns('a24-2')">Xem đáp án</button></div><div class="options"><div class="option">A. Khả năng dự trữ điện tích</div><div class="option">B. Khả năng thực hiện công của nguồn điện</div><div class="option">C. Điện trở trong</div><div class="option">D. Hiệu điện thế mạch ngoài</div></div><div id="a24-2" class="answer-section"><div class="answer-title">Đáp án: B</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 3:</span> Công thức tính suất điện động:</span><button class="toggle-btn" onclick="toggleAns('a24-3')">Xem đáp án</button></div><div class="options"><div class="option">A. ξ = A×q</div><div class="option">B. ξ = A/q</div><div class="option">C. ξ = q/A</div><div class="option">D. ξ = A²/q</div></div><div id="a24-3" class="answer-section"><div class="answer-title">Đáp án: B</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 4:</span> Khi mạch ngoài hở, hiệu điện thế giữa hai cực nguồn:</span><button class="toggle-btn" onclick="toggleAns('a24-4')">Xem đáp án</button></div><div class="options"><div class="option">A. Bằng 0</div><div class="option">B. Nhỏ hơn suất điện động</div><div class="option">C. Bằng suất điện động</div><div class="option">D. Lớn hơn suất điện động</div></div><div id="a24-4" class="answer-section"><div class="answer-title">Đáp án: C</div></div></div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 5:</span> Định luật Ohm cho toàn mạch:</span><button class="toggle-btn" onclick="toggleAns('a24-5')">Xem đáp án</button></div><div class="options"><div class="option">A. I = ξ/(R-r)</div><div class="option">B. I = ξ/(R+r)</div><div class="option">C. I = (R+r)/ξ</div><div class="option">D. I = ξ×(R+r)</div></div><div id="a24-5" class="answer-section"><div class="answer-title">Đáp án: B</div></div></div>
+    <div class="part-title">PHẦN II: TRẮC NGHIỆM ĐÚNG - SAI</div>
+    <div class="question"><div class="question-header"><span><span class="question-number">Câu 6:</span> Xét nguồn điện trong mạch kín. Đánh dấu Đ/S:</span><button class="toggle-btn" onclick="toggleAns('a24-6')">Xem đáp án</button></div><div class="tf-grid"><div class="tf-item"><div class="tf-statement">a)</div><div>ξ = U + Ir</div></div><div class="tf-item"><div class="tf-statement">b)</div><div>Điện trở trong làm giảm hiệu điện thế mạch ngoài</div></div><div class="tf-item"><div class="tf-statement">c)</div><div>Khi đoản mạch, I = ξ/r</div></div><div class="tf-item"><div class="tf-statement">d)</div><div>Lực lạ thực hiện công dương khi dịch chuyển điện tích trong nguồn</div></div></div><div id="a24-6" class="answer-section"><div class="answer-title">Đáp án: a-Đ, b-Đ, c-Đ, d-Đ</div></div></div>
+    <div class="part-title">PHẦN III: TRẢ LỜI NGẮN</div>
+    <div class="answer-note"><b>Lưu ý:</b> Đáp án là số có tối đa 4 ký tự (bao gồm dấu phẩy). Nếu đáp án có từ 2 chữ số thập phân khác 0 trở lên thì làm tròn đến 1 chữ số thập phân. Nếu sau dấu phẩy là số 0 thì có thể bỏ qua.</div>
+    <div class="short-answer"><div class="question-header"><span><span class="question-number">Câu 7:</span> ξ=12V, r=1Ω, R=5Ω. Tính I (A).</span><button class="toggle-btn" onclick="toggleAns('a24-7')">Xem đáp án</button></div><div id="a24-7" class="answer-section"><div class="answer-title">Đáp án: 2</div><div class="answer-content">\(\displaystyle I = \frac{\xi}{R+r} = \frac{12}{5+1} = 2 \text{ A}\) → <b>2</b> (1 ký tự)</div></div></div>
+    <div class="short-answer"><div class="question-header"><span><span class="question-number">Câu 8:</span> ξ=9V, r=0,5Ω, I=2A. Tính U mạch ngoài (V).</span><button class="toggle-btn" onclick="toggleAns('a24-8')">Xem đáp án</button></div><div id="a24-8" class="answer-section"><div class="answer-title">Đáp án: 8</div><div class="answer-content">\(U = \xi - Ir = 9 - 2\times0,5 = 8 \text{ V}\) → <b>8</b> (1 ký tự)</div></div></div>
+    <div class="part-title">PHẦN IV: TỰ LUẬN</div>
+    <div class="essay"><div class="question-header"><span><span class="question-number">Câu 9:</span> ξ=6V, R=4Ω, I=1,2A. Tính r và U mạch ngoài.</span><button class="toggle-btn" onclick="toggleAns('a24-9')">Xem đáp án</button></div><div id="a24-9" class="answer-section"><div class="answer-title">Hướng dẫn giải</div><div class="answer-content">\(U = IR = 1,2\times4 = 4,8\text{V}\). \(\xi = U + Ir \Rightarrow \displaystyle r = \frac{\xi-U}{I} = \frac{6-4,8}{1,2} = 1 \text{ Ω}\).</div></div></div>
+</div>
+
+<div class="footer">
+    <b>Lưu ý:</b> Đề cương biên soạn theo SGK Vật lí 11 - Kết nối tri thức với cuộc sống.<br>
+    <i>Màu chữ: Đen (#000000) chính; Màu phụ: #8B5A2B, #8B4513, #0066CC, #004488</i><br>
+    <b>Quy định đáp án Phần III:</b> Tối đa 4 ký tự (bao gồm dấu phẩy). Nếu có ≥2 chữ số thập phân khác 0 → làm tròn đến 1 chữ số thập phân. Nếu sau dấu phẩy là số 0 thì có thể bỏ qua.<br>
+    Chúc các em ôn tập hiệu quả!
+</div>
+</div>
+
+<script>
+function toggleLesson(id){document.getElementById(id).classList.toggle('show')}
+function toggleAns(id){document.getElementById(id).classList.toggle('show')}
+function toggleAll(type,show){const items=type==='lesson'?document.querySelectorAll('.lesson-content'):document.querySelectorAll('.answer-section');items.forEach(item=>{if(show)item.classList.add('show');else item.classList.remove('show')})}
+document.addEventListener('DOMContentLoaded',()=>{document.getElementById('l16').classList.add('show')})
+</script>
 </body>
 </html>
