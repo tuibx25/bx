@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Bài 23: Điện trở - Định luật Ohm | Vật Lí 11</title>
+    <!-- MathJax để hiển thị công thức đẹp -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #F5F5F5;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            color: #1e1e1e; /* gần đen */
+            padding: 30px 20px;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            border-radius: 28px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+            padding: 28px 32px;
+        }
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            border-left: 6px solid #0066CC;
+            padding-left: 18px;
+            margin-bottom: 8px;
+            color: #004488;
+        }
+        .sub {
+            color: #5a5a5a;
+            margin-bottom: 32px;
+            border-bottom: 2px solid #F5DEB3;
+            padding-bottom: 12px;
+        }
+        .section {
+            margin-bottom: 42px;
+        }
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            background: #F5F5DC;
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 40px;
+            margin-bottom: 20px;
+            color: #8B4513;
+            border-left: 4px solid #8B5A2B;
+        }
+        .question-card {
+            background: #FFFFFF;
+            border: 1px solid #D3D3D3;
+            border-radius: 24px;
+            margin-bottom: 28px;
+            padding: 18px 24px;
+            transition: 0.1s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+        .question-text {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 14px;
+            color: #2c2c2c;
+        }
+        .options {
+            margin: 12px 0 8px 20px;
+        }
+        .option {
+            margin: 8px 0;
+        }
+        .btn-answer {
+            background: #F5DEB3;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #4a2a0e;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 12px;
+            margin-bottom: 6px;
+            display: inline-block;
+            border: 1px solid #D3C9A3;
+        }
+        .btn-answer:hover {
+            background: #e9cf9a;
+            transform: scale(0.97);
+        }
+        .answer-detail {
+            background: #F5F5F5;
+            border-left: 5px solid #0066CC;
+            padding: 14px 18px;
+            margin-top: 16px;
+            border-radius: 20px;
+            display: none;
+            font-size: 0.95rem;
+            color: #1f2d3d;
+        }
+        .answer-detail p {
+            margin: 6px 0;
+        }
+        .correct-badge {
+            color: #0066CC;
+            font-weight: bold;
+        }
+        table.tf-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            background: #fff9ef;
+        }
+        .tf-table td, .tf-table th {
+            border: 1px solid #D3D3D3;
+            padding: 8px 10px;
+            vertical-align: top;
+        }
+        .tf-table th {
+            background: #F5DEB3;
+            font-weight: 600;
+        }
+        .short-answer-note {
+            background: #F5F5DC;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            color: #8B4513;
+        }
+        hr {
+            margin: 16px 0;
+            border: 0;
+            height: 1px;
+            background: #E0E0E0;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.75rem;
+            color: #888;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .inline-math {
+            font-family: monospace;
+        }
+        @media (max-width: 650px) {
+            .container {
+                padding: 18px;
+            }
+            .question-card {
+                padding: 14px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📘 Bài 23: Điện trở – Định luật Ohm</h1>
+    <div class="sub">Bám sát nội dung SGK Vật Lí 11 (Kết nối tri thức) | Các câu hỏi có nút hiển thị đáp án & giải chi tiết</div>
+
+    <!-- ================= PHẦN 1: TRẮC NGHIỆM NHIỀU LỰA CHỌN ================= -->
+    <div class="section">
+        <div class="section-title">I. TRẮC NGHIỆM (8 câu)</div>
+        
+        <!-- CÂU 1 -->
+        <div class="question-card" id="mcq1">
+            <div class="question-text">Câu 1: Đại lượng nào đặc trưng cho mức độ cản trở dòng điện của một vật dẫn?</div>
+            <div class="options">
+                <div class="option">A. Cường độ dòng điện</div>
+                <div class="option">B. Hiệu điện thế</div>
+                <div class="option">C. Điện trở</div>
+                <div class="option">D. Điện dung</div>
+            </div>
+            <button class="btn-answer" onclick="toggleAnswer('ans1')">🔍 Xem đáp án & giải</button>
+            <div id="ans1" class="answer-detail">
+                <p><span class="correct-badge">✅ Đáp án: C</span></p>
+                <p>📘 <strong>Giải thích:</strong> Điện trở \(R\) đặc trưng cho khả năng cản trở dòng điện của vật dẫn, theo định nghĩa \(R = U/I\). Đơn vị là ôm (Ω).</p>
+            </div>
+        </div>
+
+        <!-- CÂU 2 -->
+        <div class="question-card" id="mcq2">
+            <div class="question-text">Câu 2: Biểu thức nào sau đây là nội dung của định luật Ohm cho đoạn mạch chỉ có điện trở thuần?</div>
+            <div class="options">
+                <div class="option">A. \(U = I^2 R\)</div>
+                <div class="option">B. \(I = \frac{U}{R}\)</div>
+                <div class="option">C. \(R = \frac{U^2}{I}\)</div>
+                <div class="option">D. \(I = U \cdot R\)</div>
+            </div>
+            <button class="btn-answer" onclick="toggleAnswer('ans2')">🔍 Xem đáp án & giải</button>
+            <div id="ans2" class="answer-detail">
+                <p><span class="correct-badge">✅ Đáp án: B</span></p>
+                <p>📘 Định luật Ohm phát biểu: <strong>Cường độ dòng điện chạy qua dây dẫn tỉ lệ thuận với hiệu điện thế đặt vào hai đầu dây và tỉ lệ nghịch với điện trở</strong>: \(I = U/R\).</p>
+            </div>
+        </div>
+
+        <!-- CÂU 3 -->
+        <div class="question-card" id="mcq3">
+            <div class="question-text">Câu 3: Đường đặc trưng vôn – ampe (U-I) của một điện trở kim loại tuân theo định luật Ohm có dạng:</div>
+            <div class="options">
+                <div class="option">A. Đường cong parabol</div>
+                <div class="option">B. Đường hypebol</div>
+                <div class="option">C. Đường thẳng đi qua gốc tọa độ</div>
+                <div class="option">D. Đường thẳng không đi qua gốc tọa độ</div>
+            </div>
+            <button class="btn-answer" onclick="toggleAnswer('ans3')">🔍 Xem đáp án & giải</button>
+            <div id="ans3" class="answer-detail">
+                <p><span class="correct-badge">✅ Đáp án: C</span></p>
+                <p>📘 Với điện trở thuần, \(I = \frac{1}{R} U\) → đồ thị I theo U là đường thẳng qua gốc tọa độ, hệ số góc là \(1/R\).</p>
+            </div>
+        </div>
+
+        <!-- CÂU 4 -->
+        <div class="question-card" id="mcq4">
+            <div class="question-text">Câu 4: Nguyên nhân chính gây ra điện trở trong kim loại là do:</div>
+            <div class="options">
+                <div class="option">A. Sự va chạm của các electron tự do với các ion nút mạng tinh thể</div>
+                <div class="option">B. Sự thiếu hụt electron trong kim loại</div>
+                <div class="option">C. Điện trường ngoài làm electron chuyển động có hướng</div>
+                <div class="option">D. Do mật độ electron tự do quá lớn</div>
+            </div>
+            <button class="btn-answer" onclick="toggleAnswer('ans4')">🔍 Xem đáp án & giải</button>
+            <div id="ans4" class="answer-detail">
+                <p><span class="correct-badge">✅ Đáp án: A</span></p>
+                <p>📘 Trong kim loại, các electron tự do chuyển động va chạm với các ion dao động quanh nút mạng, gây cản trở dòng điện → điện trở.</p>
+            </div>
+        </div>
+
+        <!-- CÂU 5 -->
+        <div class="question-card" id="mcq5">
+            <div class="question-text">Câu 5: Khi nhiệt độ của dây kim loại tăng lên, điện trở của nó thường:</div>
+            <div class="options">
+                <div class="option">A. Giảm</div>
+                <div class="option">B. Không đổi</div>
+                <div class="option">C. Tăng</div>
+                <div class="option">D. Có thể tăng hoặc giảm tùy kim loại</div>
+            </div>
+            <button class="btn-answer" onclick="toggleAnswer('ans5')">🔍 Xem đáp án & giải</button>
+            <div id="ans5" class="answer-detail">
+                <p><span class="correct-badge">✅ Đáp án: C</span></p>
+                <p>📘 Kim loại có hệ số nhiệt điện trở dương, nhiệt độ tăng → ion dao động mạnh → cản trở electron tăng → điện trở tăng: \(R = R_0[1+\alpha(t-t_0)]\).</p>
+            </div>
+        </div>
+
+        <!-- CÂU 6 -->
+        <div class="question-card" id="mcq6">
+            <div class="question-text">Câu 6: Điện trở nhiệt loại NTC (Negative Temperature Coefficient) có đặc điểm:</div>
+            <div class="options">
+                <div class="option">A. Điện trở tăng khi nhiệt độ tăng</div>
+                <div class="option">B. Điện trở giảm khi nhiệt độ tăng</div>
+                <div class="option">C. Điện trở không phụ thuộc nhiệt độ</div>
+                <div class="option">D. Chỉ dùng cho dòng điện xoay chiều</div>
+            </div>
+            <button class="btn-answer" onclick="toggleAnswer('ans6')">🔍 Xem đáp án & giải</button>
+            <div id="ans6" class="answer-detail">
+                <p><span class="correct-badge">✅ Đáp án: B</span></p>
+                <p>📘 NTC viết tắt của “Negative Temperature Coefficient” – hệ số nhiệt âm, khi nhiệt độ tăng thì điện trở giảm. Ứng dụng làm cảm biến nhiệt.</p>
+            </div>
+        </div>
+
+        <!-- CÂU 7 -->
+        <div class="question-card" id="mcq7">
+            <div class="question-text">Câu 7: Công thức nào dưới đây thể hiện sự phụ thuộc của điện trở dây dẫn vào chất liệu và kích thước?</div>
+            <div class="options">
+                <div class="option">A. \(R = \rho \frac{l}{S}\)</div>
+                <div class="option">B. \(R = \frac{U}{I}\)</div>
+                <div class="option">C. \(R = \frac{l}{\rho S}\)</div>
+                <div class="option">D. \(R = \rho \frac{S}{l}\)</div>
+            </div>
+            <button class="btn-answer" onclick="toggleAnswer('ans7')">🔍 Xem đáp án & giải</button>
+            <div id="ans7" class="answer-detail">
+                <p><span class="correct-badge">✅ Đáp án: A</span></p>
+                <p>📘 \(R = \rho \frac{l}{S}\) trong đó \(\rho\) là điện trở suất (phụ thuộc bản chất), \(l\) chiều dài, \(S\) tiết diện.</p>
+            </div>
+        </div>
+
+        <!-- CÂU 8 -->
+        <div class="question-card" id="mcq8">
+            <div class="question-text">Câu 8: Đặt hiệu điện thế \(U = 9\,V\) vào hai đầu điện trở \(R = 15\,\Omega\). Cường độ dòng điện qua điện trở là:</div>
+            <div class="options">
+                <div class="option">A. 0,4 A</div>
+                <div class="option">B. 0,6 A</div>
+                <div class="option">C. 1,2 A</div>
+                <div class="option">D. 135 A</div>
+            </div>
+            <button class="btn-answer" onclick="toggleAnswer('ans8')">🔍 Xem đáp án & giải</button>
+            <div id="ans8" class="answer-detail">
+                <p><span class="correct-badge">✅ Đáp án: B</span></p>
+                <p>📘 Áp dụng định luật Ohm: \(I = U/R = 9/15 = 0,6\,A\).</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= PHẦN 2: TRẮC NGHIỆM ĐÚNG SAI (2 câu, mỗi câu 4 ý) ================= -->
+    <div class="section">
+        <div class="section-title">II. TRẮC NGHIỆM ĐÚNG/SAI</div>
+        <!-- Câu 1: Đường đặc trưng vôn-ampe -->
+        <div class="question-card">
+            <div class="question-text">Câu 1 (Đúng/Sai): Dựa vào bảng số liệu thí nghiệm (SGK Bài 23) của hai điện trở \(R_1\) và \(R_2\):</div>
+            <div class="options">
+                <div>a) Điện trở \(R_1\) có giá trị xấp xỉ \(2,3\,k\Omega\).</div>
+                <div>b) Điện trở \(R_2\) có giá trị xấp xỉ \(4,0\,k\Omega\).</div>
+                <div>c) Đường đặc trưng vôn-ampe của \(R_1\) có độ dốc lớn hơn \(R_2\) (với trục tung là I, trục hoành là U).</div>
+                <div>d) Khi hiệu điện thế đặt vào hai điện trở bằng nhau thì cường độ dòng điện qua \(R_1\) lớn hơn qua \(R_2\).</div>
+            </div>
+            <button class="btn-answer" onclick="toggleAnswer('ans9')">🔍 Xem đáp án & giải</button>
+            <div id="ans9" class="answer-detail">
+                <table class="tf-table">
+                    <tr><th>Ý</th><th>Đ/S</th><th>Giải thích chi tiết</th></tr>
+                    <tr><td>a)</td><td>✅ ĐÚNG</td><td>Từ bảng 23.2, với \(U=3V\), \(I_1=1,30mA\) → \(R_1 = 3 / 0,0013 \approx 2308\,\Omega \approx 2,3\,k\Omega\).</td></tr>
+                    <tr><td>b)</td><td>✅ ĐÚNG</td><td>Với \(R_2\): \(U=3V\), \(I_2=0,65mA\) → \(R_2 = 3/0,00065 \approx 4615\,\Omega \approx 4,6\,k\Omega\) (không phải 4,0kΩ) → Ý b SAI.<br>📌 Đáp án: Sai (giá trị ~4,6kΩ).</td></tr>
+                    <tr><td>c)</td><td>❌ SAI</td><td>Độ dốc của đồ thị I-U là \(1/R\). Vì \(R_1 < R_2\) → \(1/R_1 > 1/R_2\) → \(R_1\) có độ dốc lớn hơn. Thực tế \(R_1\) nhỏ hơn nên độ dốc lớn hơn → c) ĐÚNG. (Xác định lại: \(R_1=2,3k\Omega, R_2=4,6k\Omega\) → \(1/R_1 > 1/R_2\) nên độ dốc của \(R_1\) lớn hơn → ý c ĐÚNG)</td></tr>
+                    <tr><td>d)</td><td>✅ ĐÚNG</td><td>Vì \(R_1 < R_2\), cùng U thì \(I=U/R\), \(I_1 > I_2\).</td></tr>
+                </table>
+                <p><strong>Kết luận:</strong> a) Đúng; b) Sai; c) Đúng; d) Đúng.</p>
+            </div>
+        </div>
+
+        <!-- Câu 2: Điện trở nhiệt NTC -->
+        <div class="question-card">
+            <div class="question-text">Câu 2 (Đúng/Sai): Xét điện trở nhiệt loại NTC (Negative Temperature Coefficient).</div>
+            <div class="options">
+                <div>a) NTC có điện trở giảm khi nhiệt độ môi trường tăng.</div>
+                <div>b) NTC là từ viết tắt của “Nonlinear Thermal Coefficient”.</div>
+                <div>c) Điện trở nhiệt NTC thường được dùng làm cảm biến nhiệt độ trong các mạch điện tử.</div>
+                <div>d) Đường đặc trưng vôn – ampe của NTC là một đường thẳng tuyến tính.</div>
+            </div>
+            <button class="btn-answer" onclick="toggleAnswer('ans10')">🔍 Xem đáp án & giải</button>
+            <div id="ans10" class="answer-detail">
+                <table class="tf-table">
+                    <tr><th>Ý</th><th>Đ/S</th><th>Giải thích</th></tr>
+                    <tr><td>a)</td><td>✅ ĐÚNG</td><td>NTC có hệ số nhiệt âm, nhiệt độ tăng → điện trở giảm.</td></tr>
+                    <tr><td>b)</td><td>❌ SAI</td><td>NTC là viết tắt của “Negative Temperature Coefficient” (hệ số nhiệt độ âm), không phải Nonlinear.</td></tr>
+                    <tr><td>c)</td><td>✅ ĐÚNG</td><td>Ứng dụng phổ biến: cảm biến nhiệt, mạch bù nhiệt, điều khiển nhiệt độ.</td></tr>
+                    <tr><td>d)</td><td>❌ SAI</td><td>Đường đặc trưng V-A của NTC không phải đường thẳng vì điện trở thay đổi theo nhiệt độ (phi tuyến).</td></tr>
+                </table>
+                <p><strong>Đáp án đúng sai:</strong> a-Đ, b-S, c-Đ, d-S.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= PHẦN 3: CÂU TRẢ LỜI NGẮN ================= -->
+    <div class="section">
+        <div class="section-title">III. CÂU TRẢ LỜI NGẮN</div>
+        <div class="short-answer-note">📌 Ghi chú: Đáp án là số (tối đa 4 ký tự, gồm dấu phẩy thập phân). Nếu có từ 2 chữ số thập phân khác 0 trở lên thì làm tròn đến 1 chữ số thập phân.</div>
+
+        <!-- Câu TLN 1 -->
+        <div class="question-card">
+            <div class="question-text">Câu 1: Một dây dẫn có điện trở \(R = 25\,\Omega\), đặt vào hai đầu dây một hiệu điện thế \(12\,V\). Cường độ dòng điện chạy qua dây là bao nhiêu ampe? (Kết quả làm tròn 1 chữ số thập phân nếu cần)</div>
+            <button class="btn-answer" onclick="toggleAnswer('ans11')">🔍 Xem đáp án & giải</button>
+            <div id="ans11" class="answer-detail">
+                <p><span class="correct-badge">✅ Đáp án: 0,48</span></p>
+                <p>📘 \(I = U/R = 12/25 = 0,48\,A\). Số có 4 ký tự (0,48).</p>
+            </div>
+        </div>
+
+        <!-- Câu TLN 2 -->
+        <div class="question-card">
+            <div class="question-text">Câu 2: Một dây dẫn bằng đồng dài \(l = 1,5\,m\), tiết diện \(S = 0,3\,mm^2\), điện trở suất \(\rho = 1,7 \times 10^{-8}\,\Omega\cdot m\). Tính điện trở của dây (đơn vị Ω, làm tròn đến 1 chữ số thập phân).</div>
+            <button class="btn-answer" onclick="toggleAnswer('ans12')">🔍 Xem đáp án & giải</button>
+            <div id="ans12" class="answer-detail">
+                <p><span class="correct-badge">✅ Đáp án: 0,1</span></p>
+                <p>📘 \(R = \rho \frac{l}{S} = 1,7\cdot10^{-8} \cdot \frac{1,5}{0,3\cdot10^{-6}} = 1,7\cdot10^{-8} \cdot \frac{1,5}{3\cdot10^{-7}} = 1,7\cdot10^{-8} \cdot 5\cdot10^{6} = 0,085\,\Omega\). Làm tròn 0,1 Ω (một chữ số thập phân).</p>
+            </div>
+        </div>
+
+        <!-- Câu TLN 3: dựa vào bảng 23.2: U=6V, I1 = 2,60mA => R1? -->
+        <div class="question-card">
+            <div class="question-text">Câu 3: Sử dụng bảng 23.2 (SGK), với điện trở \(R_1\), khi hiệu điện thế \(U=6,0\,V\) thì cường độ dòng điện \(I_1=2,60\,mA\). Xác định giá trị điện trở \(R_1\) (đơn vị kΩ, làm tròn 1 chữ số thập phân).</div>
+            <button class="btn-answer" onclick="toggleAnswer('ans13')">🔍 Xem đáp án & giải</button>
+            <div id="ans13" class="answer-detail">
+                <p><span class="correct-badge">✅ Đáp án: 2,3</span></p>
+                <p>📘 \(R_1 = U/I = 6 / (2,60\cdot10^{-3}) = 2307,7\,\Omega \approx 2,3\,k\Omega\) (giá trị phù hợp với đặc trưng).</p>
+            </div>
+        </div>
+
+        <!-- Câu TLN 4 -->
+        <div class="question-card">
+            <div class="question-text">Câu 4: Một bóng đèn dây tóc khi sáng bình thường có điện trở \(R = 484\,\Omega\) và hiệu điện thế định mức \(220\,V\). Tính cường độ dòng điện qua đèn khi đó (đơn vị A, làm tròn đến 1 chữ số thập phân).</div>
+            <button class="btn-answer" onclick="toggleAnswer('ans14')">🔍 Xem đáp án & giải</button>
+            <div id="ans14" class="answer-detail">
+                <p><span class="correct-badge">✅ Đáp án: 0,5</span></p>
+                <p>📘 \(I = U/R = 220 / 484 \approx 0,4545\,A\). Làm tròn đến 1 chữ số thập phân → \(0,5\,A\).</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= PHẦN 4: TỰ LUẬN ================= -->
+    <div class="section">
+        <div class="section-title">IV. TỰ LUẬN (3 ý a, b, c)</div>
+        <div class="question-card">
+            <div class="question-text"><strong>Đề bài:</strong> Một dây dẫn bằng constantan (hợp kim) dài \(l = 2,0\,m\), tiết diện \(S = 1,0\,mm^2\), điện trở suất \(\rho = 0,50 \times 10^{-6}\,\Omega\cdot m\).<br>
+            a) Tính điện trở của dây dẫn.<br>
+            b) Đặt vào hai đầu dây dẫn hiệu điện thế \(U = 6,0\,V\). Tính cường độ dòng điện chạy qua dây.<br>
+            c) Nếu tăng nhiệt độ của dây dẫn lên thì điện trở của dây thay đổi như thế nào? Giải thích ngắn gọn dựa trên kiến thức về sự phụ thuộc điện trở vào nhiệt độ của kim loại/hợp kim.
+            </div>
+            <button class="btn-answer" onclick="toggleAnswer('ans15')">🔍 Xem đáp án & hướng dẫn giải</button>
+            <div id="ans15" class="answer-detail">
+                <p><strong>Giải chi tiết:</strong></p>
+                <p>a) Điện trở dây dẫn: \(R = \rho \frac{l}{S}\).<br>
+                Đổi \(S = 1,0\,mm^2 = 1,0\times10^{-6}\,m^2\).<br>
+                \(R = 0,50\times10^{-6} \cdot \frac{2,0}{1,0\times10^{-6}} = 0,50\times10^{-6} \cdot 2,0\times10^{6} = 1,0\,\Omega\).</p>
+                <p>b) Cường độ dòng điện: \(I = \frac{U}{R} = \frac{6,0}{1,0} = 6,0\,A\).</p>
+                <p>c) Khi nhiệt độ tăng, điện trở của dây constantan (kim loại/hợp kim) <strong>tăng</strong> vì các ion trong mạng tinh thể dao động mạnh hơn, làm tăng sự va chạm với các electron tự do → điện trở suất \(\rho\) tăng → điện trở tăng (hệ số nhiệt điện trở dương).</p>
+                <p><strong>Đáp số:</strong> a) \(1,0\,\Omega\); b) \(6,0\,A\); c) Điện trở tăng.</p>
+            </div>
+        </div>
+    </div>
+    <footer>© Bài tập bám sát SGK Vật Lí 11 – Bài 23: Điện trở, Định luật Ohm. Các câu hỏi được thiết kế nhằm ôn tập kiến thức trọng tâm.</footer>
+</div>
+
+<script>
+    function toggleAnswer(id) {
+        const el = document.getElementById(id);
+        if (el.style.display === 'none' || el.style.display === '') {
+            el.style.display = 'block';
+        } else {
+            el.style.display = 'none';
+        }
+    }
+    // ban đầu ẩn hết tất cả answer-detail
+    window.onload = () => {
+        const allAnswers = document.querySelectorAll('.answer-detail');
+        allAnswers.forEach(ans => ans.style.display = 'none');
+    };
+</script>
+</body>
+</html>
