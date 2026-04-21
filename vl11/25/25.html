@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài tập trắc nghiệm & tự luận - Năng lượng và Công suất điện</title>
+    <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F5F5DC;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            color: #000000;
+            line-height: 1.5;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            padding: 2rem 2rem 3rem;
+        }
+
+        h1, h2, h3 {
+            color: #8B4513;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+            font-weight: 600;
+            border-left: 5px solid #8B5A2B;
+            padding-left: 1rem;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            border-left-width: 6px;
+            color: #004488;
+            margin-top: 0;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            border-left-color: #0066CC;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            border-left-color: #8B5A2B;
+        }
+
+        .quiz-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .question-card {
+            background: #F5F5F5;
+            border-left: 4px solid #0066CC;
+            padding: 1rem 1.2rem;
+            border-radius: 20px;
+            transition: 0.1s;
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .options {
+            margin: 0.5rem 0 0.25rem 1.2rem;
+            list-style: none;
+        }
+
+        .options li {
+            margin: 0.2rem 0;
+        }
+
+        .essay-card {
+            background: #F5F5DC;
+            border-left: 4px solid #8B5A2B;
+            padding: 1rem 1.2rem;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+        }
+
+        .essay-question {
+            font-weight: 700;
+            color: #8B4513;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #8B5A2B;
+            border-top: 1px solid #D3D3D3;
+            padding-top: 1.5rem;
+        }
+
+        .note {
+            background-color: #F5F5DC;
+            padding: 0.5rem 1rem;
+            border-radius: 16px;
+            margin: 1rem 0;
+            border-left: 3px solid #8B5A2B;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📘 BÀI 25: NĂNG LƯỢNG VÀ CÔNG SUẤT ĐIỆN</h1>
+
+    <!-- PHẦN TRẮC NGHIỆM (chỉ câu hỏi và lựa chọn, không đáp án) -->
+    <h2>🔹 I. TRẮC NGHIỆM (25 câu)</h2>
+    <div class="quiz-grid" id="mcq-container"></div>
+
+    <!-- PHẦN TỰ LUẬN (chỉ câu hỏi, không hướng dẫn giải) -->
+    <h2>📝 II. TỰ LUẬN (5 câu)</h2>
+    <div id="essay-container"></div>
+
+    <footer>
+        🔗 Câu hỏi bám sát nội dung bài học "Năng lượng và công suất điện" – Kết nối tri thức với cuộc sống.
+    </footer>
+</div>
+
+<script>
+    // Dữ liệu 25 câu trắc nghiệm (chỉ câu hỏi và lựa chọn, không đáp án)
+    const mcqData = [
+        { q: "Công thức tính năng lượng điện tiêu thụ của một đoạn mạch là", options: ["A. \\(A = U^2 R t\\)", "B. \\(A = I^2 R t\\)", "C. \\(A = U I t\\)", "D. \\(A = \\frac{U}{I}t\\)"] },
+        { q: "Đơn vị của năng lượng điện tiêu thụ là", options: ["A. Oát (W)", "B. Vôn (V)", "C. Ampe (A)", "D. Jun (J)"] },
+        { q: "Công suất điện của một đoạn mạch được tính bằng", options: ["A. \\(P = U I\\)", "B. \\(P = \\frac{U}{I}\\)", "C. \\(P = \\frac{I}{U}\\)", "D. \\(P = U^2 I\\)"] },
+        { q: "Trong đoạn mạch chỉ có điện trở thuần R, nhiệt lượng tỏa ra được tính bằng", options: ["A. \\(Q = UIt\\)", "B. \\(Q = I^2 R t\\)", "C. \\(Q = \\frac{U^2}{R} t\\)", "D. Cả A, B, C đều đúng"] },
+        { q: "Một bóng đèn ghi 220V – 100W. Khi đèn hoạt động đúng định mức, cường độ dòng điện qua đèn là", options: ["A. 0,45 A", "B. 2,2 A", "C. 0,22 A", "D. 0,55 A"] },
+        { q: "1 kWh bằng", options: ["A. 3600 J", "B. 1000 J", "C. \\(3,6 \\cdot 10^6\\) J", "D. \\(10^3\\) kJ"] },
+        { q: "Trên hóa đơn tiền điện, “số điện” là đơn vị của", options: ["A. Công suất", "B. Năng lượng điện", "C. Hiệu điện thế", "D. Cường độ dòng điện"] },
+        { q: "Một ấm điện có ghi 220V – 1000W. Điện trở của ấm khi hoạt động bình thường là", options: ["A. 48,4 Ω", "B. 0,484 Ω", "C. 484 Ω", "D. 4,84 Ω"] },
+        { q: "Khi mắc nối tiếp hai đèn (220V – 20W) và (220V – 10W) vào nguồn 220V, đèn nào sáng hơn?", options: ["A. Đèn 20W", "B. Đèn 10W", "C. Sáng như nhau", "D. Không sáng"] },
+        { q: "Năng lượng điện tiêu thụ của một bóng đèn 220V – 20W khi dùng ở hiệu điện thế 200V trong 2 giờ là", options: ["A. 40 Wh", "B. 33,06 Wh", "C. 36 Wh", "D. 48,4 Wh"] },
+        { q: "Một bếp điện hoạt động liên tục trong 2 giờ với hiệu điện thế 220V, cường độ dòng điện 5A. Năng lượng điện tiêu thụ là", options: ["A. 1100 Wh", "B. 2200 Wh", "C. 4400 Wh", "D. 550 Wh"] },
+        { q: "Để tiết kiệm điện, thay bóng đèn sợi đốt 100W bằng đèn LED 20W (cùng độ sáng). Mỗi ngày dùng 5 giờ, trong một tháng (30 ngày) số tiền điện tiết kiệm được (giá 2000 đ/kWh) là", options: ["A. 24.000 đ", "B. 12.000 đ", "C. 36.000 đ", "D. 48.000 đ"] },
+        { q: "Công thức nào dưới đây là công thức tính công suất điện?", options: ["A. \\(P = A t\\)", "B. \\(P = \\frac{A}{t}\\)", "C. \\(P = \\frac{t}{A}\\)", "D. \\(P = U I t\\)"] },
+        { q: "Một thiết bị điện ghi 220V – 150W. Khi mắc vào hiệu điện thế 200V, công suất tiêu thụ thực tế là (coi điện trở không đổi)", options: ["A. 150 W", "B. 124 W", "C. 136 W", "D. 110 W"] },
+        { q: "Đơn vị nào sau đây không phải đơn vị của năng lượng điện?", options: ["A. J", "B. kWh", "C. W", "D. cal (nhiệt calo)"] },
+        { q: "Trên một bóng đèn có ghi 12V – 6W. Cường độ dòng điện định mức của đèn là", options: ["A. 0,5 A", "B. 2 A", "C. 0,2 A", "D. 72 A"] },
+        { q: "Một động cơ điện có công suất 500W, hoạt động trong 2 giờ. Số điện năng tiêu thụ là", options: ["A. 1 số", "B. 1000 số", "C. 0,5 số", "D. 2 số"] },
+        { q: "Nếu đoạn mạch có điện trở R và hiệu điện thế U, nhiệt lượng tỏa ra trong thời gian t là", options: ["A. \\(Q = \\frac{U^2}{R} t\\)", "B. \\(Q = \\frac{U}{R} t\\)", "C. \\(Q = U^2 R t\\)", "D. \\(Q = \\frac{R}{U} t\\)"] },
+        { q: "Khi mắc song song hai điện trở R1 và R2 vào nguồn hiệu điện thế U, công suất tiêu thụ của mạch là", options: ["A. \\(P = \\frac{U^2}{R_1 + R_2}\\)", "B. \\(P = U^2 \\left( \\frac{1}{R_1} + \\frac{1}{R_2} \\right)\\)", "C. \\(P = U^2 (R_1 + R_2)\\)", "D. \\(P = \\frac{U^2}{R_1} + \\frac{U^2}{R_2}\\)"] },
+        { q: "Một bóng đèn LED 9W có độ sáng tương đương đèn sợi đốt 60W. Nếu sử dụng đèn LED thay cho đèn sợi đốt trong 10 giờ, lượng điện năng tiết kiệm được là", options: ["A. 0,51 kWh", "B. 0,6 kWh", "C. 0,09 kWh", "D. 0,69 kWh"] },
+        { q: "Trong công thức tính năng lượng điện \\(A = UIt\\), đại lượng t được đo bằng", options: ["A. giờ (h)", "B. ngày", "C. giây (s)", "D. phút"] },
+        { q: "Một máy lạnh có công suất 1200W, mỗi ngày dùng 4 giờ. Số tiền điện phải trả cho máy lạnh trong 30 ngày (giá 2000 đ/kWh) là", options: ["A. 288.000 đ", "B. 240.000 đ", "C. 144.000 đ", "D. 72.000 đ"] },
+        { q: "Công tơ điện là dụng cụ đo", options: ["A. công suất điện", "B. cường độ dòng điện", "C. năng lượng điện tiêu thụ", "D. hiệu điện thế"] },
+        { q: "Hai bóng đèn (220V – 40W) và (220V – 60W) mắc nối tiếp vào 220V. Tổng công suất tiêu thụ của mạch xấp xỉ", options: ["A. 100 W", "B. 24 W", "C. 48 W", "D. 20 W"] },
+        { q: "Để tính tiền điện, người ta dùng đơn vị", options: ["A. J", "B. kW", "C. kWh", "D. W"] }
+    ];
+
+    // Render trắc nghiệm: chỉ câu hỏi và lựa chọn, không đáp án, không nút bấm
+    const mcqContainer = document.getElementById('mcq-container');
+    mcqData.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        const questionNumber = idx + 1;
+        let optsHtml = '<ul class="options">';
+        item.options.forEach(opt => {
+            optsHtml += `<li>${opt}</li>`;
+        });
+        optsHtml += '</ul>';
+        
+        card.innerHTML = `
+            <div class="question-text">Câu ${questionNumber}. ${item.q}</div>
+            ${optsHtml}
+        `;
+        mcqContainer.appendChild(card);
+    });
+
+    // Dữ liệu 5 câu tự luận (chỉ câu hỏi, không lời giải)
+    const essayData = [
+        { q: "Phát biểu định nghĩa công suất điện. Viết công thức tính công suất điện và giải thích các đại lượng. Đơn vị của công suất là gì?" },
+        { q: "Một bóng đèn sợi đốt 220V – 75W và một bóng đèn LED 220V – 15W có cùng độ sáng. a) Tính điện năng tiêu thụ của mỗi bóng trong 30 ngày, mỗi ngày dùng 5 giờ. b) Với giá điện 2000 đồng/kWh, tính số tiền điện phải trả cho mỗi bóng trong thời gian trên. c) Nếu thay bóng sợi đốt bằng bóng LED, mỗi tháng tiết kiệm được bao nhiêu tiền?" },
+        { q: "Một ấm điện có ghi 220V – 1100W được sử dụng với hiệu điện thế 200V để đun sôi 2,5 lít nước từ 25°C. Hiệu suất của ấm là 85%. Nhiệt dung riêng của nước là 4200 J/(kg.K). a) Tính điện trở của ấm. b) Tính nhiệt lượng cần thiết để đun sôi nước. c) Tính thời gian đun nước." },
+        { q: "Giải thích ý nghĩa của việc tính tiền điện theo kiểu lũy tiến (bậc thang) như trong hóa đơn điện. Nêu ít nhất hai lợi ích của cách tính này." },
+        { q: "Mắc hai bóng đèn: Đ1 (220V – 40W) và Đ2 (220V – 60W) song song với nhau vào nguồn điện 220V. a) Tính điện trở mỗi bóng. b) Tính cường độ dòng điện qua mỗi bóng và qua mạch chính. c) Tính điện năng tiêu thụ của cả mạch trong 2 giờ (theo đơn vị kWh)." }
+    ];
+
+    const essayContainer = document.getElementById('essay-container');
+    essayData.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = 'essay-card';
+        card.innerHTML = `
+            <div class="essay-question">📌 Câu ${idx+1}: ${item.q}</div>
+        `;
+        essayContainer.appendChild(card);
+    });
+
+    // Kích hoạt MathJax để render công thức toán
+    if (window.MathJax) {
+        MathJax.typesetPromise();
+    }
+</script>
+</body>
+</html>

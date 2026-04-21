@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài tập trắc nghiệm & tự luận - Năng lượng và Công suất điện</title>
+	<link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F5F5DC;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            color: #000000;
+            line-height: 1.5;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            padding: 2rem 2rem 3rem;
+        }
+
+        h1, h2, h3 {
+            color: #8B4513;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+            font-weight: 600;
+            border-left: 5px solid #8B5A2B;
+            padding-left: 1rem;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            border-left-width: 6px;
+            color: #004488;
+            margin-top: 0;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            border-left-color: #0066CC;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            border-left-color: #8B5A2B;
+        }
+
+        .quiz-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .question-card {
+            background: #F5F5F5;
+            border-left: 4px solid #0066CC;
+            padding: 1rem 1.2rem;
+            border-radius: 20px;
+            transition: 0.1s;
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .options {
+            margin: 0.5rem 0 0.25rem 1.2rem;
+            list-style: none;
+        }
+
+        .options li {
+            margin: 0.2rem 0;
+        }
+
+        .btn-answer {
+            background-color: #8B5A2B;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 16px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin-top: 0.75rem;
+            margin-right: 0.5rem;
+            transition: 0.2s;
+        }
+
+        .btn-answer:hover {
+            background-color: #8B4513;
+        }
+
+        .answer-detail {
+            margin-top: 0.8rem;
+            padding: 0.6rem 1rem;
+            background: #F5DEB3;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            color: #000000;
+            display: none;
+            border-left: 3px solid #004488;
+        }
+
+        .essay-card {
+            background: #F5F5DC;
+            border-left: 4px solid #8B5A2B;
+            padding: 1rem 1.2rem;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+        }
+
+        .essay-question {
+            font-weight: 700;
+            color: #8B4513;
+            margin-bottom: 0.5rem;
+        }
+
+        .essay-solution {
+            margin-top: 0.75rem;
+            padding-top: 0.5rem;
+            border-top: 1px dashed #D3D3D3;
+            color: #2c3e2f;
+            display: none;
+        }
+
+        .btn-essay {
+            background-color: #0066CC;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 16px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin-top: 0.75rem;
+        }
+
+        .btn-essay:hover {
+            background-color: #004488;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #8B5A2B;
+            border-top: 1px solid #D3D3D3;
+            padding-top: 1.5rem;
+        }
+
+        .note {
+            background-color: #F5F5DC;
+            padding: 0.5rem 1rem;
+            border-radius: 16px;
+            margin: 1rem 0;
+            border-left: 3px solid #8B5A2B;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📘 BÀI 25: NĂNG LƯỢNG VÀ CÔNG SUẤT ĐIỆN</h1>
+
+    <!-- PHẦN TRẮC NGHIỆM -->
+    <h2>🔹 I. TRẮC NGHIỆM (25 câu)</h2>
+    <div class="quiz-grid" id="mcq-container"></div>
+
+    <!-- PHẦN TỰ LUẬN -->
+    <h2>📝 II. TỰ LUẬN (5 câu)</h2>
+    <div id="essay-container"></div>
+
+    <footer>
+        🔗 Câu hỏi bám sát nội dung bài học "Năng lượng và công suất điện" – Kết nối tri thức với cuộc sống.
+    </footer>
+</div>
+
+<script>
+    // Dữ liệu 25 câu trắc nghiệm (có đáp án và giải thích chi tiết)
+    const mcqData = [
+        { q: "Công thức tính năng lượng điện tiêu thụ của một đoạn mạch là", options: ["A. \\(A = U^2 R t\\)", "B. \\(A = I^2 R t\\)", "C. \\(A = U I t\\)", "D. \\(A = \\frac{U}{I}t\\)"], ans: "C", explanation: "Năng lượng điện tiêu thụ bằng công của lực điện: \\(A = UIt\\). Đáp án C đúng." },
+        { q: "Đơn vị của năng lượng điện tiêu thụ là", options: ["A. Oát (W)", "B. Vôn (V)", "C. Ampe (A)", "D. Jun (J)"], ans: "D", explanation: "Jun (J) là đơn vị đo năng lượng, trong đó có năng lượng điện." },
+        { q: "Công suất điện của một đoạn mạch được tính bằng", options: ["A. \\(P = U I\\)", "B. \\(P = \\frac{U}{I}\\)", "C. \\(P = \\frac{I}{U}\\)", "D. \\(P = U^2 I\\)"], ans: "A", explanation: "Công suất điện: \\(P = UI\\), từ định nghĩa năng lượng tiêu thụ trong một đơn vị thời gian." },
+        { q: "Trong đoạn mạch chỉ có điện trở thuần R, nhiệt lượng tỏa ra được tính bằng", options: ["A. \\(Q = UIt\\)", "B. \\(Q = I^2 R t\\)", "C. \\(Q = \\frac{U^2}{R} t\\)", "D. Cả A, B, C đều đúng"], ans: "D", explanation: "Vì \\(U=IR\\), cả ba công thức đều tương đương khi mạch thuần trở." },
+        { q: "Một bóng đèn ghi 220V – 100W. Khi đèn hoạt động đúng định mức, cường độ dòng điện qua đèn là", options: ["A. 0,45 A", "B. 2,2 A", "C. 0,22 A", "D. 0,55 A"], ans: "A", explanation: "\\(I = P/U = 100/220 \\approx 0,4545 A\\), gần đúng 0,45 A." },
+        { q: "1 kWh bằng", options: ["A. 3600 J", "B. 1000 J", "C. \\(3,6 \\cdot 10^6\\) J", "D. \\(10^3\\) kJ"], ans: "C", explanation: "1 kWh = 1000 W × 3600 s = 3.600.000 J = \\(3,6.10^6\\) J." },
+        { q: "Trên hóa đơn tiền điện, “số điện” là đơn vị của", options: ["A. Công suất", "B. Năng lượng điện", "C. Hiệu điện thế", "D. Cường độ dòng điện"], ans: "B", explanation: "Số điện = 1 kWh là đơn vị đo năng lượng điện tiêu thụ." },
+        { q: "Một ấm điện có ghi 220V – 1000W. Điện trở của ấm khi hoạt động bình thường là", options: ["A. 48,4 Ω", "B. 0,484 Ω", "C. 484 Ω", "D. 4,84 Ω"], ans: "A", explanation: "\\(R = U^2/P = 220^2/1000 = 48,4\\Omega\\)." },
+        { q: "Khi mắc nối tiếp hai đèn (220V – 20W) và (220V – 10W) vào nguồn 220V, đèn nào sáng hơn?", options: ["A. Đèn 20W", "B. Đèn 10W", "C. Sáng như nhau", "D. Không sáng"], ans: "B", explanation: "Đèn 10W có điện trở lớn hơn, trong mạch nối tiếp công suất tỏa ra tỉ lệ với R, nên đèn 10W sáng hơn." },
+        { q: "Năng lượng điện tiêu thụ của một bóng đèn 220V – 20W khi dùng ở hiệu điện thế 200V trong 2 giờ là", options: ["A. 40 Wh", "B. 33,06 Wh", "C. 36 Wh", "D. 48,4 Wh"], ans: "B", explanation: "\\(R = 220^2/20 = 2420\\Omega\\); \\(P' = 200^2/2420 \\approx 16,53 W\\); \\(A = 16,53×2 = 33,06 Wh\\)." },
+        { q: "Một bếp điện hoạt động liên tục trong 2 giờ với hiệu điện thế 220V, cường độ dòng điện 5A. Năng lượng điện tiêu thụ là", options: ["A. 1100 Wh", "B. 2200 Wh", "C. 4400 Wh", "D. 550 Wh"], ans: "B", explanation: "\\(A = UIt = 220×5×2 = 2200 Wh = 2,2 kWh\\)." },
+        { q: "Để tiết kiệm điện, thay bóng đèn sợi đốt 100W bằng đèn LED 20W (cùng độ sáng). Mỗi ngày dùng 5 giờ, trong một tháng (30 ngày) số tiền điện tiết kiệm được (giá 2000 đ/kWh) là", options: ["A. 24.000 đ", "B. 12.000 đ", "C. 36.000 đ", "D. 48.000 đ"], ans: "A", explanation: "Chênh lệch 80W=0,08kW; mỗi ngày 5h → 0,4 kWh/ngày; tháng 12 kWh; tiết kiệm 12×2000=24.000đ." },
+        { q: "Công thức nào dưới đây là công thức tính công suất điện?", options: ["A. \\(P = A t\\)", "B. \\(P = \\frac{A}{t}\\)", "C. \\(P = \\frac{t}{A}\\)", "D. \\(P = U I t\\)"], ans: "B", explanation: "Công suất = năng lượng / thời gian: \\(P = A/t\\)." },
+        { q: "Một thiết bị điện ghi 220V – 150W. Khi mắc vào hiệu điện thế 200V, công suất tiêu thụ thực tế là (coi điện trở không đổi)", options: ["A. 150 W", "B. 124 W", "C. 136 W", "D. 110 W"], ans: "B", explanation: "\\(R = 220^2/150 \\approx 322,67\\Omega\\); \\(P' = 200^2/322,67 \\approx 124 W\\)." },
+        { q: "Đơn vị nào sau đây không phải đơn vị của năng lượng điện?", options: ["A. J", "B. kWh", "C. W", "D. cal (nhiệt calo)"], ans: "C", explanation: "W (oát) là đơn vị công suất, không phải năng lượng." },
+        { q: "Trên một bóng đèn có ghi 12V – 6W. Cường độ dòng điện định mức của đèn là", options: ["A. 0,5 A", "B. 2 A", "C. 0,2 A", "D. 72 A"], ans: "A", explanation: "\\(I = P/U = 6/12 = 0,5 A\\)." },
+        { q: "Một động cơ điện có công suất 500W, hoạt động trong 2 giờ. Số điện năng tiêu thụ là", options: ["A. 1 số", "B. 1000 số", "C. 0,5 số", "D. 2 số"], ans: "A", explanation: "500W=0,5kW; A=0,5×2=1kWh = 1 số điện." },
+        { q: "Nếu đoạn mạch có điện trở R và hiệu điện thế U, nhiệt lượng tỏa ra trong thời gian t là", options: ["A. \\(Q = \\frac{U^2}{R} t\\)", "B. \\(Q = \\frac{U}{R} t\\)", "C. \\(Q = U^2 R t\\)", "D. \\(Q = \\frac{R}{U} t\\)"], ans: "A", explanation: "Từ \\(Q = I^2Rt\\) và \\(I=U/R\\) suy ra \\(Q = \\frac{U^2}{R}t\\)." },
+        { q: "Khi mắc song song hai điện trở R1 và R2 vào nguồn hiệu điện thế U, công suất tiêu thụ của mạch là", options: ["A. \\(P = \\frac{U^2}{R_1 + R_2}\\)", "B. \\(P = U^2 \\left( \\frac{1}{R_1} + \\frac{1}{R_2} \\right)\\)", "C. \\(P = U^2 (R_1 + R_2)\\)", "D. \\(P = \\frac{U^2}{R_1} + \\frac{U^2}{R_2}\\)"], ans: "D", explanation: "Mắc song song, công suất tổng bằng tổng công suất từng điện trở: \\(P = P_1+P_2 = U^2/R_1 + U^2/R_2\\)." },
+        { q: "Một bóng đèn LED 9W có độ sáng tương đương đèn sợi đốt 60W. Nếu sử dụng đèn LED thay cho đèn sợi đốt trong 10 giờ, lượng điện năng tiết kiệm được là", options: ["A. 0,51 kWh", "B. 0,6 kWh", "C. 0,09 kWh", "D. 0,69 kWh"], ans: "A", explanation: "Chênh lệch 60-9=51W=0,051kW; trong 10h tiết kiệm 0,51 kWh." },
+        { q: "Trong công thức tính năng lượng điện \\(A = UIt\\), đại lượng t được đo bằng", options: ["A. giờ (h)", "B. ngày", "C. giây (s)", "D. phút"], ans: "C", explanation: "Khi A tính bằng Jun thì t tính bằng giây (s)." },
+        { q: "Một máy lạnh có công suất 1200W, mỗi ngày dùng 4 giờ. Số tiền điện phải trả cho máy lạnh trong 30 ngày (giá 2000 đ/kWh) là", options: ["A. 288.000 đ", "B. 240.000 đ", "C. 144.000 đ", "D. 72.000 đ"], ans: "A", explanation: "A = 1,2×4×30 = 144 kWh; tiền = 144×2000 = 288.000 đ." },
+        { q: "Công tơ điện là dụng cụ đo", options: ["A. công suất điện", "B. cường độ dòng điện", "C. năng lượng điện tiêu thụ", "D. hiệu điện thế"], ans: "C", explanation: "Công tơ điện đo điện năng tiêu thụ (kWh)." },
+        { q: "Hai bóng đèn (220V – 40W) và (220V – 60W) mắc nối tiếp vào 220V. Tổng công suất tiêu thụ của mạch xấp xỉ", options: ["A. 100 W", "B. 24 W", "C. 48 W", "D. 20 W"], ans: "B", explanation: "\\(R_1=1210\\Omega, R_2 \\approx 806,7\\Omega\\), \\(R_{td}=2016,7\\Omega\\), \\(P = 220^2/2016,7 \\approx 24 W\\)." },
+        { q: "Để tính tiền điện, người ta dùng đơn vị", options: ["A. J", "B. kW", "C. kWh", "D. W"], ans: "C", explanation: "Tiền điện tính theo kWh (số điện)." }
+    ];
+
+    // Render trắc nghiệm với nút ẩn/hiện đáp án + giải thích
+    const mcqContainer = document.getElementById('mcq-container');
+    mcqData.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        const questionNumber = idx + 1;
+        let optsHtml = '<ul class="options">';
+        item.options.forEach(opt => {
+            optsHtml += `<li>${opt}</li>`;
+        });
+        optsHtml += '</ul>';
+        
+        // Tạo nút và phần đáp án ẩn
+        const detailId = `mcq-detail-${idx}`;
+        card.innerHTML = `
+            <div class="question-text">Câu ${questionNumber}. ${item.q}</div>
+            ${optsHtml}
+            <button class="btn-answer" data-target="${detailId}">🔎 Hiện đáp án & giải thích</button>
+            <div id="${detailId}" class="answer-detail">
+                <strong>✅ Đáp án: ${item.ans}</strong><br>
+                📖 Giải thích: ${item.explanation}
+            </div>
+        `;
+        mcqContainer.appendChild(card);
+    });
+
+    // Gắn sự kiện cho các nút trắc nghiệm
+    document.querySelectorAll('.btn-answer').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const detailDiv = document.getElementById(targetId);
+            if (detailDiv.style.display === 'none' || detailDiv.style.display === '') {
+                detailDiv.style.display = 'block';
+                this.textContent = '🙈 Ẩn đáp án & giải thích';
+            } else {
+                detailDiv.style.display = 'none';
+                this.textContent = '🔎 Hiện đáp án & giải thích';
+            }
+        });
+    });
+
+    // Dữ liệu 5 câu tự luận (có hướng dẫn giải chi tiết)
+    const essayData = [
+        {
+            q: "Phát biểu định nghĩa công suất điện. Viết công thức tính công suất điện và giải thích các đại lượng. Đơn vị của công suất là gì?",
+            sol: "Công suất điện của một đoạn mạch là năng lượng điện mà đoạn mạch tiêu thụ trong một đơn vị thời gian. Công thức: \\(P = \\frac{A}{t} = UI\\), trong đó P là công suất (W), U là hiệu điện thế (V), I là cường độ dòng điện (A). Đơn vị: Oát (W)."
+        },
+        {
+            q: "Một bóng đèn sợi đốt 220V – 75W và một bóng đèn LED 220V – 15W có cùng độ sáng. a) Tính điện năng tiêu thụ của mỗi bóng trong 30 ngày, mỗi ngày dùng 5 giờ. b) Với giá điện 2000 đồng/kWh, tính số tiền điện phải trả cho mỗi bóng trong thời gian trên. c) Nếu thay bóng sợi đốt bằng bóng LED, mỗi tháng tiết kiệm được bao nhiêu tiền?",
+            sol: "a) Đèn sợi đốt: \\(A_1 = 0,075\\,kW \\times 5h \\times 30 = 11,25\\,kWh\\). Đèn LED: \\(A_2 = 0,015 \\times 5 \\times 30 = 2,25\\,kWh\\).<br>b) Tiền điện: Đèn sợi đốt: \\(11,25 \\times 2000 = 22.500\\) đồng. Đèn LED: \\(2,25 \\times 2000 = 4.500\\) đồng.<br>c) Tiết kiệm: \\(22.500 - 4.500 = 18.000\\) đồng mỗi tháng."
+        },
+        {
+            q: "Một ấm điện có ghi 220V – 1100W được sử dụng với hiệu điện thế 200V để đun sôi 2,5 lít nước từ 25°C. Hiệu suất của ấm là 85%. Nhiệt dung riêng của nước là 4200 J/(kg.K). a) Tính điện trở của ấm. b) Tính nhiệt lượng cần thiết để đun sôi nước. c) Tính thời gian đun nước.",
+            sol: "a) Điện trở: \\(R = \\frac{U_{đm}^2}{P_{đm}} = \\frac{220^2}{1100} = 44\\,\\Omega\\).<br>b) Nhiệt lượng cần: \\(Q_{ci} = mc\\Delta t = 2,5 \\times 4200 \\times (100-25) = 787.500\\,J\\).<br>c) Năng lượng điện tiêu thụ: \\(A = \\frac{Q_{ci}}{H} = \\frac{787500}{0,85} \\approx 926.471\\,J\\). Công suất thực tế: \\(P = \\frac{U^2}{R} = \\frac{200^2}{44} \\approx 909,09\\,W\\). Thời gian: \\(t = \\frac{A}{P} \\approx 1019\\,s \\approx 17\\) phút."
+        },
+        {
+            q: "Giải thích ý nghĩa của việc tính tiền điện theo kiểu lũy tiến (bậc thang) như trong hóa đơn điện. Nêu ít nhất hai lợi ích của cách tính này.",
+            sol: "Tính lũy tiến nghĩa là càng dùng nhiều điện, đơn giá mỗi kWh càng cao. Lợi ích: 1) Khuyến khích người dân tiết kiệm điện, tránh lãng phí. 2) Bảo vệ môi trường, giảm tải cho hệ thống điện. 3) Đảm bảo công bằng xã hội: người dùng ít chịu giá thấp, người dùng nhiều chịu giá cao hơn."
+        },
+        {
+            q: "Mắc hai bóng đèn: Đ1 (220V – 40W) và Đ2 (220V – 60W) song song với nhau vào nguồn điện 220V. a) Tính điện trở mỗi bóng. b) Tính cường độ dòng điện qua mỗi bóng và qua mạch chính. c) Tính điện năng tiêu thụ của cả mạch trong 2 giờ (theo đơn vị kWh).",
+            sol: "a) \\(R_1 = \\frac{220^2}{40} = 1210\\,\\Omega\\); \\(R_2 = \\frac{220^2}{60} \\approx 806,67\\,\\Omega\\).<br>b) \\(I_1 = \\frac{220}{1210} \\approx 0,1818\\,A\\); \\(I_2 = \\frac{220}{806,67} \\approx 0,2727\\,A\\); \\(I_{mc} = I_1 + I_2 \\approx 0,4545\\,A\\).<br>c) \\(A = (40+60) \\times 2 = 200\\,Wh = 0,2\\,kWh\\)."
+        }
+    ];
+
+    const essayContainer = document.getElementById('essay-container');
+    essayData.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = 'essay-card';
+        const solId = `essay-sol-${idx}`;
+        card.innerHTML = `
+            <div class="essay-question">📌 Câu ${idx+1}: ${item.q}</div>
+            <button class="btn-essay" data-target="${solId}">📖 Hiện hướng dẫn giải</button>
+            <div id="${solId}" class="essay-solution">
+                <strong>💡 Hướng dẫn giải:</strong><br> ${item.sol}
+            </div>
+        `;
+        essayContainer.appendChild(card);
+    });
+
+    // Gắn sự kiện cho nút tự luận
+    document.querySelectorAll('.btn-essay').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const solDiv = document.getElementById(targetId);
+            if (solDiv.style.display === 'none' || solDiv.style.display === '') {
+                solDiv.style.display = 'block';
+                this.textContent = '🙈 Ẩn hướng dẫn giải';
+            } else {
+                solDiv.style.display = 'none';
+                this.textContent = '📖 Hiện hướng dẫn giải';
+            }
+        });
+    });
+
+    // Mặc định tất cả các phần đáp án và hướng dẫn giải đều ẩn ban đầu
+    document.querySelectorAll('.answer-detail, .essay-solution').forEach(el => {
+        el.style.display = 'none';
+    });
+    
+    // Cập nhật text cho nút trắc nghiệm ban đầu (vì đang ẩn)
+    document.querySelectorAll('.btn-answer').forEach(btn => {
+        if(btn.textContent.includes('Hiện')) return;
+        btn.textContent = '🔎 Hiện đáp án & giải thích';
+    });
+    document.querySelectorAll('.btn-essay').forEach(btn => {
+        if(btn.textContent.includes('Hiện')) return;
+        btn.textContent = '📖 Hiện hướng dẫn giải';
+    });
+
+    // Kích hoạt MathJax để render lại công thức
+    if (window.MathJax) {
+        MathJax.typesetPromise();
+    }
+</script>
+</body>
+</html>

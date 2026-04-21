@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 25: Năng lượng và Công suất điện</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.3;
+            color: #000000;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 10px;
+            background-color: #F5F5F5;
+        }
+        .container {
+            background-color: #FFFFFF;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        .chapter-header {
+            color: #8B5A2B;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            border-bottom: 1px solid #D3D3D3;
+            padding-bottom: 3px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        h1 {
+            color: #000000;
+            font-size: 1.4em;
+            border-bottom: 2px solid #8B4513;
+            padding-bottom: 4px;
+            margin-bottom: 8px;
+        }
+        h2 {
+            color: #004488;
+            font-size: 1.15em;
+            border-left: 4px solid #8B5A2B;
+            padding-left: 8px;
+            margin-top: 15px;
+            margin-bottom: 6px;
+        }
+        h3 {
+            color: #000000;
+            font-size: 1em;
+            margin-bottom: 4px;
+        }
+        h4 {
+            color: #8B4513;
+            font-size: 0.95em;
+            margin-bottom: 3px;
+        }
+        .formula {
+            background-color: #F5F5DC;
+            padding: 6px 10px;
+            border-left: 3px solid #8B5A2B;
+            margin: 6px 0;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1em;
+            color: #000000;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 6px 0;
+            font-size: 0.9em;
+        }
+        th {
+            background-color: #0066CC;
+            color: #FFFFFF;
+            border: 1px solid #D3D3D3;
+            padding: 5px;
+            text-align: center;
+        }
+        td {
+            border: 1px solid #D3D3D3;
+            padding: 5px;
+            color: #000000;
+        }
+        tr:nth-child(even) {
+            background-color: #F5F5F5;
+        }
+        .info-box {
+            background-color: #F5F5DC;
+            border: 1px solid #D3D3D3;
+            padding: 8px;
+            border-radius: 3px;
+            margin: 8px 0;
+            color: #000000;
+        }
+        .info-box-know {
+            background-color: #F5DEB3;
+            border: 1px solid #D3D3D3;
+            padding: 8px;
+            border-radius: 3px;
+            margin: 8px 0;
+            color: #000000;
+        }
+        .info-box-know h4 {
+            color: #8B5A2B;
+            font-size: 0.95em;
+            margin-bottom: 3px;
+        }
+        .exercise {
+            background-color: #F5F5F5;
+            border: 2px solid #0066CC;
+            padding: 10px;
+            border-radius: 3px;
+            margin: 8px 0;
+        }
+        .exercise h4 {
+            color: #0066CC;
+            font-size: 1em;
+            margin-bottom: 4px;
+        }
+        .solution {
+            background-color: #F5F5DC;
+            border: 1px solid #8B5A2B;
+            padding: 8px;
+            border-radius: 3px;
+            margin: 4px 0 8px 0;
+            font-size: 0.9em;
+        }
+        .guide {
+            background-color: #F5DEB3;
+            border: 1px solid #8B5A2B;
+            padding: 8px;
+            border-radius: 3px;
+            margin: 4px 0 8px 0;
+            font-size: 0.9em;
+        }
+        ul, ol {
+            padding-left: 18px;
+            color: #000000;
+            margin: 2px 0;
+        }
+        li {
+            margin-bottom: 2px;
+            color: #000000;
+            font-size: 0.95em;
+        }
+        p {
+            color: #000000;
+            margin-bottom: 3px;
+            font-size: 0.95em;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #8B4513;
+        }
+        .page-number {
+            text-align: center;
+            color: #8B5A2B;
+            margin-top: 15px;
+            font-style: italic;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+        }
+        .summary-box {
+            background-color: #F5F5DC;
+            border: 2px solid #8B5A2B;
+            padding: 8px;
+            border-radius: 3px;
+            margin: 10px 0;
+        }
+        .summary-box h3 {
+            color: #8B4513;
+            margin-bottom: 3px;
+        }
+        .ability-box {
+            background-color: #F5DEB3;
+            border: 2px solid #8B5A2B;
+            padding: 8px;
+            border-radius: 3px;
+            margin: 10px 0;
+        }
+        .ability-box h3 {
+            color: #8B4513;
+            margin-bottom: 3px;
+        }
+        .sub-question {
+            margin-bottom: 2px;
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+        .solution p, .guide p {
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Bài 25: NĂNG LƯỢNG VÀ CÔNG SUẤT ĐIỆN</h1>
+
+    <div class="info-box">
+        <h4>Bảng bên ghi một số nội dung trong Hoá đơn tiền điện giá trị gia tăng (GTGT) của Công ty điện lực. Em hãy cho biết ý nghĩa của các số liệu trong bảng.</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Bộ CS</th>
+                    <th>CHỈ SỐ MỚI</th>
+                    <th>CHỈ SỐ CŨ</th>
+                    <th>HS NHÂN</th>
+                    <th>ĐN TIÊU THỤ</th>
+                    <th>ĐƠN GIÁ</th>
+                    <th>THÀNH TIỀN</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>KT</td>
+                    <td>8.429</td>
+                    <td>8.157</td>
+                    <td>1</td>
+                    <td>272</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>50</td>
+                    <td>1.549</td>
+                    <td>77.450</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>50</td>
+                    <td>1.600</td>
+                    <td>80.000</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>100</td>
+                    <td>1.858</td>
+                    <td>185.800</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>72</td>
+                    <td>2.340</td>
+                    <td>168.480</td>
+                </tr>
+                <tr>
+                    <td colspan="4"><b>Cộng:</b></td>
+                    <td><b>272</b></td>
+                    <td></td>
+                    <td><b>511.730</b></td>
+                </tr>
+                <tr>
+                    <td colspan="4">Thuế suất GTGT: 10%</td>
+                    <td colspan="2">Thuế GTGT:</td>
+                    <td>51.173</td>
+                </tr>
+                <tr>
+                    <td colspan="6">Tổng cộng tiền thanh toán:</td>
+                    <td><b>562.903</b></td>
+                </tr>
+                <tr>
+                    <td colspan="7">Số tiền viết bằng chữ: Năm trăm sáu mươi hai nghìn chín trăm linh ba đồng.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>I. NĂNG LƯỢNG ĐIỆN</h2>
+    <p>Khi đặt hiệu điện thế U vào hai đầu của một mạch tiêu thụ điện, dưới tác dụng của lực điện, các điện tích tự do trong mạch điện chuyển dời có hướng tạo ra dòng điện. Ta đã biết công của lực điện trong trường hợp này được tính bằng công thức:</p>
+    <div class="formula">A = qU</div>
+    <p>Nếu t là thời gian dòng điện chạy trong mạch thì cường độ dòng điện là I = q/t, thì công của lực điện là:</p>
+    <div class="formula">A = UIt <span style="float:right; font-size:0.8em;">(25.1)</span></div>
+    <p>Ở đây A là số đo năng lượng điện mà đoạn mạch nhận được (tiêu thụ) từ nguồn điện và được gọi là <b>năng lượng điện tiêu thụ của đoạn mạch</b>. Do đó:</p>
+    <p><i>Năng lượng điện tiêu thụ của đoạn mạch bằng công của lực điện thực hiện khi di chuyển các điện tích.</i></p>
+    <div class="formula">W = A = UIt <span style="float:right; font-size:0.8em;">(25.2)</span></div>
+    <p>Đơn vị của năng lượng điện tiêu thụ là jun, kí hiệu là J.</p>
+    <p>Dòng điện chạy trong đoạn mạch gây ra các tác dụng khác nhau và khi đó có sự chuyển hoá năng lượng điện tiêu thụ của đoạn mạch thành các dạng năng lượng khác.</p>
+    <p style="text-align:center; margin:4px 0; color:#000000; font-style:italic; font-size:0.9em;">(Hình 25.1. Một số thiết bị dùng điện: a) Xe đạp điện, b) Ấm đun nước, c) Bóng đèn sợi đốt, d) Bóng đèn LED)</p>
+
+    <div class="info-box">
+        <p style="margin-bottom:4px;">1. Năng lượng điện tiêu thụ trong dụng cụ, thiết bị dùng điện ở Hình 25.1 chuyển hoá thành dạng năng lượng nào là nhiều nhất?</p>
+        <p>2. Hãy chứng minh rằng, nếu đoạn mạch chỉ có điện trở R (đoạn mạch thuần điện trở) thì nhiệt lượng đoạn mạch toả ra khi có dòng điện chạy qua được tính bằng công thức:</p>
+        <div class="formula" style="margin:4px 0;">Q = I²Rt = (U²/R)t <span style="float:right; font-size:0.8em;">(25.3)</span></div>
+    </div>
+
+    <div class="info-box-know">
+        <p><b>?</b> Ngoài đơn vị Jun, người ta còn dùng đơn vị kilôoát giờ (kW.h) để đo năng lượng điện tiêu thụ. <span class="highlight">1 kW.h = 3,6.10³ kJ.</span></p>
+    </div>
+
+    <div class="info-box-know">
+        <h4>EM CÓ BIẾT</h4>
+        <p>Người ta đo năng lượng điện tiêu thụ bằng một thiết bị gọi là <b>công tơ điện</b> (Hình 25.2). Khi các dụng cụ, thiết bị tiêu thụ năng lượng điện hoạt động thì đĩa của công tơ quay, số chỉ của công tơ tăng dần. Đơn vị của chỉ số trên công tơ là kW.h. Trong đời sống người ta thường gọi 1 kW.h là <b>1 số điện</b>.</p>
+        <p><i>(Hình 25.2. Công tơ điện)</i></p>
+    </div>
+
+    <h2>II. CÔNG SUẤT ĐIỆN</h2>
+    <p>Công suất tiêu thụ năng lượng điện (gọi tắt là <b>công suất điện</b>) của một đoạn mạch là năng lượng điện mà mạch tiêu thụ trong một đơn vị thời gian:</p>
+    <div class="formula">P = U²/R = UI <span style="float:right; font-size:0.8em;">(25.4)</span></div>
+    <p>Đơn vị của công suất điện là Oát, kí hiệu là W.</p>
+
+    <div class="info-box">
+        <p><b>?</b> Hãy chứng minh rằng 1 kW.h = 3,6.10³ kJ.</p>
+    </div>
+
+    <h3>Bảng 25.1. Công suất điện của một số thiết bị dùng điện</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Thiết bị</th>
+                <th>Công suất điện</th>
+                <th>Thiết bị</th>
+                <th>Công suất điện</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Đèn tuýp LED 1,2 m</td><td>25 W</td><td>Tủ lạnh</td><td>100 W</td></tr>
+            <tr><td>Bóng đèn huỳnh quang 1,2 m</td><td>36 W</td><td>Máy giặt</td><td>470 W</td></tr>
+            <tr><td>Bóng đèn sợi đốt</td><td>40 W</td><td>Nồi cơm điện</td><td>600 W</td></tr>
+            <tr><td>Quạt cây</td><td>55 W</td><td>Bàn là</td><td>1 000 W</td></tr>
+            <tr><td>Tivi LED 32 inches</td><td>69 W</td><td>Điều hòa 9 000BTU</td><td>2 638 W</td></tr>
+        </tbody>
+    </table>
+
+    <div class="info-box-know">
+        <h4>EM CÓ BIẾT</h4>
+        <p>Nếu trên dụng cụ hoặc thiết bị dùng điện ghi 220 V – 100 W, thì phải hiểu là chỉ khi nào dụng cụ hoặc thiết bị được dùng ở đúng hiệu điện thế U = 220 V (bằng với <i>hiệu điện thế định mức</i>) thì công suất điện của nó mới bằng 100 W. Công suất này được gọi là <b>công suất định mức</b>.</p>
+    </div>
+
+    <div class="exercise">
+        <h4>Bài tập vận dụng</h4>
+        <p>1. Trên hoá đơn GTGT (tiền điện) ở đầu bài học, tiền điện được tính lũy tiến (càng dùng điện nhiều thì đơn giá của 1 kW·h điện càng tăng). Theo em, cách tính này nhằm những mục đích gì? Tại sao?</p>
+        <p>2. Cho các thông tin về bóng đèn sợi đốt và bóng đèn LED cùng có độ sáng như sau:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2">Giản đồ phân phối năng lượng</th>
+                    <th>Đèn sợi đốt</th>
+                    <th>Đèn LED</th>
+                </tr>
+                <tr>
+                    <td><i>Ánh sáng nhìn thấy</i><br>Điện năng 100J → 5J<br><i>Nhiệt năng</i><br>95J<br><b>220 V – 100 W</b></td>
+                    <td><i>Ánh sáng nhìn thấy</i><br>Điện năng 100J → 80J<br><i>Nhiệt năng</i><br>20J<br><b>220 V – 20 W</b></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Thời gian hoạt động</td><td>1 000 h</td><td>30 000 h</td></tr>
+                <tr><td>Giá tiền/bóng</td><td>8 000 đồng</td><td>48 000 đồng</td></tr>
+                <tr><td>Giá tiền điện</td><td colspan="2">2 000 đồng/kW·h</td></tr>
+            </tbody>
+        </table>
+        <p>Giả sử trung bình mỗi bóng đèn sử dụng 5 h/ngày, em hãy tính tiền điện phải trả cho từng bóng đèn mỗi tháng và trong 30 000 h, từ đó lập luận để so sánh về hiệu quả kinh tế khi sử dụng hai loại bóng trên.</p>
+        
+        <div class="guide">
+            <p><b>Hướng dẫn trả lời:</b></p>
+            <p><b>Câu 1:</b> Việc tính giá điện lũy tiến nhằm:</p>
+            <ul>
+                <li><b>Khuyến khích tiết kiệm điện:</b> Người dùng ít điện trả giá thấp, người dùng nhiều trả giá cao → tạo động lực sử dụng hợp lý.</li>
+                <li><b>Đảm bảo công bằng xã hội:</b> Hộ gia đình có nhu cầu cơ bản được hưởng giá ưu đãi.</li>
+                <li><b>Bảo vệ môi trường:</b> Giảm lãng phí điện năng, hạn chế phát thải từ sản xuất điện.</li>
+            </ul>
+            <p><b>Câu 2:</b> Các bước tính:</p>
+            <ul>
+                <li><b>Bước 1:</b> Tính thời gian sử dụng/tháng: 5h × 30 ngày = 150h</li>
+                <li><b>Bước 2:</b> Tính điện năng tiêu thụ: A = P × t (đổi sang kW·h)</li>
+                <li><b>Bước 3:</b> Tính tiền điện/tháng: Số kW·h × 2 000 đồng</li>
+                <li><b>Bước 4:</b> Tính cho 30 000h: Tính tổng điện năng + số bóng cần mua × giá/bóng</li>
+                <li><b>Bước 5:</b> So sánh tổng chi phí (tiền điện + tiền mua bóng) của 2 loại đèn</li>
+                <li><b>Nhận xét:</b> Đèn LED có công suất thấp hơn (20W so với 100W), tuổi thọ cao hơn (30 lần), hiệu suất phát sáng tốt hơn (80% so với 5%) → tiết kiệm hơn dù giá mua ban đầu cao hơn.</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>III. BÀI TẬP</h2>
+    
+    <h3>1. Bài tập ví dụ</h3>
+    <p>Trên nhãn của một ấm điện có ghi 220 V – 1 000 W. Sử dụng ấm điện này ở hiệu điện thế 200 V để đun sôi 2 lít nước từ nhiệt độ 20 °C. Tính thời gian đun nước. Biết hiệu suất của ấm là 90%, nhiệt dung riêng của nước là 4 190 J/kg.K, coi điện trở của ấm điện không thay đổi so với khi hoạt động ở chế độ bình thường.</p>
+    <p><b>Giải:</b></p>
+    <p>Nhiệt lượng cần để đun sôi 2 lít nước từ 20 °C:</p>
+    <div class="formula">Q = mc·Δt = 2 × 4 190 × (100 – 20) = 670 400 J</div>
+    <p>Hiệu suất của ấm H = 90% nên năng lượng điện tiêu thụ của ấm là:</p>
+    <div class="formula">A = Q / H = 670 400 / 0,9 ≈ 744 889 J</div>
+    <p>Điện trở của ấm điện:</p>
+    <div class="formula">R = U<sub>đm</sub>² / P<sub>đm</sub> = 220² / 1000 = 48,4 Ω</div>
+    <p>Từ công thức A = (U²/R)·t, suy ra thời gian đun nước:</p>
+    <div class="formula">t = A·R / U² = (744 889 × 48,4) / 200² ≈ 901 s</div>
+
+    <h3>2. Bài tập</h3>
+    <ol>
+        <li>Trên nhãn của bóng đèn 1 có ghi 220 V – 20 W và bóng đèn 2 có ghi 220 V – 10 W. Coi điện trở của mỗi bóng đèn không thay đổi.
+            
+            <p class="sub-question">a) Tính năng lượng điện tiêu thụ của mỗi bóng đèn khi sử dụng ở hiệu điện thế 200 V trong thời gian 2 giờ.</p>
+            <div class="solution">
+                <p><b>Giải:</b></p>
+                <p>R₁ = U<sub>đm</sub>² / P<sub>đm1</sub> = 220² / 20 = 2420 Ω; R₂ = 220² / 10 = 4840 Ω</p>
+                <p>Công suất thực tế khi dùng ở U = 200 V: P₁ = 200²/2420 ≈ 16,53 W; P₂ = 200²/4840 ≈ 8,26 W</p>
+                <p>Năng lượng trong t = 2 giờ = 7200 s: A₁ ≈ 16,53 × 7200 ≈ <b>119 016 J</b>; A₂ ≈ 8,26 × 7200 ≈ <b>59 472 J</b></p>
+            </div>
+
+            <p class="sub-question">b) Tính tổng công suất điện tiêu thụ của cả hai bóng đèn trong những trường hợp sau:</p>
+            <ul>
+                <li>Mắc song song hai bóng đèn vào hiệu điện thế 220 V.</li>
+                <li>Mắc nối tiếp hai bóng đèn vào hiệu điện thế 220 V.</li>
+            </ul>
+            <div class="solution">
+                <p><b>Giải:</b></p>
+                <p><b>Song song vào 220 V:</b> P<sub>tổng</sub> = 20 + 10 = <b>30 W</b></p>
+                <p><b>Nối tiếp vào 220 V:</b> R<sub>td</sub> = 2420 + 4840 = 7260 Ω; P<sub>tổng</sub> = 220² / 7260 ≈ <b>6,67 W</b></p>
+            </div>
+
+            <p class="sub-question">c) Dùng cách mắc nào nêu trên để cả hai bóng đèn đều sáng bình thường? Tại sao?</p>
+            <div class="solution">
+                <p><b>Giải:</b> Mắc <b>song song</b> vào 220 V. Vì mỗi đèn đều có U<sub>đm</sub> = 220 V, mắc song song thì mỗi đèn nhận đúng 220 V → sáng bình thường. Mắc nối tiếp thì mỗi đèn nhận dưới 220 V → sáng yếu.</p>
+            </div>
+        </li>
+        
+        <li>Thông thường, ở nước ta hiệu điện thế mạng điện trong các gia đình, trường học,... là 220 V. Em hãy tìm hiểu về hiệu điện thế định mức, công suất định mức của mỗi thiết bị điện, cách mắc các thiết bị điện dùng trong lớp học của em và thời gian sử dụng trung bình của từng thiết bị mỗi tháng để làm các việc sau:
+            
+            <p class="sub-question">a) Vẽ lại sơ đồ mạch điện.</p>
+            <div class="guide">
+                <p><b>Hướng dẫn:</b> Các thiết bị điện trong lớp (đèn, quạt, máy chiếu...) được <b>mắc song song</b> với nhau và với nguồn 220 V. Mỗi thiết bị có công tắc/cầu chì riêng.</p>
+            </div>
+
+            <p class="sub-question">b) Áp dụng giá điện trong Hoá đơn GTGT để dự tính tiền điện trung bình phải trả mỗi tháng cho lớp học.</p>
+            <div class="guide">
+                <p><b>Hướng dẫn:</b> Bước 1: Liệt kê P (W) và thời gian t (giờ/tháng) của từng thiết bị. Bước 2: Tính A = P×t (kW·h). Bước 3: Áp dụng bảng giá lũy tiến từ hóa đơn để tính tiền.</p>
+            </div>
+
+            <p class="sub-question">c) Hãy đề xuất phương án sử dụng tiết kiệm điện cho gia đình, lớp học.</p>
+            <div class="guide">
+                <p><b>Gợi ý:</b> Tắt thiết bị khi không dùng; thay đèn sợi đốt bằng đèn LED; tận dụng ánh sáng/gió tự nhiên; điều chỉnh điều hòa ở 26-27°C.</p>
+            </div>
+        </li>
+    </ol>
+
+    <div class="summary-box">
+        <h3>EM ĐÃ HỌC</h3>
+        <ul>
+            <li>Năng lượng điện tiêu thụ của đoạn mạch được đo bằng công của lực điện thực hiện khi dịch chuyển các điện tích. Công thức: <b>A = qU = UIt</b>. Đơn vị là Jun (J).</li>
+            <li>Đối với đoạn mạch thuần điện trở: <b>Q = RI²t</b>.</li>
+            <li>Công suất tiêu thụ năng lượng điện: <b>P = A/t = UI</b>. Đơn vị là Oát (W).</li>
+        </ul>
+    </div>
+
+    <div class="ability-box">
+        <h3>EM CÓ THỂ</h3>
+        <ul>
+            <li>Giải thích được nội dung trong hoá đơn tiền điện và ý nghĩa của việc tính giá điện lũy tiến; lợi ích của việc thay đèn sợi đốt bằng đèn LED.</li>
+            <li>Ước tính số tiền điện trung bình mỗi tháng cho các thiết bị điện trong nhà và các biện pháp tiết kiệm điện.</li>
+        </ul>
+    </div>
+
+    <div class="page-number">
+        KẾT NỐI TRI THỨC VỚI CUỘC SỐNG
+    </div>
+</div>
+
+</body>
+</html>
