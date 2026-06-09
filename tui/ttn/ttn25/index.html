@@ -2,293 +2,384 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Đề thi Vật lý - Mã đề 0220VL25</title>
-    <!-- Thêm MathJax để hiển thị công thức đẹp và chính xác -->
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <title>Đề Vật Lý - 0220vl25 (Toàn bộ chữ màu đen)</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
     <style>
-        /* Reset toàn bộ margin/padding, thiết lập font nền tảng thống nhất */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
-            background-color: #D3D3D3;   /* nền xám nhẹ bao ngoài */
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 16px;            /* cỡ chữ cơ sở cho toàn bộ tài liệu */
-            line-height: 1.45;
+            background: #D3D3D3;
+            font-family: 'Segoe UI', 'Roboto', 'Times New Roman', serif;
             padding: 40px 20px;
+            color: #000000;
         }
-
-        /* Khung giấy thi – nền trắng */
         .paper {
             max-width: 1100px;
             margin: 0 auto;
-            background-color: #FFFFFF;
-            padding: 50px 40px 70px 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border-radius: 4px;
-            font-size: 1rem;   /* 16px tương đương */
+            background: #FFFFFF;
+            padding: 40px 48px;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
-
-        /* Toàn bộ văn bản trong đề thi ưu tiên màu đen, font Times */
-        body, .paper, p, li, div, span, .question-text, .option, .statement, 
-        .section-title, .info-text, .tf-item, .part-sub, .footnote, 
-        .question-number, .options, .truefalse-group, .info-note {
+        h1 {
+            font-size: 1.9rem;
+            text-align: center;
             color: #000000;
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 1rem;
+            margin-bottom: 8px;
         }
-
-        /* Tiêu đề phần lớn */
+        .title-wrap {
+            text-align: center;
+            border-bottom: 2px solid #F5DEB3;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+        }
+        .section {
+            margin-bottom: 28px;
+        }
         .section-title {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: bold;
-            margin: 1.8rem 0 1rem 0;
-            padding-bottom: 0.3rem;
-            border-bottom: 2px solid #8B5A2B;
-            color: #000000;
-            letter-spacing: 1px;
-        }
-
-        /* Tiêu đề phụ dạng câu hỏi phần II */
-        .part-sub {
-            font-weight: bold;
-            margin-top: 1.2rem;
-            margin-bottom: 0.6rem;
-            font-size: 1rem;
-            color: #000000;
-            background-color: #F5F5DC;
-            padding: 0.3rem 0.8rem;
-            border-left: 6px solid #8B4513;
-        }
-
-        /* Khối câu hỏi */
-        .question-block {
-            margin: 1.2rem 0 0.8rem 0;
-        }
-
-        .question-number {
-            font-weight: bold;
-            font-size: 1rem;
-            margin-right: 0.5rem;
-            display: inline-block;
-            color: #000000;
-        }
-
-        .question-text {
-            font-weight: 500;
-            margin-bottom: 0.3rem;
-            font-size: 1rem;
-        }
-
-        /* Các phương án trắc nghiệm */
-        .options {
-            margin-left: 1.8rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .option {
-            margin: 0.2rem 0;
-            font-size: 1rem;
-        }
-
-        /* Các câu đúng/sai phần II */
-        .truefalse-group {
-            margin: 0.6rem 0 1rem 1.8rem;
-        }
-        .tf-item {
-            margin: 0.3rem 0;
-            font-size: 1rem;
-        }
-
-        /* Hình vẽ căn giữa */
-        .image-place {
-            margin: 1rem 0;
-            text-align: center;
-        }
-        .image-place img {
-            max-width: 100%;
-            height: auto;
-            border: 1px solid #D3D3D3;
-            background: #F5F5F5;
-            padding: 6px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        /* Khung thông tin bổ sung (dữ kiện cho câu 3,4 và 5,6) */
-        .info-note {
-            background-color: #F5F5DC;
-            padding: 12px 18px;
-            margin: 20px 0;
-            border-left: 5px solid #8B5A2B;
-            font-style: normal;
-            color: #000000;
-            font-size: 1rem;
-        }
-
-        /* Chân trang lưu ý */
-        .footnote {
-            margin-top: 40px;
-            padding-top: 15px;
-            border-top: 1px dashed #D3D3D3;
-            font-size: 0.95rem;
-            text-align: center;
-            color: #000000;
-            background-color: #F5F5F5;
-            padding: 12px;
-        }
-
-        /* Căn chỉnh mã đề */
-        .center {
-            text-align: center;
-        }
-        .ma-de {
-            text-align: center;
-            font-size: 1rem;
-            margin-bottom: 1.8rem;
-            color: #000000;
             background: #F5F5DC;
-            display: inline-block;
-            padding: 0.2rem 1rem;
-            border-radius: 20px;
-        }
-        .ten-de {
-            font-size: 1.3rem;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 0.2rem;
+            padding: 6px 18px;
+            border-left: 6px solid #8B5A2B;
+            border-radius: 0 30px 30px 0;
+            margin-bottom: 16px;
             color: #000000;
         }
-
-        /* Đảm bảo công thức MathJax có cùng cỡ chữ với văn bản */
-        mjx-container {
-            font-size: 1rem !important;
+        .question-item {
+            margin-bottom: 18px;
+            padding-left: 12px;
+            border-left: 3px solid #F5DEB3;
         }
-        .MathJax, .MathJax_Display, .MJXc-display {
-            font-size: 1rem !important;
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #000000;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-left: 20px;
+            margin-top: 6px;
+        }
+        .option {
+            background: #F5F5F5;
+            padding: 4px 14px;
+            border-radius: 30px;
+            color: #000000;
+        }
+        .subquestion {
+            margin-left: 24px;
+            background: #F5F5F5;
+            padding: 12px 20px;
+            border-radius: 20px;
+            border-left: 4px solid #8B4513;
+            margin-top: 8px;
+            color: #000000;
+        }
+        .subq-text {
+            margin-bottom: 8px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            color: #000000;
+        }
+        .badge {
+            font-weight: bold;
+            background: #D3D3D3;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #000000;
+        }
+        .essay-question {
+            background: #F5F5F5;
+            padding: 16px 22px;
+            border-radius: 24px;
+            margin-top: 20px;
+            color: #000000;
+        }
+        .essay-title {
+            font-weight: bold;
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+            color: #000000;
+        }
+        .info-note {
+            background: #F5DEB3;
+            padding: 12px 18px;
+            border-radius: 20px;
+            margin: 16px 0;
+            color: #000000;
+        }
+        .constants {
+            background: #F5F5DC;
+            padding: 10px 18px;
+            border-radius: 20px;
+            margin: 16px 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #000000;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 12px;
+            border-top: 1px solid #D3D3D3;
+            font-size: 0.8rem;
+            color: #000000;
+        }
+        mjx-container {
+            font-size: 1.05rem;
+            color: #000000;
+        }
+        @media (max-width: 700px) {
+            .paper { padding: 20px; }
+            .options { gap: 10px; }
+        }
+        a {
+            color: #000000;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
 <div class="paper">
-    <div class="ten-de">ĐỀ THI MÔN VẬT LÝ</div>
-    <div class="center"><span class="ma-de">Mã đề: 0220VL25</span></div>
-
-    <!-- PHẦN I: Câu 9 đến 18 -->
-    <div class="section-title">PHẦN I. (Câu 9 – Câu 18)</div>
-    
-    <div class="question-block"><span class="question-number">Câu 9:</span> <span class="question-text">Đại lượng đặc trưng cho độ bền vững của hạt nhân là</span>
-        <div class="options"><div class="option">A. độ hụt khối hạt nhân.</div><div class="option">B. năng lượng liên kết riêng.</div><div class="option">C. động tích hạt nhân.</div><div class="option">D. năng lượng liên kết.</div></div>
-    </div>
-    <div class="question-block"><span class="question-number">Câu 10:</span> <span class="question-text">Gọi \(Q\) là nhiệt lượng cần cung cấp để làm một lượng chất có khối lượng \(m\) chuyển từ thể lỏng sang thể khí ở nhiệt độ sôi. Công thức xác định nhiệt hóa hơi riêng của chất đó là</span>
-        <div class="options"><div class="option">A. \(\frac{Q}{m}\)</div><div class="option">B. \(\frac{m}{Q}\)</div><div class="option">C. \(\frac{2Q}{m}\)</div><div class="option">D. \(\frac{Q}{2m}\)</div></div>
-    </div>
-    <div class="question-block"><span class="question-number">Câu 11:</span> <span class="question-text">Ở điều kiện thường, cồn y tế dễ dàng chuyển từ thể lỏng sang thể hơi. Quá trình này là quá trình</span>
-        <div class="options"><div class="option">A. ngưng tụ.</div><div class="option">B. hóa hơi.</div><div class="option">C. đông đặc.</div><div class="option">D. nóng chảy.</div></div>
-    </div>
-    <div class="question-block"><span class="question-number">Câu 12:</span> <span class="question-text">Độ lớn suất điện động cảm ứng được xác định bằng định luật nào trong các định luật sau đây?</span>
-        <div class="options"><div class="option">A. Định luật Ohm cho vật dẫn kim loại.</div><div class="option">B. Định luật Coulomb về tương tác điện.</div><div class="option">C. Định luật Lenz về cảm ứng điện từ.</div><div class="option">D. Định luật Faraday về cảm ứng điện từ.</div></div>
-    </div>
-    <div class="question-block"><span class="question-number">Câu 13:</span> <span class="question-text">Trong kí hiệu hạt nhân \( _{Z}^{A}X \), số \(A\) là số</span>
-        <div class="options"><div class="option">A. proton.</div><div class="option">B. neutron.</div><div class="option">C. positron.</div><div class="option">D. nucleon.</div></div>
-    </div>
-    <div class="question-block"><span class="question-number">Câu 14:</span> <span class="question-text">Nội năng của một khối khí xác định không đổi khi</span>
-        <div class="options"><div class="option">A. thể tích của khí không đổi.</div><div class="option">B. nhiệt độ và thể tích của khí không đổi.</div><div class="option">C. nhiệt độ của khí không thay đổi.</div><div class="option">D. khối khí nhận năng lượng nhiệt từ vật khác.</div></div>
-    </div>
-    <div class="question-block"><span class="question-number">Câu 15:</span> <span class="question-text">Công thức định luật 1 của nhiệt động lực học là \(\Delta U = A + Q\), với \(A\) là kí hiệu công và \(Q\) là kí hiệu</span>
-        <div class="options"><div class="option">A. nhiệt độ.</div><div class="option">B. nhiệt lượng.</div><div class="option">C. nhiệt dung riêng.</div><div class="option">D. nhiệt nóng chảy riêng.</div></div>
-    </div>
-    <div class="question-block"><span class="question-number">Câu 16:</span> <span class="question-text">Theo mô hình động học phân tử, chất lỏng có các phân tử</span>
-        <div class="options"><div class="option">A. chỉ dao động quanh vị trí cân bằng cố định.</div><div class="option">B. sắp xếp có trật tự.</div><div class="option">C. dao động quanh vị trí cân bằng không cố định.</div><div class="option">D. chuyển động hỗn loạn.</div></div>
-    </div>
-    <div class="question-block"><span class="question-number">Câu 17:</span> <span class="question-text">Sự truyền năng lượng nhiệt giữa hai vật được đặt tiếp xúc với nhau chỉ xảy ra khi chúng khác nhau về</span>
-        <div class="options"><div class="option">A. khối lượng.</div><div class="option">B. nhiệt độ.</div><div class="option">C. thể tích.</div><div class="option">D. thế năng.</div></div>
-    </div>
-    <div class="question-block"><span class="question-number">Câu 18:</span> <span class="question-text">Trong hệ đơn vị SI, đơn vị của nhiệt nóng chảy riêng là</span>
-        <div class="options"><div class="option">A. J/(kg.K)</div><div class="option">B. J/°C</div><div class="option">C. J/K</div><div class="option">D. J/kg</div></div>
+    <div class="title-wrap">
+        <h1>ĐỀ KIỂM TRA VẬT LÝ<br>MÃ ĐỀ 0220VL25</h1>
     </div>
 
-    <!-- PHẦN II: Câu 1 đến 4 (Đúng/Sai) -->
-    <div class="section-title">PHẦN II. (Câu 1 – Câu 4)</div>
-    
-    <div class="part-sub">Câu 1: Sóng điện từ dùng trong thông tin liên lạc.</div>
-    <div class="truefalse-group">
-        <div class="tf-item">a) Giả sử tại một điểm có sóng điện từ truyền qua, vectơ cường độ điện trường có phương thẳng đứng hướng lên, vectơ cảm ứng từ có hướng nam – bắc thì cường độ dòng điện có hướng đông – tây.</div>
-        <div class="tf-item">b) Không thể tạo ra hiện tượng giao thoa đối với sóng điện từ.</div>
-        <div class="tf-item">c) Tại một điểm có sóng điện từ truyền qua, cường độ điện trường và cảm ứng từ luôn dao động cùng pha.</div>
-        <div class="tf-item">d) Sóng điện từ là sóng ngang.</div>
+    <!-- Phần thông tin thí sinh + hằng số -->
+    <div class="constants">
+        Họ, tên thí sinh: ..................................<br>
+        Số báo danh: ......................................<br><br>
+        + Cho biết: \(\pi = 3,14\); \(T(K) = t(^\circ C) + 273\); \(R = 8,31 \, \text{J.mol}^{-1}.\text{K}^{-1}\); \(N_A = 6,02.10^{23} \, \text{hạt/mol}\); \(\ln 2 = 0,693\).<br>
+        + Không làm tròn kết quả các phép tính trung gian.
     </div>
 
-    <div class="part-sub">Câu 2: Các quá trình biến đổi hạt nhân là cơ sở của nhiều ứng dụng.</div>
-    <div class="truefalse-group">
-        <div class="tf-item">a) Phóng xạ là quá trình tự phát và ngẫu nhiên.</div>
-        <div class="tf-item">b) Phản ứng nhiệt hạch là phản ứng thu năng lượng.</div>
-        <div class="tf-item">c) Phản ứng phân hạch là phản ứng tỏa năng lượng.</div>
-        <div class="tf-item">d) Hạt nhân uranium \( _{92}^{239}\mathrm{U} \) phóng xạ α và biến đổi thành hạt nhân thorium \( _{90}^{239}\mathrm{Th} \).</div>
+    <!-- ==================== PHẦN I ==================== -->
+    <div class="section">
+        <div class="section-title">PHẦN I. Thí sinh trả lời từ câu 1 đến câu 18. Mỗi câu hỏi thí sinh chỉ chọn một phương án.</div>
+
+        <!-- Câu 1 -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 1:</strong> Trong quá trình đẳng áp của một khối khí lí tưởng xác định,</div>
+            <div class="options"><span class="option">A. nhiệt độ của khối khí không đổi.</span><span class="option">B. thể tích của khối khí giảm khi nhiệt độ của khối khí giảm.</span><span class="option">C. thể tích của khối khí không đổi.</span><span class="option">D. thể tích của khối khí tăng khi nhiệt độ của khối khí giảm.</span></div>
+        </div>
+
+        <!-- Câu 2 - CHÍNH XÁC THEO ẢNH (dùng ℓ và Iℓ) -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 2:</strong> Một đoạn dây dẫn thẳng có chiều dài \(\ell\) mang dòng điện có cường độ \(I\) được đặt trong từ trường đều với góc hợp bởi chiều dòng điện và chiều cảm ứng từ của từ trường là \(\alpha\). Lực từ do từ trường này tác dụng lên đoạn dây có độ lớn là \(F\). Độ lớn cảm ứng từ \(B\) của từ trường là</div>
+            <div class="options">
+                <span class="option">A. \(B = \frac{F}{I\ell \tan \alpha}\).</span>
+                <span class="option">B. \(B = \frac{F}{I\ell \sin \alpha}\).</span>
+                <span class="option">C. \(B = \frac{F}{I\ell \cot \alpha}\).</span>
+                <span class="option">D. \(B = \frac{F}{I\ell \cos \alpha}\).</span>
+            </div>
+        </div>
+
+        <!-- Câu 3 -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 3:</strong> Theo mô hình động học phân tử,</div>
+            <div class="options"><span class="option">A. giữa các phân tử chỉ có lực hút.</span><span class="option">B. giữa các phân tử chỉ có lực đẩy.</span><span class="option">C. các phân tử chuyển động không ngừng.</span><span class="option">D. giữa các phân tử không có khoảng cách.</span></div>
+        </div>
+
+        <!-- Câu 4 -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 4:</strong> Khi nói về từ trường, phát biểu nào sau đây là đúng?</div>
+            <div class="options"><span class="option">A. Từ trường tác dụng lực từ lên một điện tích đứng yên ở trong đó.</span><span class="option">B. Từ trường tác dụng lực từ lên một nam châm đặt trong đó.</span><span class="option">C. Một dòng điện tạo ra một từ trường đều xung quanh nó.</span><span class="option">D. Một kim nam châm tạo ra một từ trường đều xung quanh nó.</span></div>
+        </div>
+
+        <!-- Câu 5 -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 5:</strong> Trong thí nghiệm tán xạ hạt alpha của Rutherford, khi gặp lá vàng mỏng, hầu hết các hạt alpha</div>
+            <div class="options"><span class="option">A. bị bật ngược lại.</span><span class="option">B. đi qua lá vàng.</span><span class="option">C. chuyển động theo đường xoắn ốc.</span><span class="option">D. dừng lại.</span></div>
+        </div>
+
+        <!-- Câu 6 -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 6:</strong> Trong hệ đơn vị SI, đơn vị của từ thông là</div>
+            <div class="options"><span class="option">A. tesla (T).</span><span class="option">B. volt (V).</span><span class="option">C. coulomb (C).</span><span class="option">D. weber (Wb).</span></div>
+        </div>
+
+        <!-- Câu 7 -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 7:</strong> Trong nguyên tử lithium, có bao nhiêu electron chuyển động xung quanh hạt nhân \( ^{7}_{3}Li \)?</div>
+            <div class="options"><span class="option">A. 3.</span><span class="option">B. 4.</span><span class="option">C. 7.</span><span class="option">D. 1.</span></div>
+        </div>
+
+        <!-- Câu 8 -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 8:</strong> Trong quá trình nung nóng đẳng tích một khối khí lí tưởng xác định,</div>
+            <div class="options"><span class="option">A. khối lượng riêng của khối khí tăng.</span><span class="option">B. áp suất của khối khí giảm.</span><span class="option">C. khối lượng riêng của khối khí giảm.</span><span class="option">D. áp suất của khối khí tăng.</span></div>
+        </div>
+
+        <!-- Câu 9 -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 9:</strong> Đại lượng đặc trưng cho độ bền vững của hạt nhân là</div>
+            <div class="options"><span class="option">A. độ hụt khối của hạt nhân.</span><span class="option">B. năng lượng liên kết riêng.</span><span class="option">C. điện tích hạt nhân.</span><span class="option">D. năng lượng liên kết.</span></div>
+        </div>
+
+        <!-- Câu 10 -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 10:</strong> Gọi \( Q \) là nhiệt lượng cần thiết để làm một lượng chất có khối lượng \( m \) chuyển hoàn toàn từ thể lỏng sang thể khí ở nhiệt độ sôi. Công thức xác định nhiệt hóa hơi riêng của chất này ở nhiệt độ sôi đó là</div>
+            <div class="options"><span class="option">A. \(\frac{Q}{m}\).</span><span class="option">B. \(\frac{m}{Q}\).</span><span class="option">C. \(\frac{2Q}{m}\).</span><span class="option">D. \(\frac{Q}{2m}\).</span></div>
+        </div>
+
+        <!-- Câu 11 -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 11:</strong> Để đúc một vật bằng đồng, cần nung nóng để đồng chuyển từ thể rắn thành thể lỏng. Quá trình này là quá trình</div>
+            <div class="options"><span class="option">A. ngưng tụ.</span><span class="option">B. hoá hơi.</span><span class="option">C. đông đặc.</span><span class="option">D. nóng chảy.</span></div>
+        </div>
+
+        <!-- Câu 12 -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 12:</strong> Độ lớn suất điện động cảm ứng được xác định bằng định luật nào trong các định luật sau đây?</div>
+            <div class="options"><span class="option">A. Định luật Ohm cho vật dẫn kim loại.</span><span class="option">B. Định luật Coulomb về tương tác điện.</span><span class="option">C. Định luật Lenz về cảm ứng điện từ.</span><span class="option">D. Định luật Faraday về cảm ứng điện từ.</span></div>
+        </div>
+
+        <!-- Câu 13 -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 13:</strong> Trong kí hiệu hạt nhân \( ^{A}_{Z}X \), \( A \) là số</div>
+            <div class="options"><span class="option">A. proton.</span><span class="option">B. neutron.</span><span class="option">C. positron.</span><span class="option">D. nucleon.</span></div>
+        </div>
+
+        <!-- Câu 14 -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 14:</strong> Nội năng của một khối khí xác định không đổi khi</div>
+            <div class="options"><span class="option">A. thể tích của khối khí không đổi.</span><span class="option">B. nhiệt độ và thể tích của khối khí không đổi.</span><span class="option">C. nhiệt độ của khối khí thay đổi.</span><span class="option">D. khối khí nhận năng lượng nhiệt từ vật khác.</span></div>
+        </div>
+
+        <!-- Câu 15 -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 15:</strong> Công thức định luật 1 của nhiệt động lực học là \(\Delta U = A + Q\), với \(A\) là kí hiệu công và \(Q\) là kí hiệu</div>
+            <div class="options"><span class="option">A. nhiệt độ.</span><span class="option">B. nhiệt lượng.</span><span class="option">C. nhiệt dung riêng.</span><span class="option">D. nhiệt nóng chảy riêng.</span></div>
+        </div>
+
+        <!-- Câu 16 -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 16:</strong> Theo mô hình động học phân tử, ở thể lỏng, các phân tử</div>
+            <div class="options"><span class="option">A. chỉ dao động quanh vị trí cân bằng cố định.</span><span class="option">B. sắp xếp có trật tự.</span><span class="option">C. dao động quanh vị trí cân bằng không cố định.</span><span class="option">D. chuyển động hỗn loạn.</span></div>
+        </div>
+
+        <!-- Câu 17 -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 17:</strong> Sự truyền năng lượng nhiệt giữa hai vật được đặt tiếp xúc với nhau chỉ xảy ra khi chúng khác nhau về</div>
+            <div class="options"><span class="option">A. khối lượng.</span><span class="option">B. nhiệt độ.</span><span class="option">C. thể tích.</span><span class="option">D. thể năng.</span></div>
+        </div>
+
+        <!-- Câu 18 -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 18:</strong> Trong hệ đơn vị SI, đơn vị của nhiệt nóng chảy riêng là</div>
+            <div class="options"><span class="option">A. \(J/(kg \cdot K)\).</span><span class="option">B. \(J/^\circ C\).</span><span class="option">C. \(J/K\).</span><span class="option">D. \(J/kg\).</span></div>
+        </div>
     </div>
 
-    <div class="part-sub">Câu 3: Một nam châm được đặt trên cân. Một đoạn dây dẫn cứng được giữ cố định, nằm ngang, vuông góc với các đường sức từ của từ trường đều giữa hai cực của nam châm (hình bên). Cảm ứng từ \(B\) của từ trường có phương nằm ngang và có độ lớn là \(B\). Chiều dài của phần dây dẫn \(PQ\) nằm trong vùng từ trường đều giữa hai cực nam châm là \(\ell\). Ban đầu, chưa có dòng điện chạy trong dây dẫn, cân chỉ một giá trị xác định. Sau đó, cho dòng điện không đổi với cường độ \(I\) chạy trong dây dẫn theo chiều từ \(P\) đến \(Q\). Bỏ qua ảnh hưởng của từ trường Trái Đất.</div>
-    <!-- Hình vẽ câu 3 phần II -->
-    <div class="image-place">
-        <img src="https://tuibx25.github.io/bx/tui/ttn/ttn25/pIIc3.png" alt="Hình vẽ câu 3 - nam châm và dây dẫn">
-    </div>
-    <div class="truefalse-group">
-        <div class="tf-item">a) Lực từ do từ trường tác dụng lên đoạn dây \(PQ\) hướng thẳng đứng lên trên.</div>
-        <div class="tf-item">b) Cân chỉ giá trị lớn hơn giá trị ban đầu.</div>
-        <div class="tf-item">c) Cảm ứng từ \(B\) có hướng từ cực N sang cực S của nam châm.</div>
-        <div class="tf-item">d) Lực từ do từ trường tác dụng lên đoạn dây \(PQ\) có độ lớn là \(B I \ell\).</div>
+    <!-- ==================== PHẦN II ==================== -->
+    <div class="section">
+        <div class="section-title">PHẦN II. Thí sinh trả lời từ câu 1 đến 4. Trong mỗi ý a), b), c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.</div>
+
+        <!-- Câu 1 (Phần II) -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 1:</strong> Sóng điện từ được ứng dụng nhiều trong thông tin liên lạc.</div>
+            <div class="subquestion">
+                <div class="subq-text"><span class="badge">a)</span> Giả sử tại một điểm có sóng điện từ truyền qua theo phương thẳng đứng hướng lên trên, nếu cảm ứng từ có hướng nam – bắc thì cường độ điện trường có hướng đông – tây.</div>
+                <div class="subq-text"><span class="badge">b)</span> Không thể tạo ra hiện tượng giao thoa đối với sóng điện từ.</div>
+                <div class="subq-text"><span class="badge">c)</span> Tại một điểm có sóng điện từ truyền qua, cường độ điện trường và cảm ứng từ luôn dao động ngược pha.</div>
+                <div class="subq-text"><span class="badge">d)</span> Sóng điện từ là sóng ngang.</div>
+            </div>
+        </div>
+
+        <!-- Câu 2 (Phần II) -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 2:</strong> Các quá trình biến đổi hạt nhân là cơ sở của nhiều ứng dụng.</div>
+            <div class="subquestion">
+                <div class="subq-text"><span class="badge">a)</span> Phóng xạ là quá trình tự phát và ngẫu nhiên.</div>
+                <div class="subq-text"><span class="badge">b)</span> Phản ứng nhiệt hạch là phản ứng thu năng lượng.</div>
+                <div class="subq-text"><span class="badge">c)</span> Phản ứng phân hạch là phản ứng tỏa năng lượng.</div>
+                <div class="subq-text"><span class="badge">d)</span> Hạt nhân uranium \( ^{238}_{92}U \) phóng xạ \( \alpha \) và biến đổi thành hạt nhân thorium \( ^{234}_{90}Th \).</div>
+            </div>
+        </div>
+
+        <!-- Câu 3 (Phần II) -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 3:</strong> Một nam châm được đặt trên cân. Một đoạn dây dẫn cứng được giữ cố định, nằm ngang, vuông góc với các đường sức từ của từ trường đều giữa hai cực của nam châm (hình bên). Cảm ứng từ \( \vec{B} \) của từ trường có phương nằm ngang và có độ lớn là \( B \). Chiều dài của phần dây dẫn PQ nằm trong vùng từ trường đều giữa hai cực của nam châm là \( \ell \). Ban đầu, chưa có dòng điện chạy trong dây dẫn, cân chỉ một giá trị xác định. Sau đó, cho dòng điện không đổi với cường độ \( I \) chạy trong dây dẫn theo chiều từ \( P \) đến \( Q \). Bỏ qua ảnh hưởng của từ trường Trái Đất.</div>
+            <div class="subquestion">
+                <div class="subq-text"><span class="badge">a)</span> Lực từ do từ trường tác dụng lên đoạn dây PQ hướng thẳng đứng lên trên.</div>
+                <div class="subq-text"><span class="badge">b)</span> Cân chỉ giá trị lớn hơn giá trị ban đầu.</div>
+                <div class="subq-text"><span class="badge">c)</span> Cảm ứng từ \( \vec{B} \) có hướng từ cực \( N \) sang cực \( S \) của nam châm.</div>
+                <div class="subq-text"><span class="badge">d)</span> Lực từ do từ trường tác dụng lên đoạn dây PQ có độ lớn là \( B I \ell \).</div>
+            </div>
+        </div>
+
+        <!-- Câu 4 (Phần II) -->
+        <div class="question-item">
+            <div class="question-text"><strong>Câu 4:</strong> Một nhóm học sinh thảo luận phương án thí nghiệm làm giảm ảnh hưởng của sự trao đổi nhiệt với môi trường khi đo nhiệt nóng chảy riêng của nước đá. Họ dùng các dụng cụ: Phễu chứa nước đá (1), dây điện trở (2), cốc (3), cân điện tử (4) như hình bên.<br><br>Nhóm học sinh cho rằng: <em>Trong thời gian cấp điện cho dây điện trở, nếu xác định được càng chính xác khối lượng nước đá tan chảy vào cốc đo nhiệt lượng nhận từ môi trường thì sẽ giảm được càng nhiều ảnh hưởng của sự trao đổi nhiệt giữa nước đá với môi trường.</em><br><br>Phương án thí nghiệm của họ gồm hai giai đoạn và được tóm tắt như sau:<br><br><strong>Giai đoạn 1.</strong> Chưa cấp điện cho dây điện trở: Xác định khối lượng \( m_1 \) của nước đá tan và đã chảy từ phễu vào cốc trong khoảng thời gian \( t_1 \).<br><br><strong>Giai đoạn 2.</strong> Cấp điện cho dây điện trở: Xác định khối lượng \( m_2 \) của nước đá tan và đã chảy từ phễu vào cốc trong khoảng thời gian \( t_2 \).<br><br>Ở cả hai giai đoạn, coi rằng khối lượng nước đá tan và đã chảy vào cốc đo nhiệt lượng nhận từ môi trường trong những khoảng thời gian bằng nhau là như nhau và bỏ qua các ảnh hưởng khác (bay hơi, ngưng tụ của nước ...).</div>
+            <div class="subquestion">
+                <div class="subq-text"><span class="badge">a)</span> Ở giai đoạn 1, nước đá tan do nhận nhiệt lượng từ môi trường.</div>
+                <div class="subq-text"><span class="badge">b)</span> Ở giai đoạn 2, nước đá tan do nhận nhiệt lượng từ dây điện trở và từ môi trường.</div>
+                <div class="subq-text"><span class="badge">c)</span> Nếu \( t_2 = t_1 \) thì có thể coi khối lượng của nước đá tan do nhận nhiệt lượng từ dây điện trở là \( m = m_2 - m_1 \).</div>
+                <div class="subq-text"><span class="badge">d)</span> Phương án thí nghiệm này là một trong những phương án có thể làm giảm được ảnh hưởng của sự trao đổi nhiệt với môi trường đến kết quả thí nghiệm.</div>
+            </div>
+        </div>
     </div>
 
-    <div class="part-sub">Câu 4: Một nhóm học sinh thảo luận phương án thí nghiệm làm giảm ảnh hưởng của sự trao đổi nhiệt với môi trường khi đo nhiệt nóng chảy riêng của nước đá. Họ dùng các dụng cụ: Phễu chứa nước đá (1), dây điện trở (2), cốc (3), cân điện tử (4) như hình bên. Nhóm học sinh cho rằng: Trong thời gian cấp điện cho dây điện trở, nếu xác định được càng chính xác khối lượng nước đá tan chảy vào cốc do nhiệt lượng nhận từ môi trường thì sẽ giảm được càng nhiều ảnh hưởng của sự trao đổi nhiệt giữa nước đá với môi trường. Phương án thí nghiệm của họ gồm hai giai đoạn và được tóm tắt như sau:</div>
-    <!-- Hình vẽ câu 4 phần II -->
-    <div class="image-place">
-        <img src="https://tuibx25.github.io/bx/tui/ttn/ttn25/pIIc4.png" alt="Hình vẽ câu 4 - thí nghiệm nhiệt nóng chảy">
-    </div>
-    <div class="info-note">
-        <strong>Giai đoạn 1.</strong> Chưa cấp điện cho dây điện trở: Xác định khối lượng \(m_{1}\) của nước đá tan và đá chảy từ phễu vào cốc trong khoảng thời gian \(t_{1}\).<br>
-        <strong>Giai đoạn 2.</strong> Cấp điện cho dây điện trở: Xác định khối lượng \(m_{2}\) của nước đá tan và đá chảy từ phễu vào cốc trong khoảng thời gian \(t_{2}\).<br>
-        Ở cả hai giai đoạn, coi rằng khối lượng nước đá tan và đá chảy vào cốc do nhiệt lượng nhận từ môi trường trong những khoảng thời gian bằng nhau là như nhau và bỏ qua các ảnh hưởng khác (bay hơi, ngưng tụ của nước...).
-    </div>
-    <div class="truefalse-group">
-        <div class="tf-item">a) Ở giai đoạn 1, nước đá tan do nhận nhiệt lượng từ môi trường.</div>
-        <div class="tf-item">b) Ở giai đoạn 2, nước đá tan do nhận nhiệt lượng từ dây điện trở và từ môi trường.</div>
-        <div class="tf-item">c) Nếu \(t_{2} = t_{1}\) thì có thể coi khối lượng của nước đá tan do nhận nhiệt lượng từ dây điện trở là \(m = m_{2} - m_{1}\).</div>
-        <div class="tf-item">d) Phương án thí nghiệm này là một trong những phương án có thể làm giảm được ảnh hưởng của sự trao đổi nhiệt với môi trường đến kết quả thí nghiệm.</div>
+    <!-- ==================== PHẦN III ==================== -->
+    <div class="section">
+        <div class="section-title">PHẦN III. Thí sinh trả lời từ câu 1 đến câu 6.</div>
+
+        <div class="info-note">
+            <strong>Dùng thông tin sau cho câu 1 và câu 2:</strong> Một khung dây dẫn phẳng, kín có diện tích \( 2,83 \cdot 10^{-4} \, \text{m}^2 \), gồm 22 vòng dây được đặt trong từ trường đều sao cho cảm ứng từ \( \vec{B} \) vuông góc với mặt phẳng khung dây. Trong \( 0,750 \, \text{s} \), độ lớn cảm ứng từ của từ trường tăng đều từ \( 0,100 \, \text{T} \) đến \( 0,600 \, \text{T} \).
+        </div>
+
+        <div class="essay-question">
+            <div class="essay-title">Câu 1:</div>
+            <p>Độ lớn suất điện động cảm ứng trong khung dây là \( x \cdot 10^{-3} \, \text{V} \). Tìm \( x \) (làm tròn kết quả đến chữ số hàng phần trăm).</p>
+        </div>
+
+        <div class="essay-question">
+            <div class="essay-title">Câu 2:</div>
+            <p>Biết điện trở của khung dây là \( 0,260 \, \Omega \). Nhiệt lượng tỏa ra trên khung dây trong khoảng thời gian từ trường biến thiên là \( x \cdot 10^{-5} \, \text{J} \). Tìm \( x \) (làm tròn kết quả đến chữ số hàng phần trăm).</p>
+        </div>
+
+        <div class="info-note">
+            <strong>Dùng thông tin sau cho câu 3 và câu 4:</strong> Trong các trạm không gian vũ trụ, cần thu hồi khí oxygen \( O_2 \) từ khí carbon dioxide \( CO_2 \) do các nhà du hành thở ra để tái sử dụng. Trong một phương pháp thu hồi, cứ \( 1,00 \, \text{mol} \, CO_2 \) tạo ra \( 1,00 \, \text{mol} \, O_2 \) và \( 1,00 \, \text{mol} \, methane \, CH_4 \). Sau một thời gian, lượng khí \( CO_2 \) thu được là \( 0,390 \, \text{kg} \). Khí \( CH_4 \) và \( O_2 \) tạo thành từ lượng \( CO_2 \) nói trên được chứa trong hai bình khác nhau ban đầu đều chưa chứa khí. Khối lượng mol của \( CO_2 \) và \( O_2 \) lần lượt là \( 44,0 \, \text{g/mol} \) và \( 32,0 \, \text{g/mol} \). Coi các khí là khí lí tưởng.
+        </div>
+
+        <div class="essay-question">
+            <div class="essay-title">Câu 3:</div>
+            <p>Bình chứa khí \( CH_4 \) có thể tích \( 115 \, \text{lít} \) và được duy trì ở nhiệt độ \( -45 \, ^\circ \text{C} \). Áp suất của khí \( CH_4 \) trong bình là \( x \cdot 10^5 \, \text{Pa} \). Tìm \( x \) (làm tròn kết quả đến chữ số hàng phần trăm).</p>
+        </div>
+
+        <div class="essay-question">
+            <div class="essay-title">Câu 4:</div>
+            <p>Khi một lượng khí O\(_2\) được rút ra để sử dụng thì áp suất khí trong bình chứa khí O\(_2\) bằng 58% áp suất khí khi chưa rút, nhiệt độ của bình khí không đổi. Khối lượng O\(_2\) đã được rút ra khỏi bình là bao nhiêu kilôgam (làm tròn kết quả đến chữ số hàng phần trăm)?</p>
+        </div>
+
+        <div class="info-note">
+            <strong>Dùng thông tin sau cho câu 5 và câu 6:</strong> Trước đây, để thuận tiện cho việc xem giờ, các nhà sản xuất đồng hồ đã sơn mặt số và kim của đồng hồ bằng một lớp dạ quang chứa đồng vị phóng xạ radium \(^{226}_{88}Ra\) có chu kì bán rã là 1600 năm. Ban đầu, lớp dạ quang này chứa 6,3 µg \(^{226}_{88}Ra\). Lấy số ngày trong một năm là 365. Khối lượng mol của \(^{226}_{88}Ra\) là 226 g/mol.
+        </div>
+
+        <div class="essay-question">
+            <div class="essay-title">Câu 5:</div>
+            <p>Độ phóng xạ ban đầu của lượng \(^{226}_{88}Ra\) được sơn trên đồng hồ là bao nhiêu megabecquerel (MBq, làm tròn kết quả đến chữ số hàng phần trăm)?</p>
+        </div>
+
+        <div class="essay-question">
+            <div class="essay-title">Câu 6:</div>
+            <p>Sau bao nhiêu năm thì độ phóng xạ của lượng \(^{226}_{88}Ra\) còn lại bằng 12,5% so với độ phóng xạ ban đầu (làm tròn kết quả đến chữ số hàng đơn vị)?</p>
+        </div>
     </div>
 
-    <!-- PHẦN III: Câu 1 đến 6 (tự luận) -->
-    <div class="section-title">PHẦN III. (Câu 1 – Câu 6)</div>
-    
-    <div class="question-block"><span class="question-number">Câu 1:</span> <span class="question-text">Một khung dây phẳng có diện tích \(25,0 \, \text{cm}^2\) gồm 22 vòng dây được đặt trong từ trường đều sao cho cảm ứng từ \(\vec{B}\) vuông góc với mặt phẳng khung dây. Trong \(0,750 \, \text{s}\), độ lớn cảm ứng từ của từ trường tăng đều từ \(0,100 \, \text{T}\) đến \(0,600 \, \text{T}\). Độ lớn suất điện động cảm ứng trong khung dây là \(x \cdot 10^{-3} \, \text{V}\). Tìm \(x\) (làm tròn kết quả đến chữ số hàng phần trăm).</span></div>
-    
-    <div class="question-block"><span class="question-number">Câu 2:</span> <span class="question-text">Biết điện trở của khung dây là \(0,260 \, \Omega\). Nhiệt lượng tỏa ra trên khung dây trong khoảng thời gian từ trường biến thiên là \(x \cdot 10^{-5} \, \text{J}\). Tìm \(x\) (làm tròn kết quả đến chữ số hàng phần trăm).</span></div>
-
-    <div class="info-note">
-        <strong>Dùng thông tin sau cho câu 3 và câu 4:</strong> Trong các trạm không gian vũ trụ, cần thu hồi khí oxygen \(\mathrm{O}_2\) từ khí carbon dioxide \(\mathrm{CO}_2\) do các nhà du hành thở ra để tái sử dụng. Trong một phương pháp thu hồi, cứ \(1,00 \, \text{mol}\) \(\mathrm{CO}_2\) tạo ra \(1,00 \, \text{mol}\) \(\mathrm{O}_2\) và \(1,00 \, \text{mol}\) methane \(\mathrm{CH}_4\). Sau một thời gian, lượng khí \(\mathrm{CO}_2\) thu được là \(0,390 \, \text{kg}\). Khí \(\mathrm{CH}_4\) và \(\mathrm{O}_2\) tạo thành từ lượng \(\mathrm{CO}_2\) nói trên được chứa trong hai bình khác nhau ban đầu đều chưa chứa khí. Khối lượng mol của \(\mathrm{CO}_2\) và \(\mathrm{O}_2\) lần lượt là \(44,0 \, \text{g/mol}\) và \(32,0 \, \text{g/mol}\). Coi các khí là khí lí tưởng.
-    </div>
-    <div class="question-block"><span class="question-number">Câu 3:</span> <span class="question-text">Bình chứa khí \(\mathrm{CH}_4\) có thể tích \(115 \, \text{lít}\) và được duy trì ở nhiệt độ \(-45^{\circ}\text{C}\). Áp suất của khí \(\mathrm{CH}_4\) trong bình là \(x \cdot 10^{5} \, \text{Pa}\). Tìm \(x\) (làm tròn kết quả đến chữ số hàng phần trăm).</span></div>
-    
-    <div class="question-block"><span class="question-number">Câu 4:</span> <span class="question-text">Khi một lượng khí \(\mathrm{O}_2\) được rút ra để sử dụng thì áp suất khí trong bình chứa khí \(\mathrm{O}_2\) bằng \(58\%\) áp suất khí khi chưa rút, nhiệt độ của bình khí không đổi. Khối lượng \(\mathrm{O}_2\) đã được rút ra khỏi bình là bao nhiêu kilôgam (làm tròn kết quả đến chữ số hàng phần trăm)?</span></div>
-
-    <div class="info-note">
-        <strong>Dùng thông tin sau cho câu 5 và câu 6:</strong> Trước đây, để thuận tiện cho việc xem giờ, các nhà sản xuất đồng hồ đã sơn mặt số và kim của đồng hồ bằng một lớp dạ quang chứa đồng vị phóng xạ radium \( _{88}^{226}\mathrm{Ra} \) có chu kì bán rã là \(1600\) năm. Ban đầu, lớp dạ quang này chứa \(6,3 \, \mu\text{g}\) \( _{88}^{226}\mathrm{Ra} \). Lấy số ngày trong một năm là \(365\). Khối lượng mol của \( _{88}^{226}\mathrm{Ra} \) là \(226 \, \text{g/mol}\).
-    </div>
-    <div class="question-block"><span class="question-number">Câu 5:</span> <span class="question-text">Độ phóng xạ ban đầu của lượng \( _{88}^{226}\mathrm{Ra} \) được sơn trên đồng hồ là bao nhiêu megabecoren (MBq, làm tròn kết quả đến chữ số hàng phần trăm)?</span></div>
-    
-    <div class="question-block"><span class="question-number">Câu 6:</span> <span class="question-text">Sau bao nhiêu năm thì độ phóng xạ của lượng \( _{88}^{226}\mathrm{Ra} \) còn lại bằng \(12,5\%\) so với độ phóng xạ ban đầu (làm tròn kết quả đến chữ số hàng đơn vị)?</span></div>
-
-    <!-- Lưu ý cuối đề -->
-    <div class="footnote">
+    <footer>
+        --- HẾT ---<br>
         - Thí sinh không được sử dụng tài liệu;<br>
         - Giám thị không giải thích gì thêm.
-    </div>
-    <div style="margin-top: 25px; font-size: 0.9rem; text-align: right; color: #8B5A2B; background-color:#F5F5DC; padding: 6px 12px; border-radius: 30px; width: fit-content; margin-left: auto;">
-        Mã đề 0220VL25
-    </div>
+    </footer>
 </div>
 </body>
 </html>
