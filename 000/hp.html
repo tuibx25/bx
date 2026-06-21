@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giải mã quy ước đặt tên laptop HP</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #F5F5F5;
+        color: #000000;
+        line-height: 1.7;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    header {
+        background-color: #004488;
+        color: #FFFFFF;
+        padding: 50px 30px;
+        border-radius: 12px;
+        text-align: center;
+        margin-bottom: 30px;
+        border: 3px solid #8B4513;
+    }
+
+    header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        color: #FFFFFF;
+    }
+
+    header p {
+        font-size: 1.1em;
+        color: #F5DEB3;
+    }
+
+    .intro {
+        background-color: #F5F5DC;
+        padding: 25px 30px;
+        border-left: 5px solid #8B5A2B;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        color: #000000;
+    }
+
+    .intro strong {
+        color: #8B4513;
+    }
+
+    .section {
+        background-color: #FFFFFF;
+        border-radius: 12px;
+        padding: 30px;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        border: 2px solid #D3D3D3;
+    }
+
+    .section h2 {
+        color: #004488;
+        border-bottom: 3px solid #8B5A2B;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        font-size: 1.6em;
+    }
+
+    .section h3 {
+        color: #8B4513;
+        margin: 20px 0 10px 0;
+        font-size: 1.2em;
+    }
+
+    .section p {
+        color: #000000;
+        margin-bottom: 12px;
+    }
+
+    .structure-box {
+        background-color: #F5DEB3;
+        border: 2px solid #8B4513;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    .structure-box strong {
+        color: #8B4513;
+        font-size: 1.1em;
+    }
+
+    .info-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 15px 0;
+        background-color: #F5F5F5;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #D3D3D3;
+    }
+
+    .info-table th {
+        background-color: #004488;
+        color: #FFFFFF;
+        padding: 12px 15px;
+        text-align: left;
+        font-weight: 600;
+    }
+
+    .info-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #D3D3D3;
+        color: #000000;
+    }
+
+    .info-table tr:nth-child(even) {
+        background-color: #F5F5DC;
+    }
+
+    .info-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .info-table tr:hover {
+        background-color: #F5DEB3;
+    }
+
+    .highlight {
+        color: #8B4513;
+        font-weight: bold;
+    }
+
+    .number-badge {
+        display: inline-block;
+        background-color: #8B5A2B;
+        color: #FFFFFF;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        border-radius: 50%;
+        font-weight: bold;
+        margin-right: 8px;
+    }
+
+    .examples-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .example-card {
+        background-color: #F5DEB3;
+        border: 2px solid #8B5A2B;
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .example-card h4 {
+        color: #8B4513;
+        font-size: 1.3em;
+        margin-bottom: 12px;
+        border-bottom: 2px solid #D3D3D3;
+        padding-bottom: 8px;
+    }
+
+    .example-card ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .example-card ul li {
+        padding: 6px 0;
+        color: #000000;
+        border-bottom: 1px dashed #D3D3D3;
+    }
+
+    .example-card ul li:last-child {
+        border-bottom: none;
+    }
+
+    .example-card ul li strong {
+        color: #004488;
+    }
+
+    .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background-color: #FFFFFF;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 2px solid #004488;
+    }
+
+    .comparison-table th {
+        background-color: #004488;
+        color: #FFFFFF;
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        border: 1px solid #D3D3D3;
+    }
+
+    .comparison-table td {
+        padding: 12px 15px;
+        border: 1px solid #D3D3D3;
+        color: #000000;
+    }
+
+    .comparison-table tr:nth-child(even) {
+        background-color: #F5F5F5;
+    }
+
+    .comparison-table tr:hover {
+        background-color: #F5DEB3;
+    }
+
+    .note-box {
+        background-color: #F5F5DC;
+        border-left: 5px solid #0066CC;
+        padding: 15px 20px;
+        margin: 20px 0;
+        border-radius: 5px;
+    }
+
+    .note-box strong {
+        color: #004488;
+    }
+
+    .summary {
+        background-color: #F5F5DC;
+        padding: 25px 30px;
+        border-radius: 12px;
+        border-left: 6px solid #004488;
+        margin-top: 30px;
+        color: #000000;
+        border: 2px solid #8B5A2B;
+    }
+
+    .summary h2 {
+        color: #004488;
+        margin-bottom: 12px;
+        border-bottom: 2px solid #8B4513;
+        padding-bottom: 8px;
+    }
+
+    footer {
+        text-align: center;
+        padding: 20px;
+        color: #8B4513;
+        font-size: 0.9em;
+        margin-top: 20px;
+    }
+
+    .line-category {
+        background-color: #F5DEB3;
+        border: 2px solid #8B4513;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+    }
+
+    .line-category h4 {
+        color: #004488;
+        margin-bottom: 10px;
+        font-size: 1.1em;
+    }
+
+    @media (max-width: 600px) {
+        header h1 {
+            font-size: 1.8em;
+        }
+        .comparison-table, .info-table {
+            font-size: 0.9em;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>Giải Mã Quy Ước Đặt Tên Laptop HP</h1>
+        <p>Hiểu rõ ý nghĩa các mã số: EliteBook 840 G10, ProBook 450 G10...</p>
+    </header>
+
+    <div class="intro">
+        <p>HP cũng có quy ước đặt tên <strong>tương tự Dell</strong>, nhưng <strong>có phần phức tạp hơn</strong> vì HP chia thành nhiều dòng riêng biệt với cách đặt tên khác nhau.</p>
+    </div>
+
+    <div class="section">
+        <h2><span class="number-badge">1</span> Dòng Doanh Nhân: HP EliteBook & ProBook</h2>
+        <p>Đây là dòng có quy ước đặt tên <span class="highlight">rất giống Dell</span>, nhưng có thêm hậu tố <strong>"G" (Generation)</strong> ở cuối để chỉ thế hệ.</p>
+
+        <div class="structure-box">
+            <strong>Cấu trúc: [Phân khúc] + [Kích thước] + G + [Thế hệ]</strong><br><br>
+            <em>Ví dụ: HP EliteBook 840 G10, HP ProBook 450 G10</em>
+        </div>
+
+        <h3>Chữ số đầu tiên: Phân khúc</h3>
+        <table class="info-table">
+            <thead>
+                <tr>
+                    <th>Số</th>
+                    <th>Dòng</th>
+                    <th>Đặc điểm</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>4</strong></td>
+                    <td>ProBook 400</td>
+                    <td>Phân khúc phổ thông, giá rẻ nhất trong dòng doanh nhân</td>
+                </tr>
+                <tr>
+                    <td><strong>6</strong></td>
+                    <td>ProBook 600</td>
+                    <td>Phân khúc tầm trung</td>
+                </tr>
+                <tr>
+                    <td><strong>8</strong></td>
+                    <td>EliteBook 800</td>
+                    <td>Phân khúc cao cấp, tương đương Dell Latitude 7000</td>
+                </tr>
+                <tr>
+                    <td><strong>10</strong></td>
+                    <td>EliteBook 1000</td>
+                    <td>Phân khúc siêu cao cấp (flagship)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Chữ số thứ hai: Kích thước màn hình</h3>
+        <table class="info-table">
+            <thead>
+                <tr>
+                    <th>Số</th>
+                    <th>Kích thước màn hình</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>3</strong></td><td>13 inch</td></tr>
+                <tr><td><strong>4</strong></td><td>14 inch (phổ biến nhất)</td></tr>
+                <tr><td><strong>5</strong></td><td>15 inch</td></tr>
+                <tr><td><strong>7</strong></td><td>17 inch</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Hậu tố "G" + số: Thế hệ (Generation)</h3>
+        <div class="note-box">
+            <strong>G1, G2, G3... G10, G11:</strong> Thế hệ thứ 1, 2, 3... 10, 11
+        </div>
+
+        <h3>Ví dụ:</h3>
+        <div class="examples-grid">
+            <div class="example-card">
+                <h4>HP EliteBook 840 G10</h4>
+                <ul>
+                    <li><strong>8:</strong> Dòng cao cấp (EliteBook)</li>
+                    <li><strong>4:</strong> Màn hình 14 inch</li>
+                    <li><strong>G10:</strong> Thế hệ thứ 10 (ra mắt 2023, dùng Intel Gen 13)</li>
+                </ul>
+            </div>
+            <div class="example-card">
+                <h4>HP ProBook 450 G10</h4>
+                <ul>
+                    <li><strong>4:</strong> Dòng phổ thông (ProBook)</li>
+                    <li><strong>5:</strong> Màn hình 15 inch</li>
+                    <li><strong>G10:</strong> Thế hệ thứ 10</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2><span class="number-badge">2</span> Dòng Cao Cấp Đặc Biệt</h2>
+        <p>Các dòng này <span class="highlight">không dùng số</span> mà dùng tên riêng:</p>
+
+        <div class="line-category">
+            <h4>HP Elite Dragonfly</h4>
+            <p>Laptop siêu nhẹ, cao cấp nhất</p>
+        </div>
+
+        <div class="line-category">
+            <h4>HP Elite Folio</h4>
+            <p>Thiết kế 2-trong-1, vỏ da</p>
+        </div>
+
+        <div class="line-category">
+            <h4>HP Elite x2</h4>
+            <p>Tablet lai laptop</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2><span class="number-badge">3</span> Dòng Phổ Thông (Consumer)</h2>
+        <p>Các dòng này <span class="highlight">không dùng quy ước số</span> như Dell mà dùng tên riêng:</p>
+
+        <table class="info-table">
+            <thead>
+                <tr>
+                    <th>Dòng</th>
+                    <th>Phân khúc</th>
+                    <th>Đặc điểm</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>HP Spectre</strong></td>
+                    <td>Cao cấp nhất</td>
+                    <td>Mỏng nhẹ, sang trọng, giá đắt</td>
+                </tr>
+                <tr>
+                    <td><strong>HP Envy</strong></td>
+                    <td>Tầm trung cao</td>
+                    <td>Thiết kế đẹp, hiệu năng tốt</td>
+                </tr>
+                <tr>
+                    <td><strong>HP Pavilion</strong></td>
+                    <td>Phổ thông</td>
+                    <td>Giá rẻ, đáp ứng nhu cầu cơ bản</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="note-box">
+            <strong>Sau tên dòng thường có thêm kích thước màn hình hoặc hậu tố:</strong><br>
+            • HP Spectre x360 14: Màn hình 14 inch, xoay gập 360°<br>
+            • HP Envy 16: Màn hình 16 inch<br>
+            • HP Pavilion 15: Màn hình 15 inch
+        </div>
+    </div>
+
+    <div class="section">
+        <h2><span class="number-badge">4</span> Dòng Gaming: HP Omen & Victus</h2>
+        <table class="info-table">
+            <thead>
+                <tr>
+                    <th>Dòng</th>
+                    <th>Phân khúc</th>
+                    <th>Ví dụ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>HP Omen</strong></td>
+                    <td>Gaming cao cấp</td>
+                    <td>Omen 16, Omen 17</td>
+                </tr>
+                <tr>
+                    <td><strong>HP Victus</strong></td>
+                    <td>Gaming tầm trung</td>
+                    <td>Victus 15, Victus 16</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="note-box">
+            <strong>Số ở cuối là kích thước màn hình.</strong>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2><span class="number-badge">5</span> So Sánh Nhanh Dell vs HP</h2>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Tiêu chí</th>
+                    <th>Dell Latitude</th>
+                    <th>HP EliteBook/ProBook</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Cấu trúc</strong></td>
+                    <td>4 chữ số (5440)</td>
+                    <td>3 chữ số + G + số (840 G10)</td>
+                </tr>
+                <tr>
+                    <td><strong>Phân khúc</strong></td>
+                    <td>Chữ số đầu (3, 5, 7, 9)</td>
+                    <td>Chữ số đầu (4, 6, 8)</td>
+                </tr>
+                <tr>
+                    <td><strong>Kích thước</strong></td>
+                    <td>Chữ số thứ 2 (3, 4, 5)</td>
+                    <td>Chữ số thứ 2 (3, 4, 5)</td>
+                </tr>
+                <tr>
+                    <td><strong>Thế hệ</strong></td>
+                    <td>2 chữ số cuối (40, 50)</td>
+                    <td>Hậu tố G + số (G10, G11)</td>
+                </tr>
+                <tr>
+                    <td><strong>Ví dụ</strong></td>
+                    <td>Latitude 5440</td>
+                    <td>ProBook 440 G10</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Ví Dụ Thực Tế</h2>
+        <table class="info-table">
+            <thead>
+                <tr>
+                    <th>Mã máy</th>
+                    <th>Phân khúc</th>
+                    <th>Màn hình</th>
+                    <th>Thế hệ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>HP EliteBook 830 G10</strong></td>
+                    <td>Cao cấp (800)</td>
+                    <td>13"</td>
+                    <td>Gen 10</td>
+                </tr>
+                <tr>
+                    <td><strong>HP EliteBook 840 G10</strong></td>
+                    <td>Cao cấp (800)</td>
+                    <td>14"</td>
+                    <td>Gen 10</td>
+                </tr>
+                <tr>
+                    <td><strong>HP ProBook 450 G10</strong></td>
+                    <td>Phổ thông (400)</td>
+                    <td>15"</td>
+                    <td>Gen 10</td>
+                </tr>
+                <tr>
+                    <td><strong>HP EliteBook 1040 G10</strong></td>
+                    <td>Siêu cao cấp (1000)</td>
+                    <td>14"</td>
+                    <td>Gen 10</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="summary">
+        <h2>Tóm Lại</h2>
+        <p>HP có quy ước đặt tên <strong>tương tự Dell</strong> ở dòng doanh nhân (EliteBook/ProBook), nhưng <strong>phức tạp hơn</strong> do có thêm hậu tố "G" và nhiều dòng sản phẩm khác nhau. Dòng phổ thông (Spectre, Envy, Pavilion) thì dùng tên riêng thay vì số.</p>
+    </div>
+
+    <footer>
+        <p>© Hướng dẫn tham khảo về quy ước đặt tên laptop HP</p>
+    </footer>
+
+</div>
+
+</body>
+</html>
