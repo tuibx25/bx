@@ -5,29 +5,195 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trắc nghiệm Bài 2 - Quy tắc an toàn trong phòng thực hành Vật lí</title>
     <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
+    
+    <!-- Chống cache -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <script>
-        MathJax = {
-            tex: {
-                inlineMath: [
-                    ['$', '$'],
-                    ['\\(', '\\)']
-                ],
-                displayMath: [
-                    ['$$', '$$'],
-                    ['\\[', '\\]']
-                ],
-                processEscapes: true,
-                processEnvironments: true,
-                tags: 'ams'
-            },
-            svg: {
-                fontCache: 'global'
+        // Chống chuột phải
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Chống phím tắt copy, save, view source, inspect
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+C, Ctrl+V, Ctrl+U, Ctrl+S, Ctrl+P, Ctrl+Shift+I, F12
+            if (
+                (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'u' || e.key === 's' || e.key === 'p' || e.key === 'C' || e.key === 'V' || e.key === 'U' || e.key === 'S' || e.key === 'P')) ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j')) ||
+                e.key === 'F12' ||
+                (e.ctrlKey && e.key === 'PrintScreen') ||
+                e.key === 'PrintScreen'
+            ) {
+                e.preventDefault();
+                return false;
             }
-        };
+        });
+
+        // Chống click chuột phải trên toàn trang
+        document.addEventListener('mousedown', function(e) {
+            if (e.button === 2) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Chống kéo thả
+        document.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Chống chọn văn bản
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Chống copy bằng sự kiện copy
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Chống cắt
+        document.addEventListener('cut', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Chống dán
+        document.addEventListener('paste', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Vô hiệu hóa console.log để che dấu debug
+        console.log = function() {};
+        console.warn = function() {};
+        console.error = function() {};
+        console.info = function() {};
+        console.debug = function() {};
+        console.table = function() {};
+
+        // Ngăn chặn devtools bằng cách phát hiện sự thay đổi kích thước cửa sổ
+        let devtoolsOpen = false;
+        const threshold = 160;
+
+        function detectDevTools() {
+            const widthDiff = window.outerWidth - window.innerWidth;
+            const heightDiff = window.outerHeight - window.innerHeight;
+            
+            if (widthDiff > threshold || heightDiff > threshold) {
+                if (!devtoolsOpen) {
+                    devtoolsOpen = true;
+                    // Chuyển hướng hoặc làm trống trang
+                    document.body.innerHTML = '';
+                    document.body.style.background = '#ffffff';
+                    document.body.style.display = 'flex';
+                    document.body.style.justifyContent = 'center';
+                    document.body.style.alignItems = 'center';
+                    document.body.style.height = '100vh';
+                    document.body.innerHTML = '<h1 style="color:#cc0000;font-family:Arial;text-align:center;">⚠️ Truy cập bị từ chối</h1>';
+                }
+            } else {
+                devtoolsOpen = false;
+            }
+        }
+
+        setInterval(detectDevTools, 1000);
+
+        // Chống mở bằng cách phát hiện debugger
+        function blockDebugger() {
+            const start = performance.now();
+            debugger;
+            const end = performance.now();
+            if (end - start > 100) {
+                document.body.innerHTML = '';
+                document.body.style.background = '#ffffff';
+                document.body.innerHTML = '<h1 style="color:#cc0000;font-family:Arial;text-align:center;">⚠️ Truy cập bị từ chối</h1>';
+            }
+        }
+
+        // Chạy blockDebugger định kỳ
+        setInterval(blockDebugger, 1000);
+
+        // Chống F12, Ctrl+Shift+I, Ctrl+U bằng cách ngăn sự kiện keydown
+        document.addEventListener('keydown', function(e) {
+            if (
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) ||
+                (e.ctrlKey && (e.key === 'U' || e.key === 'u'))
+            ) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Ẩn thanh địa chỉ trên mobile
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                window.scrollTo(0, 1);
+            }, 100);
+        });
+
+        // Chống chụp màn hình (chỉ hoạt động trên một số trình duyệt)
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                // Khi tab bị ẩn, xóa nội dung tạm thời
+                // (không thực hiện để tránh ảnh hưởng trải nghiệm)
+            }
+        });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" id="MathJax-script" async>
-    </script>
+    
     <style>
+        /* Chống chọn văn bản và kéo thả */
+        * {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: transparent !important;
+        }
+        
+        /* Chống in */
+        @media print {
+            body { display: none !important; }
+            * { display: none !important; }
+        }
+        
+        /* Ẩn thanh cuộn trên các trình duyệt */
+        ::-webkit-scrollbar {
+            width: 0px;
+            height: 0px;
+        }
+        * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        /* Cấm copy text bằng CSS */
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* Cấm highlight text */
+        ::selection {
+            background: transparent;
+            color: inherit;
+        }
+        ::-moz-selection {
+            background: transparent;
+            color: inherit;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -40,6 +206,10 @@
             background-color: #F5F5DC;
             color: #000000;
             padding: 10px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         .container {
             max-width: 1000px;
@@ -181,6 +351,15 @@
             cursor: cell;
         }
 
+        /* Cấm chọn trên canvas */
+        #sketchCanvas {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 10px 12px;
@@ -219,7 +398,7 @@
             <span class="note">⏱ Thời gian: 25 phút</span>
         </div>
 
-        <!-- Câu 1 -->
+        <!-- Các câu hỏi 1-25 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 1.</span> Trong phòng thực hành Vật lí, thiết bị nào sau đây có nguy cơ mất an toàn cao nhất?</div>
             <ul class="options">
@@ -230,7 +409,6 @@
             </ul>
         </div>
 
-        <!-- Câu 2 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 2.</span> Khi sử dụng thiết bị điện trong phòng thực hành, cần phải làm gì trước khi cắm hoặc tháo thiết bị?</div>
             <ul class="options">
@@ -241,7 +419,6 @@
             </ul>
         </div>
 
-        <!-- Câu 3 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 3.</span> Việc quan sát kĩ các kí hiệu và nhãn thông số trên thiết bị điện nhằm mục đích gì?</div>
             <ul class="options">
@@ -252,7 +429,6 @@
             </ul>
         </div>
 
-        <!-- Câu 4 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 4.</span> Khi sử dụng ampe kế để đo dòng điện, nếu dòng điện vượt quá giới hạn đo thì điều gì có thể xảy ra?</div>
             <ul class="options">
@@ -263,7 +439,6 @@
             </ul>
         </div>
 
-        <!-- Câu 5 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 5.</span> Để đảm bảo an toàn khi sử dụng đồng hồ đo điện đa năng, cần lưu ý điều gì?</div>
             <ul class="options">
@@ -274,7 +449,6 @@
             </ul>
         </div>
 
-        <!-- Câu 6 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 6.</span> Thiết bị nhiệt trong phòng thực hành có thể gây ra nguy cơ nào sau đây?</div>
             <ul class="options">
@@ -285,7 +459,6 @@
             </ul>
         </div>
 
-        <!-- Câu 7 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 7.</span> Khi làm thí nghiệm với nhiệt độ cao, cần sử dụng dụng cụ bảo hộ nào?</div>
             <ul class="options">
@@ -296,7 +469,6 @@
             </ul>
         </div>
 
-        <!-- Câu 8 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 8.</span> Thiết bị quang học dễ bị ảnh hưởng bởi yếu tố nào sau đây?</div>
             <ul class="options">
@@ -307,7 +479,6 @@
             </ul>
         </div>
 
-        <!-- Câu 9 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 9.</span> Khi sử dụng tia laser trong phòng thực hành, cần giữ khoảng cách an toàn vì:</div>
             <ul class="options">
@@ -318,7 +489,6 @@
             </ul>
         </div>
 
-        <!-- Câu 10 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 10.</span> Khi phát hiện người bị điện giật, việc đầu tiên cần làm là:</div>
             <ul class="options">
@@ -329,7 +499,6 @@
             </ul>
         </div>
 
-        <!-- Câu 11 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 11.</span> Trong trường hợp hỏa hoạn xảy ra trong phòng thực hành, cần phải:</div>
             <ul class="options">
@@ -340,7 +509,6 @@
             </ul>
         </div>
 
-        <!-- Câu 12 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 12.</span> Khi có đám cháy liên quan đến thiết bị điện, <strong>không được</strong> sử dụng chất nào để dập lửa?</div>
             <ul class="options">
@@ -351,7 +519,6 @@
             </ul>
         </div>
 
-        <!-- Câu 13 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 13.</span> Khi có hỏa hoạn, <strong>không được</strong> sử dụng CO₂ để dập cháy trong trường hợp nào?</div>
             <ul class="options">
@@ -362,7 +529,6 @@
             </ul>
         </div>
 
-        <!-- Câu 14 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 14.</span> Trước khi tiến hành thí nghiệm, học sinh cần làm gì?</div>
             <ul class="options">
@@ -373,7 +539,6 @@
             </ul>
         </div>
 
-        <!-- Câu 15 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 15.</span> Dây điện trong phòng thực hành cần được bố trí như thế nào?</div>
             <ul class="options">
@@ -384,7 +549,6 @@
             </ul>
         </div>
 
-        <!-- Câu 16 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 16.</span> Tại sao không được để nước hoặc dung dịch dẫn điện gần thiết bị điện?</div>
             <ul class="options">
@@ -395,7 +559,6 @@
             </ul>
         </div>
 
-        <!-- Câu 17 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 17.</span> Khi sử dụng máy biến áp trong phòng thực hành, cần thao tác như thế nào?</div>
             <ul class="options">
@@ -406,7 +569,6 @@
             </ul>
         </div>
 
-        <!-- Câu 18 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 18.</span> Sau khi làm thí nghiệm xong, học sinh cần phải làm gì?</div>
             <ul class="options">
@@ -417,7 +579,6 @@
             </ul>
         </div>
 
-        <!-- Câu 19 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 19.</span> Sốc điện (điện giật) có thể gây ra hậu quả gì?</div>
             <ul class="options">
@@ -428,7 +589,6 @@
             </ul>
         </div>
 
-        <!-- Câu 20 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 20.</span> Khi có hỏa hoạn, thái độ cần có là gì?</div>
             <ul class="options">
@@ -439,7 +599,6 @@
             </ul>
         </div>
 
-        <!-- Câu 21 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 21.</span> Khi sử dụng thiết bị đo điện, việc chọn đúng thang đo có ý nghĩa gì?</div>
             <ul class="options">
@@ -450,7 +609,6 @@
             </ul>
         </div>
 
-        <!-- Câu 22 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 22.</span> Trong phòng thực hành, tại sao phải giữ khoảng cách an toàn khi làm thí nghiệm có các vật bắn ra?</div>
             <ul class="options">
@@ -461,7 +619,6 @@
             </ul>
         </div>
 
-        <!-- Câu 23 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 23.</span> Khi phát hiện người bị điện giật, không được phép làm gì?</div>
             <ul class="options">
@@ -472,7 +629,6 @@
             </ul>
         </div>
 
-        <!-- Câu 24 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 24.</span> Các biển báo trong phòng thí nghiệm có tác dụng gì?</div>
             <ul class="options">
@@ -483,7 +639,6 @@
             </ul>
         </div>
 
-        <!-- Câu 25 -->
         <div class="question-block">
             <div class="question-text"><span class="question-number">Câu 25.</span> Yêu cầu quan trọng nhất khi làm việc trong phòng thực hành Vật lí là gì?</div>
             <ul class="options">
@@ -824,7 +979,7 @@
                     setTimeout(resizeCanvas, 200);
                 });
 
-                // Ngăn context menu
+                // Ngăn context menu trên canvas
                 canvas.addEventListener('contextmenu', function(e) {
                     e.preventDefault();
                 });
