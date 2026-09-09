@@ -3,423 +3,447 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Vẽ Viết</title>
+  <title>Trang vẽ nháp</title>
   <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
   <style>
+    /* Reset toàn bộ, không margin/padding, full màn hình */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
+
     html, body {
       width: 100%;
       height: 100%;
-      overflow: hidden;
-      background: #FFFFFF;
-      user-select: none;
-      -webkit-user-select: none;
+      background: #ffffff;
+      overflow: auto; /* cho phép cuộn */
     }
-    canvas {
-      display: block;
+
+    /* Container chiếm toàn bộ chiều cao nội dung, để cuộn */
+    #drawContainer {
+      position: relative;
+      width: 100%;
+      min-height: 100vh; /* ít nhất full viewport, nhưng có thể mở rộng */
+      height: auto;
+      background: #ffffff;
+    }
+
+    /* Canvas vẽ phủ lên toàn bộ container, cuộn theo */
+    #drawCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      cursor: default;
+      display: block;
+      pointer-events: none;   /* mặc định không nhận sự kiện */
+      z-index: 10;
       touch-action: none;
-      background: #FFFFFF;
+      cursor: default;
+      background: transparent;
     }
-    canvas.drawing {
+
+    /* Khi active (nhấn V) thì nhận sự kiện chuột */
+    #drawCanvas.active {
+      pointer-events: auto;
       cursor: crosshair;
     }
-    canvas.erasing {
-      cursor: cell;
+
+    /* Bảo mật: chống chọn, copy */
+    body {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    * {
+      scrollbar-width: none;
+    }
+
+    img, canvas {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+    }
+
+    /* Chặn context menu (chuột phải) */
+    .no-context {
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 99999;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
-  <canvas id="sketchCanvas"></canvas>
+  <div id="drawContainer">
+    <canvas id="drawCanvas"></canvas>
+  </div>
+
+  <div class="no-context" oncontextmenu="return false;"></div>
 
   <script>
     (function() {
-      "use strict";
+      // --- BẢO MẬT: chống chuột phải, copy, view source ---
+      document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        return false;
+      });
 
-      const canvas = document.getElementById('sketchCanvas');
+      document.addEventListener('keydown', function(e) {
+        // Chống Ctrl+U, Ctrl+S, Ctrl+C, Ctrl+V, Ctrl+P, F12, ...
+        if (e.ctrlKey || e.metaKey) {
+          if (e.key === 'u' || e.key === 'U' || 
+              e.key === 's' || e.key === 'S' ||
+              e.key === 'c' || e.key === 'C' ||
+              e.key === 'v' || e.key === 'V' ||
+              e.key === 'p' || e.key === 'P') {
+            e.preventDefault();
+            return false;
+          }
+        }
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J'))) {
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      // --- DOM elements ---
+      const container = document.getElementById('drawContainer');
+      const canvas = document.getElementById('drawCanvas');
       const ctx = canvas.getContext('2d');
 
-      // ---- Trạng thái ----
+      // --- Trạng thái vẽ ---
+      let paths = [];          // mỗi path: { points: [{x,y}], color, lineWidth }
+      let currentPath = null;
       let isDrawing = false;
-      let isErasing = false;
-      let lastX = 0, lastY = 0;
+
+      let isActive = false;
       let currentColor = '#8B4513';
-      let currentLineWidth = 3;
-      let bgBrightness = 100; // 0-100, 100 là trắng tinh
+      let currentLineWidth = 2;   // mặc định 2px
+      let isEraser = false;
 
-      // ---- Resize canvas full màn hình ----
+      // --- Cập nhật kích thước canvas theo container ---
       function resizeCanvas() {
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        if (canvas.width !== w || canvas.height !== h) {
-          // Lưu ảnh cũ nếu có
-          let oldData = null;
-          try {
-            oldData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          } catch(e) {}
+        const rect = container.getBoundingClientRect();
+        const width = rect.width;
+        const height = container.scrollHeight; // tổng chiều cao nội dung (bao gồm cuộn)
+        
+        canvas.width = width;
+        canvas.height = height;
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
 
-          canvas.width = w;
-          canvas.height = h;
+        // Vẽ lại toàn bộ paths
+        redrawAll();
+      }
 
-          // Phục hồi ảnh cũ
-          if (oldData) {
-            try {
-              ctx.putImageData(oldData, 0, 0);
-            } catch(e) {
-              applyBrightness();
-            }
-          } else {
-            applyBrightness();
+      // --- Vẽ lại toàn bộ paths ---
+      function redrawAll() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let path of paths) {
+          if (path.points.length < 2) continue;
+          ctx.beginPath();
+          ctx.moveTo(path.points[0].x, path.points[0].y);
+          for (let i = 1; i < path.points.length; i++) {
+            ctx.lineTo(path.points[i].x, path.points[i].y);
           }
-
-          // Cập nhật style
+          ctx.strokeStyle = path.color;
+          ctx.lineWidth = path.lineWidth;
           ctx.lineCap = 'round';
           ctx.lineJoin = 'round';
-          ctx.strokeStyle = currentColor;
-          ctx.fillStyle = currentColor;
-          ctx.lineWidth = currentLineWidth;
+          ctx.stroke();
         }
       }
 
-      // ---- Áp dụng độ sáng nền ----
-      function applyBrightness() {
-        // bgBrightness: 0 = đen, 100 = trắng
-        const value = Math.round((bgBrightness / 100) * 255);
-        const hex = value.toString(16).padStart(2, '0');
-        const bgColor = `#${hex}${hex}${hex}`;
-        canvas.style.background = bgColor;
-        // Vẽ lại toàn bộ nội dung (nếu có) - nhưng chúng ta không lưu được nội dung cũ
-        // Nên giữ nguyên canvas và chỉ thay đổi background
+      // --- Lấy tọa độ chuột so với canvas (vị trí tuyệt đối trong container) ---
+      function getCanvasCoords(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+        return {
+          x: clientX - rect.left,
+          y: clientY - rect.top
+        };
       }
 
-      // ---- Cập nhật style vẽ ----
-      function updateStyle() {
-        ctx.strokeStyle = currentColor;
-        ctx.fillStyle = currentColor;
-        ctx.lineWidth = currentLineWidth;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-      }
-
-      // ---- Lấy tọa độ chuột/cảm ứng ----
-      function getCoords(e) {
-        let clientX, clientY;
-        if (e.touches) {
-          clientX = e.touches[0].clientX;
-          clientY = e.touches[0].clientY;
-          e.preventDefault();
-        } else {
-          clientX = e.clientX;
-          clientY = e.clientY;
-        }
-        return { x: clientX, y: clientY };
-      }
-
-      // ---- Vẽ ----
+      // --- SỰ KIỆN VẼ ---
       function startDrawing(e) {
-        if (isErasing) return;
+        if (!isActive) return;
+        e.preventDefault();
+        const coords = getCanvasCoords(e);
+        currentPath = {
+          points: [{ x: coords.x, y: coords.y }],
+          color: isEraser ? '#FFFFFF' : currentColor,
+          lineWidth: isEraser ? 20 : currentLineWidth
+        };
         isDrawing = true;
-        const pos = getCoords(e);
-        lastX = pos.x;
-        lastY = pos.y;
+        if (isEraser) {
+          ctx.globalCompositeOperation = 'destination-out';
+        } else {
+          ctx.globalCompositeOperation = 'source-over';
+        }
+        // Vẽ điểm đầu
         ctx.beginPath();
-        ctx.arc(lastX, lastY, ctx.lineWidth * 0.5, 0, 2 * Math.PI);
+        ctx.arc(coords.x, coords.y, (isEraser ? 20 : currentLineWidth) / 2, 0, Math.PI * 2);
+        ctx.fillStyle = isEraser ? '#FFFFFF' : currentColor;
         ctx.fill();
       }
 
       function draw(e) {
-        if (!isDrawing || isErasing) return;
+        if (!isActive || !isDrawing || !currentPath) return;
         e.preventDefault();
-        const pos = getCoords(e);
+        const coords = getCanvasCoords(e);
+        const newPoint = { x: coords.x, y: coords.y };
+        currentPath.points.push(newPoint);
+
         ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(pos.x, pos.y);
+        ctx.moveTo(currentPath.points[currentPath.points.length - 2].x, currentPath.points[currentPath.points.length - 2].y);
+        ctx.lineTo(newPoint.x, newPoint.y);
+        ctx.strokeStyle = isEraser ? '#FFFFFF' : currentColor;
+        ctx.lineWidth = isEraser ? 20 : currentLineWidth;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
         ctx.stroke();
-        lastX = pos.x;
-        lastY = pos.y;
       }
 
       function stopDrawing(e) {
-        isDrawing = false;
-      }
-
-      // ---- Tẩy (eraser) ----
-      function startErasing(e) {
-        if (!isErasing) return;
-        isDrawing = false;
-        const pos = getCoords(e);
-        const radius = Math.max(currentLineWidth * 2, 10);
-        ctx.save();
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.beginPath();
-        ctx.arc(pos.x, pos.y, radius, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.restore();
-        lastX = pos.x;
-        lastY = pos.y;
-      }
-
-      function erase(e) {
-        if (!isErasing) return;
-        e.preventDefault();
-        const pos = getCoords(e);
-        const radius = Math.max(currentLineWidth * 2, 10);
-        ctx.save();
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.beginPath();
-        ctx.arc(pos.x, pos.y, radius, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.restore();
-        lastX = pos.x;
-        lastY = pos.y;
-      }
-
-      function stopErasing(e) {
-        // Không làm gì
-      }
-
-      // ---- Dán ảnh từ clipboard ----
-      async function pasteImage() {
-        try {
-          const clipboardItems = await navigator.clipboard.read();
-          for (const item of clipboardItems) {
-            if (item.types.some(t => t.startsWith('image/'))) {
-              const type = item.types.find(t => t.startsWith('image/'));
-              const blob = await item.getType(type);
-              const img = new Image();
-              img.onload = function() {
-                const x = (canvas.width - img.width) / 2;
-                const y = (canvas.height - img.height) / 2;
-                ctx.drawImage(img, x, y);
-              };
-              img.src = URL.createObjectURL(blob);
-              return;
-            }
+        if (!isActive) return;
+        if (isDrawing && currentPath) {
+          if (!isEraser) {
+            paths.push({
+              points: currentPath.points.slice(),
+              color: currentColor,
+              lineWidth: currentLineWidth
+            });
           }
-        } catch(e) {
-          console.log('Không thể dán ảnh:', e);
+          ctx.globalCompositeOperation = 'source-over';
         }
+        isDrawing = false;
+        currentPath = null;
       }
 
-      // ---- Xóa toàn bộ ----
-      function clearAll() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
+      // Gắn sự kiện chuột và cảm ứng
+      canvas.addEventListener('mousedown', startDrawing);
+      canvas.addEventListener('mousemove', draw);
+      canvas.addEventListener('mouseup', stopDrawing);
+      canvas.addEventListener('mouseleave', stopDrawing);
 
-      // ---- Xử lý phím nóng ----
-      function handleKeyDown(e) {
-        const key = e.key.toLowerCase();
-        const tag = document.activeElement?.tagName?.toLowerCase();
-        if (tag === 'input' || tag === 'textarea') return;
+      canvas.addEventListener('touchstart', startDrawing, { passive: false });
+      canvas.addEventListener('touchmove', draw, { passive: false });
+      canvas.addEventListener('touchend', stopDrawing, { passive: false });
+      canvas.addEventListener('touchcancel', stopDrawing, { passive: false });
 
-        switch(key) {
-          case 'v':
-            // Chế độ vẽ
-            if (isErasing) {
-              isErasing = false;
-              canvas.classList.remove('erasing');
-              canvas.classList.add('drawing');
-            } else {
-              // Đã ở chế độ vẽ
-            }
-            e.preventDefault();
-            break;
+      // --- PHÍM TẮT ---
+      document.addEventListener('keydown', function(e) {
+        const key = e.key;
 
-          case '3':
-            // Bật/tắt chế độ tẩy
-            isErasing = !isErasing;
-            if (isErasing) {
-              canvas.classList.add('erasing');
-              canvas.classList.remove('drawing');
-              isDrawing = false;
-            } else {
-              canvas.classList.remove('erasing');
-              canvas.classList.add('drawing');
-            }
-            e.preventDefault();
-            break;
-
-          case '0':
-            currentColor = '#0066CC';
-            updateStyle();
-            e.preventDefault();
-            break;
-
-          case '1':
-            currentColor = '#CC0000';
-            updateStyle();
-            e.preventDefault();
-            break;
-
-          case 'n':
-            currentColor = '#8B4513';
-            updateStyle();
-            e.preventDefault();
-            break;
-
-          case 'b':
-            currentLineWidth = Math.min(currentLineWidth + 2, 20);
-            updateStyle();
-            e.preventDefault();
-            break;
-
-          case 'm':
-            currentLineWidth = Math.max(currentLineWidth - 2, 1);
-            updateStyle();
-            e.preventDefault();
-            break;
-
-          case 'c':
-          case 'x':
-            clearAll();
-            e.preventDefault();
-            break;
-
-          case 'p':
-            pasteImage();
-            e.preventDefault();
-            break;
-
-          case '4':
-            // Giảm độ sáng nền
-            bgBrightness = Math.max(bgBrightness - 10, 0);
-            applyBrightness();
-            e.preventDefault();
-            break;
-
-          case '5':
-            // Tăng độ sáng nền
-            bgBrightness = Math.min(bgBrightness + 10, 100);
-            applyBrightness();
-            e.preventDefault();
-            break;
-
-          default:
-            break;
-        }
-      }
-
-      // ---- Gán sự kiện ----
-      function attachEvents() {
-        // Sự kiện vẽ chuột
-        canvas.addEventListener('mousedown', function(e) {
-          if (isErasing) {
-            startErasing(e);
-          } else {
-            startDrawing(e);
-          }
-        });
-        canvas.addEventListener('mousemove', function(e) {
-          if (isErasing) {
-            erase(e);
-          } else {
-            draw(e);
-          }
-        });
-        canvas.addEventListener('mouseup', function(e) {
-          if (isErasing) {
-            stopErasing(e);
-          } else {
-            stopDrawing(e);
-          }
-        });
-        canvas.addEventListener('mouseleave', function(e) {
-          if (isErasing) {
-            stopErasing(e);
-          } else {
-            stopDrawing(e);
-          }
-        });
-
-        // Sự kiện cảm ứng
-        canvas.addEventListener('touchstart', function(e) {
-          if (isErasing) {
-            startErasing(e);
-          } else {
-            startDrawing(e);
-          }
-        }, { passive: false });
-        canvas.addEventListener('touchmove', function(e) {
-          if (isErasing) {
-            erase(e);
-          } else {
-            draw(e);
-          }
-        }, { passive: false });
-        canvas.addEventListener('touchend', function(e) {
-          if (isErasing) {
-            stopErasing(e);
-          } else {
-            stopDrawing(e);
-          }
-        }, { passive: false });
-        canvas.addEventListener('touchcancel', function(e) {
-          if (isErasing) {
-            stopErasing(e);
-          } else {
-            stopDrawing(e);
-          }
-        }, { passive: false });
-
-        // Phím nóng
-        window.addEventListener('keydown', handleKeyDown);
-
-        // Resize
-        window.addEventListener('resize', resizeCanvas);
-        window.addEventListener('orientationchange', function() {
-          setTimeout(resizeCanvas, 200);
-        });
-
-        // Ngăn context menu
-        canvas.addEventListener('contextmenu', function(e) {
+        // Phím V: bật/tắt vẽ
+        if (key === 'v' || key === 'V') {
           e.preventDefault();
-        });
-
-        // Dán ảnh bằng Ctrl+V
-        document.addEventListener('paste', function(e) {
-          const items = e.clipboardData?.items;
-          if (!items) return;
-          for (const item of items) {
-            if (item.type.startsWith('image/')) {
-              const blob = item.getAsFile();
-              const img = new Image();
-              img.onload = function() {
-                const x = (canvas.width - img.width) / 2;
-                const y = (canvas.height - img.height) / 2;
-                ctx.drawImage(img, x, y);
-              };
-              img.src = URL.createObjectURL(blob);
-              e.preventDefault();
-              return;
+          isActive = !isActive;
+          if (isActive) {
+            canvas.classList.add('active');
+            canvas.style.pointerEvents = 'auto';
+            canvas.style.cursor = 'crosshair';
+          } else {
+            canvas.classList.remove('active');
+            canvas.style.pointerEvents = 'none';
+            canvas.style.cursor = 'default';
+            if (isDrawing) {
+              stopDrawing(e);
             }
           }
-        });
+          return;
+        }
+
+        // Màu sắc
+        if (key === '0') {
+          e.preventDefault();
+          currentColor = '#0066CC';
+          isEraser = false;
+          return;
+        }
+        if (key === '1') {
+          e.preventDefault();
+          currentColor = '#FF0000';
+          isEraser = false;
+          return;
+        }
+        if (key === 'n' || key === 'N') {
+          e.preventDefault();
+          currentColor = '#8B4513';
+          isEraser = false;
+          return;
+        }
+        // Độ đậm
+        if (key === 'b' || key === 'B') {
+          e.preventDefault();
+          currentLineWidth = Math.min(20, currentLineWidth + 2);
+          isEraser = false;
+          return;
+        }
+        if (key === 'm' || key === 'M') {
+          e.preventDefault();
+          currentLineWidth = Math.max(1, currentLineWidth - 2);
+          isEraser = false;
+          return;
+        }
+        // Phím 2: đặt độ đậm về 2px
+        if (key === '2') {
+          e.preventDefault();
+          currentLineWidth = 2;
+          isEraser = false;
+          return;
+        }
+        // Cục tẩy (phím 3)
+        if (key === '3') {
+          e.preventDefault();
+          isEraser = !isEraser;
+          return;
+        }
+        // Xoá hết (phím x)
+        if (key === 'x' || key === 'X') {
+          e.preventDefault();
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          paths = [];
+          currentPath = null;
+          isDrawing = false;
+          ctx.globalCompositeOperation = 'source-over';
+          return;
+        }
+
+        // --- PHÍM P: PASTE HÌNH ẢNH TỪ CLIPBOARD ---
+        if (key === 'p' || key === 'P') {
+          e.preventDefault();
+          // Kiểm tra clipboard API
+          if (!navigator.clipboard || !navigator.clipboard.read) {
+            alert('Clipboard API không được hỗ trợ hoặc không có quyền truy cập.');
+            return;
+          }
+
+          navigator.clipboard.read().then(items => {
+            for (let item of items) {
+              if (item.types.includes('image/png') || item.types.includes('image/jpeg')) {
+                item.getType('image/png').then(blob => {
+                  const url = URL.createObjectURL(blob);
+                  const img = new Image();
+                  img.onload = function() {
+                    // Vẽ ảnh lên canvas tại vị trí hiện tại (giữa màn hình?)
+                    // Lấy vị trí cuộn để dán vào đúng vị trí nhìn thấy
+                    const scrollX = window.scrollX || window.pageXOffset;
+                    const scrollY = window.scrollY || window.pageYOffset;
+                    // Dán ảnh tại vị trí hiện tại (giữa viewport)
+                    const rect = canvas.getBoundingClientRect();
+                    const centerX = (window.innerWidth / 2) + scrollX - rect.left;
+                    const centerY = (window.innerHeight / 2) + scrollY - rect.top;
+                    
+                    // Vẽ ảnh lên canvas
+                    ctx.drawImage(img, centerX - img.width/2, centerY - img.height/2);
+                    
+                    // Lưu ảnh như một path? Để đơn giản, ta lưu dưới dạng một path đặc biệt?
+                    // Nhưng để có thể xoá được, ta lưu ảnh dưới dạng một đường vẽ? Không khả thi.
+                    // Giải pháp: vẽ ảnh trực tiếp lên canvas và không lưu vào paths.
+                    // Khi xoá toàn bộ (phím x) sẽ mất ảnh.
+                    // Để tương tác với xoá, ta có thể vẽ ảnh và thêm vào paths dưới dạng một đối tượng đặc biệt.
+                    // Tuy nhiên để đơn giản, ta vẽ trực tiếp lên canvas và không lưu vào paths.
+                    // Nhưng khi redrawAll, ảnh sẽ bị mất. Vậy ta cần lưu ảnh vào paths.
+                    // Ta tạo một path đặc biệt với type 'image'
+                    // Đơn giản hơn: lưu ảnh vào mảng images, và redraw sẽ vẽ lại.
+                    if (typeof window.pastedImages === 'undefined') {
+                      window.pastedImages = [];
+                    }
+                    window.pastedImages.push({
+                      img: img,
+                      x: centerX - img.width/2,
+                      y: centerY - img.height/2
+                    });
+                    // Vẽ lại toàn bộ (bao gồm ảnh)
+                    redrawAllWithImages();
+                    URL.revokeObjectURL(url);
+                  };
+                  img.src = url;
+                });
+                break;
+              }
+            }
+          }).catch(err => {
+            alert('Không thể đọc clipboard: ' + err);
+          });
+        }
+      });
+
+      // Hàm vẽ lại bao gồm cả ảnh đã paste
+      function redrawAllWithImages() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Vẽ các đường
+        for (let path of paths) {
+          if (path.points.length < 2) continue;
+          ctx.beginPath();
+          ctx.moveTo(path.points[0].x, path.points[0].y);
+          for (let i = 1; i < path.points.length; i++) {
+            ctx.lineTo(path.points[i].x, path.points[i].y);
+          }
+          ctx.strokeStyle = path.color;
+          ctx.lineWidth = path.lineWidth;
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+          ctx.stroke();
+        }
+        // Vẽ các ảnh đã paste
+        if (window.pastedImages) {
+          for (let item of window.pastedImages) {
+            ctx.drawImage(item.img, item.x, item.y);
+          }
+        }
       }
 
-      // ---- Khởi tạo ----
-      function init() {
+      // Ghi đè redrawAll để dùng redrawAllWithImages
+      const originalRedraw = redrawAll;
+      redrawAll = function() {
+        redrawAllWithImages();
+      };
+
+      // Xoá hết (phím x) cũng xoá luôn ảnh
+      const originalX = document.addEventListener('keydown', function(e) {
+        if (e.key === 'x' || e.key === 'X') {
+          // đã xử lý ở trên, nhưng cần xoá cả ảnh
+          // Ta sẽ bổ sung trong handler hiện tại
+        }
+      });
+
+      // Patch phím x để xoá cả ảnh
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'x' || e.key === 'X') {
+          window.pastedImages = [];
+        }
+      });
+
+      // --- Resize và cuộn: cập nhật canvas ---
+      function updateCanvasSize() {
         resizeCanvas();
-        updateStyle();
-        canvas.classList.add('drawing');
-        attachEvents();
-        canvas.style.cursor = 'default';
-        
-        const style = document.createElement('style');
-        style.textContent = `
-          canvas.drawing { cursor: crosshair !important; }
-          canvas.erasing { cursor: cell !important; }
-        `;
-        document.head.appendChild(style);
       }
 
-      init();
+      window.addEventListener('resize', updateCanvasSize);
+      window.addEventListener('scroll', function() {
+        // Khi cuộn, canvas vẫn ở đúng vị trí vì position:absolute trong container
+        // Không cần làm gì thêm
+      });
 
+      // Khởi tạo
+      setTimeout(resizeCanvas, 50);
+
+      // Bảo mật thêm
+      canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+
+      console.log('Trang vẽ nháp. Nhấn V để vẽ, 0/1/n đổi màu, B/m độ đậm, 2 đặt 2px, 3 tẩy, x xoá, p paste ảnh.');
     })();
   </script>
 </body>
