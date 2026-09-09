@@ -49,6 +49,8 @@
             border-radius: 10px;
             box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
             border-left: 5px solid #8B5A2B;
+            position: relative;
+            z-index: 1;
         }
         h1 {
             color: #000000;
@@ -156,6 +158,29 @@
             font-weight: 600;
             margin-left: 4px;
         }
+
+        /* ===== Canvas vẽ phủ lên toàn bộ ===== */
+        #sketchCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            z-index: 9999;
+            touch-action: none;
+            cursor: crosshair;
+            background: transparent;
+            pointer-events: none;
+        }
+        #sketchCanvas.active {
+            display: block;
+            pointer-events: all;
+        }
+        #sketchCanvas.erasing {
+            cursor: cell;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 10px 12px;
@@ -182,6 +207,10 @@
     </style>
 </head>
 <body>
+
+    <!-- Canvas vẽ phủ -->
+    <canvas id="sketchCanvas"></canvas>
+
     <div class="container">
         <h1>⚠️ BÀI 2: QUY TẮC AN TOÀN TRONG PHÒNG THỰC HÀNH VẬT LÍ</h1>
         <div class="subtitle">25 câu hỏi trắc nghiệm — Chọn đáp án đúng nhất</div>
@@ -468,5 +497,372 @@
         <hr>
         <div class="footer-note">📌 Học sinh làm bài vào giấy và kiểm tra đáp án ở trang sau.</div>
     </div>
+
+    <script>
+        (function() {
+            "use strict";
+
+            const canvas = document.getElementById('sketchCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // ---- Trạng thái ----
+            let isDrawing = false;
+            let isErasing = false;
+            let lastX = 0,
+                lastY = 0;
+            let currentColor = '#CC0000';
+            let currentLineWidth = 3;
+            let isActive = false;
+
+            // ---- Resize canvas full màn hình ----
+            function resizeCanvas() {
+                const w = window.innerWidth;
+                const h = window.innerHeight;
+                if (canvas.width !== w || canvas.height !== h) {
+                    let oldData = null;
+                    try {
+                        oldData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    } catch (e) {}
+
+                    canvas.width = w;
+                    canvas.height = h;
+
+                    if (oldData) {
+                        try {
+                            ctx.putImageData(oldData, 0, 0);
+                        } catch (e) {
+                            // ignore
+                        }
+                    }
+
+                    ctx.lineCap = 'round';
+                    ctx.lineJoin = 'round';
+                    ctx.strokeStyle = currentColor;
+                    ctx.fillStyle = currentColor;
+                    ctx.lineWidth = currentLineWidth;
+                }
+            }
+
+            // ---- Cập nhật style vẽ ----
+            function updateStyle() {
+                ctx.strokeStyle = currentColor;
+                ctx.fillStyle = currentColor;
+                ctx.lineWidth = currentLineWidth;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+            }
+
+            // ---- Lấy tọa độ ----
+            function getCoords(e) {
+                let clientX, clientY;
+                if (e.touches) {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                    e.preventDefault();
+                } else {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                }
+                return { x: clientX, y: clientY };
+            }
+
+            // ---- Vẽ ----
+            function startDrawing(e) {
+                if (isErasing) return;
+                isDrawing = true;
+                const pos = getCoords(e);
+                lastX = pos.x;
+                lastY = pos.y;
+                ctx.beginPath();
+                ctx.arc(lastX, lastY, ctx.lineWidth * 0.5, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+
+            function draw(e) {
+                if (!isDrawing || isErasing) return;
+                e.preventDefault();
+                const pos = getCoords(e);
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+                lastX = pos.x;
+                lastY = pos.y;
+            }
+
+            function stopDrawing(e) {
+                isDrawing = false;
+            }
+
+            // ---- Tẩy ----
+            function startErasing(e) {
+                if (!isErasing) return;
+                isDrawing = false;
+                const pos = getCoords(e);
+                const radius = Math.max(currentLineWidth * 2, 10);
+                ctx.save();
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, radius, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.restore();
+                lastX = pos.x;
+                lastY = pos.y;
+            }
+
+            function erase(e) {
+                if (!isErasing) return;
+                e.preventDefault();
+                const pos = getCoords(e);
+                const radius = Math.max(currentLineWidth * 2, 10);
+                ctx.save();
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, radius, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.restore();
+                lastX = pos.x;
+                lastY = pos.y;
+            }
+
+            function stopErasing(e) {}
+
+            // ---- Xóa toàn bộ ----
+            function clearAll() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+
+            // ---- Dán ảnh ----
+            async function pasteImage() {
+                try {
+                    const clipboardItems = await navigator.clipboard.read();
+                    for (const item of clipboardItems) {
+                        if (item.types.some(t => t.startsWith('image/'))) {
+                            const type = item.types.find(t => t.startsWith('image/'));
+                            const blob = await item.getType(type);
+                            const img = new Image();
+                            img.onload = function() {
+                                const x = (canvas.width - img.width) / 2;
+                                const y = (canvas.height - img.height) / 2;
+                                ctx.drawImage(img, x, y);
+                            };
+                            img.src = URL.createObjectURL(blob);
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.log('Không thể dán ảnh:', e);
+                }
+            }
+
+            // ---- Bật/tắt chế độ vẽ ----
+            function toggleDraw() {
+                isActive = !isActive;
+                if (isActive) {
+                    canvas.classList.add('active');
+                    canvas.style.cursor = 'crosshair';
+                    isErasing = false;
+                    canvas.classList.remove('erasing');
+                } else {
+                    canvas.classList.remove('active');
+                    isDrawing = false;
+                    isErasing = false;
+                    canvas.style.cursor = 'default';
+                    canvas.classList.remove('erasing');
+                }
+            }
+
+            // ---- Xử lý phím nóng ----
+            function handleKeyDown(e) {
+                const key = e.key.toLowerCase();
+                const tag = document.activeElement?.tagName?.toLowerCase();
+                if (tag === 'input' || tag === 'textarea') return;
+
+                if (key === 'v') {
+                    toggleDraw();
+                    e.preventDefault();
+                    return;
+                }
+
+                // Chỉ xử lý các phím tắt khác khi canvas đang active
+                if (!isActive) return;
+
+                switch (key) {
+                    case '3':
+                        isErasing = !isErasing;
+                        if (isErasing) {
+                            canvas.classList.add('erasing');
+                            isDrawing = false;
+                        } else {
+                            canvas.classList.remove('erasing');
+                        }
+                        e.preventDefault();
+                        break;
+
+                    case '0':
+                        currentColor = '#0066CC';
+                        updateStyle();
+                        e.preventDefault();
+                        break;
+
+                    case '1':
+                        currentColor = '#CC0000';
+                        updateStyle();
+                        e.preventDefault();
+                        break;
+
+                    case 'n':
+                        currentColor = '#8B4513';
+                        updateStyle();
+                        e.preventDefault();
+                        break;
+
+                    case 'b':
+                        currentLineWidth = Math.min(currentLineWidth + 2, 20);
+                        updateStyle();
+                        e.preventDefault();
+                        break;
+
+                    case 'm':
+                        currentLineWidth = Math.max(currentLineWidth - 2, 1);
+                        updateStyle();
+                        e.preventDefault();
+                        break;
+
+                    case 'c':
+                    case 'x':
+                        clearAll();
+                        e.preventDefault();
+                        break;
+
+                    case 'p':
+                        pasteImage();
+                        e.preventDefault();
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            // ---- Gán sự kiện ----
+            function attachEvents() {
+                // Sự kiện vẽ chuột
+                canvas.addEventListener('mousedown', function(e) {
+                    if (!isActive) return;
+                    if (isErasing) {
+                        startErasing(e);
+                    } else {
+                        startDrawing(e);
+                    }
+                });
+                canvas.addEventListener('mousemove', function(e) {
+                    if (!isActive) return;
+                    if (isErasing) {
+                        erase(e);
+                    } else {
+                        draw(e);
+                    }
+                });
+                canvas.addEventListener('mouseup', function(e) {
+                    if (!isActive) return;
+                    if (isErasing) {
+                        stopErasing(e);
+                    } else {
+                        stopDrawing(e);
+                    }
+                });
+                canvas.addEventListener('mouseleave', function(e) {
+                    if (!isActive) return;
+                    if (isErasing) {
+                        stopErasing(e);
+                    } else {
+                        stopDrawing(e);
+                    }
+                });
+
+                // Sự kiện cảm ứng
+                canvas.addEventListener('touchstart', function(e) {
+                    if (!isActive) return;
+                    if (isErasing) {
+                        startErasing(e);
+                    } else {
+                        startDrawing(e);
+                    }
+                }, { passive: false });
+                canvas.addEventListener('touchmove', function(e) {
+                    if (!isActive) return;
+                    if (isErasing) {
+                        erase(e);
+                    } else {
+                        draw(e);
+                    }
+                }, { passive: false });
+                canvas.addEventListener('touchend', function(e) {
+                    if (!isActive) return;
+                    if (isErasing) {
+                        stopErasing(e);
+                    } else {
+                        stopDrawing(e);
+                    }
+                }, { passive: false });
+                canvas.addEventListener('touchcancel', function(e) {
+                    if (!isActive) return;
+                    if (isErasing) {
+                        stopErasing(e);
+                    } else {
+                        stopDrawing(e);
+                    }
+                }, { passive: false });
+
+                // Phím nóng
+                window.addEventListener('keydown', handleKeyDown);
+
+                // Resize
+                window.addEventListener('resize', resizeCanvas);
+                window.addEventListener('orientationchange', function() {
+                    setTimeout(resizeCanvas, 200);
+                });
+
+                // Ngăn context menu
+                canvas.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                });
+
+                // Dán ảnh bằng Ctrl+V
+                document.addEventListener('paste', function(e) {
+                    if (!isActive) return;
+                    const items = e.clipboardData?.items;
+                    if (!items) return;
+                    for (const item of items) {
+                        if (item.type.startsWith('image/')) {
+                            const blob = item.getAsFile();
+                            const img = new Image();
+                            img.onload = function() {
+                                const x = (canvas.width - img.width) / 2;
+                                const y = (canvas.height - img.height) / 2;
+                                ctx.drawImage(img, x, y);
+                            };
+                            img.src = URL.createObjectURL(blob);
+                            e.preventDefault();
+                            return;
+                        }
+                    }
+                });
+            }
+
+            // ---- Khởi tạo ----
+            function init() {
+                resizeCanvas();
+                updateStyle();
+                attachEvents();
+                canvas.style.cursor = 'default';
+            }
+
+            init();
+
+        })();
+    </script>
+
 </body>
 </html>
