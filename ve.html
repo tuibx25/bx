@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vẽ nháp - Phím nóng</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #FFFFFF;
+            position: relative;
+        }
+
+        #sketch-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: default;
+            touch-action: none;
+            z-index: 10;
+        }
+
+        /* Khi đang vẽ, hiển thị con trỏ crosshair */
+        #sketch-canvas.drawing-mode {
+            cursor: crosshair;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="sketch-canvas"></canvas>
+
+    <script>
+        (function() {
+            "use strict";
+
+            const canvas = document.getElementById('sketch-canvas');
+            const ctx = canvas.getContext('2d');
+
+            // ---- Trạng thái ----
+            let isDrawing = false;
+            let drawMode = false;        // bật/tắt chế độ vẽ (phím V)
+            let lastX = 0,
+                lastY = 0;
+
+            // Màu mặc định #8B4513
+            let currentColor = '#8B4513';
+            let currentLineWidth = 2.8;
+
+            // ---- Resize canvas full màn hình ----
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                // Khôi phục nội dung đã vẽ (nếu có)
+                if (window._savedImageData) {
+                    ctx.putImageData(window._savedImageData, 0, 0);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+
+            // Lưu ảnh hiện tại
+            function saveImageData() {
+                try {
+                    window._savedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                } catch (e) {}
+            }
+
+            // Khởi tạo
+            function initCanvas() {
+                resizeCanvas();
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.strokeStyle = currentColor;
+                ctx.fillStyle = currentColor;
+                ctx.lineWidth = currentLineWidth;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                canvas.classList.remove('drawing-mode');
+                saveImageData();
+            }
+
+            // ---- Lấy tọa độ chuột/cảm ứng ----
+            function getCoords(e) {
+                let clientX, clientY;
+                if (e.touches) {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                    e.preventDefault();
+                } else {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                }
+                return { x: clientX, y: clientY };
+            }
+
+            // ---- Vẽ ----
+            function startDrawing(e) {
+                if (!drawMode) return;
+                isDrawing = true;
+                const pos = getCoords(e);
+                lastX = pos.x;
+                lastY = pos.y;
+                // Chấm nhỏ khi bắt đầu
+                ctx.beginPath();
+                ctx.arc(lastX, lastY, ctx.lineWidth * 0.5, 0, 2 * Math.PI);
+                ctx.fillStyle = ctx.strokeStyle;
+                ctx.fill();
+            }
+
+            function draw(e) {
+                if (!isDrawing || !drawMode) return;
+                e.preventDefault();
+                const pos = getCoords(e);
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+                lastX = pos.x;
+                lastY = pos.y;
+            }
+
+            function stopDrawing(e) {
+                if (isDrawing) {
+                    isDrawing = false;
+                    saveImageData();
+                }
+            }
+
+            // ---- Xóa toàn bộ ----
+            function clearSketch() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                saveImageData();
+            }
+
+            // ---- Tẩy (xóa nét vẽ theo vùng) ----
+            function enableEraser() {
+                // Đổi màu thành trắng để làm tẩy
+                ctx.strokeStyle = '#FFFFFF';
+                ctx.fillStyle = '#FFFFFF';
+                // Lưu lại màu cũ để phục hồi sau (nếu cần)
+                // Nhưng theo yêu cầu: nhấn 3 để tẩy (tẩy xóa nét vẽ)
+                // Chúng ta sẽ đổi thành màu trắng, và khi nhấn N hoặc các phím màu khác sẽ trở lại bình thường
+            }
+
+            // ---- Đặt lại màu mặc định ----
+            function resetColor() {
+                currentColor = '#8B4513';
+                ctx.strokeStyle = currentColor;
+                ctx.fillStyle = currentColor;
+            }
+
+            // ---- Xử lý phím nóng ----
+            function handleKeyDown(e) {
+                const key = e.key;
+
+                // Không xử lý nếu đang focus vào input/textarea
+                const tag = document.activeElement?.tagName?.toLowerCase();
+                if (tag === 'input' || tag === 'textarea') return;
+
+                // ---- Phím V: Bật/tắt chế độ vẽ ----
+                if (key === 'v' || key === 'V') {
+                    e.preventDefault();
+                    drawMode = !drawMode;
+                    if (drawMode) {
+                        canvas.classList.add('drawing-mode');
+                    } else {
+                        canvas.classList.remove('drawing-mode');
+                        if (isDrawing) isDrawing = false;
+                    }
+                    return;
+                }
+
+                // ---- Phím X: Xóa toàn bộ ----
+                if (key === 'x' || key === 'X') {
+                    e.preventDefault();
+                    clearSketch();
+                    return;
+                }
+
+                // ---- Phím 0: Màu #0066CC ----
+                if (key === '0') {
+                    e.preventDefault();
+                    currentColor = '#0066CC';
+                    ctx.strokeStyle = currentColor;
+                    ctx.fillStyle = currentColor;
+                    return;
+                }
+
+                // ---- Phím 1: Màu đỏ ----
+                if (key === '1') {
+                    e.preventDefault();
+                    currentColor = '#FF0000';
+                    ctx.strokeStyle = currentColor;
+                    ctx.fillStyle = currentColor;
+                    return;
+                }
+
+                // ---- Phím N: Màu trở lại #8B4513 ----
+                if (key === 'n' || key === 'N') {
+                    e.preventDefault();
+                    resetColor();
+                    return;
+                }
+
+                // ---- Phím B: Tăng độ đậm nét vẽ ----
+                if (key === 'b' || key === 'B') {
+                    e.preventDefault();
+                    currentLineWidth = Math.min(currentLineWidth + 1.5, 20);
+                    ctx.lineWidth = currentLineWidth;
+                    return;
+                }
+
+                // ---- Phím M: Giảm độ đậm nét vẽ ----
+                if (key === 'm' || key === 'M') {
+                    e.preventDefault();
+                    currentLineWidth = Math.max(currentLineWidth - 1.5, 1);
+                    ctx.lineWidth = currentLineWidth;
+                    return;
+                }
+
+                // ---- Phím 3: Tẩy (chuyển sang màu trắng để xóa) ----
+                if (key === '3') {
+                    e.preventDefault();
+                    // Chuyển sang chế độ tẩy: màu trắng
+                    ctx.strokeStyle = '#FFFFFF';
+                    ctx.fillStyle = '#FFFFFF';
+                    // Lưu ý: người dùng có thể nhấn N hoặc 0,1 để thoát tẩy
+                    return;
+                }
+            }
+
+            // ---- Gắn sự kiện ----
+            function attachEvents() {
+                // Sự kiện vẽ
+                canvas.addEventListener('mousedown', startDrawing);
+                canvas.addEventListener('mousemove', draw);
+                canvas.addEventListener('mouseup', stopDrawing);
+                canvas.addEventListener('mouseleave', stopDrawing);
+
+                canvas.addEventListener('touchstart', startDrawing, { passive: false });
+                canvas.addEventListener('touchmove', draw, { passive: false });
+                canvas.addEventListener('touchend', stopDrawing);
+                canvas.addEventListener('touchcancel', stopDrawing);
+
+                // Phím nóng
+                window.addEventListener('keydown', handleKeyDown);
+
+                // Resize
+                window.addEventListener('resize', () => {
+                    saveImageData();
+                    resizeCanvas();
+                });
+            }
+
+            // ---- Khởi chạy ----
+            initCanvas();
+            attachEvents();
+
+            // Lưu trạng thái ban đầu
+            setTimeout(() => { saveImageData(); }, 50);
+
+        })();
+    </script>
+
+</body>
+</html>
