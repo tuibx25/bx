@@ -3,573 +3,470 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trắc nghiệm Bài 2 - An toàn phòng thực hành (Câu hỏi)</title>
-	<link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico">
+    <title>Trắc nghiệm Bài 2 - Quy tắc an toàn trong phòng thực hành Vật lí</title>
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [
+                    ['$', '$'],
+                    ['\\(', '\\)']
+                ],
+                displayMath: [
+                    ['$$', '$$'],
+                    ['\\[', '\\]']
+                ],
+                processEscapes: true,
+                processEnvironments: true,
+                tags: 'ams'
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" id="MathJax-script" async>
+    </script>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.7;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 15px;
+            line-height: 1.2;
             background-color: #F5F5DC;
-            color: #333;
-            padding: 20px;
+            color: #000000;
+            padding: 10px;
         }
-
         .container {
             max-width: 1000px;
             margin: 0 auto;
             background-color: #FFFFFF;
-            padding: 30px 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-            border-left: 6px solid #8B5A2B;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #8B5A2B;
         }
-
         h1 {
-            color: #8B4513;
-            font-size: 2em;
-            border-bottom: 3px solid #8B5A2B;
-            padding-bottom: 12px;
+            color: #000000;
+            font-size: 1.5em;
+            border-bottom: 2px solid #8B5A2B;
+            padding-bottom: 6px;
             text-align: center;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            font-weight: 700;
         }
-
         .subtitle {
             text-align: center;
-            color: #666;
+            color: #000000;
             font-style: italic;
-            margin-bottom: 25px;
-            font-size: 1.05em;
+            margin-bottom: 10px;
+            font-size: 0.9em;
         }
-
         .info-bar {
             background-color: #F5F5F5;
-            border-radius: 8px;
-            padding: 12px 20px;
-            margin-bottom: 25px;
+            border-radius: 6px;
+            padding: 6px 14px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             border: 1px solid #D3D3D3;
+            font-size: 0.9em;
         }
-
         .info-bar .total {
             font-weight: 600;
-            color: #004488;
+            color: #000000;
         }
-
         .info-bar .note {
-            color: #8B4513;
+            color: #000000;
         }
-
         .question-block {
             background-color: #F5F5F5;
-            border-radius: 10px;
-            padding: 18px 22px;
-            margin-bottom: 18px;
-            border-left: 4px solid #0066CC;
-            transition: background-color 0.2s;
+            border-radius: 6px;
+            padding: 8px 14px;
+            margin-bottom: 5px;
+            border-left: 3px solid #0066CC;
         }
-
-        .question-block:hover {
-            background-color: #F0F0F0;
-        }
-
         .question-number {
             font-weight: 700;
-            color: #8B4513;
-            font-size: 1.05em;
-            margin-right: 8px;
+            color: #000000;
+            font-size: 1em;
+            margin-right: 4px;
         }
-
         .question-text {
             font-weight: 500;
-            margin-bottom: 10px;
-            font-size: 1.02em;
+            margin-bottom: 2px;
+            font-size: 1em;
+            color: #000000;
         }
-
         .options {
-            padding-left: 28px;
+            padding-left: 18px;
             list-style: none;
+            margin: 1px 0;
         }
-
         .options li {
-            padding: 4px 0;
-            cursor: default;
+            padding: 0.5px 0;
+            font-size: 1em;
+            color: #000000;
             display: flex;
             align-items: baseline;
-            gap: 6px;
+            gap: 4px;
         }
-
         .options li::before {
             content: "●";
             color: #8B5A2B;
-            font-size: 0.7em;
-            margin-right: 8px;
+            font-size: 0.5em;
+            margin-right: 5px;
         }
-
         .options .option-label {
             font-weight: 600;
-            color: #004488;
-            min-width: 22px;
+            color: #000000;
+            min-width: 20px;
         }
-
         .options .option-text {
-            color: #333;
+            color: #000000;
         }
-
         hr {
             border: 0;
-            height: 2px;
+            height: 1px;
             background: linear-gradient(to right, #8B5A2B, transparent);
-            margin: 30px 0 20px;
+            margin: 12px 0 8px;
         }
-
         .footer-note {
             text-align: center;
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #666;
+            margin-top: 10px;
+            font-size: 0.85em;
+            color: #000000;
             border-top: 1px solid #D3D3D3;
-            padding-top: 15px;
+            padding-top: 8px;
         }
-
         .badge {
             display: inline-block;
             background-color: #8B5A2B;
             color: #FFFFFF;
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-size: 0.75em;
-            font-weight: 600;
-            margin-left: 6px;
-        }
-
-        .tag {
-            display: inline-block;
-            background-color: #D3D3D3;
-            color: #333;
             padding: 1px 10px;
-            border-radius: 12px;
-            font-size: 0.7em;
-            margin-left: 8px;
+            border-radius: 16px;
+            font-size: 0.65em;
+            font-weight: 600;
+            margin-left: 4px;
         }
-
-        .warning-box {
-            background-color: #FFF8F0;
-            border: 1px solid #8B5A2B;
-            border-radius: 6px;
-            padding: 10px 16px;
-            margin-bottom: 15px;
-            font-size: 0.95em;
-        }
-
-        .warning-box strong {
-            color: #8B4513;
-        }
-
         @media (max-width: 600px) {
             .container {
-                padding: 15px 18px;
+                padding: 10px 12px;
             }
             h1 {
-                font-size: 1.5em;
+                font-size: 1.2em;
             }
             .question-block {
-                padding: 14px 16px;
+                padding: 6px 10px;
             }
             .options {
-                padding-left: 12px;
+                padding-left: 10px;
             }
             .info-bar {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 6px;
+                gap: 3px;
+                font-size: 0.8em;
+            }
+            body {
+                font-size: 13px;
             }
         }
     </style>
 </head>
 <body>
-
     <div class="container">
-
-        <h1>🛡️ BÀI 2: AN TOÀN TRONG PHÒNG THỰC HÀNH VẬT LÍ</h1>
-        <div class="subtitle">25 câu hỏi trắc nghiệm — Học sinh chọn đáp án đúng nhất</div>
-
+        <h1>⚠️ BÀI 2: QUY TẮC AN TOÀN TRONG PHÒNG THỰC HÀNH VẬT LÍ</h1>
+        <div class="subtitle">25 câu hỏi trắc nghiệm — Chọn đáp án đúng nhất</div>
         <div class="info-bar">
             <span class="total">📌 Tổng số câu: 25</span>
-            <span class="note">⏱ Thời gian: 30 phút</span>
-        </div>
-
-        <div class="warning-box">
-            <strong>⚠️ Lưu ý:</strong> Các câu hỏi dựa trên nội dung sách giáo khoa Vật lí 10 Bài 2.
-            Hãy đọc kỹ trước khi chọn đáp án.
+            <span class="note">⏱ Thời gian: 25 phút</span>
         </div>
 
         <!-- Câu 1 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 1.</span>
-                Trong các thiết bị thí nghiệm, loại thiết bị nào có nguy cơ mất an toàn cao nhất?
-            </div>
+            <div class="question-text"><span class="question-number">Câu 1.</span> Trong phòng thực hành Vật lí, thiết bị nào sau đây có nguy cơ mất an toàn cao nhất?</div>
             <ul class="options">
                 <li><span class="option-label">A.</span><span class="option-text">Thiết bị quang học</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Thiết bị nhiệt</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Thiết bị điện</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Thiết bị thủy tinh</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Thiết bị điện</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Thiết bị cơ khí</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Thiết bị đo nhiệt độ</span></li>
             </ul>
         </div>
 
         <!-- Câu 2 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 2.</span>
-                Khi sử dụng thiết bị điện, việc đầu tiên cần làm là:
-            </div>
+            <div class="question-text"><span class="question-number">Câu 2.</span> Khi sử dụng thiết bị điện trong phòng thực hành, cần phải làm gì trước khi cắm hoặc tháo thiết bị?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Cắm phích điện ngay vào ổ</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Quan sát kĩ các kí hiệu và nhãn thông số</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Vặn hết cỡ các núm điều chỉnh</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Dùng tay ướt để kiểm tra dây điện</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Ngắt công tắc nguồn</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Bật công tắc nguồn</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cắm dây nối đất</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Kiểm tra nhiệt độ</span></li>
             </ul>
         </div>
 
         <!-- Câu 3 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 3.</span>
-                Thiết bị nào sau đây dùng để chuyển đổi điện áp trong phòng thí nghiệm?
-            </div>
+            <div class="question-text"><span class="question-number">Câu 3.</span> Việc quan sát kĩ các kí hiệu và nhãn thông số trên thiết bị điện nhằm mục đích gì?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Ampe kế</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Máy biến áp</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Lực kế</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Nhiệt kế</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Sử dụng đúng chức năng và đúng yêu cầu kĩ thuật</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Trang trí thiết bị</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Kiểm tra màu sắc</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Đo kích thước thiết bị</span></li>
             </ul>
         </div>
 
         <!-- Câu 4 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 4.</span>
-                Khi sử dụng máy biến áp, cần đặt nút điều chỉnh điện áp ở vị trí nào trước khi bật nguồn?
-            </div>
+            <div class="question-text"><span class="question-number">Câu 4.</span> Khi sử dụng ampe kế để đo dòng điện, nếu dòng điện vượt quá giới hạn đo thì điều gì có thể xảy ra?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Mức cao nhất</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Mức trung bình</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Mức thấp nhất rồi tăng dần</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Không cần điều chỉnh</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Ampe kế đo chính xác hơn</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Ampe kế có thể bị hỏng</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Ampe kế tự động tăng thang đo</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Không có ảnh hưởng gì</span></li>
             </ul>
         </div>
 
         <!-- Câu 5 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 5.</span>
-                Nguy cơ nào sau đây thường gặp khi sử dụng thiết bị nhiệt và thủy tinh?
-            </div>
+            <div class="question-text"><span class="question-number">Câu 5.</span> Để đảm bảo an toàn khi sử dụng đồng hồ đo điện đa năng, cần lưu ý điều gì?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Điện giật</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Bỏng và vỡ thủy tinh</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Cháy nổ hóa chất</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Mốc, xước dụng cụ</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Chọn chức năng và thang đo phù hợp</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Cắm dây đo vào chốt phù hợp với chức năng đo</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cả A và B đều đúng</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Không cần chú ý gì đặc biệt</span></li>
             </ul>
         </div>
 
         <!-- Câu 6 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 6.</span>
-                Khi làm thí nghiệm với nhiệt độ cao, cần sử dụng dụng cụ bảo hộ nào?
-            </div>
+            <div class="question-text"><span class="question-number">Câu 6.</span> Thiết bị nhiệt trong phòng thực hành có thể gây ra nguy cơ nào sau đây?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Găng tay thường</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Găng tay cao su chịu nhiệt</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Găng tay len</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Không cần găng tay</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Gây bỏng cho người sử dụng</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Gây nứt, vỡ các bộ phận thủy tinh</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cả A và B đều đúng</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Chỉ gây cháy nổ</span></li>
             </ul>
         </div>
 
         <!-- Câu 7 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 7.</span>
-                Thiết bị quang học trong phòng thí nghiệm dễ bị:
-            </div>
+            <div class="question-text"><span class="question-number">Câu 7.</span> Khi làm thí nghiệm với nhiệt độ cao, cần sử dụng dụng cụ bảo hộ nào?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Mốc, xước, nứt, vỡ</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Cháy nổ</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Gỉ sét</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Biến dạng vĩnh viễn</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Găng tay chịu nhiệt</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Kính bảo hộ</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Khẩu trang</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Mũ bảo hiểm</span></li>
             </ul>
         </div>
 
         <!-- Câu 8 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 8.</span>
-                Để bảo quản thiết bị quang học, cần:
-            </div>
+            <div class="question-text"><span class="question-number">Câu 8.</span> Thiết bị quang học dễ bị ảnh hưởng bởi yếu tố nào sau đây?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Lau bằng giấy thô</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Lau bằng giấy mềm chuyên dụng</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Rửa bằng nước</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Để ngoài ánh nắng</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Mốc, xước, nứt, vỡ</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Bụi bẩn</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cả A và B</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Nhiệt độ cao</span></li>
             </ul>
         </div>
 
         <!-- Câu 9 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 9.</span>
-                Khi sử dụng tia laser trong thí nghiệm, cần:
-            </div>
+            <div class="question-text"><span class="question-number">Câu 9.</span> Khi sử dụng tia laser trong phòng thực hành, cần giữ khoảng cách an toàn vì:</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Chiếu thẳng vào mắt để quan sát</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Giữ khoảng cách an toàn</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Tăng công suất tối đa</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Không cần biện pháp an toàn</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Tia laser có thể làm hỏng mắt</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Tia laser có thể gây cháy</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Tia laser có thể làm nhiễu thiết bị khác</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Tia laser phát ra âm thanh lớn</span></li>
             </ul>
         </div>
 
         <!-- Câu 10 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 10.</span>
-                Nguy cơ gây hại khi sử dụng ampe kế không đúng thang đo là:
-            </div>
+            <div class="question-text"><span class="question-number">Câu 10.</span> Khi phát hiện người bị điện giật, việc đầu tiên cần làm là:</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Hỏng thiết bị đo</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Cháy nổ</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Điện giật</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Tất cả các nguy cơ trên</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Nhanh chóng ngắt nguồn điện</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Gọi cấp cứu</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Lấy nước dội vào người</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Chạy đến kéo người ra khỏi nguồn điện</span></li>
             </ul>
         </div>
 
         <!-- Câu 11 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 11.</span>
-                Khi sử dụng đồng hồ đo điện đa năng, cần:
-            </div>
+            <div class="question-text"><span class="question-number">Câu 11.</span> Trong trường hợp hỏa hoạn xảy ra trong phòng thực hành, cần phải:</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Chọn chức năng và thang đo phù hợp</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Cắm dây đo vào chốt bất kỳ</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Không cần kiểm tra gì</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Chỉ cần bật nguồn là đủ</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Ngắt toàn bộ hệ thống điện</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Di chuyển hóa chất, chất dễ cháy đến khu vực an toàn</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cả A và B đều đúng</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Chỉ cần gọi cứu hỏa</span></li>
             </ul>
         </div>
 
         <!-- Câu 12 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 12.</span>
-                Điều gì cần làm ngay khi phát hiện người bị điện giật?
-            </div>
+            <div class="question-text"><span class="question-number">Câu 12.</span> Khi có đám cháy liên quan đến thiết bị điện, <strong>không được</strong> sử dụng chất nào để dập lửa?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Gọi cấp cứu và chờ đợi</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Nhanh chóng ngắt nguồn điện hoặc dùng vật cách điện tách nạn nhân</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Dùng tay không kéo nạn nhân</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Đổ nước lên người nạn nhân</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Nước</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Bình chữa cháy CO₂</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cát</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Bình chữa cháy bột</span></li>
             </ul>
         </div>
 
         <!-- Câu 13 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 13.</span>
-                Khi có hỏa hoạn trong phòng thực hành, cần:
-            </div>
+            <div class="question-text"><span class="question-number">Câu 13.</span> Khi có hỏa hoạn, <strong>không được</strong> sử dụng CO₂ để dập cháy trong trường hợp nào?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Ngắt toàn bộ hệ thống điện</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Di chuyển hóa chất ra khu vực an toàn</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Bình tĩnh dập tắt theo hướng dẫn</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Tất cả các ý trên</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Cháy quần áo trên người</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Cháy kim loại kiềm (Mg, K, Na...)</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cả A và B đều đúng</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Cháy do chất lỏng dễ cháy</span></li>
             </ul>
         </div>
 
         <!-- Câu 14 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 14.</span>
-                Không được dùng nước để dập đám cháy trong trường hợp nào?
-            </div>
+            <div class="question-text"><span class="question-number">Câu 14.</span> Trước khi tiến hành thí nghiệm, học sinh cần làm gì?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Cháy giấy</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Cháy có thiết bị điện</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Cháy vải</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Cháy gỗ</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Đọc kĩ hướng dẫn sử dụng thiết bị</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Kiểm tra cẩn thận thiết bị, dụng cụ</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Chỉ tiến hành khi được sự cho phép của giáo viên</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Tất cả các đáp án trên</span></li>
             </ul>
         </div>
 
         <!-- Câu 15 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 15.</span>
-                Khi có hỏa hoạn, khí CO₂ không được dùng để dập cháy:
-            </div>
+            <div class="question-text"><span class="question-number">Câu 15.</span> Dây điện trong phòng thực hành cần được bố trí như thế nào?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Quần áo trên người</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Đám cháy nhỏ</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Cháy thiết bị điện</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Cháy chất lỏng</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Gọn gàng, không bị vướng khi qua lại</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Để tràn lan trên mặt bàn</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Nối nhiều thiết bị vào cùng một ổ cắm</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Không cần chú ý</span></li>
             </ul>
         </div>
 
         <!-- Câu 16 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 16.</span>
-                Trước khi sử dụng thiết bị thí nghiệm, cần:
-            </div>
+            <div class="question-text"><span class="question-number">Câu 16.</span> Tại sao không được để nước hoặc dung dịch dẫn điện gần thiết bị điện?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Kiểm tra cẩn thận thiết bị</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Đọc kĩ hướng dẫn sử dụng</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Quan sát các chỉ dẫn, kí hiệu</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Tất cả các ý trên</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Có thể gây chập điện, điện giật</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Làm ướt thiết bị</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Làm rỉ sét thiết bị</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Làm giảm tuổi thọ thiết bị</span></li>
             </ul>
         </div>
 
         <!-- Câu 17 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 17.</span>
-                Chỉ được tiến hành thí nghiệm khi:
-            </div>
+            <div class="question-text"><span class="question-number">Câu 17.</span> Khi sử dụng máy biến áp trong phòng thực hành, cần thao tác như thế nào?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Có đủ dụng cụ</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Được sự cho phép của giáo viên</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Phòng thí nghiệm sạch sẽ</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Có nhiều bạn trong nhóm</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Đặt nút điều chỉnh điện áp ở mức thấp nhất rồi tăng dần</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Đặt ở mức cao nhất ngay từ đầu</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Không cần điều chỉnh</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Chỉ sử dụng ở mức trung bình</span></li>
             </ul>
         </div>
 
         <!-- Câu 18 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 18.</span>
-                Khi cắm hoặc tháo thiết bị điện, cần:
-            </div>
+            <div class="question-text"><span class="question-number">Câu 18.</span> Sau khi làm thí nghiệm xong, học sinh cần phải làm gì?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Để thiết bị đang bật nguồn</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Ngắt công tắc nguồn trước</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Vừa cắm vừa điều chỉnh</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Không cần quan tâm</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Vệ sinh, sắp xếp gọn gàng các thiết bị và dụng cụ</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Bỏ chất thải thí nghiệm vào đúng nơi quy định</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cả A và B đều đúng</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Rời khỏi phòng ngay lập tức</span></li>
             </ul>
         </div>
 
         <!-- Câu 19 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 19.</span>
-                Dây điện trong phòng thực hành cần được bố trí:
-            </div>
+            <div class="question-text"><span class="question-number">Câu 19.</span> Sốc điện (điện giật) có thể gây ra hậu quả gì?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Gọn gàng, không bị vướng</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Thả lỏng trên nền nhà</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Treo lên cao</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Để tự nhiên không cần sắp xếp</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Tổn thương các bộ phận của cơ thể</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Tử vong</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cả A và B đều đúng</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Không có ảnh hưởng gì</span></li>
             </ul>
         </div>
 
         <!-- Câu 20 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 20.</span>
-                Không được làm gì với nước hoặc dung dịch dễ cháy trong phòng thực hành?
-            </div>
+            <div class="question-text"><span class="question-number">Câu 20.</span> Khi có hỏa hoạn, thái độ cần có là gì?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Để gần thiết bị điện</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Để trong chai nhựa</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Để trong tủ kính</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Để xa nguồn nhiệt</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Bình tĩnh</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Hoảng loạn</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Bỏ chạy</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Đứng nhìn</span></li>
             </ul>
         </div>
 
         <!-- Câu 21 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 21.</span>
-                Khi làm thí nghiệm nung nóng vật, cần:
-            </div>
+            <div class="question-text"><span class="question-number">Câu 21.</span> Khi sử dụng thiết bị đo điện, việc chọn đúng thang đo có ý nghĩa gì?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Giữ khoảng cách an toàn</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Nhìn trực tiếp vào vật nung</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Dùng tay chạm vào vật nóng</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Không cần biện pháp an toàn</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Đảm bảo an toàn cho thiết bị đo</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Đo được giá trị chính xác</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cả A và B đều đúng</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Chỉ để kiểm tra thiết bị</span></li>
             </ul>
         </div>
 
         <!-- Câu 22 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 22.</span>
-                Sau khi hoàn thành thí nghiệm, cần:
-            </div>
+            <div class="question-text"><span class="question-number">Câu 22.</span> Trong phòng thực hành, tại sao phải giữ khoảng cách an toàn khi làm thí nghiệm có các vật bắn ra?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Vệ sinh, sắp xếp gọn gàng dụng cụ</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Bỏ chất thải thí nghiệm đúng nơi quy định</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Tắt nguồn các thiết bị điện</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Tất cả các ý trên</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Tránh bị thương do vật bắn trúng</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Tránh làm hỏng thiết bị</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cả A và B đều đúng</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Để dễ quan sát hơn</span></li>
             </ul>
         </div>
 
         <!-- Câu 23 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 23.</span>
-                Sốc điện (điện giật) có thể gây ra hậu quả gì?
-            </div>
+            <div class="question-text"><span class="question-number">Câu 23.</span> Khi phát hiện người bị điện giật, không được phép làm gì?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Tổn thương các bộ phận cơ thể</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Tử vong</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Không gây ảnh hưởng gì</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">A và B đều đúng</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Chạm trực tiếp vào người bị nạn</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Ngắt nguồn điện</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Dùng vật cách điện tách nạn nhân ra khỏi nguồn điện</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Gọi cấp cứu</span></li>
             </ul>
         </div>
 
         <!-- Câu 24 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 24.</span>
-                Biển báo an toàn trong phòng thực hành giúp:
-            </div>
+            <div class="question-text"><span class="question-number">Câu 24.</span> Các biển báo trong phòng thí nghiệm có tác dụng gì?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Nhận biết nguy cơ và cách xử lý</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Cảnh báo các nguy cơ và hướng dẫn cách xử lý</span></li>
                 <li><span class="option-label">B.</span><span class="option-text">Trang trí phòng thí nghiệm</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Ghi nhớ tên thiết bị</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Không có vai trò gì</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Ghi tên các thiết bị</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Không có tác dụng đặc biệt</span></li>
             </ul>
         </div>
 
         <!-- Câu 25 -->
         <div class="question-block">
-            <div class="question-text">
-                <span class="question-number">Câu 25.</span>
-                Đâu là nguyên tắc an toàn quan trọng nhất khi làm việc trong phòng thực hành Vật lí?
-            </div>
+            <div class="question-text"><span class="question-number">Câu 25.</span> Yêu cầu quan trọng nhất khi làm việc trong phòng thực hành Vật lí là gì?</div>
             <ul class="options">
-                <li><span class="option-label">A.</span><span class="option-text">Tuân thủ nghiêm ngặt các quy định và hướng dẫn của giáo viên</span></li>
-                <li><span class="option-label">B.</span><span class="option-text">Làm thí nghiệm thật nhanh</span></li>
-                <li><span class="option-label">C.</span><span class="option-text">Tự ý sử dụng thiết bị khi chưa được phép</span></li>
-                <li><span class="option-label">D.</span><span class="option-text">Không cần đọc hướng dẫn sử dụng</span></li>
+                <li><span class="option-label">A.</span><span class="option-text">Đảm bảo an toàn cho bản thân và người khác</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Làm thí nghiệm nhanh chóng</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Sử dụng nhiều thiết bị</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Ghi chép cẩn thận</span></li>
             </ul>
         </div>
 
         <hr>
-
-        <div class="footer-note">
-            📌 Học sinh làm bài vào giấy và kiểm tra đáp án ở trang sau.
-        </div>
-
+        <div class="footer-note">📌 Học sinh làm bài vào giấy và kiểm tra đáp án ở trang sau.</div>
     </div>
-
 </body>
 </html>
