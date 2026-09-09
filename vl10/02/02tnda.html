@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đáp án Trắc nghiệm Bài 2 - An toàn phòng thực hành</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            background-color: #F5F5DC;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+            border-left: 6px solid #8B5A2B;
+        }
+
+        h1 {
+            color: #8B4513;
+            font-size: 2em;
+            border-bottom: 3px solid #8B5A2B;
+            padding-bottom: 12px;
+            text-align: center;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 25px;
+            font-size: 1.05em;
+        }
+
+        .info-bar {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border: 1px solid #D3D3D3;
+        }
+
+        .info-bar .total {
+            font-weight: 600;
+            color: #004488;
+        }
+
+        .info-bar .score {
+            color: #8B4513;
+            font-weight: 600;
+        }
+
+        .answer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 20px 0 30px;
+        }
+
+        .answer-item {
+            background-color: #F5F5F5;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border-left: 4px solid #0066CC;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.2s;
+        }
+
+        .answer-item:hover {
+            background-color: #F0F0F0;
+        }
+
+        .answer-item .qnum {
+            font-weight: 700;
+            color: #8B4513;
+            min-width: 36px;
+        }
+
+        .answer-item .ans {
+            font-weight: 700;
+            color: #004488;
+            background-color: #D3D3D3;
+            padding: 0 12px;
+            border-radius: 4px;
+            font-size: 1.05em;
+        }
+
+        .answer-item .correct {
+            color: #2E7D32;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .section-title {
+            color: #004488;
+            font-size: 1.4em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 5px solid #0066CC;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            background-color: #F5F5F5;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .explanation {
+            background-color: #F5F5DC;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border-left: 4px solid #8B5A2B;
+            margin: 15px 0;
+        }
+
+        .explanation strong {
+            color: #8B4513;
+        }
+
+        hr {
+            border: 0;
+            height: 2px;
+            background: linear-gradient(to right, #8B5A2B, transparent);
+            margin: 30px 0 20px;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #666;
+            border-top: 1px solid #D3D3D3;
+            padding-top: 15px;
+        }
+
+        .highlight {
+            background-color: #F5DEB3;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: #2E7D32;
+            color: #FFFFFF;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        .danger-badge {
+            display: inline-block;
+            background-color: #D32F2F;
+            color: #FFFFFF;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px 18px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            .answer-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            .info-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>✅ ĐÁP ÁN TRẮC NGHIỆM</h1>
+        <div class="subtitle">Bài 2: Các quy tắc an toàn trong phòng thực hành Vật lí</div>
+
+        <div class="info-bar">
+            <span class="total">📌 Tổng số câu: 25</span>
+            <span class="score">🎯 Đáp án đúng được đánh dấu <span class="highlight">(Đáp án)</span></span>
+        </div>
+
+        <!-- Bảng đáp án nhanh -->
+        <div style="background-color: #F5F5F5; padding: 15px 20px; border-radius: 8px; border: 1px solid #D3D3D3; margin-bottom: 20px;">
+            <p style="font-weight: 600; color: #004488; margin-bottom: 10px;">📋 Bảng đáp án nhanh:</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 5px; font-size: 0.9em;">
+                <div><strong>1.</strong> C</div>
+                <div><strong>2.</strong> B</div>
+                <div><strong>3.</strong> B</div>
+                <div><strong>4.</strong> C</div>
+                <div><strong>5.</strong> B</div>
+                <div><strong>6.</strong> B</div>
+                <div><strong>7.</strong> A</div>
+                <div><strong>8.</strong> B</div>
+                <div><strong>9.</strong> B</div>
+                <div><strong>10.</strong> D</div>
+                <div><strong>11.</strong> A</div>
+                <div><strong>12.</strong> B</div>
+                <div><strong>13.</strong> D</div>
+                <div><strong>14.</strong> B</div>
+                <div><strong>15.</strong> A</div>
+                <div><strong>16.</strong> D</div>
+                <div><strong>17.</strong> B</div>
+                <div><strong>18.</strong> B</div>
+                <div><strong>19.</strong> A</div>
+                <div><strong>20.</strong> A</div>
+                <div><strong>21.</strong> A</div>
+                <div><strong>22.</strong> D</div>
+                <div><strong>23.</strong> D</div>
+                <div><strong>24.</strong> A</div>
+                <div><strong>25.</strong> A</div>
+            </div>
+        </div>
+
+        <!-- Đáp án chi tiết -->
+        <div class="section-title">📝 ĐÁP ÁN CHI TIẾT</div>
+
+        <div class="answer-grid">
+            <div class="answer-item"><span class="qnum">Câu 1</span><span class="ans">C</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 2</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 3</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 4</span><span class="ans">C</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 5</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 6</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 7</span><span class="ans">A</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 8</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 9</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 10</span><span class="ans">D</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 11</span><span class="ans">A</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 12</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 13</span><span class="ans">D</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 14</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 15</span><span class="ans">A</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 16</span><span class="ans">D</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 17</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 18</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 19</span><span class="ans">A</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 20</span><span class="ans">A</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 21</span><span class="ans">A</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 22</span><span class="ans">D</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 23</span><span class="ans">D</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 24</span><span class="ans">A</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 25</span><span class="ans">A</span><span class="correct">✅</span></div>
+        </div>
+
+        <!-- Hướng dẫn giải -->
+        <div class="section-title">📖 GIẢI THÍCH CHI TIẾT</div>
+
+        <!-- Các câu về thiết bị điện -->
+        <div class="explanation">
+            <strong>Câu 1, 2, 3, 4:</strong> Thiết bị điện có nguy cơ mất an toàn cao nhất. Khi sử dụng, cần quan sát kĩ các kí hiệu và nhãn thông số. Máy biến áp dùng để chuyển đổi điện áp và cần đặt ở mức thấp nhất trước khi bật nguồn, sau đó tăng dần.
+        </div>
+
+        <!-- Các câu về thiết bị nhiệt và thủy tinh -->
+        <div class="explanation">
+            <strong>Câu 5, 6:</strong> Thiết bị nhiệt và thủy tinh có nguy cơ gây bỏng và vỡ. Khi làm việc với nhiệt độ cao, cần mang găng tay cao su chịu nhiệt để bảo vệ an toàn.
+        </div>
+
+        <!-- Các câu về thiết bị quang học -->
+        <div class="explanation">
+            <strong>Câu 7, 8, 9:</strong> Thiết bị quang học dễ bị mốc, xước, nứt, vỡ. Cần lau bằng giấy mềm chuyên dụng và giữ khoảng cách an toàn khi sử dụng tia laser.
+        </div>
+
+        <!-- Các câu về xử lý tình huống -->
+        <div class="explanation">
+            <strong>Câu 12, 13, 14, 15:</strong> Khi có người bị điện giật, cần ngắt nguồn ngay. Khi có hỏa hoạn, cần ngắt điện, di chuyển hóa chất và bình tĩnh dập lửa. <span class="danger-badge">KHÔNG</span> dùng nước để dập cháy có thiết bị điện và <span class="danger-badge">KHÔNG</span> dùng CO₂ để dập cháy quần áo trên người.
+        </div>
+
+        <!-- Các câu về quy tắc chung -->
+        <div class="explanation">
+            <strong>Câu 16, 17, 18, 19, 20, 21, 22:</strong> Các quy tắc an toàn cơ bản:
+            <ul style="margin-top: 8px; padding-left: 20px;">
+                <li>Kiểm tra và đọc kĩ hướng dẫn trước khi dùng</li>
+                <li>Chỉ tiến hành thí nghiệm khi được giáo viên cho phép</li>
+                <li>Ngắt công tắc trước khi cắm/tháo thiết bị</li>
+                <li>Bố trí dây điện gọn gàng</li>
+                <li>Không để nước/dung dịch dễ cháy gần thiết bị điện</li>
+                <li>Giữ khoảng cách an toàn khi nung nóng</li>
+                <li>Vệ sinh và sắp xếp dụng cụ sau thí nghiệm</li>
+            </ul>
+        </div>
+
+        <!-- Câu 23 -->
+        <div class="explanation">
+            <strong>Câu 23:</strong> Sốc điện có thể gây tổn thương các bộ phận cơ thể hoặc tử vong. Đây là một trong những nguy cơ nghiêm trọng nhất trong phòng thực hành.
+        </div>
+
+        <!-- Câu 24 -->
+        <div class="explanation">
+            <strong>Câu 24:</strong> Biển báo an toàn giúp nhận biết nguy cơ và hướng dẫn cách xử lý. Học sinh cần ghi nhớ và tuân thủ các biển báo này.
+        </div>
+
+        <!-- Câu 25 -->
+        <div class="explanation">
+            <strong>Câu 25:</strong> Nguyên tắc quan trọng nhất là <span class="highlight">tuân thủ nghiêm ngặt các quy định và hướng dẫn của giáo viên</span>. Điều này giúp đảm bảo an toàn cho bản thân và mọi người trong phòng thực hành.
+        </div>
+
+        <hr>
+
+        <div class="footer-note">
+            📌 Học sinh đối chiếu đáp án và xem lại các quy tắc an toàn để nắm vững kiến thức.
+        </div>
+
+    </div>
+
+</body>
+</html>

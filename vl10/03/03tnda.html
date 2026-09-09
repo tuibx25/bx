@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đáp án Trắc nghiệm Bài 3 - Sai số trong phép đo</title>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [
+                    ['$', '$'],
+                    ['\\(', '\\)']
+                ],
+                displayMath: [
+                    ['$$', '$$'],
+                    ['\\[', '\\]']
+                ],
+                processEscapes: true,
+                processEnvironments: true,
+                tags: 'ams'
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" id="MathJax-script" async>
+    </script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            background-color: #F5F5DC;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+            border-left: 6px solid #8B5A2B;
+        }
+
+        h1 {
+            color: #8B4513;
+            font-size: 2em;
+            border-bottom: 3px solid #8B5A2B;
+            padding-bottom: 12px;
+            text-align: center;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 25px;
+            font-size: 1.05em;
+        }
+
+        .info-bar {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border: 1px solid #D3D3D3;
+        }
+
+        .info-bar .total {
+            font-weight: 600;
+            color: #004488;
+        }
+
+        .info-bar .score {
+            color: #8B4513;
+            font-weight: 600;
+        }
+
+        .answer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 20px 0 30px;
+        }
+
+        .answer-item {
+            background-color: #F5F5F5;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border-left: 4px solid #0066CC;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.2s;
+        }
+
+        .answer-item:hover {
+            background-color: #F0F0F0;
+        }
+
+        .answer-item .qnum {
+            font-weight: 700;
+            color: #8B4513;
+            min-width: 36px;
+        }
+
+        .answer-item .ans {
+            font-weight: 700;
+            color: #004488;
+            background-color: #D3D3D3;
+            padding: 0 12px;
+            border-radius: 4px;
+            font-size: 1.05em;
+        }
+
+        .answer-item .correct {
+            color: #2E7D32;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .section-title {
+            color: #004488;
+            font-size: 1.4em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 5px solid #0066CC;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            background-color: #F5F5F5;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .explanation {
+            background-color: #F5F5DC;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border-left: 4px solid #8B5A2B;
+            margin: 15px 0;
+        }
+
+        .explanation strong {
+            color: #8B4513;
+        }
+
+        .formula-box {
+            background-color: #F5F8FF;
+            padding: 10px 18px;
+            border-radius: 6px;
+            border: 1px solid #D3D3D3;
+            margin: 10px 0;
+            text-align: center;
+            font-size: 1.05em;
+            overflow-x: auto;
+        }
+
+        hr {
+            border: 0;
+            height: 2px;
+            background: linear-gradient(to right, #8B5A2B, transparent);
+            margin: 30px 0 20px;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #666;
+            border-top: 1px solid #D3D3D3;
+            padding-top: 15px;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: #2E7D32;
+            color: #FFFFFF;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        .highlight {
+            background-color: #F5DEB3;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px 18px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            .answer-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            .info-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>✅ ĐÁP ÁN TRẮC NGHIỆM</h1>
+        <div class="subtitle">Bài 3: Thực hành tính sai số trong phép đo. Ghi kết quả đo</div>
+
+        <div class="info-bar">
+            <span class="total">📌 Tổng số câu: 25</span>
+            <span class="score">🎯 Đáp án đúng được đánh dấu <span class="highlight">(Đáp án)</span></span>
+        </div>
+
+        <!-- Bảng đáp án nhanh -->
+        <div style="background-color: #F5F5F5; padding: 15px 20px; border-radius: 8px; border: 1px solid #D3D3D3; margin-bottom: 20px;">
+            <p style="font-weight: 600; color: #004488; margin-bottom: 10px;">📋 Bảng đáp án nhanh:</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 5px; font-size: 0.9em;">
+                <div><strong>1.</strong> B</div>
+                <div><strong>2.</strong> B</div>
+                <div><strong>3.</strong> C</div>
+                <div><strong>4.</strong> D</div>
+                <div><strong>5.</strong> B</div>
+                <div><strong>6.</strong> B</div>
+                <div><strong>7.</strong> B</div>
+                <div><strong>8.</strong> A</div>
+                <div><strong>9.</strong> C</div>
+                <div><strong>10.</strong> B</div>
+                <div><strong>11.</strong> C</div>
+                <div><strong>12.</strong> A</div>
+                <div><strong>13.</strong> B</div>
+                <div><strong>14.</strong> B</div>
+                <div><strong>15.</strong> C</div>
+                <div><strong>16.</strong> A</div>
+                <div><strong>17.</strong> C</div>
+                <div><strong>18.</strong> B</div>
+                <div><strong>19.</strong> C</div>
+                <div><strong>20.</strong> A</div>
+                <div><strong>21.</strong> B</div>
+                <div><strong>22.</strong> B</div>
+                <div><strong>23.</strong> A</div>
+                <div><strong>24.</strong> A</div>
+                <div><strong>25.</strong> A</div>
+            </div>
+        </div>
+
+        <!-- Đáp án chi tiết -->
+        <div class="section-title">📝 ĐÁP ÁN CHI TIẾT</div>
+
+        <div class="answer-grid">
+            <div class="answer-item"><span class="qnum">Câu 1</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 2</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 3</span><span class="ans">C</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 4</span><span class="ans">D</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 5</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 6</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 7</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 8</span><span class="ans">A</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 9</span><span class="ans">C</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 10</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 11</span><span class="ans">C</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 12</span><span class="ans">A</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 13</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 14</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 15</span><span class="ans">C</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 16</span><span class="ans">A</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 17</span><span class="ans">C</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 18</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 19</span><span class="ans">C</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 20</span><span class="ans">A</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 21</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 22</span><span class="ans">B</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 23</span><span class="ans">A</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 24</span><span class="ans">A</span><span class="correct">✅</span></div>
+            <div class="answer-item"><span class="qnum">Câu 25</span><span class="ans">A</span><span class="correct">✅</span></div>
+        </div>
+
+        <!-- Hướng dẫn giải các câu khó -->
+        <div class="section-title">📖 HƯỚNG DẪN GIẢI CHI TIẾT</div>
+
+        <!-- Câu 22 -->
+        <div class="explanation">
+            <strong>Câu 22:</strong> $\overline{A} = \dfrac{12,3 + 12,5 + 12,4}{3} = \dfrac{37,2}{3} = 12,4$ mm.
+            <div class="formula-box">$\overline{A} = \dfrac{A_1 + A_2 + \cdots + A_n}{n}$</div>
+        </div>
+
+        <!-- Câu 23 -->
+        <div class="explanation">
+            <strong>Câu 23:</strong> Sai số tuyệt đối mỗi lần đo:
+            <br>$\Delta A_1 = |12,4 - 12,3| = 0,1$ mm
+            <br>$\Delta A_2 = |12,4 - 12,5| = 0,1$ mm
+            <br>$\Delta A_3 = |12,4 - 12,4| = 0,0$ mm
+            <br>$\overline{\Delta A} = \dfrac{0,1 + 0,1 + 0,0}{3} \approx 0,07$ mm ≈ 0,1 mm
+            <div class="formula-box">$\overline{\Delta A} = \dfrac{\Delta A_1 + \Delta A_2 + \cdots + \Delta A_n}{n}$</div>
+        </div>
+
+        <!-- Câu 24 -->
+        <div class="explanation">
+            <strong>Câu 24:</strong> $t = 2,50 \pm 0,02$ s
+            <br>$\delta t = \dfrac{\Delta t}{t} \cdot 100\% = \dfrac{0,02}{2,50} \cdot 100\% = 0,8\%$
+            <div class="formula-box">$\delta A = \dfrac{\Delta A}{\overline{A}} \cdot 100\%$</div>
+        </div>
+
+        <!-- Câu 14-16: Quy tắc sai số gián tiếp -->
+        <div class="explanation">
+            <strong>Câu 14, 15, 16:</strong> Quy tắc xác định sai số phép đo gián tiếp:
+            <ul style="margin-top: 8px; padding-left: 20px;">
+                <li><strong>Tổng hoặc hiệu:</strong> $\Delta A = \Delta B + \Delta C$</li>
+                <li><strong>Tích hoặc thương:</strong> $\delta A = \delta B + \delta C$</li>
+            </ul>
+        </div>
+
+        <!-- Câu 10-11: Sai số dụng cụ -->
+        <div class="explanation">
+            <strong>Câu 10, 11:</strong> Sai số dụng cụ thường lấy bằng một nửa độ chia nhỏ nhất.
+            <br>Thước có ĐCNN = 1 mm → $\Delta A_{dc} = 0,5$ mm
+        </div>
+
+        <!-- Câu 20-21: Cách ghi kết quả -->
+        <div class="explanation">
+            <strong>Câu 20, 21:</strong> Quy tắc ghi kết quả đo:
+            <ul style="margin-top: 8px; padding-left: 20px;">
+                <li>Sai số tuyệt đối $\Delta A$ viết đến số chữ số có nghĩa tới đơn vị của ĐCNN.</li>
+                <li>Giá trị trung bình $\overline{A}$ viết đến bậc thập phân tương ứng với $\Delta A$.</li>
+            </ul>
+            <div class="formula-box">Kết quả đo: $A = \overline{A} \pm \Delta A$</div>
+        </div>
+
+        <!-- Câu 25 -->
+        <div class="explanation">
+            <strong>Câu 25:</strong> Mọi phép đo đều có sai số. Không có phép đo nào cho ta giá trị đúng tuyệt đối của đại lượng cần đo.
+        </div>
+
+        <hr>
+
+        <div class="footer-note">
+            📌 Học sinh đối chiếu đáp án và xem lại các công thức tính sai số để nắm vững kiến thức.
+        </div>
+
+    </div>
+
+</body>
+</html>

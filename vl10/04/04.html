@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tóm tắt Bài 4: Độ dịch chuyển và quãng đường đi được</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            background-color: #F5F5DC;
+            color: #333;
+            margin: 20px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 950px;
+            background-color: #FFFFFF;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 6px solid #8B5A2B;
+            margin-top: 10px;
+        }
+        h1 {
+            color: #8B4513;
+            font-size: 2em;
+            border-bottom: 3px solid #8B5A2B;
+            padding-bottom: 10px;
+            margin-top: 0;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        .section-title {
+            color: #004488;
+            font-size: 1.5em;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-left: 5px solid #0066CC;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            background-color: #F5F5F5;
+            border-radius: 0 5px 5px 0;
+        }
+        .sub-title {
+            color: #8B4513;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            padding: 5px 10px;
+            background-color: #F5DEB3;
+            border-radius: 5px;
+        }
+        p {
+            margin: 10px 0;
+            text-align: justify;
+        }
+        ul, ol {
+            padding-left: 25px;
+            margin: 10px 0;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .formula-box {
+            background-color: #F5F8FF;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border-left: 5px solid #0066CC;
+            margin: 15px 0;
+            font-size: 1.1em;
+            text-align: center;
+            overflow-x: auto;
+        }
+        .highlight-box {
+            background-color: #F5F5DC;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border-left: 4px solid #8B5A2B;
+            margin: 20px 0;
+        }
+        .important-concept {
+            background-color: #F5F5F5;
+            padding: 12px 18px;
+            border-radius: 6px;
+            border: 1px solid #D3D3D3;
+            margin: 15px 0;
+        }
+        .grid-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .grid-item {
+            flex: 1 1 200px;
+            background-color: #F5F5DC;
+            padding: 12px 15px;
+            border-radius: 6px;
+            border-left: 4px solid #8B5A2B;
+        }
+        .grid-item strong {
+            color: #8B4513;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .note {
+            background-color: #D3D3D3;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            color: #333;
+            display: inline-block;
+        }
+        hr {
+            border: 0;
+            height: 2px;
+            background: linear-gradient(to right, #8B5A2B, transparent);
+            margin: 25px 0;
+        }
+        .footer-note {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.9em;
+            color: #555;
+            border-top: 1px solid #D3D3D3;
+            padding-top: 15px;
+        }
+        .keyword {
+            color: #0066CC;
+            font-weight: 600;
+        }
+        .rule-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .rule-list li::before {
+            content: "📌 ";
+            color: #8B5A2B;
+            font-weight: bold;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background-color: #F5F5DC;
+        }
+        .comparison-table th {
+            background-color: #8B5A2B;
+            color: white;
+            padding: 10px 15px;
+            text-align: center;
+            border: 1px solid #8B5A2B;
+        }
+        .comparison-table td {
+            padding: 10px 15px;
+            text-align: center;
+            border: 1px solid #8B5A2B;
+        }
+        .comparison-table tr:nth-child(even) {
+            background-color: #FFFFFF;
+        }
+        .comparison-table tr:hover {
+            background-color: #F5DEB3;
+        }
+        .example-box {
+            background-color: #F0F7FF;
+            border: 1px solid #0066CC;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin: 15px 0;
+        }
+        .example-box .label {
+            color: #004488;
+            font-weight: 600;
+            font-size: 1.05em;
+        }
+        .math-block {
+            margin: 12px 0;
+            padding: 8px 0;
+        }
+        .vector-box {
+            background-color: #FFF8F0;
+            border: 2px dashed #8B5A2B;
+            border-radius: 8px;
+            padding: 12px 18px;
+            margin: 15px 0;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px 20px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            .section-title {
+                font-size: 1.2em;
+            }
+            .comparison-table {
+                font-size: 0.9em;
+            }
+            .comparison-table th,
+            .comparison-table td {
+                padding: 6px 8px;
+            }
+        }
+    </style>
+    <!-- MathJax để hiển thị công thức toán học -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [
+                    ['$', '$'],
+                    ['\\(', '\\)']
+                ],
+                displayMath: [
+                    ['$$', '$$'],
+                    ['\\[', '\\]']
+                ],
+                processEscapes: true,
+                processEnvironments: true,
+                tags: 'ams'
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" id="MathJax-script" async>
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>📍 BÀI 4: ĐỘ DỊCH CHUYỂN VÀ QUÃNG ĐƯỜNG ĐI ĐƯỢC</h1>
+        <p style="text-align: center; color: #555; margin-bottom: 20px;"><i>Phân biệt hai đại lượng quan trọng trong động học: Độ dịch chuyển (vector) và quãng đường đi được (vô hướng).</i></p>
+
+        <!-- Phần I -->
+        <div class="section-title">I. VỊ TRÍ CỦA VẬT CHUYỂN ĐỘNG</div>
+        <ul>
+            <li><strong>Hệ tọa độ:</strong> Dùng để xác định vị trí của vật tại các thời điểm khác nhau.</li>
+            <li><strong>Vật mốc:</strong> Vật được chọn làm gốc tọa độ (thường là điểm O).</li>
+            <li><strong>Trục tọa độ:</strong> Hệ trục vuông góc Ox và Oy với tỉ lệ xác định.</li>
+            <li><strong>Ví dụ:</strong> Điểm A có tọa độ A($x = 10$ m; $y = 20$ m) trên hệ tọa độ.</li>
+        </ul>
+
+        <div class="highlight-box">
+            <p><strong>💡 Lưu ý:</strong> Khi kích thước của vật rất nhỏ so với quãng đường đi được, vật được coi là <span class="keyword">chất điểm</span>.</p>
+        </div>
+
+        <!-- Phần II -->
+        <div class="section-title">II. ĐỘ DỊCH CHUYỂN</div>
+        
+        <div class="vector-box">
+            <p><strong>🔹 Định nghĩa:</strong> Độ dịch chuyển là <span class="keyword">đại lượng vectơ</span> cho biết <strong>độ dài</strong> và <strong>hướng</strong> của sự thay đổi vị trí của vật.</p>
+        </div>
+
+        <ul>
+            <li><strong>Kí hiệu:</strong> $\vec{d}$</li>
+            <li><strong>Đặc điểm:</strong>
+                <ul>
+                    <li>Là <span class="keyword">đại lượng vectơ</span> (có hướng).</li>
+                    <li>Cho biết vị trí điểm đầu và điểm cuối của chuyển động.</li>
+                    <li>Không phụ thuộc vào hình dạng quỹ đạo.</li>
+                </ul>
+            </li>
+            <li><strong>Công thức:</strong> $\vec{d} = \vec{r_2} - \vec{r_1}$ (với $\vec{r_1}, \vec{r_2}$ là vectơ vị trí tại thời điểm đầu và cuối).</li>
+        </ul>
+
+        <!-- Phần III -->
+        <div class="section-title">III. QUÃNG ĐƯỜNG ĐI ĐƯỢC</div>
+        
+        <div class="vector-box">
+            <p><strong>🔹 Định nghĩa:</strong> Quãng đường đi được là <span class="keyword">đại lượng vô hướng</span> cho biết <strong>độ dài</strong> của quỹ đạo mà vật đã di chuyển.</p>
+        </div>
+
+        <ul>
+            <li><strong>Kí hiệu:</strong> $s$</li>
+            <li><strong>Đặc điểm:</strong>
+                <ul>
+                    <li>Là <span class="keyword">đại lượng vô hướng</span> (không có hướng).</li>
+                    <li>Phụ thuộc vào hình dạng quỹ đạo.</li>
+                    <li>Luôn có giá trị dương ($s \ge 0$).</li>
+                </ul>
+            </li>
+        </ul>
+
+        <!-- Phần So sánh -->
+        <div class="section-title">🔍 SO SÁNH ĐỘ DỊCH CHUYỂN VÀ QUÃNG ĐƯỜNG</div>
+        
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Tiêu chí</th>
+                    <th>Độ dịch chuyển ($\vec{d}$)</th>
+                    <th>Quãng đường ($s$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Loại đại lượng</strong></td>
+                    <td><span class="keyword">Vectơ</span> (có hướng)</td>
+                    <td><span class="keyword">Vô hướng</span> (không hướng)</td>
+                </tr>
+                <tr>
+                    <td><strong>Ý nghĩa</strong></td>
+                    <td>Độ dài và hướng từ vị trí đầu đến vị trí cuối</td>
+                    <td>Độ dài quỹ đạo đã đi</td>
+                </tr>
+                <tr>
+                    <td><strong>Phụ thuộc vào quỹ đạo</strong></td>
+                    <td>Không phụ thuộc</td>
+                    <td>Phụ thuộc</td>
+                </tr>
+                <tr>
+                    <td><strong>Giá trị</strong></td>
+                    <td>Có thể âm (tùy chiều dương)</td>
+                    <td>Luôn dương ($s \ge 0$)</td>
+                </tr>
+                <tr>
+                    <td><strong>Khi nào bằng nhau</strong></td>
+                    <td colspan="2">Khi vật chuyển động <span class="keyword">thẳng và không đổi chiều</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="important-concept">
+            <p><strong>📌 Kết luận quan trọng:</strong></p>
+            <ul>
+                <li>Khi vật chuyển động thẳng, không đổi chiều: <span class="keyword">$|\vec{d}| = s$</span></li>
+                <li>Khi vật chuyển động thẳng, có đổi chiều: <span class="keyword">$|\vec{d}| < s$</span></li>
+                <li>Khi vật chuyển động cong: <span class="keyword">$|\vec{d}| < s$</span></li>
+            </ul>
+        </div>
+
+        <!-- Phần IV -->
+        <div class="section-title">IV. TỔNG HỢP ĐỘ DỊCH CHUYỂN</div>
+        <ul>
+            <li>Độ dịch chuyển tuân theo <span class="keyword">phép cộng vectơ</span>.</li>
+            <li>Để tìm độ dịch chuyển tổng hợp, ta cộng các vectơ độ dịch chuyển thành phần.</li>
+            <li><strong>Ví dụ:</strong> Đi từ A đến B, rồi từ B đến C:
+                <div class="formula-box">
+                    $\vec{d}_{AC} = \vec{d}_{AB} + \vec{d}_{BC}$
+                </div>
+            </li>
+        </ul>
+
+        <!-- Phần Ví dụ -->
+        <div class="section-title">📝 VÍ DỤ MINH HỌA</div>
+        
+        <div class="example-box">
+            <p class="label">Ví dụ: Chuyển động từ A đến B (4 km), rồi từ B đến C (4 km) theo hình tam giác vuông.</p>
+            <p><strong>Quãng đường:</strong> $s = 4 + 4 = 8$ km</p>
+            <p><strong>Độ dịch chuyển:</strong> $|\vec{d}| = \sqrt{4^2 + 4^2} \approx 5,7$ km (hướng $45^\circ$ Đông - Bắc)</p>
+        </div>
+
+        <!-- Phần Bài tập -->
+        <div class="section-title" style="border-left-color: #8B5A2B;">✏️ BÀI TẬP VẬN DỤNG</div>
+        <ul>
+            <li><strong>Bài 1:</strong> Ô tô đi thẳng 6 km theo hướng Tây, rẽ trái đi 4 km theo hướng Nam, rồi quay sang hướng Đông đi 3 km. Xác định quãng đường và độ dịch chuyển.</li>
+            <li><strong>Bài 2:</strong> Người bơi ngang sông rộng 50 m, nước chảy từ Bắc xuống Nam làm trôi 50 m. Xác định độ dịch chuyển của người đó.</li>
+        </ul>
+
+        <!-- Phần Tổng kết -->
+        <hr>
+        <div class="section-title" style="border-left-color: #8B5A2B;">📝 EM ĐÃ HỌC (Tóm tắt nội dung chính)</div>
+        <ul class="rule-list">
+            <li><strong>Độ dịch chuyển</strong> là đại lượng vectơ, cho biết độ dài và hướng của sự thay đổi vị trí của vật.</li>
+            <li><strong>Quãng đường đi được</strong> là đại lượng vô hướng, cho biết độ dài quỹ đạo mà vật đã di chuyển.</li>
+            <li>Khi vật chuyển động thẳng, không đổi chiều thì <span class="keyword">$|\vec{d}| = s$</span>.</li>
+            <li>Khi vật chuyển động thẳng, có đổi chiều thì <span class="keyword">$|\vec{d}| \neq s$</span> và $|\vec{d}| < s$.</li>
+            <li><strong>Tổng hợp các độ dịch chuyển</strong> bằng cách tổng hợp vectơ.</li>
+        </ul>
+
+        <!-- Phần Ứng dụng -->
+        <div class="section-title" style="border-left-color: #8B5A2B;">💡 EM CÓ THỂ</div>
+        <ul>
+            <li>Xác định được vị trí của một địa điểm trên bản đồ.</li>
+            <li>Phân biệt và tính toán được quãng đường và độ dịch chuyển trong các chuyển động thực tế.</li>
+        </ul>
+
+        <div style="background-color: #F5DEB3; padding: 15px; border-radius: 8px; border: 1px solid #8B5A2B; margin-top: 20px;">
+            <p style="margin: 0; text-align: center; font-weight: bold; color: #8B4513;">
+                📌 GHI NHỚ: Độ dịch chuyển và quãng đường là hai khái niệm khác nhau. Độ dịch chuyển là vectơ, quãng đường là vô hướng!
+            </p>
+        </div>
+
+        <div class="footer-note">
+            <span class="note">🏷️ Ghi chú dành cho học sinh</span><br>
+            Phân biệt rõ độ dịch chuyển và quãng đường để áp dụng đúng trong các bài toán động học.
+        </div>
+    </div>
+</body>
+</html>

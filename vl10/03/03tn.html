@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc nghiệm Bài 3 - Sai số trong phép đo (Câu hỏi)</title>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [
+                    ['$', '$'],
+                    ['\\(', '\\)']
+                ],
+                displayMath: [
+                    ['$$', '$$'],
+                    ['\\[', '\\]']
+                ],
+                processEscapes: true,
+                processEnvironments: true,
+                tags: 'ams'
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" id="MathJax-script" async>
+    </script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            background-color: #F5F5DC;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+            border-left: 6px solid #8B5A2B;
+        }
+
+        h1 {
+            color: #8B4513;
+            font-size: 2em;
+            border-bottom: 3px solid #8B5A2B;
+            padding-bottom: 12px;
+            text-align: center;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 25px;
+            font-size: 1.05em;
+        }
+
+        .info-bar {
+            background-color: #F5F5F5;
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border: 1px solid #D3D3D3;
+        }
+
+        .info-bar .total {
+            font-weight: 600;
+            color: #004488;
+        }
+
+        .info-bar .note {
+            color: #8B4513;
+        }
+
+        .question-block {
+            background-color: #F5F5F5;
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin-bottom: 18px;
+            border-left: 4px solid #0066CC;
+            transition: background-color 0.2s;
+        }
+
+        .question-block:hover {
+            background-color: #F0F0F0;
+        }
+
+        .question-number {
+            font-weight: 700;
+            color: #8B4513;
+            font-size: 1.05em;
+            margin-right: 8px;
+        }
+
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 10px;
+            font-size: 1.02em;
+        }
+
+        .question-text .math-inline {
+            color: #004488;
+        }
+
+        .options {
+            padding-left: 28px;
+            list-style: none;
+        }
+
+        .options li {
+            padding: 4px 0;
+            cursor: default;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+
+        .options li::before {
+            content: "●";
+            color: #8B5A2B;
+            font-size: 0.7em;
+            margin-right: 8px;
+        }
+
+        .options .option-label {
+            font-weight: 600;
+            color: #004488;
+            min-width: 22px;
+        }
+
+        .options .option-text {
+            color: #333;
+        }
+
+        .formula-inline {
+            background-color: #F5F8FF;
+            padding: 0 6px;
+            border-radius: 4px;
+            font-size: 1.02em;
+        }
+
+        hr {
+            border: 0;
+            height: 2px;
+            background: linear-gradient(to right, #8B5A2B, transparent);
+            margin: 30px 0 20px;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #666;
+            border-top: 1px solid #D3D3D3;
+            padding-top: 15px;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: #8B5A2B;
+            color: #FFFFFF;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: #D3D3D3;
+            color: #333;
+            padding: 1px 10px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            margin-left: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px 18px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            .question-block {
+                padding: 14px 16px;
+            }
+            .options {
+                padding-left: 12px;
+            }
+            .info-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>📝 BÀI 3: SAI SỐ TRONG PHÉP ĐO</h1>
+        <div class="subtitle">25 câu hỏi trắc nghiệm — Học sinh chọn đáp án đúng nhất</div>
+
+        <div class="info-bar">
+            <span class="total">📌 Tổng số câu: 25</span>
+            <span class="note">⏱ Thời gian: 30 phút</span>
+        </div>
+
+        <!-- Câu 1 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 1.</span>
+                Phép đo đại lượng bằng dụng cụ đo, kết quả được đọc trực tiếp trên dụng cụ đo được gọi là:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Phép đo gián tiếp</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Phép đo trực tiếp</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Phép đo tương đối</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Phép đo tuyệt đối</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 2 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 2.</span>
+                Đo tốc độ $v = \dfrac{s}{t}$ bằng cách đo quãng đường $s$ và thời gian $t$ là:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Phép đo trực tiếp</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Phép đo gián tiếp</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Phép đo cơ bản</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Phép đo sai số</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 3 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 3.</span>
+                Sai số do đặc điểm và cấu tạo của dụng cụ đo gây ra được gọi là:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Sai số ngẫu nhiên</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Sai số tuyệt đối</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Sai số hệ thống</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Sai số tỉ đối</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 4 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 4.</span>
+                Nguyên nhân nào sau đây gây ra sai số ngẫu nhiên?
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Dụng cụ đo bị mờ vạch chia</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Thao tác đo không chuẩn</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Điều kiện thí nghiệm thay đổi</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Cả B và C đều đúng</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 5 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 5.</span>
+                Để khắc phục sai số ngẫu nhiên, người ta thường:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Thay dụng cụ đo khác</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Tiến hành thí nghiệm nhiều lần và tính sai số</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Chỉ đo một lần duy nhất</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Làm tròn kết quả đo</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 6 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 6.</span>
+                Công thức tính giá trị trung bình của đại lượng $A$ sau $n$ lần đo là:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">$\overline{A} = \dfrac{A_1 + A_2 + \cdots + A_n}{n-1}$</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">$\overline{A} = \dfrac{A_1 + A_2 + \cdots + A_n}{n}$</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">$\overline{A} = A_1 + A_2 + \cdots + A_n$</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">$\overline{A} = \dfrac{A_1 + A_2}{2}$</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 7 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 7.</span>
+                Sai số tuyệt đối của mỗi lần đo được tính bằng công thức:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">$\Delta A_i = \overline{A} + A_i$</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">$\Delta A_i = |\overline{A} - A_i|$</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">$\Delta A_i = \overline{A} \cdot A_i$</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">$\Delta A_i = \dfrac{\overline{A}}{A_i}$</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 8 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 8.</span>
+                Sai số ngẫu nhiên tuyệt đối trung bình được tính theo công thức:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">$\overline{\Delta A} = \dfrac{\Delta A_1 + \Delta A_2 + \cdots + \Delta A_n}{n}$</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">$\overline{\Delta A} = \Delta A_1 + \Delta A_2 + \cdots + \Delta A_n$</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">$\overline{\Delta A} = \dfrac{\Delta A_1 + \Delta A_2}{2}$</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">$\overline{\Delta A} = \dfrac{\Delta A_1 - \Delta A_2}{n}$</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 9 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 9.</span>
+                Sai số tuyệt đối của phép đo là:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">$\Delta A = \overline{\Delta A} - \Delta A_{dc}$</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">$\Delta A = \overline{\Delta A} \cdot \Delta A_{dc}$</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">$\Delta A = \overline{\Delta A} + \Delta A_{dc}$</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">$\Delta A = \dfrac{\overline{\Delta A}}{\Delta A_{dc}}$</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 10 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 10.</span>
+                Sai số dụng cụ thường được lấy bằng:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Độ chia nhỏ nhất của dụng cụ</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Một nửa độ chia nhỏ nhất của dụng cụ</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Hai lần độ chia nhỏ nhất của dụng cụ</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Không xác định được</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 11 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 11.</span>
+                Một thước có độ chia nhỏ nhất là 1 mm. Sai số dụng cụ của thước này là:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">1 mm</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">2 mm</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">0,5 mm</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">0,1 mm</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 12 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 12.</span>
+                Sai số tỉ đối của phép đo được xác định bằng công thức:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">$\delta A = \dfrac{\Delta A}{\overline{A}} \cdot 100\%$</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">$\delta A = \Delta A \cdot \overline{A} \cdot 100\%$</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">$\delta A = \dfrac{\overline{A}}{\Delta A} \cdot 100\%$</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">$\delta A = \Delta A + \overline{A}$</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 13 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 13.</span>
+                Sai số tỉ đối cho biết:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Giá trị trung bình của phép đo</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Mức độ chính xác của phép đo</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Sai số dụng cụ</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Số lần đo</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 14 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 14.</span>
+                Khi đo đại lượng $A = B + C$, sai số tuyệt đối của $A$ được xác định là:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">$\Delta A = \Delta B - \Delta C$</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">$\Delta A = \Delta B + \Delta C$</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">$\Delta A = \Delta B \cdot \Delta C$</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">$\Delta A = \dfrac{\Delta B}{\Delta C}$</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 15 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 15.</span>
+                Khi đo đại lượng $A = B \cdot C$, sai số tỉ đối của $A$ được xác định là:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">$\delta A = \delta B - \delta C$</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">$\delta A = \delta B \cdot \delta C$</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">$\delta A = \delta B + \delta C$</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">$\delta A = \dfrac{\delta B}{\delta C}$</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 16 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 16.</span>
+                Khi đo đại lượng $A = \dfrac{B}{C}$, sai số tỉ đối của $A$ được xác định là:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">$\delta A = \delta B + \delta C$</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">$\delta A = \delta B - \delta C$</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">$\delta A = \delta B \cdot \delta C$</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">$\delta A = \dfrac{\delta B}{\delta C}$</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 17 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 17.</span>
+                Kết quả đo được ghi dưới dạng:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">$A = \overline{A}$</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">$A = \Delta A$</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">$A = \overline{A} \pm \Delta A$</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">$A = \overline{A} \cdot \Delta A$</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 18 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 18.</span>
+                Quy tắc làm tròn số: Nếu chữ số ở hàng bỏ đi nhỏ hơn 5 thì:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Chữ số bên trái tăng thêm 1</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Chữ số bên trái giữ nguyên</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Chữ số bên trái giảm đi 1</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Không xác định</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 19 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 19.</span>
+                Quy tắc làm tròn số: Nếu chữ số ở hàng bỏ đi lớn hơn hoặc bằng 5 thì:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Chữ số bên trái giữ nguyên</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Chữ số bên trái giảm đi 1</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Chữ số bên trái tăng thêm 1</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Chữ số bên trái trở thành 0</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 20 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 20.</span>
+                Sai số tuyệt đối $\Delta A$ thường được viết đến:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Số chữ số có nghĩa tới đơn vị của ĐCNN</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Số chữ số có nghĩa bất kỳ</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Một chữ số</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Hai chữ số</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 21 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 21.</span>
+                Giá trị trung bình $\overline{A}$ được viết đến:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Bậc thập phân bất kỳ</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Bậc thập phân tương ứng với $\Delta A$</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Bậc thập phân nhỏ hơn $\Delta A$</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Bậc thập phân lớn hơn $\Delta A$</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 22 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 22.</span>
+                Đo chiều dài của một vật bằng thước có ĐCNN 1 mm, thu được kết quả các lần đo: 12,3 mm; 12,5 mm; 12,4 mm. Giá trị trung bình là:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">12,3 mm</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">12,4 mm</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">12,5 mm</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">12,0 mm</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 23 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 23.</span>
+                Với số liệu câu 22, sai số tuyệt đối trung bình (làm tròn) là:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">0,1 mm</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">0,2 mm</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">0,3 mm</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">0,4 mm</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 24 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 24.</span>
+                Đo thời gian $t$ với kết quả $t = 2,50 \pm 0,02$ s. Sai số tỉ đối của phép đo là:
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">0,8%</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">1,0%</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">1,2%</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">2,0%</span></li>
+            </ul>
+        </div>
+
+        <!-- Câu 25 -->
+        <div class="question-block">
+            <div class="question-text">
+                <span class="question-number">Câu 25.</span>
+                Kết luận nào sau đây là <strong>đúng</strong> về sai số trong phép đo?
+            </div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Mọi phép đo đều có sai số</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Có thể loại bỏ hoàn toàn sai số</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Sai số chỉ do dụng cụ gây ra</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Sai số tỉ đối luôn bằng 0</span></li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <div class="footer-note">
+            📌 Học sinh làm bài vào giấy và kiểm tra đáp án ở trang sau.
+        </div>
+
+    </div>
+
+</body>
+</html>

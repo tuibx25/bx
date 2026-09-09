@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tóm tắt Bài 3: Thực hành tính sai số trong phép đo. Ghi kết quả đo</title>
+  <!-- MathJax để hiển thị công thức toán học -->
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        tags: 'ams'
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" id="MathJax-script" async></script>
+  
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.8;
+      background-color: #F5F5DC;
+      color: #333;
+      margin: 20px;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      max-width: 950px;
+      background-color: #FFFFFF;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      border-left: 6px solid #8B5A2B;
+      margin-top: 10px;
+    }
+    h1 {
+      color: #8B4513;
+      font-size: 2em;
+      border-bottom: 3px solid #8B5A2B;
+      padding-bottom: 10px;
+      margin-top: 0;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    .section-title {
+      color: #004488;
+      font-size: 1.5em;
+      margin-top: 25px;
+      margin-bottom: 10px;
+      padding-left: 10px;
+      border-left: 5px solid #0066CC;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      background-color: #F5F5F5;
+      border-radius: 0 5px 5px 0;
+    }
+    .sub-title {
+      color: #8B4513;
+      font-size: 1.2em;
+      font-weight: 600;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      padding: 5px 10px;
+      background-color: #F5DEB3;
+      border-radius: 5px;
+    }
+    p {
+      margin: 10px 0;
+      text-align: justify;
+    }
+    ul, ol {
+      padding-left: 25px;
+      margin: 10px 0;
+    }
+    li {
+      margin-bottom: 10px;
+    }
+    .formula-box {
+      background-color: #F5F8FF;
+      padding: 15px 20px;
+      border-radius: 8px;
+      border-left: 5px solid #0066CC;
+      margin: 15px 0;
+      font-size: 1.1em;
+      text-align: center;
+      overflow-x: auto;
+    }
+    .formula-box-inline {
+      background-color: #F5F8FF;
+      padding: 10px 18px;
+      border-radius: 6px;
+      border: 1px solid #D3D3D3;
+      margin: 10px 0;
+      font-size: 1.05em;
+      text-align: center;
+      overflow-x: auto;
+    }
+    .highlight-box {
+      background-color: #F5F5DC;
+      padding: 15px 20px;
+      border-radius: 8px;
+      border-left: 4px solid #8B5A2B;
+      margin: 20px 0;
+    }
+    .important-concept {
+      background-color: #F5F5F5;
+      padding: 12px 18px;
+      border-radius: 6px;
+      border: 1px solid #D3D3D3;
+      margin: 15px 0;
+    }
+    .grid-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin: 15px 0;
+    }
+    .grid-item {
+      flex: 1 1 200px;
+      background-color: #F5F5DC;
+      padding: 12px 15px;
+      border-radius: 6px;
+      border-left: 4px solid #8B5A2B;
+    }
+    .grid-item strong {
+      color: #8B4513;
+      display: block;
+      margin-bottom: 5px;
+    }
+    .note {
+      background-color: #D3D3D3;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      color: #333;
+      display: inline-block;
+    }
+    hr {
+      border: 0;
+      height: 2px;
+      background: linear-gradient(to right, #8B5A2B, transparent);
+      margin: 25px 0;
+    }
+    .footer-note {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 0.9em;
+      color: #555;
+      border-top: 1px solid #D3D3D3;
+      padding-top: 15px;
+    }
+    .keyword {
+      color: #0066CC;
+      font-weight: 600;
+    }
+    .rule-list {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    .rule-list li::before {
+      content: "📌 ";
+      color: #8B5A2B;
+      font-weight: bold;
+    }
+    .step-list {
+      list-style-type: none;
+      padding-left: 0;
+      counter-reset: step-counter;
+    }
+    .step-list li {
+      counter-increment: step-counter;
+      margin-bottom: 12px;
+      padding-left: 35px;
+      position: relative;
+    }
+    .step-list li::before {
+      content: counter(step-counter);
+      background-color: #8B5A2B;
+      color: white;
+      font-weight: bold;
+      font-size: 0.9em;
+      padding: 2px 8px;
+      border-radius: 50%;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    .example-box {
+      background-color: #F0F7FF;
+      border: 1px solid #0066CC;
+      border-radius: 8px;
+      padding: 15px 20px;
+      margin: 15px 0;
+    }
+    .example-box .label {
+      color: #004488;
+      font-weight: 600;
+      font-size: 1.05em;
+    }
+    .math-block {
+      margin: 12px 0;
+      padding: 8px 0;
+    }
+    /* Responsive */
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px 20px;
+      }
+      h1 {
+        font-size: 1.5em;
+      }
+      .section-title {
+        font-size: 1.2em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📐 BÀI 3: THỰC HÀNH TÍNH SAI SỐ TRONG PHÉP ĐO. GHI KẾT QUẢ ĐO</h1>
+    <p style="text-align: center; color: #555; margin-bottom: 20px;"><i>Mọi phép đo đều có sai số. Bài học hướng dẫn cách xác định và ghi kết quả đo chính xác.</i></p>
+
+    <!-- Phần I -->
+    <div class="section-title">I. PHÉP ĐO TRỰC TIẾP VÀ GIÁN TIẾP</div>
+    <div class="grid-container">
+      <div class="grid-item">
+        <strong>📏 Đo trực tiếp</strong>
+        Đo đại lượng bằng dụng cụ đo, kết quả đọc trực tiếp trên dụng cụ đó.<br>
+        <em>Ví dụ: Dùng thước đo chiều dài, dùng đồng hồ đo thời gian.</em>
+      </div>
+      <div class="grid-item">
+        <strong>🧮 Đo gián tiếp</strong>
+        Đo đại lượng thông qua công thức liên hệ với các đại lượng đo trực tiếp.<br>
+        <em>Ví dụ: Đo tốc độ $v = \dfrac{s}{t}$ (đo $s$ và $t$ trực tiếp).</em>
+      </div>
+    </div>
+
+    <!-- Phần II -->
+    <div class="section-title">II. SAI SỐ PHÉP ĐO</div>
+
+    <div class="sub-title">1. Phân loại sai số</div>
+    <div class="grid-container">
+      <div class="grid-item">
+        <strong>⚙️ Sai số hệ thống</strong>
+        - Do dụng cụ đo (sai số dụng cụ).<br>
+        - Do người đo (có thể loại bỏ).<br>
+        <em>Ví dụ: Thước bị mờ vạch chia.</em>
+      </div>
+      <div class="grid-item">
+        <strong>🎲 Sai số ngẫu nhiên</strong>
+        - Không có nguyên nhân rõ ràng.<br>
+        - Do thao tác đo không chuẩn, điều kiện thí nghiệm thay đổi, giác quan hạn chế.<br>
+        <em>Khắc phục: Làm thí nghiệm nhiều lần và tính sai số.</em>
+      </div>
+    </div>
+
+    <div class="sub-title">2. Cách xác định sai số phép đo trực tiếp</div>
+    
+    <p><strong>Giá trị trung bình:</strong></p>
+    <div class="formula-box">
+      $\overline{A} = \dfrac{A_1 + A_2 + \cdots + A_n}{n}$
+    </div>
+
+    <p><strong>Sai số tuyệt đối của mỗi lần đo:</strong></p>
+    <div class="formula-box">
+      $\Delta A_i = |\overline{A} - A_i|$
+    </div>
+
+    <p><strong>Sai số ngẫu nhiên tuyệt đối trung bình:</strong></p>
+    <div class="formula-box">
+      $\overline{\Delta A} = \dfrac{\Delta A_1 + \Delta A_2 + \cdots + \Delta A_n}{n}$
+    </div>
+
+    <p><strong>Sai số tuyệt đối của phép đo:</strong></p>
+    <div class="formula-box">
+      $\Delta A = \overline{\Delta A} + \Delta A_{dc}$
+    </div>
+    <p>Trong đó $\Delta A_{dc}$ là sai số dụng cụ.</p>
+
+    <p><strong>Sai số tỉ đối:</strong></p>
+    <div class="formula-box">
+      $\delta A = \dfrac{\Delta A}{\overline{A}} \cdot 100\%$
+    </div>
+    <p>Sai số tỉ đối cho biết <span class="keyword">mức độ chính xác</span> của phép đo.</p>
+
+    <div class="highlight-box">
+      <p><strong>🔧 Sai số dụng cụ:</strong> Thường lấy bằng <span class="keyword">một nửa độ chia nhỏ nhất</span> (ĐCNN) của dụng cụ đo.</p>
+      <p><em>Ví dụ: Thước có ĐCNN 1 mm → $\Delta A_{dc} = 0,5$ mm.</em></p>
+    </div>
+
+    <div class="sub-title">3. Cách xác định sai số phép đo gián tiếp</div>
+    
+    <p><strong>Trường hợp tổng hoặc hiệu:</strong> Sai số tuyệt đối bằng tổng các sai số tuyệt đối của các số hạng.</p>
+    <div class="formula-box">
+      $A = B + C \Rightarrow \Delta A = \Delta B + \Delta C$
+    </div>
+
+    <p><strong>Trường hợp tích hoặc thương:</strong> Sai số tỉ đối bằng tổng các sai số tỉ đối của các thừa số.</p>
+    <div class="formula-box">
+      $A = B \cdot C \Rightarrow \delta A = \delta B + \delta C$
+    </div>
+    
+    <div class="formula-box">
+      $A = \dfrac{B}{C} \Rightarrow \delta A = \delta B + \delta C$
+    </div>
+
+    <div class="sub-title">4. Cách ghi kết quả đo</div>
+    <ul>
+      <li>Kết quả đo được ghi dưới dạng: <span class="keyword">$A = \overline{A} \pm \Delta A$</span></li>
+      <li><strong>Quy tắc làm tròn số:</strong>
+        <ul>
+          <li>Nếu chữ số hàng bỏ đi $< 5$: giữ nguyên chữ số bên trái.</li>
+          <li>Nếu chữ số hàng bỏ đi $\ge 5$: tăng chữ số bên trái thêm 1 đơn vị.</li>
+        </ul>
+      </li>
+      <li><strong>Lưu ý:</strong> Sai số tuyệt đối $\Delta A$ thường được viết đến số chữ số có nghĩa tới đơn vị của ĐCNN. Giá trị trung bình $\overline{A}$ được viết đến bậc thập phân tương ứng với $\Delta A$.</li>
+    </ul>
+
+    <!-- Phần Ví dụ -->
+    <div class="section-title">📝 VÍ DỤ MINH HỌA</div>
+    
+    <div class="example-box">
+      <p class="label">Ví dụ 1: Đo quãng đường</p>
+      <p>$s = s_1 + s_2 \Rightarrow \Delta s = \Delta s_1 + \Delta s_2$</p>
+    </div>
+
+    <div class="example-box">
+      <p class="label">Ví dụ 2: Đo tốc độ</p>
+      <p>$v = \dfrac{s}{t} \Rightarrow \delta v = \delta s + \delta t$</p>
+      <p>Hay: $\delta v = \dfrac{\Delta s}{s} \cdot 100\% + \dfrac{\Delta t}{t} \cdot 100\%$</p>
+    </div>
+
+    <!-- Phần Tổng kết -->
+    <hr>
+    <div class="section-title" style="border-left-color: #8B5A2B;">📝 EM ĐÃ HỌC (Tóm tắt nội dung chính)</div>
+    <ul class="rule-list">
+      <li><strong>Phân biệt được phép đo trực tiếp và phép đo gián tiếp.</strong></li>
+      <li><strong>Phân loại sai số:</strong> Sai số hệ thống và sai số ngẫu nhiên.</li>
+      <li><strong>Biết cách xác định sai số:</strong> Sai số tuyệt đối, sai số tỉ đối, sai số dụng cụ.</li>
+      <li><strong>Biết cách ghi kết quả đo</strong> đúng quy tắc: $A = \overline{A} \pm \Delta A$.</li>
+    </ul>
+
+    <!-- Phần Ứng dụng -->
+    <div class="section-title" style="border-left-color: #8B5A2B;">💡 EM CÓ THỂ</div>
+    <ul>
+      <li>Áp dụng các công thức tính sai số để xử lý số liệu thí nghiệm.</li>
+      <li>Ghi chính xác kết quả đo từ các thí nghiệm thực hành.</li>
+    </ul>
+
+    <div style="background-color: #F5DEB3; padding: 15px; border-radius: 8px; border: 1px solid #8B5A2B; margin-top: 20px;">
+      <p style="margin: 0; text-align: center; font-weight: bold; color: #8B4513;">
+        📌 GHI NHỚ: Không có phép đo nào là tuyệt đối chính xác. Việc tính sai số giúp đánh giá độ tin cậy của kết quả đo.
+      </p>
+    </div>
+
+    <div class="footer-note">
+      <span class="note">🏷️ Ghi chú dành cho học sinh</span><br>
+      Nắm vững các công thức và quy tắc tính sai số để áp dụng vào các bài thực hành và xử lý số liệu.
+    </div>
+  </div>
+</body>
+</html>
