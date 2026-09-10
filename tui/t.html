@@ -56,51 +56,35 @@
             opacity: 0.85;
         }
 
+        .status {
+            margin-top: 25px;
+            font-size: 0.95rem;
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        .status.ok { color: #b8e994; }
+        .status.warn { color: #f8c291; }
+
         @media (max-width: 1024px) {
-            .time-container {
-                padding: 50px 60px;
-            }
-            .date {
-                font-size: 3rem;
-            }
-            .time {
-                font-size: 7rem;
-            }
-            .seconds {
-                font-size: 3.5rem;
-            }
+            .time-container { padding: 50px 60px; }
+            .date { font-size: 3rem; }
+            .time { font-size: 7rem; }
+            .seconds { font-size: 3.5rem; }
         }
 
         @media (max-width: 768px) {
-            .time-container {
-                padding: 40px 30px;
-            }
-            .date {
-                font-size: 2rem;
-            }
-            .time {
-                font-size: 4.5rem;
-                letter-spacing: 3px;
-            }
-            .seconds {
-                font-size: 2.5rem;
-            }
+            .time-container { padding: 40px 30px; }
+            .date { font-size: 2rem; }
+            .time { font-size: 4.5rem; letter-spacing: 3px; }
+            .seconds { font-size: 2.5rem; }
         }
 
         @media (max-width: 480px) {
-            .time-container {
-                padding: 30px 20px;
-            }
-            .date {
-                font-size: 1.5rem;
-            }
-            .time {
-                font-size: 3rem;
-                letter-spacing: 2px;
-            }
-            .seconds {
-                font-size: 1.8rem;
-            }
+            .time-container { padding: 30px 20px; }
+            .date { font-size: 1.5rem; }
+            .time { font-size: 3rem; letter-spacing: 2px; }
+            .seconds { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -110,32 +94,156 @@
         <div class="time">
             <span id="hours">--</span>:<span id="minutes">--</span><span class="seconds">:<span id="seconds">--</span></span>
         </div>
+        <div class="status" id="status"></div>
     </div>
 
     <script>
-        function updateClock() {
-            const now = new Date();
+        // Múi giờ Hà Nội: UTC+7
+        const HANOI_TZ = 'Asia/Ho_Chi_Minh';
+        const HANOI_OFFSET_HOURS = 7;
 
-            const dateOptions = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            };
-            const dateStr = now.toLocaleDateString('vi-VN', dateOptions);
+        // Độ lệch giữa giờ server và giờ máy (ms): serverTime - localTime
+        let serverTimeOffset = 0;
+        let isSynced = false;
 
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
+        // Hàm lấy thời gian từ WorldTimeAPI (hỗ trợ CORS)
+        async function syncWithWorldTimeApi() {
+            const response = await fetch(
+                'https://worldtimeapi.org/api/timezone/Asia/Ho_Chi_Minh',
+                { cache: 'no-store' }
+            );
+            if (!response.ok) throw new Error('WorldTimeAPI HTTP ' + response.status);
 
-            document.getElementById('date').textContent = dateStr;
-            document.getElementById('hours').textContent = hours;
-            document.getElementById('minutes').textContent = minutes;
-            document.getElementById('seconds').textContent = seconds;
+            const data = await response.json();
+            // unixtime: Unix timestamp (giây)
+            if (typeof data.unixtime !== 'number') {
+                throw new Error('Dữ liệu WorldTimeAPI không hợp lệ');
+            }
+            return data.unixtime * 1000;
         }
 
-        updateClock();
-        setInterval(updateClock, 1000);
+        // Hàm dự phòng: Time.Now API
+        async function syncWithTimeNowApi() {
+            const response = await fetch(
+                'https://time.now/developer/api/timezone/Asia/Ho_Chi_Minh',
+                { cache: 'no-store' }
+            );
+            if (!response.ok) throw new Error('Time.Now HTTP ' + response.status);
+
+            const data = await response.json();
+            // API này có thể trả về "unixtime"
+            if (typeof data.unixtime === 'number') {
+                return data.unixtime * 1000;
+            }
+            // Hoặc trả về datetime dạng ISO
+            if (data.datetime) {
+                return new Date(data.datetime).getTime();
+            }
+            throw new Error('Dữ liệu Time.Now không hợp lệ');
+        }
+
+        // Hàm đồng bộ chính: thử lần lượt các API
+        async function syncTime() {
+            const statusEl = document.getElementById('status');
+            statusEl.className = 'status';
+
+            const apis = [
+                { name: 'WorldTimeAPI', fn: syncWithWorldTimeApi },
+                { name: 'Time.Now',     fn: syncWithTimeNowApi }
+            ];
+
+            for (const api of apis) {
+                try {
+                    const serverMs = await api.fn();
+                    const localMs = Date.now();
+                    serverTimeOffset = serverMs - localMs;
+                    isSynced = true;
+
+                    statusEl.textContent =
+                        `Đã đồng bộ với ${api.name} (Hà Nội, UTC+7)`;
+                    statusEl.classList.add('ok');
+                    return;
+                } catch (err) {
+                    console.warn(`[${api.name}] lỗi:`, err.message);
+                }
+            }
+
+            // Cả hai API đều thất bại
+            isSynced = false;
+            serverTimeOffset = 0;
+            statusEl.textContent =
+                'Không thể đồng bộ trực tuyến – đang dùng giờ máy + bù UTC+7';
+            statusEl.classList.add('warn');
+        }
+
+        // Trả về thời gian Hà Nội hiện tại
+        function getHanoiNow() {
+            if (isSynced) {
+                // Dùng offset từ server (serverMs - localMs)
+                // Vậy giờ server ≈ Date.now() + offset
+                // Nhưng server đã trả về giờ Hà Nội (Asia/Ho_Chi_Minh) nên
+                // timestamp này chính là UTC tuyệt đối.
+                // Khi format với timeZone Hà Nội sẽ ra đúng giờ Hà Nội.
+                return new Date(Date.now() + serverTimeOffset);
+            }
+
+            // Dự phòng: lấy UTC của máy + 7 giờ
+            const nowUtcMs = Date.now() + new Date().getTimezoneOffset() * 60 * 1000;
+            return new Date(nowUtcMs + HANOI_OFFSET_HOURS * 3600 * 1000);
+        }
+
+        const dateFormatter = new Intl.DateTimeFormat('vi-VN', {
+            timeZone: HANOI_TZ,
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        const timeFormatter = new Intl.DateTimeFormat('vi-VN', {
+            timeZone: HANOI_TZ,
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        });
+
+        function updateClock() {
+            const now = getHanoiNow();
+
+            const dateStr = dateFormatter.format(now);
+            const parts = timeFormatter.formatToParts(now);
+
+            let hh = '--', mm = '--', ss = '--';
+            for (const p of parts) {
+                if (p.type === 'hour')   hh = p.value;
+                if (p.type === 'minute') mm = p.value;
+                if (p.type === 'second') ss = p.value;
+            }
+
+            document.getElementById('date').textContent = dateStr;
+            document.getElementById('hours').textContent = hh;
+            document.getElementById('minutes').textContent = mm;
+            document.getElementById('seconds').textContent = ss;
+        }
+
+        async function init() {
+            // Hiển thị tạm giờ máy + bù UTC+7 ngay lập tức
+            updateClock();
+            setInterval(updateClock, 1000);
+
+            // Đồng bộ với server
+            await syncTime();
+            updateClock();
+
+            // Đồng bộ lại mỗi 10 phút
+            setInterval(async () => {
+                await syncTime();
+                updateClock();
+            }, 10 * 60 * 1000);
+        }
+
+        init();
     </script>
 </body>
 </html>
