@@ -160,6 +160,7 @@
 
         .textbox.editing { cursor: text; }
 
+        /* Text content riêng để không phá nút con */
         .textbox .tb-content {
             display: inline-block;
             min-width: 40px;
@@ -168,6 +169,7 @@
             overflow-wrap: break-word;
         }
 
+        /* Placeholder: CHỈ dùng opacity, KHÔNG đổi font-style/weight/color */
         .textbox .tb-content.placeholder {
             opacity: 0.45;
         }
@@ -268,7 +270,7 @@
             box-shadow: 0 4px 16px rgba(0,0,0,0.18);
             border-radius: 8px;
             padding: 12px 14px;
-            min-width: 320px;
+            min-width: 280px;
             max-height: 90vh;
             overflow-y: auto;
             font-family: Arial, sans-serif;
@@ -295,6 +297,7 @@
 
         #ctxMenu select,
         #ctxMenu input[type="number"],
+        #ctxMenu input[type="color"],
         #ctxMenu input[type="text"] {
             flex: 1;
             padding: 4px 6px;
@@ -306,6 +309,12 @@
             outline: none;
             font-family: inherit;
             min-width: 0;
+        }
+
+        #ctxMenu input[type="color"] {
+            padding: 2px;
+            height: 30px;
+            cursor: pointer;
         }
 
         #ctxMenu input[type="range"] {
@@ -398,7 +407,6 @@
 
         #ctxMenu .ctx-radio.active input { accent-color: #fff; }
 
-        /* ============ COLOR SWATCHES ============ */
         .color-swatches {
             display: flex;
             gap: 6px;
@@ -440,25 +448,6 @@
         .color-swatch.light.active::after {
             color: #333;
             text-shadow: 0 1px 2px rgba(255,255,255,0.8);
-        }
-
-        /* Swatch nhỏ cho bảng điều khiển textbox */
-        .color-swatches-sm {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-            flex: 1;
-        }
-
-        .color-swatches-sm .color-swatch {
-            width: 22px;
-            height: 22px;
-            border-radius: 5px;
-            border-width: 2px;
-        }
-
-        .color-swatches-sm .color-swatch.active::after {
-            font-size: 12px;
         }
 
         ::-webkit-scrollbar { width: 0px; height: 0px; background: transparent; }
@@ -566,20 +555,9 @@
                 <input type="number" id="ctxSize" min="8" max="200" step="1" value="24">
             </div>
 
-            <div class="ctx-row" style="align-items:flex-start;">
-                <label style="padding-top:4px;">Màu chữ</label>
-                <div class="color-swatches-sm" id="textColorSwatches">
-                    <div class="color-swatch" data-color="#000000" style="background:#000000" title="Đen"></div>
-                    <div class="color-swatch" data-color="#8B4513" style="background:#8B4513" title="Nâu đậm"></div>
-                    <div class="color-swatch" data-color="#8B5A2B" style="background:#8B5A2B" title="Nâu nhạt"></div>
-                    <div class="color-swatch" data-color="#FFFFFF" style="background:#FFFFFF" title="Trắng"></div>
-                    <div class="color-swatch light" data-color="#F5F5F5" style="background:#F5F5F5" title="Trắng xám"></div>
-                    <div class="color-swatch light" data-color="#F5F5DC" style="background:#F5F5DC" title="Be"></div>
-                    <div class="color-swatch light" data-color="#F5DEB3" style="background:#F5DEB3" title="Lúa mì"></div>
-                    <div class="color-swatch light" data-color="#D3D3D3" style="background:#D3D3D3" title="Xám nhạt"></div>
-                    <div class="color-swatch" data-color="#0066CC" style="background:#0066CC" title="Xanh"></div>
-                    <div class="color-swatch" data-color="#004488" style="background:#004488" title="Xanh đậm"></div>
-                </div>
+            <div class="ctx-row">
+                <label>Màu chữ</label>
+                <input type="color" id="ctxColor" value="#000000">
             </div>
 
             <div class="ctx-row">
@@ -604,46 +582,16 @@
             <div class="ctx-section">
                 <div class="ctx-title" style="margin-bottom:6px;">📦 Hộp textbox</div>
 
-                <div class="ctx-row" style="align-items:flex-start;">
-                    <label style="padding-top:4px;">Nền</label>
-                    <div class="color-swatches-sm" id="bgColorSwatches">
-                        <div class="color-swatch light" data-color="#FFFFFF" style="background:#FFFFFF" title="Trắng"></div>
-                        <div class="color-swatch light" data-color="#F5F5F5" style="background:#F5F5F5" title="Trắng xám"></div>
-                        <div class="color-swatch light" data-color="#F5F5DC" style="background:#F5F5DC" title="Be"></div>
-                        <div class="color-swatch light" data-color="#F5DEB3" style="background:#F5DEB3" title="Lúa mì"></div>
-                        <div class="color-swatch light" data-color="#D3D3D3" style="background:#D3D3D3" title="Xám nhạt"></div>
-                        <div class="color-swatch" data-color="#8B5A2B" style="background:#8B5A2B" title="Nâu nhạt"></div>
-                        <div class="color-swatch" data-color="#8B4513" style="background:#8B4513" title="Nâu đậm"></div>
-                        <div class="color-swatch" data-color="#0066CC" style="background:#0066CC" title="Xanh"></div>
-                        <div class="color-swatch" data-color="#004488" style="background:#004488" title="Xanh đậm"></div>
-                        <div class="color-swatch" data-color="#000000" style="background:#000000" title="Đen"></div>
-                    </div>
-                </div>
-
-                <div class="ctx-row" style="margin-top:6px;">
-                    <label></label>
-                    <label class="ctx-check"><input type="checkbox" id="ctxBgTransparent"> Trong suốt</label>
-                </div>
-
-                <div class="ctx-row" style="align-items:flex-start;">
-                    <label style="padding-top:4px;">Viền</label>
-                    <div class="color-swatches-sm" id="borderColorSwatches">
-                        <div class="color-swatch" data-color="#000000" style="background:#000000" title="Đen"></div>
-                        <div class="color-swatch" data-color="#8B4513" style="background:#8B4513" title="Nâu đậm"></div>
-                        <div class="color-swatch" data-color="#8B5A2B" style="background:#8B5A2B" title="Nâu nhạt"></div>
-                        <div class="color-swatch light" data-color="#FFFFFF" style="background:#FFFFFF" title="Trắng"></div>
-                        <div class="color-swatch light" data-color="#F5F5F5" style="background:#F5F5F5" title="Trắng xám"></div>
-                        <div class="color-swatch light" data-color="#F5F5DC" style="background:#F5F5DC" title="Be"></div>
-                        <div class="color-swatch light" data-color="#F5DEB3" style="background:#F5DEB3" title="Lúa mì"></div>
-                        <div class="color-swatch light" data-color="#D3D3D3" style="background:#D3D3D3" title="Xám nhạt"></div>
-                        <div class="color-swatch" data-color="#0066CC" style="background:#0066CC" title="Xanh"></div>
-                        <div class="color-swatch" data-color="#004488" style="background:#004488" title="Xanh đậm"></div>
-                    </div>
+                <div class="ctx-row">
+                    <label>Nền</label>
+                    <input type="color" id="ctxBg" value="#ffffff">
+                    <label class="ctx-check" style="flex:0 0 auto;"><input type="checkbox" id="ctxBgTransparent"> Trong suốt</label>
                 </div>
 
                 <div class="ctx-row">
-                    <label>Kiểu viền</label>
-                    <select id="ctxBorderStyle" style="flex:1;">
+                    <label>Viền</label>
+                    <input type="color" id="ctxBorder" value="#8B4513">
+                    <select id="ctxBorderStyle" style="flex:0 0 100px;">
                         <option value="dashed">Nét đứt</option>
                         <option value="solid">Nét liền</option>
                         <option value="dotted">Chấm</option>
@@ -1036,66 +984,19 @@
 
         var ctxFont = document.getElementById('ctxFont');
         var ctxSize = document.getElementById('ctxSize');
+        var ctxColor = document.getElementById('ctxColor');
         var ctxBold = document.getElementById('ctxBold');
         var ctxItalic = document.getElementById('ctxItalic');
         var ctxUnderline = document.getElementById('ctxUnderline');
+        var ctxBg = document.getElementById('ctxBg');
         var ctxBgTransparent = document.getElementById('ctxBgTransparent');
+        var ctxBorder = document.getElementById('ctxBorder');
         var ctxBorderStyle = document.getElementById('ctxBorderStyle');
         var ctxRadius = document.getElementById('ctxRadius');
         var ctxApply = document.getElementById('ctxApply');
         var ctxReset = document.getElementById('ctxReset');
         var ctxAlignRadios = document.querySelectorAll('input[name="ctxAlign"]');
         var ctxAlignGroup = document.getElementById('ctxAlignGroup');
-
-        // Swatch groups cho textbox
-        var textColorSwatches = document.getElementById('textColorSwatches');
-        var bgColorSwatches = document.getElementById('bgColorSwatches');
-        var borderColorSwatches = document.getElementById('borderColorSwatches');
-
-        // Biến lưu màu đang chọn
-        var selectedTextColor = '#000000';
-        var selectedBgColor = '#FFFFFF';
-        var selectedBorderColor = '#8B4513';
-
-        // ===== SWATCH CLICK HANDLERS =====
-        function bindSwatchGroup(groupEl, onPick) {
-            groupEl.addEventListener('click', function(e) {
-                var sw = e.target.closest('.color-swatch');
-                if (!sw) return;
-                var color = sw.getAttribute('data-color');
-                var allSw = groupEl.querySelectorAll('.color-swatch');
-                for (var i = 0; i < allSw.length; i++) allSw[i].classList.remove('active');
-                sw.classList.add('active');
-                onPick(color);
-            });
-        }
-
-        bindSwatchGroup(textColorSwatches, function(color) {
-            selectedTextColor = color;
-        });
-        bindSwatchGroup(bgColorSwatches, function(color) {
-            selectedBgColor = color;
-            // Nếu chọn màu nền, tự bỏ tick "Trong suốt"
-            ctxBgTransparent.checked = false;
-        });
-        bindSwatchGroup(borderColorSwatches, function(color) {
-            selectedBorderColor = color;
-        });
-
-        // Hàm highlight swatch theo màu
-        function setActiveSwatch(groupEl, color) {
-            var allSw = groupEl.querySelectorAll('.color-swatch');
-            var found = false;
-            for (var i = 0; i < allSw.length; i++) {
-                if (allSw[i].getAttribute('data-color').toUpperCase() === color.toUpperCase()) {
-                    allSw[i].classList.add('active');
-                    found = true;
-                } else {
-                    allSw[i].classList.remove('active');
-                }
-            }
-            return found;
-        }
 
         var ctxImgW = document.getElementById('ctxImgW');
         var ctxImgH = document.getElementById('ctxImgH');
@@ -1123,13 +1024,13 @@
 
         function rgbToHex(rgb) {
             if (!rgb) return '#000000';
-            if (rgb.indexOf('#') === 0) return rgb.toUpperCase();
+            if (rgb.indexOf('#') === 0) return rgb;
             var m = rgb.match(/\d+/g);
             if (!m || m.length < 3) return '#000000';
             return '#' + [parseInt(m[0],10), parseInt(m[1],10), parseInt(m[2],10)].map(function(v) {
                 var h = v.toString(16);
                 return h.length === 1 ? '0' + h : h;
-            }).join('').toUpperCase();
+            }).join('');
         }
 
         function openDrawMenu(x, y) {
@@ -1169,6 +1070,7 @@
         }
 
         function openTextBoxMenu(tb, x, y) {
+            // Đồng bộ placeholder state trước khi đọc style
             syncPlaceholderState(tb);
 
             currentTextbox = tb;
@@ -1193,16 +1095,9 @@
             var sizeSrc = (contentEl && contentEl.style.fontSize) || tb.style.fontSize || cs.fontSize;
             ctxSize.value = parseInt(sizeSrc, 10) || 24;
 
-            // ===== MÀU CHỮ =====
             var colorSrc = (contentEl && contentEl.style.color) || tb.style.color || cs.color || '#000000';
-            selectedTextColor = rgbToHex(colorSrc);
-            if (!setActiveSwatch(textColorSwatches, selectedTextColor)) {
-                // Nếu màu không có trong danh sách, mặc định chọn đen
-                selectedTextColor = '#000000';
-                setActiveSwatch(textColorSwatches, selectedTextColor);
-            }
+            ctxColor.value = rgbToHex(colorSrc);
 
-            // Bold / Italic / Underline
             var boldSrc = (contentEl && contentEl.style.fontWeight) || tb.style.fontWeight || cs.fontWeight;
             var italicSrc = (contentEl && contentEl.style.fontStyle) || tb.style.fontStyle || cs.fontStyle;
             ctxBold.checked = (boldSrc === 'bold' || parseInt(boldSrc, 10) >= 700);
@@ -1217,30 +1112,12 @@
             }
             updateAlignHighlight(align);
 
-            // ===== MÀU NỀN =====
             var bg = tb.style.backgroundColor || cs.backgroundColor;
             var isTransparent = !bg || bg === 'transparent' || bg === 'rgba(0, 0, 0, 0)';
-            if (isTransparent) {
-                ctxBgTransparent.checked = true;
-                selectedBgColor = '#FFFFFF';
-                setActiveSwatch(bgColorSwatches, selectedBgColor);
-            } else {
-                ctxBgTransparent.checked = false;
-                selectedBgColor = rgbToHex(bg);
-                if (!setActiveSwatch(bgColorSwatches, selectedBgColor)) {
-                    selectedBgColor = '#FFFFFF';
-                    setActiveSwatch(bgColorSwatches, selectedBgColor);
-                }
-            }
+            if (isTransparent) { ctxBgTransparent.checked = true; ctxBg.value = '#ffffff'; }
+            else { ctxBgTransparent.checked = false; ctxBg.value = rgbToHex(bg); }
 
-            // ===== MÀU VIỀN =====
-            var borderSrc = tb.style.borderColor || cs.borderTopColor || '#8B4513';
-            selectedBorderColor = rgbToHex(borderSrc);
-            if (!setActiveSwatch(borderColorSwatches, selectedBorderColor)) {
-                selectedBorderColor = '#8B4513';
-                setActiveSwatch(borderColorSwatches, selectedBorderColor);
-            }
-
+            ctxBorder.value = rgbToHex(tb.style.borderColor || cs.borderTopColor || '#8B4513');
             var bStyle = (tb.style.borderStyle || cs.borderTopStyle || 'dashed').split(' ')[0];
             for (var m = 0; m < ctxBorderStyle.options.length; m++) {
                 if (ctxBorderStyle.options[m].value === bStyle) { ctxBorderStyle.selectedIndex = m; break; }
@@ -1302,16 +1179,19 @@
             if (!currentTextbox) return;
             var contentEl = currentTextbox.querySelector('.tb-content');
 
+            // Font family
             currentTextbox.style.fontFamily = ctxFont.value;
             if (contentEl) contentEl.style.fontFamily = ctxFont.value;
 
+            // Font size
             currentTextbox.style.fontSize = ctxSize.value + 'px';
             if (contentEl) contentEl.style.fontSize = ctxSize.value + 'px';
 
-            // ===== MÀU CHỮ =====
-            currentTextbox.style.color = selectedTextColor;
-            if (contentEl) contentEl.style.color = selectedTextColor;
+            // Màu chữ
+            currentTextbox.style.color = ctxColor.value;
+            if (contentEl) contentEl.style.color = ctxColor.value;
 
+            // Bold / Italic / Underline
             currentTextbox.style.fontWeight = ctxBold.checked ? 'bold' : 'normal';
             currentTextbox.style.fontStyle = ctxItalic.checked ? 'italic' : 'normal';
             currentTextbox.style.textDecoration = ctxUnderline.checked ? 'underline' : 'none';
@@ -1321,23 +1201,26 @@
                 contentEl.style.textDecoration = ctxUnderline.checked ? 'underline' : 'none';
             }
 
+            // Căn lề
             var alignVal = 'left';
             for (var i = 0; i < ctxAlignRadios.length; i++) {
                 if (ctxAlignRadios[i].checked) { alignVal = ctxAlignRadios[i].value; break; }
             }
             currentTextbox.style.textAlign = alignVal;
 
-            // ===== MÀU NỀN =====
+            // Nền
             if (ctxBgTransparent.checked) currentTextbox.style.background = 'transparent';
-            else currentTextbox.style.background = selectedBgColor;
+            else currentTextbox.style.background = ctxBg.value;
 
-            // ===== VIỀN =====
+            // Viền
             var bs = ctxBorderStyle.value;
             if (bs === 'none') currentTextbox.style.border = 'none';
-            else currentTextbox.style.border = '1px ' + bs + ' ' + selectedBorderColor;
+            else currentTextbox.style.border = '1px ' + bs + ' ' + ctxBorder.value;
             currentTextbox.style.borderRadius = (parseInt(ctxRadius.value, 10) || 0) + 'px';
 
+            // Đồng bộ placeholder state sau khi apply
             syncPlaceholderState(currentTextbox);
+
             closeContextMenu();
         });
 
@@ -1357,20 +1240,16 @@
             currentTextbox.style.borderRadius = '0px';
 
             if (contentEl) {
-                contentEl.style.fontFamily = '"Segoe UI", Arial, sans-serif';
-                contentEl.style.fontSize = '24px';
-                contentEl.style.color = '#000000';
-                contentEl.style.fontWeight = 'bold';
-                contentEl.style.fontStyle = 'normal';
-                contentEl.style.textDecoration = 'none';
+                contentEl.style.fontFamily = '';
+                contentEl.style.fontSize = '';
+                contentEl.style.color = '';
+                contentEl.style.fontWeight = '';
+                contentEl.style.fontStyle = '';
+                contentEl.style.textDecoration = '';
             }
 
-            // Reset biến màu
-            selectedTextColor = '#000000';
-            selectedBgColor = '#FFFFFF';
-            selectedBorderColor = '#8B4513';
-
             syncPlaceholderState(currentTextbox);
+
             closeContextMenu();
         });
 
@@ -1450,6 +1329,7 @@
             return el && el.classList.contains('placeholder');
         }
 
+        // === HÀM ĐỒNG BỘ PLACEHOLDER STATE ===
         function syncPlaceholderState(tb) {
             var el = getContentEl(tb);
             if (!el) return;
@@ -1686,6 +1566,7 @@
                 startSpeechRecognition(tb);
             });
 
+            // === 8 RESIZE HANDLES ===
             var positions = ['nw','n','ne','e','se','s','sw','w'];
             positions.forEach(function(pos) {
                 var h = document.createElement('div');
@@ -1752,6 +1633,7 @@
 
             board.appendChild(tb);
 
+            // Đồng bộ placeholder state lần đầu
             syncPlaceholderState(tb);
 
             if (withMic) {
@@ -1954,6 +1836,7 @@
         document.addEventListener('paste', function(e) {
             var isInTextbox = e.target.classList && e.target.classList.contains('textbox');
             if (isInTextbox) {
+                // Cho phép paste text vào textbox, sau đó sync
                 setTimeout(function() {
                     var tb = e.target.closest('.textbox');
                     if (tb) syncPlaceholderState(tb);
