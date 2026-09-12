@@ -196,7 +196,6 @@
 
         body.gray-bg .textbox { background: rgba(255, 255, 255, 0.9); }
 
-        /* ============ TEXTBOX RESIZE HANDLES ============ */
         .textbox .resize-handle {
             position: absolute;
             width: 10px;
@@ -222,7 +221,6 @@
         .textbox.editing .resize-handle,
         .textbox.selected .resize-handle { display: block; }
 
-        /* ============ MIC BUTTON ============ */
         .tb-mic {
             position: absolute;
             bottom: -10px;
@@ -398,7 +396,54 @@
 
         #ctxMenu .ctx-radio.active input { accent-color: #fff; }
 
-        /* ============ COLOR SWATCHES ============ */
+        /* ===== COLOR GRID DÙNG CHUNG ===== */
+        .color-grid {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .color-grid .color-swatch {
+            width: 26px;
+            height: 26px;
+            border-radius: 5px;
+            border: 2px solid #ccc;
+            cursor: pointer;
+            transition: transform 0.1s;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .color-grid .color-swatch:hover {
+            transform: scale(1.1);
+            border-color: #888;
+        }
+
+        .color-grid .color-swatch.active {
+            border-color: #0066CC;
+            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.35);
+        }
+
+        .color-grid .color-swatch.active::after {
+            content: "✓";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-weight: bold;
+            font-size: 13px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+            pointer-events: none;
+        }
+
+        .color-grid .color-swatch.light.active::after {
+            color: #333;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+        }
+
+        /* Color swatches cho công cụ vẽ (giữ riêng) */
         .color-swatches {
             display: flex;
             gap: 6px;
@@ -440,25 +485,6 @@
         .color-swatch.light.active::after {
             color: #333;
             text-shadow: 0 1px 2px rgba(255,255,255,0.8);
-        }
-
-        /* Swatch nhỏ cho bảng điều khiển textbox */
-        .color-swatches-sm {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-            flex: 1;
-        }
-
-        .color-swatches-sm .color-swatch {
-            width: 22px;
-            height: 22px;
-            border-radius: 5px;
-            border-width: 2px;
-        }
-
-        .color-swatches-sm .color-swatch.active::after {
-            font-size: 12px;
         }
 
         ::-webkit-scrollbar { width: 0px; height: 0px; background: transparent; }
@@ -566,19 +592,21 @@
                 <input type="number" id="ctxSize" min="8" max="200" step="1" value="24">
             </div>
 
+            <!-- MÀU CHỮ — lưới swatch -->
             <div class="ctx-row" style="align-items:flex-start;">
                 <label style="padding-top:4px;">Màu chữ</label>
-                <div class="color-swatches-sm" id="textColorSwatches">
+                <div class="color-grid" id="ctxColorGrid">
                     <div class="color-swatch" data-color="#000000" style="background:#000000" title="Đen"></div>
-                    <div class="color-swatch" data-color="#8B4513" style="background:#8B4513" title="Nâu đậm"></div>
-                    <div class="color-swatch" data-color="#8B5A2B" style="background:#8B5A2B" title="Nâu nhạt"></div>
-                    <div class="color-swatch" data-color="#FFFFFF" style="background:#FFFFFF" title="Trắng"></div>
-                    <div class="color-swatch light" data-color="#F5F5F5" style="background:#F5F5F5" title="Trắng xám"></div>
-                    <div class="color-swatch light" data-color="#F5F5DC" style="background:#F5F5DC" title="Be"></div>
-                    <div class="color-swatch light" data-color="#F5DEB3" style="background:#F5DEB3" title="Lúa mì"></div>
+                    <div class="color-swatch light" data-color="#FFFFFF" style="background:#FFFFFF" title="Trắng"></div>
+                    <div class="color-swatch light" data-color="#F5F5F5" style="background:#F5F5F5" title="Xám rất nhạt"></div>
                     <div class="color-swatch light" data-color="#D3D3D3" style="background:#D3D3D3" title="Xám nhạt"></div>
+                    <div class="color-swatch" data-color="#FF0000" style="background:#FF0000" title="Đỏ"></div>
+                    <div class="color-swatch" data-color="#8B4513" style="background:#8B4513" title="Nâu đậm"></div>
+                    <div class="color-swatch" data-color="#8B5A2B" style="background:#8B5A2B" title="Nâu"></div>
                     <div class="color-swatch" data-color="#0066CC" style="background:#0066CC" title="Xanh"></div>
                     <div class="color-swatch" data-color="#004488" style="background:#004488" title="Xanh đậm"></div>
+                    <div class="color-swatch light" data-color="#F5F5DC" style="background:#F5F5DC" title="Be"></div>
+                    <div class="color-swatch light" data-color="#F5DEB3" style="background:#F5DEB3" title="Lúa mì"></div>
                 </div>
             </div>
 
@@ -604,46 +632,41 @@
             <div class="ctx-section">
                 <div class="ctx-title" style="margin-bottom:6px;">📦 Hộp textbox</div>
 
-                <div class="ctx-row" style="align-items:flex-start;">
+                <!-- NỀN — lưới swatch -->
+                <div class="ctx-row" style="align-items:flex-start;flex-wrap:wrap;">
                     <label style="padding-top:4px;">Nền</label>
-                    <div class="color-swatches-sm" id="bgColorSwatches">
+                    <div class="color-grid" id="ctxBgGrid" style="flex:0 0 100%;margin-top:4px;">
                         <div class="color-swatch light" data-color="#FFFFFF" style="background:#FFFFFF" title="Trắng"></div>
-                        <div class="color-swatch light" data-color="#F5F5F5" style="background:#F5F5F5" title="Trắng xám"></div>
+                        <div class="color-swatch light" data-color="#F5F5F5" style="background:#F5F5F5" title="Xám rất nhạt"></div>
                         <div class="color-swatch light" data-color="#F5F5DC" style="background:#F5F5DC" title="Be"></div>
                         <div class="color-swatch light" data-color="#F5DEB3" style="background:#F5DEB3" title="Lúa mì"></div>
                         <div class="color-swatch light" data-color="#D3D3D3" style="background:#D3D3D3" title="Xám nhạt"></div>
-                        <div class="color-swatch" data-color="#8B5A2B" style="background:#8B5A2B" title="Nâu nhạt"></div>
+                        <div class="color-swatch" data-color="#8B5A2B" style="background:#8B5A2B" title="Nâu"></div>
                         <div class="color-swatch" data-color="#8B4513" style="background:#8B4513" title="Nâu đậm"></div>
                         <div class="color-swatch" data-color="#0066CC" style="background:#0066CC" title="Xanh"></div>
                         <div class="color-swatch" data-color="#004488" style="background:#004488" title="Xanh đậm"></div>
+                        <div class="color-swatch" data-color="#FF0000" style="background:#FF0000" title="Đỏ"></div>
                         <div class="color-swatch" data-color="#000000" style="background:#000000" title="Đen"></div>
                     </div>
+                    <label class="ctx-check" style="flex:0 0 100%;margin-top:6px;">
+                        <input type="checkbox" id="ctxBgTransparent"> Trong suốt
+                    </label>
                 </div>
 
-                <div class="ctx-row" style="margin-top:6px;">
-                    <label></label>
-                    <label class="ctx-check"><input type="checkbox" id="ctxBgTransparent"> Trong suốt</label>
-                </div>
-
-                <div class="ctx-row" style="align-items:flex-start;">
+                <!-- VIỀN — lưới swatch -->
+                <div class="ctx-row" style="align-items:flex-start;flex-wrap:wrap;">
                     <label style="padding-top:4px;">Viền</label>
-                    <div class="color-swatches-sm" id="borderColorSwatches">
+                    <div class="color-grid" id="ctxBorderGrid" style="flex:0 0 100%;margin-top:4px;">
+                        <div class="color-swatch" data-color="#8B4513" style="background:#8B4513" title="Nâu đậm (mặc định)"></div>
+                        <div class="color-swatch" data-color="#8B5A2B" style="background:#8B5A2B" title="Nâu"></div>
                         <div class="color-swatch" data-color="#000000" style="background:#000000" title="Đen"></div>
-                        <div class="color-swatch" data-color="#8B4513" style="background:#8B4513" title="Nâu đậm"></div>
-                        <div class="color-swatch" data-color="#8B5A2B" style="background:#8B5A2B" title="Nâu nhạt"></div>
-                        <div class="color-swatch light" data-color="#FFFFFF" style="background:#FFFFFF" title="Trắng"></div>
-                        <div class="color-swatch light" data-color="#F5F5F5" style="background:#F5F5F5" title="Trắng xám"></div>
-                        <div class="color-swatch light" data-color="#F5F5DC" style="background:#F5F5DC" title="Be"></div>
-                        <div class="color-swatch light" data-color="#F5DEB3" style="background:#F5DEB3" title="Lúa mì"></div>
-                        <div class="color-swatch light" data-color="#D3D3D3" style="background:#D3D3D3" title="Xám nhạt"></div>
+                        <div class="color-swatch" data-color="#FF0000" style="background:#FF0000" title="Đỏ"></div>
                         <div class="color-swatch" data-color="#0066CC" style="background:#0066CC" title="Xanh"></div>
                         <div class="color-swatch" data-color="#004488" style="background:#004488" title="Xanh đậm"></div>
+                        <div class="color-swatch light" data-color="#D3D3D3" style="background:#D3D3D3" title="Xám nhạt"></div>
+                        <div class="color-swatch light" data-color="#F5DEB3" style="background:#F5DEB3" title="Lúa mì"></div>
                     </div>
-                </div>
-
-                <div class="ctx-row">
-                    <label>Kiểu viền</label>
-                    <select id="ctxBorderStyle" style="flex:1;">
+                    <select id="ctxBorderStyle" style="flex:0 0 100%;margin-top:6px;">
                         <option value="dashed">Nét đứt</option>
                         <option value="solid">Nét liền</option>
                         <option value="dotted">Chấm</option>
@@ -1036,6 +1059,9 @@
 
         var ctxFont = document.getElementById('ctxFont');
         var ctxSize = document.getElementById('ctxSize');
+        var ctxColorGrid = document.getElementById('ctxColorGrid');
+        var ctxBgGrid = document.getElementById('ctxBgGrid');
+        var ctxBorderGrid = document.getElementById('ctxBorderGrid');
         var ctxBold = document.getElementById('ctxBold');
         var ctxItalic = document.getElementById('ctxItalic');
         var ctxUnderline = document.getElementById('ctxUnderline');
@@ -1047,56 +1073,6 @@
         var ctxAlignRadios = document.querySelectorAll('input[name="ctxAlign"]');
         var ctxAlignGroup = document.getElementById('ctxAlignGroup');
 
-        // Swatch groups cho textbox
-        var textColorSwatches = document.getElementById('textColorSwatches');
-        var bgColorSwatches = document.getElementById('bgColorSwatches');
-        var borderColorSwatches = document.getElementById('borderColorSwatches');
-
-        // Biến lưu màu đang chọn
-        var selectedTextColor = '#000000';
-        var selectedBgColor = '#FFFFFF';
-        var selectedBorderColor = '#8B4513';
-
-        // ===== SWATCH CLICK HANDLERS =====
-        function bindSwatchGroup(groupEl, onPick) {
-            groupEl.addEventListener('click', function(e) {
-                var sw = e.target.closest('.color-swatch');
-                if (!sw) return;
-                var color = sw.getAttribute('data-color');
-                var allSw = groupEl.querySelectorAll('.color-swatch');
-                for (var i = 0; i < allSw.length; i++) allSw[i].classList.remove('active');
-                sw.classList.add('active');
-                onPick(color);
-            });
-        }
-
-        bindSwatchGroup(textColorSwatches, function(color) {
-            selectedTextColor = color;
-        });
-        bindSwatchGroup(bgColorSwatches, function(color) {
-            selectedBgColor = color;
-            // Nếu chọn màu nền, tự bỏ tick "Trong suốt"
-            ctxBgTransparent.checked = false;
-        });
-        bindSwatchGroup(borderColorSwatches, function(color) {
-            selectedBorderColor = color;
-        });
-
-        // Hàm highlight swatch theo màu
-        function setActiveSwatch(groupEl, color) {
-            var allSw = groupEl.querySelectorAll('.color-swatch');
-            var found = false;
-            for (var i = 0; i < allSw.length; i++) {
-                if (allSw[i].getAttribute('data-color').toUpperCase() === color.toUpperCase()) {
-                    allSw[i].classList.add('active');
-                    found = true;
-                } else {
-                    allSw[i].classList.remove('active');
-                }
-            }
-            return found;
-        }
-
         var ctxImgW = document.getElementById('ctxImgW');
         var ctxImgH = document.getElementById('ctxImgH');
         var ctxImgLockRatio = document.getElementById('ctxImgLockRatio');
@@ -1107,6 +1083,41 @@
         var ctxImgApply = document.getElementById('ctxImgApply');
         var ctxImgReset = document.getElementById('ctxImgReset');
         var ctxImgDelete = document.getElementById('ctxImgDelete');
+
+        // === Tiện ích color grid ===
+        function setGridActive(grid, color) {
+            if (!grid) return false;
+            var target = (color || '').toUpperCase();
+            var swatches = grid.querySelectorAll('.color-swatch');
+            var found = false;
+            for (var i = 0; i < swatches.length; i++) {
+                var c = (swatches[i].getAttribute('data-color') || '').toUpperCase();
+                if (c === target) {
+                    swatches[i].classList.add('active');
+                    found = true;
+                } else {
+                    swatches[i].classList.remove('active');
+                }
+            }
+            return found;
+        }
+
+        function getGridActiveColor(grid, fallback) {
+            if (!grid) return fallback;
+            var sw = grid.querySelector('.color-swatch.active');
+            return sw ? sw.getAttribute('data-color') : fallback;
+        }
+
+        [ctxColorGrid, ctxBgGrid, ctxBorderGrid].forEach(function(grid) {
+            if (!grid) return;
+            grid.addEventListener('click', function(e) {
+                var sw = e.target.closest('.color-swatch');
+                if (!sw) return;
+                var all = grid.querySelectorAll('.color-swatch');
+                for (var i = 0; i < all.length; i++) all[i].classList.remove('active');
+                sw.classList.add('active');
+            });
+        });
 
         function updateAlignHighlight(value) {
             var labels = ctxAlignGroup.querySelectorAll('.ctx-radio');
@@ -1193,16 +1204,13 @@
             var sizeSrc = (contentEl && contentEl.style.fontSize) || tb.style.fontSize || cs.fontSize;
             ctxSize.value = parseInt(sizeSrc, 10) || 24;
 
-            // ===== MÀU CHỮ =====
+            // === Màu chữ ===
             var colorSrc = (contentEl && contentEl.style.color) || tb.style.color || cs.color || '#000000';
-            selectedTextColor = rgbToHex(colorSrc);
-            if (!setActiveSwatch(textColorSwatches, selectedTextColor)) {
-                // Nếu màu không có trong danh sách, mặc định chọn đen
-                selectedTextColor = '#000000';
-                setActiveSwatch(textColorSwatches, selectedTextColor);
+            var hexColor = rgbToHex(colorSrc);
+            if (!setGridActive(ctxColorGrid, hexColor)) {
+                setGridActive(ctxColorGrid, '#000000');
             }
 
-            // Bold / Italic / Underline
             var boldSrc = (contentEl && contentEl.style.fontWeight) || tb.style.fontWeight || cs.fontWeight;
             var italicSrc = (contentEl && contentEl.style.fontStyle) || tb.style.fontStyle || cs.fontStyle;
             ctxBold.checked = (boldSrc === 'bold' || parseInt(boldSrc, 10) >= 700);
@@ -1217,28 +1225,24 @@
             }
             updateAlignHighlight(align);
 
-            // ===== MÀU NỀN =====
+            // === Nền ===
             var bg = tb.style.backgroundColor || cs.backgroundColor;
             var isTransparent = !bg || bg === 'transparent' || bg === 'rgba(0, 0, 0, 0)';
             if (isTransparent) {
                 ctxBgTransparent.checked = true;
-                selectedBgColor = '#FFFFFF';
-                setActiveSwatch(bgColorSwatches, selectedBgColor);
+                setGridActive(ctxBgGrid, '#FFFFFF');
             } else {
                 ctxBgTransparent.checked = false;
-                selectedBgColor = rgbToHex(bg);
-                if (!setActiveSwatch(bgColorSwatches, selectedBgColor)) {
-                    selectedBgColor = '#FFFFFF';
-                    setActiveSwatch(bgColorSwatches, selectedBgColor);
+                var hexBg = rgbToHex(bg);
+                if (!setGridActive(ctxBgGrid, hexBg)) {
+                    setGridActive(ctxBgGrid, '#FFFFFF');
                 }
             }
 
-            // ===== MÀU VIỀN =====
-            var borderSrc = tb.style.borderColor || cs.borderTopColor || '#8B4513';
-            selectedBorderColor = rgbToHex(borderSrc);
-            if (!setActiveSwatch(borderColorSwatches, selectedBorderColor)) {
-                selectedBorderColor = '#8B4513';
-                setActiveSwatch(borderColorSwatches, selectedBorderColor);
+            // === Viền ===
+            var hexBorder = rgbToHex(tb.style.borderColor || cs.borderTopColor || '#8B4513');
+            if (!setGridActive(ctxBorderGrid, hexBorder)) {
+                setGridActive(ctxBorderGrid, '#8B4513');
             }
 
             var bStyle = (tb.style.borderStyle || cs.borderTopStyle || 'dashed').split(' ')[0];
@@ -1302,16 +1306,20 @@
             if (!currentTextbox) return;
             var contentEl = currentTextbox.querySelector('.tb-content');
 
+            // Font family
             currentTextbox.style.fontFamily = ctxFont.value;
             if (contentEl) contentEl.style.fontFamily = ctxFont.value;
 
+            // Font size
             currentTextbox.style.fontSize = ctxSize.value + 'px';
             if (contentEl) contentEl.style.fontSize = ctxSize.value + 'px';
 
-            // ===== MÀU CHỮ =====
-            currentTextbox.style.color = selectedTextColor;
-            if (contentEl) contentEl.style.color = selectedTextColor;
+            // Màu chữ từ grid
+            var newColor = getGridActiveColor(ctxColorGrid, '#000000');
+            currentTextbox.style.color = newColor;
+            if (contentEl) contentEl.style.color = newColor;
 
+            // Bold / Italic / Underline
             currentTextbox.style.fontWeight = ctxBold.checked ? 'bold' : 'normal';
             currentTextbox.style.fontStyle = ctxItalic.checked ? 'italic' : 'normal';
             currentTextbox.style.textDecoration = ctxUnderline.checked ? 'underline' : 'none';
@@ -1321,23 +1329,30 @@
                 contentEl.style.textDecoration = ctxUnderline.checked ? 'underline' : 'none';
             }
 
+            // Căn lề
             var alignVal = 'left';
             for (var i = 0; i < ctxAlignRadios.length; i++) {
                 if (ctxAlignRadios[i].checked) { alignVal = ctxAlignRadios[i].value; break; }
             }
             currentTextbox.style.textAlign = alignVal;
 
-            // ===== MÀU NỀN =====
-            if (ctxBgTransparent.checked) currentTextbox.style.background = 'transparent';
-            else currentTextbox.style.background = selectedBgColor;
+            // Nền từ grid
+            if (ctxBgTransparent.checked) {
+                currentTextbox.style.background = 'transparent';
+            } else {
+                var newBg = getGridActiveColor(ctxBgGrid, '#FFFFFF');
+                currentTextbox.style.background = newBg;
+            }
 
-            // ===== VIỀN =====
+            // Viền từ grid
             var bs = ctxBorderStyle.value;
+            var newBorder = getGridActiveColor(ctxBorderGrid, '#8B4513');
             if (bs === 'none') currentTextbox.style.border = 'none';
-            else currentTextbox.style.border = '1px ' + bs + ' ' + selectedBorderColor;
+            else currentTextbox.style.border = '1px ' + bs + ' ' + newBorder;
             currentTextbox.style.borderRadius = (parseInt(ctxRadius.value, 10) || 0) + 'px';
 
             syncPlaceholderState(currentTextbox);
+
             closeContextMenu();
         });
 
@@ -1357,20 +1372,21 @@
             currentTextbox.style.borderRadius = '0px';
 
             if (contentEl) {
-                contentEl.style.fontFamily = '"Segoe UI", Arial, sans-serif';
-                contentEl.style.fontSize = '24px';
-                contentEl.style.color = '#000000';
-                contentEl.style.fontWeight = 'bold';
-                contentEl.style.fontStyle = 'normal';
-                contentEl.style.textDecoration = 'none';
+                contentEl.style.fontFamily = '';
+                contentEl.style.fontSize = '';
+                contentEl.style.color = '';
+                contentEl.style.fontWeight = '';
+                contentEl.style.fontStyle = '';
+                contentEl.style.textDecoration = '';
             }
 
-            // Reset biến màu
-            selectedTextColor = '#000000';
-            selectedBgColor = '#FFFFFF';
-            selectedBorderColor = '#8B4513';
+            // Đồng bộ grid active
+            setGridActive(ctxColorGrid, '#000000');
+            setGridActive(ctxBgGrid, '#FFFFFF');
+            setGridActive(ctxBorderGrid, '#8B4513');
 
             syncPlaceholderState(currentTextbox);
+
             closeContextMenu();
         });
 
