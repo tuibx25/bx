@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Drawing Board</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-
-    <!-- Handsontable CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
-
     <style>
         * {
             margin: 0;
@@ -262,121 +258,187 @@
         .textbox.editing .tb-mic,
         .textbox.mic-active .tb-mic { display: block; }
 
-        /* ============ EXCEL TABLE (HANDSONTABLE) ============ */
-        .excel-wrapper {
+        /* ============ SHEET WRAPPER (BẢNG TÍNH) ============ */
+        .sheet-wrapper {
             position: absolute;
             z-index: 140;
-            background: #fff;
-            border: 2px solid #217346;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            overflow: hidden;
             display: flex;
             flex-direction: column;
-            min-width: 260px;
-            min-height: 160px;
+            background: #ffffff;
+            border: 2px solid #0F9D58;
+            border-radius: 8px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+            overflow: hidden;
+            min-width: 200px;
+            min-height: 150px;
         }
 
-        .excel-wrapper.selected {
-            outline: 2px dashed #0066CC;
-            outline-offset: 2px;
+        .sheet-wrapper.selected {
+            box-shadow: 0 0 0 2px rgba(15, 157, 88, 0.35), 0 6px 24px rgba(0,0,0,0.18);
         }
 
-        .excel-header {
-            background: linear-gradient(135deg, #217346 0%, #1a5a38 100%);
-            color: #fff;
-            padding: 6px 10px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: move;
+        .sheet-wrapper .sheet-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            padding: 5px 8px;
+            background: linear-gradient(135deg, #0F9D58 0%, #0B7A43 100%);
+            color: #fff;
+            cursor: move;
             user-select: none;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
             flex-shrink: 0;
-            height: 30px;
         }
 
-        .excel-header .excel-title {
+        .sheet-wrapper .sheet-title {
             display: flex;
             align-items: center;
             gap: 6px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
 
-        .excel-header .excel-close {
-            width: 20px;
-            height: 20px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            text-align: center;
-            line-height: 20px;
-            font-size: 14px;
+        .sheet-wrapper .sheet-actions {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .sheet-wrapper .sheet-btn {
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.18);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
             cursor: pointer;
+            transition: background 0.15s;
+            line-height: 1;
+        }
+
+        .sheet-wrapper .sheet-btn:hover { background: rgba(255,255,255,0.35); }
+        .sheet-wrapper .sheet-btn.sheet-delete:hover { background: #d33; }
+
+        .sheet-wrapper .sheet-body {
+            position: relative;
+            flex: 1;
+            background: #fff;
+            overflow: hidden;
+            min-height: 100px;
+        }
+
+        .sheet-wrapper .sheet-body iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+            background: #fff;
+        }
+
+        .sheet-wrapper .sheet-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px;
+            text-align: center;
+            background: #f8fafc;
+            color: #475569;
+            font-size: 13px;
+        }
+
+        .sheet-wrapper .sheet-placeholder .ph-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #0F9D58;
+        }
+
+        .sheet-wrapper .sheet-placeholder input[type="text"] {
+            width: 90%;
+            max-width: 420px;
+            padding: 8px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 13px;
+            outline: none;
+            background: #fff;
+            color: #0f172a;
+            font-family: Arial, sans-serif;
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        .sheet-wrapper .sheet-placeholder input[type="text"]:focus {
+            border-color: #0F9D58;
+            box-shadow: 0 0 0 3px rgba(15,157,88,0.15);
+        }
+
+        .sheet-wrapper .sheet-placeholder .ph-btns {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .sheet-wrapper .sheet-placeholder .ph-btn {
+            padding: 7px 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            background: #0F9D58;
+            color: #fff;
             transition: background 0.15s;
         }
 
-        .excel-header .excel-close:hover {
-            background: #d33;
+        .sheet-wrapper .sheet-placeholder .ph-btn:hover { background: #0B7A43; }
+        .sheet-wrapper .sheet-placeholder .ph-btn.secondary {
+            background: #e2e8f0;
+            color: #334155;
         }
+        .sheet-wrapper .sheet-placeholder .ph-btn.secondary:hover { background: #cbd5e1; }
 
-        .excel-container {
-            flex: 1;
-            overflow: hidden;
-            position: relative;
-        }
+        /* Resize handles cho sheet (dùng chung class resize-handle) */
+        .sheet-wrapper .resize-handle { display: none; }
+        .sheet-wrapper:hover .resize-handle,
+        .sheet-wrapper.selected .resize-handle { display: block; }
 
-        .excel-container .ht_master,
-        .excel-container .handsontable {
-            font-family: "Segoe UI", Arial, sans-serif;
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .excel-container .handsontable td {
-            text-align: center !important;
-            vertical-align: middle !important;
-            font-weight: bold !important;
-            font-size: 20px !important;
-            padding: 4px 6px !important;
-        }
-
-        .excel-container .handsontable th {
-            text-align: center !important;
-            vertical-align: middle !important;
-            font-weight: bold !important;
-            font-size: 14px !important;
-            background: #f0f7f4 !important;
-        }
-
-        .excel-container .handsontable .htCore thead th {
-            background: #e6f2ec !important;
-            color: #217346 !important;
-        }
-
-        .excel-resize-handle {
+        .sheet-wrapper .sheet-delete-x {
             position: absolute;
-            width: 12px;
-            height: 12px;
-            background: #217346;
-            border: 2px solid #fff;
+            top: -12px;
+            right: -12px;
+            width: 24px;
+            height: 24px;
+            background: #d33;
+            color: #fff;
             border-radius: 50%;
-            z-index: 200;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+            text-align: center;
+            line-height: 24px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
             display: none;
+            z-index: 210;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
         }
 
-        .excel-resize-handle.nw { cursor: nwse-resize; top: -6px; left: -6px; }
-        .excel-resize-handle.ne { cursor: nesw-resize; top: -6px; right: -6px; }
-        .excel-resize-handle.sw { cursor: nesw-resize; bottom: -6px; left: -6px; }
-        .excel-resize-handle.se { cursor: nwse-resize; bottom: -6px; right: -6px; }
-        .excel-resize-handle.n  { cursor: ns-resize; top: -6px; left: 50%; transform: translateX(-50%); }
-        .excel-resize-handle.s  { cursor: ns-resize; bottom: -6px; left: 50%; transform: translateX(-50%); }
-        .excel-resize-handle.w  { cursor: ew-resize; top: 50%; left: -6px; transform: translateY(-50%); }
-        .excel-resize-handle.e  { cursor: ew-resize; top: 50%; right: -6px; transform: translateY(-50%); }
+        .sheet-wrapper.selected .sheet-delete-x { display: block; }
+        .sheet-wrapper .sheet-delete-x:hover { background: #b00; }
 
-        .excel-wrapper.selected .excel-resize-handle { display: block; }
-
-        body.drawing-mode .excel-wrapper { pointer-events: none; }
+        body.drawing-mode .sheet-wrapper { pointer-events: none; }
 
         /* ============ CONTEXT MENU ============ */
         #ctxMenu {
@@ -863,10 +925,6 @@
 
     </div>
 
-    <!-- Handsontable + HyperFormula -->
-    <script src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hyperformula/dist/hyperformula.full.min.js"></script>
-
     <script>
     (function() {
         'use strict';
@@ -879,8 +937,8 @@
         document.addEventListener('contextmenu', function(e) {
             var tb = e.target.closest && e.target.closest('.textbox');
             var iw = e.target.closest && e.target.closest('.img-wrapper');
-            var ex = e.target.closest && e.target.closest('.excel-wrapper');
-            if (tb || iw || ex) return;
+            var sw = e.target.closest && e.target.closest('.sheet-wrapper');
+            if (tb || iw || sw) return;
             e.preventDefault();
             return false;
         });
@@ -908,12 +966,12 @@
 
         document.addEventListener('copy', function(e) {
             if (e.target.classList && e.target.classList.contains('textbox')) return;
-            if (e.target.closest && e.target.closest('.excel-wrapper')) return;
+            if (e.target.classList && e.target.classList.contains('sheet-wrapper')) return;
             e.preventDefault(); return false;
         });
         document.addEventListener('cut', function(e) {
             if (e.target.classList && e.target.classList.contains('textbox')) return;
-            if (e.target.closest && e.target.closest('.excel-wrapper')) return;
+            if (e.target.classList && e.target.classList.contains('sheet-wrapper')) return;
             e.preventDefault(); return false;
         });
         document.addEventListener('dragstart', function(e) { e.preventDefault(); return false; });
@@ -2070,83 +2128,242 @@
             syncPlaceholderState(tb);
         }
 
-        // ========== EXCEL TABLE (HANDSONTABLE) ==========
-        var excelInstances = [];
+        // ========== SHEET WRAPPER (BẢNG TÍNH GOOGLE SHEETS) ==========
+        // Mặc định 3 hàng 3 cột, font đậm cỡ 20, canh giữa ô
+        var SHEET_DEFAULT_ROWS = 3;
+        var SHEET_DEFAULT_COLS = 3;
 
-        function createExcelTable(x, y) {
-            // Nếu chưa có vị trí, đặt ở giữa màn hình
-            if (typeof x !== 'number' || typeof y !== 'number') {
-                x = window.scrollX + window.innerWidth / 2 - 250;
-                y = window.scrollY + window.innerHeight / 2 - 130;
+        /**
+         * Tạo URL nhúng Google Sheets từ URL chia sẻ.
+         * Hỗ trợ các dạng:
+         *  - https://docs.google.com/spreadsheets/d/ID/edit#gid=0
+         *  - https://docs.google.com/spreadsheets/d/ID/edit?usp=sharing
+         *  - URL đã ở dạng /preview hoặc /htmlembed
+         * Trả về URL nhúng hoặc null nếu không nhận dạng được.
+         */
+        function buildSheetEmbedUrl(input) {
+            if (!input) return null;
+            var url = String(input).trim();
+            if (!url) return null;
+
+            // Nếu đã là URL embed/preview thì dùng luôn
+            if (/\/spreadsheets\/d\/[^\/]+\/(preview|htmlembed)/.test(url)) {
+                return url;
             }
 
-            // Wrapper
+            // Bắt ID từ URL chia sẻ
+            var m = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+            if (!m) return null;
+            var id = m[1];
+
+            // Bắt gid nếu có
+            var gidMatch = url.match(/[#&?]gid=([0-9]+)/);
+            var gid = gidMatch ? gidMatch[1] : '0';
+
+            return 'https://docs.google.com/spreadsheets/d/' + id +
+                   '/preview?gid=' + gid + '&rm=minimal&single=true';
+        }
+
+        /**
+         * Tạo placeholder HTML cho sheet — dùng DOM API để tránh lỗi escape.
+         */
+        function createSheetPlaceholder(wrapper) {
+            var ph = document.createElement('div');
+            ph.className = 'sheet-placeholder';
+
+            var title = document.createElement('div');
+            title.className = 'ph-title';
+            title.textContent = '📊 Dán link Google Sheets';
+            ph.appendChild(title);
+
+            var desc = document.createElement('div');
+            desc.style.fontSize = '12px';
+            desc.style.color = '#64748b';
+            desc.style.maxWidth = '420px';
+            desc.textContent = 'Mở Google Sheets → Chia sẻ → "Bất kỳ ai có liên kết" → Copy link → Dán vào ô bên dưới.';
+            ph.appendChild(desc);
+
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = 'https://docs.google.com/spreadsheets/d/.../edit';
+            input.autocomplete = 'off';
+            input.spellcheck = false;
+            ph.appendChild(input);
+
+            var btns = document.createElement('div');
+            btns.className = 'ph-btns';
+
+            var btnOk = document.createElement('button');
+            btnOk.className = 'ph-btn';
+            btnOk.textContent = 'Nhúng bảng tính';
+            btns.appendChild(btnOk);
+
+            var btnSample = document.createElement('button');
+            btnSample.className = 'ph-btn secondary';
+            btnSample.textContent = 'Dùng bảng mẫu';
+            btns.appendChild(btnSample);
+
+            ph.appendChild(btns);
+            wrapper.appendChild(ph);
+
+            function doEmbed() {
+                var embedUrl = buildSheetEmbedUrl(input.value);
+                if (!embedUrl) {
+                    alert('Link không hợp lệ.\nVui lòng dán link Google Sheets dạng:\nhttps://docs.google.com/spreadsheets/d/.../edit');
+                    input.focus();
+                    return;
+                }
+                embedSheet(wrapper, embedUrl);
+            }
+
+            btnOk.addEventListener('click', function(e) {
+                e.stopPropagation();
+                doEmbed();
+            });
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    doEmbed();
+                }
+                e.stopPropagation();
+            });
+            input.addEventListener('mousedown', function(e) { e.stopPropagation(); });
+            input.addEventListener('click', function(e) { e.stopPropagation(); });
+
+            btnSample.addEventListener('click', function(e) {
+                e.stopPropagation();
+                // Bảng mẫu công khai (chỉ để demo — người dùng nên thay bằng bảng của mình)
+                var sample = 'https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/preview?rm=minimal&single=true';
+                embedSheet(wrapper, sample);
+            });
+
+            setTimeout(function() { input.focus(); }, 80);
+        }
+
+        /**
+         * Thay placeholder bằng iframe Google Sheets.
+         */
+        function embedSheet(wrapper, embedUrl) {
+            var body = wrapper.querySelector('.sheet-body');
+            if (!body) return;
+            body.innerHTML = '';
+
+            var iframe = document.createElement('iframe');
+            iframe.src = embedUrl;
+            iframe.setAttribute('loading', 'lazy');
+            iframe.setAttribute('allowfullscreen', 'true');
+            iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+            body.appendChild(iframe);
+
+            // Lưu URL vào dataset để có thể khôi phục sau này
+            wrapper.dataset.sheetUrl = embedUrl;
+        }
+
+        /**
+         * Tạo bảng tính mới (wrapper + header + body + resize handles).
+         */
+        function createSheetWrapper(opts) {
+            opts = opts || {};
             var wrapper = document.createElement('div');
-            wrapper.className = 'excel-wrapper';
-            wrapper.style.left = Math.max(0, x) + 'px';
-            wrapper.style.top = Math.max(0, y) + 'px';
-            wrapper.style.width = '500px';
-            wrapper.style.height = '260px';
+            wrapper.className = 'sheet-wrapper';
+            wrapper.style.left = (opts.left != null ? opts.left : 80) + 'px';
+            wrapper.style.top = (opts.top != null ? opts.top : 80) + 'px';
+            wrapper.style.width = (opts.width || 480) + 'px';
+            wrapper.style.height = (opts.height || 320) + 'px';
 
             // Header
             var header = document.createElement('div');
-            header.className = 'excel-header';
+            header.className = 'sheet-header';
 
-            var titleSpan = document.createElement('span');
-            titleSpan.className = 'excel-title';
-            titleSpan.innerHTML = '📊 Bảng tính (E)';
-            header.appendChild(titleSpan);
+            var titleWrap = document.createElement('div');
+            titleWrap.className = 'sheet-title';
 
-            var closeBtn = document.createElement('span');
-            closeBtn.className = 'excel-close';
-            closeBtn.textContent = '×';
-            closeBtn.title = 'Xoá bảng tính';
-            header.appendChild(closeBtn);
+            var icon = document.createElement('span');
+            icon.textContent = '📊';
+            titleWrap.appendChild(icon);
 
+            var titleText = document.createElement('span');
+            titleText.textContent = 'Bảng tính Google Sheets (' +
+                SHEET_DEFAULT_ROWS + '×' + SHEET_DEFAULT_COLS + ')';
+            titleWrap.appendChild(titleText);
+
+            header.appendChild(titleWrap);
+
+            var actions = document.createElement('div');
+            actions.className = 'sheet-actions';
+
+            var btnChange = document.createElement('button');
+            btnChange.className = 'sheet-btn';
+            btnChange.title = 'Đổi link Google Sheets';
+            btnChange.textContent = '🔗';
+            actions.appendChild(btnChange);
+
+            var btnDelete = document.createElement('button');
+            btnDelete.className = 'sheet-btn sheet-delete';
+            btnDelete.title = 'Xoá bảng tính';
+            btnDelete.textContent = '✕';
+            actions.appendChild(btnDelete);
+
+            header.appendChild(actions);
             wrapper.appendChild(header);
 
-            // Container cho Handsontable
-            var container = document.createElement('div');
-            container.className = 'excel-container';
-            wrapper.appendChild(container);
+            // Body
+            var body = document.createElement('div');
+            body.className = 'sheet-body';
+            wrapper.appendChild(body);
 
             // Resize handles
             var positions = ['nw','n','ne','e','se','s','sw','w'];
             positions.forEach(function(pos) {
                 var h = document.createElement('div');
-                h.className = 'excel-resize-handle ' + pos;
+                h.className = 'resize-handle ' + pos;
                 h.dataset.pos = pos;
                 wrapper.appendChild(h);
                 h.addEventListener('mousedown', function(ev) {
                     ev.preventDefault();
                     ev.stopPropagation();
-                    startExcelResize(wrapper, ev, pos);
+                    startSheetResize(wrapper, ev, pos);
                 });
             });
 
-            // Close button
-            closeBtn.addEventListener('mousedown', function(ev) {
+            // Nút xoá riêng (góc trên phải, hiện khi chọn)
+            var delX = document.createElement('div');
+            delX.className = 'sheet-delete-x';
+            delX.textContent = '×';
+            delX.title = 'Xoá bảng tính';
+            wrapper.appendChild(delX);
+
+            // Sự kiện xoá
+            function doDelete(ev) {
+                if (ev) { ev.stopPropagation(); ev.preventDefault(); }
+                if (wrapper.parentNode) wrapper.parentNode.removeChild(wrapper);
+                if (selectedWrapper === wrapper) selectedWrapper = null;
+            }
+            btnDelete.addEventListener('mousedown', doDelete);
+            delX.addEventListener('mousedown', doDelete);
+
+            // Đổi link
+            btnChange.addEventListener('mousedown', function(ev) {
                 ev.stopPropagation();
                 ev.preventDefault();
-                // Destroy Handsontable instance
-                var instance = wrapper._hot;
-                if (instance) {
-                    try { instance.destroy(); } catch (ex) {}
+                var current = wrapper.dataset.sheetUrl || '';
+                var newLink = prompt('Dán link Google Sheets mới:\n(ví dụ: https://docs.google.com/spreadsheets/d/.../edit)', current);
+                if (newLink === null) return;
+                var embedUrl = buildSheetEmbedUrl(newLink);
+                if (!embedUrl) {
+                    alert('Link không hợp lệ.');
+                    return;
                 }
-                // Remove khỏi danh sách
-                var idx = excelInstances.indexOf(instance);
-                if (idx !== -1) excelInstances.splice(idx, 1);
-                if (wrapper.parentNode) wrapper.parentNode.removeChild(wrapper);
+                embedSheet(wrapper, embedUrl);
             });
 
-            // Di chuyển bằng header
+            // Kéo di chuyển bằng header
             header.addEventListener('mousedown', function(ev) {
                 if (isDrawing) return;
                 if (ev.button === 2) return;
                 ev.preventDefault();
                 ev.stopPropagation();
-
-                // Select wrapper
                 deselectAll();
                 wrapper.classList.add('selected');
                 selectedWrapper = wrapper;
@@ -2170,69 +2387,41 @@
                 document.addEventListener('mouseup', upHandler);
             });
 
-            // Click vào wrapper (không phải header) để select
+            // Nhấn vào thân cũng chọn (không chặn iframe khi đang tương tác)
             wrapper.addEventListener('mousedown', function(ev) {
                 if (isDrawing) return;
                 if (ev.button === 2) return;
-                if (ev.target.closest('.excel-header')) return;
-                // Không select khi đang click vào ô của Handsontable (trừ khi click vào viền)
-                if (ev.target.closest('.excel-container')) {
-                    deselectAll();
-                    return;
-                }
+                if (ev.target.closest('.sheet-body')) return; // cho phép tương tác iframe
+                if (ev.target.closest('.sheet-header')) return;
+                if (ev.target.classList && ev.target.classList.contains('resize-handle')) return;
+                ev.stopPropagation();
                 deselectAll();
                 wrapper.classList.add('selected');
                 selectedWrapper = wrapper;
             });
 
-            board.appendChild(wrapper);
-
-            // Khởi tạo Handsontable
-            var data = [];
-            for (var i = 0; i < 3; i++) {
-                data.push(['', '', '']);
-            }
-
-            var hot = new Handsontable(container, {
-                data: data,
-                rowHeaders: true,
-                colHeaders: true,
-                width: '100%',
-                height: '100%',
-                licenseKey: 'non-commercial-and-evaluation',
-                formulas: {
-                    engine: HyperFormula
-                },
-                cells: function() {
-                    return {
-                        className: 'htCenter htMiddle'
-                    };
-                },
-                afterChange: function() {
-                    // Không cần làm gì đặc biệt
-                }
+            // Chuột phải trên header → menu đổi link
+            header.addEventListener('contextmenu', function(ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                deselectAll();
+                wrapper.classList.add('selected');
+                selectedWrapper = wrapper;
+                var newLink = prompt('Dán link Google Sheets mới:', wrapper.dataset.sheetUrl || '');
+                if (newLink === null) return;
+                var embedUrl = buildSheetEmbedUrl(newLink);
+                if (!embedUrl) { alert('Link không hợp lệ.'); return; }
+                embedSheet(wrapper, embedUrl);
             });
 
-            wrapper._hot = hot;
-            excelInstances.push(hot);
-
-            // Resize Handsontable khi container thay đổi kích thước
-            if (window.ResizeObserver) {
-                var ro = new ResizeObserver(function() {
-                    try { hot.refreshDimensions(); } catch (ex) {}
-                });
-                ro.observe(container);
-            }
-
-            // Select wrapper ban đầu
-            deselectAll();
-            wrapper.classList.add('selected');
-            selectedWrapper = wrapper;
-
+            board.appendChild(wrapper);
             return wrapper;
         }
 
-        function startExcelResize(wrapper, startEvent, pos) {
+        /**
+         * Bắt đầu kéo resize cho sheet.
+         */
+        function startSheetResize(wrapper, startEvent, pos) {
             var startX = startEvent.clientX;
             var startY = startEvent.clientY;
             var startW = wrapper.offsetWidth;
@@ -2240,8 +2429,8 @@
             var startL = parseInt(wrapper.style.left, 10) || 0;
             var startT = parseInt(wrapper.style.top, 10) || 0;
 
-            var minW = 260;
-            var minH = 160;
+            var minW = 200;
+            var minH = 150;
 
             function moveHandler(me) {
                 var dx = me.clientX - startX;
@@ -2270,6 +2459,22 @@
             }
             document.addEventListener('mousemove', moveHandler);
             document.addEventListener('mouseup', upHandler);
+        }
+
+        /**
+         * Hàm tiện ích: chèn bảng tính mới vào giữa màn hình (có placeholder để dán link).
+         */
+        function insertSheet() {
+            var cx = window.scrollX + window.innerWidth / 2 - 240;
+            var cy = window.scrollY + window.innerHeight / 2 - 160;
+            var wrapper = createSheetWrapper({
+                left: Math.max(0, cx),
+                top: Math.max(0, cy),
+                width: 480,
+                height: 320
+            });
+            createSheetPlaceholder(wrapper);
+            return wrapper;
         }
 
         // ========== IMAGE WRAPPER ==========
@@ -2444,16 +2649,14 @@
 
         document.addEventListener('paste', function(e) {
             var isInTextbox = e.target.classList && e.target.classList.contains('textbox');
-            if (isInTextbox) {
+            var isInSheet = e.target.classList && e.target.classList.contains('sheet-wrapper');
+            if (isInTextbox || isInSheet) {
                 setTimeout(function() {
                     var tb = e.target.closest('.textbox');
                     if (tb) syncPlaceholderState(tb);
                 }, 0);
                 return;
             }
-            // Không xử lý paste ảnh khi đang focus vào bảng tính
-            if (e.target.closest && e.target.closest('.excel-wrapper')) return;
-
             var items = (e.clipboardData || window.clipboardData).items;
             if (!items) return;
             for (var i = 0; i < items.length; i++) {
@@ -2488,8 +2691,6 @@
             var isInTextbox = e.target.classList && e.target.classList.contains('textbox');
             if (isInTextbox) return;
             if (tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
-            // Không xử lý phím tắt khi đang focus vào bảng tính
-            if (e.target.closest && e.target.closest('.excel-wrapper')) return;
 
             var key = e.key;
             switch (key) {
@@ -2527,9 +2728,9 @@
                     e.preventDefault();
                     break;
 
-                // === E = CHÈN BẢNG TÍNH EXCEL ===
+                // === E = CHÈN BẢNG TÍNH GOOGLE SHEETS ===
                 case 'e': case 'E':
-                    createExcelTable();
+                    insertSheet();
                     e.preventDefault();
                     break;
 
@@ -2578,6 +2779,7 @@
 
                 // === PHÍM TẮT CÔNG CỤ ===
                 case 'k': case 'K':
+                    // K = Bút
                     if (isDrawing) {
                         drawMode = 'pen';
                         isErasing = false;
@@ -2588,6 +2790,7 @@
                     e.preventDefault();
                     break;
                 case 'l': case 'L':
+                    // L = Thẳng
                     if (isDrawing) {
                         drawMode = 'line';
                         isErasing = false;
@@ -2598,6 +2801,7 @@
                     e.preventDefault();
                     break;
                 case 'i': case 'I':
+                    // I = Mũi tên
                     if (isDrawing) {
                         drawMode = 'arrow';
                         isErasing = false;
@@ -2608,6 +2812,7 @@
                     e.preventDefault();
                     break;
                 case 'o': case 'O':
+                    // O = Tròn / Elip
                     if (isDrawing) {
                         drawMode = 'circle';
                         isErasing = false;
@@ -2618,6 +2823,7 @@
                     e.preventDefault();
                     break;
                 case 'p': case 'P':
+                    // P = Paste ảnh
                     handlePaste();
                     e.preventDefault();
                     break;
