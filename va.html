@@ -169,9 +169,9 @@
             overflow-wrap: break-word;
         }
 
-        /* Placeholder cho textbox trống */
+        /* Placeholder: dùng opacity thay vì color để không ghi đè màu thực */
         .textbox .tb-content.placeholder {
-            color: #999;
+            opacity: 0.45;
             font-weight: normal;
             font-style: italic;
         }
@@ -226,7 +226,7 @@
         .textbox.editing .resize-handle,
         .textbox.selected .resize-handle { display: block; }
 
-        /* ============ MIC BUTTON (Speech-to-Text) ============ */
+        /* ============ MIC BUTTON ============ */
         .tb-mic {
             position: absolute;
             bottom: -10px;
@@ -1079,8 +1079,11 @@
             ctxImage.style.display = 'none';
 
             var cs = window.getComputedStyle(tb);
+            var contentEl = tb.querySelector('.tb-content');
 
-            var ff = (tb.style.fontFamily || cs.fontFamily || 'Segoe UI').replace(/['"]/g, '').split(',')[0].trim();
+            // Đọc font-family từ tb (hoặc content)
+            var fontSrc = (contentEl && contentEl.style.fontFamily) || tb.style.fontFamily || cs.fontFamily || 'Segoe UI';
+            var ff = fontSrc.replace(/['"]/g, '').split(',')[0].trim();
             var found = false;
             for (var i = 0; i < ctxFont.options.length; i++) {
                 if (ctxFont.options[i].value.toLowerCase() === ff.toLowerCase()) {
@@ -1089,13 +1092,22 @@
             }
             if (!found) ctxFont.selectedIndex = 0;
 
-            ctxSize.value = parseInt(tb.style.fontSize || cs.fontSize, 10) || 24;
-            ctxColor.value = rgbToHex(tb.style.color || cs.color || '#000000');
+            // Đọc font-size
+            var sizeSrc = (contentEl && contentEl.style.fontSize) || tb.style.fontSize || cs.fontSize;
+            ctxSize.value = parseInt(sizeSrc, 10) || 24;
 
-            ctxBold.checked = (cs.fontWeight === 'bold' || parseInt(cs.fontWeight, 10) >= 700);
-            ctxItalic.checked = (cs.fontStyle === 'italic');
-            ctxUnderline.checked = (cs.textDecorationLine && cs.textDecorationLine.indexOf('underline') !== -1) ||
-                                   (cs.textDecoration && cs.textDecoration.indexOf('underline') !== -1);
+            // Đọc màu: ưu tiên content > tb > computed
+            var colorSrc = (contentEl && contentEl.style.color) || tb.style.color || cs.color || '#000000';
+            ctxColor.value = rgbToHex(colorSrc);
+
+            // Kiểu chữ
+            var boldSrc = (contentEl && contentEl.style.fontWeight) || tb.style.fontWeight || cs.fontWeight;
+            var italicSrc = (contentEl && contentEl.style.fontStyle) || tb.style.fontStyle || cs.fontStyle;
+            ctxBold.checked = (boldSrc === 'bold' || parseInt(boldSrc, 10) >= 700);
+            ctxItalic.checked = (italicSrc === 'italic');
+
+            var deco = (contentEl && contentEl.style.textDecoration) || tb.style.textDecoration || cs.textDecorationLine || cs.textDecoration || '';
+            ctxUnderline.checked = (deco.indexOf('underline') !== -1);
 
             var align = tb.style.textAlign || cs.textAlign || 'left';
             for (var k = 0; k < ctxAlignRadios.length; k++) {
@@ -1168,22 +1180,42 @@
 
         ctxApply.addEventListener('click', function() {
             if (!currentTextbox) return;
+            var contentEl = currentTextbox.querySelector('.tb-content');
+
+            // Font family
             currentTextbox.style.fontFamily = ctxFont.value;
+            if (contentEl) contentEl.style.fontFamily = ctxFont.value;
+
+            // Font size
             currentTextbox.style.fontSize = ctxSize.value + 'px';
+            if (contentEl) contentEl.style.fontSize = ctxSize.value + 'px';
+
+            // Màu chữ — set trên cả 2 để chắc chắn thắng CSS
             currentTextbox.style.color = ctxColor.value;
+            if (contentEl) contentEl.style.color = ctxColor.value;
+
+            // Bold / Italic / Underline
             currentTextbox.style.fontWeight = ctxBold.checked ? 'bold' : 'normal';
             currentTextbox.style.fontStyle = ctxItalic.checked ? 'italic' : 'normal';
             currentTextbox.style.textDecoration = ctxUnderline.checked ? 'underline' : 'none';
+            if (contentEl) {
+                contentEl.style.fontWeight = ctxBold.checked ? 'bold' : 'normal';
+                contentEl.style.fontStyle = ctxItalic.checked ? 'italic' : 'normal';
+                contentEl.style.textDecoration = ctxUnderline.checked ? 'underline' : 'none';
+            }
 
+            // Căn lề — chỉ trên tb là đủ
             var alignVal = 'left';
             for (var i = 0; i < ctxAlignRadios.length; i++) {
                 if (ctxAlignRadios[i].checked) { alignVal = ctxAlignRadios[i].value; break; }
             }
             currentTextbox.style.textAlign = alignVal;
 
+            // Nền
             if (ctxBgTransparent.checked) currentTextbox.style.background = 'transparent';
             else currentTextbox.style.background = ctxBg.value;
 
+            // Viền
             var bs = ctxBorderStyle.value;
             if (bs === 'none') currentTextbox.style.border = 'none';
             else currentTextbox.style.border = '1px ' + bs + ' ' + ctxBorder.value;
@@ -1194,6 +1226,8 @@
 
         ctxReset.addEventListener('click', function() {
             if (!currentTextbox) return;
+            var contentEl = currentTextbox.querySelector('.tb-content');
+
             currentTextbox.style.fontFamily = '"Segoe UI", Arial, sans-serif';
             currentTextbox.style.fontSize = '24px';
             currentTextbox.style.color = '#000000';
@@ -1204,6 +1238,15 @@
             currentTextbox.style.background = 'rgba(255, 255, 255, 0.85)';
             currentTextbox.style.border = '1px dashed #8B4513';
             currentTextbox.style.borderRadius = '0px';
+
+            if (contentEl) {
+                contentEl.style.fontFamily = '';
+                contentEl.style.fontSize = '';
+                contentEl.style.color = '';
+                contentEl.style.fontWeight = '';
+                contentEl.style.fontStyle = '';
+                contentEl.style.textDecoration = '';
+            }
             closeContextMenu();
         });
 
@@ -1414,7 +1457,6 @@
             var startL = rect.left + window.scrollX;
             var startT = rect.top + window.scrollY;
 
-            // Lưu min-width/height từ computed style
             var cs = window.getComputedStyle(tb);
             var minW = parseFloat(cs.minWidth) || 120;
             var minH = parseFloat(cs.minHeight) || 30;
@@ -1432,12 +1474,14 @@
                 if (newW < minW) { newW = minW; if (pos.indexOf('w') !== -1) newL = startL + startW - minW; }
                 if (newH < minH) { newH = minH; if (pos.indexOf('n') !== -1) newT = startT + startH - minH; }
 
-                // Giới hạn max-width 80vw
                 var maxW = window.innerWidth * 0.8;
                 if (newW > maxW) {
                     newW = maxW;
                     if (pos.indexOf('w') !== -1) newL = startL + startW - maxW;
                 }
+
+                newL = Math.max(0, newL);
+                newT = Math.max(0, newT);
 
                 tb.style.width = newW + 'px';
                 tb.style.height = newH + 'px';
@@ -1467,6 +1511,7 @@
             var content = document.createElement('span');
             content.className = 'tb-content placeholder';
             content.textContent = PLACEHOLDER;
+            content.style.color = '#000000';
             tb.appendChild(content);
 
             tb._speechBase = '';
