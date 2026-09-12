@@ -130,7 +130,6 @@
             position: absolute;
             min-width: 120px;
             min-height: 30px;
-            /* ===== GIỚI HẠN CHIỀU RỘNG TỐI ĐA 80% VIEWPORT ===== */
             max-width: 80vw;
             padding: 4px 8px;
             background: rgba(255, 255, 255, 0.85);
@@ -200,6 +199,32 @@
         .textbox.editing .tb-delete { display: block; }
 
         body.gray-bg .textbox { background: rgba(255, 255, 255, 0.9); }
+
+        /* ============ TEXTBOX RESIZE HANDLES ============ */
+        .textbox .resize-handle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #0066CC;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            z-index: 200;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        .textbox .resize-handle.nw { cursor: nwse-resize; top: -5px; left: -5px; }
+        .textbox .resize-handle.ne { cursor: nesw-resize; top: -5px; right: -5px; }
+        .textbox .resize-handle.sw { cursor: nesw-resize; bottom: -5px; left: -5px; }
+        .textbox .resize-handle.se { cursor: nwse-resize; bottom: -5px; right: -5px; }
+        .textbox .resize-handle.n  { cursor: ns-resize; top: -5px; left: 50%; transform: translateX(-50%); }
+        .textbox .resize-handle.s  { cursor: ns-resize; bottom: -5px; left: 50%; transform: translateX(-50%); }
+        .textbox .resize-handle.w  { cursor: ew-resize; top: 50%; left: -5px; transform: translateY(-50%); }
+        .textbox .resize-handle.e  { cursor: ew-resize; top: 50%; right: -5px; transform: translateY(-50%); }
+
+        .textbox:hover .resize-handle,
+        .textbox.editing .resize-handle,
+        .textbox.selected .resize-handle { display: block; }
 
         /* ============ MIC BUTTON (Speech-to-Text) ============ */
         .tb-mic {
@@ -458,7 +483,6 @@
         <canvas id="drawCanvas"></canvas>
     </div>
 
-    <!-- Context menu (dùng chung cho canvas / textbox / ảnh) -->
     <div id="ctxMenu">
 
         <div id="ctxDraw">
@@ -641,13 +665,11 @@
     (function() {
         'use strict';
 
-        // ========== PHÁT HIỆN TRÌNH DUYỆT ==========
         var isBrave = !!(navigator.brave && navigator.brave.isBrave);
         if (navigator.brave && typeof navigator.brave.isBrave === 'function') {
             navigator.brave.isBrave().then(function(v) { isBrave = v; });
         }
 
-        // ========== BẢO MẬT ==========
         document.addEventListener('contextmenu', function(e) {
             var tb = e.target.closest && e.target.closest('.textbox');
             var iw = e.target.closest && e.target.closest('.img-wrapper');
@@ -687,7 +709,6 @@
         });
         document.addEventListener('dragstart', function(e) { e.preventDefault(); return false; });
 
-        // ========== CANVAS VẼ ==========
         var board = document.getElementById('board');
         var canvas = document.getElementById('drawCanvas');
         var ctx = canvas.getContext('2d');
@@ -877,7 +898,6 @@
             selectedWrapper = null;
         }
 
-        // ========== CONTEXT MENU ==========
         var ctxMenu = document.getElementById('ctxMenu');
         var ctxDraw = document.getElementById('ctxDraw');
         var ctxTextBox = document.getElementById('ctxTextBox');
@@ -1384,6 +1404,54 @@
             activeMicTextbox = null;
         }
 
+        // ========== TEXTBOX RESIZE ==========
+        function startTextboxResize(tb, startEvent, pos) {
+            var startX = startEvent.clientX;
+            var startY = startEvent.clientY;
+            var rect = tb.getBoundingClientRect();
+            var startW = rect.width;
+            var startH = rect.height;
+            var startL = rect.left + window.scrollX;
+            var startT = rect.top + window.scrollY;
+
+            // Lưu min-width/height từ computed style
+            var cs = window.getComputedStyle(tb);
+            var minW = parseFloat(cs.minWidth) || 120;
+            var minH = parseFloat(cs.minHeight) || 30;
+
+            function moveHandler(me) {
+                var dx = me.clientX - startX;
+                var dy = me.clientY - startY;
+                var newW = startW, newH = startH, newL = startL, newT = startT;
+
+                if (pos.indexOf('e') !== -1) newW = startW + dx;
+                if (pos.indexOf('w') !== -1) { newW = startW - dx; newL = startL + dx; }
+                if (pos.indexOf('s') !== -1) newH = startH + dy;
+                if (pos.indexOf('n') !== -1) { newH = startH - dy; newT = startT + dy; }
+
+                if (newW < minW) { newW = minW; if (pos.indexOf('w') !== -1) newL = startL + startW - minW; }
+                if (newH < minH) { newH = minH; if (pos.indexOf('n') !== -1) newT = startT + startH - minH; }
+
+                // Giới hạn max-width 80vw
+                var maxW = window.innerWidth * 0.8;
+                if (newW > maxW) {
+                    newW = maxW;
+                    if (pos.indexOf('w') !== -1) newL = startL + startW - maxW;
+                }
+
+                tb.style.width = newW + 'px';
+                tb.style.height = newH + 'px';
+                tb.style.left = newL + 'px';
+                tb.style.top = newT + 'px';
+            }
+            function upHandler() {
+                document.removeEventListener('mousemove', moveHandler);
+                document.removeEventListener('mouseup', upHandler);
+            }
+            document.addEventListener('mousemove', moveHandler);
+            document.addEventListener('mouseup', upHandler);
+        }
+
         // ========== TEXTBOX ==========
         function createTextbox(x, y, withMic) {
             var tb = document.createElement('div');
@@ -1395,8 +1463,6 @@
             tb.style.fontSize = '24px';
             tb.style.fontWeight = 'bold';
             tb.style.color = '#000000';
-            // Đảm bảo max-width được áp dụng qua inline style
-            tb.style.maxWidth = '80vw';
 
             var content = document.createElement('span');
             content.className = 'tb-content placeholder';
@@ -1447,6 +1513,20 @@
                 startSpeechRecognition(tb);
             });
 
+            // === 8 RESIZE HANDLES ===
+            var positions = ['nw','n','ne','e','se','s','sw','w'];
+            positions.forEach(function(pos) {
+                var h = document.createElement('div');
+                h.className = 'resize-handle ' + pos;
+                h.dataset.pos = pos;
+                tb.appendChild(h);
+                h.addEventListener('mousedown', function(ev) {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    startTextboxResize(tb, ev, pos);
+                });
+            });
+
             tb.addEventListener('dblclick', function(ev) {
                 ev.stopPropagation();
                 enterEditMode(tb);
@@ -1463,14 +1543,16 @@
             tb.addEventListener('mousedown', function(ev) {
                 if (tb.contentEditable === 'true') return;
                 if (ev.target === del || ev.target === mic) return;
+                if (ev.target.classList && ev.target.classList.contains('resize-handle')) return;
                 if (ev.button === 2) return;
                 ev.preventDefault();
                 ev.stopPropagation();
 
+                var rect = tb.getBoundingClientRect();
                 var startX = ev.clientX;
                 var startY = ev.clientY;
-                var startLeft = parseInt(tb.style.left, 10) || 0;
-                var startTop = parseInt(tb.style.top, 10) || 0;
+                var startLeft = rect.left + window.scrollX;
+                var startTop = rect.top + window.scrollY;
 
                 function moveHandler(me) {
                     var dx = me.clientX - startX;
