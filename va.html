@@ -169,11 +169,9 @@
             overflow-wrap: break-word;
         }
 
-        /* Placeholder: dùng opacity thay vì color để không ghi đè màu thực */
+        /* Placeholder: CHỈ dùng opacity, KHÔNG đổi font-style/weight/color */
         .textbox .tb-content.placeholder {
             opacity: 0.45;
-            font-weight: normal;
-            font-style: italic;
         }
 
         .textbox .tb-delete {
@@ -1072,6 +1070,9 @@
         }
 
         function openTextBoxMenu(tb, x, y) {
+            // Đồng bộ placeholder state trước khi đọc style
+            syncPlaceholderState(tb);
+
             currentTextbox = tb;
             currentImgWrapper = null;
             ctxDraw.style.display = 'none';
@@ -1081,7 +1082,6 @@
             var cs = window.getComputedStyle(tb);
             var contentEl = tb.querySelector('.tb-content');
 
-            // Đọc font-family từ tb (hoặc content)
             var fontSrc = (contentEl && contentEl.style.fontFamily) || tb.style.fontFamily || cs.fontFamily || 'Segoe UI';
             var ff = fontSrc.replace(/['"]/g, '').split(',')[0].trim();
             var found = false;
@@ -1092,15 +1092,12 @@
             }
             if (!found) ctxFont.selectedIndex = 0;
 
-            // Đọc font-size
             var sizeSrc = (contentEl && contentEl.style.fontSize) || tb.style.fontSize || cs.fontSize;
             ctxSize.value = parseInt(sizeSrc, 10) || 24;
 
-            // Đọc màu: ưu tiên content > tb > computed
             var colorSrc = (contentEl && contentEl.style.color) || tb.style.color || cs.color || '#000000';
             ctxColor.value = rgbToHex(colorSrc);
 
-            // Kiểu chữ
             var boldSrc = (contentEl && contentEl.style.fontWeight) || tb.style.fontWeight || cs.fontWeight;
             var italicSrc = (contentEl && contentEl.style.fontStyle) || tb.style.fontStyle || cs.fontStyle;
             ctxBold.checked = (boldSrc === 'bold' || parseInt(boldSrc, 10) >= 700);
@@ -1190,7 +1187,7 @@
             currentTextbox.style.fontSize = ctxSize.value + 'px';
             if (contentEl) contentEl.style.fontSize = ctxSize.value + 'px';
 
-            // Màu chữ — set trên cả 2 để chắc chắn thắng CSS
+            // Màu chữ
             currentTextbox.style.color = ctxColor.value;
             if (contentEl) contentEl.style.color = ctxColor.value;
 
@@ -1204,7 +1201,7 @@
                 contentEl.style.textDecoration = ctxUnderline.checked ? 'underline' : 'none';
             }
 
-            // Căn lề — chỉ trên tb là đủ
+            // Căn lề
             var alignVal = 'left';
             for (var i = 0; i < ctxAlignRadios.length; i++) {
                 if (ctxAlignRadios[i].checked) { alignVal = ctxAlignRadios[i].value; break; }
@@ -1220,6 +1217,9 @@
             if (bs === 'none') currentTextbox.style.border = 'none';
             else currentTextbox.style.border = '1px ' + bs + ' ' + ctxBorder.value;
             currentTextbox.style.borderRadius = (parseInt(ctxRadius.value, 10) || 0) + 'px';
+
+            // Đồng bộ placeholder state sau khi apply
+            syncPlaceholderState(currentTextbox);
 
             closeContextMenu();
         });
@@ -1247,6 +1247,9 @@
                 contentEl.style.fontStyle = '';
                 contentEl.style.textDecoration = '';
             }
+
+            syncPlaceholderState(currentTextbox);
+
             closeContextMenu();
         });
 
@@ -1324,6 +1327,21 @@
 
         function isPlaceholder(el) {
             return el && el.classList.contains('placeholder');
+        }
+
+        // === HÀM ĐỒNG BỘ PLACEHOLDER STATE ===
+        function syncPlaceholderState(tb) {
+            var el = getContentEl(tb);
+            if (!el) return;
+            var txt = (el.textContent || '').trim();
+            if (txt === '' || txt === PLACEHOLDER) {
+                el.classList.add('placeholder');
+                el.textContent = PLACEHOLDER;
+                tb._speechBase = '';
+            } else {
+                el.classList.remove('placeholder');
+                tb._speechBase = txt + ' ';
+            }
         }
 
         function createRecognition() {
@@ -1512,25 +1530,15 @@
             content.className = 'tb-content placeholder';
             content.textContent = PLACEHOLDER;
             content.style.color = '#000000';
+            content.style.fontFamily = '"Segoe UI", Arial, sans-serif';
+            content.style.fontSize = '24px';
+            content.style.fontWeight = 'bold';
             tb.appendChild(content);
 
             tb._speechBase = '';
 
             content.addEventListener('input', function() {
-                if (isPlaceholder(content)) {
-                    if (content.textContent.trim() === '' || content.textContent.trim() === PLACEHOLDER) {
-                        content.classList.add('placeholder');
-                        content.textContent = PLACEHOLDER;
-                    } else {
-                        content.classList.remove('placeholder');
-                    }
-                }
-                if (!isPlaceholder(content)) {
-                    var t = (content.textContent || '').replace(/\s+$/, '');
-                    tb._speechBase = t ? (t + ' ') : '';
-                } else {
-                    tb._speechBase = '';
-                }
+                syncPlaceholderState(tb);
             });
 
             var del = document.createElement('span');
@@ -1615,6 +1623,7 @@
 
             tb.addEventListener('blur', function() {
                 if (activeMicTextbox !== tb) exitEditMode(tb);
+                syncPlaceholderState(tb);
             });
 
             tb.addEventListener('keydown', function(ev) {
@@ -1623,6 +1632,9 @@
             });
 
             board.appendChild(tb);
+
+            // Đồng bộ placeholder state lần đầu
+            syncPlaceholderState(tb);
 
             if (withMic) {
                 setTimeout(function() { startSpeechRecognition(tb); }, 200);
@@ -1648,6 +1660,7 @@
         function exitEditMode(tb) {
             tb.contentEditable = 'false';
             tb.classList.remove('editing');
+            syncPlaceholderState(tb);
         }
 
         // ========== IMAGE WRAPPER ==========
@@ -1822,7 +1835,14 @@
 
         document.addEventListener('paste', function(e) {
             var isInTextbox = e.target.classList && e.target.classList.contains('textbox');
-            if (isInTextbox) return;
+            if (isInTextbox) {
+                // Cho phép paste text vào textbox, sau đó sync
+                setTimeout(function() {
+                    var tb = e.target.closest('.textbox');
+                    if (tb) syncPlaceholderState(tb);
+                }, 0);
+                return;
+            }
             var items = (e.clipboardData || window.clipboardData).items;
             if (!items) return;
             for (var i = 0; i < items.length; i++) {
