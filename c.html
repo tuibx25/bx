@@ -1,0 +1,2685 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drawing Board</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- Handsontable CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            background: #ffffff;
+            overflow-x: hidden;
+            font-family: Arial, sans-serif;
+            transition: background-color 0.15s ease;
+        }
+
+        body.gray-bg { background: #e8e8e8; }
+
+        #board {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background: #ffffff;
+            transition: background-color 0.15s ease;
+        }
+
+        body.gray-bg #board { background: #e8e8e8; }
+
+        #drawCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            pointer-events: none;
+            touch-action: none;
+        }
+
+        #drawCanvas.active {
+            pointer-events: auto;
+            cursor: crosshair;
+        }
+
+        #drawCanvas.eraser { cursor: cell; }
+        #drawCanvas.shape-mode { cursor: crosshair; }
+
+        /* ============ ẢNH ============ */
+        .img-wrapper {
+            position: absolute;
+            z-index: 50;
+            display: inline-block;
+            line-height: 0;
+        }
+
+        .img-wrapper.selected {
+            outline: 2px dashed #0066CC;
+            outline-offset: 2px;
+        }
+
+        .img-wrapper img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            -webkit-user-drag: none;
+            user-drag: none;
+        }
+
+        .resize-handle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #0066CC;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            z-index: 200;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        .resize-handle.nw { cursor: nwse-resize; top: -6px; left: -6px; }
+        .resize-handle.ne { cursor: nesw-resize; top: -6px; right: -6px; }
+        .resize-handle.sw { cursor: nesw-resize; bottom: -6px; left: -6px; }
+        .resize-handle.se { cursor: nwse-resize; bottom: -6px; right: -6px; }
+        .resize-handle.n  { cursor: ns-resize; top: -6px; left: 50%; transform: translateX(-50%); }
+        .resize-handle.s  { cursor: ns-resize; bottom: -6px; left: 50%; transform: translateX(-50%); }
+        .resize-handle.w  { cursor: ew-resize; top: 50%; left: -6px; transform: translateY(-50%); }
+        .resize-handle.e  { cursor: ew-resize; top: 50%; right: -6px; transform: translateY(-50%); }
+
+        .img-wrapper.selected .resize-handle { display: block; }
+
+        .img-wrapper .img-delete {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 24px;
+            height: 24px;
+            background: #d33;
+            color: #fff;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+            z-index: 210;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        .img-wrapper.selected .img-delete { display: block; }
+        .img-wrapper .img-delete:hover { background: #b00; }
+
+        body.drawing-mode .img-wrapper { pointer-events: none; }
+
+        /* ============ TEXTBOX ============ */
+        .textbox {
+            position: absolute;
+            min-width: 120px;
+            min-height: 30px;
+            max-width: 80vw;
+            padding: 4px 8px;
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px dashed #8B4513;
+            color: #000000;
+            font-size: 24px;
+            font-family: "Segoe UI", Arial, sans-serif;
+            font-weight: bold;
+            z-index: 150;
+            outline: none;
+            cursor: move;
+            line-height: 1.3;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: pre-wrap;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        .textbox:focus {
+            border-style: solid;
+            border-color: #0066CC;
+            background: rgba(255, 255, 255, 0.95);
+            cursor: text;
+        }
+
+        .textbox.editing { cursor: text; }
+
+        .textbox .tb-content {
+            display: inline-block;
+            min-width: 40px;
+            outline: none;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .textbox .tb-content.placeholder {
+            opacity: 0.45;
+        }
+
+        .textbox .tb-delete {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 20px;
+            height: 20px;
+            background: #d33;
+            color: #fff;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+            z-index: 220;
+        }
+
+        .textbox:hover .tb-delete,
+        .textbox.mic-active .tb-delete,
+        .textbox.editing .tb-delete { display: block; }
+
+        body.gray-bg .textbox { background: rgba(255, 255, 255, 0.9); }
+
+        .textbox .resize-handle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #0066CC;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            z-index: 200;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        .textbox .resize-handle.nw { cursor: nwse-resize; top: -5px; left: -5px; }
+        .textbox .resize-handle.ne { cursor: nesw-resize; top: -5px; right: -5px; }
+        .textbox .resize-handle.sw { cursor: nesw-resize; bottom: -5px; left: -5px; }
+        .textbox .resize-handle.se { cursor: nwse-resize; bottom: -5px; right: -5px; }
+        .textbox .resize-handle.n  { cursor: ns-resize; top: -5px; left: 50%; transform: translateX(-50%); }
+        .textbox .resize-handle.s  { cursor: ns-resize; bottom: -5px; left: 50%; transform: translateX(-50%); }
+        .textbox .resize-handle.w  { cursor: ew-resize; top: 50%; left: -5px; transform: translateY(-50%); }
+        .textbox .resize-handle.e  { cursor: ew-resize; top: 50%; right: -5px; transform: translateY(-50%); }
+
+        .textbox:hover .resize-handle,
+        .textbox.editing .resize-handle,
+        .textbox.selected .resize-handle { display: block; }
+
+        .tb-mic {
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            width: 26px;
+            height: 26px;
+            background: #0066CC;
+            color: #fff;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 26px;
+            font-size: 14px;
+            cursor: pointer;
+            display: none;
+            z-index: 220;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            transition: background 0.15s, transform 0.15s;
+            user-select: none;
+        }
+
+        .tb-mic:hover { background: #0055aa; transform: scale(1.1); }
+        .tb-mic.listening {
+            background: #d33;
+            animation: pulse-mic 1s infinite;
+        }
+
+        @keyframes pulse-mic {
+            0%   { box-shadow: 0 0 0 0 rgba(211, 51, 51, 0.7); }
+            70%  { box-shadow: 0 0 0 10px rgba(211, 51, 51, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(211, 51, 51, 0); }
+        }
+
+        .textbox:hover .tb-mic,
+        .textbox.editing .tb-mic,
+        .textbox.mic-active .tb-mic { display: block; }
+
+        /* ============ EXCEL TABLE (HANDSONTABLE) ============ */
+        .excel-wrapper {
+            position: absolute;
+            z-index: 140;
+            background: #fff;
+            border: 2px solid #217346;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-width: 260px;
+            min-height: 160px;
+        }
+
+        .excel-wrapper.selected {
+            outline: 2px dashed #0066CC;
+            outline-offset: 2px;
+        }
+
+        .excel-header {
+            background: linear-gradient(135deg, #217346 0%, #1a5a38 100%);
+            color: #fff;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: move;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            flex-shrink: 0;
+            height: 30px;
+        }
+
+        .excel-header .excel-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .excel-header .excel-close {
+            width: 20px;
+            height: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .excel-header .excel-close:hover {
+            background: #d33;
+        }
+
+        .excel-container {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .excel-container .ht_master,
+        .excel-container .handsontable {
+            font-family: "Segoe UI", Arial, sans-serif;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .excel-container .handsontable td {
+            text-align: center !important;
+            vertical-align: middle !important;
+            font-weight: bold !important;
+            font-size: 20px !important;
+            padding: 4px 6px !important;
+        }
+
+        .excel-container .handsontable th {
+            text-align: center !important;
+            vertical-align: middle !important;
+            font-weight: bold !important;
+            font-size: 14px !important;
+            background: #f0f7f4 !important;
+        }
+
+        .excel-container .handsontable .htCore thead th {
+            background: #e6f2ec !important;
+            color: #217346 !important;
+        }
+
+        .excel-resize-handle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #217346;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            z-index: 200;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        .excel-resize-handle.nw { cursor: nwse-resize; top: -6px; left: -6px; }
+        .excel-resize-handle.ne { cursor: nesw-resize; top: -6px; right: -6px; }
+        .excel-resize-handle.sw { cursor: nesw-resize; bottom: -6px; left: -6px; }
+        .excel-resize-handle.se { cursor: nwse-resize; bottom: -6px; right: -6px; }
+        .excel-resize-handle.n  { cursor: ns-resize; top: -6px; left: 50%; transform: translateX(-50%); }
+        .excel-resize-handle.s  { cursor: ns-resize; bottom: -6px; left: 50%; transform: translateX(-50%); }
+        .excel-resize-handle.w  { cursor: ew-resize; top: 50%; left: -6px; transform: translateY(-50%); }
+        .excel-resize-handle.e  { cursor: ew-resize; top: 50%; right: -6px; transform: translateY(-50%); }
+
+        .excel-wrapper.selected .excel-resize-handle { display: block; }
+
+        body.drawing-mode .excel-wrapper { pointer-events: none; }
+
+        /* ============ CONTEXT MENU ============ */
+        #ctxMenu {
+            position: fixed;
+            z-index: 10000;
+            background: #ffffff;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+            border-radius: 8px;
+            padding: 12px 14px;
+            min-width: 340px;
+            max-height: 90vh;
+            overflow-y: auto;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            color: #333;
+            display: none;
+            user-select: none;
+        }
+
+        #ctxMenu .ctx-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 8px;
+        }
+
+        #ctxMenu .ctx-row:last-child { margin-bottom: 0; }
+
+        #ctxMenu label {
+            flex: 0 0 80px;
+            font-size: 12px;
+            color: #555;
+        }
+
+        #ctxMenu select,
+        #ctxMenu input[type="number"],
+        #ctxMenu input[type="text"] {
+            flex: 1;
+            padding: 4px 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 13px;
+            background: #fff;
+            cursor: pointer;
+            outline: none;
+            font-family: inherit;
+            min-width: 0;
+        }
+
+        #ctxMenu input[type="range"] {
+            flex: 1;
+            cursor: pointer;
+        }
+
+        #ctxMenu select:focus,
+        #ctxMenu input:focus { border-color: #0066CC; }
+
+        #ctxMenu .ctx-title {
+            font-weight: bold;
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #eee;
+        }
+
+        #ctxMenu .ctx-section {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        #ctxMenu .ctx-btn {
+            flex: 1;
+            padding: 7px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+        }
+
+        #ctxMenu .ctx-btn-apply { background: #0066CC; color: #fff; }
+        #ctxMenu .ctx-btn-apply:hover { background: #0055aa; }
+        #ctxMenu .ctx-btn-reset { background: #eee; color: #333; }
+        #ctxMenu .ctx-btn-reset:hover { background: #ddd; }
+        #ctxMenu .ctx-btn-danger { background: #d33; color: #fff; }
+        #ctxMenu .ctx-btn-danger:hover { background: #b00; }
+
+        #ctxMenu .ctx-checks {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        #ctxMenu .ctx-check {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            user-select: none;
+        }
+
+        #ctxMenu .ctx-check input { cursor: pointer; margin: 0; }
+
+        #ctxMenu .ctx-radios {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        #ctxMenu .ctx-radio {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 4px 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #fafafa;
+            user-select: none;
+        }
+
+        #ctxMenu .ctx-radio input { cursor: pointer; margin: 0; }
+
+        #ctxMenu .ctx-radio.active {
+            background: #0066CC;
+            color: #fff;
+            border-color: #0066CC;
+        }
+
+        #ctxMenu .ctx-radio.active input { accent-color: #fff; }
+
+        /* ===== COLOR GRID DÙNG CHUNG ===== */
+        .color-grid {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .color-grid .color-swatch {
+            width: 26px;
+            height: 26px;
+            border-radius: 5px;
+            border: 2px solid #ccc;
+            cursor: pointer;
+            transition: transform 0.1s;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .color-grid .color-swatch:hover {
+            transform: scale(1.1);
+            border-color: #888;
+        }
+
+        .color-grid .color-swatch.active {
+            border-color: #0066CC;
+            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.35);
+        }
+
+        .color-grid .color-swatch.active::after {
+            content: "✓";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-weight: bold;
+            font-size: 13px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+            pointer-events: none;
+        }
+
+        .color-grid .color-swatch.light.active::after {
+            color: #333;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+        }
+
+        /* Color swatches cho công cụ vẽ (giữ riêng) */
+        .color-swatches {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .color-swatch {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: 2px solid #ccc;
+            cursor: pointer;
+            transition: transform 0.1s;
+            position: relative;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.1);
+            border-color: #888;
+        }
+
+        .color-swatch.active {
+            border-color: #0066CC;
+            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.3);
+        }
+
+        .color-swatch.active::after {
+            content: "✓";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-weight: bold;
+            font-size: 14px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .color-swatch.light.active::after {
+            color: #333;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+        }
+
+        ::-webkit-scrollbar { width: 0px; height: 0px; background: transparent; }
+        html { scrollbar-width: none; }
+        body { -ms-overflow-style: none; }
+
+        #watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 60px;
+            color: rgba(0, 0, 0, 0.03);
+            pointer-events: none;
+            z-index: 9999;
+            white-space: nowrap;
+            font-weight: bold;
+            letter-spacing: 10px;
+        }
+
+        @media print {
+            body { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="watermark">BX</div>
+
+    <div id="board">
+        <canvas id="drawCanvas"></canvas>
+    </div>
+
+    <div id="ctxMenu">
+
+        <div id="ctxDraw">
+            <div class="ctx-title">🖌️ Công cụ vẽ</div>
+
+            <div class="ctx-row">
+                <label>Màu vẽ</label>
+                <div class="color-swatches" id="drawColorSwatches">
+                    <div class="color-swatch" data-color="#000000" style="background:#000000" title="Đen"></div>
+                    <div class="color-swatch active" data-color="#8B4513" style="background:#8B4513" title="Nâu (mặc định)"></div>
+                    <div class="color-swatch" data-color="#FF0000" style="background:#FF0000" title="Đỏ"></div>
+                    <div class="color-swatch light" data-color="#F5F5DC" style="background:#F5F5DC" title="Be"></div>
+                    <div class="color-swatch light" data-color="#F5DEB3" style="background:#F5DEB3" title="Lúa mì"></div>
+                    <div class="color-swatch light" data-color="#D3D3D3" style="background:#D3D3D3" title="Xám nhạt"></div>
+                    <div class="color-swatch" data-color="#0066CC" style="background:#0066CC" title="Xanh"></div>
+                    <div class="color-swatch" data-color="#004488" style="background:#004488" title="Xanh đậm"></div>
+                </div>
+            </div>
+
+            <div class="ctx-row">
+                <label>Màu khác</label>
+                <input type="color" id="drawCustomColor" value="#8B4513">
+            </div>
+
+            <div class="ctx-row">
+                <label>Độ dày</label>
+                <input type="range" id="drawWidth" min="1" max="30" step="1" value="2">
+                <span id="drawWidthVal" style="flex:0 0 40px;text-align:right;font-size:12px;color:#555;">2px</span>
+            </div>
+
+            <div class="ctx-row">
+                <label class="ctx-check" style="flex:0 0 100%;">
+                    <input type="checkbox" id="drawPressure" checked> Nhạy lực nhấn bút (pressure)
+                </label>
+            </div>
+
+            <div class="ctx-row">
+                <label>Công cụ</label>
+                <div class="ctx-radios" id="drawModeGroup">
+                    <label class="ctx-radio active" data-mode="pen" title="Phím tắt: K"><input type="radio" name="drawMode" value="pen" checked>✏️ Bút (K)</label>
+                    <label class="ctx-radio" data-mode="line" title="Phím tắt: L"><input type="radio" name="drawMode" value="line">📏 Thẳng (L)</label>
+                    <label class="ctx-radio" data-mode="arrow" title="Phím tắt: I"><input type="radio" name="drawMode" value="arrow">➡️ Mũi tên (I)</label>
+                    <label class="ctx-radio" data-mode="circle" title="Phím tắt: O"><input type="radio" name="drawMode" value="circle">⭕ Tròn (O)</label>
+                    <label class="ctx-radio" data-mode="eraser" title="Phím tắt: 3"><input type="radio" name="drawMode" value="eraser">🧽 Tẩy (3)</label>
+                </div>
+            </div>
+
+            <div class="ctx-row" style="margin-top:-2px;">
+                <label></label>
+                <span style="font-size:11px;color:#888;">Giữ <b>Shift</b> khi kéo ⭕ để vẽ hình tròn hoàn hảo</span>
+            </div>
+
+            <div class="ctx-row ctx-section" style="margin-bottom:0;">
+                <button class="ctx-btn ctx-btn-reset" id="drawClearAll" style="background:#d33;color:#fff;">Xoá hết nét vẽ</button>
+            </div>
+        </div>
+
+        <div id="ctxTextBox" style="display:none;">
+            <div class="ctx-title">📝 Định dạng chữ</div>
+
+            <div class="ctx-row">
+                <label>Font</label>
+                <select id="ctxFont">
+                    <option value="Segoe UI">Segoe UI</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Tahoma">Tahoma</option>
+                    <option value="Trebuchet MS">Trebuchet MS</option>
+                    <option value="Comic Sans MS">Comic Sans MS</option>
+                    <option value="Impact">Impact</option>
+                    <option value="Roboto">Roboto</option>
+                </select>
+            </div>
+
+            <div class="ctx-row">
+                <label>Cỡ chữ</label>
+                <input type="number" id="ctxSize" min="8" max="200" step="1" value="24">
+            </div>
+
+            <!-- MÀU CHỮ — lưới swatch -->
+            <div class="ctx-row" style="align-items:flex-start;">
+                <label style="padding-top:4px;">Màu chữ</label>
+                <div class="color-grid" id="ctxColorGrid">
+                    <div class="color-swatch" data-color="#000000" style="background:#000000" title="Đen"></div>
+                    <div class="color-swatch light" data-color="#FFFFFF" style="background:#FFFFFF" title="Trắng"></div>
+                    <div class="color-swatch light" data-color="#F5F5F5" style="background:#F5F5F5" title="Xám rất nhạt"></div>
+                    <div class="color-swatch light" data-color="#D3D3D3" style="background:#D3D3D3" title="Xám nhạt"></div>
+                    <div class="color-swatch" data-color="#FF0000" style="background:#FF0000" title="Đỏ"></div>
+                    <div class="color-swatch" data-color="#8B4513" style="background:#8B4513" title="Nâu đậm"></div>
+                    <div class="color-swatch" data-color="#8B5A2B" style="background:#8B5A2B" title="Nâu"></div>
+                    <div class="color-swatch" data-color="#0066CC" style="background:#0066CC" title="Xanh"></div>
+                    <div class="color-swatch" data-color="#004488" style="background:#004488" title="Xanh đậm"></div>
+                    <div class="color-swatch light" data-color="#F5F5DC" style="background:#F5F5DC" title="Be"></div>
+                    <div class="color-swatch light" data-color="#F5DEB3" style="background:#F5DEB3" title="Lúa mì"></div>
+                </div>
+            </div>
+
+            <div class="ctx-row">
+                <label>Kiểu chữ</label>
+                <div class="ctx-checks">
+                    <label class="ctx-check"><input type="checkbox" id="ctxBold" checked><b>B</b></label>
+                    <label class="ctx-check"><input type="checkbox" id="ctxItalic"><i>I</i></label>
+                    <label class="ctx-check"><input type="checkbox" id="ctxUnderline"><u>U</u></label>
+                </div>
+            </div>
+
+            <div class="ctx-row">
+                <label>Căn lề</label>
+                <div class="ctx-radios" id="ctxAlignGroup">
+                    <label class="ctx-radio" data-align="left"><input type="radio" name="ctxAlign" value="left" checked>Trái</label>
+                    <label class="ctx-radio" data-align="center"><input type="radio" name="ctxAlign" value="center">Giữa</label>
+                    <label class="ctx-radio" data-align="right"><input type="radio" name="ctxAlign" value="right">Phải</label>
+                    <label class="ctx-radio" data-align="justify"><input type="radio" name="ctxAlign" value="justify">Đều</label>
+                </div>
+            </div>
+
+            <div class="ctx-section">
+                <div class="ctx-title" style="margin-bottom:6px;">📦 Hộp textbox</div>
+
+                <!-- NỀN — lưới swatch -->
+                <div class="ctx-row" style="align-items:flex-start;flex-wrap:wrap;">
+                    <label style="padding-top:4px;">Nền</label>
+                    <div class="color-grid" id="ctxBgGrid" style="flex:0 0 100%;margin-top:4px;">
+                        <div class="color-swatch light" data-color="#FFFFFF" style="background:#FFFFFF" title="Trắng"></div>
+                        <div class="color-swatch light" data-color="#F5F5F5" style="background:#F5F5F5" title="Xám rất nhạt"></div>
+                        <div class="color-swatch light" data-color="#F5F5DC" style="background:#F5F5DC" title="Be"></div>
+                        <div class="color-swatch light" data-color="#F5DEB3" style="background:#F5DEB3" title="Lúa mì"></div>
+                        <div class="color-swatch light" data-color="#D3D3D3" style="background:#D3D3D3" title="Xám nhạt"></div>
+                        <div class="color-swatch" data-color="#8B5A2B" style="background:#8B5A2B" title="Nâu"></div>
+                        <div class="color-swatch" data-color="#8B4513" style="background:#8B4513" title="Nâu đậm"></div>
+                        <div class="color-swatch" data-color="#0066CC" style="background:#0066CC" title="Xanh"></div>
+                        <div class="color-swatch" data-color="#004488" style="background:#004488" title="Xanh đậm"></div>
+                        <div class="color-swatch" data-color="#FF0000" style="background:#FF0000" title="Đỏ"></div>
+                        <div class="color-swatch" data-color="#000000" style="background:#000000" title="Đen"></div>
+                    </div>
+                    <label class="ctx-check" style="flex:0 0 100%;margin-top:6px;">
+                        <input type="checkbox" id="ctxBgTransparent"> Trong suốt
+                    </label>
+                </div>
+
+                <!-- VIỀN — lưới swatch -->
+                <div class="ctx-row" style="align-items:flex-start;flex-wrap:wrap;">
+                    <label style="padding-top:4px;">Viền</label>
+                    <div class="color-grid" id="ctxBorderGrid" style="flex:0 0 100%;margin-top:4px;">
+                        <div class="color-swatch" data-color="#8B4513" style="background:#8B4513" title="Nâu đậm (mặc định)"></div>
+                        <div class="color-swatch" data-color="#8B5A2B" style="background:#8B5A2B" title="Nâu"></div>
+                        <div class="color-swatch" data-color="#000000" style="background:#000000" title="Đen"></div>
+                        <div class="color-swatch" data-color="#FF0000" style="background:#FF0000" title="Đỏ"></div>
+                        <div class="color-swatch" data-color="#0066CC" style="background:#0066CC" title="Xanh"></div>
+                        <div class="color-swatch" data-color="#004488" style="background:#004488" title="Xanh đậm"></div>
+                        <div class="color-swatch light" data-color="#D3D3D3" style="background:#D3D3D3" title="Xám nhạt"></div>
+                        <div class="color-swatch light" data-color="#F5DEB3" style="background:#F5DEB3" title="Lúa mì"></div>
+                    </div>
+                    <select id="ctxBorderStyle" style="flex:0 0 100%;margin-top:6px;">
+                        <option value="dashed">Nét đứt</option>
+                        <option value="solid">Nét liền</option>
+                        <option value="dotted">Chấm</option>
+                        <option value="double">Đôi</option>
+                        <option value="none">Không viền</option>
+                    </select>
+                </div>
+
+                <div class="ctx-row">
+                    <label>Bo góc</label>
+                    <input type="number" id="ctxRadius" min="0" max="50" step="1" value="0">
+                    <label style="flex:0 0 auto;font-size:12px;">px</label>
+                </div>
+            </div>
+
+            <div class="ctx-row ctx-section" style="margin-bottom:0;">
+                <button class="ctx-btn ctx-btn-apply" id="ctxApply">Áp dụng</button>
+                <button class="ctx-btn ctx-btn-reset" id="ctxReset">Mặc định</button>
+            </div>
+        </div>
+
+        <div id="ctxImage" style="display:none;">
+            <div class="ctx-title">🖼️ Chỉnh sửa ảnh</div>
+
+            <div class="ctx-row">
+                <label>Chiều rộng</label>
+                <input type="number" id="ctxImgW" min="20" step="1" value="100">
+                <label style="flex:0 0 auto;font-size:12px;">px</label>
+            </div>
+
+            <div class="ctx-row">
+                <label>Chiều cao</label>
+                <input type="number" id="ctxImgH" min="20" step="1" value="100">
+                <label style="flex:0 0 auto;font-size:12px;">px</label>
+            </div>
+
+            <div class="ctx-row">
+                <label class="ctx-check" style="flex:0 0 100%;">
+                    <input type="checkbox" id="ctxImgLockRatio" checked> Giữ tỉ lệ khung hình
+                </label>
+            </div>
+
+            <div class="ctx-row">
+                <label>Độ mờ</label>
+                <input type="range" id="ctxImgOpacity" min="10" max="100" step="1" value="100">
+                <span id="ctxImgOpacityVal" style="flex:0 0 40px;text-align:right;font-size:12px;color:#555;">100%</span>
+            </div>
+
+            <div class="ctx-row">
+                <label>Xoay</label>
+                <input type="range" id="ctxImgRotate" min="-180" max="180" step="1" value="0">
+                <span id="ctxImgRotateVal" style="flex:0 0 40px;text-align:right;font-size:12px;color:#555;">0°</span>
+            </div>
+
+            <div class="ctx-section">
+                <div class="ctx-row">
+                    <button class="ctx-btn ctx-btn-apply" id="ctxImgApply">Áp dụng</button>
+                    <button class="ctx-btn ctx-btn-reset" id="ctxImgReset">Reset</button>
+                </div>
+                <div class="ctx-row" style="margin-top:8px;">
+                    <button class="ctx-btn ctx-btn-danger" id="ctxImgDelete" style="width:100%;">Xoá ảnh</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Handsontable + HyperFormula -->
+    <script src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hyperformula/dist/hyperformula.full.min.js"></script>
+
+    <script>
+    (function() {
+        'use strict';
+
+        var isBrave = !!(navigator.brave && navigator.brave.isBrave);
+        if (navigator.brave && typeof navigator.brave.isBrave === 'function') {
+            navigator.brave.isBrave().then(function(v) { isBrave = v; });
+        }
+
+        document.addEventListener('contextmenu', function(e) {
+            var tb = e.target.closest && e.target.closest('.textbox');
+            var iw = e.target.closest && e.target.closest('.img-wrapper');
+            var ex = e.target.closest && e.target.closest('.excel-wrapper');
+            if (tb || iw || ex) return;
+            e.preventDefault();
+            return false;
+        });
+
+        document.addEventListener('keydown', function(e) {
+            var isInTextbox = e.target.classList && e.target.classList.contains('textbox');
+            if (isInTextbox) {
+                if (e.key === 'F12') { e.preventDefault(); return false; }
+                if (e.ctrlKey && (e.key === 's' || e.key === 'S')) { e.preventDefault(); return false; }
+                if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) { e.preventDefault(); return false; }
+                return;
+            }
+
+            if (e.key === 'F12') { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && ['I','J','C','K','i','j','c','k'].includes(e.key)) {
+                e.preventDefault(); return false;
+            }
+            if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) { e.preventDefault(); return false; }
+            if (e.ctrlKey && (e.key === 's' || e.key === 'S')) { e.preventDefault(); return false; }
+            if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) { e.preventDefault(); return false; }
+            if (e.ctrlKey && ['c','C','a','A','x','X'].includes(e.key)) {
+                e.preventDefault(); return false;
+            }
+        }, true);
+
+        document.addEventListener('copy', function(e) {
+            if (e.target.classList && e.target.classList.contains('textbox')) return;
+            if (e.target.closest && e.target.closest('.excel-wrapper')) return;
+            e.preventDefault(); return false;
+        });
+        document.addEventListener('cut', function(e) {
+            if (e.target.classList && e.target.classList.contains('textbox')) return;
+            if (e.target.closest && e.target.closest('.excel-wrapper')) return;
+            e.preventDefault(); return false;
+        });
+        document.addEventListener('dragstart', function(e) { e.preventDefault(); return false; });
+
+        var board = document.getElementById('board');
+        var canvas = document.getElementById('drawCanvas');
+        var ctx = canvas.getContext('2d');
+
+        var isDrawing = false;
+        var isErasing = false;
+        var isPointerDown = false;
+        var lastX = 0, lastY = 0;
+        var lastWidth = 0;
+
+        // === CÔNG CỤ ===
+        var drawMode = 'pen'; // 'pen' | 'line' | 'arrow' | 'circle' | 'eraser'
+        var shapeStartX = 0, shapeStartY = 0;
+        var shapePreview = null;
+
+        var strokeColor = '#8B4513';
+        var strokeWidth = 2;
+        var DEFAULT_COLOR = '#8B4513';
+        var DEFAULT_WIDTH = 2;
+        var pressureEnabled = true;
+
+        var strokes = [];
+        var currentStroke = null;
+
+        function resizeCanvas() {
+            var dpr = window.devicePixelRatio || 1;
+            var w = board.offsetWidth;
+            var h = board.offsetHeight;
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+            canvas.style.width = w + 'px';
+            canvas.style.height = h + 'px';
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            redrawAll();
+        }
+
+        function redrawAll() {
+            var w = board.offsetWidth;
+            var h = board.offsetHeight;
+            ctx.clearRect(0, 0, w, h);
+            for (var i = 0; i < strokes.length; i++) drawStroke(strokes[i]);
+            if (shapePreview) drawShape(shapePreview);
+        }
+
+        function drawStroke(stroke) {
+            if (stroke.type === 'line' || stroke.type === 'arrow' || stroke.type === 'circle') {
+                drawShape(stroke);
+                return;
+            }
+            if (!stroke.points || stroke.points.length === 0) return;
+            ctx.save();
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            if (stroke.erase) {
+                ctx.globalCompositeOperation = 'destination-out';
+            } else {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.strokeStyle = stroke.color;
+            }
+
+            var pts = stroke.points;
+
+            if (pts.length === 1) {
+                var p = pts[0];
+                var pw = pts[0].w || stroke.width;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, pw / 2, 0, Math.PI * 2);
+                if (stroke.erase) ctx.fillStyle = 'rgba(0,0,0,1)';
+                else ctx.fillStyle = stroke.color;
+                ctx.fill();
+            } else {
+                for (var j = 1; j < pts.length; j++) {
+                    var p0 = pts[j - 1];
+                    var p1 = pts[j];
+                    var w0 = p0.w || stroke.width;
+                    var w1 = p1.w || stroke.width;
+                    var segW = (w0 + w1) / 2;
+
+                    if (stroke.erase) {
+                        ctx.lineWidth = segW * 6;
+                        ctx.strokeStyle = 'rgba(0,0,0,1)';
+                    } else {
+                        ctx.lineWidth = segW;
+                    }
+
+                    ctx.beginPath();
+                    ctx.moveTo(p0.x, p0.y);
+                    ctx.lineTo(p1.x, p1.y);
+                    ctx.stroke();
+                }
+            }
+            ctx.restore();
+        }
+
+        // ========== VẼ HÌNH ==========
+        function drawShape(shape) {
+            if (!shape) return;
+            ctx.save();
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.strokeStyle = shape.color;
+            ctx.lineWidth = shape.width;
+            ctx.globalCompositeOperation = 'source-over';
+
+            var x1 = shape.x1, y1 = shape.y1, x2 = shape.x2, y2 = shape.y2;
+
+            if (shape.type === 'line') {
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+            } else if (shape.type === 'arrow') {
+                drawArrow(ctx, x1, y1, x2, y2, shape.width);
+            } else if (shape.type === 'circle') {
+                var cx = (x1 + x2) / 2;
+                var cy = (y1 + y2) / 2;
+                var rx = Math.abs(x2 - x1) / 2;
+                var ry = Math.abs(y2 - y1) / 2;
+                ctx.beginPath();
+                ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+
+        function drawArrow(ctx, x1, y1, x2, y2, width) {
+            var headLen = Math.max(12, width * 4);
+            var dx = x2 - x1;
+            var dy = y2 - y1;
+            var angle = Math.atan2(dy, dx);
+
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(x2, y2);
+            ctx.lineTo(
+                x2 - headLen * Math.cos(angle - Math.PI / 6),
+                y2 - headLen * Math.sin(angle - Math.PI / 6)
+            );
+            ctx.lineTo(
+                x2 - headLen * Math.cos(angle + Math.PI / 6),
+                y2 - headLen * Math.sin(angle + Math.PI / 6)
+            );
+            ctx.closePath();
+            ctx.fillStyle = ctx.strokeStyle;
+            ctx.fill();
+        }
+
+        function getPos(e) {
+            var rect = board.getBoundingClientRect();
+            var clientX, clientY;
+            if (e.touches && e.touches.length) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            return { x: clientX - rect.left, y: clientY - rect.top };
+        }
+
+        function getPressure(e) {
+            if (!pressureEnabled) return 0.5;
+            if (typeof e.pressure === 'number' && e.pressure > 0) return e.pressure;
+            if (e.touches && e.touches.length && typeof e.touches[0].force === 'number') {
+                var f = e.touches[0].force;
+                if (f > 0) return f;
+            }
+            return 0.5;
+        }
+
+        function pressureToWidth(pressure, baseWidth) {
+            if (!pressureEnabled) return baseWidth;
+            var factor = 0.3 + pressure * 1.2;
+            return Math.max(0.5, baseWidth * factor);
+        }
+
+        function onPointerDown(e) {
+            if (!isDrawing) return;
+            if (e.button === 2) return;
+            e.preventDefault();
+            isPointerDown = true;
+            var pos = getPos(e);
+
+            if (drawMode === 'line' || drawMode === 'arrow' || drawMode === 'circle') {
+                shapeStartX = pos.x;
+                shapeStartY = pos.y;
+                shapePreview = {
+                    type: drawMode,
+                    color: strokeColor,
+                    width: strokeWidth,
+                    x1: pos.x,
+                    y1: pos.y,
+                    x2: pos.x,
+                    y2: pos.y
+                };
+                redrawAll();
+                return;
+            }
+
+            var pressure = getPressure(e);
+            lastX = pos.x;
+            lastY = pos.y;
+
+            var w = isErasing ? strokeWidth : pressureToWidth(pressure, strokeWidth);
+            lastWidth = w;
+
+            currentStroke = {
+                type: 'free',
+                color: strokeColor,
+                width: strokeWidth,
+                erase: isErasing,
+                points: [{x: pos.x, y: pos.y, w: w}]
+            };
+            strokes.push(currentStroke);
+            redrawAll();
+        }
+
+        function onPointerMove(e) {
+            if (!isDrawing || !isPointerDown) return;
+            e.preventDefault();
+            var pos = getPos(e);
+
+            // Shape mode preview
+            if (shapePreview) {
+                shapePreview.x2 = pos.x;
+                shapePreview.y2 = pos.y;
+                // Với hình tròn: giữ Shift → ép thành hình tròn hoàn hảo
+                if (shapePreview.type === 'circle' && e.shiftKey) {
+                    var dx = shapePreview.x2 - shapePreview.x1;
+                    var dy = shapePreview.y2 - shapePreview.y1;
+                    var size = Math.max(Math.abs(dx), Math.abs(dy));
+                    shapePreview.x2 = shapePreview.x1 + (dx < 0 ? -size : size);
+                    shapePreview.y2 = shapePreview.y1 + (dy < 0 ? -size : size);
+                }
+                redrawAll();
+                return;
+            }
+
+            if (!currentStroke) return;
+            var pressure = getPressure(e);
+            var dx = pos.x - lastX;
+            var dy = pos.y - lastY;
+            if (dx * dx + dy * dy < 1) return;
+
+            var w = isErasing ? strokeWidth : pressureToWidth(pressure, strokeWidth);
+
+            currentStroke.points.push({x: pos.x, y: pos.y, w: w});
+            lastX = pos.x;
+            lastY = pos.y;
+            lastWidth = w;
+            redrawAll();
+        }
+
+        function onPointerUp(e) {
+            if (!isPointerDown) return;
+            isPointerDown = false;
+
+            if (shapePreview) {
+                var p = shapePreview;
+
+                // Nếu là circle và giữ Shift khi nhả → ép thành hình tròn hoàn hảo
+                if (p.type === 'circle' && e && e.shiftKey) {
+                    var dx0 = p.x2 - p.x1;
+                    var dy0 = p.y2 - p.y1;
+                    var size0 = Math.max(Math.abs(dx0), Math.abs(dy0));
+                    p.x2 = p.x1 + (dx0 < 0 ? -size0 : size0);
+                    p.y2 = p.y1 + (dy0 < 0 ? -size0 : size0);
+                }
+
+                // Chỉ lưu nếu kéo đủ xa
+                var dx = p.x2 - p.x1;
+                var dy = p.y2 - p.y1;
+                if (dx * dx + dy * dy > 9) {
+                    strokes.push({
+                        type: p.type,
+                        color: p.color,
+                        width: p.width,
+                        x1: p.x1,
+                        y1: p.y1,
+                        x2: p.x2,
+                        y2: p.y2
+                    });
+                }
+                shapePreview = null;
+                redrawAll();
+            }
+
+            currentStroke = null;
+        }
+
+        canvas.addEventListener('mousedown', onPointerDown);
+        canvas.addEventListener('mousemove', onPointerMove);
+        window.addEventListener('mouseup', onPointerUp);
+
+        canvas.addEventListener('touchstart', onPointerDown, {passive: false});
+        canvas.addEventListener('touchmove', onPointerMove, {passive: false});
+        window.addEventListener('touchend', onPointerUp);
+        window.addEventListener('touchcancel', onPointerUp);
+
+        if (window.PointerEvent) {
+            canvas.addEventListener('pointerdown', function(e) {
+                if (e.pointerType === 'pen' || e.pointerType === 'touch') onPointerDown(e);
+            });
+            canvas.addEventListener('pointermove', function(e) {
+                if (e.pointerType === 'pen' || e.pointerType === 'touch') onPointerMove(e);
+            });
+            window.addEventListener('pointerup', function(e) {
+                if (e.pointerType === 'pen' || e.pointerType === 'touch') onPointerUp(e);
+            });
+        }
+
+        var selectedWrapper = null;
+
+        function deselectAll() {
+            if (selectedWrapper) selectedWrapper.classList.remove('selected');
+            selectedWrapper = null;
+        }
+
+        var ctxMenu = document.getElementById('ctxMenu');
+        var ctxDraw = document.getElementById('ctxDraw');
+        var ctxTextBox = document.getElementById('ctxTextBox');
+        var ctxImage = document.getElementById('ctxImage');
+        var currentTextbox = null;
+        var currentImgWrapper = null;
+
+        var drawColorSwatches = document.getElementById('drawColorSwatches');
+        var drawCustomColor = document.getElementById('drawCustomColor');
+        var drawWidth = document.getElementById('drawWidth');
+        var drawWidthVal = document.getElementById('drawWidthVal');
+        var drawPressure = document.getElementById('drawPressure');
+        var drawModeGroup = document.getElementById('drawModeGroup');
+        var drawClearAll = document.getElementById('drawClearAll');
+
+        drawColorSwatches.addEventListener('click', function(e) {
+            var sw = e.target.closest('.color-swatch');
+            if (!sw) return;
+            var color = sw.getAttribute('data-color');
+            strokeColor = color;
+            isErasing = false;
+            if (drawMode === 'eraser') { drawMode = 'pen'; updateModeHighlight('pen'); canvas.classList.remove('eraser'); }
+            drawCustomColor.value = color;
+            var allSw = drawColorSwatches.querySelectorAll('.color-swatch');
+            for (var i = 0; i < allSw.length; i++) allSw[i].classList.remove('active');
+            sw.classList.add('active');
+            if (!isDrawing) {
+                isDrawing = true;
+                canvas.classList.add('active');
+                document.body.classList.add('drawing-mode');
+                canvas.classList.remove('eraser');
+            }
+            updateCursor();
+        });
+
+        drawCustomColor.addEventListener('input', function() {
+            strokeColor = drawCustomColor.value;
+            isErasing = false;
+            if (drawMode === 'eraser') { drawMode = 'pen'; updateModeHighlight('pen'); }
+            canvas.classList.remove('eraser');
+            var allSw = drawColorSwatches.querySelectorAll('.color-swatch');
+            for (var i = 0; i < allSw.length; i++) allSw[i].classList.remove('active');
+            if (!isDrawing) {
+                isDrawing = true;
+                canvas.classList.add('active');
+                document.body.classList.add('drawing-mode');
+            }
+            updateCursor();
+        });
+
+        drawWidth.addEventListener('input', function() {
+            strokeWidth = parseInt(drawWidth.value, 10) || 2;
+            drawWidthVal.textContent = strokeWidth + 'px';
+        });
+
+        drawPressure.addEventListener('change', function() {
+            pressureEnabled = drawPressure.checked;
+        });
+
+        function updateModeHighlight(mode) {
+            var labels = drawModeGroup.querySelectorAll('.ctx-radio');
+            for (var i = 0; i < labels.length; i++) {
+                if (labels[i].getAttribute('data-mode') === mode) labels[i].classList.add('active');
+                else labels[i].classList.remove('active');
+            }
+        }
+
+        function updateCursor() {
+            canvas.classList.remove('eraser', 'shape-mode');
+            if (drawMode === 'eraser') canvas.classList.add('eraser');
+            else if (drawMode !== 'pen') canvas.classList.add('shape-mode');
+        }
+
+        drawModeGroup.addEventListener('click', function(e) {
+            var label = e.target.closest('.ctx-radio');
+            if (!label) return;
+            var mode = label.getAttribute('data-mode');
+            drawMode = mode;
+            isErasing = (mode === 'eraser');
+            updateModeHighlight(mode);
+            updateCursor();
+
+            if (!isDrawing) {
+                isDrawing = true;
+                canvas.classList.add('active');
+                document.body.classList.add('drawing-mode');
+            }
+        });
+
+        drawClearAll.addEventListener('click', function() {
+            strokes = [];
+            currentStroke = null;
+            shapePreview = null;
+            redrawAll();
+            closeContextMenu();
+        });
+
+        var ctxFont = document.getElementById('ctxFont');
+        var ctxSize = document.getElementById('ctxSize');
+        var ctxColorGrid = document.getElementById('ctxColorGrid');
+        var ctxBgGrid = document.getElementById('ctxBgGrid');
+        var ctxBorderGrid = document.getElementById('ctxBorderGrid');
+        var ctxBold = document.getElementById('ctxBold');
+        var ctxItalic = document.getElementById('ctxItalic');
+        var ctxUnderline = document.getElementById('ctxUnderline');
+        var ctxBgTransparent = document.getElementById('ctxBgTransparent');
+        var ctxBorderStyle = document.getElementById('ctxBorderStyle');
+        var ctxRadius = document.getElementById('ctxRadius');
+        var ctxApply = document.getElementById('ctxApply');
+        var ctxReset = document.getElementById('ctxReset');
+        var ctxAlignRadios = document.querySelectorAll('input[name="ctxAlign"]');
+        var ctxAlignGroup = document.getElementById('ctxAlignGroup');
+
+        var ctxImgW = document.getElementById('ctxImgW');
+        var ctxImgH = document.getElementById('ctxImgH');
+        var ctxImgLockRatio = document.getElementById('ctxImgLockRatio');
+        var ctxImgOpacity = document.getElementById('ctxImgOpacity');
+        var ctxImgOpacityVal = document.getElementById('ctxImgOpacityVal');
+        var ctxImgRotate = document.getElementById('ctxImgRotate');
+        var ctxImgRotateVal = document.getElementById('ctxImgRotateVal');
+        var ctxImgApply = document.getElementById('ctxImgApply');
+        var ctxImgReset = document.getElementById('ctxImgReset');
+        var ctxImgDelete = document.getElementById('ctxImgDelete');
+
+        // === Tiện ích color grid ===
+        function setGridActive(grid, color) {
+            if (!grid) return false;
+            var target = (color || '').toUpperCase();
+            var swatches = grid.querySelectorAll('.color-swatch');
+            var found = false;
+            for (var i = 0; i < swatches.length; i++) {
+                var c = (swatches[i].getAttribute('data-color') || '').toUpperCase();
+                if (c === target) {
+                    swatches[i].classList.add('active');
+                    found = true;
+                } else {
+                    swatches[i].classList.remove('active');
+                }
+            }
+            return found;
+        }
+
+        function getGridActiveColor(grid, fallback) {
+            if (!grid) return fallback;
+            var sw = grid.querySelector('.color-swatch.active');
+            return sw ? sw.getAttribute('data-color') : fallback;
+        }
+
+        [ctxColorGrid, ctxBgGrid, ctxBorderGrid].forEach(function(grid) {
+            if (!grid) return;
+            grid.addEventListener('click', function(e) {
+                var sw = e.target.closest('.color-swatch');
+                if (!sw) return;
+                var all = grid.querySelectorAll('.color-swatch');
+                for (var i = 0; i < all.length; i++) all[i].classList.remove('active');
+                sw.classList.add('active');
+            });
+        });
+
+        function updateAlignHighlight(value) {
+            var labels = ctxAlignGroup.querySelectorAll('.ctx-radio');
+            for (var i = 0; i < labels.length; i++) {
+                if (labels[i].getAttribute('data-align') === value) labels[i].classList.add('active');
+                else labels[i].classList.remove('active');
+            }
+        }
+
+        ctxAlignGroup.addEventListener('click', function(e) {
+            var label = e.target.closest('.ctx-radio');
+            if (label) updateAlignHighlight(label.getAttribute('data-align'));
+        });
+
+        function rgbToHex(rgb) {
+            if (!rgb) return '#000000';
+            if (rgb.indexOf('#') === 0) return rgb.toUpperCase();
+            var m = rgb.match(/\d+/g);
+            if (!m || m.length < 3) return '#000000';
+            return '#' + [parseInt(m[0],10), parseInt(m[1],10), parseInt(m[2],10)].map(function(v) {
+                var h = v.toString(16);
+                return h.length === 1 ? '0' + h : h;
+            }).join('').toUpperCase();
+        }
+
+        function openDrawMenu(x, y) {
+            currentTextbox = null;
+            currentImgWrapper = null;
+            ctxDraw.style.display = 'block';
+            ctxTextBox.style.display = 'none';
+            ctxImage.style.display = 'none';
+
+            drawWidth.value = strokeWidth;
+            drawWidthVal.textContent = strokeWidth + 'px';
+            drawPressure.checked = pressureEnabled;
+
+            var allSw = drawColorSwatches.querySelectorAll('.color-swatch');
+            var matched = false;
+            for (var i = 0; i < allSw.length; i++) {
+                if (allSw[i].getAttribute('data-color').toLowerCase() === strokeColor.toLowerCase()) {
+                    allSw[i].classList.add('active');
+                    matched = true;
+                } else {
+                    allSw[i].classList.remove('active');
+                }
+            }
+            if (!matched) drawCustomColor.value = strokeColor;
+
+            updateModeHighlight(drawMode);
+
+            showMenuAt(x, y);
+        }
+
+        function openTextBoxMenu(tb, x, y) {
+            syncPlaceholderState(tb);
+
+            currentTextbox = tb;
+            currentImgWrapper = null;
+            ctxDraw.style.display = 'none';
+            ctxTextBox.style.display = 'block';
+            ctxImage.style.display = 'none';
+
+            var cs = window.getComputedStyle(tb);
+            var contentEl = tb.querySelector('.tb-content');
+
+            var fontSrc = (contentEl && contentEl.style.fontFamily) || tb.style.fontFamily || cs.fontFamily || 'Segoe UI';
+            var ff = fontSrc.replace(/['"]/g, '').split(',')[0].trim();
+            var found = false;
+            for (var i = 0; i < ctxFont.options.length; i++) {
+                if (ctxFont.options[i].value.toLowerCase() === ff.toLowerCase()) {
+                    ctxFont.selectedIndex = i; found = true; break;
+                }
+            }
+            if (!found) ctxFont.selectedIndex = 0;
+
+            var sizeSrc = (contentEl && contentEl.style.fontSize) || tb.style.fontSize || cs.fontSize;
+            ctxSize.value = parseInt(sizeSrc, 10) || 24;
+
+            // === Màu chữ ===
+            var colorSrc = (contentEl && contentEl.style.color) || tb.style.color || cs.color || '#000000';
+            var hexColor = rgbToHex(colorSrc);
+            if (!setGridActive(ctxColorGrid, hexColor)) {
+                setGridActive(ctxColorGrid, '#000000');
+            }
+
+            var boldSrc = (contentEl && contentEl.style.fontWeight) || tb.style.fontWeight || cs.fontWeight;
+            var italicSrc = (contentEl && contentEl.style.fontStyle) || tb.style.fontStyle || cs.fontStyle;
+            ctxBold.checked = (boldSrc === 'bold' || parseInt(boldSrc, 10) >= 700);
+            ctxItalic.checked = (italicSrc === 'italic');
+
+            var deco = (contentEl && contentEl.style.textDecoration) || tb.style.textDecoration || cs.textDecorationLine || cs.textDecoration || '';
+            ctxUnderline.checked = (deco.indexOf('underline') !== -1);
+
+            var align = tb.style.textAlign || cs.textAlign || 'left';
+            for (var k = 0; k < ctxAlignRadios.length; k++) {
+                ctxAlignRadios[k].checked = (ctxAlignRadios[k].value === align);
+            }
+            updateAlignHighlight(align);
+
+            // === Nền ===
+            var bg = tb.style.backgroundColor || cs.backgroundColor;
+            var isTransparent = !bg || bg === 'transparent' || bg === 'rgba(0, 0, 0, 0)';
+            if (isTransparent) {
+                ctxBgTransparent.checked = true;
+                setGridActive(ctxBgGrid, '#FFFFFF');
+            } else {
+                ctxBgTransparent.checked = false;
+                var hexBg = rgbToHex(bg);
+                if (!setGridActive(ctxBgGrid, hexBg)) {
+                    setGridActive(ctxBgGrid, '#FFFFFF');
+                }
+            }
+
+            // === Viền ===
+            var hexBorder = rgbToHex(tb.style.borderColor || cs.borderTopColor || '#8B4513');
+            if (!setGridActive(ctxBorderGrid, hexBorder)) {
+                setGridActive(ctxBorderGrid, '#8B4513');
+            }
+
+            var bStyle = (tb.style.borderStyle || cs.borderTopStyle || 'dashed').split(' ')[0];
+            for (var m = 0; m < ctxBorderStyle.options.length; m++) {
+                if (ctxBorderStyle.options[m].value === bStyle) { ctxBorderStyle.selectedIndex = m; break; }
+            }
+            ctxRadius.value = parseInt(tb.style.borderRadius || cs.borderTopLeftRadius, 10) || 0;
+
+            showMenuAt(x, y);
+        }
+
+        var imgOriginalRatio = 1;
+
+        function openImageMenu(wrapper, x, y) {
+            currentImgWrapper = wrapper;
+            currentTextbox = null;
+            ctxDraw.style.display = 'none';
+            ctxTextBox.style.display = 'none';
+            ctxImage.style.display = 'block';
+
+            ctxImgW.value = Math.round(wrapper.offsetWidth);
+            ctxImgH.value = Math.round(wrapper.offsetHeight);
+
+            var op = parseFloat(wrapper.style.opacity);
+            if (isNaN(op)) op = 1;
+            ctxImgOpacity.value = Math.round(op * 100);
+            ctxImgOpacityVal.textContent = Math.round(op * 100) + '%';
+
+            var rot = parseFloat(wrapper.dataset.rotate) || 0;
+            ctxImgRotate.value = rot;
+            ctxImgRotateVal.textContent = rot + '°';
+
+            var img = wrapper.querySelector('img');
+            if (img && img.naturalWidth) {
+                imgOriginalRatio = img.naturalWidth / img.naturalHeight;
+            }
+
+            showMenuAt(x, y);
+        }
+
+        function showMenuAt(x, y) {
+            ctxMenu.style.display = 'block';
+            var menuW = ctxMenu.offsetWidth;
+            var menuH = ctxMenu.offsetHeight;
+            var posX = x, posY = y;
+            if (posX + menuW > window.innerWidth) posX = window.innerWidth - menuW - 8;
+            if (posY + menuH > window.innerHeight) posY = window.innerHeight - menuH - 8;
+            if (posX < 4) posX = 4;
+            if (posY < 4) posY = 4;
+            ctxMenu.style.left = posX + 'px';
+            ctxMenu.style.top = posY + 'px';
+        }
+
+        function closeContextMenu() {
+            ctxMenu.style.display = 'none';
+            currentTextbox = null;
+            currentImgWrapper = null;
+        }
+
+        ctxApply.addEventListener('click', function() {
+            if (!currentTextbox) return;
+            var contentEl = currentTextbox.querySelector('.tb-content');
+
+            // Font family
+            currentTextbox.style.fontFamily = ctxFont.value;
+            if (contentEl) contentEl.style.fontFamily = ctxFont.value;
+
+            // Font size
+            currentTextbox.style.fontSize = ctxSize.value + 'px';
+            if (contentEl) contentEl.style.fontSize = ctxSize.value + 'px';
+
+            // Màu chữ từ grid
+            var newColor = getGridActiveColor(ctxColorGrid, '#000000');
+            currentTextbox.style.color = newColor;
+            if (contentEl) contentEl.style.color = newColor;
+
+            // Bold / Italic / Underline
+            currentTextbox.style.fontWeight = ctxBold.checked ? 'bold' : 'normal';
+            currentTextbox.style.fontStyle = ctxItalic.checked ? 'italic' : 'normal';
+            currentTextbox.style.textDecoration = ctxUnderline.checked ? 'underline' : 'none';
+            if (contentEl) {
+                contentEl.style.fontWeight = ctxBold.checked ? 'bold' : 'normal';
+                contentEl.style.fontStyle = ctxItalic.checked ? 'italic' : 'normal';
+                contentEl.style.textDecoration = ctxUnderline.checked ? 'underline' : 'none';
+            }
+
+            // Căn lề
+            var alignVal = 'left';
+            for (var i = 0; i < ctxAlignRadios.length; i++) {
+                if (ctxAlignRadios[i].checked) { alignVal = ctxAlignRadios[i].value; break; }
+            }
+            currentTextbox.style.textAlign = alignVal;
+
+            // Nền từ grid
+            if (ctxBgTransparent.checked) {
+                currentTextbox.style.background = 'transparent';
+            } else {
+                var newBg = getGridActiveColor(ctxBgGrid, '#FFFFFF');
+                currentTextbox.style.background = newBg;
+            }
+
+            // Viền từ grid
+            var bs = ctxBorderStyle.value;
+            var newBorder = getGridActiveColor(ctxBorderGrid, '#8B4513');
+            if (bs === 'none') currentTextbox.style.border = 'none';
+            else currentTextbox.style.border = '1px ' + bs + ' ' + newBorder;
+            currentTextbox.style.borderRadius = (parseInt(ctxRadius.value, 10) || 0) + 'px';
+
+            syncPlaceholderState(currentTextbox);
+
+            closeContextMenu();
+        });
+
+        ctxReset.addEventListener('click', function() {
+            if (!currentTextbox) return;
+            var contentEl = currentTextbox.querySelector('.tb-content');
+
+            currentTextbox.style.fontFamily = '"Segoe UI", Arial, sans-serif';
+            currentTextbox.style.fontSize = '24px';
+            currentTextbox.style.color = '#000000';
+            currentTextbox.style.fontWeight = 'bold';
+            currentTextbox.style.fontStyle = 'normal';
+            currentTextbox.style.textDecoration = 'none';
+            currentTextbox.style.textAlign = 'left';
+            currentTextbox.style.background = 'rgba(255, 255, 255, 0.85)';
+            currentTextbox.style.border = '1px dashed #8B4513';
+            currentTextbox.style.borderRadius = '0px';
+
+            if (contentEl) {
+                contentEl.style.fontFamily = '';
+                contentEl.style.fontSize = '';
+                contentEl.style.color = '';
+                contentEl.style.fontWeight = '';
+                contentEl.style.fontStyle = '';
+                contentEl.style.textDecoration = '';
+            }
+
+            // Đồng bộ grid active
+            setGridActive(ctxColorGrid, '#000000');
+            setGridActive(ctxBgGrid, '#FFFFFF');
+            setGridActive(ctxBorderGrid, '#8B4513');
+
+            syncPlaceholderState(currentTextbox);
+
+            closeContextMenu();
+        });
+
+        ctxImgW.addEventListener('input', function() {
+            if (ctxImgLockRatio.checked && imgOriginalRatio) {
+                ctxImgH.value = Math.round(parseInt(ctxImgW.value, 10) / imgOriginalRatio);
+            }
+        });
+        ctxImgH.addEventListener('input', function() {
+            if (ctxImgLockRatio.checked && imgOriginalRatio) {
+                ctxImgW.value = Math.round(parseInt(ctxImgH.value, 10) * imgOriginalRatio);
+            }
+        });
+
+        ctxImgOpacity.addEventListener('input', function() {
+            ctxImgOpacityVal.textContent = ctxImgOpacity.value + '%';
+        });
+        ctxImgRotate.addEventListener('input', function() {
+            ctxImgRotateVal.textContent = ctxImgRotate.value + '°';
+        });
+
+        ctxImgApply.addEventListener('click', function() {
+            if (!currentImgWrapper) return;
+            currentImgWrapper.style.width = (parseInt(ctxImgW.value, 10) || 100) + 'px';
+            currentImgWrapper.style.height = (parseInt(ctxImgH.value, 10) || 100) + 'px';
+            currentImgWrapper.style.opacity = (parseInt(ctxImgOpacity.value, 10) || 100) / 100;
+            var rot = parseInt(ctxImgRotate.value, 10) || 0;
+            currentImgWrapper.dataset.rotate = rot;
+            updateWrapperTransform(currentImgWrapper);
+            closeContextMenu();
+        });
+
+        ctxImgReset.addEventListener('click', function() {
+            if (!currentImgWrapper) return;
+            var img = currentImgWrapper.querySelector('img');
+            if (img && img.naturalWidth) {
+                currentImgWrapper.style.width = img.naturalWidth + 'px';
+                currentImgWrapper.style.height = img.naturalHeight + 'px';
+            }
+            currentImgWrapper.style.opacity = 1;
+            currentImgWrapper.dataset.rotate = 0;
+            updateWrapperTransform(currentImgWrapper);
+            closeContextMenu();
+        });
+
+        ctxImgDelete.addEventListener('click', function() {
+            if (!currentImgWrapper) return;
+            if (currentImgWrapper.parentNode) currentImgWrapper.parentNode.removeChild(currentImgWrapper);
+            closeContextMenu();
+        });
+
+        function updateWrapperTransform(wrapper) {
+            var rot = parseFloat(wrapper.dataset.rotate) || 0;
+            wrapper.style.transform = 'rotate(' + rot + 'deg)';
+        }
+
+        document.addEventListener('mousedown', function(e) {
+            if (ctxMenu.style.display === 'block') {
+                if (!ctxMenu.contains(e.target)) closeContextMenu();
+            }
+        });
+
+        ctxMenu.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+
+        // ========== SPEECH RECOGNITION ==========
+        var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        var recognition = null;
+        var isListening = false;
+        var activeMicTextbox = null;
+        var PLACEHOLDER = 'Nhập text...';
+
+        function getContentEl(tb) {
+            return tb.querySelector('.tb-content');
+        }
+
+        function isPlaceholder(el) {
+            return el && el.classList.contains('placeholder');
+        }
+
+        function syncPlaceholderState(tb) {
+            var el = getContentEl(tb);
+            if (!el) return;
+            var txt = (el.textContent || '').trim();
+            if (txt === '' || txt === PLACEHOLDER) {
+                el.classList.add('placeholder');
+                el.textContent = PLACEHOLDER;
+                tb._speechBase = '';
+            } else {
+                el.classList.remove('placeholder');
+                tb._speechBase = txt + ' ';
+            }
+        }
+
+        function createRecognition() {
+            if (!SpeechRecognition) return null;
+            var rec = new SpeechRecognition();
+            rec.continuous = true;
+            rec.interimResults = true;
+            rec.lang = 'vi-VN';
+
+            rec.onresult = function(event) {
+                if (!activeMicTextbox) return;
+                var el = getContentEl(activeMicTextbox);
+                if (!el) return;
+
+                var finalTranscript = '';
+                var interimTranscript = '';
+                for (var i = event.resultIndex; i < event.results.length; i++) {
+                    var transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) finalTranscript += transcript;
+                    else interimTranscript += transcript;
+                }
+
+                var base = activeMicTextbox._speechBase || '';
+                var combined = base + finalTranscript + interimTranscript;
+
+                if (combined.trim().length > 0) {
+                    el.classList.remove('placeholder');
+                    el.textContent = combined;
+                }
+
+                if (finalTranscript) {
+                    activeMicTextbox._speechBase = (base + finalTranscript);
+                    if (!/\s$/.test(activeMicTextbox._speechBase)) {
+                        activeMicTextbox._speechBase += ' ';
+                    }
+                }
+            };
+
+            rec.onerror = function(event) {
+                console.warn('Speech recognition error:', event.error);
+                if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+                    stopSpeechRecognition();
+                    if (isBrave) {
+                        alert('Brave đã chặn Web Speech API.\n\n' +
+                              'Cách khắc phục:\n' +
+                              '1. Mở brave://settings/system\n' +
+                              '2. Bật "Use Google Services for WebRTC and Push Messaging"\n' +
+                              '3. Khởi động lại Brave và thử lại.\n\n' +
+                              'Hoặc dùng Chrome/Edge để mic hoạt động ổn định hơn.');
+                    }
+                }
+            };
+
+            rec.onend = function() {
+                if (isListening && activeMicTextbox) {
+                    try { rec.start(); } catch (ex) {}
+                }
+            };
+
+            return rec;
+        }
+
+        function startSpeechRecognition(tb) {
+            if (!SpeechRecognition) {
+                alert('Trình duyệt không hỗ trợ Web Speech API.\nVui lòng dùng Chrome / Edge / Safari.');
+                return;
+            }
+
+            if (isListening && activeMicTextbox === tb) {
+                stopSpeechRecognition();
+                return;
+            }
+
+            if (isListening && activeMicTextbox && activeMicTextbox !== tb) {
+                stopSpeechRecognition();
+            }
+
+            if (!recognition) recognition = createRecognition();
+            if (!recognition) return;
+
+            activeMicTextbox = tb;
+            var el = getContentEl(tb);
+
+            if (isPlaceholder(el)) {
+                tb._speechBase = '';
+            } else {
+                var t = (el.textContent || '').replace(/\s+$/, '');
+                tb._speechBase = t ? (t + ' ') : '';
+            }
+
+            isListening = true;
+            tb.classList.add('mic-active');
+            var micBtn = tb.querySelector('.tb-mic');
+            if (micBtn) micBtn.classList.add('listening');
+
+            if (tb.contentEditable !== 'true') {
+                tb.contentEditable = 'true';
+                tb.classList.add('editing');
+            }
+
+            try {
+                recognition.start();
+            } catch (ex) {
+                console.warn('Không thể start speech recognition:', ex);
+                if (isBrave) {
+                    alert('Brave chặn Web Speech API.\n\nVào brave://settings/system → bật "Use Google Services for WebRTC and Push Messaging", sau đó khởi động lại Brave.\n\nHoặc dùng Chrome/Edge.');
+                }
+            }
+        }
+
+        function stopSpeechRecognition() {
+            isListening = false;
+            if (recognition) {
+                try { recognition.stop(); } catch (ex) {}
+            }
+            if (activeMicTextbox) {
+                activeMicTextbox.classList.remove('mic-active');
+                var micBtn = activeMicTextbox.querySelector('.tb-mic');
+                if (micBtn) micBtn.classList.remove('listening');
+            }
+            activeMicTextbox = null;
+        }
+
+        // ========== TEXTBOX RESIZE ==========
+        function startTextboxResize(tb, startEvent, pos) {
+            var startX = startEvent.clientX;
+            var startY = startEvent.clientY;
+            var rect = tb.getBoundingClientRect();
+            var startW = rect.width;
+            var startH = rect.height;
+            var startL = rect.left + window.scrollX;
+            var startT = rect.top + window.scrollY;
+
+            var cs = window.getComputedStyle(tb);
+            var minW = parseFloat(cs.minWidth) || 120;
+            var minH = parseFloat(cs.minHeight) || 30;
+
+            function moveHandler(me) {
+                var dx = me.clientX - startX;
+                var dy = me.clientY - startY;
+                var newW = startW, newH = startH, newL = startL, newT = startT;
+
+                if (pos.indexOf('e') !== -1) newW = startW + dx;
+                if (pos.indexOf('w') !== -1) { newW = startW - dx; newL = startL + dx; }
+                if (pos.indexOf('s') !== -1) newH = startH + dy;
+                if (pos.indexOf('n') !== -1) { newH = startH - dy; newT = startT + dy; }
+
+                if (newW < minW) { newW = minW; if (pos.indexOf('w') !== -1) newL = startL + startW - minW; }
+                if (newH < minH) { newH = minH; if (pos.indexOf('n') !== -1) newT = startT + startH - minH; }
+
+                var maxW = window.innerWidth * 0.8;
+                if (newW > maxW) {
+                    newW = maxW;
+                    if (pos.indexOf('w') !== -1) newL = startL + startW - maxW;
+                }
+
+                newL = Math.max(0, newL);
+                newT = Math.max(0, newT);
+
+                tb.style.width = newW + 'px';
+                tb.style.height = newH + 'px';
+                tb.style.left = newL + 'px';
+                tb.style.top = newT + 'px';
+            }
+            function upHandler() {
+                document.removeEventListener('mousemove', moveHandler);
+                document.removeEventListener('mouseup', upHandler);
+            }
+            document.addEventListener('mousemove', moveHandler);
+            document.addEventListener('mouseup', upHandler);
+        }
+
+        // ========== TEXTBOX ==========
+        function createTextbox(x, y, withMic) {
+            var tb = document.createElement('div');
+            tb.className = 'textbox';
+            tb.contentEditable = 'false';
+            tb.style.left = (x || 60) + 'px';
+            tb.style.top = (y || 60) + 'px';
+            tb.style.fontFamily = '"Segoe UI", Arial, sans-serif';
+            tb.style.fontSize = '24px';
+            tb.style.fontWeight = 'bold';
+            tb.style.color = '#000000';
+
+            var content = document.createElement('span');
+            content.className = 'tb-content placeholder';
+            content.textContent = PLACEHOLDER;
+            content.style.color = '#000000';
+            content.style.fontFamily = '"Segoe UI", Arial, sans-serif';
+            content.style.fontSize = '24px';
+            content.style.fontWeight = 'bold';
+            tb.appendChild(content);
+
+            tb._speechBase = '';
+
+            content.addEventListener('input', function() {
+                syncPlaceholderState(tb);
+            });
+
+            var del = document.createElement('span');
+            del.className = 'tb-delete';
+            del.textContent = '×';
+            del.title = 'Xoá textbox';
+            tb.appendChild(del);
+
+            del.addEventListener('mousedown', function(ev) {
+                ev.stopPropagation();
+                ev.preventDefault();
+                if (activeMicTextbox === tb) stopSpeechRecognition();
+                if (tb.parentNode) tb.parentNode.removeChild(tb);
+            });
+
+            var mic = document.createElement('span');
+            mic.className = 'tb-mic';
+            mic.textContent = '🎤';
+            mic.title = 'Nhấn để nhập bằng giọng nói';
+            tb.appendChild(mic);
+
+            mic.addEventListener('mousedown', function(ev) {
+                ev.stopPropagation();
+                ev.preventDefault();
+                startSpeechRecognition(tb);
+            });
+
+            var positions = ['nw','n','ne','e','se','s','sw','w'];
+            positions.forEach(function(pos) {
+                var h = document.createElement('div');
+                h.className = 'resize-handle ' + pos;
+                h.dataset.pos = pos;
+                tb.appendChild(h);
+                h.addEventListener('mousedown', function(ev) {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    startTextboxResize(tb, ev, pos);
+                });
+            });
+
+            tb.addEventListener('dblclick', function(ev) {
+                ev.stopPropagation();
+                enterEditMode(tb);
+            });
+
+            tb.addEventListener('contextmenu', function(ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                if (tb.contentEditable === 'true') tb.blur();
+                deselectAll();
+                openTextBoxMenu(tb, ev.clientX, ev.clientY);
+            });
+
+            tb.addEventListener('mousedown', function(ev) {
+                if (tb.contentEditable === 'true') return;
+                if (ev.target === del || ev.target === mic) return;
+                if (ev.target.classList && ev.target.classList.contains('resize-handle')) return;
+                if (ev.button === 2) return;
+                ev.preventDefault();
+                ev.stopPropagation();
+
+                var rect = tb.getBoundingClientRect();
+                var startX = ev.clientX;
+                var startY = ev.clientY;
+                var startLeft = rect.left + window.scrollX;
+                var startTop = rect.top + window.scrollY;
+
+                function moveHandler(me) {
+                    var dx = me.clientX - startX;
+                    var dy = me.clientY - startY;
+                    tb.style.left = Math.max(0, startLeft + dx) + 'px';
+                    tb.style.top = Math.max(0, startTop + dy) + 'px';
+                }
+                function upHandler() {
+                    document.removeEventListener('mousemove', moveHandler);
+                    document.removeEventListener('mouseup', upHandler);
+                }
+                document.addEventListener('mousemove', moveHandler);
+                document.addEventListener('mouseup', upHandler);
+            });
+
+            tb.addEventListener('blur', function() {
+                if (activeMicTextbox !== tb) exitEditMode(tb);
+                syncPlaceholderState(tb);
+            });
+
+            tb.addEventListener('keydown', function(ev) {
+                if (ev.key === 'Escape') { ev.preventDefault(); tb.blur(); }
+                ev.stopPropagation();
+            });
+
+            board.appendChild(tb);
+
+            syncPlaceholderState(tb);
+
+            if (withMic) {
+                setTimeout(function() { startSpeechRecognition(tb); }, 200);
+            }
+
+            return tb;
+        }
+
+        function enterEditMode(tb) {
+            tb.contentEditable = 'true';
+            tb.classList.add('editing');
+            tb.focus();
+            var contentEl = getContentEl(tb);
+            if (contentEl && isPlaceholder(contentEl)) {
+                var range = document.createRange();
+                range.selectNodeContents(contentEl);
+                var sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+        }
+
+        function exitEditMode(tb) {
+            tb.contentEditable = 'false';
+            tb.classList.remove('editing');
+            syncPlaceholderState(tb);
+        }
+
+        // ========== EXCEL TABLE (HANDSONTABLE) ==========
+        var excelInstances = [];
+
+        function createExcelTable(x, y) {
+            // Nếu chưa có vị trí, đặt ở giữa màn hình
+            if (typeof x !== 'number' || typeof y !== 'number') {
+                x = window.scrollX + window.innerWidth / 2 - 250;
+                y = window.scrollY + window.innerHeight / 2 - 130;
+            }
+
+            // Wrapper
+            var wrapper = document.createElement('div');
+            wrapper.className = 'excel-wrapper';
+            wrapper.style.left = Math.max(0, x) + 'px';
+            wrapper.style.top = Math.max(0, y) + 'px';
+            wrapper.style.width = '500px';
+            wrapper.style.height = '260px';
+
+            // Header
+            var header = document.createElement('div');
+            header.className = 'excel-header';
+
+            var titleSpan = document.createElement('span');
+            titleSpan.className = 'excel-title';
+            titleSpan.innerHTML = '📊 Bảng tính (E)';
+            header.appendChild(titleSpan);
+
+            var closeBtn = document.createElement('span');
+            closeBtn.className = 'excel-close';
+            closeBtn.textContent = '×';
+            closeBtn.title = 'Xoá bảng tính';
+            header.appendChild(closeBtn);
+
+            wrapper.appendChild(header);
+
+            // Container cho Handsontable
+            var container = document.createElement('div');
+            container.className = 'excel-container';
+            wrapper.appendChild(container);
+
+            // Resize handles
+            var positions = ['nw','n','ne','e','se','s','sw','w'];
+            positions.forEach(function(pos) {
+                var h = document.createElement('div');
+                h.className = 'excel-resize-handle ' + pos;
+                h.dataset.pos = pos;
+                wrapper.appendChild(h);
+                h.addEventListener('mousedown', function(ev) {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    startExcelResize(wrapper, ev, pos);
+                });
+            });
+
+            // Close button
+            closeBtn.addEventListener('mousedown', function(ev) {
+                ev.stopPropagation();
+                ev.preventDefault();
+                // Destroy Handsontable instance
+                var instance = wrapper._hot;
+                if (instance) {
+                    try { instance.destroy(); } catch (ex) {}
+                }
+                // Remove khỏi danh sách
+                var idx = excelInstances.indexOf(instance);
+                if (idx !== -1) excelInstances.splice(idx, 1);
+                if (wrapper.parentNode) wrapper.parentNode.removeChild(wrapper);
+            });
+
+            // Di chuyển bằng header
+            header.addEventListener('mousedown', function(ev) {
+                if (isDrawing) return;
+                if (ev.button === 2) return;
+                ev.preventDefault();
+                ev.stopPropagation();
+
+                // Select wrapper
+                deselectAll();
+                wrapper.classList.add('selected');
+                selectedWrapper = wrapper;
+
+                var startX = ev.clientX;
+                var startY = ev.clientY;
+                var startLeft = parseInt(wrapper.style.left, 10) || 0;
+                var startTop = parseInt(wrapper.style.top, 10) || 0;
+
+                function moveHandler(me) {
+                    var dx = me.clientX - startX;
+                    var dy = me.clientY - startY;
+                    wrapper.style.left = Math.max(0, startLeft + dx) + 'px';
+                    wrapper.style.top = Math.max(0, startTop + dy) + 'px';
+                }
+                function upHandler() {
+                    document.removeEventListener('mousemove', moveHandler);
+                    document.removeEventListener('mouseup', upHandler);
+                }
+                document.addEventListener('mousemove', moveHandler);
+                document.addEventListener('mouseup', upHandler);
+            });
+
+            // Click vào wrapper (không phải header) để select
+            wrapper.addEventListener('mousedown', function(ev) {
+                if (isDrawing) return;
+                if (ev.button === 2) return;
+                if (ev.target.closest('.excel-header')) return;
+                // Không select khi đang click vào ô của Handsontable (trừ khi click vào viền)
+                if (ev.target.closest('.excel-container')) {
+                    deselectAll();
+                    return;
+                }
+                deselectAll();
+                wrapper.classList.add('selected');
+                selectedWrapper = wrapper;
+            });
+
+            board.appendChild(wrapper);
+
+            // Khởi tạo Handsontable
+            var data = [];
+            for (var i = 0; i < 3; i++) {
+                data.push(['', '', '']);
+            }
+
+            var hot = new Handsontable(container, {
+                data: data,
+                rowHeaders: true,
+                colHeaders: true,
+                width: '100%',
+                height: '100%',
+                licenseKey: 'non-commercial-and-evaluation',
+                formulas: {
+                    engine: HyperFormula
+                },
+                cells: function() {
+                    return {
+                        className: 'htCenter htMiddle'
+                    };
+                },
+                afterChange: function() {
+                    // Không cần làm gì đặc biệt
+                }
+            });
+
+            wrapper._hot = hot;
+            excelInstances.push(hot);
+
+            // Resize Handsontable khi container thay đổi kích thước
+            if (window.ResizeObserver) {
+                var ro = new ResizeObserver(function() {
+                    try { hot.refreshDimensions(); } catch (ex) {}
+                });
+                ro.observe(container);
+            }
+
+            // Select wrapper ban đầu
+            deselectAll();
+            wrapper.classList.add('selected');
+            selectedWrapper = wrapper;
+
+            return wrapper;
+        }
+
+        function startExcelResize(wrapper, startEvent, pos) {
+            var startX = startEvent.clientX;
+            var startY = startEvent.clientY;
+            var startW = wrapper.offsetWidth;
+            var startH = wrapper.offsetHeight;
+            var startL = parseInt(wrapper.style.left, 10) || 0;
+            var startT = parseInt(wrapper.style.top, 10) || 0;
+
+            var minW = 260;
+            var minH = 160;
+
+            function moveHandler(me) {
+                var dx = me.clientX - startX;
+                var dy = me.clientY - startY;
+                var newW = startW, newH = startH, newL = startL, newT = startT;
+
+                if (pos.indexOf('e') !== -1) newW = startW + dx;
+                if (pos.indexOf('w') !== -1) { newW = startW - dx; newL = startL + dx; }
+                if (pos.indexOf('s') !== -1) newH = startH + dy;
+                if (pos.indexOf('n') !== -1) { newH = startH - dy; newT = startT + dy; }
+
+                if (newW < minW) { newW = minW; if (pos.indexOf('w') !== -1) newL = startL + startW - minW; }
+                if (newH < minH) { newH = minH; if (pos.indexOf('n') !== -1) newT = startT + startH - minH; }
+
+                newL = Math.max(0, newL);
+                newT = Math.max(0, newT);
+
+                wrapper.style.width = newW + 'px';
+                wrapper.style.height = newH + 'px';
+                wrapper.style.left = newL + 'px';
+                wrapper.style.top = newT + 'px';
+            }
+            function upHandler() {
+                document.removeEventListener('mousemove', moveHandler);
+                document.removeEventListener('mouseup', upHandler);
+            }
+            document.addEventListener('mousemove', moveHandler);
+            document.addEventListener('mouseup', upHandler);
+        }
+
+        // ========== IMAGE WRAPPER ==========
+        function createImageWrapper(src) {
+            var wrapper = document.createElement('div');
+            wrapper.className = 'img-wrapper';
+            wrapper.dataset.rotate = 0;
+            wrapper.style.left = '40px';
+            wrapper.style.top = '40px';
+            wrapper.style.width = '300px';
+            wrapper.style.height = 'auto';
+
+            var img = document.createElement('img');
+            img.src = src;
+            img.draggable = false;
+            img.alt = '';
+            img.addEventListener('dragstart', function(e) { e.preventDefault(); });
+            wrapper.appendChild(img);
+
+            var positions = ['nw','n','ne','e','se','s','sw','w'];
+            positions.forEach(function(pos) {
+                var h = document.createElement('div');
+                h.className = 'resize-handle ' + pos;
+                h.dataset.pos = pos;
+                wrapper.appendChild(h);
+                h.addEventListener('mousedown', function(ev) {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    startResize(wrapper, ev, pos);
+                });
+            });
+
+            var del = document.createElement('span');
+            del.className = 'img-delete';
+            del.textContent = '×';
+            del.title = 'Xoá ảnh';
+            wrapper.appendChild(del);
+            del.addEventListener('mousedown', function(ev) {
+                ev.stopPropagation();
+                ev.preventDefault();
+                if (wrapper.parentNode) wrapper.parentNode.removeChild(wrapper);
+            });
+
+            img.onload = function() {
+                var nw = img.naturalWidth;
+                var nh = img.naturalHeight;
+                if (nw && nh) {
+                    wrapper.style.height = (300 * nh / nw) + 'px';
+                }
+                updateBoardHeight();
+            };
+
+            wrapper.addEventListener('mousedown', function(ev) {
+                if (isDrawing) return;
+                if (ev.button === 2) return;
+                ev.preventDefault();
+                ev.stopPropagation();
+                deselectAll();
+                wrapper.classList.add('selected');
+                selectedWrapper = wrapper;
+
+                var startX = ev.clientX;
+                var startY = ev.clientY;
+                var startLeft = parseInt(wrapper.style.left, 10) || 0;
+                var startTop = parseInt(wrapper.style.top, 10) || 0;
+
+                function moveHandler(me) {
+                    var dx = me.clientX - startX;
+                    var dy = me.clientY - startY;
+                    wrapper.style.left = Math.max(0, startLeft + dx) + 'px';
+                    wrapper.style.top = Math.max(0, startTop + dy) + 'px';
+                }
+                function upHandler() {
+                    document.removeEventListener('mousemove', moveHandler);
+                    document.removeEventListener('mouseup', upHandler);
+                }
+                document.addEventListener('mousemove', moveHandler);
+                document.addEventListener('mouseup', upHandler);
+            });
+
+            wrapper.addEventListener('contextmenu', function(ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                deselectAll();
+                wrapper.classList.add('selected');
+                selectedWrapper = wrapper;
+                openImageMenu(wrapper, ev.clientX, ev.clientY);
+            });
+
+            board.appendChild(wrapper);
+            return wrapper;
+        }
+
+        function startResize(wrapper, startEvent, pos) {
+            var startX = startEvent.clientX;
+            var startY = startEvent.clientY;
+            var startW = wrapper.offsetWidth;
+            var startH = wrapper.offsetHeight;
+            var startL = parseInt(wrapper.style.left, 10) || 0;
+            var startT = parseInt(wrapper.style.top, 10) || 0;
+
+            var img = wrapper.querySelector('img');
+            var naturalRatio = img && img.naturalWidth ? img.naturalWidth / img.naturalHeight : 1;
+            var keepRatio = !startEvent.shiftKey;
+
+            function moveHandler(me) {
+                var dx = me.clientX - startX;
+                var dy = me.clientY - startY;
+                var newW = startW, newH = startH, newL = startL, newT = startT;
+
+                if (pos.indexOf('e') !== -1) newW = startW + dx;
+                if (pos.indexOf('w') !== -1) { newW = startW - dx; newL = startL + dx; }
+                if (pos.indexOf('s') !== -1) newH = startH + dy;
+                if (pos.indexOf('n') !== -1) { newH = startH - dy; newT = startT + dy; }
+
+                if (newW < 20) { newW = 20; if (pos.indexOf('w') !== -1) newL = startL + startW - 20; }
+                if (newH < 20) { newH = 20; if (pos.indexOf('n') !== -1) newT = startT + startH - 20; }
+
+                if (keepRatio) {
+                    if (pos === 'n' || pos === 's') {
+                        newW = newH * naturalRatio;
+                    } else if (pos === 'e' || pos === 'w') {
+                        newH = newW / naturalRatio;
+                    } else {
+                        if (Math.abs(dx) > Math.abs(dy)) newH = newW / naturalRatio;
+                        else newW = newH * naturalRatio;
+                        if (pos.indexOf('w') !== -1) newL = startL + startW - newW;
+                        if (pos.indexOf('n') !== -1) newT = startT + startH - newH;
+                    }
+                }
+
+                wrapper.style.width = newW + 'px';
+                wrapper.style.height = newH + 'px';
+                wrapper.style.left = newL + 'px';
+                wrapper.style.top = newT + 'px';
+            }
+            function upHandler() {
+                document.removeEventListener('mousemove', moveHandler);
+                document.removeEventListener('mouseup', upHandler);
+            }
+            document.addEventListener('mousemove', moveHandler);
+            document.addEventListener('mouseup', upHandler);
+        }
+
+        board.addEventListener('mousedown', function(e) {
+            if (isDrawing) return;
+            if (e.target === board || e.target === canvas) deselectAll();
+        });
+
+        // ========== PASTE IMAGE ==========
+        function handlePaste() {
+            if (navigator.clipboard && navigator.clipboard.read) {
+                navigator.clipboard.read().then(function(items) {
+                    for (var i = 0; i < items.length; i++) {
+                        var item = items[i];
+                        for (var j = 0; j < item.types.length; j++) {
+                            var type = item.types[j];
+                            if (type.indexOf('image') === 0) {
+                                item.getType(type).then(function(blob) {
+                                    var url = URL.createObjectURL(blob);
+                                    addImageFromSrc(url);
+                                });
+                                return;
+                            }
+                        }
+                    }
+                }).catch(function(err) {
+                    console.log('Clipboard API không khả dụng:', err);
+                });
+            }
+        }
+
+        document.addEventListener('paste', function(e) {
+            var isInTextbox = e.target.classList && e.target.classList.contains('textbox');
+            if (isInTextbox) {
+                setTimeout(function() {
+                    var tb = e.target.closest('.textbox');
+                    if (tb) syncPlaceholderState(tb);
+                }, 0);
+                return;
+            }
+            // Không xử lý paste ảnh khi đang focus vào bảng tính
+            if (e.target.closest && e.target.closest('.excel-wrapper')) return;
+
+            var items = (e.clipboardData || window.clipboardData).items;
+            if (!items) return;
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf('image') === 0) {
+                    var blob = items[i].getAsFile();
+                    if (blob) {
+                        var url = URL.createObjectURL(blob);
+                        addImageFromSrc(url);
+                        e.preventDefault();
+                    }
+                }
+            }
+        });
+
+        function addImageFromSrc(src) {
+            var wrapper = createImageWrapper(src);
+            var cx = window.scrollX + window.innerWidth / 2 - 150;
+            var cy = window.scrollY + window.innerHeight / 2 - 100;
+            wrapper.style.left = Math.max(0, cx) + 'px';
+            wrapper.style.top = Math.max(0, cy) + 'px';
+            updateBoardHeight();
+            setTimeout(resizeCanvas, 100);
+        }
+
+        function updateBoardHeight() {
+            board.style.minHeight = '100vh';
+        }
+
+        // ========== BÀN PHÍM ==========
+        document.addEventListener('keydown', function(e) {
+            var tag = (e.target.tagName || '').toLowerCase();
+            var isInTextbox = e.target.classList && e.target.classList.contains('textbox');
+            if (isInTextbox) return;
+            if (tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
+            // Không xử lý phím tắt khi đang focus vào bảng tính
+            if (e.target.closest && e.target.closest('.excel-wrapper')) return;
+
+            var key = e.key;
+            switch (key) {
+                case 'v': case 'V':
+                    isDrawing = !isDrawing;
+                    if (isDrawing) {
+                        canvas.classList.add('active');
+                        document.body.classList.add('drawing-mode');
+                        deselectAll();
+                        updateCursor();
+                    } else {
+                        canvas.classList.remove('active');
+                        canvas.classList.remove('eraser');
+                        canvas.classList.remove('shape-mode');
+                        document.body.classList.remove('drawing-mode');
+                        isErasing = false;
+                        isPointerDown = false;
+                        currentStroke = null;
+                        shapePreview = null;
+                    }
+                    e.preventDefault();
+                    break;
+
+                case 'z': case 'Z':
+                    var mx = window.innerWidth / 2;
+                    var my = window.innerHeight / 2;
+                    openDrawMenu(mx, my);
+                    e.preventDefault();
+                    break;
+
+                case 'a': case 'A':
+                    var viewCenterX = window.scrollX + window.innerWidth / 2 - 60;
+                    var viewCenterY = window.scrollY + window.innerHeight / 2 - 15;
+                    createTextbox(viewCenterX, viewCenterY, true);
+                    e.preventDefault();
+                    break;
+
+                // === E = CHÈN BẢNG TÍNH EXCEL ===
+                case 'e': case 'E':
+                    createExcelTable();
+                    e.preventDefault();
+                    break;
+
+                case '0':
+                    if (isDrawing) { strokeColor = '#0066CC'; isErasing = false; canvas.classList.remove('eraser'); }
+                    e.preventDefault();
+                    break;
+                case '1':
+                    if (isDrawing) { strokeColor = '#FF0000'; isErasing = false; canvas.classList.remove('eraser'); }
+                    e.preventDefault();
+                    break;
+                case 'd': case 'D':
+                    if (isDrawing) { strokeColor = '#000000'; isErasing = false; canvas.classList.remove('eraser'); }
+                    e.preventDefault();
+                    break;
+                case 'n': case 'N':
+                    if (isDrawing) { strokeColor = DEFAULT_COLOR; isErasing = false; canvas.classList.remove('eraser'); }
+                    e.preventDefault();
+                    break;
+                case 'b': case 'B':
+                    if (isDrawing) {
+                        strokeWidth += 1;
+                        if (strokeWidth > 50) strokeWidth = 50;
+                        isErasing = false;
+                        canvas.classList.remove('eraser');
+                    }
+                    e.preventDefault();
+                    break;
+                case 'm': case 'M':
+                    if (isDrawing) {
+                        strokeWidth -= 1;
+                        if (strokeWidth < 1) strokeWidth = 1;
+                        isErasing = false;
+                        canvas.classList.remove('eraser');
+                    }
+                    e.preventDefault();
+                    break;
+                case '2':
+                    if (isDrawing) { strokeWidth = DEFAULT_WIDTH; isErasing = false; canvas.classList.remove('eraser'); }
+                    e.preventDefault();
+                    break;
+                case '3':
+                    if (isDrawing) { drawMode = 'eraser'; isErasing = true; updateModeHighlight('eraser'); updateCursor(); }
+                    e.preventDefault();
+                    break;
+
+                // === PHÍM TẮT CÔNG CỤ ===
+                case 'k': case 'K':
+                    if (isDrawing) {
+                        drawMode = 'pen';
+                        isErasing = false;
+                        canvas.classList.remove('eraser');
+                        updateModeHighlight('pen');
+                        updateCursor();
+                    }
+                    e.preventDefault();
+                    break;
+                case 'l': case 'L':
+                    if (isDrawing) {
+                        drawMode = 'line';
+                        isErasing = false;
+                        canvas.classList.remove('eraser');
+                        updateModeHighlight('line');
+                        updateCursor();
+                    }
+                    e.preventDefault();
+                    break;
+                case 'i': case 'I':
+                    if (isDrawing) {
+                        drawMode = 'arrow';
+                        isErasing = false;
+                        canvas.classList.remove('eraser');
+                        updateModeHighlight('arrow');
+                        updateCursor();
+                    }
+                    e.preventDefault();
+                    break;
+                case 'o': case 'O':
+                    if (isDrawing) {
+                        drawMode = 'circle';
+                        isErasing = false;
+                        canvas.classList.remove('eraser');
+                        updateModeHighlight('circle');
+                        updateCursor();
+                    }
+                    e.preventDefault();
+                    break;
+                case 'p': case 'P':
+                    handlePaste();
+                    e.preventDefault();
+                    break;
+
+                case '4':
+                    document.body.classList.add('gray-bg');
+                    e.preventDefault();
+                    break;
+                case '5':
+                    document.body.classList.remove('gray-bg');
+                    e.preventDefault();
+                    break;
+
+                case 'x': case 'X':
+                    if (isDrawing) {
+                        strokes = [];
+                        currentStroke = null;
+                        shapePreview = null;
+                        redrawAll();
+                    }
+                    e.preventDefault();
+                    break;
+
+                case 't': case 'T':
+                    var tx = window.scrollX + window.innerWidth / 2 - 60;
+                    var ty = window.scrollY + window.innerHeight / 2 - 15;
+                    var newTb = createTextbox(tx, ty);
+                    setTimeout(function() { enterEditMode(newTb); }, 50);
+                    e.preventDefault();
+                    break;
+
+                default:
+                    break;
+            }
+        }, true);
+
+        // ========== KHỞI TẠO ==========
+        function init() {
+            resizeCanvas();
+            updateBoardHeight();
+            updateModeHighlight('pen');
+            updateCursor();
+        }
+
+        window.addEventListener('load', function() { setTimeout(init, 100); });
+
+        window.addEventListener('resize', function() {
+            updateBoardHeight();
+            resizeCanvas();
+        });
+
+        if (window.ResizeObserver) {
+            var ro = new ResizeObserver(function() { resizeCanvas(); });
+            ro.observe(board);
+        }
+
+        document.addEventListener('mousedown', function(e) {
+            if (e.button === 2) e.preventDefault();
+        });
+
+    })();
+    </script>
+
+</body>
+</html>
