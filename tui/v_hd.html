@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng dẫn sử dụng - Drawing Board</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        /* ============================================================
+           BẢNG MÀU (chỉ dùng 9 màu được chỉ định)
+           #8B5A2B  - Nâu
+           #8B4513  - Nâu đậm
+           #FFFFFF  - Trắng
+           #F5F5F5  - Xám rất nhạt
+           #F5F5DC  - Be
+           #F5DEB3  - Lúa mì
+           #D3D3D3  - Xám nhạt
+           #0066CC  - Xanh dương
+           #004488  - Xanh đậm
+           ============================================================ */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #F5F5F5;
+            color: #8B4513;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* ============ HERO ============ */
+        .hero {
+            background: linear-gradient(135deg, #8B4513 0%, #8B5A2B 60%, #004488 100%);
+            color: #FFFFFF;
+            padding: 55px 20px 65px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 4px solid #0066CC;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -10%;
+            width: 120%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-size: 2.3rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
+            color: #FFFFFF;
+        }
+
+        .hero .subtitle {
+            font-size: 1.05rem;
+            opacity: 0.92;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+            color: #F5F5DC;
+        }
+
+        .hero .badge {
+            display: inline-block;
+            margin-top: 18px;
+            background: rgba(245, 245, 220, 0.15);
+            border: 1px solid rgba(245, 245, 220, 0.4);
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            position: relative;
+            z-index: 1;
+            color: #F5F5DC;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        /* ============ CONTAINER ============ */
+        .container {
+            max-width: 1100px;
+            margin: -30px auto 0;
+            padding: 0 20px 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ============ TOC ============ */
+        .toc {
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 22px 26px;
+            box-shadow: 0 4px 20px rgba(139, 69, 19, 0.10);
+            margin-bottom: 30px;
+            border: 1px solid #D3D3D3;
+        }
+
+        .toc h2 {
+            font-size: 1rem;
+            color: #004488;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #D3D3D3;
+        }
+
+        .toc ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 6px;
+        }
+
+        .toc li a {
+            color: #8B4513;
+            text-decoration: none;
+            padding: 7px 12px;
+            display: block;
+            border-radius: 6px;
+            transition: all 0.15s;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            font-weight: 500;
+        }
+
+        .toc li a:hover {
+            background: #F5F5DC;
+            border-left-color: #0066CC;
+            color: #004488;
+            padding-left: 16px;
+        }
+
+        /* ============ SECTION ============ */
+        .section {
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 28px 32px;
+            box-shadow: 0 4px 20px rgba(139, 69, 19, 0.07);
+            margin-bottom: 24px;
+            border: 1px solid #D3D3D3;
+            scroll-margin-top: 20px;
+        }
+
+        .section h2 {
+            font-size: 1.35rem;
+            color: #004488;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #F5DEB3;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h2 .icon {
+            font-size: 1.45rem;
+        }
+
+        .section h3 {
+            font-size: 1.05rem;
+            color: #0066CC;
+            margin: 20px 0 10px;
+            font-weight: 700;
+        }
+
+        .section h3:first-of-type {
+            margin-top: 8px;
+        }
+
+        .section p {
+            margin-bottom: 12px;
+            color: #8B4513;
+        }
+
+        .section ul, .section ol {
+            margin: 10px 0 14px 24px;
+            color: #8B4513;
+        }
+
+        .section li {
+            margin-bottom: 6px;
+        }
+
+        .section li strong {
+            color: #8B5A2B;
+        }
+
+        /* ============ KBD ============ */
+        kbd {
+            display: inline-block;
+            background: #8B4513;
+            color: #FFFFFF;
+            padding: 3px 10px;
+            border-radius: 5px;
+            font-family: "Consolas", "Monaco", monospace;
+            font-size: 0.82rem;
+            font-weight: 700;
+            box-shadow: 0 2px 0 #5a2e0c;
+            margin: 0 2px;
+            line-height: 1.4;
+            min-width: 28px;
+            text-align: center;
+            border: 1px solid #8B5A2B;
+        }
+
+        kbd.blue {
+            background: #0066CC;
+            box-shadow: 0 2px 0 #004488;
+            border-color: #004488;
+        }
+
+        kbd.dark {
+            background: #004488;
+            box-shadow: 0 2px 0 #002a55;
+            border-color: #002a55;
+        }
+
+        kbd.light {
+            background: #F5DEB3;
+            color: #8B4513;
+            box-shadow: 0 2px 0 #D3D3D3;
+            border-color: #D3D3D3;
+        }
+
+        /* ============ TABLE ============ */
+        .shortcut-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(139, 69, 19, 0.08);
+            border: 1px solid #D3D3D3;
+        }
+
+        .shortcut-table thead {
+            background: #004488;
+            color: #FFFFFF;
+        }
+
+        .shortcut-table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .shortcut-table td {
+            padding: 11px 16px;
+            border-bottom: 1px solid #F5F5F5;
+            font-size: 0.92rem;
+            vertical-align: top;
+            color: #8B4513;
+        }
+
+        .shortcut-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .shortcut-table tbody tr:nth-child(even) {
+            background: #F5F5F5;
+        }
+
+        .shortcut-table tbody tr:hover {
+            background: #F5F5DC;
+        }
+
+        .shortcut-table td:first-child {
+            width: 180px;
+            white-space: nowrap;
+        }
+
+        /* ============ NOTE ============ */
+        .note {
+            background: #F5F5DC;
+            border-left: 4px solid #0066CC;
+            padding: 12px 18px;
+            border-radius: 6px;
+            margin: 16px 0;
+            font-size: 0.92rem;
+            color: #8B4513;
+        }
+
+        .note.warn {
+            background: #F5DEB3;
+            border-left-color: #8B5A2B;
+        }
+
+        .note.tip {
+            background: #F5F5F5;
+            border-left-color: #004488;
+        }
+
+        .note strong {
+            color: #004488;
+        }
+
+        .note.warn strong {
+            color: #8B4513;
+        }
+
+        .note.tip strong {
+            color: #0066CC;
+        }
+
+        /* ============ STEPS ============ */
+        .steps {
+            list-style: none;
+            margin-left: 0;
+            counter-reset: step;
+        }
+
+        .steps li {
+            position: relative;
+            padding-left: 46px;
+            margin-bottom: 14px;
+            counter-increment: step;
+            min-height: 32px;
+            color: #8B4513;
+        }
+
+        .steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #0066CC, #004488);
+            color: #FFFFFF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 6px rgba(0, 102, 204, 0.3);
+        }
+
+        .steps.brown li::before {
+            background: linear-gradient(135deg, #8B5A2B, #8B4513);
+            box-shadow: 0 2px 6px rgba(139, 69, 19, 0.3);
+        }
+
+        /* ============ TOOL CARDS ============ */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 14px;
+            margin: 16px 0;
+        }
+
+        .tool-card {
+            background: #F5F5F5;
+            border: 1px solid #D3D3D3;
+            border-radius: 10px;
+            padding: 16px;
+            transition: all 0.2s;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(139, 69, 19, 0.12);
+            border-color: #0066CC;
+            background: #F5F5DC;
+        }
+
+        .tool-card .tool-icon {
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .tool-card .tool-name {
+            font-weight: 700;
+            color: #8B4513;
+            margin-bottom: 6px;
+            font-size: 1rem;
+        }
+
+        .tool-card .tool-key {
+            margin-bottom: 8px;
+        }
+
+        .tool-card .tool-desc {
+            font-size: 0.85rem;
+            color: #8B5A2B;
+            line-height: 1.5;
+        }
+
+        /* ============ COLOR PALETTE ============ */
+        .palette {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 16px 0;
+        }
+
+        .palette-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .palette-swatch {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            border: 3px solid #FFFFFF;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transition: transform 0.15s;
+        }
+
+        .palette-swatch:hover {
+            transform: scale(1.08);
+        }
+
+        .palette-label {
+            font-size: 0.72rem;
+            color: #8B5A2B;
+            font-family: "Consolas", monospace;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* ============ FOOTER ============ */
+        footer {
+            text-align: center;
+            padding: 32px 20px;
+            color: #8B5A2B;
+            font-size: 0.85rem;
+            border-top: 1px solid #D3D3D3;
+            margin-top: 20px;
+            background: #F5F5F5;
+        }
+
+        footer .heart {
+            color: #8B4513;
+        }
+
+        /* ============ BACK TO TOP ============ */
+        #backTop {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 46px;
+            height: 46px;
+            background: #0066CC;
+            color: #FFFFFF;
+            border: 2px solid #FFFFFF;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(0, 102, 204, 0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            z-index: 100;
+        }
+
+        #backTop:hover {
+            background: #004488;
+            transform: translateY(-3px);
+        }
+
+        #backTop.show {
+            display: flex;
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 1.7rem; }
+            .hero .subtitle { font-size: 0.95rem; }
+            .section { padding: 20px 18px; }
+            .section h2 { font-size: 1.15rem; }
+            .shortcut-table td:first-child { width: 130px; }
+            .shortcut-table th, .shortcut-table td { padding: 9px 10px; font-size: 0.85rem; }
+            .container { padding: 0 12px 40px; }
+            .palette-swatch { width: 48px; height: 48px; }
+        }
+
+        /* ============ PRINT ============ */
+        @media print {
+            body { background: #FFFFFF; }
+            .hero {
+                background: #8B4513 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            #backTop { display: none !important; }
+            .section { box-shadow: none; border: 1px solid #D3D3D3; page-break-inside: avoid; }
+            .toc { box-shadow: none; border: 1px solid #D3D3D3; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= HERO ================= -->
+    <header class="hero">
+        <h1>📖 Hướng dẫn sử dụng Drawing Board</h1>
+        <p class="subtitle">Bảng vẽ trực tuyến — Bút, hình học, textbox, giọng nói, ảnh, Undo/Redo</p>
+        <span class="badge">Phiên bản cập nhật — Hỗ trợ Ctrl+Z / Ctrl+Y</span>
+    </header>
+
+    <div class="container">
+
+        <!-- ================= TOC ================= -->
+        <nav class="toc">
+            <h2>📑 Mục lục</h2>
+            <ul>
+                <li><a href="#batdau">1. Bắt đầu nhanh</a></li>
+                <li><a href="#congcu">2. Công cụ vẽ</a></li>
+                <li><a href="#phimtat">3. Bảng phím tắt</a></li>
+                <li><a href="#undoredo">4. Undo / Redo</a></li>
+                <li><a href="#menu">5. Menu chuột phải</a></li>
+                <li><a href="#textbox">6. Textbox &amp; giọng nói</a></li>
+                <li><a href="#anh">7. Chèn &amp; chỉnh ảnh</a></li>
+                <li><a href="#maucsac">8. Bảng màu</a></li>
+                <li><a href="#meohay">9. Mẹo hay</a></li>
+                <li><a href="#luuy">10. Lưu ý</a></li>
+            </ul>
+        </nav>
+
+        <!-- ================= 1. BẮT ĐẦU ================= -->
+        <section class="section" id="batdau">
+            <h2><span class="icon">🚀</span> 1. Bắt đầu nhanh</h2>
+
+            <p>Bảng vẽ có hai chế độ chính: <strong>chế độ chọn</strong> (di chuyển ảnh, textbox) và <strong>chế độ vẽ</strong> (vẽ trên canvas).</p>
+
+            <ol class="steps brown">
+                <li>Nhấn phím <kbd class="blue">V</kbd> để <strong>bật chế độ vẽ</strong>. Con trỏ chuyển thành hình chữ thập.</li>
+                <li>Nhấn <kbd class="blue">K</kbd> để chọn <strong>bút vẽ</strong>, hoặc <kbd class="blue">L</kbd> / <kbd class="blue">I</kbd> / <kbd class="blue">O</kbd> để chọn công cụ hình học.</li>
+                <li>Kéo chuột (hoặc dùng bút cảm ứng) trên bảng để vẽ.</li>
+                <li>Nhấn <kbd class="blue">V</kbd> lần nữa để <strong>tắt chế độ vẽ</strong> và quay lại chế độ chọn.</li>
+                <li>Nhấn <kbd class="blue">Z</kbd> bất cứ lúc nào để mở <strong>menu công cụ vẽ</strong> đầy đủ.</li>
+                <li>Nhấn <kbd class="dark">Ctrl</kbd>+<kbd class="dark">Z</kbd> để <strong>hoàn tác</strong>, <kbd class="dark">Ctrl</kbd>+<kbd class="dark">Y</kbd> để <strong>làm lại</strong>.</li>
+            </ol>
+
+            <div class="note tip">
+                <strong>💡 Mẹo:</strong> Nếu dùng bút cảm ứng (Wacom, iPad Pencil…), hãy bật tuỳ chọn <em>"Nhạy lực nhấn bút"</em> trong menu <kbd class="blue">Z</kbd> để nét vẽ có độ dày mảnh theo lực nhấn.
+            </div>
+        </section>
+
+        <!-- ================= 2. CÔNG CỤ ================= -->
+        <section class="section" id="congcu">
+            <h2><span class="icon">🖌️</span> 2. Công cụ vẽ</h2>
+
+            <p>Bảng vẽ cung cấp 5 công cụ chính, mỗi công cụ có phím tắt riêng:</p>
+
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <span class="tool-icon">✏️</span>
+                    <div class="tool-name">Bút</div>
+                    <div class="tool-key">Phím <kbd class="blue">K</kbd></div>
+                    <div class="tool-desc">Vẽ nét tự do, hỗ trợ nhạy lực nhấn bút. Đây là công cụ mặc định khi bật chế độ vẽ.</div>
+                </div>
+
+                <div class="tool-card">
+                    <span class="tool-icon">📏</span>
+                    <div class="tool-name">Đoạn thẳng</div>
+                    <div class="tool-key">Phím <kbd class="blue">L</kbd></div>
+                    <div class="tool-desc">Kéo chuột từ điểm đầu đến điểm cuối để tạo đoạn thẳng. Có preview realtime khi kéo.</div>
+                </div>
+
+                <div class="tool-card">
+                    <span class="tool-icon">➡️</span>
+                    <div class="tool-name">Mũi tên</div>
+                    <div class="tool-key">Phím <kbd class="blue">I</kbd></div>
+                    <div class="tool-desc">Vẽ mũi tên có đầu nhọn. Kích thước đầu mũi tên tự động theo độ dày nét vẽ.</div>
+                </div>
+
+                <div class="tool-card">
+                    <span class="tool-icon">⭕</span>
+                    <div class="tool-name">Tròn / Elip</div>
+                    <div class="tool-key">Phím <kbd class="blue">O</kbd></div>
+                    <div class="tool-desc">
+                        Kéo chuột để vẽ elip. <strong>Giữ <kbd class="light">Shift</kbd></strong> khi kéo để vẽ <strong>hình tròn hoàn hảo</strong>.
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <span class="tool-icon">🧽</span>
+                    <div class="tool-name">Tẩy</div>
+                    <div class="tool-key">Phím <kbd class="blue">3</kbd></div>
+                    <div class="tool-desc">Xoá nét vẽ theo đường kéo. Độ rộng tẩy gấp 6 lần độ dày bút hiện tại.</div>
+                </div>
+            </div>
+
+            <h3>🎨 Đổi màu nhanh</h3>
+            <ul>
+                <li><kbd class="blue">0</kbd> — Màu xanh dương <span style="display:inline-block;width:14px;height:14px;background:#0066CC;border-radius:3px;vertical-align:middle;border:1px solid #004488;"></span></li>
+                <li><kbd class="blue">1</kbd> — Màu nâu đậm <span style="display:inline-block;width:14px;height:14px;background:#8B4513;border-radius:3px;vertical-align:middle;border:1px solid #8B5A2B;"></span></li>
+                <li><kbd class="blue">D</kbd> — Màu nâu <span style="display:inline-block;width:14px;height:14px;background:#8B5A2B;border-radius:3px;vertical-align:middle;border:1px solid #8B4513;"></span></li>
+                <li><kbd class="blue">N</kbd> — Màu nâu mặc định <span style="display:inline-block;width:14px;height:14px;background:#8B4513;border-radius:3px;vertical-align:middle;border:1px solid #8B5A2B;"></span></li>
+                <li>Hoặc dùng ô <em>"Màu khác"</em> trong menu <kbd class="blue">Z</kbd> để chọn màu tuỳ ý.</li>
+            </ul>
+
+            <h3>📐 Độ dày nét vẽ</h3>
+            <ul>
+                <li><kbd class="blue">B</kbd> — Tăng độ dày thêm 1px (tối đa 50px).</li>
+                <li><kbd class="blue">M</kbd> — Giảm độ dày bớt 1px (tối thiểu 1px).</li>
+                <li><kbd class="blue">2</kbd> — Đặt về độ dày mặc định (2px).</li>
+            </ul>
+
+            <h3>🗑️ Xoá nét vẽ</h3>
+            <ul>
+                <li><kbd class="blue">X</kbd> — Xoá toàn bộ nét vẽ trên canvas.</li>
+                <li>Hoặc bấm nút <strong>"Xoá hết nét vẽ"</strong> trong menu <kbd class="blue">Z</kbd>.</li>
+            </ul>
+        </section>
+
+        <!-- ================= 3. PHÍM TẮT ================= -->
+        <section class="section" id="phimtat">
+            <h2><span class="icon">⌨️</span> 3. Bảng phím tắt</h2>
+
+            <table class="shortcut-table">
+                <thead>
+                    <tr>
+                        <th>Phím</th>
+                        <th>Chức năng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><kbd class="dark">Ctrl</kbd>+<kbd class="dark">Z</kbd></td>
+                        <td><strong>Hoàn tác</strong> hành động gần nhất (Undo)</td>
+                    </tr>
+                    <tr>
+                        <td><kbd class="dark">Ctrl</kbd>+<kbd class="dark">Y</kbd></td>
+                        <td><strong>Làm lại</strong> hành động vừa hoàn tác (Redo)</td>
+                    </tr>
+                    <tr>
+                        <td><kbd class="blue">V</kbd></td>
+                        <td>Bật / tắt chế độ vẽ</td>
+                    </tr>
+                    <tr>
+                        <td><kbd class="blue">K</kbd></td>
+                        <td>Chọn công cụ <strong>Bút</strong> ✏️</td>
+                    </tr>
+                    <tr>
+                        <td><kbd class="blue">L</kbd></td>
+                        <td>Chọn công cụ <strong>Đoạn thẳng</strong> 📏</td>
+                    </tr>
+                    <tr>
+                        <td><kbd class="blue">I</kbd></td>
+                        <td>Chọn công cụ <strong>Mũi tên</strong> ➡️</td>
+                    </tr>
+                    <tr>
+                        <td><kbd class="blue">O</kbd></td>
+                        <td>Chọn công cụ <strong>Tròn / Elip</strong> ⭕ <br><small style="color:#8B5A2B;">Giữ <kbd class="light">Shift</kbd> khi kéo để vẽ hình tròn hoàn hảo</small></td>
+                    </tr>
+                    <tr>
+                        <td><kbd class="blue">3</kbd></td>
+                        <td>Chọn công cụ <strong>Tẩy</strong> 🧽</td>
+                    </tr>
+                    <tr>
+                        <td><kbd class="blue">0</kbd> / <kbd class="blue">1</kbd> / <kbd class="blue">D</kbd> / <kbd class="blue">N</kbd></td>
+                        <td>Đổi màu nhanh: xanh dương / nâu đậm / nâu / nâu mặc định</td>
+                    </tr>
+                    <tr>
+                        <td><kbd class="blue">B</kbd> / <kbd class="blue">M</kbd></td>
+                        <td>Tăng / giảm độ dày nét vẽ</td>
+                    </tr>
+                    <tr>
+                        <td><kbd class="blue">2</kbd></td>
+                        <td>Đặt độ dày về mặc định (2px)</td>
+                    </tr>
+                    <tr>
+                        <td><kbd class="blue">X</kbd></td>
+                        <td>Xoá toàn bộ nét vẽ</td>
+                    </tr>
+                    <tr>
+                        <td><kbd class="blue">Z</kbd></td>
+                        <td>Mở menu công cụ vẽ đầy đủ</td>
+                    </tr>
+                    <tr>
+                        <td><kbd class="blue">T</kbd></td>
+                        <td>Thêm textbox mới (ở giữa màn hình)</td>
+                    </tr>
+                    <tr>
+                        <td><kbd class="blue">A</kbd></td>
+                        <td>Thêm textbox mới + <strong>bật mic</strong> nhập bằng giọng nói</td>
+                    </tr>
+                    <tr>
+                        <td><kbd class="blue">P</kbd></td>
+                        <td><strong>Paste ảnh</strong> từ clipboard vào bảng vẽ</td>
+                    </tr>
+                    <tr>
+                        <td><kbd class="blue">4</kbd> / <kbd class="blue">5</kbd></td>
+                        <td>Đổi nền bảng vẽ sang xám / trắng</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="note">
+                <strong>Lưu ý:</strong> Các phím tắt chỉ hoạt động khi <strong>không</strong> đang gõ trong textbox hoặc ô nhập liệu.
+            </div>
+        </section>
+
+        <!-- ================= 4. UNDO / REDO ================= -->
+        <section class="section" id="undoredo">
+            <h2><span class="icon">↶</span> 4. Undo / Redo (Hoàn tác &amp; Làm lại)</h2>
+
+            <p>Bảng vẽ hỗ trợ <strong>hoàn tác</strong> và <strong>làm lại</strong> mọi hành động, giúp bạn yên tâm thử nghiệm mà không sợ mất công.</p>
+
+            <h3>Cách sử dụng</h3>
+            <ul>
+                <li>Nhấn <kbd class="dark">Ctrl</kbd>+<kbd class="dark">Z</kbd> để <strong>hoàn tác</strong> hành động vừa làm.</li>
+                <li>Nhấn <kbd class="dark">Ctrl</kbd>+<kbd class="dark">Y</kbd> để <strong>làm lại</strong> hành động vừa hoàn tác.</li>
+                <li>Có thể nhấn nhiều lần liên tiếp để lùi/tiến nhiều bước (tối đa <strong>100 bước</strong>).</li>
+            </ul>
+
+            <h3>Những hành động được ghi nhớ</h3>
+            <ul>
+                <li>✅ Vẽ nét tự do (bút, tẩy)</li>
+                <li>✅ Vẽ hình: đoạn thẳng, mũi tên, tròn/elip</li>
+                <li>✅ Xoá toàn bộ nét vẽ</li>
+                <li>✅ Thêm / xoá textbox</li>
+                <li>✅ Gõ chữ trong textbox</li>
+                <li>✅ Di chuyển textbox, resize textbox</li>
+                <li>✅ Đổi định dạng textbox (font, màu, viền…)</li>
+                <li>✅ Chèn ảnh (paste), di chuyển ảnh, resize ảnh</li>
+                <li>✅ Đổi opacity / xoay ảnh</li>
+                <li>✅ Nhập giọng nói vào textbox</li>
+            </ul>
+
+            <div class="note tip">
+                <strong>💡 Mẹo:</strong> Undo/Redo hoạt động theo cơ chế <em>snapshot</em> — mỗi bước là một ảnh chụp toàn bộ trạng thái bảng vẽ. Vì vậy, ngay cả khi bạn vừa vẽ vừa di chuyển textbox, mọi thứ vẫn được khôi phục chính xác.
+            </div>
+
+            <div class="note warn">
+                <strong>⚠️ Lưu ý:</strong> Undo/Redo <strong>không khôi phục</strong> được trạng thái khi bạn tải lại trang (F5). Dữ liệu chỉ tồn tại trong phiên làm việc hiện tại.
+            </div>
+        </section>
+
+        <!-- ================= 5. MENU CHUỘT PHẢI ================= -->
+        <section class="section" id="menu">
+            <h2><span class="icon">🖱️</span> 5. Menu chuột phải</h2>
+
+            <p>Menu chuột phải (hoặc phím <kbd class="blue">Z</kbd>) là trung tâm điều khiển của bảng vẽ. Menu hiển thị <strong>3 nhóm chức năng</strong> tuỳ theo đối tượng bạn nhắm vào:</p>
+
+            <h3>🖌️ Nhóm 1 — Công cụ vẽ (nhắm vào vùng trống)</h3>
+            <p>Khi nhấn chuột phải vào vùng trống trên bảng, menu công cụ vẽ sẽ hiện ra với:</p>
+            <ul>
+                <li>Chọn màu vẽ (8 màu có sẵn + ô chọn màu tuỳ chỉnh).</li>
+                <li>Thanh trượt độ dày nét vẽ (1–30px).</li>
+                <li>Tuỳ chọn nhạy lực nhấn bút (pressure).</li>
+                <li>Chọn công cụ: Bút, Thẳng, Mũi tên, Tròn, Tẩy.</li>
+                <li>Nút xoá hết nét vẽ.</li>
+            </ul>
+
+            <h3>📝 Nhóm 2 — Định dạng textbox (nhắm vào textbox)</h3>
+            <p>Khi nhấn chuột phải vào textbox, menu định dạng chữ hiện ra với:</p>
+            <ul>
+                <li>Font chữ, cỡ chữ (8–200px).</li>
+                <li>Màu chữ (11 màu có sẵn).</li>
+                <li>Kiểu chữ: <b>B</b> đậm, <i>I</i> nghiêng, <u>U</u> gạch chân.</li>
+                <li>Căn lề: trái, giữa, phải, đều.</li>
+                <li>Màu nền hộp, tuỳ chọn trong suốt.</li>
+                <li>Màu viền, kiểu viền (nét đứt, liền, chấm, đôi, không viền).</li>
+                <li>Bo góc hộp (0–50px).</li>
+            </ul>
+
+            <h3>🖼️ Nhóm 3 — Chỉnh sửa ảnh (nhắm vào ảnh)</h3>
+            <p>Khi nhấn chuột phải vào ảnh, menu chỉnh ảnh hiện ra với:</p>
+            <ul>
+                <li>Chiều rộng / chiều cao (px).</li>
+                <li>Tuỳ chọn giữ tỉ lệ khung hình.</li>
+                <li>Độ mờ (10%–100%).</li>
+                <li>Góc xoay (-180° đến 180°).</li>
+                <li>Nút Áp dụng, Reset, Xoá ảnh.</li>
+            </ul>
+
+            <div class="note tip">
+                <strong>💡 Mẹo:</strong> Menu chuột phải sẽ tự động đóng khi bạn bấm ra ngoài. Nhấn <kbd class="light">Esc</kbd> để đóng nhanh hơn.
+            </div>
+        </section>
+
+        <!-- ================= 6. TEXTBOX ================= -->
+        <section class="section" id="textbox">
+            <h2><span class="icon">📝</span> 6. Textbox &amp; nhập bằng giọng nói</h2>
+
+            <h3>Tạo textbox</h3>
+            <ul>
+                <li><kbd class="blue">T</kbd> — Tạo textbox mới ở giữa màn hình, tự động vào chế độ chỉnh sửa.</li>
+                <li><kbd class="blue">A</kbd> — Tạo textbox mới + <strong>bật mic</strong> nhập giọng nói ngay.</li>
+            </ul>
+
+            <h3>Chỉnh sửa nội dung</h3>
+            <ul>
+                <li><strong>Nháy đúp chuột</strong> vào textbox để vào chế độ gõ chữ.</li>
+                <li>Gõ nội dung bình thường, có thể xuống dòng bằng <kbd class="light">Enter</kbd>.</li>
+                <li>Nhấn <kbd class="light">Esc</kbd> hoặc click ra ngoài để thoát chế độ gõ.</li>
+            </ul>
+
+            <h3>Di chuyển &amp; resize</h3>
+            <ul>
+                <li><strong>Kéo</strong> textbox để di chuyển.</li>
+                <li><strong>Kéo các chấm xanh</strong> ở 8 cạnh để thay đổi kích thước.</li>
+                <li>Nút <strong>×</strong> đỏ ở góc trên phải để xoá textbox.</li>
+            </ul>
+
+            <h3>🎤 Nhập bằng giọng nói</h3>
+            <ol class="steps">
+                <li>Nhấn vào nút <strong>🎤</strong> ở góc dưới phải textbox.</li>
+                <li>Nút chuyển sang màu đỏ và nhấp nháy — đang nghe.</li>
+                <li>Nói tiếng Việt, văn bản sẽ xuất hiện realtime trong textbox.</li>
+                <li>Nhấn nút 🎤 lần nữa để dừng.</li>
+            </ol>
+
+            <div class="note warn">
+                <strong>⚠️ Lưu ý với Brave:</strong> Trình duyệt Brave mặc định chặn Web Speech API. Để mic hoạt động, vào <code>brave://settings/system</code> → bật <em>"Use Google Services for WebRTC and Push Messaging"</em> → khởi động lại Brave. Hoặc dùng <strong>Chrome / Edge</strong> để mic hoạt động ổn định nhất.
+            </div>
+
+            <div class="note">
+                <strong>Định dạng textbox:</strong> Nhấn chuột phải vào textbox để mở menu định dạng (font, màu, viền, nền, căn lề…).
+            </div>
+        </section>
+
+        <!-- ================= 7. ẢNH ================= -->
+        <section class="section" id="anh">
+            <h2><span class="icon">🖼️</span> 7. Chèn &amp; chỉnh sửa ảnh</h2>
+
+            <h3>Chèn ảnh</h3>
+            <ul>
+                <li><strong>Cách 1:</strong> Sao chép ảnh vào clipboard (Ctrl+C), rồi nhấn <kbd class="blue">P</kbd> hoặc <kbd class="light">Ctrl+V</kbd>.</li>
+                <li><strong>Cách 2:</strong> Trong menu <kbd class="blue">Z</kbd>, dùng tính năng paste ảnh (nếu trình duyệt hỗ trợ Clipboard API).</li>
+            </ul>
+            <p>Ảnh sẽ xuất hiện ở giữa màn hình với chiều rộng mặc định 300px (giữ nguyên tỉ lệ).</p>
+
+            <h3>Di chuyển &amp; resize</h3>
+            <ul>
+                <li><strong>Kéo ảnh</strong> để di chuyển (khi ở chế độ chọn, tức là <kbd class="blue">V</kbd> đang tắt).</li>
+                <li>Click vào ảnh để hiện khung chọn màu xanh.</li>
+                <li><strong>Kéo các chấm xanh</strong> ở 8 cạnh để thay đổi kích thước.</li>
+                <li>Giữ <kbd class="light">Shift</kbd> khi kéo để <strong>tắt giữ tỉ lệ</strong> (cho phép bóp méo ảnh).</li>
+                <li>Nút <strong>×</strong> đỏ ở góc để xoá ảnh.</li>
+            </ul>
+
+            <h3>Chỉnh sửa nâng cao</h3>
+            <p>Nhấn chuột phải vào ảnh để mở menu chỉnh sửa với các tuỳ chọn:</p>
+            <ul>
+                <li>Chiều rộng / chiều cao chính xác (px).</li>
+                <li>Độ mờ (10%–100%) — hữu ích khi muốn ảnh làm nền mờ.</li>
+                <li>Xoay ảnh từ -180° đến 180°.</li>
+                <li>Reset về kích thước gốc.</li>
+                <li>Xoá ảnh.</li>
+            </ul>
+
+            <div class="note tip">
+                <strong>💡 Mẹo:</strong> Khi đang ở chế độ vẽ, ảnh sẽ <strong>không</strong> nhận click chuột — bạn có thể vẽ đè lên ảnh mà không lo vô tình di chuyển nó. Nhấn <kbd class="blue">V</kbd> để tắt chế độ vẽ khi muốn di chuyển ảnh.
+            </div>
+        </section>
+
+        <!-- ================= 8. BẢNG MÀU ================= -->
+        <section class="section" id="maucsac">
+            <h2><span class="icon">🎨</span> 8. Bảng màu sử dụng</h2>
+
+            <p>Toàn bộ giao diện của bảng vẽ và trang hướng dẫn này sử dụng <strong>9 màu</strong> theo bảng màu thống nhất:</p>
+
+            <div class="palette">
+                <div class="palette-item">
+                    <div class="palette-swatch" style="background:#8B5A2B;"></div>
+                    <div class="palette-label">#8B5A2B<br>Nâu</div>
+                </div>
+                <div class="palette-item">
+                    <div class="palette-swatch" style="background:#8B4513;"></div>
+                    <div class="palette-label">#8B4513<br>Nâu đậm</div>
+                </div>
+                <div class="palette-item">
+                    <div class="palette-swatch" style="background:#FFFFFF; border-color:#D3D3D3;"></div>
+                    <div class="palette-label">#FFFFFF<br>Trắng</div>
+                </div>
+                <div class="palette-item">
+                    <div class="palette-swatch" style="background:#F5F5F5;"></div>
+                    <div class="palette-label">#F5F5F5<br>Xám rất nhạt</div>
+                </div>
+                <div class="palette-item">
+                    <div class="palette-swatch" style="background:#F5F5DC;"></div>
+                    <div class="palette-label">#F5F5DC<br>Be</div>
+                </div>
+                <div class="palette-item">
+                    <div class="palette-swatch" style="background:#F5DEB3;"></div>
+                    <div class="palette-label">#F5DEB3<br>Lúa mì</div>
+                </div>
+                <div class="palette-item">
+                    <div class="palette-swatch" style="background:#D3D3D3;"></div>
+                    <div class="palette-label">#D3D3D3<br>Xám nhạt</div>
+                </div>
+                <div class="palette-item">
+                    <div class="palette-swatch" style="background:#0066CC;"></div>
+                    <div class="palette-label">#0066CC<br>Xanh dương</div>
+                </div>
+                <div class="palette-item">
+                    <div class="palette-swatch" style="background:#004488;"></div>
+                    <div class="palette-label">#004488<br>Xanh đậm</div>
+                </div>
+            </div>
+
+            <h3>Quy tắc sử dụng màu</h3>
+            <ul>
+                <li><strong>Nền trang:</strong> <span style="color:#F5F5F5;background:#8B4513;padding:1px 6px;border-radius:3px;">#F5F5F5</span> (xám rất nhạt) — dịu mắt, không chói.</li>
+                <li><strong>Chữ chính:</strong> <span style="color:#8B4513;font-weight:700;">#8B4513</span> (nâu đậm) — tương phản tốt trên nền sáng.</li>
+                <li><strong>Tiêu đề:</strong> <span style="color:#004488;font-weight:700;">#004488</span> (xanh đậm) — nổi bật, dễ nhận diện.</li>
+                <li><strong>Điểm nhấn:</strong> <span style="color:#0066CC;font-weight:700;">#0066CC</span> (xanh dương) — dùng cho hover, border, nút.</li>
+                <li><strong>Khung / viền:</strong> #D3D3D3 (xám nhạt) — nhẹ nhàng, không gây rối.</li>
+                <li><strong>Nền phụ:</strong> #F5F5DC (be), #F5DEB3 (lúa mì) — dùng cho note, highlight.</li>
+                <li><strong>Nền chính:</strong> #FFFFFF (trắng) — cho card, section.</li>
+                <li><strong>Màu phụ trợ:</strong> #8B5A2B (nâu) — cho text phụ, icon.</li>
+            </ul>
+        </section>
+
+        <!-- ================= 9. MẸO HAY ================= -->
+        <section class="section" id="meohay">
+            <h2><span class="icon">✨</span> 9. Mẹo hay</h2>
+
+            <h3>Vẽ hình tròn hoàn hảo</h3>
+            <p>Chọn công cụ Tròn bằng <kbd class="blue">O</kbd>, sau đó <strong>giữ <kbd class="light">Shift</kbd></strong> trong khi kéo chuột. Hình sẽ tự động được ép thành hình tròn với bán kính bằng cạnh lớn hơn của vùng kéo. Nhả <kbd class="light">Shift</kbd> giữa chừng để quay lại elip.</p>
+
+            <h3>Vẽ chính xác bằng bút cảm ứng</h3>
+            <p>Bật tuỳ chọn <em>"Nhạy lực nhấn bút"</em> trong menu <kbd class="blue">Z</kbd>. Nét vẽ sẽ mảnh khi nhấn nhẹ, dày khi nhấn mạnh — giống bút thật.</p>
+
+            <h3>Dùng ảnh làm nền mờ</h3>
+            <p>Chèn ảnh, nhấn chuột phải → kéo thanh <em>"Độ mờ"</em> xuống khoảng 30–50%. Ảnh sẽ mờ đi, bạn có thể vẽ đè lên để tô lại hoặc ghi chú.</p>
+
+            <h3>Đổi nền bảng vẽ</h3>
+            <p>Nhấn <kbd class="blue">4</kbd> để đổi nền sang xám nhạt — hữu ích khi vẽ bằng bút trắng hoặc khi muốn dịu mắt. Nhấn <kbd class="blue">5</kbd> để quay lại nền trắng.</p>
+
+            <h3>Chèn ảnh nhanh</h3>
+            <p>Sao chép ảnh từ bất kỳ đâu (web, ứng dụng…), quay lại bảng vẽ và nhấn <kbd class="blue">P</kbd>. Ảnh sẽ được dán ngay vào giữa màn hình.</p>
+
+            <h3>Undo nhiều bước liên tục</h3>
+            <p>Nhấn giữ <kbd class="dark">Ctrl</kbd> và gõ <kbd class="dark">Z</kbd> liên tục để lùi lại nhiều thao tác. Tương tự với <kbd class="dark">Ctrl</kbd>+<kbd class="dark">Y</kbd> để tiến tới. Bạn có thể lùi/tiến tối đa 100 bước.</p>
+
+            <h3>Phóng to / thu nhỏ textbox</h3>
+            <p>Textbox có 8 chấm resize ở các cạnh. Kéo để thay đổi kích thước — hữu ích khi cần tạo khung ghi chú lớn.</p>
+        </section>
+
+        <!-- ================= 10. LƯU Ý ================= -->
+        <section class="section" id="luuy">
+            <h2><span class="icon">⚠️</span> 10. Lưu ý quan trọng</h2>
+
+            <ul>
+                <li><strong>Dữ liệu không được lưu tự động.</strong> Khi tải lại trang (F5), toàn bộ nét vẽ, textbox và ảnh sẽ mất. Hãy chụp màn hình hoặc in ra nếu cần lưu.</li>
+                <li><strong>Undo/Redo không khôi phục sau khi tải lại trang.</strong> History chỉ tồn tại trong phiên làm việc hiện tại.</li>
+                <li><strong>Không thể in bằng Ctrl+P</strong> — trang đã chặn in để bảo vệ nội dung.</li>
+                <li><strong>Không thể sao chép nét vẽ</strong> — chỉ có thể sao chép chữ trong textbox.</li>
+                <li><strong>Chuột phải</strong> trên vùng trống sẽ mở menu công cụ vẽ, không phải menu của trình duyệt.</li>
+                <li><strong>Trên thiết bị cảm ứng:</strong> dùng ngón tay hoặc bút cảm ứng để vẽ, chạm 2 ngón để cuộn trang.</li>
+                <li><strong>Mic giọng nói</strong> cần quyền truy cập microphone và hoạt động tốt nhất trên Chrome / Edge.</li>
+                <li><strong>Undo/Redo</strong> hoạt động với cả vẽ, dán ảnh, nhập text, và mọi thao tác khác. Nếu không còn gì để hoàn tác, phím tắt sẽ không làm gì cả.</li>
+            </ul>
+
+            <div class="note warn">
+                <strong>Quan trọng:</strong> Trang này <strong>không tự động lưu</strong> dữ liệu. Nếu đang vẽ dở mà vô tình tải lại trang, mọi thứ sẽ mất. Hãy cẩn thận!
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+        <p>📖 Hướng dẫn sử dụng Drawing Board — Phiên bản cập nhật với Undo/Redo</p>
+        <p style="margin-top:6px;">Làm với <span class="heart">❤</span> để vẽ dễ dàng hơn</p>
+    </footer>
+
+    <!-- ================= BACK TO TOP ================= -->
+    <button id="backTop" title="Về đầu trang">↑</button>
+
+    <script>
+        // ===== BACK TO TOP =====
+        var backTop = document.getElementById('backTop');
+
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                backTop.classList.add('show');
+            } else {
+                backTop.classList.remove('show');
+            }
+        });
+
+        backTop.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ===== SMOOTH SCROLL CHO TOC =====
+        document.querySelectorAll('.toc a').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                var target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ===== ĐÁNH DẤU SECTION ĐANG XEM =====
+        var sections = document.querySelectorAll('.section');
+        var tocLinks = document.querySelectorAll('.toc a');
+
+        function highlightToc() {
+            var scrollPos = window.scrollY + 100;
+            var currentId = '';
+
+            sections.forEach(function(sec) {
+                if (sec.offsetTop <= scrollPos) {
+                    currentId = sec.id;
+                }
+            });
+
+            tocLinks.forEach(function(link) {
+                if (link.getAttribute('href') === '#' + currentId) {
+                    link.style.background = '#F5F5DC';
+                    link.style.borderLeftColor = '#0066CC';
+                    link.style.color = '#004488';
+                } else {
+                    link.style.background = '';
+                    link.style.borderLeftColor = '';
+                    link.style.color = '';
+                }
+            });
+        }
+
+        window.addEventListener('scroll', highlightToc);
+        highlightToc();
+    </script>
+
+</body>
+</html>
