@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Viewer</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            background: #ffffff;
+            overflow-x: hidden;
+            font-family: Arial, sans-serif;
+            transition: background-color 0.15s ease;
+        }
+
+        body.gray-bg {
+            background: #e8e8e8;
+        }
+
+        #board {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background: #ffffff;
+            transition: background-color 0.15s ease;
+        }
+
+        body.gray-bg #board {
+            background: #e8e8e8;
+        }
+
+        /* Ảnh trang */
+        .page-img {
+            width: 100vw;
+            height: auto;
+            display: block;
+            margin: 0;
+            padding: 0;
+            pointer-events: none;
+            -webkit-user-drag: none;
+            user-drag: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* Ảnh paste vào board */
+        .pasted-img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin: 0;
+            padding: 0;
+            pointer-events: none;
+            -webkit-user-drag: none;
+            user-drag: none;
+        }
+
+        #drawCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            pointer-events: none;
+            touch-action: none;
+        }
+
+        #drawCanvas.active {
+            pointer-events: auto;
+            cursor: crosshair;
+        }
+
+        #drawCanvas.eraser {
+            cursor: cell;
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            height: 0px;
+            background: transparent;
+        }
+
+        html {
+            scrollbar-width: none;
+        }
+
+        body {
+            -ms-overflow-style: none;
+        }
+
+        #watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 60px;
+            color: rgba(0, 0, 0, 0.03);
+            pointer-events: none;
+            z-index: 9999;
+            white-space: nowrap;
+            font-weight: bold;
+            letter-spacing: 10px;
+        }
+
+        @media print {
+            body { display: none !important; }
+        }
+
+        /* ============ TEXTBOX ============ */
+        .textbox {
+            position: absolute;
+            min-width: 120px;
+            min-height: 30px;
+            padding: 4px 8px;
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px dashed #8B4513;
+            color: #000000;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            z-index: 150;
+            outline: none;
+            cursor: move;
+            line-height: 1.3;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        .textbox:focus {
+            border-style: solid;
+            border-color: #0066CC;
+            background: rgba(255, 255, 255, 0.95);
+            cursor: text;
+        }
+
+        .textbox.editing {
+            cursor: text;
+        }
+
+        .textbox .tb-delete {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 20px;
+            height: 20px;
+            background: #d33;
+            color: #fff;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .textbox:hover .tb-delete {
+            display: block;
+        }
+
+        body.gray-bg .textbox {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        /* ============ CONTEXT MENU CHO TEXTBOX ============ */
+        #tbContextMenu {
+            position: fixed;
+            z-index: 10000;
+            background: #ffffff;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+            border-radius: 6px;
+            padding: 10px 12px;
+            min-width: 260px;
+            max-height: 90vh;
+            overflow-y: auto;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            color: #333;
+            display: none;
+            user-select: none;
+        }
+
+        #tbContextMenu .ctx-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 8px;
+        }
+
+        #tbContextMenu .ctx-row:last-child {
+            margin-bottom: 0;
+        }
+
+        #tbContextMenu label {
+            flex: 0 0 70px;
+            font-size: 12px;
+            color: #555;
+        }
+
+        #tbContextMenu select,
+        #tbContextMenu input[type="number"],
+        #tbContextMenu input[type="color"],
+        #tbContextMenu input[type="text"] {
+            flex: 1;
+            padding: 4px 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 13px;
+            background: #fff;
+            cursor: pointer;
+            outline: none;
+            font-family: inherit;
+            min-width: 0;
+        }
+
+        #tbContextMenu input[type="color"] {
+            padding: 2px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        #tbContextMenu select:focus,
+        #tbContextMenu input:focus {
+            border-color: #0066CC;
+        }
+
+        #tbContextMenu .ctx-title {
+            font-weight: bold;
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #eee;
+        }
+
+        #tbContextMenu .ctx-section {
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px solid #eee;
+        }
+
+        #tbContextMenu .ctx-btn {
+            flex: 1;
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        #tbContextMenu .ctx-btn-apply {
+            background: #0066CC;
+            color: #fff;
+        }
+
+        #tbContextMenu .ctx-btn-apply:hover {
+            background: #0055aa;
+        }
+
+        #tbContextMenu .ctx-btn-reset {
+            background: #eee;
+            color: #333;
+        }
+
+        #tbContextMenu .ctx-btn-reset:hover {
+            background: #ddd;
+        }
+
+        #tbContextMenu .ctx-checks {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        #tbContextMenu .ctx-check {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            user-select: none;
+        }
+
+        #tbContextMenu .ctx-check input {
+            cursor: pointer;
+            margin: 0;
+        }
+
+        #tbContextMenu .ctx-radios {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        #tbContextMenu .ctx-radio {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 3px 7px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #fafafa;
+            user-select: none;
+        }
+
+        #tbContextMenu .ctx-radio input {
+            cursor: pointer;
+            margin: 0;
+        }
+
+        #tbContextMenu .ctx-radio.active {
+            background: #0066CC;
+            color: #fff;
+            border-color: #0066CC;
+        }
+
+        #tbContextMenu .ctx-radio.active input {
+            accent-color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="watermark">BX</div>
+
+    <div id="board">
+        <img class="page-img" src="page-18.jpeg" alt="" draggable="false">
+        <img class="page-img" src="page-19.jpeg" alt="" draggable="false">
+        <img class="page-img" src="page-20.jpeg" alt="" draggable="false">
+        <img class="page-img" src="page-21.jpeg" alt="" draggable="false">
+        <canvas id="drawCanvas"></canvas>
+    </div>
+
+    <div id="tbContextMenu">
+        <div class="ctx-title">Định dạng chữ</div>
+
+        <div class="ctx-row">
+            <label>Font</label>
+            <select id="ctxFont">
+                <option value="Arial">Arial</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Tahoma">Tahoma</option>
+                <option value="Trebuchet MS">Trebuchet MS</option>
+                <option value="Comic Sans MS">Comic Sans MS</option>
+                <option value="Impact">Impact</option>
+                <option value="Roboto">Roboto</option>
+            </select>
+        </div>
+
+        <div class="ctx-row">
+            <label>Cỡ chữ</label>
+            <input type="number" id="ctxSize" min="8" max="200" step="1" value="16">
+        </div>
+
+        <div class="ctx-row">
+            <label>Màu chữ</label>
+            <input type="color" id="ctxColor" value="#000000">
+        </div>
+
+        <div class="ctx-row">
+            <label>Kiểu chữ</label>
+            <div class="ctx-checks">
+                <label class="ctx-check"><input type="checkbox" id="ctxBold"><b>B</b></label>
+                <label class="ctx-check"><input type="checkbox" id="ctxItalic"><i>I</i></label>
+                <label class="ctx-check"><input type="checkbox" id="ctxUnderline"><u>U</u></label>
+            </div>
+        </div>
+
+        <div class="ctx-row">
+            <label>Căn lề</label>
+            <div class="ctx-radios" id="ctxAlignGroup">
+                <label class="ctx-radio" data-align="left"><input type="radio" name="ctxAlign" value="left" checked>Trái</label>
+                <label class="ctx-radio" data-align="center"><input type="radio" name="ctxAlign" value="center">Giữa</label>
+                <label class="ctx-radio" data-align="right"><input type="radio" name="ctxAlign" value="right">Phải</label>
+                <label class="ctx-radio" data-align="justify"><input type="radio" name="ctxAlign" value="justify">Đều</label>
+            </div>
+        </div>
+
+        <div class="ctx-section">
+            <div class="ctx-title" style="margin-bottom:6px;">Hộp textbox</div>
+
+            <div class="ctx-row">
+                <label>Nền</label>
+                <input type="color" id="ctxBg" value="#ffffff">
+                <label class="ctx-check" style="flex:0 0 auto;"><input type="checkbox" id="ctxBgTransparent"> Trong suốt</label>
+            </div>
+
+            <div class="ctx-row">
+                <label>Viền</label>
+                <input type="color" id="ctxBorder" value="#8B4513">
+                <select id="ctxBorderStyle" style="flex:0 0 100px;">
+                    <option value="dashed">Nét đứt</option>
+                    <option value="solid">Nét liền</option>
+                    <option value="dotted">Chấm</option>
+                    <option value="double">Đôi</option>
+                    <option value="none">Không viền</option>
+                </select>
+            </div>
+
+            <div class="ctx-row">
+                <label>Bo góc</label>
+                <input type="number" id="ctxRadius" min="0" max="50" step="1" value="0">
+                <label style="flex:0 0 auto;font-size:12px;">px</label>
+            </div>
+        </div>
+
+        <div class="ctx-row ctx-section" style="margin-bottom:0;">
+            <button class="ctx-btn ctx-btn-apply" id="ctxApply">Áp dụng</button>
+            <button class="ctx-btn ctx-btn-reset" id="ctxReset">Mặc định</button>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        'use strict';
+
+        // ========== BẢO MẬT ==========
+        document.addEventListener('contextmenu', function(e) {
+            var tb = e.target.closest && e.target.closest('.textbox');
+            if (tb) return;
+            e.preventDefault();
+            return false;
+        });
+
+        document.addEventListener('keydown', function(e) {
+            var isInTextbox = e.target.classList && e.target.classList.contains('textbox');
+            if (isInTextbox) {
+                if (e.key === 'F12') { e.preventDefault(); return false; }
+                if (e.ctrlKey && (e.key === 's' || e.key === 'S')) { e.preventDefault(); return false; }
+                if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) { e.preventDefault(); return false; }
+                return;
+            }
+
+            if (e.key === 'F12') { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && ['I','J','C','K','i','j','c','k'].includes(e.key)) {
+                e.preventDefault(); return false;
+            }
+            if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) { e.preventDefault(); return false; }
+            if (e.ctrlKey && (e.key === 's' || e.key === 'S')) { e.preventDefault(); return false; }
+            if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) { e.preventDefault(); return false; }
+            if (e.ctrlKey && ['c','C','a','A','x','X'].includes(e.key)) {
+                e.preventDefault(); return false;
+            }
+        }, true);
+
+        document.addEventListener('copy', function(e) {
+            if (e.target.classList && e.target.classList.contains('textbox')) return;
+            e.preventDefault(); return false;
+        });
+        document.addEventListener('cut', function(e) {
+            if (e.target.classList && e.target.classList.contains('textbox')) return;
+            e.preventDefault(); return false;
+        });
+        document.addEventListener('dragstart', function(e) { e.preventDefault(); return false; });
+
+        // Chặn kéo thả ảnh trang
+        document.querySelectorAll('.page-img').forEach(function(img) {
+            img.addEventListener('dragstart', function(e) { e.preventDefault(); });
+            img.addEventListener('mousedown', function(e) { e.preventDefault(); });
+        });
+
+        // ========== CANVAS VẼ ==========
+        var board = document.getElementById('board');
+        var canvas = document.getElementById('drawCanvas');
+        var ctx = canvas.getContext('2d');
+
+        var isDrawing = false;
+        var isErasing = false;
+        var isPointerDown = false;
+        var lastX = 0, lastY = 0;
+
+        var strokeColor = '#8B4513';
+        var strokeWidth = 2;
+        var DEFAULT_COLOR = '#8B4513';
+        var DEFAULT_WIDTH = 2;
+
+        var strokes = [];
+        var currentStroke = null;
+
+        function resizeCanvas() {
+            var dpr = window.devicePixelRatio || 1;
+            var w = board.offsetWidth;
+            var h = board.offsetHeight;
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+            canvas.style.width = w + 'px';
+            canvas.style.height = h + 'px';
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            redrawAll();
+        }
+
+        function redrawAll() {
+            var w = board.offsetWidth;
+            var h = board.offsetHeight;
+            ctx.clearRect(0, 0, w, h);
+            for (var i = 0; i < strokes.length; i++) drawStroke(strokes[i]);
+        }
+
+        function drawStroke(stroke) {
+            if (!stroke.points || stroke.points.length === 0) return;
+            ctx.save();
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            if (stroke.erase) {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.lineWidth = stroke.width * 6;
+                ctx.strokeStyle = 'rgba(0,0,0,1)';
+            } else {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.lineWidth = stroke.width;
+                ctx.strokeStyle = stroke.color;
+            }
+            ctx.beginPath();
+            if (stroke.points.length === 1) {
+                var p = stroke.points[0];
+                ctx.arc(p.x, p.y, ctx.lineWidth / 2, 0, Math.PI * 2);
+                ctx.fillStyle = stroke.erase ? 'rgba(0,0,0,1)' : stroke.color;
+                ctx.fill();
+            } else {
+                ctx.moveTo(stroke.points[0].x, stroke.points[0].y);
+                for (var j = 1; j < stroke.points.length; j++) {
+                    ctx.lineTo(stroke.points[j].x, stroke.points[j].y);
+                }
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+
+        function getPos(e) {
+            var rect = board.getBoundingClientRect();
+            var clientX, clientY;
+            if (e.touches && e.touches.length) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            return { x: clientX - rect.left, y: clientY - rect.top };
+        }
+
+        function onPointerDown(e) {
+            if (!isDrawing) return;
+            e.preventDefault();
+            isPointerDown = true;
+            var pos = getPos(e);
+            lastX = pos.x;
+            lastY = pos.y;
+            currentStroke = {
+                color: strokeColor,
+                width: strokeWidth,
+                erase: isErasing,
+                points: [{x: pos.x, y: pos.y}]
+            };
+            strokes.push(currentStroke);
+            redrawAll();
+        }
+
+        function onPointerMove(e) {
+            if (!isDrawing || !isPointerDown || !currentStroke) return;
+            e.preventDefault();
+            var pos = getPos(e);
+            var dx = pos.x - lastX;
+            var dy = pos.y - lastY;
+            if (dx * dx + dy * dy < 1) return;
+            currentStroke.points.push({x: pos.x, y: pos.y});
+            lastX = pos.x;
+            lastY = pos.y;
+            redrawAll();
+        }
+
+        function onPointerUp(e) {
+            if (!isPointerDown) return;
+            isPointerDown = false;
+            currentStroke = null;
+        }
+
+        canvas.addEventListener('mousedown', onPointerDown);
+        canvas.addEventListener('mousemove', onPointerMove);
+        window.addEventListener('mouseup', onPointerUp);
+        canvas.addEventListener('touchstart', onPointerDown, {passive: false});
+        canvas.addEventListener('touchmove', onPointerMove, {passive: false});
+        window.addEventListener('touchend', onPointerUp);
+        window.addEventListener('touchcancel', onPointerUp);
+
+        // ========== CONTEXT MENU CHO TEXTBOX ==========
+        var tbMenu = document.getElementById('tbContextMenu');
+        var ctxFont = document.getElementById('ctxFont');
+        var ctxSize = document.getElementById('ctxSize');
+        var ctxColor = document.getElementById('ctxColor');
+        var ctxBold = document.getElementById('ctxBold');
+        var ctxItalic = document.getElementById('ctxItalic');
+        var ctxUnderline = document.getElementById('ctxUnderline');
+        var ctxBg = document.getElementById('ctxBg');
+        var ctxBgTransparent = document.getElementById('ctxBgTransparent');
+        var ctxBorder = document.getElementById('ctxBorder');
+        var ctxBorderStyle = document.getElementById('ctxBorderStyle');
+        var ctxRadius = document.getElementById('ctxRadius');
+        var ctxApply = document.getElementById('ctxApply');
+        var ctxReset = document.getElementById('ctxReset');
+        var ctxAlignRadios = document.querySelectorAll('input[name="ctxAlign"]');
+        var ctxAlignGroup = document.getElementById('ctxAlignGroup');
+        var currentTb = null;
+
+        function updateAlignHighlight(value) {
+            var labels = ctxAlignGroup.querySelectorAll('.ctx-radio');
+            for (var i = 0; i < labels.length; i++) {
+                if (labels[i].getAttribute('data-align') === value) {
+                    labels[i].classList.add('active');
+                } else {
+                    labels[i].classList.remove('active');
+                }
+            }
+        }
+
+        ctxAlignGroup.addEventListener('click', function(e) {
+            var label = e.target.closest('.ctx-radio');
+            if (label) updateAlignHighlight(label.getAttribute('data-align'));
+        });
+
+        function openContextMenu(tb, x, y) {
+            currentTb = tb;
+            var cs = window.getComputedStyle(tb);
+
+            var ff = (tb.style.fontFamily || cs.fontFamily || 'Arial').replace(/['"]/g, '').split(',')[0].trim();
+            var found = false;
+            for (var i = 0; i < ctxFont.options.length; i++) {
+                if (ctxFont.options[i].value.toLowerCase() === ff.toLowerCase()) {
+                    ctxFont.selectedIndex = i;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) ctxFont.selectedIndex = 0;
+
+            var fs = parseInt(tb.style.fontSize || cs.fontSize, 10) || 16;
+            ctxSize.value = fs;
+
+            var color = tb.style.color || cs.color || '#000000';
+            ctxColor.value = rgbToHex(color);
+
+            ctxBold.checked = (cs.fontWeight === 'bold' || parseInt(cs.fontWeight, 10) >= 700);
+            ctxItalic.checked = (cs.fontStyle === 'italic');
+            ctxUnderline.checked = (cs.textDecorationLine && cs.textDecorationLine.indexOf('underline') !== -1) ||
+                                   (cs.textDecoration && cs.textDecoration.indexOf('underline') !== -1);
+
+            var align = tb.style.textAlign || cs.textAlign || 'left';
+            for (var k = 0; k < ctxAlignRadios.length; k++) {
+                ctxAlignRadios[k].checked = (ctxAlignRadios[k].value === align);
+            }
+            updateAlignHighlight(align);
+
+            var bg = tb.style.backgroundColor || cs.backgroundColor;
+            var isTransparent = !bg || bg === 'transparent' || bg === 'rgba(0, 0, 0, 0)';
+            if (isTransparent) {
+                ctxBgTransparent.checked = true;
+                ctxBg.value = '#ffffff';
+            } else {
+                ctxBgTransparent.checked = false;
+                ctxBg.value = rgbToHex(bg);
+            }
+
+            var borderColor = tb.style.borderColor || cs.borderTopColor || '#8B4513';
+            ctxBorder.value = rgbToHex(borderColor);
+            var bStyle = (tb.style.borderStyle || cs.borderTopStyle || 'dashed').split(' ')[0];
+            for (var m = 0; m < ctxBorderStyle.options.length; m++) {
+                if (ctxBorderStyle.options[m].value === bStyle) {
+                    ctxBorderStyle.selectedIndex = m;
+                    break;
+                }
+            }
+            var radius = parseInt(tb.style.borderRadius || cs.borderTopLeftRadius, 10) || 0;
+            ctxRadius.value = radius;
+
+            tbMenu.style.display = 'block';
+            var menuW = tbMenu.offsetWidth;
+            var menuH = tbMenu.offsetHeight;
+            var posX = x;
+            var posY = y;
+            if (posX + menuW > window.innerWidth) posX = window.innerWidth - menuW - 8;
+            if (posY + menuH > window.innerHeight) posY = window.innerHeight - menuH - 8;
+            if (posX < 4) posX = 4;
+            if (posY < 4) posY = 4;
+            tbMenu.style.left = posX + 'px';
+            tbMenu.style.top = posY + 'px';
+        }
+
+        function closeContextMenu() {
+            tbMenu.style.display = 'none';
+            currentTb = null;
+        }
+
+        function rgbToHex(rgb) {
+            if (!rgb) return '#000000';
+            if (rgb.indexOf('#') === 0) return rgb;
+            var m = rgb.match(/\d+/g);
+            if (!m || m.length < 3) return '#000000';
+            var r = parseInt(m[0], 10);
+            var g = parseInt(m[1], 10);
+            var b = parseInt(m[2], 10);
+            return '#' + [r, g, b].map(function(v) {
+                var h = v.toString(16);
+                return h.length === 1 ? '0' + h : h;
+            }).join('');
+        }
+
+        ctxApply.addEventListener('click', function() {
+            if (!currentTb) return;
+
+            currentTb.style.fontFamily = ctxFont.value;
+            currentTb.style.fontSize = ctxSize.value + 'px';
+            currentTb.style.color = ctxColor.value;
+            currentTb.style.fontWeight = ctxBold.checked ? 'bold' : 'normal';
+            currentTb.style.fontStyle = ctxItalic.checked ? 'italic' : 'normal';
+            currentTb.style.textDecoration = ctxUnderline.checked ? 'underline' : 'none';
+
+            var alignVal = 'left';
+            for (var i = 0; i < ctxAlignRadios.length; i++) {
+                if (ctxAlignRadios[i].checked) { alignVal = ctxAlignRadios[i].value; break; }
+            }
+            currentTb.style.textAlign = alignVal;
+
+            if (ctxBgTransparent.checked) {
+                currentTb.style.background = 'transparent';
+            } else {
+                currentTb.style.background = ctxBg.value;
+            }
+
+            var bs = ctxBorderStyle.value;
+            if (bs === 'none') {
+                currentTb.style.border = 'none';
+            } else {
+                currentTb.style.border = '1px ' + bs + ' ' + ctxBorder.value;
+            }
+            currentTb.style.borderRadius = (parseInt(ctxRadius.value, 10) || 0) + 'px';
+
+            closeContextMenu();
+        });
+
+        ctxReset.addEventListener('click', function() {
+            if (!currentTb) return;
+            currentTb.style.fontFamily = 'Arial';
+            currentTb.style.fontSize = '16px';
+            currentTb.style.color = '#000000';
+            currentTb.style.fontWeight = 'normal';
+            currentTb.style.fontStyle = 'normal';
+            currentTb.style.textDecoration = 'none';
+            currentTb.style.textAlign = 'left';
+            currentTb.style.background = 'rgba(255, 255, 255, 0.85)';
+            currentTb.style.border = '1px dashed #8B4513';
+            currentTb.style.borderRadius = '0px';
+
+            ctxFont.value = 'Arial';
+            ctxSize.value = 16;
+            ctxColor.value = '#000000';
+            ctxBold.checked = false;
+            ctxItalic.checked = false;
+            ctxUnderline.checked = false;
+            ctxBg.value = '#ffffff';
+            ctxBgTransparent.checked = false;
+            ctxBorder.value = '#8B4513';
+            ctxBorderStyle.value = 'dashed';
+            ctxRadius.value = 0;
+            for (var i = 0; i < ctxAlignRadios.length; i++) {
+                ctxAlignRadios[i].checked = (ctxAlignRadios[i].value === 'left');
+            }
+            updateAlignHighlight('left');
+
+            closeContextMenu();
+        });
+
+        document.addEventListener('mousedown', function(e) {
+            if (tbMenu.style.display === 'block') {
+                if (!tbMenu.contains(e.target)) closeContextMenu();
+            }
+        });
+
+        tbMenu.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+
+        // ========== TEXTBOX ==========
+        function createTextbox(x, y) {
+            var tb = document.createElement('div');
+            tb.className = 'textbox';
+            tb.contentEditable = 'false';
+            tb.style.left = (x || 60) + 'px';
+            tb.style.top = (y || 60) + 'px';
+            tb.style.fontFamily = 'Arial';
+            tb.style.fontSize = '16px';
+            tb.style.color = '#000000';
+            tb.textContent = 'Nhập text...';
+
+            var del = document.createElement('span');
+            del.className = 'tb-delete';
+            del.textContent = '×';
+            del.title = 'Xoá textbox';
+            tb.appendChild(del);
+
+            del.addEventListener('mousedown', function(ev) {
+                ev.stopPropagation();
+                ev.preventDefault();
+                if (tb.parentNode) tb.parentNode.removeChild(tb);
+            });
+
+            tb.addEventListener('dblclick', function(ev) {
+                ev.stopPropagation();
+                enterEditMode(tb);
+            });
+
+            tb.addEventListener('contextmenu', function(ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                if (tb.contentEditable === 'true') tb.blur();
+                openContextMenu(tb, ev.clientX, ev.clientY);
+            });
+
+            tb.addEventListener('mousedown', function(ev) {
+                if (tb.contentEditable === 'true') return;
+                if (ev.target === del) return;
+                if (ev.button === 2) return;
+                ev.preventDefault();
+                ev.stopPropagation();
+
+                var startX = ev.clientX;
+                var startY = ev.clientY;
+                var startLeft = parseInt(tb.style.left, 10) || 0;
+                var startTop = parseInt(tb.style.top, 10) || 0;
+
+                function moveHandler(me) {
+                    var dx = me.clientX - startX;
+                    var dy = me.clientY - startY;
+                    tb.style.left = Math.max(0, startLeft + dx) + 'px';
+                    tb.style.top = Math.max(0, startTop + dy) + 'px';
+                }
+                function upHandler() {
+                    document.removeEventListener('mousemove', moveHandler);
+                    document.removeEventListener('mouseup', upHandler);
+                }
+                document.addEventListener('mousemove', moveHandler);
+                document.addEventListener('mouseup', upHandler);
+            });
+
+            tb.addEventListener('blur', function() { exitEditMode(tb); });
+
+            tb.addEventListener('keydown', function(ev) {
+                if (ev.key === 'Escape') {
+                    ev.preventDefault();
+                    tb.blur();
+                }
+                ev.stopPropagation();
+            });
+
+            board.appendChild(tb);
+            return tb;
+        }
+
+        function enterEditMode(tb) {
+            tb.contentEditable = 'true';
+            tb.classList.add('editing');
+            tb.focus();
+            if (tb.textContent === 'Nhập text...') {
+                var range = document.createRange();
+                range.selectNodeContents(tb);
+                var sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+        }
+
+        function exitEditMode(tb) {
+            tb.contentEditable = 'false';
+            tb.classList.remove('editing');
+        }
+
+        // ========== BÀN PHÍM ==========
+        document.addEventListener('keydown', function(e) {
+            var tag = (e.target.tagName || '').toLowerCase();
+            var isInTextbox = e.target.classList && e.target.classList.contains('textbox');
+            if (isInTextbox) return;
+            if (tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
+
+            var key = e.key;
+            switch (key) {
+                case 'v': case 'V':
+                    isDrawing = !isDrawing;
+                    if (isDrawing) {
+                        canvas.classList.add('active');
+                    } else {
+                        canvas.classList.remove('active');
+                        canvas.classList.remove('eraser');
+                        isErasing = false;
+                        isPointerDown = false;
+                        currentStroke = null;
+                    }
+                    e.preventDefault();
+                    break;
+
+                case '0':
+                    if (isDrawing) { strokeColor = '#0066CC'; isErasing = false; canvas.classList.remove('eraser'); }
+                    e.preventDefault();
+                    break;
+
+                case '1':
+                    if (isDrawing) { strokeColor = '#FF0000'; isErasing = false; canvas.classList.remove('eraser'); }
+                    e.preventDefault();
+                    break;
+
+                case 'd': case 'D':
+                    if (isDrawing) { strokeColor = '#000000'; isErasing = false; canvas.classList.remove('eraser'); }
+                    e.preventDefault();
+                    break;
+
+                case 'n': case 'N':
+                    if (isDrawing) { strokeColor = DEFAULT_COLOR; isErasing = false; canvas.classList.remove('eraser'); }
+                    e.preventDefault();
+                    break;
+
+                case 'b': case 'B':
+                    if (isDrawing) {
+                        strokeWidth += 1;
+                        if (strokeWidth > 50) strokeWidth = 50;
+                        isErasing = false;
+                        canvas.classList.remove('eraser');
+                    }
+                    e.preventDefault();
+                    break;
+
+                case 'm': case 'M':
+                    if (isDrawing) {
+                        strokeWidth -= 1;
+                        if (strokeWidth < 1) strokeWidth = 1;
+                        isErasing = false;
+                        canvas.classList.remove('eraser');
+                    }
+                    e.preventDefault();
+                    break;
+
+                case '2':
+                    if (isDrawing) { strokeWidth = DEFAULT_WIDTH; isErasing = false; canvas.classList.remove('eraser'); }
+                    e.preventDefault();
+                    break;
+
+                case '3':
+                    if (isDrawing) { isErasing = true; canvas.classList.add('eraser'); }
+                    e.preventDefault();
+                    break;
+
+                case '4':
+                    document.body.classList.add('gray-bg');
+                    e.preventDefault();
+                    break;
+
+                case '5':
+                    document.body.classList.remove('gray-bg');
+                    e.preventDefault();
+                    break;
+
+                case 'x': case 'X':
+                    if (isDrawing) {
+                        strokes = [];
+                        currentStroke = null;
+                        redrawAll();
+                    }
+                    e.preventDefault();
+                    break;
+
+                case 't': case 'T':
+                    var viewCenterX = window.scrollX + window.innerWidth / 2 - 60;
+                    var viewCenterY = window.scrollY + window.innerHeight / 2 - 15;
+                    var newTb = createTextbox(viewCenterX, viewCenterY);
+                    setTimeout(function() { enterEditMode(newTb); }, 50);
+                    e.preventDefault();
+                    break;
+
+                case 'p': case 'P':
+                    handlePaste();
+                    e.preventDefault();
+                    break;
+
+                default:
+                    break;
+            }
+        }, true);
+
+        // ========== PASTE HÌNH ẢNH TỪ CLIPBOARD ==========
+        function handlePaste() {
+            if (navigator.clipboard && navigator.clipboard.read) {
+                navigator.clipboard.read().then(function(items) {
+                    for (var i = 0; i < items.length; i++) {
+                        var item = items[i];
+                        for (var j = 0; j < item.types.length; j++) {
+                            var type = item.types[j];
+                            if (type.indexOf('image') === 0) {
+                                item.getType(type).then(function(blob) {
+                                    var url = URL.createObjectURL(blob);
+                                    addImageToBoard(url);
+                                });
+                                return;
+                            }
+                        }
+                    }
+                }).catch(function(err) {
+                    console.log('Clipboard API không khả dụng:', err);
+                });
+            }
+        }
+
+        document.addEventListener('paste', function(e) {
+            var isInTextbox = e.target.classList && e.target.classList.contains('textbox');
+            if (isInTextbox) return;
+            var items = (e.clipboardData || window.clipboardData).items;
+            if (!items) return;
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf('image') === 0) {
+                    var blob = items[i].getAsFile();
+                    if (blob) {
+                        var url = URL.createObjectURL(blob);
+                        addImageToBoard(url);
+                        e.preventDefault();
+                    }
+                }
+            }
+        });
+
+        function addImageToBoard(src) {
+            var img = document.createElement('img');
+            img.className = 'pasted-img';
+            img.src = src;
+            img.draggable = false;
+            img.alt = '';
+            img.addEventListener('dragstart', function(e) { e.preventDefault(); });
+            board.insertBefore(img, canvas);
+            img.onload = function() {
+                updateBoardHeight();
+                setTimeout(resizeCanvas, 50);
+            };
+        }
+
+        // Đảm bảo board cao ít nhất bằng tổng các ảnh + viewport
+        function updateBoardHeight() {
+            // Board tự co theo ảnh (img là block, width 100vw)
+            // Chỉ cần đảm bảo min-height >= viewport
+            board.style.minHeight = '100vh';
+        }
+
+        // ========== KHỞI TẠO ==========
+        function init() {
+            resizeCanvas();
+            updateBoardHeight();
+        }
+
+        window.addEventListener('load', function() {
+            setTimeout(init, 100);
+        });
+
+        window.addEventListener('resize', function() {
+            updateBoardHeight();
+            resizeCanvas();
+        });
+
+        if (window.ResizeObserver) {
+            var ro = new ResizeObserver(function() { resizeCanvas(); });
+            ro.observe(board);
+        }
+
+        document.addEventListener('mousedown', function(e) {
+            if (e.button === 2) e.preventDefault();
+        });
+
+    })();
+    </script>
+
+</body>
+</html>
