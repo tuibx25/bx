@@ -738,7 +738,7 @@
         <canvas id="drawCanvas"></canvas>
     </div>
 
-    <!-- Toolbar siêu nhỏ, sát mép dưới -->
+    <!-- Toolbar siêu nhỏ, sát mép dưới - có 2 nút elip và tròn -->
     <div id="tabletToolbar">
         <div class="tb-btn" data-action="pen" data-mode="pen">
             <span class="tb-icon">🖊️</span>
@@ -748,6 +748,9 @@
         </div>
         <div class="tb-btn" data-action="arrow" data-mode="arrow">
             <span class="tb-icon">➡️</span>
+        </div>
+        <div class="tb-btn" data-action="ellipse" data-mode="ellipse">
+            <span class="tb-icon">⬭</span>
         </div>
         <div class="tb-btn" data-action="circle" data-mode="circle">
             <span class="tb-icon">⭕</span>
@@ -841,6 +844,7 @@
                     <label class="ctx-radio active" data-mode="pen"><input type="radio" name="drawMode" value="pen" checked>✏️ Bút</label>
                     <label class="ctx-radio" data-mode="line"><input type="radio" name="drawMode" value="line">📏 Thẳng</label>
                     <label class="ctx-radio" data-mode="arrow"><input type="radio" name="drawMode" value="arrow">➡️ Mũi tên</label>
+                    <label class="ctx-radio" data-mode="ellipse"><input type="radio" name="drawMode" value="ellipse">⬭ Elip</label>
                     <label class="ctx-radio" data-mode="circle"><input type="radio" name="drawMode" value="circle">⭕ Tròn</label>
                     <label class="ctx-radio" data-mode="eraser"><input type="radio" name="drawMode" value="eraser">🧽 Tẩy</label>
                 </div>
@@ -848,7 +852,7 @@
 
             <div class="ctx-row" style="margin-top:-2px;">
                 <label></label>
-                <span style="font-size:11px;color:#888;">Giữ <b>Shift</b> khi kéo ⭕ để vẽ hình tròn hoàn hảo</span>
+                <span style="font-size:11px;color:#888;">⬭ Elip tự do · ⭕ Tròn hoàn hảo (không cần Shift)</span>
             </div>
 
             <div class="ctx-row ctx-section" style="margin-bottom:0;">
@@ -1103,7 +1107,6 @@
         var strokes = [];
         var currentStroke = null;
 
-        // Hàm bật chế độ vẽ
         function enableDrawing() {
             if (isDrawing) return;
             isDrawing = true;
@@ -1113,7 +1116,6 @@
             updateCursor();
         }
 
-        // Hàm tắt chế độ vẽ
         function disableDrawing() {
             if (!isDrawing) return;
             isDrawing = false;
@@ -1123,7 +1125,6 @@
             isPointerDown = false;
             currentStroke = null;
             shapePreview = null;
-            // Bỏ active tất cả nút mode trên toolbar
             var modeBtns = document.querySelectorAll('#tabletToolbar .tb-btn[data-mode]');
             for (var i = 0; i < modeBtns.length; i++) modeBtns[i].classList.remove('active');
             redrawAll();
@@ -1564,7 +1565,7 @@
         }
 
         function drawStroke(stroke) {
-            if (stroke.type === 'line' || stroke.type === 'arrow' || stroke.type === 'circle') {
+            if (stroke.type === 'line' || stroke.type === 'arrow' || stroke.type === 'circle' || stroke.type === 'ellipse') {
                 drawShape(stroke);
                 return;
             }
@@ -1632,11 +1633,19 @@
                 ctx.stroke();
             } else if (shape.type === 'arrow') {
                 drawArrow(ctx, x1, y1, x2, y2, shape.width);
-            } else if (shape.type === 'circle') {
+            } else if (shape.type === 'ellipse' || shape.type === 'circle') {
                 var cx = (x1 + x2) / 2;
                 var cy = (y1 + y2) / 2;
                 var rx = Math.abs(x2 - x1) / 2;
                 var ry = Math.abs(y2 - y1) / 2;
+
+                if (shape.type === 'circle') {
+                    // Tròn hoàn hảo: dùng bán kính lớn nhất cho cả 2 chiều
+                    var r = Math.max(rx, ry);
+                    rx = r;
+                    ry = r;
+                }
+
                 ctx.beginPath();
                 ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
                 ctx.stroke();
@@ -1706,7 +1715,7 @@
             isPointerDown = true;
             var pos = getPos(e);
 
-            if (drawMode === 'line' || drawMode === 'arrow' || drawMode === 'circle') {
+            if (drawMode === 'line' || drawMode === 'arrow' || drawMode === 'circle' || drawMode === 'ellipse') {
                 shapeStartX = pos.x;
                 shapeStartY = pos.y;
                 shapePreview = {
@@ -1748,13 +1757,8 @@
             if (shapePreview) {
                 shapePreview.x2 = pos.x;
                 shapePreview.y2 = pos.y;
-                if (shapePreview.type === 'circle' && e.shiftKey) {
-                    var dx = shapePreview.x2 - shapePreview.x1;
-                    var dy = shapePreview.y2 - shapePreview.y1;
-                    var size = Math.max(Math.abs(dx), Math.abs(dy));
-                    shapePreview.x2 = shapePreview.x1 + (dx < 0 ? -size : size);
-                    shapePreview.y2 = shapePreview.y1 + (dy < 0 ? -size : size);
-                }
+                // Circle mode luôn tự động tròn đều, không cần shift
+                // Ellipse mode giữ nguyên elip
                 redrawAll();
                 return;
             }
@@ -1780,14 +1784,6 @@
 
             if (shapePreview) {
                 var p = shapePreview;
-
-                if (p.type === 'circle' && e && e.shiftKey) {
-                    var dx0 = p.x2 - p.x1;
-                    var dy0 = p.y2 - p.y1;
-                    var size0 = Math.max(Math.abs(dx0), Math.abs(dy0));
-                    p.x2 = p.x1 + (dx0 < 0 ? -size0 : size0);
-                    p.y2 = p.y1 + (dy0 < 0 ? -size0 : size0);
-                }
 
                 var dx = p.x2 - p.x1;
                 var dy = p.y2 - p.y1;
@@ -2881,8 +2877,7 @@
             var mode = btn.getAttribute('data-mode');
 
             switch (action) {
-                case 'pen': case 'line': case 'arrow': case 'circle': case 'eraser':
-                    // Nếu nút đang active và là nút vẽ → bỏ chọn (dừng vẽ)
+                case 'pen': case 'line': case 'arrow': case 'circle': case 'ellipse': case 'eraser':
                     if (btn.classList.contains('active') && isDrawing) {
                         disableDrawing();
                         showToast('Đã dừng vẽ');
@@ -2892,6 +2887,8 @@
                         isErasing = (mode === 'eraser');
                         updateModeHighlight(mode);
                         updateCursor();
+                        if (mode === 'ellipse') showToast('Elip (tự do)');
+                        else if (mode === 'circle') showToast('Tròn hoàn hảo');
                     }
                     break;
 
@@ -2988,6 +2985,7 @@
                 case 'k': case 'K': if (isDrawing) { drawMode = 'pen'; isErasing = false; canvas.classList.remove('eraser'); updateModeHighlight('pen'); updateCursor(); } e.preventDefault(); break;
                 case 'l': case 'L': if (isDrawing) { drawMode = 'line'; isErasing = false; canvas.classList.remove('eraser'); updateModeHighlight('line'); updateCursor(); } e.preventDefault(); break;
                 case 'i': case 'I': if (isDrawing) { drawMode = 'arrow'; isErasing = false; canvas.classList.remove('eraser'); updateModeHighlight('arrow'); updateCursor(); } e.preventDefault(); break;
+                case 'e': case 'E': if (isDrawing) { drawMode = 'ellipse'; isErasing = false; canvas.classList.remove('eraser'); updateModeHighlight('ellipse'); updateCursor(); } e.preventDefault(); break;
                 case 'o': case 'O': if (isDrawing) { drawMode = 'circle'; isErasing = false; canvas.classList.remove('eraser'); updateModeHighlight('circle'); updateCursor(); } e.preventDefault(); break;
                 case 'p': case 'P': pasteImageFromClipboard(); e.preventDefault(); break;
                 case '4': document.body.classList.add('gray-bg'); e.preventDefault(); break;
