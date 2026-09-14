@@ -738,7 +738,7 @@
         <canvas id="drawCanvas"></canvas>
     </div>
 
-    <!-- Toolbar siêu nhỏ, sát mép dưới, không có nút bánh răng -->
+    <!-- Toolbar siêu nhỏ, sát mép dưới -->
     <div id="tabletToolbar">
         <div class="tb-btn" data-action="pen" data-mode="pen">
             <span class="tb-icon">🖊️</span>
@@ -1029,7 +1029,7 @@
                             (navigator.msMaxTouchPoints > 0);
         var showToolbar = isTouchDevice;
 
-        // ========== CHẶN CONTEXT MENU TRÊN TOOLBAR VÀ NÚT TOGGLE ==========
+        // ========== CHẶN CONTEXT MENU ==========
         document.addEventListener('contextmenu', function(e) {
             var tb = e.target.closest && e.target.closest('.textbox');
             var iw = e.target.closest && e.target.closest('.img-wrapper');
@@ -1102,6 +1102,32 @@
 
         var strokes = [];
         var currentStroke = null;
+
+        // Hàm bật chế độ vẽ
+        function enableDrawing() {
+            if (isDrawing) return;
+            isDrawing = true;
+            canvas.classList.add('active');
+            document.body.classList.add('drawing-mode');
+            deselectAll();
+            updateCursor();
+        }
+
+        // Hàm tắt chế độ vẽ
+        function disableDrawing() {
+            if (!isDrawing) return;
+            isDrawing = false;
+            canvas.classList.remove('active', 'eraser', 'shape-mode');
+            document.body.classList.remove('drawing-mode');
+            isErasing = false;
+            isPointerDown = false;
+            currentStroke = null;
+            shapePreview = null;
+            // Bỏ active tất cả nút mode trên toolbar
+            var modeBtns = document.querySelectorAll('#tabletToolbar .tb-btn[data-mode]');
+            for (var i = 0; i < modeBtns.length; i++) modeBtns[i].classList.remove('active');
+            redrawAll();
+        }
 
         // ========== HISTORY ==========
         var history = [];
@@ -1836,12 +1862,7 @@
                 if (qcSw[k].getAttribute('data-color').toUpperCase() === color.toUpperCase()) qcSw[k].classList.add('active');
                 else qcSw[k].classList.remove('active');
             }
-            if (!isDrawing) {
-                isDrawing = true;
-                canvas.classList.add('active');
-                document.body.classList.add('drawing-mode');
-                canvas.classList.remove('eraser');
-            }
+            enableDrawing();
             updateCursor();
         }
 
@@ -1881,11 +1902,7 @@
             isErasing = (mode === 'eraser');
             updateModeHighlight(mode);
             updateCursor();
-            if (!isDrawing) {
-                isDrawing = true;
-                canvas.classList.add('active');
-                document.body.classList.add('drawing-mode');
-            }
+            enableDrawing();
         });
 
         drawClearAll.addEventListener('click', function() {
@@ -2395,7 +2412,7 @@
 
         function stopSpeechRecognition() {
             isListening = false;
-            if (recognition) { try { recognition.stop(); } catch (ex) {} }
+            if (recognition) { try { recognition.stop(); } catch(ex) {} }
             if (activeMicTextbox) {
                 activeMicTextbox.classList.remove('mic-active');
                 var micBtn = activeMicTextbox.querySelector('.tb-mic');
@@ -2865,15 +2882,17 @@
 
             switch (action) {
                 case 'pen': case 'line': case 'arrow': case 'circle': case 'eraser':
-                    if (!isDrawing) {
-                        isDrawing = true;
-                        canvas.classList.add('active');
-                        document.body.classList.add('drawing-mode');
+                    // Nếu nút đang active và là nút vẽ → bỏ chọn (dừng vẽ)
+                    if (btn.classList.contains('active') && isDrawing) {
+                        disableDrawing();
+                        showToast('Đã dừng vẽ');
+                    } else {
+                        enableDrawing();
+                        drawMode = mode;
+                        isErasing = (mode === 'eraser');
+                        updateModeHighlight(mode);
+                        updateCursor();
                     }
-                    drawMode = mode;
-                    isErasing = (mode === 'eraser');
-                    updateModeHighlight(mode);
-                    updateCursor();
                     break;
 
                 case 'text':
@@ -2940,20 +2959,8 @@
             var key = e.key;
             switch (key) {
                 case 'v': case 'V':
-                    isDrawing = !isDrawing;
-                    if (isDrawing) {
-                        canvas.classList.add('active');
-                        document.body.classList.add('drawing-mode');
-                        deselectAll();
-                        updateCursor();
-                    } else {
-                        canvas.classList.remove('active', 'eraser', 'shape-mode');
-                        document.body.classList.remove('drawing-mode');
-                        isErasing = false;
-                        isPointerDown = false;
-                        currentStroke = null;
-                        shapePreview = null;
-                    }
+                    if (isDrawing) disableDrawing();
+                    else enableDrawing();
                     e.preventDefault();
                     break;
                 case 'z': case 'Z':
