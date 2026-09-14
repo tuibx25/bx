@@ -649,20 +649,20 @@
             display: none !important;
         }
 
-        /* Nút toggle toolbar */
+        /* Nút toggle toolbar - luôn hiển thị trên thiết bị cảm ứng */
         #toolbarToggle {
             position: fixed;
             bottom: calc(4px + env(safe-area-inset-bottom, 0px));
             right: 4px;
             z-index: 9999;
-            width: 22px;
-            height: 22px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             background: #0066CC;
             color: #fff;
             border: none;
             box-shadow: 0 2px 8px rgba(0, 102, 204, 0.4);
-            font-size: 11px;
+            font-size: 12px;
             cursor: pointer;
             display: none;
             align-items: center;
@@ -738,7 +738,7 @@
         <canvas id="drawCanvas"></canvas>
     </div>
 
-    <!-- Toolbar siêu nhỏ, sát mép dưới - có 2 nút elip và tròn -->
+    <!-- Toolbar siêu nhỏ, sát mép dưới -->
     <div id="tabletToolbar">
         <div class="tb-btn" data-action="pen" data-mode="pen">
             <span class="tb-icon">🖊️</span>
@@ -1065,9 +1065,10 @@
             }
         }, true);
 
+        // Chỉ hiện nút toggle, KHÔNG tự động mở toolbar
         if (showToolbar) {
-            document.getElementById('tabletToolbar').classList.add('visible');
             document.getElementById('toolbarToggle').classList.add('visible');
+            // Toolbar mặc định ẩn - không thêm class 'visible' hay 'toolbar-open'
         }
 
         // ========== TOAST ==========
@@ -1640,7 +1641,6 @@
                 var ry = Math.abs(y2 - y1) / 2;
 
                 if (shape.type === 'circle') {
-                    // Tròn hoàn hảo: dùng bán kính lớn nhất cho cả 2 chiều
                     var r = Math.max(rx, ry);
                     rx = r;
                     ry = r;
@@ -1757,8 +1757,6 @@
             if (shapePreview) {
                 shapePreview.x2 = pos.x;
                 shapePreview.y2 = pos.y;
-                // Circle mode luôn tự động tròn đều, không cần shift
-                // Ellipse mode giữ nguyên elip
                 redrawAll();
                 return;
             }
@@ -2852,11 +2850,7 @@
             this.textContent = toolbarOpen ? '✕' : '☰';
         });
 
-        if (showToolbar) {
-            toolbarOpen = true;
-            document.body.classList.add('toolbar-open');
-            document.getElementById('toolbarToggle').textContent = '✕';
-        }
+        // KHÔNG tự động mở toolbar - mặc định ẩn
 
         // Quick colors
         document.getElementById('quickColors').addEventListener('click', function(e) {
@@ -2966,6 +2960,11 @@
                     break;
                 case 'a': case 'A':
                     createTextbox(window.scrollX + window.innerWidth / 2 - 60, window.scrollY + window.innerHeight / 2 - 15, true);
+                    e.preventDefault();
+                    break;
+                case 'c': case 'C':
+                    // Phím C: chọn ảnh chèn vào trang
+                    openImageFilePicker();
                     e.preventDefault();
                     break;
                 case '0': if (isDrawing) setActiveColor('#0066CC'); e.preventDefault(); break;
