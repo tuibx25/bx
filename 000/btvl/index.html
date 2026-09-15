@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hệ Thống Bài Tập Vật Lý Online</title>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { 
+    getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, 
+    signOut, onAuthStateChanged 
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { 
+    getFirestore, collection, addDoc, getDocs, doc, deleteDoc, 
+    updateDoc, query, where, orderBy, getDoc, setDoc, serverTimestamp 
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  // ==== CẤU HÌNH FIREBASE - THAY BẰNG THÔNG TIN CỦA BẠN ====
+  const firebaseConfig = {
+    apiKey: "AIzaSyDX1tt6PyBUxCwU6qTe9Cn9bbbWhgLKLKU",
+  authDomain: "bx-vlpt.firebaseapp.com",
+  projectId: "bx-vlpt",
+  storageBucket: "bx-vlpt.firebasestorage.app",
+  messagingSenderId: "223423849238",
+  appId: "1:223423849238:web:5407c3bc93d68654dc2637",
+  measurementId: "G-S37RM7Q5C5"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // Email giáo viên (cố định - người dùng này có quyền admin)
+  const TEACHER_EMAIL = "trntui6@gmail.com";
+
+  window.FB = { auth, db, TEACHER_EMAIL,
+    createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged,
+    collection, addDoc, getDocs, doc, deleteDoc, updateDoc, query, where, orderBy, getDoc, setDoc, serverTimestamp
+  };
+</script>
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #F5F5F5;
+    color: #000;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #8B5A2B 0%, #8B4513 100%);
+    color: #FFFFFF;
+    padding: 18px 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  header h1 { font-size: 22px; font-weight: 600; }
+  header .user-info { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+  header button { cursor: pointer; }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 24px 20px; }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #D3D3D3;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    padding: 12px 28px;
+    background: #F5F5DC;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    color: #8B4513;
+    border-radius: 8px 8px 0 0;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: #F5DEB3; }
+  .tab-btn.active {
+    background: #FFFFFF;
+    border-bottom-color: #8B5A2B;
+    color: #8B4513;
+  }
+
+  /* Buttons */
+  .btn {
+    padding: 9px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .btn-primary { background: #8B5A2B; color: #FFFFFF; }
+  .btn-primary:hover { background: #8B4513; }
+  .btn-secondary { background: #0066CC; color: #FFFFFF; }
+  .btn-secondary:hover { background: #004488; }
+  .btn-light { background: #F5DEB3; color: #000; border: 1px solid #D3D3D3; }
+  .btn-light:hover { background: #F5F5DC; }
+  .btn-danger { background: #c0392b; color: #FFFFFF; }
+  .btn-danger:hover { background: #a93226; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-sm { padding: 6px 12px; font-size: 13px; }
+
+  /* Cards */
+  .card {
+    background: #FFFFFF;
+    border: 1px solid #D3D3D3;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .card h3 { color: #8B4513; margin-bottom: 8px; font-size: 17px; }
+  .card .meta { font-size: 13px; color: #555; margin-bottom: 10px; }
+  .card .content { 
+    background: #F5F5DC; 
+    padding: 12px; 
+    border-radius: 6px; 
+    margin: 10px 0;
+    white-space: pre-wrap;
+    font-size: 14px;
+  }
+
+  /* Forms */
+  .form-group { margin-bottom: 14px; }
+  .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 14px; color: #333; }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #D3D3D3;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #FFFFFF;
+    color: #000;
+  }
+  .form-group textarea { min-height: 100px; resize: vertical; }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    outline: none;
+    border-color: #8B5A2B;
+    box-shadow: 0 0 0 2px rgba(139,90,43,0.15);
+  }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000; padding: 20px;
+  }
+  .modal {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 28px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal h2 { color: #8B4513; margin-bottom: 18px; font-size: 20px; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+  /* Status badges */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .badge-pending { background: #F5DEB3; color: #8B4513; }
+  .badge-approved { background: #0066CC; color: #FFFFFF; }
+  .badge-rejected { background: #D3D3D3; color: #333; }
+  .badge-done { background: #8B5A2B; color: #FFFFFF; }
+  .badge-graded { background: #004488; color: #FFFFFF; }
+
+  /* Sections */
+  .hidden { display: none !important; }
+  .empty { text-align: center; color: #777; padding: 40px; font-style: italic; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .space-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+
+  /* Submission boxes */
+  .submission {
+    background: #F5F5DC;
+    border-left: 4px solid #8B5A2B;
+    padding: 14px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  .submission.graded { border-left-color: #004488; background: #F5F5F5; }
+
+  /* Login area */
+  .login-box {
+    max-width: 420px;
+    margin: 40px auto;
+    background: #FFFFFF;
+    padding: 32px;
+    border-radius: 12px;
+    border: 1px solid #D3D3D3;
+  }
+
+  /* Alert */
+  .alert {
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 14px;
+    font-size: 14px;
+  }
+  .alert-info { background: #F5F5DC; border: 1px solid #F5DEB3; color: #000; }
+  .alert-error { background: #F5F5DC; border: 1px solid #c0392b; color: #c0392b; }
+  .alert-success { background: #F5F5DC; border: 1px solid #0066CC; color: #004488; }
+
+  /* Score input */
+  .score-input { width: 80px !important; display: inline-block; }
+
+  /* Tab content */
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Small text */
+  .text-sm { font-size: 13px; color: #555; }
+  .mt-2 { margin-top: 10px; }
+  .mb-2 { margin-bottom: 10px; }
+
+  /* Toast */
+  #toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: #8B4513;
+    color: #FFFFFF;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 2000;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 14px;
+    max-width: 340px;
+  }
+  #toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📚 Hệ Thống Bài Tập Vật Lý Online</h1>
+  <div class="user-info">
+    <span id="userLabel">Khách (chưa đăng nhập)</span>
+    <button id="authBtn" class="btn btn-light btn-sm">Đăng nhập</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- TABS -->
+  <div class="tabs" id="mainTabs">
+    <button class="tab-btn active" data-tab="tab-view">📖 Xem Bài Tập</button>
+    <button class="tab-btn" data-tab="tab-submit">✍️ Bài Làm Của Tôi</button>
+    <button class="tab-btn hidden" data-tab="tab-teacher" id="teacherTabBtn">👨‍🏫 Quản Lý (GV)</button>
+  </div>
+
+  <!-- TAB: VIEW ASSIGNMENTS -->
+  <div id="tab-view" class="tab-content active">
+    <div class="tabs" style="border:none; margin-bottom:16px;">
+      <button class="tab-btn active grade-tab" data-grade="10">Vật Lý 10</button>
+      <button class="tab-btn grade-tab" data-grade="11">Vật Lý 11</button>
+      <button class="tab-btn grade-tab" data-grade="12">Vật Lý 12</button>
+    </div>
+    <div id="assignmentsList"></div>
+  </div>
+
+  <!-- TAB: MY SUBMISSIONS -->
+  <div id="tab-submit" class="tab-content">
+    <div id="mySubmissions"></div>
+  </div>
+
+  <!-- TAB: TEACHER -->
+  <div id="tab-teacher" class="tab-content">
+    <div class="card">
+      <div class="space-between mb-2">
+        <h3>➕ Thêm Bài Tập Mới</h3>
+        <button class="btn btn-light btn-sm" id="showAddFormBtn">Hiện/Ẩn form</button>
+      </div>
+      <div id="addFormWrap" class="hidden">
+        <div class="row">
+          <div class="form-group" style="flex:1; min-width:140px;">
+            <label>Khối lớp</label>
+            <select id="addGrade">
+              <option value="10">Vật Lý 10</option>
+              <option value="11">Vật Lý 11</option>
+              <option value="12">Vật Lý 12</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex:3; min-width:220px;">
+            <label>Tiêu đề bài tập</label>
+            <input id="addTitle" placeholder="VD: Bài 5 - Động lượng" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Nội dung / Đề bài</label>
+          <textarea id="addContent" placeholder="Nhập đề bài chi tiết..."></textarea>
+        </div>
+        <div class="row">
+          <div class="form-group" style="flex:1;">
+            <label>Hạn nộp (tuỳ chọn)</label>
+            <input type="date" id="addDeadline" />
+          </div>
+          <div class="form-group" style="flex:1;">
+            <label>Điểm tối đa</label>
+            <input type="number" id="addMaxScore" value="10" min="1" max="100" />
+          </div>
+        </div>
+        <button class="btn btn-primary" id="addAssignmentBtn">Thêm bài tập</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>👥 Duyệt Học Sinh</h3>
+      <p class="text-sm mb-2">Học sinh đăng ký cần được bạn xác nhận mới có thể làm bài.</p>
+      <div id="pendingUsers"></div>
+    </div>
+
+    <div class="card">
+      <h3>📋 Danh Sách Bài Tập & Bài Làm</h3>
+      <div id="teacherAssignments"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL: AUTH -->
+<div id="authModal" class="modal-overlay hidden">
+  <div class="modal">
+    <h2 id="authModalTitle">Đăng nhập</h2>
+    <div id="authError"></div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="authEmail" placeholder="trntui6@gmail.com" />
+    </div>
+    <div class="form-group">
+      <label>Mật khẩu</label>
+      <input type="password" id="authPassword" placeholder="Ít nhất 6 ký tự" />
+    </div>
+    <div class="form-group" id="authNameGroup" style="display:none;">
+      <label>Họ và tên</label>
+      <input type="text" id="authName" placeholder="Nguyễn Văn A" />
+    </div>
+    <div class="form-group" id="authClassGroup" style="display:none;">
+      <label>Lớp</label>
+      <input type="text" id="authClass" placeholder="VD: 10A1" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-light" id="authCancelBtn">Hủy</button>
+      <button class="btn btn-primary" id="authSubmitBtn">Đăng nhập</button>
+    </div>
+    <p class="text-sm mt-2" style="text-align:center;">
+      <a href="#" id="toggleAuthMode" style="color:#0066CC;">Chưa có tài khoản? Đăng ký</a>
+    </p>
+  </div>
+</div>
+
+<!-- MODAL: DO ASSIGNMENT -->
+<div id="doModal" class="modal-overlay hidden">
+  <div class="modal" style="max-width: 720px;">
+    <h2 id="doTitle">Làm bài</h2>
+    <div id="doContent" class="content" style="margin-bottom:16px;"></div>
+    <div class="form-group">
+      <label>Bài làm của em</label>
+      <textarea id="doAnswer" placeholder="Nhập lời giải / đáp án..." style="min-height:180px;"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-light" id="doCancelBtn">Hủy</button>
+      <button class="btn btn-primary" id="doSubmitBtn">Nộp bài</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: GRADE -->
+<div id="gradeModal" class="modal-overlay hidden">
+  <div class="modal" style="max-width: 720px;">
+    <h2>Chấm bài</h2>
+    <div id="gradeInfo"></div>
+    <div class="form-group">
+      <label>Điểm (thang 10)</label>
+      <input type="number" id="gradeScore" min="0" max="10" step="0.25" class="score-input" />
+    </div>
+    <div class="form-group">
+      <label>Nhận xét</label>
+      <textarea id="gradeComment" placeholder="Nhận xét cho học sinh..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-light" id="gradeCancelBtn">Hủy</button>
+      <button class="btn btn-primary" id="gradeSaveBtn">Lưu điểm</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+  const { auth, db, TEACHER_EMAIL,
+    createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged,
+    collection, addDoc, getDocs, doc, deleteDoc, updateDoc, query, where, orderBy, getDoc, setDoc, serverTimestamp
+  } = window.FB;
+
+  let currentUser = null;     // Firebase user
+  let currentProfile = null;  // { role, name, class, approved }
+  let currentGrade = "10";
+  let authMode = "login";     // 'login' | 'register'
+  let currentDoAssignment = null;
+  let currentGradeSubmission = null;
+
+  // ---------- HELPERS ----------
+  const $ = (id) => document.getElementById(id);
+  const show = (el) => el.classList.remove('hidden');
+  const hide = (el) => el.classList.add('hidden');
+  const esc = (s) => (s ?? '').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  function toast(msg, type='info') {
+    const t = $('toast');
+    t.textContent = msg;
+    t.style.background = type === 'error' ? '#c0392b' : (type === 'success' ? '#0066CC' : '#8B4513');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  function fmtDate(ts) {
+    if (!ts) return '—';
+    const d = ts.toDate ? ts.toDate() : new Date(ts);
+    return d.toLocaleString('vi-VN');
+  }
+
+  // ---------- TABS ----------
+  document.querySelectorAll('.tab-btn[data-tab]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      $('tab-' + btn.dataset.tab.split('-')[1]).classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('.grade-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.grade-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentGrade = btn.dataset.grade;
+      loadAssignments();
+    });
+  });
+
+  // ---------- AUTH ----------
+  $('authBtn').addEventListener('click', () => {
+    if (currentUser) {
+      signOut(auth).then(() => toast('Đã đăng xuất'));
+    } else {
+      openAuthModal('login');
+    }
+  });
+
+  function openAuthModal(mode) {
+    authMode = mode;
+    $('authModalTitle').textContent = mode === 'login' ? 'Đăng nhập' : 'Đăng ký';
+    $('authSubmitBtn').textContent = mode === 'login' ? 'Đăng nhập' : 'Đăng ký';
+    $('authNameGroup').style.display = mode === 'register' ? 'block' : 'none';
+    $('authClassGroup').style.display = mode === 'register' ? 'block' : 'none';
+    $('toggleAuthMode').textContent = mode === 'login' ? 'Chưa có tài khoản? Đăng ký' : 'Đã có tài khoản? Đăng nhập';
+    $('authError').innerHTML = '';
+    show($('authModal'));
+  }
+
+  $('toggleAuthMode').addEventListener('click', (e) => {
+    e.preventDefault();
+    openAuthModal(authMode === 'login' ? 'register' : 'login');
+  });
+
+  $('authCancelBtn').addEventListener('click', () => hide($('authModal')));
+
+  $('authSubmitBtn').addEventListener('click', async () => {
+    const email = $('authEmail').value.trim();
+    const pass = $('authPassword').value;
+    $('authError').innerHTML = '';
+    if (!email || pass.length < 6) {
+      $('authError').innerHTML = '<div class="alert alert-error">Email hợp lệ và mật khẩu ≥ 6 ký tự.</div>';
+      return;
+    }
+    try {
+      if (authMode === 'login') {
+        await signInWithEmailAndPassword(auth, email, pass);
+        toast('Đăng nhập thành công', 'success');
+      } else {
+        const name = $('authName').value.trim();
+        const cls = $('authClass').value.trim();
+        if (!name) {
+          $('authError').innerHTML = '<div class="alert alert-error">Vui lòng nhập họ tên.</div>';
+          return;
+        }
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+        const isTeacher = email.toLowerCase() === TEACHER_EMAIL.toLowerCase();
+        await setDoc(doc(db, 'users', cred.user.uid), {
+          email, name, class: cls,
+          role: isTeacher ? 'teacher' : 'student',
+          approved: isTeacher,
+          createdAt: serverTimestamp()
+        });
+        toast('Đăng ký thành công! Chờ giáo viên duyệt.', 'success');
+      }
+      hide($('authModal'));
+    } catch (err) {
+      $('authError').innerHTML = `<div class="alert alert-error">${esc(err.message)}</div>`;
+    }
+  });
+
+  // ---------- AUTH STATE ----------
+  onAuthStateChanged(auth, async (user) => {
+    currentUser = user;
+    if (user) {
+      const snap = await getDoc(doc(db, 'users', user.uid));
+      if (snap.exists()) currentProfile = snap.data();
+      else currentProfile = { role: 'student', name: user.email, approved: false };
+
+      $('userLabel').textContent = `${currentProfile.name || user.email} (${currentProfile.role === 'teacher' ? 'Giáo viên' : 'Học sinh'})`;
+      $('authBtn').textContent = 'Đăng xuất';
+
+      if (currentProfile.role === 'teacher') {
+        show($('teacherTabBtn'));
+      } else {
+        hide($('teacherTabBtn'));
+      }
+    } else {
+      currentProfile = null;
+      $('userLabel').textContent = 'Khách (chưa đăng nhập)';
+      $('authBtn').textContent = 'Đăng nhập';
+      hide($('teacherTabBtn'));
+    }
+    loadAssignments();
+    loadMySubmissions();
+    if (currentProfile?.role === 'teacher') {
+      loadPendingUsers();
+      loadTeacherAssignments();
+    }
+  });
+
+  // ---------- LOAD ASSIGNMENTS ----------
+  async function loadAssignments() {
+    const list = $('assignmentsList');
+    list.innerHTML = '<div class="empty">Đang tải...</div>';
+    try {
+      const q = query(collection(db, 'assignments'), where('grade', '==', currentGrade));
+      const snap = await getDocs(q);
+      if (snap.empty) {
+        list.innerHTML = '<div class="empty">Chưa có bài tập cho khối này.</div>';
+        return;
+      }
+      const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      items.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
+      list.innerHTML = items.map(a => `
+        <div class="card">
+          <div class="space-between">
+            <h3>${esc(a.title)}</h3>
+            <span class="badge badge-pending">Khối ${esc(a.grade)}</span>
+          </div>
+          <div class="meta">
+            Điểm tối đa: ${esc(a.maxScore ?? 10)}
+            ${a.deadline ? ` • Hạn: ${esc(a.deadline)}` : ''}
+          </div>
+          <div class="content">${esc(a.content)}</div>
+          <button class="btn btn-primary btn-sm" data-do="${a.id}">Làm bài</button>
+        </div>
+      `).join('');
+      list.querySelectorAll('[data-do]').forEach(btn => {
+        btn.addEventListener('click', () => openDoModal(btn.dataset.do, items));
+      });
+    } catch (err) {
+      list.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`;
+    }
+  }
+
+  // ---------- DO MODAL ----------
+  async function openDoModal(assignmentId, items) {
+    if (!currentUser) { toast('Vui lòng đăng nhập để làm bài', 'error'); openAuthModal('login'); return; }
+    if (currentProfile?.role === 'teacher') { toast('Giáo viên không làm bài', 'error'); return; }
+    if (!currentProfile?.approved) { toast('Tài khoản chưa được giáo viên duyệt', 'error'); return; }
+
+    const a = items.find(x => x.id === assignmentId);
+    if (!a) return;
+
+    // Check số lần làm
+    const subQ = query(collection(db, 'submissions'),
+      where('assignmentId', '==', assignmentId),
+      where('studentId', '==', currentUser.uid));
+    const subSnap = await getDocs(subQ);
+    const count = subSnap.size;
+    if (count >= 3) { toast('Bạn đã làm bài này 3 lần (tối đa)', 'error'); return; }
+
+    currentDoAssignment = a;
+    $('doTitle').textContent = `Làm bài: ${a.title} (lần ${count + 1}/3)`;
+    $('doContent').textContent = a.content;
+    $('doAnswer').value = '';
+    show($('doModal'));
+  }
+
+  $('doCancelBtn').addEventListener('click', () => hide($('doModal')));
+
+  $('doSubmitBtn').addEventListener('click', async () => {
+    const answer = $('doAnswer').value.trim();
+    if (!answer) { toast('Vui lòng nhập bài làm', 'error'); return; }
+    try {
+      await addDoc(collection(db, 'submissions'), {
+        assignmentId: currentDoAssignment.id,
+        assignmentTitle: currentDoAssignment.title,
+        grade: currentDoAssignment.grade,
+        studentId: currentUser.uid,
+        studentName: currentProfile.name || currentUser.email,
+        studentClass: currentProfile.class || '',
+        answer,
+        score: null,
+        comment: '',
+        status: 'submitted',
+        submittedAt: serverTimestamp()
+      });
+      hide($('doModal'));
+      toast('Nộp bài thành công!', 'success');
+      loadMySubmissions();
+      if (currentProfile?.role === 'teacher') loadTeacherAssignments();
+    } catch (err) {
+      toast('Lỗi: ' + err.message, 'error');
+    }
+  });
+
+  // ---------- MY SUBMISSIONS ----------
+  async function loadMySubmissions() {
+    const wrap = $('mySubmissions');
+    if (!currentUser || currentProfile?.role === 'teacher') {
+      wrap.innerHTML = currentUser
+        ? '<div class="empty">Giáo viên không có bài làm.</div>'
+        : '<div class="empty">Vui lòng đăng nhập để xem bài làm của bạn.</div>';
+      return;
+    }
+    wrap.innerHTML = '<div class="empty">Đang tải...</div>';
+    try {
+      const q = query(collection(db, 'submissions'), where('studentId', '==', currentUser.uid));
+      const snap = await getDocs(q);
+      if (snap.empty) { wrap.innerHTML = '<div class="empty">Bạn chưa nộp bài nào.</div>'; return; }
+      const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      items.sort((a,b) => (b.submittedAt?.seconds||0) - (a.submittedAt?.seconds||0));
+
+      // Nhóm theo assignment
+      const grouped = {};
+      items.forEach(s => { (grouped[s.assignmentId] ||= []).push(s); });
+
+      wrap.innerHTML = Object.values(grouped).map(list => {
+        const a = list[0];
+        return `
+          <div class="card">
+            <div class="space-between">
+              <h3>${esc(a.assignmentTitle)}</h3>
+              <span class="badge badge-pending">Khối ${esc(a.grade)} • ${list.length}/3 lần</span>
+            </div>
+            ${list.map((s, i) => `
+              <div class="submission ${s.status === 'graded' ? 'graded' : ''}">
+                <div class="space-between">
+                  <strong>Lần ${list.length - i}</strong>
+                  <span class="text-sm">${fmtDate(s.submittedAt)}</span>
+                </div>
+                <div class="content" style="margin-top:8px;">${esc(s.answer)}</div>
+                ${s.status === 'graded'
+                  ? `<div class="mt-2"><strong>Điểm: ${esc(s.score)}</strong> ${s.comment ? ` • Nhận xét: ${esc(s.comment)}` : ''}</div>`
+                  : '<div class="text-sm mt-2">⏳ Chưa chấm</div>'}
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }).join('');
+    } catch (err) {
+      wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`;
+    }
+  }
+
+  // ================= TEACHER =================
+
+  // Add assignment form
+  $('showAddFormBtn').addEventListener('click', () => $('addFormWrap').classList.toggle('hidden'));
+
+  $('addAssignmentBtn').addEventListener('click', async () => {
+    if (currentProfile?.role !== 'teacher') { toast('Chỉ giáo viên mới thêm bài', 'error'); return; }
+    const grade = $('addGrade').value;
+    const title = $('addTitle').value.trim();
+    const content = $('addContent').value.trim();
+    const deadline = $('addDeadline').value;
+    const maxScore = Number($('addMaxScore').value) || 10;
+    if (!title || !content) { toast('Nhập tiêu đề và nội dung', 'error'); return; }
+    try {
+      await addDoc(collection(db, 'assignments'), {
+        grade, title, content, deadline, maxScore,
+        teacherId: currentUser.uid,
+        createdAt: serverTimestamp()
+      });
+      $('addTitle').value = ''; $('addContent').value = ''; $('addDeadline').value = '';
+      toast('Đã thêm bài tập', 'success');
+      loadAssignments();
+      loadTeacherAssignments();
+    } catch (err) {
+      toast('Lỗi: ' + err.message, 'error');
+    }
+  });
+
+  // Pending users
+  async function loadPendingUsers() {
+    const wrap = $('pendingUsers');
+    wrap.innerHTML = '<div class="empty">Đang tải...</div>';
+    try {
+      const snap = await getDocs(collection(db, 'users'));
+      const pending = snap.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .filter(u => u.role === 'student' && !u.approved);
+      if (!pending.length) { wrap.innerHTML = '<div class="empty">Không có học sinh chờ duyệt.</div>'; return; }
+      wrap.innerHTML = pending.map(u => `
+        <div class="submission">
+          <div class="space-between">
+            <div>
+              <strong>${esc(u.name)}</strong> — ${esc(u.email)}
+              <div class="text-sm">Lớp: ${esc(u.class || '—')}</div>
+            </div>
+            <button class="btn btn-secondary btn-sm" data-approve="${u.id}">✓ Duyệt</button>
+          </div>
+        </div>
+      `).join('');
+      wrap.querySelectorAll('[data-approve]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          await updateDoc(doc(db, 'users', btn.dataset.approve), { approved: true });
+          toast('Đã duyệt học sinh', 'success');
+          loadPendingUsers();
+        });
+      });
+    } catch (err) {
+      wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`;
+    }
+  }
+
+  // Teacher assignments + submissions
+  async function loadTeacherAssignments() {
+    const wrap = $('teacherAssignments');
+    wrap.innerHTML = '<div class="empty">Đang tải...</div>';
+    try {
+      const [aSnap, sSnap] = await Promise.all([
+        getDocs(collection(db, 'assignments')),
+        getDocs(collection(db, 'submissions'))
+      ]);
+      const assignments = aSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      const submissions = sSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      assignments.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
+
+      if (!assignments.length) { wrap.innerHTML = '<div class="empty">Chưa có bài tập nào.</div>'; return; }
+
+      wrap.innerHTML = assignments.map(a => {
+        const subs = submissions.filter(s => s.assignmentId === a.id);
+        return `
+          <div class="card">
+            <div class="space-between">
+              <div>
+                <h3>${esc(a.title)}</h3>
+                <div class="meta">Khối ${esc(a.grade)} • Điểm tối đa: ${esc(a.maxScore ?? 10)} • ${subs.length} bài nộp</div>
+              </div>
+              <button class="btn btn-danger btn-sm" data-del-assignment="${a.id}">🗑 Xoá bài tập</button>
+            </div>
+            <div class="content">${esc(a.content)}</div>
+            ${subs.length ? subs.map(s => `
+              <div class="submission ${s.status === 'graded' ? 'graded' : ''}">
+                <div class="space-between">
+                  <div>
+                    <strong>${esc(s.studentName)}</strong>
+                    ${s.studentClass ? `<span class="text-sm"> — Lớp ${esc(s.studentClass)}</span>` : ''}
+                    <div class="text-sm">${fmtDate(s.submittedAt)}</div>
+                  </div>
+                  <div>
+                    ${s.status === 'graded'
+                      ? `<span class="badge badge-graded">Điểm: ${esc(s.score)}</span>`
+                      : `<span class="badge badge-done">Chưa chấm</span>`}
+                    <button class="btn btn-secondary btn-sm" data-grade-sub="${s.id}">Chấm</button>
+                  </div>
+                </div>
+                <div style="margin-top:8px; white-space:pre-wrap;">${esc(s.answer)}</div>
+                ${s.comment ? `<div class="text-sm mt-2">💬 ${esc(s.comment)}</div>` : ''}
+              </div>
+            `).join('') : '<div class="text-sm" style="padding:8px;">Chưa có bài nộp.</div>'}
+          </div>
+        `;
+      }).join('');
+
+      // Delete assignment
+      wrap.querySelectorAll('[data-del-assignment]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('Xoá bài tập này? (Không xoá bài làm đã nộp)')) return;
+          await deleteDoc(doc(db, 'assignments', btn.dataset.delAssignment));
+          toast('Đã xoá bài tập', 'success');
+          loadAssignments();
+          loadTeacherAssignments();
+        });
+      });
+
+      // Grade submission
+      wrap.querySelectorAll('[data-grade-sub]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const s = submissions.find(x => x.id === btn.dataset.gradeSub);
+          currentGradeSubmission = s;
+          $('gradeInfo').innerHTML = `
+            <div class="content">
+              <strong>${esc(s.studentName)}</strong> — ${esc(s.assignmentTitle)}<br>
+              ${esc(s.answer)}
+            </div>
+          `;
+          $('gradeScore').value = s.score ?? '';
+          $('gradeComment').value = s.comment ?? '';
+          show($('gradeModal'));
+        });
+      });
+    } catch (err) {
+      wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`;
+    }
+  }
+
+  $('gradeCancelBtn').addEventListener('click', () => hide($('gradeModal')));
+
+  $('gradeSaveBtn').addEventListener('click', async () => {
+    if (!currentGradeSubmission) return;
+    const score = Number($('gradeScore').value);
+    if (isNaN(score) || score < 0 || score > 10) { toast('Điểm phải từ 0 đến 10', 'error'); return; }
+    try {
+      await updateDoc(doc(db, 'submissions', currentGradeSubmission.id), {
+        score,
+        comment: $('gradeComment').value.trim(),
+        status: 'graded',
+        gradedAt: serverTimestamp(),
+        gradedBy: currentUser.uid
+      });
+      toast('Đã lưu điểm', 'success');
+      hide($('gradeModal'));
+      loadTeacherAssignments();
+    } catch (err) {
+      toast('Lỗi: ' + err.message, 'error');
+    }
+  });
+
+</script>
+
+</body>
+</html>
