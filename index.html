@@ -9,7 +9,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { 
     getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, 
-    signOut, onAuthStateChanged, sendEmailVerification, deleteUser
+    signOut, onAuthStateChanged, sendEmailVerification
   } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
   import { 
     getFirestore, collection, addDoc, getDocs, doc, deleteDoc, 
@@ -36,7 +36,7 @@
 
   window.FB = { auth, db, TEACHER_EMAIL,
     createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged,
-    sendEmailVerification, deleteUser,
+    sendEmailVerification,
     collection, addDoc, getDocs, doc, deleteDoc, updateDoc, query, where, getDoc, setDoc, serverTimestamp
   };
 </script>
@@ -155,6 +155,7 @@
     box-shadow: 0 0 0 2px rgba(139,90,43,0.15);
   }
   .form-group .hint { font-size: 12px; color: #666; margin-top: 4px; font-style: italic; }
+  .form-group .hint code { background: #F5F5DC; padding: 1px 5px; border-radius: 3px; font-style: normal; }
 
   .modal-overlay {
     position: fixed; inset: 0;
@@ -306,7 +307,6 @@
     text-align: center;
   }
 
-  /* Email verification banner */
   #verifyBanner {
     background: #F5DEB3;
     border-bottom: 2px solid #8B5A2B;
@@ -320,7 +320,17 @@
     color: #8B4513;
   }
   #verifyBanner strong { color: #c0392b; }
-  #verifyBanner button { cursor: pointer; }
+
+  .url-status {
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 11px;
+    margin-top: 6px;
+    word-break: break-all;
+  }
+  .url-status.absolute { background: #E8F5E9; color: #2E7D32; border-left: 3px solid #0066CC; }
+  .url-status.relative { background: #FFF9E6; color: #8B4513; border-left: 3px solid #8B5A2B; }
 </style>
 </head>
 <body>
@@ -400,14 +410,14 @@
         <div id="essayFields">
           <div class="alert alert-info">
             💡 <strong>Tự luận:</strong> HS phải đăng nhập + xác thực email mới xem được đề.
-            Hỗ trợ <strong>file HTML</strong> (thư mục <code>tl/</code>) hoặc 
-            <strong>link Google Drive PDF</strong>.
+            Hỗ trợ <strong>file HTML</strong> hoặc <strong>link Google Drive PDF</strong>.
+            <br>🎯 <strong>Khuyến nghị dùng LINK TUYỆT ĐỐI</strong> để tránh lỗi.
           </div>
           
           <div class="form-group">
             <label>Cách nhập đề bài</label>
             <select id="essaySource">
-              <option value="html">📁 File HTML (thư mục tl/)</option>
+              <option value="html">📁 File HTML (link tuyệt đối hoặc tương đối)</option>
               <option value="gdrive">🔗 Link Google Drive (PDF)</option>
               <option value="upload">📤 Upload file HTML (≤ 900KB)</option>
             </select>
@@ -416,12 +426,17 @@
           <!-- HTML source -->
           <div id="essayHtmlFields">
             <div class="form-group">
-              <label>Đường dẫn file HTML</label>
+              <label>URL file HTML tự luận</label>
               <div style="display:flex; gap:8px; align-items:center;">
-                <input id="addEssayUrl" placeholder="tl/ten-file.html" style="flex:1;" />
+                <input id="addEssayUrl" placeholder="https://tuibx25.github.io/bx/btvl/tl/tl.html" style="flex:1;" />
                 <button class="btn btn-light btn-sm" type="button" id="previewEssayBtn" style="white-space:nowrap;">👁 Xem trước</button>
               </div>
-              <div class="hint">VD: <code>tl/de-on-tap.html</code></div>
+              <div class="hint">
+                💡 <strong>Khuyến nghị:</strong> dán <strong>link tuyệt đối</strong> (bắt đầu bằng <code>https://</code>) để tránh lỗi.<br>
+                VD: <code>https://tuibx25.github.io/bx/btvl/tl/de-on-tap.html</code><br>
+                Hoặc nhập đường dẫn tương đối: <code>tl/de-on-tap.html</code> — hệ thống tự chuyển.
+              </div>
+              <div id="essayUrlStatus" class="url-status hidden"></div>
             </div>
             <div class="preview-box" id="essayPreviewBox">
               <div class="preview-label">XEM TRƯỚC</div>
@@ -465,14 +480,20 @@
           <div class="alert alert-warn">
             ⚠️ <strong>Trắc nghiệm như thi thật:</strong> Khi HS bấm "Bắt đầu" → ghi nhận 1 lượt,
             đồng hồ chạy, đóng tab vẫn tính. Tối đa <strong>3 lượt</strong>.
+            <br>🎯 <strong>Khuyến nghị dùng LINK TUYỆT ĐỐI</strong> để tránh lỗi.
           </div>
           <div class="form-group">
-            <label>Đường dẫn file HTML trắc nghiệm</label>
+            <label>URL file HTML trắc nghiệm</label>
             <div style="display:flex; gap:8px; align-items:center;">
-              <input id="addQuizUrl" placeholder="tn/ten-file.html" style="flex:1;" />
+              <input id="addQuizUrl" placeholder="https://tuibx25.github.io/bx/btvl/tn/tn.html" style="flex:1;" />
               <button class="btn btn-light btn-sm" type="button" id="previewQuizBtn" style="white-space:nowrap;">👁 Xem trước</button>
             </div>
-            <div class="hint">VD: <code>tn/kiem-tra-15p.html</code></div>
+            <div class="hint">
+              💡 <strong>Khuyến nghị:</strong> dán <strong>link tuyệt đối</strong> (bắt đầu bằng <code>https://</code>).<br>
+              VD: <code>https://tuibx25.github.io/bx/btvl/tn/kiem-tra-15p.html</code><br>
+              Hoặc nhập đường dẫn tương đối: <code>tn/kiem-tra-15p.html</code> — hệ thống tự chuyển.
+            </div>
+            <div id="quizUrlStatus" class="url-status hidden"></div>
           </div>
           <div class="preview-box" id="quizPreviewBox">
             <div class="preview-label">XEM TRƯỚC</div>
@@ -528,7 +549,7 @@
 
     <div class="card">
       <h3>👥 Quản Lý Học Sinh</h3>
-      <p class="text-sm mb-2">Danh sách tài khoản HS đã xác thực email. Có thể xoá nếu cần.</p>
+      <p class="text-sm mb-2">Danh sách tài khoản HS. Có thể xoá nếu cần.</p>
       <div id="userManagement"></div>
     </div>
 
@@ -571,22 +592,6 @@
   </div>
 </div>
 
-<!-- MODAL QUÊN MẬT KHẨU -->
-<div id="forgotModal" class="modal-overlay hidden">
-  <div class="modal">
-    <h2>🔐 Quên mật khẩu</h2>
-    <div id="forgotError"></div>
-    <div class="form-group">
-      <label>Email đã đăng ký</label>
-      <input type="email" id="forgotEmail" placeholder="email@example.com" />
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-light" id="forgotCancelBtn">Hủy</button>
-      <button class="btn btn-primary" id="forgotSubmitBtn">Gửi mail đặt lại</button>
-    </div>
-  </div>
-</div>
-
 <!-- MODAL XÁC NHẬN BẮT ĐẦU QUIZ -->
 <div id="startQuizModal" class="modal-overlay hidden">
   <div class="modal">
@@ -625,7 +630,8 @@
     <div class="alert alert-warn" style="flex-shrink:0;">
       ⏱ <strong>Đang trong thời gian làm bài.</strong> Không đóng tab. Hết giờ bài sẽ tự động nộp.
     </div>
-    <iframe id="quizFrame" class="content-frame" style="flex:1; height: 100%;"></iframe>
+    <iframe id="quizFrame" class="content-frame" style="flex:1; height: 100%;"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
     <div id="quizError" class="hidden alert alert-error" style="margin-top:10px;">
       ⚠️ Không tải được nội dung bài tập. Vui lòng thử lại hoặc báo giáo viên.
     </div>
@@ -640,7 +646,8 @@
       <button class="btn btn-light btn-sm" id="htmlCloseBtn">✖ Đóng</button>
     </div>
     <div id="viewTimeInfo" class="time-info" style="display:none;"></div>
-    <iframe id="htmlFrame" class="content-frame" style="height: 70vh;"></iframe>
+    <iframe id="htmlFrame" class="content-frame" style="height: 70vh;"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
     <div id="htmlError" class="hidden alert alert-error" style="margin-top:10px;">
       ⚠️ Không tải được nội dung. Vui lòng kiểm tra lại đường dẫn.
     </div>
@@ -672,7 +679,7 @@
 <script type="module">
   const { auth, db, TEACHER_EMAIL,
     createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged,
-    sendEmailVerification, deleteUser,
+    sendEmailVerification,
     collection, addDoc, getDocs, doc, deleteDoc, updateDoc, query, where, getDoc, setDoc, serverTimestamp
   } = window.FB;
 
@@ -723,6 +730,26 @@
     });
   }
 
+  // ⭐ RESOLVE URL: chấp nhận cả link tuyệt đối và tương đối
+  function resolveUrl(url) {
+    if (!url) return '';
+    url = url.trim();
+    
+    // Nếu là link tuyệt đối (http://, https://, //) → giữ nguyên
+    if (/^(https?:)?\/\//i.test(url)) {
+      return url;
+    }
+    
+    // Nếu là đường dẫn tương đối → chuyển thành tuyệt đối dựa trên URL trang hiện tại
+    try {
+      let cleanUrl = url;
+      if (cleanUrl.startsWith('/')) cleanUrl = cleanUrl.substring(1);
+      return new URL(cleanUrl, window.location.href).href;
+    } catch (e) {
+      return url;
+    }
+  }
+
   // ⭐ Nối query string thông minh
   function buildUrlWithParams(url, params) {
     if (!url) return '';
@@ -740,14 +767,28 @@
   // ⭐ Chuyển link Google Drive sang dạng embed
   function convertGDriveUrl(url) {
     if (!url) return '';
-    // Dạng: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
     let match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
     if (match) return `https://drive.google.com/file/d/${match[1]}/preview`;
-    // Dạng: https://drive.google.com/open?id=FILE_ID
     match = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
     if (match) return `https://drive.google.com/file/d/${match[1]}/preview`;
     if (url.includes('/preview')) return url;
     return url;
+  }
+
+  // ⭐ Hiển thị trạng thái URL (tuyệt đối hay tương đối)
+  function showUrlStatus(statusId, url) {
+    const el = $(statusId);
+    if (!url) { hide(el); return; }
+    const isAbsolute = /^(https?:)?\/\//i.test(url.trim());
+    const resolved = resolveUrl(url);
+    el.classList.remove('hidden', 'absolute', 'relative');
+    if (isAbsolute) {
+      el.classList.add('absolute');
+      el.textContent = '✅ Link tuyệt đối: ' + url.trim();
+    } else {
+      el.classList.add('relative');
+      el.textContent = '⚠️ Đường dẫn tương đối → sẽ tự chuyển thành: ' + resolved;
+    }
   }
 
   // ==================== TABS ====================
@@ -769,7 +810,6 @@
     });
   });
 
-  // ==================== TYPE TOGGLE ====================
   $('addType').addEventListener('change', () => {
     const v = $('addType').value;
     hide($('essayFields')); hide($('quizFields'));
@@ -790,6 +830,10 @@
     else show($('essayUploadFields'));
   });
 
+  // ==================== URL INPUT LISTENER ====================
+  $('addEssayUrl').addEventListener('input', () => showUrlStatus('essayUrlStatus', $('addEssayUrl').value));
+  $('addQuizUrl').addEventListener('input', () => showUrlStatus('quizUrlStatus', $('addQuizUrl').value));
+
   // ==================== PREVIEW ====================
   function showPreview(boxId, url) {
     const box = $(boxId);
@@ -797,9 +841,10 @@
       box.innerHTML = `<div class="preview-label">XEM TRƯỚC</div><div class="preview-empty">Chưa có đường dẫn</div>`;
       return;
     }
+    const resolved = resolveUrl(url);
     box.innerHTML = `
       <div class="preview-label">XEM TRƯỚC</div>
-      <iframe src="${esc(url)}" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
+      <iframe src="${esc(resolved)}" referrerpolicy="no-referrer-when-downgrade"></iframe>
     `;
   }
 
@@ -880,7 +925,6 @@
         const cred = await createUserWithEmailAndPassword(auth, email, pass);
         const isTeacher = email.toLowerCase() === TEACHER_EMAIL.toLowerCase();
         
-        // ⭐ Gửi mail xác thực
         try {
           await sendEmailVerification(cred.user);
         } catch (e) {
@@ -888,7 +932,6 @@
           $('authError').innerHTML = `<div class="alert alert-error">Tạo tài khoản OK nhưng không gửi được mail xác thực: ${esc(e.message)}</div>`;
         }
         
-        // Lưu profile vào Firestore
         await setDoc(doc(db, 'users', cred.user.uid), {
           email, 
           name, 
@@ -926,7 +969,6 @@
     if (user) {
       const isTeacherEmail = user.email.toLowerCase() === TEACHER_EMAIL.toLowerCase();
       
-      // Đọc profile từ Firestore
       const snap = await getDoc(doc(db, 'users', user.uid));
       if (snap.exists()) {
         currentProfile = snap.data();
@@ -949,7 +991,6 @@
         currentProfile = newProfile;
       }
 
-      // Cập nhật emailVerified vào Firestore nếu thay đổi
       if (currentProfile.emailVerified !== user.emailVerified) {
         try {
           await updateDoc(doc(db, 'users', user.uid), { emailVerified: user.emailVerified });
@@ -966,10 +1007,8 @@
         hide($('verifyBanner'));
       } else {
         hide($('teacherTabBtn'));
-        // ⭐ Hiện banner cảnh báo nếu chưa xác thực mail
         if (!user.emailVerified) {
           show($('verifyBanner'));
-          // Auto-poll mỗi 5s kiểm tra đã xác thực chưa
           verifyPollInterval = setInterval(async () => {
             if (!currentUser) { clearInterval(verifyPollInterval); return; }
             await currentUser.reload();
@@ -978,7 +1017,6 @@
               verifyPollInterval = null;
               hide($('verifyBanner'));
               toast('🎉 Email đã được xác thực!', 'success');
-              // Cập nhật Firestore
               try {
                 await updateDoc(doc(db, 'users', currentUser.uid), { emailVerified: true });
                 currentProfile.emailVerified = true;
@@ -1047,7 +1085,6 @@
       if (snap.empty) { list.innerHTML = '<div class="empty">Chưa có bài tập cho khối này.</div>'; return; }
       let items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-      // Lọc theo giao bài
       if (currentProfile?.role === 'student' && currentUser) {
         items = items.filter(a => {
           const noAssign = (!a.assignedTo || a.assignedTo.length === 0)
@@ -1059,7 +1096,6 @@
         });
       }
 
-      // Sắp xếp: bài giao riêng lên đầu
       items.sort((a, b) => {
         const aAssigned = (a.assignedTo?.includes(currentUser?.uid) || a.assignedClasses?.includes(currentProfile?.class)) ? 1 : 0;
         const bAssigned = (b.assignedTo?.includes(currentUser?.uid) || b.assignedClasses?.includes(currentProfile?.class)) ? 1 : 0;
@@ -1184,22 +1220,21 @@
     }
   }
 
-  // ==================== ESSAY VIEW + LOG ====================
+  // ==================== ESSAY VIEW ====================
   async function openEssayModal(a) {
     if (!currentUser) { toast('Vui lòng đăng nhập để xem đề', 'error'); openAuthModal('login'); return; }
     
-    // GV xem không log
     if (currentProfile?.role === 'teacher') {
       $('htmlTitle').textContent = a.title + ' (GV xem)';
       $('viewTimeInfo').style.display = 'none';
       hide($('htmlError'));
-      // ⭐ Xử lý đúng nguồn: fileData hoặc url (có thể là GDrive)
       if (a.fileData) {
         $('htmlFrame').src = a.fileData;
       } else if (a.url) {
-        // Nếu là link Drive → convert sang embed
         const isGDrive = a.url.includes('drive.google.com');
-        $('htmlFrame').src = isGDrive ? convertGDriveUrl(a.url) : a.url;
+        const finalUrl = isGDrive ? convertGDriveUrl(a.url) : resolveUrl(a.url);
+        $('htmlFrame').src = finalUrl;
+        console.log('[ESSAY GV] URL:', finalUrl);
       } else {
         $('htmlFrame').srcdoc = '<h2 style="padding:20px;">Không có nội dung</h2>';
       }
@@ -1232,12 +1267,13 @@
     $('viewTimeInfo').innerHTML = `⏱ Bắt đầu xem lúc: <strong>${new Date(startedAt).toLocaleTimeString('vi-VN')}</strong>`;
     hide($('htmlError'));
     
-    // ⭐ Load nội dung đúng cách
     if (a.fileData) {
       $('htmlFrame').src = a.fileData;
     } else if (a.url) {
       const isGDrive = a.url.includes('drive.google.com');
-      $('htmlFrame').src = isGDrive ? convertGDriveUrl(a.url) : a.url;
+      const finalUrl = isGDrive ? convertGDriveUrl(a.url) : resolveUrl(a.url);
+      $('htmlFrame').src = finalUrl;
+      console.log('[ESSAY HS] URL:', finalUrl);
     } else {
       $('htmlFrame').srcdoc = '<h2 style="padding:20px;">Không có nội dung</h2>';
     }
@@ -1252,7 +1288,6 @@
       tickInterval: null
     };
 
-    // Heartbeat 30s
     currentViewSession.heartbeatInterval = setInterval(async () => {
       if (!currentViewSession) return;
       const elapsed = Math.round((Date.now() - currentViewSession.startedAt) / 1000);
@@ -1261,7 +1296,6 @@
       } catch (e) {}
     }, 30000);
 
-    // Tick 1s
     currentViewSession.tickInterval = setInterval(() => {
       if (!currentViewSession) return;
       const elapsed = Math.round((Date.now() - currentViewSession.startedAt) / 1000);
@@ -1338,6 +1372,16 @@
   $('startQuizConfirm').addEventListener('click', async () => {
     if (!currentQuizAssignment) return;
     const a = currentQuizAssignment;
+    
+    console.log('[QUIZ START] Assignment:', {
+      id: a.id,
+      title: a.title,
+      type: a.type,
+      url: a.url,
+      hasFileData: !!a.fileData,
+      duration: a.duration
+    });
+    
     hide($('startQuizModal'));
 
     const duration = Number(a.duration) || 25;
@@ -1381,7 +1425,7 @@
       $('quizFrame').srcdoc = '';
       hide($('quizError'));
       
-      // ⭐ NỐI URL THÔNG MINH
+      // ⭐ RESOLVE URL thông minh
       const timeParams = {
         duration: duration,
         startedAt: startedAt.getTime(),
@@ -1390,16 +1434,29 @@
       
       if (a.fileData) {
         $('quizFrame').src = a.fileData;
-      } else if (a.url) {
-        $('quizFrame').src = buildUrlWithParams(a.url, timeParams);
+        console.log('[QUIZ] Using fileData (base64)');
+      } else if (a.url && a.url.trim() !== '') {
+        const absoluteUrl = resolveUrl(a.url);
+        const finalUrl = buildUrlWithParams(absoluteUrl, timeParams);
+        $('quizFrame').src = finalUrl;
+        console.log('[QUIZ] Original URL:', a.url);
+        console.log('[QUIZ] Absolute URL:', absoluteUrl);
+        console.log('[QUIZ] Final URL:', finalUrl);
       } else {
-        $('quizFrame').srcdoc = '<h2 style="padding:20px;">Không có nội dung</h2>';
+        // ⭐ Hiện lỗi rõ ràng thay vì iframe trắng
+        $('quizFrame').srcdoc = `
+          <div style="padding:30px; font-family: sans-serif; text-align: center;">
+            <h2 style="color:#c0392b;">⚠️ Bài tập chưa có nội dung</h2>
+            <p>Giáo viên chưa nhập đường dẫn file hoặc upload file.</p>
+            <p style="color:#666; font-size:13px; margin-top:10px;">
+              Vui lòng báo giáo viên kiểm tra lại bài tập này.
+            </p>
+          </div>
+        `;
+        console.error('[QUIZ] Missing url AND fileData!', a);
       }
       
-      // ⭐ Log để debug
-      console.log('[QUIZ] Loading iframe URL:', $('quizFrame').src);
-      
-      // ⭐ Timeout kiểm tra iframe load được không
+      // Timeout kiểm tra iframe load được không
       setTimeout(() => {
         try {
           const frameDoc = $('quizFrame').contentDocument;
@@ -1407,7 +1464,7 @@
             show($('quizError'));
           }
         } catch (e) {
-          // Cross-origin → bình thường
+          // Cross-origin → bình thường, không làm gì
         }
       }, 5000);
       
@@ -1639,7 +1696,7 @@
         } else if (source === 'gdrive') {
           const gdriveUrl = $('addEssayGDriveUrl').value.trim();
           if (!gdriveUrl) { toast('Nhập link Google Drive', 'error'); return; }
-          payload.url = gdriveUrl;  // sẽ được convert khi hiển thị
+          payload.url = gdriveUrl;
           payload.isGDrive = true;
           payload.note = note;
         } else if (source === 'upload') {
@@ -1668,7 +1725,6 @@
         payload.duration = duration;
       }
 
-      // Giao bài
       const classesStr = $('addAssignClasses').value.trim();
       payload.assignedClasses = classesStr
         ? classesStr.split(',').map(s => s.trim()).filter(Boolean)
@@ -1691,7 +1747,6 @@
 
       await addDoc(collection(db, 'assignments'), payload);
       
-      // Reset form
       $('addTitle').value = ''; $('addEssayNote').value = '';
       $('addEssayUrl').value = ''; $('addEssayGDriveUrl').value = ''; $('addEssayFile').value = '';
       $('addQuizUrl').value = ''; $('addQuizFile').value = ''; $('addQuizDesc').value = '';
@@ -1702,6 +1757,8 @@
       $('essayPreviewBox').innerHTML = `<div class="preview-label">XEM TRƯỚC</div><div class="preview-empty">Nhập đường dẫn và bấm "👁 Xem trước"</div>`;
       $('gdrivePreviewBox').innerHTML = `<div class="preview-label">XEM TRƯỚC</div><div class="preview-empty">Dán link Drive rồi bấm "👁 Xem trước"</div>`;
       $('quizPreviewBox').innerHTML = `<div class="preview-label">XEM TRƯỚC</div><div class="preview-empty">Nhập đường dẫn và bấm "👁 Xem trước"</div>`;
+      hide($('essayUrlStatus'));
+      hide($('quizUrlStatus'));
 
       toast('Đã thêm bài tập', 'success');
       loadAssignments();
@@ -1751,9 +1808,8 @@
           if (!confirm(`⚠️ Xoá tài khoản HS "${email}"?\n\nHành động này không thể hoàn tác.\n\nLƯU Ý: Chỉ xoá được dữ liệu Firestore. Để xoá hoàn toàn khỏi Authentication, GV cần vào Firebase Console.`)) return;
           
           try {
-            // Xoá Firestore doc
             await deleteDoc(doc(db, 'users', uid));
-            toast(`Đã xoá dữ liệu HS ${email}. Cần xoá thủ công trong Firebase Authentication.`, 'success');
+            toast(`Đã xoá dữ liệu HS ${email}.`, 'success');
             loadUserManagement();
           } catch (err) {
             toast('Lỗi xoá: ' + err.message, 'error');
@@ -1929,7 +1985,9 @@
             $('htmlFrame').src = a.fileData;
           } else if (a.url) {
             const isGDrive = a.url.includes('drive.google.com');
-            $('htmlFrame').src = isGDrive ? convertGDriveUrl(a.url) : a.url;
+            const finalUrl = isGDrive ? convertGDriveUrl(a.url) : resolveUrl(a.url);
+            $('htmlFrame').src = finalUrl;
+            console.log('[GV VIEW] URL:', finalUrl);
           } else {
             $('htmlFrame').srcdoc = '<h2 style="padding:20px;">Không có nội dung</h2>';
           }
