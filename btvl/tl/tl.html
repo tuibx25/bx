@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bài trắc nghiệm</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)'], ['$', '$']],
+      displayMath: [['\\[', '\\]'], ['$$', '$$']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #F5F5F5;
+    color: #000;
+    padding: 16px;
+    line-height: 1.7;
+  }
+  .quiz-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 5px solid #8B5A2B;
+  }
+  h1 {
+    color: #8B4513;
+    font-size: 1.4em;
+    text-align: center;
+    border-bottom: 2px solid #8B5A2B;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+  .q-block {
+    background: #F5F5F5;
+    padding: 12px 14px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    border-left: 3px solid #0066CC;
+  }
+  .q-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .q-number {
+    background: #8B5A2B;
+    color: #FFF;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: 700;
+  }
+  .q-type {
+    background: #F5DEB3;
+    color: #8B4513;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.75em;
+    font-weight: 600;
+  }
+  .q-text { font-weight: 600; margin-bottom: 8px; }
+
+  .opt {
+    display: block;
+    padding: 6px 10px;
+    margin: 4px 0;
+    background: #FFFFFF;
+    border: 1px solid #D3D3D3;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .opt:hover { background: #F5F5DC; border-color: #8B5A2B; }
+  .opt input { margin-right: 8px; }
+  .opt.selected { background: #F5DEB3; border-color: #8B5A2B; }
+
+  .tf-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #FFFFFF;
+    border: 1px solid #D3D3D3;
+    border-radius: 6px;
+    margin: 4px 0;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .tf-stmt { flex: 1; min-width: 200px; }
+  .tf-btns { display: flex; gap: 6px; }
+  .tf-btn {
+    padding: 4px 14px;
+    border: 1px solid #D3D3D3;
+    background: #FFF;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .tf-btn:hover { background: #F5F5DC; }
+  .tf-btn.selected-true { background: #0066CC; color: #FFF; border-color: #0066CC; }
+  .tf-btn.selected-false { background: #8B5A2B; color: #FFF; border-color: #8B5A2B; }
+
+  .short-answer {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #D3D3D3;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  .short-answer:focus {
+    outline: none;
+    border-color: #8B5A2B;
+    box-shadow: 0 0 0 2px rgba(139,90,43,0.15);
+  }
+
+  .submit-bar {
+    position: sticky;
+    bottom: 0;
+    background: #FFFFFF;
+    padding: 12px 0;
+    border-top: 2px solid #8B5A2B;
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+  }
+  .btn-primary { background: #8B5A2B; color: #FFFFFF; }
+  .btn-primary:hover { background: #8B4513; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .result-box {
+    display: none;
+    background: #F5F5DC;
+    border: 2px solid #8B5A2B;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 16px;
+    text-align: center;
+  }
+  .result-box.show { display: block; }
+
+  .progress-info {
+    text-align: center;
+    color: #555;
+    font-size: 0.9em;
+    margin-bottom: 12px;
+  }
+
+  #blockOverlay, #timeUpOverlay {
+    position: fixed; inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    padding: 20px;
+    text-align: center;
+  }
+  #blockOverlay { background: #F5F5F5; }
+  #timeUpOverlay { background: rgba(0,0,0,0.85); color: #FFF; }
+  #blockOverlay.show, #timeUpOverlay.show { display: flex; }
+  #blockOverlay .box {
+    background: #FFFFFF;
+    padding: 30px;
+    border-radius: 12px;
+    border-left: 5px solid #8B5A2B;
+    max-width: 500px;
+  }
+  #blockOverlay h2 { color: #8B4513; margin-bottom: 12px; }
+  #timeUpOverlay h1 { color: #FFF; font-size: 2em; margin-bottom: 12px; }
+
+  #miniTimer {
+    position: fixed;
+    top: 10px; right: 10px;
+    background: #8B4513;
+    color: #FFF;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: monospace;
+    z-index: 9999;
+    display: none;
+  }
+  #miniTimer.show { display: block; }
+  #miniTimer.warning { background: #c0392b; }
+
+  mjx-container { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+</style>
+</head>
+<body>
+
+<div id="blockOverlay">
+  <div class="box">
+    <h2>🔒 Truy cập bị chặn</h2>
+    <p>Bài trắc nghiệm chỉ có thể làm qua trang hệ thống.</p>
+  </div>
+</div>
+
+<div id="miniTimer">--:--</div>
+
+<div id="timeUpOverlay">
+  <div>
+    <h1>⏱ HẾT GIỜ</h1>
+    <p style="font-size:1.1em;">Bài làm đang được tự động nộp...</p>
+  </div>
+</div>
+
+<div class="quiz-container" id="quizContainer">
+  <h1 id="quizTitle">BÀI TRẮC NGHIỆM</h1>
+  <div class="progress-info">
+    Đã trả lời: <strong id="answeredCount">0</strong> / <strong id="totalCount">0</strong> câu
+  </div>
+  <div id="quizArea"></div>
+  <div class="submit-bar">
+    <div><span id="statusMsg" style="color:#555; font-size:14px;"></span></div>
+    <div><button class="btn btn-primary" id="submitBtn">Nộp bài</button></div>
+  </div>
+  <div class="result-box" id="resultBox">
+    <h2 style="color:#8B4513; margin-bottom:10px;">✅ Đã nộp bài thành công!</h2>
+    <p style="color:#555;">Kết quả đã gửi đến giáo viên.</p>
+  </div>
+</div>
+
+<script>
+(function() {
+  const isInIframe = window.parent && window.parent !== window;
+  if (!isInIframe) {
+    document.getElementById('blockOverlay').classList.add('show');
+    document.getElementById('quizContainer').style.display = 'none';
+    window.__BLOCKED__ = true;
+  }
+})();
+
+if (!window.__BLOCKED__) {
+
+/* ==========================================================
+   CẤU HÌNH BÀI TRẮC NGHIỆM
+   ----------------------------------------------------------
+   3 LOẠI CÂU HỎI:
+
+   1) "choice" — Trắc nghiệm nhiều lựa chọn
+      { type: "choice", question: "...", options: [...], correct: 0 }
+
+   2) "truefalse" — Đúng/Sai (nhiều phát biểu)
+      { type: "truefalse", question: "...", statements: [
+          { text: "...", correct: true }, ...
+      ]}
+
+   3) "short" — Trả lời ngắn
+      { type: "short", question: "...", correct: "đáp án",
+        acceptable: ["cách viết khác 1", "cách viết khác 2"] }
+
+   Công thức Vật lý: dùng MathJax \(v = v_0 + at\)
+   ========================================================== */
+
+const QUESTIONS = [
+  {
+    type: "choice",
+    question: "Một vật chuyển động thẳng đều với vận tốc \\(v = 15\\,m/s\\). Quãng đường vật đi được trong 20 giây là:",
+    options: [
+      "\\(s = 300\\,m\\)",
+      "\\(s = 200\\,m\\)",
+      "\\(s = 100\\,m\\)",
+      "\\(s = 400\\,m\\)"
+    ],
+    correct: 0
+  },
+  {
+    type: "truefalse",
+    question: "Cho một vật chuyển động thẳng biến đổi đều. Xét tính đúng/sai của các phát biểu sau:",
+    statements: [
+      { text: "Gia tốc của vật không đổi theo thời gian.", correct: true },
+      { text: "Vận tốc của vật tỉ lệ thuận với thời gian.", correct: false },
+      { text: "Đồ thị vận tốc - thời gian là đường thẳng.", correct: true },
+      { text: "Quãng đường đi được tỉ lệ thuận với bình phương thời gian.", correct: true }
+    ]
+  },
+  {
+    type: "short",
+    question: "Một xe ô tô đang chạy với vận tốc \\(v_0 = 20\\,m/s\\) thì hãm phanh, chuyển động chậm dần đều với gia tốc \\(a = -2\\,m/s^2\\). Thời gian từ lúc hãm phanh đến khi xe dừng hẳn là bao nhiêu giây? (chỉ ghi số, không ghi đơn vị)",
+    correct: "10",
+    acceptable: ["10", "10s", "10 giây"]
+  },
+  {
+    type: "choice",
+    question: "Công thức tính quãng đường đi được của vật rơi tự do từ độ cao \\(h\\) trong thời gian \\(t\\) là:",
+    options: [
+      "\\(s = \\frac{1}{2}gt^2\\)",
+      "\\(s = gt\\)",
+      "\\(s = \\frac{1}{2}g^2t\\)",
+      "\\(s = g^2t^2\\)"
+    ],
+    correct: 0
+  },
+  {
+    type: "truefalse",
+    question: "Về định luật II Newton \\(\\vec{F} = m\\vec{a}\\). Xét tính đúng/sai:",
+    statements: [
+      { text: "Gia tốc cùng chiều với lực tác dụng.", correct: true },
+      { text: "Đơn vị của lực là Newton (N).", correct: true },
+      { text: "Khối lượng tỉ lệ nghịch với gia tốc khi lực không đổi.", correct: true },
+      { text: "Lực và gia tốc luôn ngược chiều nhau.", correct: false }
+    ]
+  },
+  {
+    type: "short",
+    question: "Vật rơi tự do từ độ cao \\(h = 45\\,m\\), lấy \\(g = 10\\,m/s^2\\). Vận tốc của vật khi chạm đất là bao nhiêu m/s? (chỉ ghi số)",
+    correct: "30",
+    acceptable: ["30", "30m/s"]
+  }
+];
+
+let answers = {};
+let submitted = false;
+let duration = 25;
+let deadlineAt = null;
+let timerInterval = null;
+
+const $ = (id) => document.getElementById(id);
+const quizArea = $('quizArea');
+const answeredCountEl = $('answeredCount');
+const totalCountEl = $('totalCount');
+const submitBtn = $('submitBtn');
+const statusMsg = $('statusMsg');
+const miniTimer = $('miniTimer');
+const timeUpOverlay = $('timeUpOverlay');
+const resultBox = $('resultBox');
+
+totalCountEl.textContent = QUESTIONS.length;
+
+function renderQuiz() {
+  quizArea.innerHTML = QUESTIONS.map((q, qi) => {
+    if (q.type === 'choice') return renderChoice(q, qi);
+    if (q.type === 'truefalse') return renderTrueFalse(q, qi);
+    if (q.type === 'short') return renderShort(q, qi);
+    return '';
+  }).join('');
+
+  attachEvents();
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+  }
+}
+
+function renderChoice(q, qi) {
+  return `
+    <div class="q-block">
+      <div class="q-header">
+        <span class="q-number">Câu ${qi + 1}</span>
+        <span class="q-type">Nhiều lựa chọn</span>
+      </div>
+      <div class="q-text">${q.question}</div>
+      ${q.options.map((opt, oi) => `
+        <label class="opt" data-q="${qi}" data-o="${oi}">
+          <input type="radio" name="q${qi}" value="${oi}" />
+          <strong>${String.fromCharCode(65 + oi)}.</strong> ${opt}
+        </label>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderTrueFalse(q, qi) {
+  return `
+    <div class="q-block">
+      <div class="q-header">
+        <span class="q-number">Câu ${qi + 1}</span>
+        <span class="q-type">Đúng / Sai</span>
+      </div>
+      <div class="q-text">${q.question}</div>
+      ${q.statements.map((st, si) => `
+        <div class="tf-row">
+          <div class="tf-stmt"><strong>${String.fromCharCode(97 + si)})</strong> ${st.text}</div>
+          <div class="tf-btns">
+            <button type="button" class="tf-btn" data-tf-q="${qi}" data-tf-s="${si}" data-tf-val="true">Đúng</button>
+            <button type="button" class="tf-btn" data-tf-q="${qi}" data-tf-s="${si}" data-tf-val="false">Sai</button>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderShort(q, qi) {
+  return `
+    <div class="q-block">
+      <div class="q-header">
+        <span class="q-number">Câu ${qi + 1}</span>
+        <span class="q-type">Trả lời ngắn</span>
+      </div>
+      <div class="q-text">${q.question}</div>
+      <input type="text" class="short-answer" data-short-q="${qi}" placeholder="Nhập đáp án..." />
+    </div>
+  `;
+}
+
+function attachEvents() {
+  quizArea.querySelectorAll('input[type="radio"]').forEach(input => {
+    input.addEventListener('change', (e) => {
+      const qi = Number(e.target.name.replace('q', ''));
+      answers[qi] = Number(e.target.value);
+      quizArea.querySelectorAll(`.opt[data-q="${qi}"]`).forEach(l => l.classList.remove('selected'));
+      e.target.closest('.opt').classList.add('selected');
+      updateAnsweredCount();
+    });
+  });
+
+  quizArea.querySelectorAll('.tf-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const qi = Number(btn.dataset.tfQ);
+      const si = Number(btn.dataset.tfS);
+      const val = btn.dataset.tfVal === 'true';
+      if (!answers[qi]) answers[qi] = {};
+      answers[qi][si] = val;
+      quizArea.querySelectorAll(`.tf-btn[data-tf-q="${qi}"][data-tf-s="${si}"]`).forEach(b => {
+        b.classList.remove('selected-true', 'selected-false');
+      });
+      if (val) btn.classList.add('selected-true');
+      else btn.classList.add('selected-false');
+      updateAnsweredCount();
+    });
+  });
+
+  quizArea.querySelectorAll('.short-answer').forEach(input => {
+    input.addEventListener('input', (e) => {
+      const qi = Number(e.target.dataset.shortQ);
+      answers[qi] = e.target.value.trim();
+      updateAnsweredCount();
+    });
+  });
+}
+
+function isAnswered(qi) {
+  const q = QUESTIONS[qi];
+  const a = answers[qi];
+  if (q.type === 'choice') return a !== undefined;
+  if (q.type === 'truefalse') {
+    if (!a || typeof a !== 'object') return false;
+    return Object.keys(a).length === q.statements.length;
+  }
+  if (q.type === 'short') return a !== undefined && a !== '';
+  return false;
+}
+
+function updateAnsweredCount() {
+  let count = 0;
+  QUESTIONS.forEach((_, qi) => { if (isAnswered(qi)) count++; });
+  answeredCountEl.textContent = count;
+  statusMsg.textContent = count === QUESTIONS.length
+    ? '✅ Đã trả lời hết'
+    : `Còn ${QUESTIONS.length - count} câu chưa hoàn thành`;
+}
+
+function calcScore() {
+  let totalScore = 0;
+  let maxScore = 0;
+
+  QUESTIONS.forEach((q, qi) => {
+    if (q.type === 'choice') {
+      maxScore += 1;
+      if (answers[qi] === q.correct) totalScore += 1;
+    } 
+    else if (q.type === 'truefalse') {
+      maxScore += 1;
+      const a = answers[qi] || {};
+      let correctCount = 0;
+      q.statements.forEach((st, si) => {
+        if (a[si] === st.correct) correctCount++;
+      });
+      totalScore += correctCount / q.statements.length;
+    } 
+    else if (q.type === 'short') {
+      maxScore += 1;
+      const a = (answers[qi] || '').toString().trim().toLowerCase();
+      const okList = [
+        (q.correct || '').toString().trim().toLowerCase(),
+        ...(q.acceptable || []).map(s => s.toLowerCase())
+      ];
+      if (okList.includes(a)) totalScore += 1;
+    }
+  });
+
+  return { score: Math.round(totalScore * 100) / 100, max: maxScore };
+}
+
+function getTimeFromUrl() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const d = Number(params.get('duration'));
+    const dl = Number(params.get('deadlineAt'));
+    const st = Number(params.get('startedAt'));
+    if (d > 0) duration = d;
+    if (dl > 0) deadlineAt = dl;
+    else if (st > 0 && d > 0) deadlineAt = st + d * 60 * 1000;
+  } catch (e) {}
+}
+
+function startTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+  miniTimer.classList.add('show');
+  updateTimer();
+  timerInterval = setInterval(updateTimer, 1000);
+}
+
+function updateTimer() {
+  if (!deadlineAt) return;
+  const remain = deadlineAt - Date.now();
+  if (remain <= 0) {
+    miniTimer.textContent = '⏱ 00:00';
+    miniTimer.classList.add('warning');
+    clearInterval(timerInterval);
+    forceSubmit();
+    return;
+  }
+  const totalSec = Math.floor(remain / 1000);
+  const mm = String(Math.floor(totalSec / 60)).padStart(2, '0');
+  const ss = String(totalSec % 60).padStart(2, '0');
+  miniTimer.textContent = `⏱ ${mm}:${ss}`;
+  if (totalSec < 60) miniTimer.classList.add('warning');
+  else miniTimer.classList.remove('warning');
+}
+
+function submitQuiz() {
+  if (submitted) return;
+  const answered = QUESTIONS.filter((_, qi) => isAnswered(qi)).length;
+  if (answered === 0) { alert('Em chưa trả lời câu nào!'); return; }
+  if (answered < QUESTIONS.length) {
+    if (!confirm(`Em còn ${QUESTIONS.length - answered} câu chưa trả lời. Vẫn nộp bài?`)) return;
+  }
+  doSubmit(false);
+}
+
+function forceSubmit() {
+  if (submitted) return;
+  timeUpOverlay.classList.add('show');
+  setTimeout(() => doSubmit(true), 800);
+}
+
+function doSubmit(isTimeout) {
+  if (submitted) return;
+  submitted = true;
+  const { score, max } = calcScore();
+
+  resultBox.classList.add('show');
+  submitBtn.disabled = true;
+  miniTimer.classList.remove('show');
+  if (timerInterval) clearInterval(timerInterval);
+
+  const payload = {
+    type: 'QUIZ_SUBMIT',
+    score: score,
+    total: max,
+    answers: answers,
+    isTimeout: isTimeout
+  };
+
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage(payload, '*');
+  }
+}
+
+submitBtn.addEventListener('click', submitQuiz);
+
+window.addEventListener('message', (event) => {
+  if (!event.data) return;
+  if (event.data.type === 'INIT_TIME') {
+    duration = event.data.duration || duration;
+    deadlineAt = event.data.deadlineAt || (Date.now() + duration * 60 * 1000);
+    startTimer();
+  }
+  if (event.data.type === 'FORCE_SUBMIT') forceSubmit();
+});
+
+getTimeFromUrl();
+renderQuiz();
+updateAnsweredCount();
+if (!deadlineAt) deadlineAt = Date.now() + duration * 60 * 1000;
+startTimer();
+
+}
+</script>
+
+</body>
+</html>

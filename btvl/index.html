@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hệ Thống Bài Tập Vật Lý Online</title>
+<link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { 
@@ -12,10 +13,10 @@
   } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
   import { 
     getFirestore, collection, addDoc, getDocs, doc, deleteDoc, 
-    updateDoc, query, where, orderBy, getDoc, setDoc, serverTimestamp 
+    updateDoc, query, where, getDoc, setDoc, serverTimestamp
   } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  // ==== CẤU HÌNH FIREBASE - THAY BẰNG THÔNG TIN CỦA BẠN ====
+  // ==== CẤU HÌNH FIREBASE ====
   const firebaseConfig = {
     apiKey: "AIzaSyDX1tt6PyBUxCwU6qTe9Cn9bbbWhgLKLKU",
   authDomain: "bx-vlpt.firebaseapp.com",
@@ -30,13 +31,12 @@
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // Email giáo viên (cố định - người dùng này có quyền admin)
-  // ⚠️ QUAN TRỌNG: Thay bằng chính xác email giáo viên bạn dùng để đăng nhập
+  // ⚠️ EMAIL GIÁO VIÊN — ĐỔI THÀNH EMAIL CỦA BẠN
   const TEACHER_EMAIL = "trntui6@gmail.com";
 
   window.FB = { auth, db, TEACHER_EMAIL,
     createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged,
-    collection, addDoc, getDocs, doc, deleteDoc, updateDoc, query, where, orderBy, getDoc, setDoc, serverTimestamp
+    collection, addDoc, getDocs, doc, deleteDoc, updateDoc, query, where, getDoc, setDoc, serverTimestamp
   };
 </script>
 
@@ -62,11 +62,9 @@
   }
   header h1 { font-size: 22px; font-weight: 600; }
   header .user-info { display: flex; align-items: center; gap: 12px; font-size: 14px; }
-  header button { cursor: pointer; }
 
   .container { max-width: 1200px; margin: 0 auto; padding: 24px 20px; }
 
-  /* Tabs */
   .tabs {
     display: flex;
     gap: 8px;
@@ -85,6 +83,7 @@
     color: #8B4513;
     border-radius: 8px 8px 0 0;
     transition: all 0.2s;
+    font-family: inherit;
   }
   .tab-btn:hover { background: #F5DEB3; }
   .tab-btn.active {
@@ -93,7 +92,6 @@
     color: #8B4513;
   }
 
-  /* Buttons */
   .btn {
     padding: 9px 18px;
     border: none;
@@ -103,6 +101,8 @@
     font-weight: 500;
     transition: all 0.2s;
     font-family: inherit;
+    text-decoration: none;
+    display: inline-block;
   }
   .btn-primary { background: #8B5A2B; color: #FFFFFF; }
   .btn-primary:hover { background: #8B4513; }
@@ -115,7 +115,6 @@
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .btn-sm { padding: 6px 12px; font-size: 13px; }
 
-  /* Cards */
   .card {
     background: #FFFFFF;
     border: 1px solid #D3D3D3;
@@ -124,6 +123,7 @@
     margin-bottom: 16px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   }
+  .card.assigned { border-left: 5px solid #c0392b; }
   .card h3 { color: #8B4513; margin-bottom: 8px; font-size: 17px; }
   .card .meta { font-size: 13px; color: #555; margin-bottom: 10px; }
   .card .content { 
@@ -135,7 +135,6 @@
     font-size: 14px;
   }
 
-  /* Forms */
   .form-group { margin-bottom: 14px; }
   .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 14px; color: #333; }
   .form-group input, .form-group textarea, .form-group select {
@@ -154,8 +153,8 @@
     border-color: #8B5A2B;
     box-shadow: 0 0 0 2px rgba(139,90,43,0.15);
   }
+  .form-group .hint { font-size: 12px; color: #666; margin-top: 4px; font-style: italic; }
 
-  /* Modal */
   .modal-overlay {
     position: fixed; inset: 0;
     background: rgba(0,0,0,0.5);
@@ -171,10 +170,11 @@
     max-height: 90vh;
     overflow-y: auto;
   }
+  .modal.modal-large { max-width: 1100px; width: 95%; }
+  .modal.modal-xl { max-width: 1400px; width: 98%; height: 92vh; display: flex; flex-direction: column; }
   .modal h2 { color: #8B4513; margin-bottom: 18px; font-size: 20px; }
   .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
 
-  /* Status badges */
   .badge {
     display: inline-block;
     padding: 3px 10px;
@@ -183,19 +183,19 @@
     font-weight: 600;
   }
   .badge-pending { background: #F5DEB3; color: #8B4513; }
-  .badge-approved { background: #0066CC; color: #FFFFFF; }
-  .badge-rejected { background: #D3D3D3; color: #333; }
-  .badge-done { background: #8B5A2B; color: #FFFFFF; }
   .badge-graded { background: #004488; color: #FFFFFF; }
-  .badge-teacher { background: #004488; color: #FFFFFF; }
+  .badge-essay { background: #8B5A2B; color: #FFFFFF; }
+  .badge-quiz { background: #004488; color: #FFFFFF; }
+  .badge-inprogress { background: #F5DEB3; color: #8B4513; border: 1px solid #8B5A2B; }
+  .badge-late { background: #c0392b; color: #FFFFFF; }
+  .badge-viewed { background: #0066CC; color: #FFFFFF; }
+  .badge-assigned { background: #c0392b; color: #FFFFFF; }
 
-  /* Sections */
   .hidden { display: none !important; }
   .empty { text-align: center; color: #777; padding: 40px; font-style: italic; }
   .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
   .space-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
 
-  /* Submission boxes */
   .submission {
     background: #F5F5DC;
     border-left: 4px solid #8B5A2B;
@@ -204,41 +204,22 @@
     margin-bottom: 10px;
   }
   .submission.graded { border-left-color: #004488; background: #F5F5F5; }
+  .submission.in-progress { border-left-color: #F5DEB3; background: #FFFBF0; }
+  .submission.late { border-left-color: #c0392b; }
+  .submission.viewed { border-left-color: #0066CC; background: #F5F8FF; }
 
-  /* Login area */
-  .login-box {
-    max-width: 420px;
-    margin: 40px auto;
-    background: #FFFFFF;
-    padding: 32px;
-    border-radius: 12px;
-    border: 1px solid #D3D3D3;
-  }
-
-  /* Alert */
-  .alert {
-    padding: 10px 14px;
-    border-radius: 6px;
-    margin-bottom: 14px;
-    font-size: 14px;
-  }
-  .alert-info { background: #F5F5DC; border: 1px solid #F5DEB3; color: #000; }
+  .alert { padding: 10px 14px; border-radius: 6px; margin-bottom: 14px; font-size: 14px; }
+  .alert-info { background: #F5F5DC; border: 1px solid #0066CC; color: #004488; }
+  .alert-warn { background: #F5F5DC; border: 1px solid #8B5A2B; color: #8B4513; }
   .alert-error { background: #F5F5DC; border: 1px solid #c0392b; color: #c0392b; }
-  .alert-success { background: #F5F5DC; border: 1px solid #0066CC; color: #004488; }
 
-  /* Score input */
-  .score-input { width: 80px !important; display: inline-block; }
-
-  /* Tab content */
   .tab-content { display: none; }
   .tab-content.active { display: block; }
 
-  /* Small text */
   .text-sm { font-size: 13px; color: #555; }
   .mt-2 { margin-top: 10px; }
   .mb-2 { margin-bottom: 10px; }
 
-  /* Toast */
   #toast {
     position: fixed;
     bottom: 24px; right: 24px;
@@ -255,19 +236,70 @@
   }
   #toast.show { opacity: 1; }
 
-  /* Debug panel */
-  #debugPanel {
-    position: fixed;
-    bottom: 10px; left: 10px;
-    background: rgba(0,0,0,0.75);
-    color: #fff;
-    font-size: 11px;
-    padding: 6px 10px;
+  iframe.content-frame {
+    width: 100%;
+    border: 1px solid #D3D3D3;
+    border-radius: 8px;
+    background: #FFFFFF;
+  }
+
+  .score-display { font-size: 24px; font-weight: 700; color: #004488; }
+
+  .lock-btn {
+    background: #D3D3D3;
+    color: #333;
+    cursor: pointer;
+    border: 1px solid #bbb;
+  }
+  .lock-btn:hover { background: #c0c0c0; }
+
+  .time-info {
+    background: #F5F5DC;
+    padding: 8px 12px;
     border-radius: 6px;
-    z-index: 1500;
-    font-family: monospace;
-    max-width: 380px;
+    font-size: 13px;
+    color: #8B4513;
+    border-left: 3px solid #8B5A2B;
+    margin: 8px 0;
+  }
+
+  /* ⭐ PREVIEW BOX CHO GV */
+  .preview-box {
+    margin-top: 8px;
+    border: 2px dashed #8B5A2B;
+    border-radius: 8px;
+    height: 400px;
+    overflow: hidden;
+    background: #FFFFFF;
+    position: relative;
+  }
+  .preview-box iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  .preview-box .preview-label {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    background: #8B5A2B;
+    color: #FFF;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    z-index: 10;
     pointer-events: none;
+  }
+  .preview-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #999;
+    font-style: italic;
+    padding: 20px;
+    text-align: center;
   }
 </style>
 </head>
@@ -282,15 +314,12 @@
 </header>
 
 <div class="container">
-
-  <!-- TABS -->
   <div class="tabs" id="mainTabs">
     <button class="tab-btn active" data-tab="view">📖 Xem Bài Tập</button>
-    <button class="tab-btn" data-tab="submit">✍️ Bài Làm Của Tôi</button>
+    <button class="tab-btn" data-tab="submit">📊 Kết Quả Của Tôi</button>
     <button class="tab-btn hidden" data-tab="teacher" id="teacherTabBtn">👨‍🏫 Quản Lý (GV)</button>
   </div>
 
-  <!-- TAB: VIEW ASSIGNMENTS -->
   <div id="tab-view" class="tab-content active">
     <div class="tabs" style="border:none; margin-bottom:16px;">
       <button class="tab-btn active grade-tab" data-grade="10">Vật Lý 10</button>
@@ -300,12 +329,10 @@
     <div id="assignmentsList"></div>
   </div>
 
-  <!-- TAB: MY SUBMISSIONS -->
   <div id="tab-submit" class="tab-content">
     <div id="mySubmissions"></div>
   </div>
 
-  <!-- TAB: TEACHER -->
   <div id="tab-teacher" class="tab-content">
     <div class="card">
       <div class="space-between mb-2">
@@ -324,14 +351,85 @@
           </div>
           <div class="form-group" style="flex:3; min-width:220px;">
             <label>Tiêu đề bài tập</label>
-            <input id="addTitle" placeholder="VD: Bài 5 - Động lượng" />
+            <input id="addTitle" placeholder="VD: Bài 2 - Quy tắc an toàn" />
           </div>
         </div>
+
         <div class="form-group">
-          <label>Nội dung / Đề bài</label>
-          <textarea id="addContent" placeholder="Nhập đề bài chi tiết..."></textarea>
+          <label>Loại bài tập</label>
+          <select id="addType">
+            <option value="essay">📄 Tự luận — HS xem đề (phải ĐN), làm giấy nộp</option>
+            <option value="quiz">🎯 Trắc nghiệm — Tự chấm điểm, khống chế thời gian</option>
+          </select>
         </div>
-        <div class="row">
+
+        <!-- ============ ESSAY FIELDS ============ -->
+        <div id="essayFields">
+          <div class="alert alert-info">
+            💡 <strong>Tự luận:</strong> HS phải đăng nhập + được duyệt mới xem được đề.
+            Hệ thống ghi nhận ai xem, xem lúc nào, bao lâu. HS làm ra giấy nộp GV.
+          </div>
+          <div class="form-group">
+            <label>Đường dẫn file HTML tự luận</label>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <input id="addEssayUrl" placeholder="tl/ten-file.html" style="flex:1;" />
+              <button class="btn btn-light btn-sm" type="button" id="previewEssayBtn" style="white-space:nowrap;">👁 Xem trước</button>
+            </div>
+            <div class="hint">VD: <code>tl/de-on-tap.html</code> — file nằm trong thư mục <code>tl/</code></div>
+          </div>
+
+          <!-- ⭐ PREVIEW BOX ESSAY -->
+          <div class="preview-box" id="essayPreviewBox">
+            <div class="preview-label">XEM TRƯỚC</div>
+            <div class="preview-empty">Nhập đường dẫn và bấm "👁 Xem trước" để kiểm tra nội dung</div>
+          </div>
+
+          <div class="form-group" style="margin-top:14px;">
+            <label>Hoặc Upload file HTML (≤ 900KB)</label>
+            <input type="file" id="addEssayFile" accept=".html,.htm" />
+          </div>
+          <div class="form-group">
+            <label>Hướng dẫn / Ghi chú</label>
+            <textarea id="addEssayNote" placeholder="VD: Làm bài 1,2,3 vào vở, nộp vào tiết sau" style="min-height:60px;"></textarea>
+          </div>
+        </div>
+
+        <!-- ============ QUIZ FIELDS ============ -->
+        <div id="quizFields" class="hidden">
+          <div class="alert alert-warn">
+            ⚠️ <strong>Trắc nghiệm như thi thật:</strong> Khi HS bấm "Bắt đầu" → ghi nhận 1 lượt,
+            đồng hồ chạy, đóng tab vẫn tính. Tối đa <strong>3 lượt</strong>.
+          </div>
+          <div class="form-group">
+            <label>Đường dẫn file HTML trắc nghiệm</label>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <input id="addQuizUrl" placeholder="tn/ten-file.html" style="flex:1;" />
+              <button class="btn btn-light btn-sm" type="button" id="previewQuizBtn" style="white-space:nowrap;">👁 Xem trước</button>
+            </div>
+            <div class="hint">VD: <code>tn/kiem-tra-15p.html</code> — file nằm trong thư mục <code>tn/</code></div>
+          </div>
+
+          <!-- ⭐ PREVIEW BOX QUIZ -->
+          <div class="preview-box" id="quizPreviewBox">
+            <div class="preview-label">XEM TRƯỚC</div>
+            <div class="preview-empty">Nhập đường dẫn và bấm "👁 Xem trước" để kiểm tra nội dung</div>
+          </div>
+
+          <div class="form-group" style="margin-top:14px;">
+            <label>Hoặc Upload file HTML (≤ 900KB)</label>
+            <input type="file" id="addQuizFile" accept=".html,.htm" />
+          </div>
+          <div class="form-group">
+            <label>⏱ Thời gian làm bài (phút) — bắt buộc</label>
+            <input type="number" id="addQuizDuration" value="25" min="1" max="180" />
+          </div>
+          <div class="form-group">
+            <label>Mô tả ngắn</label>
+            <textarea id="addQuizDesc" placeholder="VD: 25 câu trắc nghiệm về an toàn" style="min-height:60px;"></textarea>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:14px;">
           <div class="form-group" style="flex:1;">
             <label>Hạn nộp (tuỳ chọn)</label>
             <input type="date" id="addDeadline" />
@@ -341,13 +439,33 @@
             <input type="number" id="addMaxScore" value="10" min="1" max="100" />
           </div>
         </div>
+
+        <!-- ============ GIAO BÀI ============ -->
+        <div class="form-group" style="margin-top:14px; padding:12px; background:#F5F5DC; border-radius:6px; border-left:3px solid #8B5A2B;">
+          <label style="font-weight:600; color:#8B4513;">🎯 Giao bài cho ai?</label>
+          <div class="hint" style="margin-bottom:8px; color:#555;">
+            Để trống cả 2 ô = <strong>tất cả HS khối này</strong> đều thấy.
+            Chỉ định lớp hoặc email = chỉ HS đó mới thấy.
+          </div>
+          <div class="row">
+            <div class="form-group" style="flex:1; min-width:200px;">
+              <label style="font-size:13px;">Theo lớp (cách nhau dấu phẩy)</label>
+              <input id="addAssignClasses" placeholder="VD: 10A1, 10A2" />
+            </div>
+            <div class="form-group" style="flex:1; min-width:200px;">
+              <label style="font-size:13px;">Theo email HS (cách nhau dấu phẩy)</label>
+              <input id="addAssignEmails" placeholder="VD: hs1@gmail.com, hs2@gmail.com" />
+            </div>
+          </div>
+        </div>
+
         <button class="btn btn-primary" id="addAssignmentBtn">Thêm bài tập</button>
       </div>
     </div>
 
     <div class="card">
       <h3>👥 Duyệt Học Sinh</h3>
-      <p class="text-sm mb-2">Học sinh đăng ký cần được bạn xác nhận mới có thể làm bài.</p>
+      <p class="text-sm mb-2">Học sinh đăng ký cần được bạn xác nhận mới có thể xem/làm bài.</p>
       <div id="pendingUsers"></div>
     </div>
 
@@ -356,10 +474,9 @@
       <div id="teacherAssignments"></div>
     </div>
   </div>
-
 </div>
 
-<!-- MODAL: AUTH -->
+<!-- MODAL AUTH -->
 <div id="authModal" class="modal-overlay hidden">
   <div class="modal">
     <h2 id="authModalTitle">Đăng nhập</h2>
@@ -390,30 +507,68 @@
   </div>
 </div>
 
-<!-- MODAL: DO ASSIGNMENT -->
-<div id="doModal" class="modal-overlay hidden">
-  <div class="modal" style="max-width: 720px;">
-    <h2 id="doTitle">Làm bài</h2>
-    <div id="doContent" class="content" style="margin-bottom:16px;"></div>
-    <div class="form-group">
-      <label>Bài làm của em</label>
-      <textarea id="doAnswer" placeholder="Nhập lời giải / đáp án..." style="min-height:180px;"></textarea>
+<!-- MODAL XÁC NHẬN BẮT ĐẦU QUIZ -->
+<div id="startQuizModal" class="modal-overlay hidden">
+  <div class="modal">
+    <h2>⚠️ Xác nhận bắt đầu làm bài</h2>
+    <div id="startQuizInfo"></div>
+    <div class="alert alert-warn" style="margin-top:14px;">
+      <strong>Lưu ý quan trọng:</strong>
+      <ul style="margin-left:20px; margin-top:6px;">
+        <li>Khi bấm <strong>"Bắt đầu"</strong>, hệ thống tính <strong>1 lượt làm bài</strong>.</li>
+        <li>Đồng hồ đếm ngược sẽ bắt đầu chạy ngay.</li>
+        <li>Đóng tab / thoát giữa chừng <strong>vẫn tính 1 lượt</strong>.</li>
+        <li>Hết giờ, bài sẽ <strong>tự động nộp</strong>.</li>
+        <li>Tối đa <strong>3 lượt</strong> cho mỗi bài.</li>
+      </ul>
     </div>
     <div class="modal-actions">
-      <button class="btn btn-light" id="doCancelBtn">Hủy</button>
-      <button class="btn btn-primary" id="doSubmitBtn">Nộp bài</button>
+      <button class="btn btn-light" id="startQuizCancel">Hủy</button>
+      <button class="btn btn-primary" id="startQuizConfirm">🚀 Bắt đầu làm bài</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL: GRADE -->
+<!-- MODAL VIEW QUIZ -->
+<div id="quizModal" class="modal-overlay hidden">
+  <div class="modal modal-xl">
+    <div class="space-between mb-2">
+      <h2 id="quizTitle">Làm bài trắc nghiệm</h2>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div id="quizTimer" style="
+          background:#8B4513; color:#FFF; padding:8px 16px; border-radius:8px;
+          font-size:18px; font-weight:700; font-family:monospace; min-width:120px; text-align:center;
+        ">--:--</div>
+        <button class="btn btn-light btn-sm" id="quizCloseBtn">✖ Thoát</button>
+      </div>
+    </div>
+    <div class="alert alert-warn" style="flex-shrink:0;">
+      ⏱ <strong>Đang trong thời gian làm bài.</strong> Không đóng tab. Hết giờ bài sẽ tự động nộp.
+    </div>
+    <iframe id="quizFrame" class="content-frame" style="flex:1; height: 100%;"></iframe>
+  </div>
+</div>
+
+<!-- MODAL VIEW ESSAY / CONTENT -->
+<div id="htmlModal" class="modal-overlay hidden">
+  <div class="modal modal-large">
+    <div class="space-between mb-2">
+      <h2 id="htmlTitle">Xem bài tập</h2>
+      <button class="btn btn-light btn-sm" id="htmlCloseBtn">✖ Đóng</button>
+    </div>
+    <div id="viewTimeInfo" class="time-info" style="display:none;"></div>
+    <iframe id="htmlFrame" class="content-frame" style="height: 70vh;"></iframe>
+  </div>
+</div>
+
+<!-- MODAL GRADE -->
 <div id="gradeModal" class="modal-overlay hidden">
   <div class="modal" style="max-width: 720px;">
     <h2>Chấm bài</h2>
     <div id="gradeInfo"></div>
     <div class="form-group">
       <label>Điểm (thang 10)</label>
-      <input type="number" id="gradeScore" min="0" max="10" step="0.25" class="score-input" />
+      <input type="number" id="gradeScore" min="0" max="10" step="0.25" style="width:100px;" />
     </div>
     <div class="form-group">
       <label>Nhận xét</label>
@@ -427,22 +582,24 @@
 </div>
 
 <div id="toast"></div>
-<div id="debugPanel"></div>
 
 <script type="module">
   const { auth, db, TEACHER_EMAIL,
     createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged,
-    collection, addDoc, getDocs, doc, deleteDoc, updateDoc, query, where, orderBy, getDoc, setDoc, serverTimestamp
+    collection, addDoc, getDocs, doc, deleteDoc, updateDoc, query, where, getDoc, setDoc, serverTimestamp
   } = window.FB;
 
-  let currentUser = null;     // Firebase user
-  let currentProfile = null;  // { role, name, class, approved }
+  let currentUser = null;
+  let currentProfile = null;
   let currentGrade = "10";
-  let authMode = "login";     // 'login' | 'register'
-  let currentDoAssignment = null;
+  let authMode = "login";
   let currentGradeSubmission = null;
+  let currentQuizAssignment = null;
+  let currentQuizSession = null;
+  let quizTimerInterval = null;
+  let currentViewSession = null;
+  let approvalPollInterval = null;
 
-  // ---------- HELPERS ----------
   const $ = (id) => document.getElementById(id);
   const show = (el) => el.classList.remove('hidden');
   const hide = (el) => el.classList.add('hidden');
@@ -456,17 +613,30 @@
     setTimeout(() => t.classList.remove('show'), 3000);
   }
 
-  function debug(msg) {
-    $('debugPanel').textContent = msg;
-  }
-
   function fmtDate(ts) {
     if (!ts) return '—';
     const d = ts.toDate ? ts.toDate() : new Date(ts);
     return d.toLocaleString('vi-VN');
   }
 
-  // ---------- TABS ----------
+  function fmtDuration(sec) {
+    if (!sec) return '—';
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    if (m === 0) return `${s} giây`;
+    return `${m} phút ${s} giây`;
+  }
+
+  function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // ==================== TABS ====================
   document.querySelectorAll('.tab-btn[data-tab]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
@@ -485,13 +655,77 @@
     });
   });
 
-  // ---------- AUTH ----------
-  $('authBtn').addEventListener('click', () => {
-    if (currentUser) {
-      signOut(auth).then(() => toast('Đã đăng xuất'));
+  $('addType').addEventListener('change', () => {
+    const v = $('addType').value;
+    hide($('essayFields')); hide($('quizFields'));
+    if (v === 'essay') {
+      show($('essayFields'));
+      $('essayPreviewBox').innerHTML = `
+        <div class="preview-label">XEM TRƯỚC</div>
+        <div class="preview-empty">Nhập đường dẫn và bấm "👁 Xem trước"</div>
+      `;
     } else {
-      openAuthModal('login');
+      show($('quizFields'));
+      $('quizPreviewBox').innerHTML = `
+        <div class="preview-label">XEM TRƯỚC</div>
+        <div class="preview-empty">Nhập đường dẫn và bấm "👁 Xem trước"</div>
+      `;
     }
+  });
+
+  // ==================== PREVIEW CHO GV ====================
+  function showPreview(boxId, url) {
+    const box = $(boxId);
+    if (!url) {
+      box.innerHTML = `
+        <div class="preview-label">XEM TRƯỚC</div>
+        <div class="preview-empty">Chưa có đường dẫn</div>
+      `;
+      return;
+    }
+    box.innerHTML = `
+      <div class="preview-label">XEM TRƯỚC</div>
+      <iframe src="${esc(url)}" sandbox="allow-scripts allow-same-origin"></iframe>
+    `;
+  }
+
+  $('previewEssayBtn').addEventListener('click', () => {
+    const url = $('addEssayUrl').value.trim();
+    if (!url) { toast('Chưa nhập đường dẫn', 'error'); return; }
+    showPreview('essayPreviewBox', url);
+    toast('Đang tải bản xem trước...', 'info');
+  });
+
+  $('previewQuizBtn').addEventListener('click', () => {
+    const url = $('addQuizUrl').value.trim();
+    if (!url) { toast('Chưa nhập đường dẫn', 'error'); return; }
+    showPreview('quizPreviewBox', url);
+    toast('Đang tải bản xem trước...', 'info');
+  });
+
+  // Auto-load khi đổi đường dẫn (debounce 1s)
+  let essayPreviewTimer = null;
+  $('addEssayUrl').addEventListener('input', () => {
+    clearTimeout(essayPreviewTimer);
+    essayPreviewTimer = setTimeout(() => {
+      const url = $('addEssayUrl').value.trim();
+      if (url) showPreview('essayPreviewBox', url);
+    }, 1000);
+  });
+
+  let quizPreviewTimer = null;
+  $('addQuizUrl').addEventListener('input', () => {
+    clearTimeout(quizPreviewTimer);
+    quizPreviewTimer = setTimeout(() => {
+      const url = $('addQuizUrl').value.trim();
+      if (url) showPreview('quizPreviewBox', url);
+    }, 1000);
+  });
+
+  // ==================== AUTH ====================
+  $('authBtn').addEventListener('click', () => {
+    if (currentUser) signOut(auth).then(() => toast('Đã đăng xuất'));
+    else openAuthModal('login');
   });
 
   function openAuthModal(mode) {
@@ -527,10 +761,7 @@
       } else {
         const name = $('authName').value.trim();
         const cls = $('authClass').value.trim();
-        if (!name) {
-          $('authError').innerHTML = '<div class="alert alert-error">Vui lòng nhập họ tên.</div>';
-          return;
-        }
+        if (!name) { $('authError').innerHTML = '<div class="alert alert-error">Vui lòng nhập họ tên.</div>'; return; }
         const cred = await createUserWithEmailAndPassword(auth, email, pass);
         const isTeacher = email.toLowerCase() === TEACHER_EMAIL.toLowerCase();
         await setDoc(doc(db, 'users', cred.user.uid), {
@@ -539,7 +770,7 @@
           approved: isTeacher,
           createdAt: serverTimestamp()
         });
-        toast(isTeacher ? 'Đăng ký giáo viên thành công!' : 'Đăng ký thành công! Chờ giáo viên duyệt.', 'success');
+        toast(isTeacher ? 'Đăng ký giáo viên thành công!' : 'Đăng ký thành công! Chờ GV duyệt.', 'success');
       }
       hide($('authModal'));
     } catch (err) {
@@ -547,70 +778,59 @@
     }
   });
 
-  // ---------- AUTH STATE (ĐÃ CẢI TIẾN) ----------
   onAuthStateChanged(auth, async (user) => {
     currentUser = user;
-    debug('Checking auth state...');
+    if (approvalPollInterval) { clearInterval(approvalPollInterval); approvalPollInterval = null; }
 
     if (user) {
       const isTeacherEmail = user.email.toLowerCase() === TEACHER_EMAIL.toLowerCase();
       const snap = await getDoc(doc(db, 'users', user.uid));
-
       if (snap.exists()) {
         currentProfile = snap.data();
-
-        // ✅ TỰ ĐỘNG CẤP QUYỀN GIÁO VIÊN nếu email khớp TEACHER_EMAIL
         if (isTeacherEmail && (currentProfile.role !== 'teacher' || !currentProfile.approved)) {
           try {
-            await updateDoc(doc(db, 'users', user.uid), {
-              role: 'teacher',
-              approved: true
-            });
-            currentProfile.role = 'teacher';
-            currentProfile.approved = true;
+            await updateDoc(doc(db, 'users', user.uid), { role: 'teacher', approved: true });
+            currentProfile.role = 'teacher'; currentProfile.approved = true;
             toast('Đã tự động cấp quyền giáo viên', 'success');
-          } catch (e) {
-            console.error('Không thể cập nhật role:', e);
-          }
+          } catch (e) { console.error(e); }
         }
       } else {
-        // Tạo profile mới nếu chưa có document
         const newProfile = {
-          email: user.email,
-          name: user.email,
-          class: '',
+          email: user.email, name: user.email, class: '',
           role: isTeacherEmail ? 'teacher' : 'student',
           approved: isTeacherEmail,
           createdAt: serverTimestamp()
         };
-        try {
-          await setDoc(doc(db, 'users', user.uid), newProfile);
-        } catch (e) {
-          console.error('Không thể tạo profile:', e);
-        }
+        try { await setDoc(doc(db, 'users', user.uid), newProfile); } catch (e) { console.error(e); }
         currentProfile = newProfile;
       }
-
-      // Cập nhật UI
       const roleLabel = currentProfile.role === 'teacher' ? 'Giáo viên' : 'Học sinh';
       $('userLabel').textContent = `${currentProfile.name || user.email} (${roleLabel})`;
       $('authBtn').textContent = 'Đăng xuất';
+      if (currentProfile.role === 'teacher') show($('teacherTabBtn'));
+      else hide($('teacherTabBtn'));
 
-      if (currentProfile.role === 'teacher') {
-        show($('teacherTabBtn'));
-      } else {
-        hide($('teacherTabBtn'));
+      // Auto-poll khi HS chưa được duyệt
+      if (currentProfile.role === 'student' && !currentProfile.approved) {
+        approvalPollInterval = setInterval(async () => {
+          if (!currentUser) { clearInterval(approvalPollInterval); return; }
+          const s = await getDoc(doc(db, 'users', currentUser.uid));
+          if (s.exists() && s.data().approved) {
+            currentProfile = s.data();
+            clearInterval(approvalPollInterval);
+            approvalPollInterval = null;
+            toast('🎉 Tài khoản đã được duyệt!', 'success');
+            loadAssignments();
+            loadMySubmissions();
+          }
+        }, 30000);
       }
-
-      debug(`User: ${user.email} | Role: ${currentProfile.role} | Approved: ${currentProfile.approved}`);
     } else {
       currentProfile = null;
       $('userLabel').textContent = 'Khách (chưa đăng nhập)';
       $('authBtn').textContent = 'Đăng nhập';
       hide($('teacherTabBtn'));
-      debug('Chưa đăng nhập');
     }
-
     loadAssignments();
     loadMySubmissions();
     if (currentProfile?.role === 'teacher') {
@@ -619,100 +839,499 @@
     }
   });
 
-  // ---------- LOAD ASSIGNMENTS ----------
+  // ==================== LOAD ASSIGNMENTS ====================
   async function loadAssignments() {
     const list = $('assignmentsList');
     list.innerHTML = '<div class="empty">Đang tải...</div>';
     try {
       const q = query(collection(db, 'assignments'), where('grade', '==', currentGrade));
       const snap = await getDocs(q);
-      if (snap.empty) {
-        list.innerHTML = '<div class="empty">Chưa có bài tập cho khối này.</div>';
+      if (snap.empty) { list.innerHTML = '<div class="empty">Chưa có bài tập cho khối này.</div>'; return; }
+      let items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+      // LỌC BÀI TẬP THEO GIAO BÀI
+      if (currentProfile?.role === 'student' && currentUser) {
+        items = items.filter(a => {
+          const noAssign = (!a.assignedTo || a.assignedTo.length === 0)
+                        && (!a.assignedClasses || a.assignedClasses.length === 0);
+          if (noAssign) return true;
+          const toMe = a.assignedTo?.includes(currentUser.uid);
+          const toMyClass = a.assignedClasses?.includes(currentProfile.class);
+          return toMe || toMyClass;
+        });
+      }
+
+      // SẮP XẾP: bài giao riêng lên đầu
+      items.sort((a, b) => {
+        const aAssigned = (a.assignedTo?.includes(currentUser?.uid) || a.assignedClasses?.includes(currentProfile?.class)) ? 1 : 0;
+        const bAssigned = (b.assignedTo?.includes(currentUser?.uid) || b.assignedClasses?.includes(currentProfile?.class)) ? 1 : 0;
+        if (aAssigned !== bAssigned) return bAssigned - aAssigned;
+        return (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0);
+      });
+
+      if (items.length === 0) {
+        list.innerHTML = '<div class="empty">Chưa có bài tập nào cho khối này.</div>';
         return;
       }
-      const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      items.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
-      list.innerHTML = items.map(a => `
-        <div class="card">
-          <div class="space-between">
-            <h3>${esc(a.title)}</h3>
-            <span class="badge badge-pending">Khối ${esc(a.grade)}</span>
+
+      let mySubs = [];
+      if (currentUser && currentProfile?.role !== 'teacher') {
+        const sq = query(collection(db, 'submissions'), where('studentId', '==', currentUser.uid));
+        const ss = await getDocs(sq);
+        mySubs = ss.docs.map(d => d.data());
+      }
+
+      const isLoggedIn = !!currentUser;
+      const isStudent = currentProfile?.role === 'student';
+      const isApproved = currentProfile?.approved === true;
+
+      list.innerHTML = items.map(a => {
+        const typeBadge = {
+          essay: '<span class="badge badge-essay">📄 Tự luận</span>',
+          quiz: '<span class="badge badge-quiz">🎯 Trắc nghiệm</span>'
+        }[a.type] || '';
+
+        let assignedBadge = '';
+        let isAssignedToMe = false;
+        if (currentProfile?.role === 'student' && currentUser) {
+          const toMe = a.assignedTo?.includes(currentUser.uid);
+          const toMyClass = a.assignedClasses?.includes(currentProfile.class);
+          if (toMe || toMyClass) {
+            assignedBadge = '<span class="badge badge-assigned">📌 GV giao</span>';
+            isAssignedToMe = true;
+          }
+        }
+
+        const doneCount = mySubs.filter(s => s.assignmentId === a.id && s.status !== 'in_progress').length;
+
+        let actionBtn = '';
+
+        if (a.type === 'essay') {
+          if (!isLoggedIn) {
+            actionBtn = `<button class="btn lock-btn btn-sm" data-require-login>🔒 Đăng nhập để xem đề</button>`;
+          } else if (currentProfile?.role === 'teacher') {
+            actionBtn = `<button class="btn btn-primary btn-sm" data-view-essay="${a.id}">👁 Xem đề (GV)</button>`;
+          } else if (!isApproved) {
+            actionBtn = `
+              <div class="row">
+                <span class="text-sm" style="color:#c0392b;">⏳ Chờ giáo viên duyệt tài khoản</span>
+                <button class="btn btn-light btn-sm" data-recheck>🔄 Kiểm tra lại</button>
+              </div>
+              <div class="text-sm" style="color:#666; margin-top:4px;">
+                Sau khi được duyệt, em có thể xem đề ngay mà không cần chờ lại.
+              </div>
+            `;
+          } else {
+            actionBtn = `<button class="btn btn-primary btn-sm" data-view-essay="${a.id}">📖 Xem đề bài</button>`;
+          }
+        } 
+        else if (a.type === 'quiz') {
+          if (!isLoggedIn) {
+            actionBtn = `<button class="btn lock-btn btn-sm" data-require-login>🔒 Đăng nhập để làm bài</button>`;
+          } else if (currentProfile?.role === 'teacher') {
+            actionBtn = `<span class="text-sm" style="color:#8B4513;">👨‍🏫 Giáo viên không làm bài</span>`;
+          } else if (!isApproved) {
+            actionBtn = `
+              <div class="row">
+                <span class="text-sm" style="color:#c0392b;">⏳ Chờ giáo viên duyệt tài khoản</span>
+                <button class="btn btn-light btn-sm" data-recheck>🔄 Kiểm tra lại</button>
+              </div>
+            `;
+          } else if (doneCount >= 3) {
+            actionBtn = `<span class="text-sm" style="color:#c0392b;">✋ Đã làm tối đa 3 lần</span>`;
+          } else {
+            actionBtn = `<button class="btn btn-primary btn-sm" data-do-quiz="${a.id}">🎯 Bắt đầu làm bài (${doneCount}/3)</button>`;
+          }
+        }
+
+        let timeInfo = '';
+        if (a.type === 'quiz' && a.duration) {
+          timeInfo = `<div class="time-info">⏱ Thời gian làm bài: <strong>${esc(a.duration)} phút</strong> • Tối đa 3 lượt</div>`;
+        }
+        if (a.type === 'essay') {
+          timeInfo = `<div class="time-info">📄 Hình thức: Xem đề trên web → Làm ra giấy → Nộp trực tiếp GV</div>`;
+        }
+
+        return `
+          <div class="card ${isAssignedToMe ? 'assigned' : ''}">
+            <div class="space-between">
+              <h3>${esc(a.title)}</h3>
+              <div>
+                <span class="badge badge-pending">Khối ${esc(a.grade)}</span>
+                ${typeBadge}
+                ${assignedBadge}
+              </div>
+            </div>
+            <div class="meta">
+              Điểm tối đa: ${esc(a.maxScore ?? 10)}
+              ${a.deadline ? ` • Hạn: ${esc(a.deadline)}` : ''}
+              ${isStudent && a.type === 'quiz' ? ` • Đã làm: ${doneCount}/3 lần` : ''}
+            </div>
+            ${timeInfo}
+            <div class="content">${esc(
+              a.type === 'essay' ? (a.note || 'Xem đề bài đính kèm') :
+              (a.desc || 'Bài trắc nghiệm')
+            )}</div>
+            ${actionBtn}
           </div>
-          <div class="meta">
-            Điểm tối đa: ${esc(a.maxScore ?? 10)}
-            ${a.deadline ? ` • Hạn: ${esc(a.deadline)}` : ''}
-          </div>
-          <div class="content">${esc(a.content)}</div>
-          <button class="btn btn-primary btn-sm" data-do="${a.id}">Làm bài</button>
-        </div>
-      `).join('');
-      list.querySelectorAll('[data-do]').forEach(btn => {
-        btn.addEventListener('click', () => openDoModal(btn.dataset.do, items));
+        `;
+      }).join('');
+
+      list.querySelectorAll('[data-do-quiz]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const a = items.find(x => x.id === btn.dataset.doQuiz);
+          openStartQuizModal(a);
+        });
       });
+      list.querySelectorAll('[data-view-essay]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const a = items.find(x => x.id === btn.dataset.viewEssay);
+          openEssayModal(a);
+        });
+      });
+      list.querySelectorAll('[data-require-login]').forEach(btn => {
+        btn.addEventListener('click', () => openAuthModal('login'));
+      });
+      list.querySelectorAll('[data-recheck]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!currentUser) return;
+          const snap = await getDoc(doc(db, 'users', currentUser.uid));
+          if (snap.exists()) {
+            const data = snap.data();
+            if (data.approved) {
+              currentProfile = data;
+              toast('🎉 Tài khoản đã được duyệt!', 'success');
+              loadAssignments();
+              loadMySubmissions();
+            } else {
+              toast('Tài khoản vẫn chưa được duyệt.', 'error');
+            }
+          }
+        });
+      });
+
     } catch (err) {
       list.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`;
     }
   }
 
-  // ---------- DO MODAL ----------
-  async function openDoModal(assignmentId, items) {
-    if (!currentUser) { toast('Vui lòng đăng nhập để làm bài', 'error'); openAuthModal('login'); return; }
-    if (currentProfile?.role === 'teacher') { toast('Giáo viên không làm bài', 'error'); return; }
-    if (!currentProfile?.approved) { toast('Tài khoản chưa được giáo viên duyệt', 'error'); return; }
+  // ==================== ESSAY VIEW + LOG ====================
+  async function openEssayModal(a) {
+    if (!currentUser) { toast('Vui lòng đăng nhập để xem đề', 'error'); openAuthModal('login'); return; }
+    if (currentProfile?.role === 'teacher') {
+      $('htmlTitle').textContent = a.title + ' (GV xem)';
+      $('viewTimeInfo').style.display = 'none';
+      if (a.fileData) $('htmlFrame').src = a.fileData;
+      else if (a.url) $('htmlFrame').src = a.url;
+      else $('htmlFrame').srcdoc = '<h2 style="padding:20px;">Không có nội dung</h2>';
+      show($('htmlModal'));
+      return;
+    }
+    if (!currentProfile?.approved) { toast('Tài khoản chưa được GV duyệt', 'error'); return; }
 
-    const a = items.find(x => x.id === assignmentId);
-    if (!a) return;
+    const startedAt = Date.now();
+    let logId = null;
+    try {
+      const docRef = await addDoc(collection(db, 'viewLogs'), {
+        assignmentId: a.id,
+        assignmentTitle: a.title,
+        grade: a.grade,
+        studentId: currentUser.uid,
+        studentName: currentProfile.name || currentUser.email,
+        studentClass: currentProfile.class || '',
+        viewedAt: serverTimestamp(),
+        startedAt: startedAt,
+        durationSec: 0,
+        endedAt: null
+      });
+      logId = docRef.id;
+    } catch (e) { console.error('Không ghi được log:', e); }
 
-    // Check số lần làm
+    $('htmlTitle').textContent = a.title;
+    $('viewTimeInfo').style.display = 'block';
+    $('viewTimeInfo').innerHTML = `⏱ Bắt đầu xem lúc: <strong>${new Date(startedAt).toLocaleTimeString('vi-VN')}</strong>`;
+    
+    if (a.fileData) $('htmlFrame').src = a.fileData;
+    else if (a.url) $('htmlFrame').src = a.url;
+    else $('htmlFrame').srcdoc = '<h2 style="padding:20px;">Không có nội dung</h2>';
+    
+    show($('htmlModal'));
+
+    currentViewSession = {
+      logId,
+      assignmentId: a.id,
+      startedAt,
+      heartbeatInterval: null,
+      tickInterval: null
+    };
+
+    // Heartbeat 30s
+    currentViewSession.heartbeatInterval = setInterval(async () => {
+      if (!currentViewSession) return;
+      const elapsed = Math.round((Date.now() - currentViewSession.startedAt) / 1000);
+      try {
+        await updateDoc(doc(db, 'viewLogs', currentViewSession.logId), { durationSec: elapsed });
+      } catch (e) {}
+    }, 30000);
+
+    // Tick 1s
+    currentViewSession.tickInterval = setInterval(() => {
+      if (!currentViewSession) return;
+      const elapsed = Math.round((Date.now() - currentViewSession.startedAt) / 1000);
+      const mm = Math.floor(elapsed / 60);
+      const ss = elapsed % 60;
+      $('viewTimeInfo').innerHTML = `⏱ Đã xem: <strong>${mm} phút ${ss} giây</strong>`;
+    }, 1000);
+  }
+
+  async function closeEssayModal() {
+    if (currentViewSession) {
+      const elapsed = Math.round((Date.now() - currentViewSession.startedAt) / 1000);
+      if (currentViewSession.heartbeatInterval) clearInterval(currentViewSession.heartbeatInterval);
+      if (currentViewSession.tickInterval) clearInterval(currentViewSession.tickInterval);
+      try {
+        await updateDoc(doc(db, 'viewLogs', currentViewSession.logId), {
+          durationSec: elapsed,
+          endedAt: serverTimestamp()
+        });
+      } catch (e) { console.error(e); }
+      currentViewSession = null;
+    }
+    $('htmlFrame').src = 'about:blank';
+    hide($('htmlModal'));
+  }
+
+  $('htmlCloseBtn').addEventListener('click', closeEssayModal);
+
+  window.addEventListener('beforeunload', (e) => {
+    if (currentQuizSession) {
+      e.preventDefault();
+      e.returnValue = 'Bạn đang làm bài. Thoát sẽ mất lượt làm này!';
+      return e.returnValue;
+    }
+  });
+
+  // ==================== QUIZ ====================
+  async function checkCanDo(assignmentId) {
+    if (!currentUser) { toast('Vui lòng đăng nhập để làm bài', 'error'); openAuthModal('login'); return false; }
+    if (currentProfile?.role === 'teacher') { toast('Giáo viên không làm bài', 'error'); return false; }
+    if (currentProfile?.role !== 'student') { toast('Chỉ học sinh mới làm bài', 'error'); return false; }
+    if (!currentProfile?.approved) { toast('Tài khoản chưa được giáo viên duyệt', 'error'); return false; }
     const subQ = query(collection(db, 'submissions'),
       where('assignmentId', '==', assignmentId),
       where('studentId', '==', currentUser.uid));
     const subSnap = await getDocs(subQ);
-    const count = subSnap.size;
-    if (count >= 3) { toast('Bạn đã làm bài này 3 lần (tối đa)', 'error'); return; }
-
-    currentDoAssignment = a;
-    $('doTitle').textContent = `Làm bài: ${a.title} (lần ${count + 1}/3)`;
-    $('doContent').textContent = a.content;
-    $('doAnswer').value = '';
-    show($('doModal'));
+    if (subSnap.size >= 3) { toast('Bạn đã làm bài này 3 lần (tối đa)', 'error'); return false; }
+    return subSnap.size + 1;
   }
 
-  $('doCancelBtn').addEventListener('click', () => hide($('doModal')));
+  async function openStartQuizModal(a) {
+    const attempt = await checkCanDo(a.id);
+    if (!attempt) return;
+    currentQuizAssignment = a;
 
-  $('doSubmitBtn').addEventListener('click', async () => {
-    const answer = $('doAnswer').value.trim();
-    if (!answer) { toast('Vui lòng nhập bài làm', 'error'); return; }
+    $('startQuizInfo').innerHTML = `
+      <div class="content">
+        <strong>${esc(a.title)}</strong><br>
+        <span style="font-size:13px; color:#555;">Lần làm thứ <strong>${attempt}</strong> / 3</span><br>
+        <div style="margin-top:10px;">
+          ⏱ Thời gian: <strong>${esc(a.duration || 25)} phút</strong><br>
+          🎯 Điểm tối đa: <strong>${esc(a.maxScore || 10)}</strong>
+        </div>
+      </div>
+    `;
+    show($('startQuizModal'));
+  }
+
+  $('startQuizCancel').addEventListener('click', () => {
+    hide($('startQuizModal'));
+    currentQuizAssignment = null;
+  });
+
+  $('startQuizConfirm').addEventListener('click', async () => {
+    if (!currentQuizAssignment) return;
+    const a = currentQuizAssignment;
+    hide($('startQuizModal'));
+
+    const duration = Number(a.duration) || 25;
+    const startedAt = new Date();
+    const deadlineAt = new Date(startedAt.getTime() + duration * 60 * 1000);
+
     try {
-      await addDoc(collection(db, 'submissions'), {
-        assignmentId: currentDoAssignment.id,
-        assignmentTitle: currentDoAssignment.title,
-        grade: currentDoAssignment.grade,
+      const sessionRef = await addDoc(collection(db, 'submissions'), {
+        assignmentId: a.id,
+        assignmentTitle: a.title,
+        grade: a.grade,
+        type: 'quiz',
         studentId: currentUser.uid,
         studentName: currentProfile.name || currentUser.email,
         studentClass: currentProfile.class || '',
-        answer,
+        answer: '[Bài trắc nghiệm — đang làm]',
+        autoScore: null,
+        autoTotal: a.maxScore || 10,
+        answers: null,
         score: null,
         comment: '',
-        status: 'submitted',
-        submittedAt: serverTimestamp()
+        status: 'in_progress',
+        duration: duration,
+        startedAt: serverTimestamp(),
+        deadlineAt: deadlineAt.getTime(),
+        submittedAt: null
       });
-      hide($('doModal'));
-      toast('Nộp bài thành công!', 'success');
-      loadMySubmissions();
-      if (currentProfile?.role === 'teacher') loadTeacherAssignments();
+
+      currentQuizSession = {
+        attemptId: sessionRef.id,
+        startedAt: startedAt.getTime(),
+        deadlineAt: deadlineAt.getTime(),
+        duration: duration
+      };
+
+      const subQ = query(collection(db, 'submissions'),
+        where('assignmentId', '==', a.id),
+        where('studentId', '==', currentUser.uid));
+      const subSnap = await getDocs(subQ);
+      $('quizTitle').textContent = `${a.title} — Lần ${subSnap.size}/3`;
+      $('quizFrame').srcdoc = '';
+      
+      const timeParams = `?duration=${duration}&startedAt=${startedAt.getTime()}&deadlineAt=${deadlineAt.getTime()}`;
+      if (a.fileData) {
+        $('quizFrame').src = a.fileData;
+      } else if (a.url) {
+        $('quizFrame').src = a.url + timeParams;
+      } else {
+        $('quizFrame').srcdoc = '<h2 style="padding:20px;">Không có nội dung</h2>';
+      }
+      
+      show($('quizModal'));
+      startQuizTimer();
     } catch (err) {
-      toast('Lỗi: ' + err.message, 'error');
+      toast('Không thể bắt đầu: ' + err.message, 'error');
     }
   });
 
-  // ---------- MY SUBMISSIONS ----------
+  function startQuizTimer() {
+    if (quizTimerInterval) clearInterval(quizTimerInterval);
+    updateQuizTimer();
+    quizTimerInterval = setInterval(updateQuizTimer, 1000);
+  }
+
+  function updateQuizTimer() {
+    if (!currentQuizSession) return;
+    const remainMs = currentQuizSession.deadlineAt - Date.now();
+    if (remainMs <= 0) {
+      $('quizTimer').textContent = 'HẾT GIỜ';
+      $('quizTimer').style.background = '#c0392b';
+      clearInterval(quizTimerInterval);
+      autoSubmitOnTimeout();
+      return;
+    }
+    const totalSec = Math.floor(remainMs / 1000);
+    const mm = String(Math.floor(totalSec / 60)).padStart(2, '0');
+    const ss = String(totalSec % 60).padStart(2, '0');
+    $('quizTimer').textContent = `⏱ ${mm}:${ss}`;
+    if (totalSec < 60) $('quizTimer').style.background = '#c0392b';
+    else if (totalSec < 300) $('quizTimer').style.background = '#8B5A2B';
+    else $('quizTimer').style.background = '#8B4513';
+  }
+
+  window.addEventListener('message', async (event) => {
+    if (!currentQuizSession || !currentQuizAssignment) return;
+    if (!event.data || event.data.type !== 'QUIZ_SUBMIT') return;
+    const { score, total, answers } = event.data;
+    if (typeof score !== 'number') return;
+    await finishQuiz(score, total, answers, false);
+  });
+
+  async function finishQuiz(score, total, answers, isTimeout) {
+    if (!currentQuizSession || !currentQuizAssignment) return;
+    const session = currentQuizSession;
+    const a = currentQuizAssignment;
+    if (quizTimerInterval) clearInterval(quizTimerInterval);
+    const submittedAt = Date.now();
+    const isLate = submittedAt > session.deadlineAt;
+
+    try {
+      await updateDoc(doc(db, 'submissions', session.attemptId), {
+        answer: isTimeout
+          ? `[Tự động nộp do hết giờ] ${answers ? Object.keys(answers).length : 0} câu đã trả lời`
+          : `[Bài trắc nghiệm] ${answers ? Object.keys(answers).length : 0} câu đã trả lời`,
+        autoScore: score,
+        autoTotal: total || a.maxScore || 10,
+        answers: answers || {},
+        status: 'submitted',
+        submittedAt: serverTimestamp(),
+        isLate: isLate,
+        timeSpent: Math.round((submittedAt - session.startedAt) / 1000)
+      });
+
+      if (isTimeout) toast('⏱ Hết giờ! Bài đã tự động nộp.', 'success');
+      else toast('Đã nộp bài! GV sẽ xem kết quả.', 'success');
+
+      $('quizFrame').src = 'about:blank';
+      hide($('quizModal'));
+      currentQuizSession = null;
+      currentQuizAssignment = null;
+      $('quizTimer').style.background = '#8B4513';
+      $('quizTimer').textContent = '--:--';
+
+      loadAssignments();
+      loadMySubmissions();
+    } catch (err) {
+      toast('Lỗi lưu bài: ' + err.message, 'error');
+    }
+  }
+
+  async function autoSubmitOnTimeout() {
+    const iframe = $('quizFrame');
+    if (iframe && iframe.contentWindow) {
+      try { iframe.contentWindow.postMessage({ type: 'FORCE_SUBMIT' }, '*'); } catch (e) {}
+    }
+    setTimeout(async () => {
+      if (currentQuizSession) {
+        await finishQuiz(0, currentQuizAssignment?.maxScore || 10, {}, true);
+      }
+    }, 2000);
+  }
+
+  $('quizCloseBtn').addEventListener('click', () => {
+    if (!currentQuizSession) { hide($('quizModal')); return; }
+    const remain = Math.max(0, Math.floor((currentQuizSession.deadlineAt - Date.now()) / 1000));
+    const mm = Math.floor(remain / 60);
+    const ss = remain % 60;
+    if (!confirm(`⚠️ Bạn đang làm bài!\n\nNếu thoát:\n• Lượt này VẪN BỊ TÍNH\n• Bài sẽ KHÔNG được nộp\n• Không thể làm lại\n\nCòn ${mm}p ${ss}s.\n\nVẫn thoát?`)) return;
+    abandonCurrentQuiz();
+  });
+
+  async function abandonCurrentQuiz() {
+    if (!currentQuizSession) return;
+    const session = currentQuizSession;
+    if (quizTimerInterval) clearInterval(quizTimerInterval);
+    try {
+      await updateDoc(doc(db, 'submissions', session.attemptId), {
+        status: 'abandoned',
+        answer: '[Học sinh thoát giữa chừng]',
+        submittedAt: serverTimestamp(),
+        abandonedAt: serverTimestamp()
+      });
+    } catch (e) { console.error(e); }
+    $('quizFrame').src = 'about:blank';
+    hide($('quizModal'));
+    currentQuizSession = null;
+    currentQuizAssignment = null;
+    $('quizTimer').style.background = '#8B4513';
+    $('quizTimer').textContent = '--:--';
+    toast('Đã thoát. Lượt làm này vẫn được tính.', 'error');
+    loadAssignments();
+    loadMySubmissions();
+  }
+
+  // ==================== MY SUBMISSIONS ====================
   async function loadMySubmissions() {
     const wrap = $('mySubmissions');
     if (!currentUser || currentProfile?.role === 'teacher') {
       wrap.innerHTML = currentUser
         ? '<div class="empty">Giáo viên không có bài làm.</div>'
-        : '<div class="empty">Vui lòng đăng nhập để xem bài làm của bạn.</div>';
+        : '<div class="empty">Vui lòng đăng nhập để xem kết quả.</div>';
       return;
     }
     wrap.innerHTML = '<div class="empty">Đang tải...</div>';
@@ -721,9 +1340,8 @@
       const snap = await getDocs(q);
       if (snap.empty) { wrap.innerHTML = '<div class="empty">Bạn chưa nộp bài nào.</div>'; return; }
       const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      items.sort((a,b) => (b.submittedAt?.seconds||0) - (a.submittedAt?.seconds||0));
+      items.sort((a,b) => (b.submittedAt?.seconds||b.startedAt?.seconds||0) - (a.submittedAt?.seconds||a.startedAt?.seconds||0));
 
-      // Nhóm theo assignment
       const grouped = {};
       items.forEach(s => { (grouped[s.assignmentId] ||= []).push(s); });
 
@@ -733,20 +1351,44 @@
           <div class="card">
             <div class="space-between">
               <h3>${esc(a.assignmentTitle)}</h3>
-              <span class="badge badge-pending">Khối ${esc(a.grade)} • ${list.length}/3 lần</span>
-            </div>
-            ${list.map((s, i) => `
-              <div class="submission ${s.status === 'graded' ? 'graded' : ''}">
-                <div class="space-between">
-                  <strong>Lần ${list.length - i}</strong>
-                  <span class="text-sm">${fmtDate(s.submittedAt)}</span>
-                </div>
-                <div class="content" style="margin-top:8px;">${esc(s.answer)}</div>
-                ${s.status === 'graded'
-                  ? `<div class="mt-2"><strong>Điểm: ${esc(s.score)}</strong> ${s.comment ? ` • Nhận xét: ${esc(s.comment)}` : ''}</div>`
-                  : '<div class="text-sm mt-2">⏳ Chưa chấm</div>'}
+              <div>
+                <span class="badge badge-pending">Khối ${esc(a.grade)}</span>
+                <span class="badge badge-quiz">🎯 Trắc nghiệm</span>
               </div>
-            `).join('')}
+            </div>
+            ${list.map((s, i) => {
+              let statusHtml = '';
+              if (s.status === 'in_progress') statusHtml = `<span class="badge badge-inprogress">🔄 Đang làm</span>`;
+              else if (s.status === 'abandoned') statusHtml = `<span class="badge badge-pending">⚠️ Bỏ dở</span>`;
+              else if (s.status === 'graded') statusHtml = `<span class="badge badge-graded">Điểm: ${esc(s.score)}</span>`;
+              else statusHtml = `<span class="badge badge-pending">⏳ Chưa chấm</span>`;
+
+              const timeInfo = s.timeSpent
+                ? `<div class="text-sm">⏱ Thời gian làm: ${Math.floor(s.timeSpent/60)}p ${s.timeSpent%60}s</div>`
+                : '';
+              const lateInfo = s.isLate ? `<div class="text-sm" style="color:#c0392b;">⚠️ Nộp trễ giờ</div>` : '';
+
+              return `
+                <div class="submission ${s.status === 'graded' ? 'graded' : ''} ${s.status === 'in_progress' ? 'in-progress' : ''} ${s.isLate ? 'late' : ''}">
+                  <div class="space-between">
+                    <strong>Lần ${list.length - i}</strong>
+                    ${statusHtml}
+                  </div>
+                  <div class="text-sm mt-2">
+                    Bắt đầu: ${fmtDate(s.startedAt)}
+                    ${s.submittedAt ? ` • Nộp: ${fmtDate(s.submittedAt)}` : ''}
+                  </div>
+                  ${timeInfo}
+                  ${lateInfo}
+                  ${s.status === 'graded'
+                    ? `<div class="mt-2">
+                         <strong>Kết quả GV chấm:</strong> <span class="score-display">${esc(s.score)}/${esc(s.autoTotal || 10)}</span>
+                         ${s.comment ? `<div class="text-sm mt-2">💬 ${esc(s.comment)}</div>` : ''}
+                       </div>`
+                    : ''}
+                </div>
+              `;
+            }).join('')}
           </div>
         `;
       }).join('');
@@ -755,42 +1397,110 @@
     }
   }
 
-  // ================= TEACHER =================
-
-  // Add assignment form
+  // ==================== TEACHER: ADD ====================
   $('showAddFormBtn').addEventListener('click', () => $('addFormWrap').classList.toggle('hidden'));
 
   $('addAssignmentBtn').addEventListener('click', async () => {
     if (currentProfile?.role !== 'teacher') { toast('Chỉ giáo viên mới thêm bài', 'error'); return; }
     const grade = $('addGrade').value;
     const title = $('addTitle').value.trim();
-    const content = $('addContent').value.trim();
+    const type = $('addType').value;
     const deadline = $('addDeadline').value;
     const maxScore = Number($('addMaxScore').value) || 10;
-    if (!title || !content) { toast('Nhập tiêu đề và nội dung', 'error'); return; }
+    if (!title) { toast('Nhập tiêu đề', 'error'); return; }
+
+    const payload = {
+      grade, title, type, deadline, maxScore,
+      teacherId: currentUser.uid,
+      createdAt: serverTimestamp()
+    };
+
     try {
-      await addDoc(collection(db, 'assignments'), {
-        grade, title, content, deadline, maxScore,
-        teacherId: currentUser.uid,
-        createdAt: serverTimestamp()
-      });
-      $('addTitle').value = ''; $('addContent').value = ''; $('addDeadline').value = '';
+      if (type === 'essay') {
+        const note = $('addEssayNote').value.trim();
+        const file = $('addEssayFile').files[0];
+        const url = $('addEssayUrl').value.trim();
+        if (!file && !url) { toast('Chọn file hoặc nhập đường dẫn', 'error'); return; }
+        if (file) {
+          if (file.size > 900 * 1024) { toast('File > 900KB, vui lòng nén hoặc dùng link', 'error'); return; }
+          payload.fileData = await readFileAsBase64(file);
+          payload.fileName = file.name;
+        }
+        if (url) payload.url = url;
+        payload.note = note;
+      } else if (type === 'quiz') {
+        const desc = $('addQuizDesc').value.trim();
+        const file = $('addQuizFile').files[0];
+        const url = $('addQuizUrl').value.trim();
+        const duration = Number($('addQuizDuration').value) || 25;
+        if (!file && !url) { toast('Chọn file hoặc nhập đường dẫn', 'error'); return; }
+        if (duration < 1 || duration > 180) { toast('Thời gian từ 1-180 phút', 'error'); return; }
+        if (file) {
+          if (file.size > 900 * 1024) { toast('File > 900KB, vui lòng nén hoặc dùng link', 'error'); return; }
+          payload.fileData = await readFileAsBase64(file);
+          payload.fileName = file.name;
+        }
+        if (url) payload.url = url;
+        payload.desc = desc;
+        payload.duration = duration;
+      }
+
+      // GIAO BÀI
+      const classesStr = $('addAssignClasses').value.trim();
+      payload.assignedClasses = classesStr
+        ? classesStr.split(',').map(s => s.trim()).filter(Boolean)
+        : [];
+
+      const emailsStr = $('addAssignEmails').value.trim();
+      payload.assignedTo = [];
+      if (emailsStr) {
+        const emails = emailsStr.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+        const uSnap = await getDocs(collection(db, 'users'));
+        const allUsers = uSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        payload.assignedTo = allUsers
+          .filter(u => emails.includes((u.email || '').toLowerCase()))
+          .map(u => u.id);
+        if (payload.assignedTo.length === 0) {
+          toast('⚠️ Không tìm thấy HS nào với email đã nhập. Kiểm tra lại!', 'error');
+          return;
+        }
+        if (payload.assignedTo.length < emails.length) {
+          toast(`⚠️ Chỉ tìm thấy ${payload.assignedTo.length}/${emails.length} email`, 'error');
+        }
+      }
+
+      await addDoc(collection(db, 'assignments'), payload);
+      $('addTitle').value = ''; $('addEssayNote').value = '';
+      $('addEssayUrl').value = ''; $('addEssayFile').value = '';
+      $('addQuizUrl').value = ''; $('addQuizFile').value = ''; $('addQuizDesc').value = '';
+      $('addQuizDuration').value = 25;
+      $('addDeadline').value = '';
+      $('addAssignClasses').value = '';
+      $('addAssignEmails').value = '';
+
+      // Reset preview boxes
+      $('essayPreviewBox').innerHTML = `
+        <div class="preview-label">XEM TRƯỚC</div>
+        <div class="preview-empty">Nhập đường dẫn và bấm "👁 Xem trước"</div>
+      `;
+      $('quizPreviewBox').innerHTML = `
+        <div class="preview-label">XEM TRƯỚC</div>
+        <div class="preview-empty">Nhập đường dẫn và bấm "👁 Xem trước"</div>
+      `;
+
       toast('Đã thêm bài tập', 'success');
       loadAssignments();
       loadTeacherAssignments();
-    } catch (err) {
-      toast('Lỗi: ' + err.message, 'error');
-    }
+    } catch (err) { toast('Lỗi: ' + err.message, 'error'); }
   });
 
-  // Pending users
+  // ==================== TEACHER: PENDING ====================
   async function loadPendingUsers() {
     const wrap = $('pendingUsers');
     wrap.innerHTML = '<div class="empty">Đang tải...</div>';
     try {
       const snap = await getDocs(collection(db, 'users'));
-      const pending = snap.docs
-        .map(d => ({ id: d.id, ...d.data() }))
+      const pending = snap.docs.map(d => ({ id: d.id, ...d.data() }))
         .filter(u => u.role === 'student' && !u.approved);
       if (!pending.length) { wrap.innerHTML = '<div class="empty">Không có học sinh chờ duyệt.</div>'; return; }
       wrap.innerHTML = pending.map(u => `
@@ -811,65 +1521,163 @@
           loadPendingUsers();
         });
       });
-    } catch (err) {
-      wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`;
-    }
+    } catch (err) { wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`; }
   }
 
-  // Teacher assignments + submissions
+  // ==================== TEACHER: LIST ====================
   async function loadTeacherAssignments() {
     const wrap = $('teacherAssignments');
     wrap.innerHTML = '<div class="empty">Đang tải...</div>';
     try {
-      const [aSnap, sSnap] = await Promise.all([
+      const [aSnap, sSnap, vSnap] = await Promise.all([
         getDocs(collection(db, 'assignments')),
-        getDocs(collection(db, 'submissions'))
+        getDocs(collection(db, 'submissions')),
+        getDocs(collection(db, 'viewLogs'))
       ]);
       const assignments = aSnap.docs.map(d => ({ id: d.id, ...d.data() }));
       const submissions = sSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      const viewLogs = vSnap.docs.map(d => ({ id: d.id, ...d.data() }));
       assignments.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
 
       if (!assignments.length) { wrap.innerHTML = '<div class="empty">Chưa có bài tập nào.</div>'; return; }
 
       wrap.innerHTML = assignments.map(a => {
         const subs = submissions.filter(s => s.assignmentId === a.id);
+        const views = viewLogs.filter(v => v.assignmentId === a.id);
+        const typeBadge = {
+          essay: '<span class="badge badge-essay">📄 Tự luận</span>',
+          quiz: '<span class="badge badge-quiz">🎯 Trắc nghiệm</span>'
+        }[a.type] || '';
+
+        let preview = a.type === 'essay' ? esc(a.note || 'File đề bài') : esc(a.desc || '');
+        
+        let fileLink = '';
+        if (a.fileName) {
+          fileLink = `<span class="text-sm">📎 ${esc(a.fileName)}</span>`;
+        } else if (a.url) {
+          fileLink = `<span class="text-sm">📎 ${esc(a.url)}</span>`;
+        }
+        // ⭐ Nút xem nội dung
+        fileLink += ` <button class="btn btn-light btn-sm" data-view-content="${a.id}">👁 Xem nội dung</button>`;
+
+        const durationInfo = a.type === 'quiz' && a.duration
+          ? `<div class="time-info">⏱ Thời gian: <strong>${esc(a.duration)} phút</strong></div>` : '';
+
+        // Assignment info
+        let assignInfo = '';
+        if (a.assignedClasses?.length > 0 || a.assignedTo?.length > 0) {
+          const parts = [];
+          if (a.assignedClasses?.length) parts.push(`Lớp: ${a.assignedClasses.join(', ')}`);
+          if (a.assignedTo?.length) parts.push(`${a.assignedTo.length} HS cụ thể`);
+          assignInfo = `<div class="time-info" style="background:#FFF9E6; border-left-color:#c0392b;">
+            🎯 Giao cho: <strong>${esc(parts.join(' • '))}</strong>
+          </div>`;
+        } else {
+          assignInfo = `<div class="time-info">🎯 Giao cho: <strong>Tất cả HS khối ${esc(a.grade)}</strong></div>`;
+        }
+
+        // View logs (essay)
+        let viewSection = '';
+        if (a.type === 'essay') {
+          if (views.length === 0) {
+            viewSection = '<div class="text-sm" style="padding:8px;">Chưa có HS nào xem đề.</div>';
+          } else {
+            const byStudent = {};
+            views.forEach(v => {
+              const key = v.studentId;
+              if (!byStudent[key]) byStudent[key] = { name: v.studentName, cls: v.studentClass, logs: [] };
+              byStudent[key].logs.push(v);
+            });
+            viewSection = `
+              <div style="margin-top:10px; padding:10px; background:#F5F8FF; border-radius:6px; border-left:3px solid #0066CC;">
+                <strong style="color:#004488;">👁 ${views.length} lượt xem đề (${Object.keys(byStudent).length} HS)</strong>
+                <div style="margin-top:8px;">
+                  ${Object.values(byStudent).map(st => `
+                    <div class="submission viewed" style="margin-top:6px;">
+                      <strong>${esc(st.name)}</strong>
+                      ${st.cls ? `<span class="text-sm"> — Lớp ${esc(st.cls)}</span>` : ''}
+                      <div class="text-sm">Đã xem ${st.logs.length} lần:</div>
+                      ${st.logs.map(v => `
+                        <div class="text-sm" style="margin-left:12px;">
+                          • ${fmtDate(v.viewedAt || v.startedAt)} — 
+                          ${v.durationSec ? `xem <strong>${fmtDuration(v.durationSec)}</strong>` : 'chưa có dữ liệu thời gian'}
+                          ${v.endedAt ? '' : ' <em>(chưa đóng)</em>'}
+                        </div>
+                      `).join('')}
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            `;
+          }
+        }
+
+        // Submissions (quiz)
+        let subsSection = '';
+        if (a.type === 'quiz') {
+          subsSection = subs.length ? subs.map(s => {
+            const autoInfo = s.autoScore != null
+              ? `<div class="text-sm" style="color:#004488;">🎯 Hệ thống tự chấm: <strong>${esc(s.autoScore)}/${esc(s.autoTotal || 10)}</strong></div>`
+              : '';
+            const lateInfo = s.isLate ? `<span class="badge badge-late">⚠️ Nộp trễ</span>` : '';
+            const statusBadge = {
+              in_progress: '<span class="badge badge-inprogress">🔄 Đang làm</span>',
+              abandoned: '<span class="badge badge-pending">⚠️ Bỏ dở</span>',
+              submitted: '<span class="badge badge-pending">⏳ Chưa chấm</span>',
+              graded: `<span class="badge badge-graded">Điểm: ${esc(s.score)}</span>`
+            }[s.status] || '';
+            const timeInfo = s.timeSpent
+              ? `<div class="text-sm">⏱ Thời gian: ${Math.floor(s.timeSpent/60)}p ${s.timeSpent%60}s</div>` : '';
+
+            return `
+            <div class="submission ${s.status === 'graded' ? 'graded' : ''} ${s.status === 'in_progress' ? 'in-progress' : ''} ${s.isLate ? 'late' : ''}">
+              <div class="space-between">
+                <div>
+                  <strong>${esc(s.studentName)}</strong>
+                  ${s.studentClass ? `<span class="text-sm"> — Lớp ${esc(s.studentClass)}</span>` : ''}
+                  <div class="text-sm">
+                    ${s.startedAt ? `Bắt đầu: ${fmtDate(s.startedAt)}` : ''}
+                    ${s.submittedAt ? ` • Nộp: ${fmtDate(s.submittedAt)}` : ''}
+                  </div>
+                </div>
+                <div>
+                  ${statusBadge} ${lateInfo}
+                  ${s.status !== 'in_progress' ? `<button class="btn btn-secondary btn-sm" data-grade-sub="${s.id}">Chấm</button>` : ''}
+                </div>
+              </div>
+              ${autoInfo}
+              ${timeInfo}
+              ${s.answers ? `<details class="mt-2"><summary class="text-sm" style="cursor:pointer;">Xem chi tiết câu trả lời</summary><pre class="text-sm" style="margin-top:6px; white-space:pre-wrap; background:#F5F5DC; padding:8px; border-radius:4px;">${esc(JSON.stringify(s.answers, null, 2))}</pre></details>` : ''}
+              ${s.comment ? `<div class="text-sm mt-2">💬 ${esc(s.comment)}</div>` : ''}
+            </div>
+          `;}).join('') : '<div class="text-sm" style="padding:8px;">Chưa có bài nộp.</div>';
+        }
+
         return `
           <div class="card">
             <div class="space-between">
               <div>
                 <h3>${esc(a.title)}</h3>
-                <div class="meta">Khối ${esc(a.grade)} • Điểm tối đa: ${esc(a.maxScore ?? 10)} • ${subs.length} bài nộp</div>
-              </div>
-              <button class="btn btn-danger btn-sm" data-del-assignment="${a.id}">🗑 Xoá bài tập</button>
-            </div>
-            <div class="content">${esc(a.content)}</div>
-            ${subs.length ? subs.map(s => `
-              <div class="submission ${s.status === 'graded' ? 'graded' : ''}">
-                <div class="space-between">
-                  <div>
-                    <strong>${esc(s.studentName)}</strong>
-                    ${s.studentClass ? `<span class="text-sm"> — Lớp ${esc(s.studentClass)}</span>` : ''}
-                    <div class="text-sm">${fmtDate(s.submittedAt)}</div>
-                  </div>
-                  <div>
-                    ${s.status === 'graded'
-                      ? `<span class="badge badge-graded">Điểm: ${esc(s.score)}</span>`
-                      : `<span class="badge badge-done">Chưa chấm</span>`}
-                    <button class="btn btn-secondary btn-sm" data-grade-sub="${s.id}">Chấm</button>
-                  </div>
+                <div class="meta">
+                  Khối ${esc(a.grade)} • Điểm tối đa: ${esc(a.maxScore ?? 10)} • ${a.type === 'quiz' ? subs.length + ' lượt' : views.length + ' lượt xem'}
+                  ${typeBadge}
                 </div>
-                <div style="margin-top:8px; white-space:pre-wrap;">${esc(s.answer)}</div>
-                ${s.comment ? `<div class="text-sm mt-2">💬 ${esc(s.comment)}</div>` : ''}
+                ${fileLink}
               </div>
-            `).join('') : '<div class="text-sm" style="padding:8px;">Chưa có bài nộp.</div>'}
+              <button class="btn btn-danger btn-sm" data-del-assignment="${a.id}">🗑 Xoá</button>
+            </div>
+            ${durationInfo}
+            ${assignInfo}
+            <div class="content">${preview}</div>
+            ${viewSection}
+            ${subsSection}
           </div>
         `;
       }).join('');
 
-      // Delete assignment
       wrap.querySelectorAll('[data-del-assignment]').forEach(btn => {
         btn.addEventListener('click', async () => {
-          if (!confirm('Xoá bài tập này? (Không xoá bài làm đã nộp)')) return;
+          if (!confirm('Xoá bài tập này? (Không xoá log/bài làm đã ghi)')) return;
           await deleteDoc(doc(db, 'assignments', btn.dataset.delAssignment));
           toast('Đã xoá bài tập', 'success');
           loadAssignments();
@@ -877,25 +1685,50 @@
         });
       });
 
-      // Grade submission
+      // ⭐ Nút Xem nội dung
+      wrap.querySelectorAll('[data-view-content]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const a = assignments.find(x => x.id === btn.dataset.viewContent);
+          if (!a) return;
+          $('htmlTitle').textContent = a.title + ' (GV xem nội dung)';
+          $('viewTimeInfo').style.display = 'none';
+          if (a.fileData) {
+            $('htmlFrame').src = a.fileData;
+          } else if (a.url) {
+            $('htmlFrame').src = a.url;
+          } else {
+            $('htmlFrame').srcdoc = '<h2 style="padding:20px;">Không có nội dung</h2>';
+          }
+          show($('htmlModal'));
+        });
+      });
+
       wrap.querySelectorAll('[data-grade-sub]').forEach(btn => {
         btn.addEventListener('click', () => {
           const s = submissions.find(x => x.id === btn.dataset.gradeSub);
           currentGradeSubmission = s;
+          const autoInfo = s.autoScore != null
+            ? `<div class="alert alert-info">🎯 <strong>Hệ thống tự chấm:</strong> ${esc(s.autoScore)}/${esc(s.autoTotal || 10)}</div>`
+            : '';
+          const timeInfo = s.timeSpent
+            ? `<div class="alert alert-info">⏱ Thời gian làm bài: ${Math.floor(s.timeSpent/60)} phút ${s.timeSpent%60} giây</div>`
+            : '';
+          const lateInfo = s.isLate
+            ? `<div class="alert alert-error">⚠️ Học sinh nộp trễ giờ quy định</div>`
+            : '';
           $('gradeInfo').innerHTML = `
             <div class="content">
               <strong>${esc(s.studentName)}</strong> — ${esc(s.assignmentTitle)}<br>
-              ${esc(s.answer)}
+              <span class="text-sm">${esc(s.answer)}</span>
             </div>
+            ${autoInfo}${timeInfo}${lateInfo}
           `;
-          $('gradeScore').value = s.score ?? '';
+          $('gradeScore').value = s.score ?? (s.autoScore ?? '');
           $('gradeComment').value = s.comment ?? '';
           show($('gradeModal'));
         });
       });
-    } catch (err) {
-      wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`;
-    }
+    } catch (err) { wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`; }
   }
 
   $('gradeCancelBtn').addEventListener('click', () => hide($('gradeModal')));
@@ -912,12 +1745,10 @@
         gradedAt: serverTimestamp(),
         gradedBy: currentUser.uid
       });
-      toast('Đã lưu điểm', 'success');
+      toast('Đã lưu điểm. HS sẽ thấy kết quả.', 'success');
       hide($('gradeModal'));
       loadTeacherAssignments();
-    } catch (err) {
-      toast('Lỗi: ' + err.message, 'error');
-    }
+    } catch (err) { toast('Lỗi: ' + err.message, 'error'); }
   });
 
 </script>
