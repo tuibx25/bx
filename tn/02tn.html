@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc nghiệm Bài 2 - Quy tắc an toàn trong phòng thực hành Vật lí</title>
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
+    
+    <!-- Chống cache -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <script>
+        // Chống chuột phải
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Chống phím tắt copy, save, view source, inspect
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+C, Ctrl+V, Ctrl+U, Ctrl+S, Ctrl+P, Ctrl+Shift+I, F12
+            if (
+                (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'u' || e.key === 's' || e.key === 'p' || e.key === 'C' || e.key === 'V' || e.key === 'U' || e.key === 'S' || e.key === 'P')) ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j')) ||
+                e.key === 'F12' ||
+                (e.ctrlKey && e.key === 'PrintScreen') ||
+                e.key === 'PrintScreen'
+            ) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Chống click chuột phải trên toàn trang
+        document.addEventListener('mousedown', function(e) {
+            if (e.button === 2) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Chống kéo thả
+        document.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Chống chọn văn bản
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Chống copy bằng sự kiện copy
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Chống cắt
+        document.addEventListener('cut', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Chống dán
+        document.addEventListener('paste', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Vô hiệu hóa console.log để che dấu debug
+        console.log = function() {};
+        console.warn = function() {};
+        console.error = function() {};
+        console.info = function() {};
+        console.debug = function() {};
+        console.table = function() {};
+
+        // Ngăn chặn devtools bằng cách phát hiện sự thay đổi kích thước cửa sổ
+        let devtoolsOpen = false;
+        const threshold = 160;
+
+        function detectDevTools() {
+            const widthDiff = window.outerWidth - window.innerWidth;
+            const heightDiff = window.outerHeight - window.innerHeight;
+            
+            if (widthDiff > threshold || heightDiff > threshold) {
+                if (!devtoolsOpen) {
+                    devtoolsOpen = true;
+                    // Chuyển hướng hoặc làm trống trang
+                    document.body.innerHTML = '';
+                    document.body.style.background = '#ffffff';
+                    document.body.style.display = 'flex';
+                    document.body.style.justifyContent = 'center';
+                    document.body.style.alignItems = 'center';
+                    document.body.style.height = '100vh';
+                    document.body.innerHTML = '<h1 style="color:#cc0000;font-family:Arial;text-align:center;">⚠️ Truy cập bị từ chối</h1>';
+                }
+            } else {
+                devtoolsOpen = false;
+            }
+        }
+
+        setInterval(detectDevTools, 1000);
+
+        // Chống mở bằng cách phát hiện debugger
+        function blockDebugger() {
+            const start = performance.now();
+            debugger;
+            const end = performance.now();
+            if (end - start > 100) {
+                document.body.innerHTML = '';
+                document.body.style.background = '#ffffff';
+                document.body.innerHTML = '<h1 style="color:#cc0000;font-family:Arial;text-align:center;">⚠️ Truy cập bị từ chối</h1>';
+            }
+        }
+
+        // Chạy blockDebugger định kỳ
+        setInterval(blockDebugger, 1000);
+
+        // Chống F12, Ctrl+Shift+I, Ctrl+U bằng cách ngăn sự kiện keydown
+        document.addEventListener('keydown', function(e) {
+            if (
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) ||
+                (e.ctrlKey && (e.key === 'U' || e.key === 'u'))
+            ) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Ẩn thanh địa chỉ trên mobile
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                window.scrollTo(0, 1);
+            }, 100);
+        });
+
+        // Chống chụp màn hình (chỉ hoạt động trên một số trình duyệt)
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                // Khi tab bị ẩn, xóa nội dung tạm thời
+                // (không thực hiện để tránh ảnh hưởng trải nghiệm)
+            }
+        });
+    </script>
+    
+    <style>
+        /* Chống chọn văn bản và kéo thả */
+        * {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: transparent !important;
+        }
+        
+        /* Chống in */
+        @media print {
+            body { display: none !important; }
+            * { display: none !important; }
+        }
+        
+        /* Ẩn thanh cuộn trên các trình duyệt */
+        ::-webkit-scrollbar {
+            width: 0px;
+            height: 0px;
+        }
+        * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        /* Cấm copy text bằng CSS */
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* Cấm highlight text */
+        ::selection {
+            background: transparent;
+            color: inherit;
+        }
+        ::-moz-selection {
+            background: transparent;
+            color: inherit;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 15px;
+            line-height: 1.2;
+            background-color: #F5F5DC;
+            color: #000000;
+            padding: 10px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #8B5A2B;
+            position: relative;
+            z-index: 1;
+        }
+        h1 {
+            color: #000000;
+            font-size: 1.5em;
+            border-bottom: 2px solid #8B5A2B;
+            padding-bottom: 6px;
+            text-align: center;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+        .subtitle {
+            text-align: center;
+            color: #000000;
+            font-style: italic;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+        .info-bar {
+            background-color: #F5F5F5;
+            border-radius: 6px;
+            padding: 6px 14px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border: 1px solid #D3D3D3;
+            font-size: 0.9em;
+        }
+        .info-bar .total {
+            font-weight: 600;
+            color: #000000;
+        }
+        .info-bar .note {
+            color: #000000;
+        }
+        .question-block {
+            background-color: #F5F5F5;
+            border-radius: 6px;
+            padding: 8px 14px;
+            margin-bottom: 5px;
+            border-left: 3px solid #0066CC;
+        }
+        .question-number {
+            font-weight: 700;
+            color: #000000;
+            font-size: 1em;
+            margin-right: 4px;
+        }
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 2px;
+            font-size: 1em;
+            color: #000000;
+        }
+        .options {
+            padding-left: 18px;
+            list-style: none;
+            margin: 1px 0;
+        }
+        .options li {
+            padding: 0.5px 0;
+            font-size: 1em;
+            color: #000000;
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+        }
+        .options li::before {
+            content: "●";
+            color: #8B5A2B;
+            font-size: 0.5em;
+            margin-right: 5px;
+        }
+        .options .option-label {
+            font-weight: 600;
+            color: #000000;
+            min-width: 20px;
+        }
+        .options .option-text {
+            color: #000000;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, #8B5A2B, transparent);
+            margin: 12px 0 8px;
+        }
+        .footer-note {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.85em;
+            color: #000000;
+            border-top: 1px solid #D3D3D3;
+            padding-top: 8px;
+        }
+        .badge {
+            display: inline-block;
+            background-color: #8B5A2B;
+            color: #FFFFFF;
+            padding: 1px 10px;
+            border-radius: 16px;
+            font-size: 0.65em;
+            font-weight: 600;
+            margin-left: 4px;
+        }
+
+        /* ===== Canvas vẽ phủ lên toàn bộ ===== */
+        #sketchCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            z-index: 9999;
+            touch-action: none;
+            cursor: crosshair;
+            background: transparent;
+            pointer-events: none;
+        }
+        #sketchCanvas.active {
+            display: block;
+            pointer-events: all;
+        }
+        #sketchCanvas.erasing {
+            cursor: cell;
+        }
+
+        /* Cấm chọn trên canvas */
+        #sketchCanvas {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px 12px;
+            }
+            h1 {
+                font-size: 1.2em;
+            }
+            .question-block {
+                padding: 6px 10px;
+            }
+            .options {
+                padding-left: 10px;
+            }
+            .info-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 3px;
+                font-size: 0.8em;
+            }
+            body {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas vẽ phủ -->
+    <canvas id="sketchCanvas"></canvas>
+
+    <div class="container">
+        <h1>⚠️ BÀI 2: QUY TẮC AN TOÀN TRONG PHÒNG THỰC HÀNH VẬT LÍ</h1>
+        <div class="subtitle">25 câu hỏi trắc nghiệm — Chọn đáp án đúng nhất</div>
+        <div class="info-bar">
+            <span class="total">📌 Tổng số câu: 25</span>
+            <span class="note">⏱ Thời gian: 25 phút</span>
+        </div>
+
+        <!-- Các câu hỏi 1-25 -->
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 1.</span> Trong phòng thực hành Vật lí, thiết bị nào sau đây có nguy cơ mất an toàn cao nhất?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Thiết bị quang học</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Thiết bị điện</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Thiết bị cơ khí</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Thiết bị đo nhiệt độ</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 2.</span> Khi sử dụng thiết bị điện trong phòng thực hành, cần phải làm gì trước khi cắm hoặc tháo thiết bị?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Ngắt công tắc nguồn</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Bật công tắc nguồn</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cắm dây nối đất</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Kiểm tra nhiệt độ</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 3.</span> Việc quan sát kĩ các kí hiệu và nhãn thông số trên thiết bị điện nhằm mục đích gì?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Sử dụng đúng chức năng và đúng yêu cầu kĩ thuật</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Trang trí thiết bị</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Kiểm tra màu sắc</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Đo kích thước thiết bị</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 4.</span> Khi sử dụng ampe kế để đo dòng điện, nếu dòng điện vượt quá giới hạn đo thì điều gì có thể xảy ra?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Ampe kế đo chính xác hơn</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Ampe kế có thể bị hỏng</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Ampe kế tự động tăng thang đo</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Không có ảnh hưởng gì</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 5.</span> Để đảm bảo an toàn khi sử dụng đồng hồ đo điện đa năng, cần lưu ý điều gì?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Chọn chức năng và thang đo phù hợp</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Cắm dây đo vào chốt phù hợp với chức năng đo</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cả A và B đều đúng</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Không cần chú ý gì đặc biệt</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 6.</span> Thiết bị nhiệt trong phòng thực hành có thể gây ra nguy cơ nào sau đây?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Gây bỏng cho người sử dụng</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Gây nứt, vỡ các bộ phận thủy tinh</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cả A và B đều đúng</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Chỉ gây cháy nổ</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 7.</span> Khi làm thí nghiệm với nhiệt độ cao, cần sử dụng dụng cụ bảo hộ nào?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Găng tay chịu nhiệt</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Kính bảo hộ</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Khẩu trang</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Mũ bảo hiểm</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 8.</span> Thiết bị quang học dễ bị ảnh hưởng bởi yếu tố nào sau đây?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Mốc, xước, nứt, vỡ</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Bụi bẩn</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cả A và B</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Nhiệt độ cao</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 9.</span> Khi sử dụng tia laser trong phòng thực hành, cần giữ khoảng cách an toàn vì:</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Tia laser có thể làm hỏng mắt</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Tia laser có thể gây cháy</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Tia laser có thể làm nhiễu thiết bị khác</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Tia laser phát ra âm thanh lớn</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 10.</span> Khi phát hiện người bị điện giật, việc đầu tiên cần làm là:</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Nhanh chóng ngắt nguồn điện</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Gọi cấp cứu</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Lấy nước dội vào người</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Chạy đến kéo người ra khỏi nguồn điện</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 11.</span> Trong trường hợp hỏa hoạn xảy ra trong phòng thực hành, cần phải:</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Ngắt toàn bộ hệ thống điện</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Di chuyển hóa chất, chất dễ cháy đến khu vực an toàn</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cả A và B đều đúng</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Chỉ cần gọi cứu hỏa</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 12.</span> Khi có đám cháy liên quan đến thiết bị điện, <strong>không được</strong> sử dụng chất nào để dập lửa?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Nước</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Bình chữa cháy CO₂</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cát</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Bình chữa cháy bột</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 13.</span> Khi có hỏa hoạn, <strong>không được</strong> sử dụng CO₂ để dập cháy trong trường hợp nào?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Cháy quần áo trên người</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Cháy kim loại kiềm (Mg, K, Na...)</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cả A và B đều đúng</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Cháy do chất lỏng dễ cháy</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 14.</span> Trước khi tiến hành thí nghiệm, học sinh cần làm gì?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Đọc kĩ hướng dẫn sử dụng thiết bị</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Kiểm tra cẩn thận thiết bị, dụng cụ</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Chỉ tiến hành khi được sự cho phép của giáo viên</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Tất cả các đáp án trên</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 15.</span> Dây điện trong phòng thực hành cần được bố trí như thế nào?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Gọn gàng, không bị vướng khi qua lại</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Để tràn lan trên mặt bàn</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Nối nhiều thiết bị vào cùng một ổ cắm</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Không cần chú ý</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 16.</span> Tại sao không được để nước hoặc dung dịch dẫn điện gần thiết bị điện?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Có thể gây chập điện, điện giật</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Làm ướt thiết bị</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Làm rỉ sét thiết bị</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Làm giảm tuổi thọ thiết bị</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 17.</span> Khi sử dụng máy biến áp trong phòng thực hành, cần thao tác như thế nào?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Đặt nút điều chỉnh điện áp ở mức thấp nhất rồi tăng dần</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Đặt ở mức cao nhất ngay từ đầu</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Không cần điều chỉnh</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Chỉ sử dụng ở mức trung bình</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 18.</span> Sau khi làm thí nghiệm xong, học sinh cần phải làm gì?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Vệ sinh, sắp xếp gọn gàng các thiết bị và dụng cụ</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Bỏ chất thải thí nghiệm vào đúng nơi quy định</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cả A và B đều đúng</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Rời khỏi phòng ngay lập tức</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 19.</span> Sốc điện (điện giật) có thể gây ra hậu quả gì?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Tổn thương các bộ phận của cơ thể</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Tử vong</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cả A và B đều đúng</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Không có ảnh hưởng gì</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 20.</span> Khi có hỏa hoạn, thái độ cần có là gì?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Bình tĩnh</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Hoảng loạn</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Bỏ chạy</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Đứng nhìn</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 21.</span> Khi sử dụng thiết bị đo điện, việc chọn đúng thang đo có ý nghĩa gì?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Đảm bảo an toàn cho thiết bị đo</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Đo được giá trị chính xác</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cả A và B đều đúng</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Chỉ để kiểm tra thiết bị</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 22.</span> Trong phòng thực hành, tại sao phải giữ khoảng cách an toàn khi làm thí nghiệm có các vật bắn ra?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Tránh bị thương do vật bắn trúng</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Tránh làm hỏng thiết bị</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Cả A và B đều đúng</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Để dễ quan sát hơn</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 23.</span> Khi phát hiện người bị điện giật, không được phép làm gì?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Chạm trực tiếp vào người bị nạn</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Ngắt nguồn điện</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Dùng vật cách điện tách nạn nhân ra khỏi nguồn điện</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Gọi cấp cứu</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 24.</span> Các biển báo trong phòng thí nghiệm có tác dụng gì?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Cảnh báo các nguy cơ và hướng dẫn cách xử lý</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Trang trí phòng thí nghiệm</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Ghi tên các thiết bị</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Không có tác dụng đặc biệt</span></li>
+            </ul>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text"><span class="question-number">Câu 25.</span> Yêu cầu quan trọng nhất khi làm việc trong phòng thực hành Vật lí là gì?</div>
+            <ul class="options">
+                <li><span class="option-label">A.</span><span class="option-text">Đảm bảo an toàn cho bản thân và người khác</span></li>
+                <li><span class="option-label">B.</span><span class="option-text">Làm thí nghiệm nhanh chóng</span></li>
+                <li><span class="option-label">C.</span><span class="option-text">Sử dụng nhiều thiết bị</span></li>
+                <li><span class="option-label">D.</span><span class="option-text">Ghi chép cẩn thận</span></li>
+            </ul>
+        </div>
+
+        <hr>
+        <div class="footer-note">📌 Học sinh làm bài vào giấy và kiểm tra đáp án ở trang sau.</div>
+    </div>
+
+    <script>
+        (function() {
+            "use strict";
+
+            const canvas = document.getElementById('sketchCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // ---- Trạng thái ----
+            let isDrawing = false;
+            let isErasing = false;
+            let lastX = 0,
+                lastY = 0;
+            let currentColor = '#CC0000';
+            let currentLineWidth = 3;
+            let isActive = false;
+
+            // ---- Resize canvas full màn hình ----
+            function resizeCanvas() {
+                const w = window.innerWidth;
+                const h = window.innerHeight;
+                if (canvas.width !== w || canvas.height !== h) {
+                    let oldData = null;
+                    try {
+                        oldData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    } catch (e) {}
+
+                    canvas.width = w;
+                    canvas.height = h;
+
+                    if (oldData) {
+                        try {
+                            ctx.putImageData(oldData, 0, 0);
+                        } catch (e) {
+                            // ignore
+                        }
+                    }
+
+                    ctx.lineCap = 'round';
+                    ctx.lineJoin = 'round';
+                    ctx.strokeStyle = currentColor;
+                    ctx.fillStyle = currentColor;
+                    ctx.lineWidth = currentLineWidth;
+                }
+            }
+
+            // ---- Cập nhật style vẽ ----
+            function updateStyle() {
+                ctx.strokeStyle = currentColor;
+                ctx.fillStyle = currentColor;
+                ctx.lineWidth = currentLineWidth;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+            }
+
+            // ---- Lấy tọa độ ----
+            function getCoords(e) {
+                let clientX, clientY;
+                if (e.touches) {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                    e.preventDefault();
+                } else {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                }
+                return { x: clientX, y: clientY };
+            }
+
+            // ---- Vẽ ----
+            function startDrawing(e) {
+                if (isErasing) return;
+                isDrawing = true;
+                const pos = getCoords(e);
+                lastX = pos.x;
+                lastY = pos.y;
+                ctx.beginPath();
+                ctx.arc(lastX, lastY, ctx.lineWidth * 0.5, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+
+            function draw(e) {
+                if (!isDrawing || isErasing) return;
+                e.preventDefault();
+                const pos = getCoords(e);
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+                lastX = pos.x;
+                lastY = pos.y;
+            }
+
+            function stopDrawing(e) {
+                isDrawing = false;
+            }
+
+            // ---- Tẩy ----
+            function startErasing(e) {
+                if (!isErasing) return;
+                isDrawing = false;
+                const pos = getCoords(e);
+                const radius = Math.max(currentLineWidth * 2, 10);
+                ctx.save();
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, radius, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.restore();
+                lastX = pos.x;
+                lastY = pos.y;
+            }
+
+            function erase(e) {
+                if (!isErasing) return;
+                e.preventDefault();
+                const pos = getCoords(e);
+                const radius = Math.max(currentLineWidth * 2, 10);
+                ctx.save();
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, radius, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.restore();
+                lastX = pos.x;
+                lastY = pos.y;
+            }
+
+            function stopErasing(e) {}
+
+            // ---- Xóa toàn bộ ----
+            function clearAll() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+
+            // ---- Dán ảnh ----
+            async function pasteImage() {
+                try {
+                    const clipboardItems = await navigator.clipboard.read();
+                    for (const item of clipboardItems) {
+                        if (item.types.some(t => t.startsWith('image/'))) {
+                            const type = item.types.find(t => t.startsWith('image/'));
+                            const blob = await item.getType(type);
+                            const img = new Image();
+                            img.onload = function() {
+                                const x = (canvas.width - img.width) / 2;
+                                const y = (canvas.height - img.height) / 2;
+                                ctx.drawImage(img, x, y);
+                            };
+                            img.src = URL.createObjectURL(blob);
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.log('Không thể dán ảnh:', e);
+                }
+            }
+
+            // ---- Bật/tắt chế độ vẽ ----
+            function toggleDraw() {
+                isActive = !isActive;
+                if (isActive) {
+                    canvas.classList.add('active');
+                    canvas.style.cursor = 'crosshair';
+                    isErasing = false;
+                    canvas.classList.remove('erasing');
+                } else {
+                    canvas.classList.remove('active');
+                    isDrawing = false;
+                    isErasing = false;
+                    canvas.style.cursor = 'default';
+                    canvas.classList.remove('erasing');
+                }
+            }
+
+            // ---- Xử lý phím nóng ----
+            function handleKeyDown(e) {
+                const key = e.key.toLowerCase();
+                const tag = document.activeElement?.tagName?.toLowerCase();
+                if (tag === 'input' || tag === 'textarea') return;
+
+                if (key === 'v') {
+                    toggleDraw();
+                    e.preventDefault();
+                    return;
+                }
+
+                // Chỉ xử lý các phím tắt khác khi canvas đang active
+                if (!isActive) return;
+
+                switch (key) {
+                    case '3':
+                        isErasing = !isErasing;
+                        if (isErasing) {
+                            canvas.classList.add('erasing');
+                            isDrawing = false;
+                        } else {
+                            canvas.classList.remove('erasing');
+                        }
+                        e.preventDefault();
+                        break;
+
+                    case '0':
+                        currentColor = '#0066CC';
+                        updateStyle();
+                        e.preventDefault();
+                        break;
+
+                    case '1':
+                        currentColor = '#CC0000';
+                        updateStyle();
+                        e.preventDefault();
+                        break;
+
+                    case 'n':
+                        currentColor = '#8B4513';
+                        updateStyle();
+                        e.preventDefault();
+                        break;
+
+                    case 'b':
+                        currentLineWidth = Math.min(currentLineWidth + 2, 20);
+                        updateStyle();
+                        e.preventDefault();
+                        break;
+
+                    case 'm':
+                        currentLineWidth = Math.max(currentLineWidth - 2, 1);
+                        updateStyle();
+                        e.preventDefault();
+                        break;
+
+                    case 'c':
+                    case 'x':
+                        clearAll();
+                        e.preventDefault();
+                        break;
+
+                    case 'p':
+                        pasteImage();
+                        e.preventDefault();
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            // ---- Gán sự kiện ----
+            function attachEvents() {
+                // Sự kiện vẽ chuột
+                canvas.addEventListener('mousedown', function(e) {
+                    if (!isActive) return;
+                    if (isErasing) {
+                        startErasing(e);
+                    } else {
+                        startDrawing(e);
+                    }
+                });
+                canvas.addEventListener('mousemove', function(e) {
+                    if (!isActive) return;
+                    if (isErasing) {
+                        erase(e);
+                    } else {
+                        draw(e);
+                    }
+                });
+                canvas.addEventListener('mouseup', function(e) {
+                    if (!isActive) return;
+                    if (isErasing) {
+                        stopErasing(e);
+                    } else {
+                        stopDrawing(e);
+                    }
+                });
+                canvas.addEventListener('mouseleave', function(e) {
+                    if (!isActive) return;
+                    if (isErasing) {
+                        stopErasing(e);
+                    } else {
+                        stopDrawing(e);
+                    }
+                });
+
+                // Sự kiện cảm ứng
+                canvas.addEventListener('touchstart', function(e) {
+                    if (!isActive) return;
+                    if (isErasing) {
+                        startErasing(e);
+                    } else {
+                        startDrawing(e);
+                    }
+                }, { passive: false });
+                canvas.addEventListener('touchmove', function(e) {
+                    if (!isActive) return;
+                    if (isErasing) {
+                        erase(e);
+                    } else {
+                        draw(e);
+                    }
+                }, { passive: false });
+                canvas.addEventListener('touchend', function(e) {
+                    if (!isActive) return;
+                    if (isErasing) {
+                        stopErasing(e);
+                    } else {
+                        stopDrawing(e);
+                    }
+                }, { passive: false });
+                canvas.addEventListener('touchcancel', function(e) {
+                    if (!isActive) return;
+                    if (isErasing) {
+                        stopErasing(e);
+                    } else {
+                        stopDrawing(e);
+                    }
+                }, { passive: false });
+
+                // Phím nóng
+                window.addEventListener('keydown', handleKeyDown);
+
+                // Resize
+                window.addEventListener('resize', resizeCanvas);
+                window.addEventListener('orientationchange', function() {
+                    setTimeout(resizeCanvas, 200);
+                });
+
+                // Ngăn context menu trên canvas
+                canvas.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                });
+
+                // Dán ảnh bằng Ctrl+V
+                document.addEventListener('paste', function(e) {
+                    if (!isActive) return;
+                    const items = e.clipboardData?.items;
+                    if (!items) return;
+                    for (const item of items) {
+                        if (item.type.startsWith('image/')) {
+                            const blob = item.getAsFile();
+                            const img = new Image();
+                            img.onload = function() {
+                                const x = (canvas.width - img.width) / 2;
+                                const y = (canvas.height - img.height) / 2;
+                                ctx.drawImage(img, x, y);
+                            };
+                            img.src = URL.createObjectURL(blob);
+                            e.preventDefault();
+                            return;
+                        }
+                    }
+                });
+            }
+
+            // ---- Khởi tạo ----
+            function init() {
+                resizeCanvas();
+                updateStyle();
+                attachEvents();
+                canvas.style.cursor = 'default';
+            }
+
+            init();
+
+        })();
+    </script>
+
+</body>
+</html>
