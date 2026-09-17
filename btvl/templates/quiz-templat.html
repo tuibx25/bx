@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}}</title>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)'], ['$', '$']],
+      displayMath: [['\\[', '\\]'], ['$$', '$$']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #F5F5F5;
+    color: #000;
+    padding: 16px;
+    line-height: 1.7;
+  }
+  .quiz-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 5px solid #8B5A2B;
+  }
+  h1 {
+    color: #8B4513;
+    font-size: 1.4em;
+    text-align: center;
+    border-bottom: 2px solid #8B5A2B;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+  .quiz-info {
+    background: #F5F5DC;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 13px;
+    color: #8B4513;
+    border-left: 3px solid #8B5A2B;
+  }
+  .q-block, .question {
+    background: #F5F5F5;
+    padding: 12px 14px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    border-left: 3px solid #0066CC;
+  }
+  .q-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .q-number {
+    background: #8B5A2B;
+    color: #FFF;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: 700;
+  }
+  .q-type {
+    background: #F5DEB3;
+    color: #8B4513;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.75em;
+    font-weight: 600;
+  }
+  .q-text { font-weight: 600; margin-bottom: 8px; }
+  .q-text img { max-width: 100%; height: auto; border-radius: 4px; margin: 6px 0; }
+
+  .opt {
+    display: block;
+    padding: 6px 10px;
+    margin: 4px 0;
+    background: #FFFFFF;
+    border: 1px solid #D3D3D3;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .opt:hover { background: #F5F5DC; border-color: #8B5A2B; }
+  .opt input { margin-right: 8px; }
+  .opt.selected { background: #F5DEB3; border-color: #8B5A2B; }
+  .opt img { max-width: 100%; max-height: 200px; height: auto; border-radius: 4px; }
+
+  .tf-item, .tf-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #FFFFFF;
+    border: 1px solid #D3D3D3;
+    border-radius: 6px;
+    margin: 4px 0;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .tf-stmt { flex: 1; min-width: 200px; }
+  .tf-btns { display: flex; gap: 6px; }
+  .tf-btn {
+    padding: 4px 14px;
+    border: 1px solid #D3D3D3;
+    background: #FFF;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .tf-btn:hover { background: #F5F5DC; }
+  .tf-btn.selected-true { background: #0066CC; color: #FFF; border-color: #0066CC; }
+  .tf-btn.selected-false { background: #8B5A2B; color: #FFF; border-color: #8B5A2B; }
+
+  .short-answer {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #D3D3D3;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  .short-answer:focus {
+    outline: none;
+    border-color: #8B5A2B;
+    box-shadow: 0 0 0 2px rgba(139,90,43,0.15);
+  }
+
+  .submit-bar {
+    position: sticky;
+    bottom: 0;
+    background: #FFFFFF;
+    padding: 12px 0;
+    border-top: 2px solid #8B5A2B;
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+  }
+  .btn-primary { background: #8B5A2B; color: #FFFFFF; }
+  .btn-primary:hover { background: #8B4513; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .result-box {
+    display: none;
+    background: #F5F5DC;
+    border: 2px solid #8B5A2B;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 16px;
+    text-align: center;
+  }
+  .result-box.show { display: block; }
+
+  .progress-info {
+    text-align: center;
+    color: #555;
+    font-size: 0.9em;
+    margin-bottom: 12px;
+  }
+
+  mjx-container { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+</style>
+</head>
+<body>
+
+<div class="quiz-container">
+  <h1>{{TITLE}}</h1>
+  <div class="quiz-info">
+    <span>⏱ Thời gian: <strong>{{DURATION}} phút</strong></span>
+  </div>
+  <div class="progress-info">
+    Đã trả lời: <strong id="answeredCount">0</strong> / <strong id="totalCount">0</strong> câu
+  </div>
+  <div id="quizArea">
+{{QUESTIONS}}
+  </div>
+  <div class="submit-bar">
+    <div><span id="statusMsg" style="color:#555; font-size:14px;"></span></div>
+    <div><button class="btn btn-primary" id="submitBtn">Nộp bài</button></div>
+  </div>
+  <div class="result-box" id="resultBox">
+    <h2 style="color:#8B4513; margin-bottom:10px;">✅ Đã nộp bài thành công!</h2>
+    <p style="color:#555;">Kết quả đã gửi đến giáo viên.</p>
+  </div>
+</div>
+
+</body>
+</html>
