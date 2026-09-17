@@ -60,6 +60,7 @@
   }
   header h1 { font-size: 22px; font-weight: 600; }
   header .user-info { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+
   .container { max-width: 1200px; margin: 0 auto; padding: 24px 20px; }
 
   .tabs {
@@ -89,6 +90,7 @@
     border-bottom-color: #8B5A2B;
     color: #8B4513;
   }
+
   .btn {
     padding: 9px 18px;
     border: none;
@@ -122,6 +124,7 @@
   }
   .card h3 { color: #8B4513; margin-bottom: 8px; font-size: 17px; }
   .card .meta { font-size: 13px; color: #555; margin-bottom: 10px; }
+
   .form-group { margin-bottom: 14px; }
   .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 14px; color: #333; }
   .form-group input, .form-group textarea, .form-group select {
@@ -141,6 +144,7 @@
     box-shadow: 0 0 0 2px rgba(139,90,43,0.15);
   }
   .form-group .hint { font-size: 12px; color: #666; margin-top: 4px; font-style: italic; }
+  .form-group .hint code { background: #F5F5DC; padding: 1px 5px; border-radius: 3px; font-style: normal; }
 
   .modal-overlay {
     position: fixed; inset: 0;
@@ -506,7 +510,7 @@
     background: #FFF;
   }
 
-  /* FORM MODE TOGGLE */
+  /* MODE TOGGLE */
   .mode-toggle {
     display: flex;
     gap: 10px;
@@ -529,16 +533,8 @@
     background: #F5F5DC;
     box-shadow: 0 2px 8px rgba(139,90,43,0.15);
   }
-  .mode-option .mode-title {
-    font-weight: 700;
-    color: #8B4513;
-    margin-bottom: 4px;
-    font-size: 15px;
-  }
-  .mode-option .mode-desc {
-    font-size: 12px;
-    color: #666;
-  }
+  .mode-option .mode-title { font-weight: 700; color: #8B4513; margin-bottom: 4px; font-size: 15px; }
+  .mode-option .mode-desc { font-size: 12px; color: #666; }
 
   /* HTML PREVIEW */
   .html-preview {
@@ -580,6 +576,33 @@
     font-size: 13px;
   }
   .viewlog-row:last-child { border-bottom: none; }
+
+  /* SECTION HEADERS CHO BÀI LÀM */
+  .section-header {
+    background: linear-gradient(135deg, #8B5A2B 0%, #8B4513 100%);
+    color: #FFF;
+    padding: 14px 20px;
+    border-radius: 8px;
+    margin: 24px 0 14px;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .section-header.part-1 {
+    background: linear-gradient(135deg, #8B5A2B 0%, #8B4513 100%);
+  }
+  .section-header.part-2 {
+    background: linear-gradient(135deg, #0066CC 0%, #004488 100%);
+  }
+  .section-header.part-3 {
+    background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+  }
+  .section-note {
+    font-style: italic;
+    color: #555;
+    font-size: 13px;
+    margin-bottom: 12px;
+    padding-left: 4px;
+  }
 </style>
 </head>
 <body>
@@ -676,7 +699,7 @@
   </div>
 </div>
 
-<!-- MODAL XÁC NHẬN BẮT ĐẦU QUIZ -->
+<!-- MODAL START QUIZ -->
 <div id="startQuizModal" class="modal-overlay hidden">
   <div class="modal">
     <h2>⚠️ Xác nhận bắt đầu</h2>
@@ -818,9 +841,7 @@
   let currentViewSession = null;
   let verifyPollInterval = null;
 
-  // ⭐ Cho loại external — heartbeat theo dõi thời gian
-  let externalSessions = {};     // { assignmentId: { logId, startedAt, heartbeatInterval } }
-
+  let externalSessions = {};
   let allLessonsCache = [];
   let allAssignmentsCache = [];
   let mySubsCache = [];
@@ -864,7 +885,7 @@
     } catch (e) { return url; }
   }
 
-  // ⭐ Parse HTML câu hỏi (cho loại inline)
+  // ⭐ PARSE HTML → MẢNG CÂU HỎI
   function parseQuestionsHtml(htmlContent) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, 'text/html');
@@ -874,6 +895,8 @@
       const id = qEl.dataset.id;
       const type = qEl.dataset.type;
       const answer = qEl.dataset.answer;
+      const points = parseFloat(qEl.dataset.points || 1);
+      
       if (!id || !type) return;
       
       const qText = qEl.querySelector('.q-text')?.textContent?.trim() || '';
@@ -882,71 +905,81 @@
         const options = [];
         qEl.querySelectorAll('input[type="radio"]').forEach(inp => {
           const parent = inp.parentElement;
-          options.push({ 
-            value: inp.value, 
-            text: parent.textContent.trim().replace(/^[A-D]\.\s*/, '')
-          });
+          options.push({ value: inp.value, text: parent.textContent.trim().replace(/^[A-D]\.\s*/, '') });
         });
-        questions.push({ id, type: 'choice', text: qText, options, correctAnswer: answer });
+        questions.push({ id, type: 'choice', text: qText, options, correctAnswer: answer, points });
       } 
       else if (type === 'truefalse') {
         const statements = [];
         qEl.querySelectorAll('.tf-item').forEach(tfEl => {
           statements.push({
             statement: parseInt(tfEl.dataset.statement),
-            text: tfEl.querySelector('.tf-stmt')?.textContent?.trim() || 
-                  tfEl.querySelector('span:first-child')?.textContent?.trim() || '',
+            text: tfEl.querySelector('.tf-stmt')?.textContent?.trim() || tfEl.querySelector('span:first-child')?.textContent?.trim() || '',
             correct: tfEl.dataset.answer === 'true'
           });
         });
-        questions.push({ id, type: 'truefalse', text: qText, statements });
+        questions.push({ id, type: 'truefalse', text: qText, statements, points });
       } 
       else if (type === 'short') {
-        questions.push({ id, type: 'short', text: qText, correctAnswer: answer });
+        questions.push({ id, type: 'short', text: qText, correctAnswer: answer, points });
       }
     });
     
     return questions;
   }
 
-  // ⭐ Chấm điểm
+  // ⭐ CHẤM ĐIỂM THEO data-points
   function gradeSubmission(template, studentAnswers) {
-    let totalCorrect = 0;
+    let totalScore = 0;
+    let maxScore = 0;
     const details = {};
     
     template.questions.forEach(q => {
+      const points = parseFloat(q.points || 1);
+      maxScore += points;
       const studentAns = studentAnswers[q.id];
       
       if (q.type === 'choice') {
         const isCorrect = studentAns === q.correctAnswer;
-        if (isCorrect) totalCorrect++;
-        details[q.id] = { type: 'choice', student: studentAns, correct: q.correctAnswer, isCorrect };
+        const earned = isCorrect ? points : 0;
+        totalScore += earned;
+        details[q.id] = { type: 'choice', student: studentAns, correct: q.correctAnswer, isCorrect, points, earned };
       } 
       else if (q.type === 'truefalse') {
+        const perStmt = points / q.statements.length;
         let correctCount = 0;
         const stDetails = {};
         q.statements.forEach(st => {
           const stAns = studentAns?.[st.statement];
           const isCorrect = stAns === st.correct;
           if (isCorrect) correctCount++;
-          stDetails[st.statement] = { student: stAns, correct: st.correct, isCorrect };
+          stDetails[st.statement] = { student: stAns, correct: st.correct, isCorrect, points: perStmt };
         });
-        totalCorrect += correctCount / q.statements.length;
-        details[q.id] = { type: 'truefalse', details: stDetails, correctCount, total: q.statements.length };
+        const earned = correctCount * perStmt;
+        totalScore += earned;
+        details[q.id] = { type: 'truefalse', details: stDetails, correctCount, total: q.statements.length, points, earned, perStmt };
       } 
       else if (q.type === 'short') {
         const norm = (s) => (s || '').toString().trim().toLowerCase().replace(/\s+/g, '');
         const isCorrect = norm(studentAns) === norm(q.correctAnswer);
-        if (isCorrect) totalCorrect++;
-        details[q.id] = { type: 'short', student: studentAns, correct: q.correctAnswer, isCorrect };
+        const earned = isCorrect ? points : 0;
+        totalScore += earned;
+        details[q.id] = { type: 'short', student: studentAns, correct: q.correctAnswer, isCorrect, points, earned };
       }
     });
     
-    const maxScore = template.questions.length;
-    return { score: Math.round(totalCorrect * 100) / 100, max: maxScore, details };
+    const finalScore = maxScore > 0 ? Math.round((totalScore / maxScore) * 10 * 100) / 100 : 0;
+    
+    return { 
+      score: finalScore,
+      max: 10,
+      rawScore: Math.round(totalScore * 100) / 100,
+      rawMax: Math.round(maxScore * 100) / 100,
+      details 
+    };
   }
 
-  // ⭐ Auto-publish
+  // ⭐ AUTO-PUBLISH
   async function autoPublishExpiredAssignments() {
     try {
       const now = Date.now();
@@ -978,25 +1011,15 @@
     } catch (e) { console.error('Auto-publish error:', e); }
   }
 
-  // ⭐ Dọn dẹp external session khi rời trang
   window.addEventListener('beforeunload', (e) => {
     if (currentQuizSession) {
       e.preventDefault();
       e.returnValue = 'Bạn đang làm bài.';
       return e.returnValue;
     }
-    // Ghi log đóng cho external sessions
     Object.values(externalSessions).forEach(sess => {
       if (sess.heartbeatInterval) clearInterval(sess.heartbeatInterval);
     });
-  });
-
-  // ⭐ Đóng external session khi tab visible lại
-  document.addEventListener('visibilitychange', async () => {
-    if (document.visibilityState === 'visible') {
-      // HS quay lại tab index → có thể đã đóng tab ngoài
-      // Không làm gì, heartbeat vẫn chạy
-    }
   });
 
   // ==================== AUTH ====================
@@ -1047,7 +1070,6 @@
         
         const cred = await createUserWithEmailAndPassword(auth, email, pass);
         const isTeacher = email.toLowerCase() === TEACHER_EMAIL.toLowerCase();
-        
         try { await sendEmailVerification(cred.user); } catch (e) { console.error(e); }
         
         await setDoc(doc(db, 'users', cred.user.uid), {
@@ -1347,7 +1369,6 @@
 
   function renderAssignmentRow(a) {
     const isExternal = a.mode === 'external';
-    
     const modeBadge = isExternal
       ? '<span class="badge badge-external">🔗 Luyện tập</span>'
       : '<span class="badge badge-inline">🎯 Chấm điểm</span>';
@@ -1370,7 +1391,6 @@
     const maxAttempts = a.maxAttempts || 3;
     const doneCount = mySubsOfA.length;
 
-    // ⭐ Đếm số lần truy cập external
     const viewLogsOfA = myViewLogsCache.filter(v => v.assignmentId === a.id);
     const accessCount = viewLogsOfA.length;
     const totalDuration = viewLogsOfA.reduce((s, v) => s + (v.durationSec || 0), 0);
@@ -1383,14 +1403,12 @@
     let actionBtn = '';
     
     if (isExternal) {
-      // Loại external: mở tab mới
       if (!isLoggedIn) actionBtn = `<button class="btn lock-btn btn-sm" data-require-login>🔒 Đăng nhập</button>`;
       else if (isTeacher) actionBtn = `<button class="btn btn-primary btn-sm" data-open-external="${a.id}">🔗 Mở (GV)</button>`;
       else if (!isEmailVerified) actionBtn = `<span class="text-sm" style="color:#c0392b;">📧 Xác thực email</span>`;
       else if (maxAttempts > 0 && accessCount >= maxAttempts) actionBtn = `<span class="text-sm" style="color:#c0392b;">✋ Đã mở ${maxAttempts} lần</span>`;
       else actionBtn = `<button class="btn btn-secondary btn-sm" data-open-external="${a.id}">🔗 Mở luyện tập (${accessCount}${maxAttempts > 0 ? '/' + maxAttempts : ''})</button>`;
     } else {
-      // Loại inline: làm trên web
       if (a.type === 'essay') {
         if (!isLoggedIn) actionBtn = `<button class="btn lock-btn btn-sm" data-require-login>🔒 Đăng nhập</button>`;
         else if (isTeacher) actionBtn = `<button class="btn btn-primary btn-sm" data-view-essay="${a.id}">👁 Xem đề</button>`;
@@ -1439,14 +1457,12 @@
     if (!currentUser) { toast('Vui lòng đăng nhập', 'error'); openAuthModal('login'); return; }
     
     if (currentProfile?.role === 'teacher') {
-      // GV mở bình thường
       window.open(resolveUrl(a.externalUrl), '_blank');
       return;
     }
     
     if (!currentUser.emailVerified) { toast('Vui lòng xác thực email', 'error'); return; }
 
-    // Kiểm tra giới hạn lượt
     const maxAttempts = a.maxAttempts || 0;
     const viewLogsOfA = myViewLogsCache.filter(v => v.assignmentId === a.id);
     if (maxAttempts > 0 && viewLogsOfA.length >= maxAttempts) {
@@ -1454,7 +1470,6 @@
       return;
     }
 
-    // ⭐ Tạo log truy cập
     const startedAt = Date.now();
     let logId = null;
     try {
@@ -1475,46 +1490,26 @@
       logId = docRef.id;
     } catch (e) { console.error('Không ghi được log:', e); }
 
-    // ⭐ Mở tab mới
     const url = resolveUrl(a.externalUrl);
     const win = window.open(url, '_blank');
     if (!win) {
-      toast('Trình duyệt chặn popup! Vui lòng cho phép.', 'error');
+      toast('Trình duyệt chặn popup!', 'error');
       if (logId) { try { await deleteDoc(doc(db, 'viewLogs', logId)); } catch (e) {} }
       return;
     }
 
-    toast('✅ Đã mở file luyện tập ở tab mới', 'success');
+    toast('✅ Đã mở file luyện tập', 'success');
 
-    // ⭐ Bắt đầu heartbeat 30s để ước lượng thời gian
     if (logId) {
       const heartbeatInterval = setInterval(async () => {
         try {
           const elapsed = Math.round((Date.now() - startedAt) / 1000);
-          await updateDoc(doc(db, 'viewLogs', logId), {
-            durationSec: elapsed,
-            lastHeartbeat: Date.now()
-          });
-        } catch (e) { console.warn('Heartbeat error:', e); }
+          await updateDoc(doc(db, 'viewLogs', logId), { durationSec: elapsed, lastHeartbeat: Date.now() });
+        } catch (e) {}
       }, 30000);
 
-      // Lưu session
-      externalSessions[logId] = {
-        assignmentId: a.id,
-        logId,
-        startedAt,
-        heartbeatInterval
-      };
-
-      // Cập nhật cache
-      myViewLogsCache.push({
-        id: logId,
-        assignmentId: a.id,
-        studentId: currentUser.uid,
-        mode: 'external',
-        startedAt: startedAt,
-        durationSec: 0
-      });
+      externalSessions[logId] = { assignmentId: a.id, logId, startedAt, heartbeatInterval };
+      myViewLogsCache.push({ id: logId, assignmentId: a.id, studentId: currentUser.uid, mode: 'external', startedAt, durationSec: 0 });
     }
   }
 
@@ -1609,7 +1604,7 @@
       <div class="content" style="background:#F5F5DC; padding:12px; border-radius:6px;">
         <strong>${esc(a.title)}</strong><br>
         <span style="font-size:13px; color:#555;">Lần ${attempt}/${maxAttempts}</span><br>
-        <div style="margin-top:10px;">⏱ ${esc(a.duration || 25)} phút • 🎯 Điểm tối đa: ${esc(a.maxScore || 10)}</div>
+        <div style="margin-top:10px;">⏱ ${esc(a.duration || 25)} phút • 🎯 Điểm tối đa: 10</div>
       </div>
     `;
     show($('startQuizModal'));
@@ -1631,7 +1626,6 @@
     const sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 
     try {
-      // ⭐ Lấy questions từ Firestore (không fetch file)
       if (!a.questionsHtml) {
         toast('Đề này không có câu hỏi!', 'error');
         return;
@@ -1645,7 +1639,6 @@
 
       const template = { questions };
 
-      // ⭐ Tạo submission
       const sessionRef = await addDoc(collection(db, 'submissions'), {
         assignmentId: a.id,
         assignmentTitle: a.title,
@@ -1657,7 +1650,7 @@
         studentClass: currentProfile.class || '',
         answer: '[Đang làm]',
         autoScore: null,
-        autoTotal: questions.length,
+        autoTotal: 10,
         answers: null,
         score: null, comment: '',
         status: 'in_progress',
@@ -1676,7 +1669,6 @@
         template
       };
 
-      // ⭐ Hiển thị quiz
       showQuizInline(a, questions);
       startCountdownTimer();
 
@@ -1685,32 +1677,50 @@
         iframe.onload = () => setTimeout(() => injectQuizRuntime(), 300);
         setTimeout(() => injectQuizRuntime(), 800);
       }
-
     } catch (err) {
       console.error(err);
       toast('Lỗi: ' + err.message, 'error');
     }
   });
 
+  // ⭐ SHOW QUIZ INLINE VỚI SECTION HEADERS
   function showQuizInline(a, questions) {
     const container = document.getElementById('quizFrameContainer');
     if (!container) return;
     
-    // Build HTML từ questions
-    let questionsHtml = questions.map((q, idx) => {
-      if (q.type === 'choice') {
-        return `
-          <div class="question" data-id="${q.id}" data-type="choice" data-answer="${q.correctAnswer}">
-            <div class="q-text">Câu ${idx + 1}. ${esc(q.text)}</div>
+    // Nhóm theo phần
+    const part1 = questions.filter(q => q.type === 'choice');
+    const part2 = questions.filter(q => q.type === 'truefalse');
+    const part3 = questions.filter(q => q.type === 'short');
+    
+    let questionsHtml = '';
+    
+    // PHẦN I
+    if (part1.length > 0) {
+      questionsHtml += `<div class="section-header part-1">I. PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn</div>\n`;
+      questionsHtml += `<p class="section-note">(Thí sinh trả lời từ câu 1 đến câu ${part1.length}. Mỗi câu hỏi thí sinh chỉ chọn một phương án)</p>\n`;
+      
+      part1.forEach((q, idx) => {
+        questionsHtml += `
+          <div class="question" data-id="${q.id}" data-type="choice" data-answer="${q.correctAnswer}" data-points="${q.points || 1}">
+            <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${esc(q.text.replace(/^Câu\s+\d+\.\s*/i, ''))}</div>
             ${q.options.map(opt => `
               <label class="opt"><input type="radio" name="${q.id}" value="${opt.value}"> ${opt.value}. ${esc(opt.text)}</label>
             `).join('')}
           </div>
         `;
-      } else if (q.type === 'truefalse') {
-        return `
-          <div class="question" data-id="${q.id}" data-type="truefalse">
-            <div class="q-text">Câu ${idx + 1}. ${esc(q.text)}</div>
+      });
+    }
+    
+    // PHẦN II
+    if (part2.length > 0) {
+      questionsHtml += `<div class="section-header part-2">II. PHẦN II. Câu trắc nghiệm đúng sai</div>\n`;
+      questionsHtml += `<p class="section-note">(Thí sinh trả lời từ câu 1 đến câu ${part2.length}. Trong mỗi ý a), b), c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai)</p>\n`;
+      
+      part2.forEach((q, idx) => {
+        questionsHtml += `
+          <div class="question" data-id="${q.id}" data-type="truefalse" data-points="${q.points || 1}">
+            <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${esc(q.text.replace(/^Câu\s+\d+\.\s*/i, ''))}</div>
             ${q.statements.map(st => `
               <div class="tf-item" data-statement="${st.statement}" data-answer="${st.correct}">
                 <span class="tf-stmt">${String.fromCharCode(97 + st.statement)}) ${esc(st.text)}</span>
@@ -1722,16 +1732,23 @@
             `).join('')}
           </div>
         `;
-      } else if (q.type === 'short') {
-        return `
-          <div class="question" data-id="${q.id}" data-type="short" data-answer="${esc(q.correctAnswer)}">
-            <div class="q-text">Câu ${idx + 1}. ${esc(q.text)}</div>
+      });
+    }
+    
+    // PHẦN III
+    if (part3.length > 0) {
+      questionsHtml += `<div class="section-header part-3">III. PHẦN III. Câu trắc nghiệm trả lời ngắn</div>\n`;
+      questionsHtml += `<p class="section-note">(Thí sinh trả lời từ câu 1 đến câu ${part3.length})</p>\n`;
+      
+      part3.forEach((q, idx) => {
+        questionsHtml += `
+          <div class="question" data-id="${q.id}" data-type="short" data-answer="${esc(q.correctAnswer)}" data-points="${q.points || 1}">
+            <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${esc(q.text.replace(/^Câu\s+\d+\.\s*/i, ''))}</div>
             <input type="text" class="short-answer" placeholder="Nhập đáp án..." />
           </div>
         `;
-      }
-      return '';
-    }).join('');
+      });
+    }
 
     const html = `<!DOCTYPE html>
 <html>
@@ -1739,10 +1756,7 @@
 <meta charset="UTF-8">
 <title>${esc(a.title)}</title>
 <script>
-window.MathJax = {
-  tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] },
-  svg: { fontCache: 'global' }
-};
+window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: { fontCache: 'global' } };
 <\/script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async><\/script>
 <style>
@@ -1751,6 +1765,11 @@ window.MathJax = {
   .quiz-container { max-width: 900px; margin: 0 auto; background: #FFF; padding: 20px; border-radius: 10px; border-left: 5px solid #8B5A2B; }
   h1 { color: #8B4513; font-size: 1.4em; text-align: center; border-bottom: 2px solid #8B5A2B; padding-bottom: 8px; margin-bottom: 16px; }
   .progress-info { text-align: center; color: #555; font-size: 0.9em; margin-bottom: 12px; }
+  .section-header { color: #FFF; padding: 14px 20px; border-radius: 8px; margin: 24px 0 14px; font-weight: 700; font-size: 16px; }
+  .section-header.part-1 { background: linear-gradient(135deg, #8B5A2B 0%, #8B4513 100%); }
+  .section-header.part-2 { background: linear-gradient(135deg, #0066CC 0%, #004488 100%); }
+  .section-header.part-3 { background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%); }
+  .section-note { font-style: italic; color: #555; font-size: 13px; margin-bottom: 12px; padding-left: 4px; }
   .question { background: #F5F5F5; padding: 12px 14px; border-radius: 6px; margin-bottom: 12px; border-left: 3px solid #0066CC; }
   .q-text { font-weight: 600; margin-bottom: 8px; }
   .q-text img { max-width: 100%; height: auto; border-radius: 4px; margin: 6px 0; }
@@ -1758,7 +1777,6 @@ window.MathJax = {
   .opt:hover { background: #F5F5DC; border-color: #8B5A2B; }
   .opt input { margin-right: 8px; }
   .opt.selected { background: #F5DEB3; border-color: #8B5A2B; }
-  .opt img { max-width: 100%; max-height: 200px; border-radius: 4px; }
   .tf-item { display: flex; justify-content: space-between; padding: 8px 12px; background: #FFF; border: 1px solid #D3D3D3; border-radius: 6px; margin: 4px 0; gap: 10px; flex-wrap: wrap; }
   .tf-stmt { flex: 1; min-width: 200px; }
   .tf-btns { display: flex; gap: 6px; }
@@ -1792,7 +1810,6 @@ window.MathJax = {
     iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
     iframe.srcdoc = html;
     container.appendChild(iframe);
-
     show($('countdownOverlay'));
   }
 
@@ -1925,7 +1942,7 @@ window.MathJax = {
 
   async function autoSubmitOnTimeout() {
     if (!currentQuizSession) return;
-    await finishQuiz(0, currentQuizSession.template.questions.length, {}, {}, true);
+    await finishQuiz(0, 10, {}, {}, true);
   }
 
   async function finishQuiz(score, total, answers, details, isTimeout) {
@@ -1939,7 +1956,7 @@ window.MathJax = {
     try {
       await updateDoc(doc(db, 'submissions', session.attemptId), {
         answer: isTimeout ? '[Hết giờ - tự động nộp]' : `[Đã nộp] ${Object.keys(answers).length} câu`,
-        autoScore: score, autoTotal: total, answers, details,
+        autoScore: score, autoTotal: 10, answers, details,
         status: 'submitted', submittedAt: serverTimestamp(),
         isLate, isTimeout,
         timeSpent: Math.round((submittedAt - session.startedAt) / 1000)
@@ -2010,7 +2027,6 @@ window.MathJax = {
 
       let html = '';
 
-      // Phần 1: Bài làm inline
       if (!snap.empty) {
         const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         items.sort((a,b) => (b.submittedAt?.seconds||b.startedAt?.seconds||0) - (a.submittedAt?.seconds||a.startedAt?.seconds||0));
@@ -2052,7 +2068,7 @@ window.MathJax = {
                     ${s.timeSpent ? `<div class="text-sm">⏱ ${Math.floor(s.timeSpent/60)}p ${s.timeSpent%60}s</div>` : ''}
                     ${showScore ? `
                       <div class="mt-2" style="background:#E8F5E9; padding:12px; border-radius:6px; border-left:4px solid #0066CC;">
-                        <strong>Điểm:</strong> <span class="score-display">${esc(finalScore)}/${esc(s.autoTotal)}</span>
+                        <strong>Điểm:</strong> <span class="score-display">${esc(finalScore)}/10</span>
                         ${s.comment ? `<div class="text-sm mt-2">💬 <strong>Nhận xét:</strong> ${esc(s.comment)}</div>` : ''}
                       </div>
                     ` : ''}
@@ -2064,7 +2080,6 @@ window.MathJax = {
         }).join('');
       }
 
-      // Phần 2: Luyện tập external
       const externalLogs = myLogs.filter(l => l.mode === 'external');
       if (externalLogs.length > 0) {
         const groupedLogs = {};
@@ -2085,14 +2100,6 @@ window.MathJax = {
               <div class="text-sm mt-2">
                 <strong>Đã mở ${list.length} lần</strong> • Tổng thời gian: ${fmtDuration(totalDur)}
               </div>
-              ${list.sort((a,b) => (b.startedAt||0) - (a.startedAt||0)).map(l => `
-                <div class="submission viewlog">
-                  <div class="text-sm">
-                    📅 Mở: ${fmtDate(l.openedAt || l.startedAt)}
-                    ${l.durationSec ? ` • ⏱ ${fmtDuration(l.durationSec)}` : ''}
-                  </div>
-                </div>
-              `).join('')}
             </div>
           `;
         }).join('');
@@ -2108,18 +2115,56 @@ window.MathJax = {
           if (sub) await showStudentDetail(sub);
         });
       });
-
     } catch (err) {
       wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`;
     }
   }
 
+  // ⭐ HS chỉ thấy tổng điểm, GV thấy chi tiết
   async function showStudentDetail(sub) {
     try { await updateDoc(doc(db, 'submissions', sub.id), { studentViewed: true }); } catch (e) {}
 
     const finalScore = sub.score != null ? sub.score : sub.autoScore;
 
+    let body = `
+      <div class="detail-header">
+        <div class="info">
+          <h2>${esc(sub.assignmentTitle)}</h2>
+          <div class="meta">
+            📅 Nộp: ${fmtDate(sub.submittedAt)}
+            ${sub.timeSpent ? ` • ⏱ ${Math.floor(sub.timeSpent/60)}p ${sub.timeSpent%60}s` : ''}
+          </div>
+        </div>
+        <div class="score-box">
+          <div class="score">${esc(finalScore)}/10</div>
+          <div class="label">Điểm trắc nghiệm</div>
+        </div>
+      </div>
+    `;
+
+    if (sub.comment) {
+      body += `<div class="comment-box"><strong>💬 Nhận xét của GV:</strong><br>${esc(sub.comment)}</div>`;
+    }
+
+    body += `
+      <div class="alert alert-info" style="margin-top:20px;">
+        ℹ️ <strong>Lưu ý:</strong> Điểm trên là <strong>điểm phần trắc nghiệm</strong>. 
+        Điểm phần tự luận (nếu có) sẽ được giáo viên chấm riêng.
+      </div>
+    `;
+
+    if (currentProfile?.role === 'teacher') {
+      body += await renderTeacherDetail(sub);
+    }
+
+    $('studentDetailBody').innerHTML = body;
+    show($('studentDetailModal'));
+  }
+
+  async function renderTeacherDetail(sub) {
+    let html = '';
     let template = null;
+    
     try {
       const aSnap = await getDoc(doc(db, 'assignments', sub.assignmentId));
       if (aSnap.exists()) {
@@ -2130,80 +2175,78 @@ window.MathJax = {
       }
     } catch (e) { console.warn(e); }
 
-    let body = `
-      <div class="detail-header">
-        <div class="info">
-          <h2>${esc(sub.assignmentTitle)}</h2>
-          <div class="meta">📅 Nộp: ${fmtDate(sub.submittedAt)}${sub.timeSpent ? ` • ⏱ ${Math.floor(sub.timeSpent/60)}p ${sub.timeSpent%60}s` : ''}</div>
-        </div>
-        <div class="score-box">
-          <div class="score">${esc(finalScore)}/${esc(sub.autoTotal)}</div>
-          <div class="label">Điểm của em</div>
-        </div>
-      </div>
-    `;
+    if (!template || !sub.details) return '';
 
-    if (sub.comment) {
-      body += `<div class="comment-box"><strong>💬 Nhận xét GV:</strong><br>${esc(sub.comment)}</div>`;
-    }
-
-    if (template && sub.details) {
-      body += `<h3 style="color:#8B4513; margin: 20px 0 12px;">📋 Chi tiết từng câu</h3>`;
-      
-      template.questions.forEach((q, idx) => {
+    html += `<h3 style="color:#8B4513; margin: 20px 0 12px;">📋 Chi tiết từng câu (chỉ GV thấy)</h3>`;
+    
+    const part1 = template.questions.filter(q => q.type === 'choice');
+    const part2 = template.questions.filter(q => q.type === 'truefalse');
+    const part3 = template.questions.filter(q => q.type === 'short');
+    
+    if (part1.length > 0) {
+      html += `<div style="background:linear-gradient(135deg,#8B5A2B,#8B4513);color:#FFF;padding:10px 16px;border-radius:6px;margin:16px 0 10px;font-weight:700;">I. PHẦN I — Trắc nghiệm</div>`;
+      part1.forEach((q, idx) => {
         const detail = sub.details[q.id];
         if (!detail) return;
-
-        if (q.type === 'choice') {
-          const cls = detail.isCorrect ? 'correct' : 'wrong';
-          const numCls = detail.isCorrect ? 'correct-bg' : 'wrong-bg';
-          body += `
-            <div class="question-detail ${cls}">
-              <div class="q-num ${numCls}">Câu ${idx + 1}</div>
-              <div class="q-text">${esc(q.text)}</div>
-              ${q.options.map(opt => {
-                let optCls = ''; let mark = '';
-                if (opt.value === detail.correct) { optCls = 'correct-answer'; mark = '<span class="mark check">✓ Đáp án</span>'; }
-                if (opt.value === detail.student) {
-                  if (opt.value === detail.correct) { optCls = 'student-correct'; mark = '<span class="mark check">✓ Em chọn</span>'; }
-                  else { optCls = 'student-wrong'; mark = '<span class="mark cross">✗ Em chọn</span>'; }
-                }
-                return `<div class="option-row ${optCls}"><span class="label">${opt.value}.</span><span>${esc(opt.text)}</span>${mark}</div>`;
-              }).join('')}
-            </div>
-          `;
-        } else if (q.type === 'truefalse') {
-          const stDetails = detail.details || {};
-          const cls = detail.correctCount === detail.total ? 'correct' : (detail.correctCount === 0 ? 'wrong' : 'partial');
-          const numCls = detail.correctCount === detail.total ? 'correct-bg' : (detail.correctCount === 0 ? 'wrong-bg' : 'partial-bg');
-          body += `
-            <div class="question-detail ${cls}">
-              <div class="q-num ${numCls}">Câu ${idx + 1} — Đúng ${detail.correctCount}/${detail.total}</div>
-              <div class="q-text">${esc(q.text)}</div>
-              ${q.statements.map(st => {
-                const d = stDetails[st.statement];
-                if (!d) return '';
-                return `<div class="tf-row-detail"><div class="stmt">${st.statement + 1}) ${esc(st.text)}</div><div class="answers"><div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>ĐA:</strong> ${st.correct ? 'Đúng' : 'Sai'}</div><div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>Em:</strong> ${d.student === true ? 'Đúng' : (d.student === false ? 'Sai' : '(bỏ)')}</div></div></div>`;
-              }).join('')}
-            </div>
-          `;
-        } else if (q.type === 'short') {
-          const cls = detail.isCorrect ? 'correct' : 'wrong';
-          const numCls = detail.isCorrect ? 'correct-bg' : 'wrong-bg';
-          body += `
-            <div class="question-detail ${cls}">
-              <div class="q-num ${numCls}">Câu ${idx + 1}</div>
-              <div class="q-text">${esc(q.text)}</div>
-              <div class="option-row ${detail.isCorrect ? 'student-correct' : 'student-wrong'}"><span class="label">Em:</span><span>${esc(detail.student || '(bỏ)')}</span></div>
-              ${!detail.isCorrect ? `<div class="option-row correct-answer"><span class="label">ĐA:</span><span>${esc(detail.correct)}</span></div>` : ''}
-            </div>
-          `;
-        }
+        const cls = detail.isCorrect ? 'correct' : 'wrong';
+        const numCls = detail.isCorrect ? 'correct-bg' : 'wrong-bg';
+        html += `
+          <div class="question-detail ${cls}">
+            <div class="q-num ${numCls}">Câu ${idx + 1} ${detail.isCorrect ? '✓' : '✗'} — ${detail.earned}/${detail.points} điểm</div>
+            <div class="q-text">${esc(q.text.replace(/^Câu\s+\d+\.\s*/i, ''))}</div>
+            ${q.options.map(opt => {
+              let optCls = ''; let mark = '';
+              if (opt.value === detail.correct) { optCls = 'correct-answer'; mark = '<span class="mark check">✓ Đáp án</span>'; }
+              if (opt.value === detail.student && opt.value !== detail.correct) { optCls = 'student-wrong'; mark = '<span class="mark cross">✗ HS</span>'; }
+              if (opt.value === detail.student && opt.value === detail.correct) { optCls = 'student-correct'; mark = '<span class="mark check">✓ HS</span>'; }
+              return `<div class="option-row ${optCls}"><span class="label">${opt.value}.</span><span>${esc(opt.text)}</span>${mark}</div>`;
+            }).join('')}
+          </div>
+        `;
+      });
+    }
+    
+    if (part2.length > 0) {
+      html += `<div style="background:linear-gradient(135deg,#0066CC,#004488);color:#FFF;padding:10px 16px;border-radius:6px;margin:16px 0 10px;font-weight:700;">II. PHẦN II — Đúng/Sai</div>`;
+      part2.forEach((q, idx) => {
+        const detail = sub.details[q.id];
+        if (!detail) return;
+        const stDetails = detail.details || {};
+        const cls = detail.correctCount === detail.total ? 'correct' : (detail.correctCount === 0 ? 'wrong' : 'partial');
+        const numCls = detail.correctCount === detail.total ? 'correct-bg' : (detail.correctCount === 0 ? 'wrong-bg' : 'partial-bg');
+        html += `
+          <div class="question-detail ${cls}">
+            <div class="q-num ${numCls}">Câu ${idx + 1} — ${detail.correctCount}/${detail.total} ý — ${detail.earned.toFixed(2)}/${detail.points} điểm</div>
+            <div class="q-text">${esc(q.text.replace(/^Câu\s+\d+\.\s*/i, ''))}</div>
+            ${q.statements.map(st => {
+              const d = stDetails[st.statement];
+              if (!d) return '';
+              return `<div class="tf-row-detail"><div class="stmt">${String.fromCharCode(97 + st.statement)}) ${esc(st.text)}</div><div class="answers"><div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>ĐA:</strong> ${st.correct ? 'Đ' : 'S'}</div><div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>HS:</strong> ${d.student === true ? 'Đ' : (d.student === false ? 'S' : '(bỏ)')}</div></div></div>`;
+            }).join('')}
+          </div>
+        `;
+      });
+    }
+    
+    if (part3.length > 0) {
+      html += `<div style="background:linear-gradient(135deg,#2E7D32,#1B5E20);color:#FFF;padding:10px 16px;border-radius:6px;margin:16px 0 10px;font-weight:700;">III. PHẦN III — Trả lời ngắn</div>`;
+      part3.forEach((q, idx) => {
+        const detail = sub.details[q.id];
+        if (!detail) return;
+        const cls = detail.isCorrect ? 'correct' : 'wrong';
+        const numCls = detail.isCorrect ? 'correct-bg' : 'wrong-bg';
+        html += `
+          <div class="question-detail ${cls}">
+            <div class="q-num ${numCls}">Câu ${idx + 1} ${detail.isCorrect ? '✓' : '✗'} — ${detail.earned}/${detail.points} điểm</div>
+            <div class="q-text">${esc(q.text.replace(/^Câu\s+\d+\.\s*/i, ''))}</div>
+            <div class="option-row ${detail.isCorrect ? 'student-correct' : 'student-wrong'}"><span class="label">HS:</span><span>${esc(detail.student || '(bỏ)')}</span></div>
+            ${!detail.isCorrect ? `<div class="option-row correct-answer"><span class="label">ĐA:</span><span>${esc(detail.correct)}</span></div>` : ''}
+          </div>
+        `;
       });
     }
 
-    $('studentDetailBody').innerHTML = body;
-    show($('studentDetailModal'));
+    return html;
   }
 
   $('studentDetailCloseBtn').addEventListener('click', () => hide($('studentDetailModal')));
@@ -2219,7 +2262,6 @@ window.MathJax = {
           <h3>📖 Quản Lý Bài Học</h3>
           <button class="btn btn-primary btn-sm" id="showAddLessonBtn">➕ Thêm Bài Học</button>
         </div>
-        <p class="text-sm">Bài học là chương/bài lớn. Mỗi bài có nhiều đề.</p>
         <div id="lessonsList"></div>
       </div>
 
@@ -2245,7 +2287,7 @@ window.MathJax = {
           </div>
           <div class="form-group">
             <label>Tiêu đề đề bài</label>
-            <input id="addTitle" placeholder="VD: Đề 1: Trắc nghiệm cơ bản" />
+            <input id="addTitle" placeholder="VD: Đề 1: Trắc nghiệm" />
           </div>
 
           <div class="form-group">
@@ -2253,31 +2295,27 @@ window.MathJax = {
             <div class="mode-toggle">
               <div class="mode-option selected" data-mode="inline">
                 <div class="mode-title">🎯 Đề nhập trực tiếp</div>
-                <div class="mode-desc">Dán HTML câu hỏi → Lưu vào hệ thống → HS làm trên web → Chấm điểm tự động</div>
+                <div class="mode-desc">Dán HTML câu hỏi → HS làm trên web → Chấm điểm tự động</div>
               </div>
               <div class="mode-option" data-mode="external">
                 <div class="mode-title">🔗 Đề file ngoài</div>
-                <div class="mode-desc">Nhập URL file HTML → HS mở tab mới luyện tập → Chỉ theo dõi thời gian</div>
+                <div class="mode-desc">Nhập URL file HTML → HS mở tab mới luyện tập → Chỉ theo dõi</div>
               </div>
             </div>
             <input type="hidden" id="addMode" value="inline" />
           </div>
 
-          <!-- INLINE FIELDS -->
           <div id="inlineFields">
             <div class="alert alert-info">
-              💡 Dán HTML câu hỏi vào ô bên dưới. Hỗ trợ 3 loại:
-              <strong>choice</strong> (trắc nghiệm), <strong>truefalse</strong> (đúng/sai), <strong>short</strong> (trả lời ngắn).
-              <br>Mỗi câu là <code>&lt;div class="question" data-id="q1" data-type="choice" data-answer="B"&gt;</code>
+              💡 Dán HTML câu hỏi vào ô bên dưới. Dùng <strong>tool.html</strong> để chuyển đổi từ file Word.
             </div>
             <div class="form-group">
               <label>📋 Dán HTML câu hỏi</label>
-              <textarea id="addQuestionsHtml" placeholder="&lt;div class=&quot;question&quot; data-id=&quot;q1&quot; data-type=&quot;choice&quot; data-answer=&quot;B&quot;&gt;..." style="min-height: 250px; font-family: monospace; font-size: 12px;"></textarea>
-              <div class="hint">Có thể dùng AI (ChatGPT/Claude) để tạo HTML theo format</div>
-              <button class="btn btn-light btn-sm" type="button" id="previewQuestionsBtn" style="margin-top:8px;">👁 Xem trước câu hỏi</button>
+              <textarea id="addQuestionsHtml" placeholder="<div class=&quot;question&quot; data-id=&quot;q1&quot;...></div>" style="min-height: 250px; font-family: monospace; font-size: 12px;"></textarea>
+              <button class="btn btn-light btn-sm" type="button" id="previewQuestionsBtn" style="margin-top:8px;">👁 Xem trước</button>
             </div>
             <div id="questionsPreview" class="hidden">
-              <label style="font-weight:600; color:#8B4513;">Preview câu hỏi:</label>
+              <label style="font-weight:600; color:#8B4513;">Preview:</label>
               <div class="html-preview" id="questionsPreviewBox"></div>
             </div>
             <div class="row">
@@ -2289,23 +2327,13 @@ window.MathJax = {
                 <label>Số lượt tối đa</label>
                 <input type="number" id="addQuizMaxAttempts" value="3" min="1" max="10" />
               </div>
-              <div class="form-group" style="flex:1;">
-                <label>Điểm tối đa</label>
-                <input type="number" id="addMaxScore" value="10" min="1" max="100" />
-              </div>
             </div>
           </div>
 
-          <!-- EXTERNAL FIELDS -->
           <div id="externalFields" class="hidden">
-            <div class="alert alert-info">
-              💡 Nhập URL file HTML bất kỳ (có thể ở content/, Google Drive, hosting khác).
-              HS sẽ <strong>mở tab mới</strong> để luyện tập. Hệ thống chỉ theo dõi thời gian, không chấm điểm.
-            </div>
             <div class="form-group">
               <label>🔗 URL file HTML</label>
-              <input id="addExternalUrl" placeholder="https://tuibx25.github.io/bx/btvl/content/luyen-tap-1.html" />
-              <div class="hint">Có thể là link tuyệt đối hoặc đường dẫn tương đối</div>
+              <input id="addExternalUrl" placeholder="https://tuibx25.github.io/bx/btvl/content/luyen-tap.html" />
             </div>
             <div class="row">
               <div class="form-group" style="flex:1;">
@@ -2314,14 +2342,14 @@ window.MathJax = {
               </div>
               <div class="form-group" style="flex:1;">
                 <label>Mô tả ngắn</label>
-                <input id="addExternalDesc" placeholder="VD: Luyện tập chương 1" />
+                <input id="addExternalDesc" />
               </div>
             </div>
           </div>
 
           <div class="row" style="margin-top:14px;">
             <div class="form-group" style="flex:1;">
-              <label>Hạn nộp (tuỳ chọn)</label>
+              <label>Hạn nộp</label>
               <input type="date" id="addDeadline" />
             </div>
           </div>
@@ -2335,7 +2363,7 @@ window.MathJax = {
               </div>
               <div class="form-group" style="flex:1; min-width:200px;">
                 <label style="font-size:13px;">Theo email HS</label>
-                <input id="addAssignEmails" placeholder="VD: hs1@gmail.com" />
+                <input id="addAssignEmails" />
               </div>
             </div>
           </div>
@@ -2346,6 +2374,20 @@ window.MathJax = {
       <div class="card">
         <h3>👥 Quản Lý Học Sinh</h3>
         <div id="userManagement"></div>
+      </div>
+
+      <div class="card" style="border-left: 5px solid #c0392b;">
+        <h3 style="color: #c0392b;">⚠️ Xoá Dữ Liệu Cuối Năm</h3>
+        <p class="text-sm" style="margin-bottom: 12px;">
+          Khi hết năm học, xoá <strong>toàn bộ bài làm và điểm</strong> của HS. 
+          <br>✅ <strong>Giữ lại:</strong> tài khoản HS, bài học, đề bài tập.
+          <br>❌ <strong>Xoá:</strong> bài làm, điểm số, log truy cập.
+        </p>
+        <div class="row">
+          <button class="btn btn-danger" id="clearSubmissionsBtn">🗑 Xoá TẤT CẢ bài làm</button>
+          <button class="btn btn-light" id="viewDataStatsBtn">📊 Xem thống kê dữ liệu</button>
+        </div>
+        <div id="dataStats" style="margin-top:12px;"></div>
       </div>
 
       <div class="card">
@@ -2362,14 +2404,12 @@ window.MathJax = {
     });
     $('showAddFormBtn').addEventListener('click', () => $('addFormWrap').classList.toggle('hidden'));
 
-    // Mode toggle
     tab.querySelectorAll('.mode-option').forEach(opt => {
       opt.addEventListener('click', () => {
         tab.querySelectorAll('.mode-option').forEach(o => o.classList.remove('selected'));
         opt.classList.add('selected');
         const mode = opt.dataset.mode;
         $('addMode').value = mode;
-        
         if (mode === 'inline') {
           show($('inlineFields')); hide($('externalFields'));
         } else {
@@ -2378,75 +2418,69 @@ window.MathJax = {
       });
     });
 
-    // Preview questions
     $('previewQuestionsBtn').addEventListener('click', () => {
       const html = $('addQuestionsHtml').value.trim();
       if (!html) { toast('Chưa có HTML', 'error'); return; }
-      
       const questions = parseQuestionsHtml(html);
-      if (questions.length === 0) {
-        toast('Không parse được câu hỏi nào!', 'error');
-        return;
-      }
+      if (questions.length === 0) { toast('Không parse được câu hỏi!', 'error'); return; }
       
-      let previewHtml = `<div class="alert alert-success">✅ Parse được ${questions.length} câu hỏi</div>`;
-      questions.forEach((q, idx) => {
-        if (q.type === 'choice') {
-          previewHtml += `
-            <div class="question">
-              <div class="q-text">Câu ${idx + 1}. ${esc(q.text)}</div>
-              ${q.options.map(o => `<div class="opt">${o.value}. ${esc(o.text)}</div>`).join('')}
-              <div class="text-sm" style="color:#0066CC; margin-top:6px;">✓ Đáp án: <strong>${q.correctAnswer}</strong></div>
-            </div>
-          `;
-        } else if (q.type === 'truefalse') {
-          previewHtml += `
-            <div class="question">
-              <div class="q-text">Câu ${idx + 1}. ${esc(q.text)}</div>
-              ${q.statements.map(st => `<div class="tf-item">${String.fromCharCode(97 + st.statement)}) ${esc(st.text)} → <strong>${st.correct ? 'Đúng' : 'Sai'}</strong></div>`).join('')}
-            </div>
-          `;
-        } else if (q.type === 'short') {
-          previewHtml += `
-            <div class="question">
-              <div class="q-text">Câu ${idx + 1}. ${esc(q.text)}</div>
-              <input class="short-answer" disabled placeholder="HS nhập đáp án" />
-              <div class="text-sm" style="color:#0066CC; margin-top:6px;">✓ Đáp án: <strong>${esc(q.correctAnswer)}</strong></div>
-            </div>
-          `;
-        }
-      });
+      const part1 = questions.filter(q => q.type === 'choice');
+      const part2 = questions.filter(q => q.type === 'truefalse');
+      const part3 = questions.filter(q => q.type === 'short');
+      
+      let previewHtml = `<div class="alert alert-success">✅ Parse được ${questions.length} câu</div>`;
+      
+      if (part1.length > 0) {
+        previewHtml += `<h4 style="color:#8B4513;margin-top:12px;">I. Trắc nghiệm (${part1.length})</div>`;
+        part1.forEach((q, i) => {
+          previewHtml += `<div class="question"><div class="q-text">Câu ${i+1}. ${esc(q.text)} <span style="color:#0066CC;">[ĐA: ${q.correctAnswer}, ${q.points}đ]</span></div>`;
+          q.options.forEach(o => previewHtml += `<div class="opt">${o.value}. ${esc(o.text)}</div>`);
+          previewHtml += `</div>`;
+        });
+      }
+      if (part2.length > 0) {
+        previewHtml += `<h4 style="color:#0066CC;margin-top:12px;">II. Đúng/Sai (${part2.length})</h4>`;
+        part2.forEach((q, i) => {
+          previewHtml += `<div class="question"><div class="q-text">Câu ${i+1}. ${esc(q.text)} <span style="color:#0066CC;">[${q.points}đ]</span></div>`;
+          q.statements.forEach(st => previewHtml += `<div class="tf-item">${String.fromCharCode(97 + st.statement)}) ${esc(st.text)} → <strong>${st.correct ? 'Đ' : 'S'}</strong></div>`);
+          previewHtml += `</div>`;
+        });
+      }
+      if (part3.length > 0) {
+        previewHtml += `<h4 style="color:#2E7D32;margin-top:12px;">III. Trả lời ngắn (${part3.length})</h4>`;
+        part3.forEach((q, i) => {
+          previewHtml += `<div class="question"><div class="q-text">Câu ${i+1}. ${esc(q.text)} <span style="color:#0066CC;">[ĐA: ${q.correctAnswer}, ${q.points}đ]</span></div></div>`;
+        });
+      }
       
       $('questionsPreviewBox').innerHTML = previewHtml;
       show($('questionsPreview'));
     });
 
     $('addAssignmentBtn').addEventListener('click', addAssignment);
+    $('clearSubmissionsBtn').addEventListener('click', clearAllSubmissions);
+    $('viewDataStatsBtn').addEventListener('click', showDataStats);
 
     loadLessonsForTeacher();
     loadUserManagement();
     loadTeacherAssignments();
   }
 
-  // ==================== ADD LESSON ====================
   $('addLessonCancel').addEventListener('click', () => hide($('addLessonModal')));
   $('addLessonConfirm').addEventListener('click', async () => {
     const grade = $('lessonGrade').value;
     const name = $('lessonName').value.trim();
     const description = $('lessonDesc').value.trim();
     if (!name) { toast('Nhập tên bài học', 'error'); return; }
-    
     try {
       const lq = query(collection(db, 'lessons'), where('grade', '==', grade));
       const lSnap = await getDocs(lq);
       const order = lSnap.size + 1;
-
       await addDoc(collection(db, 'lessons'), {
         grade, name, description, order,
         teacherId: currentUser.uid,
         createdAt: serverTimestamp()
       });
-      
       hide($('addLessonModal'));
       toast('✅ Đã thêm bài học!', 'success');
       loadLessonsForTeacher();
@@ -2454,12 +2488,10 @@ window.MathJax = {
     } catch (err) { toast('Lỗi: ' + err.message, 'error'); }
   });
 
-  // ==================== LOAD LESSONS ====================
   async function loadLessonsForTeacher() {
     const wrap = $('lessonsList');
     const selectEl = $('addLesson');
     if (!wrap) return;
-    
     try {
       const snap = await getDocs(collection(db, 'lessons'));
       const lessons = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -2498,7 +2530,7 @@ window.MathJax = {
 
       wrap.querySelectorAll('[data-del-lesson]').forEach(btn => {
         btn.addEventListener('click', async () => {
-          if (!confirm('Xoá bài học? Đề bên trong chuyển sang "Chưa phân loại".')) return;
+          if (!confirm('Xoá bài học?')) return;
           await deleteDoc(doc(db, 'lessons', btn.dataset.delLesson));
           toast('Đã xoá', 'success');
           loadLessonsForTeacher();
@@ -2508,7 +2540,6 @@ window.MathJax = {
     } catch (err) { wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`; }
   }
 
-  // ==================== ADD ASSIGNMENT ====================
   async function addAssignment() {
     if (currentProfile?.role !== 'teacher') { toast('Chỉ GV', 'error'); return; }
     const grade = $('addGrade').value;
@@ -2530,19 +2561,18 @@ window.MathJax = {
         if (!questionsHtml) { toast('Dán HTML câu hỏi', 'error'); return; }
         
         const questions = parseQuestionsHtml(questionsHtml);
-        if (questions.length === 0) { toast('Không parse được câu hỏi nào!', 'error'); return; }
+        if (questions.length === 0) { toast('Không parse được câu hỏi!', 'error'); return; }
         
         payload.type = 'quiz';
         payload.questionsHtml = questionsHtml;
         payload.duration = Number($('addQuizDuration').value) || 25;
         payload.maxAttempts = Number($('addQuizMaxAttempts').value) || 3;
-        payload.maxScore = Number($('addMaxScore').value) || 10;
+        payload.maxScore = 10;
         
         toast(`✅ Đã parse ${questions.length} câu hỏi`, 'success');
       } else {
         const externalUrl = $('addExternalUrl').value.trim();
         if (!externalUrl) { toast('Nhập URL file', 'error'); return; }
-        
         payload.type = 'external';
         payload.externalUrl = externalUrl;
         payload.maxAttempts = Number($('addExternalMaxAttempts').value) || 0;
@@ -2566,7 +2596,6 @@ window.MathJax = {
 
       await addDoc(collection(db, 'assignments'), payload);
       
-      // Reset
       $('addTitle').value = '';
       $('addQuestionsHtml').value = '';
       $('addExternalUrl').value = '';
@@ -2582,7 +2611,6 @@ window.MathJax = {
     } catch (err) { toast('Lỗi: ' + err.message, 'error'); }
   }
 
-  // ==================== USER MANAGEMENT ====================
   async function loadUserManagement() {
     const wrap = $('userManagement');
     if (!wrap) return;
@@ -2623,7 +2651,68 @@ window.MathJax = {
     } catch (err) { wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`; }
   }
 
-  // ==================== TEACHER LIST ====================
+  async function showDataStats() {
+    const statsDiv = $('dataStats');
+    statsDiv.innerHTML = '<div class="empty">Đang đếm...</div>';
+    try {
+      const [subsSnap, logsSnap, usersSnap, aSnap, lSnap] = await Promise.all([
+        getDocs(collection(db, 'submissions')),
+        getDocs(collection(db, 'viewLogs')),
+        getDocs(collection(db, 'users')),
+        getDocs(collection(db, 'assignments')),
+        getDocs(collection(db, 'lessons'))
+      ]);
+      const studentCount = usersSnap.docs.filter(d => d.data().role === 'student').length;
+      statsDiv.innerHTML = `
+        <div class="alert alert-info">
+          <strong>📊 Thống kê dữ liệu:</strong>
+          <ul style="margin-left: 20px; margin-top: 8px;">
+            <li>👥 Học sinh: <strong>${studentCount}</strong> tài khoản</li>
+            <li>📖 Bài học: <strong>${lSnap.size}</strong></li>
+            <li>📝 Đề bài tập: <strong>${aSnap.size}</strong></li>
+            <li>📄 Bài làm: <strong>${subsSnap.size}</strong></li>
+            <li>👁 Log truy cập: <strong>${logsSnap.size}</strong></li>
+          </ul>
+        </div>
+      `;
+    } catch (err) {
+      statsDiv.innerHTML = `<div class="alert alert-error">Lỗi: ${esc(err.message)}</div>`;
+    }
+  }
+
+  async function clearAllSubmissions() {
+    if (!confirm('⚠️ XOÁ TẤT CẢ BÀI LÀM VÀ ĐIỂM?\n\n✅ Giữ: Tài khoản, bài học, đề\n❌ Xoá: Bài làm, điểm, log\n\nKhông thể hoàn tác!')) return;
+    const confirmText = prompt('Gõ chính xác để xác nhận: XOA HET');
+    if (confirmText !== 'XOA HET') { toast('Đã hủy', 'info'); return; }
+    toast('Đang xoá...', 'info');
+    try {
+      const subsSnap = await getDocs(collection(db, 'submissions'));
+      const logsSnap = await getDocs(collection(db, 'viewLogs'));
+      
+      const subDocs = subsSnap.docs;
+      for (let i = 0; i < subDocs.length; i += 500) {
+        const batch = writeBatch(db);
+        subDocs.slice(i, i + 500).forEach(d => batch.delete(d.ref));
+        await batch.commit();
+      }
+      
+      const logDocs = logsSnap.docs;
+      for (let i = 0; i < logDocs.length; i += 500) {
+        const batch = writeBatch(db);
+        logDocs.slice(i, i + 500).forEach(d => batch.delete(d.ref));
+        await batch.commit();
+      }
+      
+      toast(`✅ Đã xoá ${subsSnap.size} bài làm + ${logsSnap.size} log!`, 'success');
+      loadAssignments();
+      loadMySubmissions();
+      loadTeacherAssignments();
+      showDataStats();
+    } catch (err) {
+      toast('Lỗi: ' + err.message, 'error');
+    }
+  }
+
   async function loadTeacherAssignments() {
     const wrap = $('teacherAssignments');
     if (!wrap) return;
@@ -2660,35 +2749,27 @@ window.MathJax = {
 
         let statsSection = '';
         if (isExternal) {
-          // Thống kê truy cập
           const byStudent = {};
           logs.forEach(l => {
-            if (!byStudent[l.studentId]) byStudent[l.studentId] = { name: l.studentName, cls: l.studentClass, count: 0, totalDur: 0, first: null, last: null };
+            if (!byStudent[l.studentId]) byStudent[l.studentId] = { name: l.studentName, cls: l.studentClass, count: 0, totalDur: 0 };
             byStudent[l.studentId].count++;
             byStudent[l.studentId].totalDur += (l.durationSec || 0);
-            const ts = l.startedAt || 0;
-            if (!byStudent[l.studentId].first || ts < byStudent[l.studentId].first) byStudent[l.studentId].first = ts;
-            if (!byStudent[l.studentId].last || ts > byStudent[l.studentId].last) byStudent[l.studentId].last = ts;
           });
           
-          const uniqueStudents = Object.keys(byStudent).length;
           statsSection = `
             <div class="viewlog-summary">
-              <div style="margin-bottom:8px;">
-                📊 <strong>${uniqueStudents} HS đã truy cập</strong> • Tổng ${logs.length} lượt
-              </div>
+              <div style="margin-bottom:8px;">📊 <strong>${Object.keys(byStudent).length} HS</strong> đã truy cập • ${logs.length} lượt</div>
               ${Object.values(byStudent).map(st => `
                 <div class="viewlog-row">
                   <span><strong>${esc(st.name)}</strong>${st.cls ? ` — ${esc(st.cls)}` : ''}</span>
                   <span>${st.count} lần • ${fmtDuration(st.totalDur)}</span>
                 </div>
               `).join('')}
-              ${uniqueStudents > 0 ? `<button class="btn btn-light btn-sm" style="margin-top:8px;" data-view-log-detail="${a.id}">📋 Xem chi tiết</button>` : ''}
             </div>
           `;
         } else if (a.type === 'quiz') {
           statsSection = subs.length ? subs.map(s => {
-            const autoInfo = s.autoScore != null ? `<div class="text-sm" style="color:#004488;">🎯 ${esc(s.autoScore)}/${esc(s.autoTotal)}</div>` : '';
+            const autoInfo = s.autoScore != null ? `<div class="text-sm" style="color:#004488;">🎯 ${esc(s.autoScore)}/10</div>` : '';
             const statusBadge = {
               in_progress: '<span class="badge badge-inprogress">🔄 Đang làm</span>',
               abandoned: '<span class="badge badge-pending">⚠️ Hủy</span>',
@@ -2721,18 +2802,13 @@ window.MathJax = {
               <div>
                 <div class="text-sm" style="color:#8B4513;">📖 ${esc(lessonName)}</div>
                 <h3>${esc(a.title)}</h3>
-                <div class="meta">
-                  Khối ${esc(a.grade)} • ${isExternal ? logs.length + ' lượt truy cập' : subs.length + ' bài nộp'}
-                  ${modeBadge}
-                </div>
+                <div class="meta">Khối ${esc(a.grade)} • ${isExternal ? logs.length + ' lượt' : subs.length + ' bài'} ${modeBadge}</div>
               </div>
               <div style="display:flex; gap:8px; flex-wrap:wrap;">
                 ${publishBtn}
                 <button class="btn btn-danger btn-sm" data-del-assignment="${a.id}">🗑 Xoá</button>
               </div>
             </div>
-            ${!isExternal && a.duration ? `<div class="time-info">⏱ ${esc(a.duration)} phút • ${esc(a.maxAttempts || 3)} lượt${a.deadline ? ` • Hạn: ${esc(a.deadline)}` : ''}</div>` : ''}
-            ${isExternal && a.maxAttempts > 0 ? `<div class="time-info external">🔗 Tối đa ${esc(a.maxAttempts)} lần mở${a.deadline ? ` • Hạn: ${esc(a.deadline)}` : ''}</div>` : ''}
             ${statsSection}
           </div>
         `;
@@ -2765,15 +2841,6 @@ window.MathJax = {
         });
       });
 
-      wrap.querySelectorAll('[data-view-log-detail]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const assignmentId = btn.dataset.viewLogDetail;
-          const a = assignments.find(x => x.id === assignmentId);
-          const logs = viewLogs.filter(v => v.assignmentId === assignmentId && v.mode === 'external');
-          showViewLogModal(a, logs);
-        });
-      });
-
       wrap.querySelectorAll('[data-grade-sub]').forEach(btn => {
         btn.addEventListener('click', async () => {
           const s = submissions.find(x => x.id === btn.dataset.gradeSub);
@@ -2785,78 +2852,6 @@ window.MathJax = {
     } catch (err) { wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`; }
   }
 
-  // ⭐ MODAL XEM LỊCH SỬ TRUY CẬP
-  function showViewLogModal(a, logs) {
-    $('viewLogTitle').textContent = '📊 Lịch sử: ' + a.title;
-    
-    if (logs.length === 0) {
-      $('viewLogBody').innerHTML = '<div class="empty">Chưa có ai truy cập.</div>';
-      show($('viewLogModal'));
-      return;
-    }
-
-    const byStudent = {};
-    logs.forEach(l => {
-      if (!byStudent[l.studentId]) {
-        byStudent[l.studentId] = { 
-          name: l.studentName, 
-          cls: l.studentClass, 
-          count: 0, 
-          totalDur: 0,
-          first: null,
-          last: null,
-          logs: []
-        };
-      }
-      byStudent[l.studentId].count++;
-      byStudent[l.studentId].totalDur += (l.durationSec || 0);
-      const ts = l.startedAt || 0;
-      if (!byStudent[l.studentId].first || ts < byStudent[l.studentId].first) byStudent[l.studentId].first = ts;
-      if (!byStudent[l.studentId].last || ts > byStudent[l.studentId].last) byStudent[l.studentId].last = ts;
-      byStudent[l.studentId].logs.push(l);
-    });
-
-    const body = `
-      <div class="alert alert-info">
-        Tổng <strong>${Object.keys(byStudent).length} HS</strong> đã truy cập, 
-        <strong>${logs.length} lượt</strong>
-      </div>
-      ${Object.values(byStudent).map(st => `
-        <div class="submission viewlog" style="margin-bottom:10px;">
-          <div class="space-between">
-            <div>
-              <strong>${esc(st.name)}</strong>
-              ${st.cls ? `<span class="text-sm"> — Lớp ${esc(st.cls)}</span>` : ''}
-            </div>
-            <div class="badge badge-external">${st.count} lần</div>
-          </div>
-          <div class="text-sm mt-2">
-            <strong>Lần đầu:</strong> ${fmtDate(st.first)}<br>
-            <strong>Lần cuối:</strong> ${fmtDate(st.last)}<br>
-            <strong>Tổng thời gian:</strong> ${fmtDuration(st.totalDur)}
-          </div>
-          <details style="margin-top:8px;">
-            <summary style="cursor:pointer; color:#0066CC; font-weight:600;">Xem từng lượt (${st.logs.length})</summary>
-            <div style="margin-top:6px;">
-              ${st.logs.sort((a,b) => (b.startedAt||0) - (a.startedAt||0)).map((l, i) => `
-                <div class="text-sm" style="padding:4px 0; border-bottom:1px dashed #D3D3D3;">
-                  ${st.logs.length - i}. ${fmtDate(l.openedAt || l.startedAt)}
-                  ${l.durationSec ? ` • ⏱ ${fmtDuration(l.durationSec)}` : ''}
-                </div>
-              `).join('')}
-            </div>
-          </details>
-        </div>
-      `).join('')}
-    `;
-    
-    $('viewLogBody').innerHTML = body;
-    show($('viewLogModal'));
-  }
-
-  $('viewLogCloseBtn').addEventListener('click', () => hide($('viewLogModal')));
-
-  // ==================== GRADE MODAL ====================
   async function showGradeModal(s, a) {
     currentGradeSubmission = s;
     
@@ -2867,7 +2862,7 @@ window.MathJax = {
           <div class="meta">${s.studentClass ? `Lớp ${esc(s.studentClass)} • ` : ''}📅 ${fmtDate(s.submittedAt || s.startedAt)}${s.timeSpent ? ` • ⏱ ${Math.floor(s.timeSpent/60)}p ${s.timeSpent%60}s` : ''}</div>
         </div>
         <div class="score-box">
-          <div class="score">${esc(s.autoScore != null ? s.autoScore : '?')}/${esc(s.autoTotal || 10)}</div>
+          <div class="score">${esc(s.autoScore != null ? s.autoScore : '?')}/10</div>
           <div class="label">Điểm tự chấm</div>
         </div>
       </div>
@@ -2881,17 +2876,21 @@ window.MathJax = {
         if (questions && s.details) {
           body += `<h3 style="color:#8B4513; margin: 20px 0 12px;">📋 Chi tiết</h3>`;
           
-          questions.forEach((q, idx) => {
-            const detail = s.details[q.id];
-            if (!detail) return;
-
-            if (q.type === 'choice') {
+          const part1 = questions.filter(q => q.type === 'choice');
+          const part2 = questions.filter(q => q.type === 'truefalse');
+          const part3 = questions.filter(q => q.type === 'short');
+          
+          if (part1.length > 0) {
+            body += `<div style="background:linear-gradient(135deg,#8B5A2B,#8B4513);color:#FFF;padding:10px 16px;border-radius:6px;margin:16px 0 10px;font-weight:700;">I. Trắc nghiệm</div>`;
+            part1.forEach((q, idx) => {
+              const detail = s.details[q.id];
+              if (!detail) return;
               const cls = detail.isCorrect ? 'correct' : 'wrong';
               const numCls = detail.isCorrect ? 'correct-bg' : 'wrong-bg';
               body += `
                 <div class="question-detail ${cls}">
-                  <div class="q-num ${numCls}">Câu ${idx + 1} ${detail.isCorrect ? '✓' : '✗'}</div>
-                  <div class="q-text">${esc(q.text)}</div>
+                  <div class="q-num ${numCls}">Câu ${idx + 1} ${detail.isCorrect ? '✓' : '✗'} — ${detail.earned}/${detail.points}</div>
+                  <div class="q-text">${esc(q.text.replace(/^Câu\s+\d+\.\s*/i, ''))}</div>
                   ${q.options.map(opt => {
                     let optCls = ''; let mark = '';
                     if (opt.value === detail.correct) { optCls = 'correct-answer'; mark = '<span class="mark check">✓ Đáp án</span>'; }
@@ -2901,34 +2900,48 @@ window.MathJax = {
                   }).join('')}
                 </div>
               `;
-            } else if (q.type === 'truefalse') {
+            });
+          }
+          
+          if (part2.length > 0) {
+            body += `<div style="background:linear-gradient(135deg,#0066CC,#004488);color:#FFF;padding:10px 16px;border-radius:6px;margin:16px 0 10px;font-weight:700;">II. Đúng/Sai</div>`;
+            part2.forEach((q, idx) => {
+              const detail = s.details[q.id];
+              if (!detail) return;
               const stDetails = detail.details || {};
               const cls = detail.correctCount === detail.total ? 'correct' : (detail.correctCount === 0 ? 'wrong' : 'partial');
               const numCls = detail.correctCount === detail.total ? 'correct-bg' : (detail.correctCount === 0 ? 'wrong-bg' : 'partial-bg');
               body += `
                 <div class="question-detail ${cls}">
-                  <div class="q-num ${numCls}">Câu ${idx + 1} — ${detail.correctCount}/${detail.total}</div>
-                  <div class="q-text">${esc(q.text)}</div>
+                  <div class="q-num ${numCls}">Câu ${idx + 1} — ${detail.correctCount}/${detail.total} — ${detail.earned.toFixed(2)}/${detail.points}</div>
+                  <div class="q-text">${esc(q.text.replace(/^Câu\s+\d+\.\s*/i, ''))}</div>
                   ${q.statements.map(st => {
                     const d = stDetails[st.statement];
                     if (!d) return '';
-                    return `<div class="tf-row-detail"><div class="stmt">${st.statement + 1}) ${esc(st.text)}</div><div class="answers"><div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>ĐA:</strong> ${st.correct ? 'Đ' : 'S'}</div><div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>HS:</strong> ${d.student === true ? 'Đ' : (d.student === false ? 'S' : '(bỏ)')}</div></div></div>`;
+                    return `<div class="tf-row-detail"><div class="stmt">${String.fromCharCode(97 + st.statement)}) ${esc(st.text)}</div><div class="answers"><div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>ĐA:</strong> ${st.correct ? 'Đ' : 'S'}</div><div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>HS:</strong> ${d.student === true ? 'Đ' : (d.student === false ? 'S' : '(bỏ)')}</div></div></div>`;
                   }).join('')}
                 </div>
               `;
-            } else if (q.type === 'short') {
+            });
+          }
+          
+          if (part3.length > 0) {
+            body += `<div style="background:linear-gradient(135deg,#2E7D32,#1B5E20);color:#FFF;padding:10px 16px;border-radius:6px;margin:16px 0 10px;font-weight:700;">III. Trả lời ngắn</div>`;
+            part3.forEach((q, idx) => {
+              const detail = s.details[q.id];
+              if (!detail) return;
               const cls = detail.isCorrect ? 'correct' : 'wrong';
               const numCls = detail.isCorrect ? 'correct-bg' : 'wrong-bg';
               body += `
                 <div class="question-detail ${cls}">
-                  <div class="q-num ${numCls}">Câu ${idx + 1} ${detail.isCorrect ? '✓' : '✗'}</div>
-                  <div class="q-text">${esc(q.text)}</div>
+                  <div class="q-num ${numCls}">Câu ${idx + 1} ${detail.isCorrect ? '✓' : '✗'} — ${detail.earned}/${detail.points}</div>
+                  <div class="q-text">${esc(q.text.replace(/^Câu\s+\d+\.\s*/i, ''))}</div>
                   <div class="option-row ${detail.isCorrect ? 'student-correct' : 'student-wrong'}"><span class="label">HS:</span><span>${esc(detail.student || '(bỏ)')}</span></div>
                   ${!detail.isCorrect ? `<div class="option-row correct-answer"><span class="label">ĐA:</span><span>${esc(detail.correct)}</span></div>` : ''}
                 </div>
               `;
-            }
-          });
+            });
+          }
         }
       }
     } catch (e) { console.warn(e); }
