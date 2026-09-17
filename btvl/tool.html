@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tool chuyển đổi đề thi → HTML cho hệ thống</title>
+<title>Tool chuyển đổi đề thi → HTML</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -84,19 +84,6 @@
     box-shadow: 0 0 0 2px rgba(139,90,43,0.15);
     background: #FFF;
   }
-  .form-group input[type="text"] {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #D3D3D3;
-    border-radius: 6px;
-    font-size: 14px;
-    font-family: inherit;
-  }
-  .form-group input[type="text"]:focus {
-    outline: none;
-    border-color: #8B5A2B;
-    box-shadow: 0 0 0 2px rgba(139,90,43,0.15);
-  }
 
   .btn {
     padding: 10px 20px;
@@ -116,7 +103,6 @@
   .btn-light:hover { background: #F5F5DC; }
   .btn-success { background: #2E7D32; color: #FFF; }
   .btn-success:hover { background: #1B5E20; }
-  .btn-sm { padding: 6px 12px; font-size: 13px; }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
   .alert {
@@ -253,7 +239,7 @@
     padding: 12px;
     font-size: 12px;
     font-family: monospace;
-    max-height: 200px;
+    max-height: 300px;
     overflow-y: auto;
     margin-top: 10px;
   }
@@ -285,6 +271,85 @@
   }
   .tab-content { display: none; }
   .tab-content.active { display: block; }
+
+  /* ⭐ BIỂU ĐIỂM */
+  .grade-config {
+    background: #F5F5DC;
+    border-left: 4px solid #8B5A2B;
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  .grade-config h3 {
+    color: #8B4513;
+    margin-bottom: 12px;
+    font-size: 16px;
+  }
+  .grade-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    padding: 10px 14px;
+    background: #FFF;
+    border-radius: 6px;
+    border: 1px solid #D3D3D3;
+  }
+  .grade-row .label {
+    font-weight: 600;
+    color: #333;
+    min-width: 180px;
+    font-size: 14px;
+  }
+  .grade-row input[type="number"] {
+    width: 100px;
+    padding: 6px 10px;
+    border: 1px solid #D3D3D3;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  .grade-row input[type="number"]:focus {
+    outline: none;
+    border-color: #8B5A2B;
+    box-shadow: 0 0 0 2px rgba(139,90,43,0.15);
+  }
+  .grade-row .total {
+    margin-left: auto;
+    font-weight: 700;
+    color: #004488;
+    font-size: 15px;
+    min-width: 120px;
+    text-align: right;
+  }
+  .grade-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 2px dashed #8B5A2B;
+    font-size: 16px;
+    font-weight: 700;
+    color: #8B4513;
+  }
+  .grade-total .value {
+    font-size: 22px;
+    color: #004488;
+  }
+
+  #toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: #8B4513; color: #FFF;
+    padding: 12px 20px; border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 2000; opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 14px; max-width: 340px;
+  }
+  #toast.show { opacity: 1; }
 </style>
 </head>
 <body>
@@ -301,7 +366,7 @@
       <li>Dán nội dung <strong>file đề</strong> (c.html) vào ô bên trái</li>
       <li>Dán nội dung <strong>file đáp án</strong> (d.html) vào ô bên phải</li>
       <li>Bấm <strong>"🔄 Chuyển đổi"</strong></li>
-      <li>Kiểm tra kết quả ở phần <strong>Preview</strong></li>
+      <li>Kiểm tra kết quả ở tab <strong>Preview</strong></li>
       <li>Bấm <strong>"📋 Copy HTML"</strong> → dán vào form thêm đề trên index</li>
     </ol>
   </div>
@@ -328,7 +393,38 @@
     </div>
   </div>
 
+  <!-- ⭐ FORM BIỂU ĐIỂM -->
   <div class="card">
+    <div class="grade-config">
+      <h3>⚙️ Cấu hình biểu điểm</h3>
+
+      <div class="grade-row">
+        <span class="label">Phần I — Trắc nghiệm</span>
+        <span>Số câu: <strong id="countChoice">0</strong></span>
+        <span>Điểm/câu: <input type="number" id="pointsChoice" value="0.25" min="0.01" max="10" step="0.05" /></span>
+        <span class="total" id="totalChoice">0.00 điểm</span>
+      </div>
+
+      <div class="grade-row">
+        <span class="label">Phần II — Đúng/Sai</span>
+        <span>Số câu: <strong id="countTF">0</strong></span>
+        <span>Điểm/câu: <input type="number" id="pointsTF" value="1.0" min="0.01" max="10" step="0.05" /></span>
+        <span class="total" id="totalTF">0.00 điểm</span>
+      </div>
+
+      <div class="grade-row">
+        <span class="label">Phần III — Trả lời ngắn</span>
+        <span>Số câu: <strong id="countShort">0</strong></span>
+        <span>Điểm/câu: <input type="number" id="pointsShort" value="0.25" min="0.01" max="10" step="0.05" /></span>
+        <span class="total" id="totalShort">0.00 điểm</span>
+      </div>
+
+      <div class="grade-total">
+        <span>TỔNG TRẮC NGHIỆM:</span>
+        <span class="value" id="totalAll">0.00 điểm</span>
+      </div>
+    </div>
+
     <div class="actions-bar">
       <button class="btn btn-primary" id="convertBtn">🔄 Chuyển đổi</button>
       <button class="btn btn-light" id="clearBtn">🗑 Xóa hết</button>
@@ -379,15 +475,7 @@
   </div>
 </div>
 
-<div id="toast" style="
-  position: fixed; bottom: 24px; right: 24px;
-  background: #8B4513; color: #FFF;
-  padding: 12px 20px; border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  z-index: 2000; opacity: 0;
-  transition: opacity 0.3s;
-  font-size: 14px; max-width: 340px;
-"></div>
+<div id="toast"></div>
 
 <script>
 (function() {
@@ -403,8 +491,7 @@
     t.textContent = msg;
     t.style.background = type === 'error' ? '#c0392b' : (type === 'success' ? '#0066CC' : '#8B4513');
     t.classList.add('show');
-    t.style.opacity = '1';
-    setTimeout(() => { t.style.opacity = '0'; }, 3000);
+    setTimeout(() => t.classList.remove('show'), 3000);
   }
 
   function log(msg, type) {
@@ -416,76 +503,57 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // PARSE FILE C.HTML — Lấy câu hỏi + lựa chọn
+  // PARSE FILE C.HTML
   // ═══════════════════════════════════════════════════════════
   function parseFileC(html) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
 
     const questions = [];
-
-    // Bắt tất cả <div class="cau"> trong file
     const cauEls = doc.querySelectorAll('.cau, .cau-dung-sai, .cau-tra-loi-ngan');
 
-    cauEls.forEach((el, idx) => {
-      // Bỏ qua nếu không tìm thấy nội dung
+    cauEls.forEach((el) => {
       const pTags = el.querySelectorAll('p');
-
-      // Cách 1: Câu trắc nghiệm (có .dap-an với các span A/B/C/D)
       const dapAnDiv = el.querySelector('.dap-an');
       const yDiv = el.querySelector('.y');
 
       if (dapAnDiv) {
-        // Đây là câu trắc nghiệm nhiều lựa chọn
+        // Câu trắc nghiệm
         const text = Array.from(pTags).map(p => p.textContent.trim()).join(' ').trim();
         const options = Array.from(dapAnDiv.querySelectorAll('span')).map(s => s.textContent.trim());
 
-        // Bỏ qua nếu thiếu dữ liệu
         if (!text || options.length < 2) return;
 
         questions.push({
           type: 'choice',
           text: text,
-          options: options,
-          originalText: text
+          options: options
         });
       } 
       else if (yDiv) {
-        // Đây là câu đúng/sai
+        // Câu đúng/sai
         const text = Array.from(pTags).map(p => p.textContent.trim()).join(' ').trim();
         const statements = [];
         yDiv.querySelectorAll('p').forEach((p, i) => {
-          statements.push({
-            stmt: i,
-            text: p.textContent.trim()
-          });
+          statements.push({ stmt: i, text: p.textContent.trim() });
         });
 
         if (!text || statements.length === 0) return;
 
-        // Kiểm tra có ảnh không
         const img = el.querySelector('img');
 
         questions.push({
           type: 'truefalse',
           text: text,
           statements: statements,
-          imgHtml: img ? img.outerHTML : null,
-          originalText: text
+          imgHtml: img ? img.outerHTML : null
         });
       } 
       else {
-        // Đây có thể là câu trả lời ngắn (chỉ có <p> chứa nội dung)
-        // Phần III trong file c.html chỉ có <p> câu hỏi, không có options
+        // Câu trả lời ngắn
         const text = Array.from(pTags).map(p => p.textContent.trim()).join(' ').trim();
-        
-        // Kiểm tra có phải câu hỏi không (bắt đầu bằng "Câu")
         if (text && /^Câu\s+\d+/i.test(text)) {
-          questions.push({
-            type: 'short',
-            text: text,
-            originalText: text
-          });
+          questions.push({ type: 'short', text: text });
         }
       }
     });
@@ -494,32 +562,27 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // PARSE FILE D.HTML — Lấy đáp án
+  // PARSE FILE D.HTML
   // ═══════════════════════════════════════════════════════════
   function parseFileD(html) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
 
     const answers = {
-      choice: {},        // { 1: 'C', 2: 'D', ... }
-      truefalse: {},     // { 1: { 0: true, 1: false, ... }, 2: {...} }
-      short: {}          // { 1: '0.02 J', 2: '75 cm/s²', ... }
+      choice: {},
+      truefalse: {},
+      short: {}
     };
 
-    // ─── Phần I: Trắc nghiệm nhiều lựa chọn ───
-    // Bảng có cột: Câu | Đáp án | Câu | Đáp án | ...
-    // Mỗi <tr> có 8 ô: câu1 | đáp1 | câu2 | đáp2 | câu3 | đáp3 | câu4 | đáp4
     const tables = doc.querySelectorAll('table');
 
-    tables.forEach((table, tableIdx) => {
+    tables.forEach((table) => {
       const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim());
-      
-      // Bảng trắc nghiệm nhiều lựa chọn: có "Câu" ở header
+
+      // Bảng phần I: 8 cột
       if (headers.length >= 2 && headers[0] === 'Câu' && headers[1] === 'Đáp án' && headers.length === 8) {
-        // Đây là bảng phần I
         table.querySelectorAll('tbody tr').forEach(tr => {
           const cells = Array.from(tr.querySelectorAll('td'));
-          // Mỗi tr có 8 ô: [câu, đáp, câu, đáp, câu, đáp, câu, đáp]
           for (let i = 0; i < cells.length; i += 2) {
             const qNum = parseInt(cells[i]?.textContent?.trim());
             const ans = cells[i + 1]?.textContent?.trim();
@@ -529,10 +592,8 @@
           }
         });
       }
-      // Bảng đúng/sai: có cột "Ý" và "Đáp án"
+      // Bảng đúng/sai
       else if (headers.includes('Ý') && headers.includes('Đáp án')) {
-        // Xác định đây là bảng câu nào (dựa vào h3 ngay trước table)
-        // Tìm h3 gần nhất phía trước
         let prev = table.previousElementSibling;
         let cauNum = null;
         while (prev) {
@@ -543,40 +604,37 @@
           }
           prev = prev.previousElementSibling;
         }
-        
-        if (!cauNum) return;
 
+        if (!cauNum) return;
         if (!answers.truefalse[cauNum]) answers.truefalse[cauNum] = {};
-        const baseIdx = Object.keys(answers.truefalse).length - 1;
-        answers.truefalse[cauNum] = {};
 
         table.querySelectorAll('tbody tr').forEach(tr => {
           const cells = Array.from(tr.querySelectorAll('td'));
           if (cells.length < 2) return;
-          
-          const yLabel = cells[0].textContent.trim().toLowerCase(); // "a)", "b)"...
+
+          const yLabel = cells[0].textContent.trim().toLowerCase();
           const ansText = cells[1].textContent.trim().toLowerCase();
-          
+
           const yMatch = yLabel.match(/([a-d])\)/);
           if (!yMatch) return;
-          
-          const stmtIdx = yMatch[1].charCodeAt(0) - 97; // a=0, b=1...
+
+          const stmtIdx = yMatch[1].charCodeAt(0) - 97;
           const isTrue = ansText.includes('đúng');
           const isFalse = ansText.includes('sai');
-          
+
           if (isTrue) answers.truefalse[cauNum][stmtIdx] = true;
           else if (isFalse) answers.truefalse[cauNum][stmtIdx] = false;
         });
       }
-      // Bảng trả lời ngắn: có cột "Câu" và "Đáp án" và "Giải thích"
+      // Bảng trả lời ngắn
       else if (headers[0] === 'Câu' && headers[1] === 'Đáp án' && headers.length >= 3) {
         table.querySelectorAll('tbody tr').forEach(tr => {
           const cells = Array.from(tr.querySelectorAll('td'));
           if (cells.length < 2) return;
-          
+
           const qNum = parseInt(cells[0].textContent.trim());
           const ans = cells[1].textContent.trim();
-          
+
           if (!isNaN(qNum) && ans) {
             answers.short[qNum] = ans;
           }
@@ -588,29 +646,71 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // CHUYỂN ĐỔI SANG FORMAT .question
+  // BIỂU ĐIỂM
+  // ═══════════════════════════════════════════════════════════
+  let currentQuestions = { choice: 0, tf: 0, short: 0 };
+
+  function updateQuestionCounts(questions) {
+    currentQuestions.choice = questions.filter(q => q.type === 'choice').length;
+    currentQuestions.tf = questions.filter(q => q.type === 'truefalse').length;
+    currentQuestions.short = questions.filter(q => q.type === 'short').length;
+
+    $('countChoice').textContent = currentQuestions.choice;
+    $('countTF').textContent = currentQuestions.tf;
+    $('countShort').textContent = currentQuestions.short;
+
+    updateTotals();
+  }
+
+  function updateTotals() {
+    const pChoice = parseFloat($('pointsChoice').value) || 0;
+    const pTF = parseFloat($('pointsTF').value) || 0;
+    const pShort = parseFloat($('pointsShort').value) || 0;
+
+    const totalChoice = currentQuestions.choice * pChoice;
+    const totalTF = currentQuestions.tf * pTF;
+    const totalShort = currentQuestions.short * pShort;
+    const totalAll = totalChoice + totalTF + totalShort;
+
+    $('totalChoice').textContent = totalChoice.toFixed(2) + ' điểm';
+    $('totalTF').textContent = totalTF.toFixed(2) + ' điểm';
+    $('totalShort').textContent = totalShort.toFixed(2) + ' điểm';
+    $('totalAll').textContent = totalAll.toFixed(2) + ' điểm';
+  }
+
+  ['pointsChoice', 'pointsTF', 'pointsShort'].forEach(id => {
+    $('pointsChoice').addEventListener('input', updateTotals);
+  });
+  $('pointsChoice').addEventListener('input', updateTotals);
+  $('pointsTF').addEventListener('input', updateTotals);
+  $('pointsShort').addEventListener('input', updateTotals);
+
+  // ═══════════════════════════════════════════════════════════
+  // CONVERT SANG FORMAT .question
   // ═══════════════════════════════════════════════════════════
   function convert(questions, answers) {
     const output = [];
-    let qCount = 0;        // Câu trắc nghiệm
-    let tfCount = 0;       // Câu đúng/sai
-    let shortCount = 0;    // Câu trả lời ngắn
+    let qCount = 0, tfCount = 0, shortCount = 0;
+
+    // Lấy điểm
+    const pChoice = parseFloat($('pointsChoice').value) || 0.25;
+    const pTF = parseFloat($('pointsTF').value) || 1.0;
+    const pShort = parseFloat($('pointsShort').value) || 0.25;
 
     questions.forEach((q) => {
       if (q.type === 'choice') {
         qCount++;
         const qid = 'q' + qCount;
         const correctAns = answers.choice[qCount];
-        
+
         if (!correctAns) {
-          log(`⚠️ Câu ${qCount} không tìm thấy đáp án trong file d.html`, 'warn');
+          log(`⚠️ Câu ${qCount} không tìm thấy đáp án`, 'warn');
         }
 
-        let html = `<div class="question" data-id="${qid}" data-type="choice"${correctAns ? ` data-answer="${correctAns}"` : ''}>\n`;
+        let html = `<div class="question" data-id="${qid}" data-type="choice"${correctAns ? ` data-answer="${correctAns}"` : ''} data-points="${pChoice}">\n`;
         html += `  <div class="q-text">${esc(q.text)}</div>\n`;
-        
+
         q.options.forEach(opt => {
-          // Tách "A. ..." thành value "A" và text "..."
           const match = opt.match(/^([A-D])[.\s]\s*(.+)$/i);
           if (match) {
             const val = match[1].toUpperCase();
@@ -620,7 +720,7 @@
             html += `  <label class="opt"><input type="radio" name="${qid}" value=""> ${esc(opt)}</label>\n`;
           }
         });
-        
+
         html += `</div>`;
         output.push(html);
       } 
@@ -629,7 +729,7 @@
         const qid = 'tf' + tfCount;
         const tfAnswers = answers.truefalse[tfCount] || {};
 
-        let html = `<div class="question" data-id="${qid}" data-type="truefalse">\n`;
+        let html = `<div class="question" data-id="${qid}" data-type="truefalse" data-points="${pTF}">\n`;
         html += `  <div class="q-text">${esc(q.text)}\n`;
         if (q.imgHtml) {
           html += `    <div style="text-align:center;margin:10px 0;">${q.imgHtml}</div>\n`;
@@ -639,11 +739,11 @@
         q.statements.forEach(st => {
           const stmtIdx = st.stmt;
           const correct = tfAnswers[stmtIdx];
-          
+
           if (correct === undefined) {
-            log(`⚠️ Câu Đ/S ${tfCount}, ý ${String.fromCharCode(97 + stmtIdx)}) không có đáp án`, 'warn');
+            log(`⚠️ Câu Đ/S ${tfCount} ý ${String.fromCharCode(97 + stmtIdx)}) thiếu đáp án`, 'warn');
           }
-          
+
           html += `  <div class="tf-item" data-statement="${stmtIdx}"${correct !== undefined ? ` data-answer="${correct}"` : ''}>\n`;
           html += `    <span class="tf-stmt">${esc(st.text)}</span>\n`;
           html += `    <span class="tf-btns">\n`;
@@ -660,12 +760,12 @@
         shortCount++;
         const qid = 'sa' + shortCount;
         const correctAns = answers.short[shortCount];
-        
+
         if (!correctAns) {
           log(`⚠️ Câu trả lời ngắn ${shortCount} không có đáp án`, 'warn');
         }
 
-        let html = `<div class="question" data-id="${qid}" data-type="short"${correctAns ? ` data-answer="${esc(correctAns)}"` : ''}>\n`;
+        let html = `<div class="question" data-id="${qid}" data-type="short"${correctAns ? ` data-answer="${esc(correctAns)}"` : ''} data-points="${pShort}">\n`;
         html += `  <div class="q-text">${esc(q.text)}</div>\n`;
         html += `  <input type="text" class="short-answer" placeholder="Nhập đáp án..." />\n`;
         html += `</div>`;
@@ -675,12 +775,7 @@
 
     return {
       html: output.join('\n\n'),
-      stats: {
-        choice: qCount,
-        tf: tfCount,
-        short: shortCount,
-        total: qCount + tfCount + shortCount
-      }
+      stats: { choice: qCount, tf: tfCount, short: shortCount, total: qCount + tfCount + shortCount }
     };
   }
 
@@ -690,7 +785,7 @@
   $('convertBtn').addEventListener('click', () => {
     const cHtml = $('inputC').value.trim();
     const dHtml = $('inputD').value.trim();
-    
+
     $('debugPanel').innerHTML = '';
     log('Bắt đầu chuyển đổi...');
 
@@ -701,9 +796,8 @@
     }
 
     try {
-      // Parse file C
       const questions = parseFileC(cHtml);
-      log(`📄 File C: Tìm thấy ${questions.length} câu hỏi`);
+      log(`📄 File C: ${questions.length} câu hỏi`);
       log(`   - Choice: ${questions.filter(q => q.type === 'choice').length}`);
       log(`   - True/False: ${questions.filter(q => q.type === 'truefalse').length}`);
       log(`   - Short: ${questions.filter(q => q.type === 'short').length}`);
@@ -714,37 +808,32 @@
         return;
       }
 
-      // Parse file D
+      // Cập nhật số câu
+      updateQuestionCounts(questions);
+
       const answers = parseFileD(dHtml);
       log(`✅ File D: ${Object.keys(answers.choice).length} đáp án trắc nghiệm`);
       log(`✅ File D: ${Object.keys(answers.truefalse).length} câu đúng/sai`);
       log(`✅ File D: ${Object.keys(answers.short).length} đáp án trả lời ngắn`);
 
-      // Chuyển đổi
       const result = convert(questions, answers);
       log(`🎉 Chuyển đổi thành công: ${result.stats.total} câu`);
 
-      // Hiển thị output
       $('outputBox').textContent = result.html;
-      
-      // Stats
+
       $('statChoice').textContent = result.stats.choice;
       $('statTF').textContent = result.stats.tf;
       $('statShort').textContent = result.stats.short;
       $('statTotal').textContent = result.stats.total;
       $('statsBox').style.display = 'flex';
 
-      // Enable buttons
       $('copyBtn').disabled = false;
       $('downloadBtn').disabled = false;
 
-      // Preview
       renderPreview(questions, answers);
-
-      // Switch to output tab
       switchTab('output');
 
-      toast(`✅ Đã chuyển đổi ${result.stats.total} câu hỏi!`, 'success');
+      toast(`✅ Đã chuyển đổi ${result.stats.total} câu!`, 'success');
     } catch (err) {
       console.error(err);
       log('❌ Lỗi: ' + err.message, 'error');
@@ -795,18 +884,17 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // NÚT COPY / DOWNLOAD
+  // COPY / DOWNLOAD
   // ═══════════════════════════════════════════════════════════
   $('copyBtn').addEventListener('click', async () => {
     const html = $('outputBox').textContent;
-    if (!html) { toast('Chưa có nội dung để copy', 'error'); return; }
+    if (!html) { toast('Chưa có nội dung', 'error'); return; }
 
     try {
       await navigator.clipboard.writeText(html);
       toast('📋 Đã copy HTML vào clipboard!', 'success');
       log('📋 Đã copy vào clipboard');
     } catch (err) {
-      // Fallback
       const range = document.createRange();
       range.selectNode($('outputBox'));
       window.getSelection().removeAllRanges();
@@ -832,9 +920,6 @@
     toast('💾 Đã tải file!', 'success');
   });
 
-  // ═══════════════════════════════════════════════════════════
-  // CLEAR
-  // ═══════════════════════════════════════════════════════════
   $('clearBtn').addEventListener('click', () => {
     $('inputC').value = '';
     $('inputD').value = '';
@@ -844,6 +929,8 @@
     $('statsBox').style.display = 'none';
     $('copyBtn').disabled = true;
     $('downloadBtn').disabled = true;
+    currentQuestions = { choice: 0, tf: 0, short: 0 };
+    updateQuestionCounts([]);
     toast('🗑 Đã xóa hết', 'info');
   });
 
@@ -862,7 +949,7 @@
   });
 
   // ═══════════════════════════════════════════════════════════
-  // LOAD SAMPLE
+  // SAMPLE
   // ═══════════════════════════════════════════════════════════
   $('loadSampleBtn').addEventListener('click', () => {
     $('inputC').value = `<!DOCTYPE html>
@@ -871,7 +958,7 @@
 <h1>Đề kiểm tra môn Vật lý</h1>
 <p class="ma-de">Mã đề 0201</p>
 
-<h2>I. PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn</h2>
+<h2>I. PHẦN I</h2>
 
 <div class="cau">
   <p><strong>Câu 1.</strong> Một vật dao động tắt dần có các đại lượng giảm liên tục theo thời gian là</p>
@@ -893,7 +980,7 @@
   </div>
 </div>
 
-<h2>II. PHẦN II. Câu trắc nghiệm đúng sai</h2>
+<h2>II. PHẦN II</h2>
 
 <div class="cau cau-dung-sai">
   <p><strong>Câu 1.</strong> Một vật dao động điều hòa với biên độ 5 cm và tần số góc là 10 rad/s.</p>
@@ -905,7 +992,7 @@
   </div>
 </div>
 
-<h2>III. PHẦN III. Câu trắc nghiệm trả lời ngắn</h2>
+<h2>III. PHẦN III</h2>
 
 <div class="cau cau-tra-loi-ngan">
   <p><strong>Câu 1.</strong> Một con lắc lò xo có độ cứng 20 N/m, chu kì 2 s. Khi vật qua vị trí có li độ 3π cm thì động năng là bao nhiêu J?</p>
@@ -920,7 +1007,7 @@
     $('inputD').value = `<!DOCTYPE html>
 <html><head><meta charset="UTF-8"><title>Đáp án</title></head>
 <body>
-<h1>Đáp án đề kiểm tra</h1>
+<h1>Đáp án</h1>
 
 <h2>I. PHẦN I</h2>
 <table>
@@ -955,6 +1042,7 @@
 </body></html>`;
 
     toast('📥 Đã load ví dụ mẫu', 'success');
+    log('📥 Đã load ví dụ. Bấm "Chuyển đổi" để test.');
   });
 
   log('Tool sẵn sàng. Dán nội dung file c.html và d.html rồi bấm "Chuyển đổi".');
