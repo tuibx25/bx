@@ -462,7 +462,6 @@
   }
   .comment-box strong { color: #8B4513; }
 
-  /* QUIZ OVERLAY */
   #countdownOverlay {
     position: fixed; inset: 0;
     background: #F5F5F5;
@@ -509,7 +508,6 @@
     background: #FFF;
   }
 
-  /* MODE TOGGLE */
   .mode-toggle {
     display: flex;
     gap: 10px;
@@ -535,7 +533,6 @@
   .mode-option .mode-title { font-weight: 700; color: #8B4513; margin-bottom: 4px; font-size: 15px; }
   .mode-option .mode-desc { font-size: 12px; color: #666; }
 
-  /* HTML PREVIEW */
   .html-preview {
     background: #FFF;
     border: 1px solid #D3D3D3;
@@ -557,7 +554,6 @@
   .html-preview .tf-item { padding: 6px 8px; margin: 4px 0; background: #FFF; border-radius: 4px; }
   .html-preview .short-answer { width: 100%; padding: 6px 10px; border: 1px solid #D3D3D3; border-radius: 4px; }
 
-  /* VIEW LOG SUMMARY */
   .viewlog-summary {
     background: #F5F8FF;
     border-left: 4px solid #0066CC;
@@ -576,7 +572,6 @@
   }
   .viewlog-row:last-child { border-bottom: none; }
 
-  /* SECTION HEADERS */
   .section-header {
     color: #FFF;
     padding: 14px 20px;
@@ -643,7 +638,7 @@
       </select>
       <select id="filterType">
         <option value="all">📚 Tất cả loại</option>
-        <option value="inline">🎯 Chấm điểm tự động</option>
+        <option value="inline">🎯 Đề có điểm</option>
         <option value="external">🔗 Luyện tập (file ngoài)</option>
       </select>
       <span class="count" id="resultCount"></span>
@@ -866,7 +861,6 @@
     } catch (e) { return url; }
   }
 
-  // ⭐ PARSE HTML → MẢNG CÂU HỎI (có đọc data-points)
   function parseQuestionsHtml(htmlContent) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, 'text/html');
@@ -909,7 +903,6 @@
     return questions;
   }
 
-  // ⭐ SỬA 1: CHẤM ĐIỂM THEO data-points — KHÔNG QUY ĐỔI
   function gradeSubmission(template, studentAnswers) {
     let totalScore = 0;
     let maxScore = 0;
@@ -949,7 +942,6 @@
       }
     });
     
-    // ⭐ KHÔNG QUY ĐỔI — giữ nguyên điểm thô
     return { 
       score: Math.round(totalScore * 100) / 100,
       max: Math.round(maxScore * 100) / 100,
@@ -957,7 +949,6 @@
     };
   }
 
-  // ⭐ AUTO-PUBLISH
   async function autoPublishExpiredAssignments() {
     try {
       const now = Date.now();
@@ -1345,11 +1336,17 @@
     `;
   }
 
+  // ⭐ SỬA: Chỉ GV thấy badge phân loại đề
   function renderAssignmentRow(a) {
     const isExternal = a.mode === 'external';
-    const modeBadge = isExternal
-      ? '<span class="badge badge-external">🔗 Luyện tập</span>'
-      : '<span class="badge badge-inline">🎯 Chấm điểm</span>';
+    
+    // ⭐ Badge phân loại đề — CHỈ GV THẤY
+    const isTeacherView = currentProfile?.role === 'teacher';
+    const modeBadge = isTeacherView
+      ? (isExternal
+          ? '<span class="badge badge-external">🔗 Luyện tập</span>'
+          : '<span class="badge badge-inline">🎯 Đề có điểm</span>')
+      : '';
 
     let assignedBadge = '';
     let isAssignedToMe = false;
@@ -1919,7 +1916,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     await finishQuiz(0, Math.round(maxScore * 100) / 100, {}, {}, true);
   }
 
-  // ⭐ SỬA 2: LƯU autoScore + autoMax
   async function finishQuiz(score, total, answers, details, isTimeout) {
     if (!currentQuizSession) return;
     const session = currentQuizSession;
@@ -2020,7 +2016,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
                 <h3>${esc(a.assignmentTitle)}</h3>
                 <div>
                   <span class="badge badge-pending">Khối ${esc(a.grade)}</span>
-                  <span class="badge badge-inline">🎯 Chấm điểm</span>
                 </div>
               </div>
               ${list.map((s, i) => {
@@ -2074,7 +2069,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
                 <h3>${esc(a.assignmentTitle)}</h3>
                 <div>
                   <span class="badge badge-pending">Khối ${esc(a.grade)}</span>
-                  <span class="badge badge-external">🔗 Luyện tập</span>
                 </div>
               </div>
               <div class="text-sm mt-2">
@@ -2100,7 +2094,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     }
   }
 
-  // ⭐ SỬA 3: HS thấy /autoMax, GV thấy chi tiết
   async function showStudentDetail(sub) {
     try { await updateDoc(doc(db, 'submissions', sub.id), { studentViewed: true }); } catch (e) {}
 
@@ -2719,7 +2712,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         
         const modeBadge = isExternal
           ? '<span class="badge badge-external">🔗 Luyện tập</span>'
-          : '<span class="badge badge-inline">🎯 Chấm điểm</span>';
+          : '<span class="badge badge-inline">🎯 Đề có điểm</span>';
 
         const submitted = subs.filter(s => s.status === 'submitted');
         const publishBtn = !isExternal && submitted.length > 0 
@@ -2832,7 +2825,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     } catch (err) { wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`; }
   }
 
-  // ⭐ SỬA 4 + 5: Ô nhập điểm linh hoạt theo autoMax
   async function showGradeModal(s, a) {
     currentGradeSubmission = s;
     const maxScore = s.autoMax || 7;
@@ -2932,7 +2924,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     $('gradeScore').value = s.score ?? (s.autoScore ?? '');
     $('gradeComment').value = s.comment ?? '';
     
-    // ⭐ Cập nhật label + max theo autoMax
     $('gradeScoreLabel').textContent = `Điểm GV chấm (0 → ${maxScore})`;
     $('gradeScore').max = maxScore;
     
@@ -2942,7 +2933,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
   $('gradeCloseBtn').addEventListener('click', () => hide($('gradeModal')));
   $('gradeCancelBtn').addEventListener('click', () => hide($('gradeModal')));
 
-  // ⭐ SỬA 6: Validate điểm theo autoMax
   $('gradeSaveBtn').addEventListener('click', async () => {
     if (!currentGradeSubmission) return;
     const score = Number($('gradeScore').value);
