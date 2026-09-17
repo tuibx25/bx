@@ -144,7 +144,6 @@
     box-shadow: 0 0 0 2px rgba(139,90,43,0.15);
   }
   .form-group .hint { font-size: 12px; color: #666; margin-top: 4px; font-style: italic; }
-  .form-group .hint code { background: #F5F5DC; padding: 1px 5px; border-radius: 3px; font-style: normal; }
 
   .modal-overlay {
     position: fixed; inset: 0;
@@ -577,9 +576,8 @@
   }
   .viewlog-row:last-child { border-bottom: none; }
 
-  /* SECTION HEADERS CHO BÀI LÀM */
+  /* SECTION HEADERS */
   .section-header {
-    background: linear-gradient(135deg, #8B5A2B 0%, #8B4513 100%);
     color: #FFF;
     padding: 14px 20px;
     border-radius: 8px;
@@ -587,15 +585,9 @@
     font-weight: 700;
     font-size: 16px;
   }
-  .section-header.part-1 {
-    background: linear-gradient(135deg, #8B5A2B 0%, #8B4513 100%);
-  }
-  .section-header.part-2 {
-    background: linear-gradient(135deg, #0066CC 0%, #004488 100%);
-  }
-  .section-header.part-3 {
-    background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
-  }
+  .section-header.part-1 { background: linear-gradient(135deg, #8B5A2B 0%, #8B4513 100%); }
+  .section-header.part-2 { background: linear-gradient(135deg, #0066CC 0%, #004488 100%); }
+  .section-header.part-3 { background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%); }
   .section-note {
     font-style: italic;
     color: #555;
@@ -757,8 +749,8 @@
     <div id="gradeInfo"></div>
     <div class="row" style="margin-top:16px; padding-top:16px; border-top:1px solid #D3D3D3;">
       <div class="form-group" style="flex:1; min-width:150px;">
-        <label>Điểm (0-10)</label>
-        <input type="number" id="gradeScore" min="0" max="10" step="0.25" style="width:100%;" />
+        <label id="gradeScoreLabel">Điểm GV chấm</label>
+        <input type="number" id="gradeScore" min="0" step="0.25" style="width:100%;" />
       </div>
       <div class="form-group" style="flex:3; min-width:250px;">
         <label>Nhận xét</label>
@@ -807,17 +799,6 @@
       <button class="btn btn-light" id="addLessonCancel">Hủy</button>
       <button class="btn btn-primary" id="addLessonConfirm">✅ Tạo</button>
     </div>
-  </div>
-</div>
-
-<!-- MODAL VIEW LOG DETAIL -->
-<div id="viewLogModal" class="modal-overlay hidden">
-  <div class="modal modal-large">
-    <div class="space-between mb-2">
-      <h2 id="viewLogTitle">📊 Lịch sử truy cập</h2>
-      <button class="btn btn-light btn-sm" id="viewLogCloseBtn">✖ Đóng</button>
-    </div>
-    <div id="viewLogBody"></div>
   </div>
 </div>
 
@@ -885,7 +866,7 @@
     } catch (e) { return url; }
   }
 
-  // ⭐ PARSE HTML → MẢNG CÂU HỎI
+  // ⭐ PARSE HTML → MẢNG CÂU HỎI (có đọc data-points)
   function parseQuestionsHtml(htmlContent) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, 'text/html');
@@ -928,7 +909,7 @@
     return questions;
   }
 
-  // ⭐ CHẤM ĐIỂM THEO data-points
+  // ⭐ SỬA 1: CHẤM ĐIỂM THEO data-points — KHÔNG QUY ĐỔI
   function gradeSubmission(template, studentAnswers) {
     let totalScore = 0;
     let maxScore = 0;
@@ -968,13 +949,10 @@
       }
     });
     
-    const finalScore = maxScore > 0 ? Math.round((totalScore / maxScore) * 10 * 100) / 100 : 0;
-    
+    // ⭐ KHÔNG QUY ĐỔI — giữ nguyên điểm thô
     return { 
-      score: finalScore,
-      max: 10,
-      rawScore: Math.round(totalScore * 100) / 100,
-      rawMax: Math.round(maxScore * 100) / 100,
+      score: Math.round(totalScore * 100) / 100,
+      max: Math.round(maxScore * 100) / 100,
       details 
     };
   }
@@ -1452,7 +1430,7 @@
     `;
   }
 
-  // ==================== EXTERNAL ASSIGNMENT ====================
+  // ==================== EXTERNAL ====================
   async function openExternalAssignment(a) {
     if (!currentUser) { toast('Vui lòng đăng nhập', 'error'); openAuthModal('login'); return; }
     
@@ -1584,7 +1562,7 @@
 
   $('htmlCloseBtn').addEventListener('click', closeEssayModal);
 
-  // ==================== QUIZ INLINE ====================
+  // ==================== QUIZ ====================
   async function openStartQuizModal(a) {
     if (!currentUser) { toast('Vui lòng đăng nhập', 'error'); openAuthModal('login'); return; }
     if (currentProfile?.role === 'teacher') { toast('GV không làm bài', 'error'); return; }
@@ -1604,7 +1582,7 @@
       <div class="content" style="background:#F5F5DC; padding:12px; border-radius:6px;">
         <strong>${esc(a.title)}</strong><br>
         <span style="font-size:13px; color:#555;">Lần ${attempt}/${maxAttempts}</span><br>
-        <div style="margin-top:10px;">⏱ ${esc(a.duration || 25)} phút • 🎯 Điểm tối đa: 10</div>
+        <div style="margin-top:10px;">⏱ ${esc(a.duration || 25)} phút</div>
       </div>
     `;
     show($('startQuizModal'));
@@ -1650,7 +1628,7 @@
         studentClass: currentProfile.class || '',
         answer: '[Đang làm]',
         autoScore: null,
-        autoTotal: 10,
+        autoMax: null,
         answers: null,
         score: null, comment: '',
         status: 'in_progress',
@@ -1683,19 +1661,16 @@
     }
   });
 
-  // ⭐ SHOW QUIZ INLINE VỚI SECTION HEADERS
   function showQuizInline(a, questions) {
     const container = document.getElementById('quizFrameContainer');
     if (!container) return;
     
-    // Nhóm theo phần
     const part1 = questions.filter(q => q.type === 'choice');
     const part2 = questions.filter(q => q.type === 'truefalse');
     const part3 = questions.filter(q => q.type === 'short');
     
     let questionsHtml = '';
     
-    // PHẦN I
     if (part1.length > 0) {
       questionsHtml += `<div class="section-header part-1">I. PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn</div>\n`;
       questionsHtml += `<p class="section-note">(Thí sinh trả lời từ câu 1 đến câu ${part1.length}. Mỗi câu hỏi thí sinh chỉ chọn một phương án)</p>\n`;
@@ -1712,7 +1687,6 @@
       });
     }
     
-    // PHẦN II
     if (part2.length > 0) {
       questionsHtml += `<div class="section-header part-2">II. PHẦN II. Câu trắc nghiệm đúng sai</div>\n`;
       questionsHtml += `<p class="section-note">(Thí sinh trả lời từ câu 1 đến câu ${part2.length}. Trong mỗi ý a), b), c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai)</p>\n`;
@@ -1735,7 +1709,6 @@
       });
     }
     
-    // PHẦN III
     if (part3.length > 0) {
       questionsHtml += `<div class="section-header part-3">III. PHẦN III. Câu trắc nghiệm trả lời ngắn</div>\n`;
       questionsHtml += `<p class="section-note">(Thí sinh trả lời từ câu 1 đến câu ${part3.length})</p>\n`;
@@ -1942,9 +1915,11 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
 
   async function autoSubmitOnTimeout() {
     if (!currentQuizSession) return;
-    await finishQuiz(0, 10, {}, {}, true);
+    const maxScore = currentQuizSession.template.questions.reduce((s, q) => s + parseFloat(q.points || 1), 0);
+    await finishQuiz(0, Math.round(maxScore * 100) / 100, {}, {}, true);
   }
 
+  // ⭐ SỬA 2: LƯU autoScore + autoMax
   async function finishQuiz(score, total, answers, details, isTimeout) {
     if (!currentQuizSession) return;
     const session = currentQuizSession;
@@ -1956,8 +1931,12 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     try {
       await updateDoc(doc(db, 'submissions', session.attemptId), {
         answer: isTimeout ? '[Hết giờ - tự động nộp]' : `[Đã nộp] ${Object.keys(answers).length} câu`,
-        autoScore: score, autoTotal: 10, answers, details,
-        status: 'submitted', submittedAt: serverTimestamp(),
+        autoScore: score,
+        autoMax: total,
+        answers: answers,
+        details: details,
+        status: 'submitted',
+        submittedAt: serverTimestamp(),
         isLate, isTimeout,
         timeSpent: Math.round((submittedAt - session.startedAt) / 1000)
       });
@@ -2057,6 +2036,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
 
                 const showScore = s.status === 'published' || s.status === 'graded';
                 const finalScore = s.score != null ? s.score : s.autoScore;
+                const maxScore = s.autoMax || 7;
                 
                 return `
                   <div class="submission ${s.status === 'graded' || s.status === 'published' ? 'graded' : ''}">
@@ -2068,7 +2048,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
                     ${s.timeSpent ? `<div class="text-sm">⏱ ${Math.floor(s.timeSpent/60)}p ${s.timeSpent%60}s</div>` : ''}
                     ${showScore ? `
                       <div class="mt-2" style="background:#E8F5E9; padding:12px; border-radius:6px; border-left:4px solid #0066CC;">
-                        <strong>Điểm:</strong> <span class="score-display">${esc(finalScore)}/10</span>
+                        <strong>Điểm:</strong> <span class="score-display">${esc(finalScore)}/${esc(maxScore)}</span>
                         ${s.comment ? `<div class="text-sm mt-2">💬 <strong>Nhận xét:</strong> ${esc(s.comment)}</div>` : ''}
                       </div>
                     ` : ''}
@@ -2120,11 +2100,12 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     }
   }
 
-  // ⭐ HS chỉ thấy tổng điểm, GV thấy chi tiết
+  // ⭐ SỬA 3: HS thấy /autoMax, GV thấy chi tiết
   async function showStudentDetail(sub) {
     try { await updateDoc(doc(db, 'submissions', sub.id), { studentViewed: true }); } catch (e) {}
 
     const finalScore = sub.score != null ? sub.score : sub.autoScore;
+    const maxScore = sub.autoMax || 7;
 
     let body = `
       <div class="detail-header">
@@ -2136,7 +2117,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
           </div>
         </div>
         <div class="score-box">
-          <div class="score">${esc(finalScore)}/10</div>
+          <div class="score">${esc(finalScore)}/${esc(maxScore)}</div>
           <div class="label">Điểm trắc nghiệm</div>
         </div>
       </div>
@@ -2148,8 +2129,8 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
 
     body += `
       <div class="alert alert-info" style="margin-top:20px;">
-        ℹ️ <strong>Lưu ý:</strong> Điểm trên là <strong>điểm phần trắc nghiệm</strong>. 
-        Điểm phần tự luận (nếu có) sẽ được giáo viên chấm riêng.
+        ℹ️ <strong>Lưu ý:</strong> Đây là <strong>điểm phần trắc nghiệm</strong> (tối đa ${esc(maxScore)} điểm). 
+        Điểm phần tự luận được giáo viên chấm riêng.
       </div>
     `;
 
@@ -2311,7 +2292,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
             </div>
             <div class="form-group">
               <label>📋 Dán HTML câu hỏi</label>
-              <textarea id="addQuestionsHtml" placeholder="<div class=&quot;question&quot; data-id=&quot;q1&quot;...></div>" style="min-height: 250px; font-family: monospace; font-size: 12px;"></textarea>
+              <textarea id="addQuestionsHtml" placeholder='<div class="question" data-id="q1"...></div>' style="min-height: 250px; font-family: monospace; font-size: 12px;"></textarea>
               <button class="btn btn-light btn-sm" type="button" id="previewQuestionsBtn" style="margin-top:8px;">👁 Xem trước</button>
             </div>
             <div id="questionsPreview" class="hidden">
@@ -2431,7 +2412,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       let previewHtml = `<div class="alert alert-success">✅ Parse được ${questions.length} câu</div>`;
       
       if (part1.length > 0) {
-        previewHtml += `<h4 style="color:#8B4513;margin-top:12px;">I. Trắc nghiệm (${part1.length})</div>`;
+        previewHtml += `<h4 style="color:#8B4513;margin-top:12px;">I. Trắc nghiệm (${part1.length})</h4>`;
         part1.forEach((q, i) => {
           previewHtml += `<div class="question"><div class="q-text">Câu ${i+1}. ${esc(q.text)} <span style="color:#0066CC;">[ĐA: ${q.correctAnswer}, ${q.points}đ]</span></div>`;
           q.options.forEach(o => previewHtml += `<div class="opt">${o.value}. ${esc(o.text)}</div>`);
@@ -2567,7 +2548,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         payload.questionsHtml = questionsHtml;
         payload.duration = Number($('addQuizDuration').value) || 25;
         payload.maxAttempts = Number($('addQuizMaxAttempts').value) || 3;
-        payload.maxScore = 10;
         
         toast(`✅ Đã parse ${questions.length} câu hỏi`, 'success');
       } else {
@@ -2577,7 +2557,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         payload.externalUrl = externalUrl;
         payload.maxAttempts = Number($('addExternalMaxAttempts').value) || 0;
         payload.desc = $('addExternalDesc').value.trim();
-        payload.maxScore = 0;
       }
 
       const classesStr = $('addAssignClasses').value.trim();
@@ -2769,13 +2748,14 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
           `;
         } else if (a.type === 'quiz') {
           statsSection = subs.length ? subs.map(s => {
-            const autoInfo = s.autoScore != null ? `<div class="text-sm" style="color:#004488;">🎯 ${esc(s.autoScore)}/10</div>` : '';
+            const maxScore = s.autoMax || 7;
+            const autoInfo = s.autoScore != null ? `<div class="text-sm" style="color:#004488;">🎯 ${esc(s.autoScore)}/${esc(maxScore)}</div>` : '';
             const statusBadge = {
               in_progress: '<span class="badge badge-inprogress">🔄 Đang làm</span>',
               abandoned: '<span class="badge badge-pending">⚠️ Hủy</span>',
               submitted: '<span class="badge badge-pending">⏳ Chưa công bố</span>',
               published: '<span class="badge badge-published">✅ Đã công bố</span>',
-              graded: `<span class="badge badge-graded">Điểm: ${esc(s.score)}</span>`
+              graded: `<span class="badge badge-graded">Điểm: ${esc(s.score)}/${esc(maxScore)}</span>`
             }[s.status] || '';
 
             return `
@@ -2852,8 +2832,10 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     } catch (err) { wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`; }
   }
 
+  // ⭐ SỬA 4 + 5: Ô nhập điểm linh hoạt theo autoMax
   async function showGradeModal(s, a) {
     currentGradeSubmission = s;
+    const maxScore = s.autoMax || 7;
     
     let body = `
       <div class="detail-header">
@@ -2862,7 +2844,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
           <div class="meta">${s.studentClass ? `Lớp ${esc(s.studentClass)} • ` : ''}📅 ${fmtDate(s.submittedAt || s.startedAt)}${s.timeSpent ? ` • ⏱ ${Math.floor(s.timeSpent/60)}p ${s.timeSpent%60}s` : ''}</div>
         </div>
         <div class="score-box">
-          <div class="score">${esc(s.autoScore != null ? s.autoScore : '?')}/10</div>
+          <div class="score">${esc(s.autoScore != null ? s.autoScore : '?')}/${esc(maxScore)}</div>
           <div class="label">Điểm tự chấm</div>
         </div>
       </div>
@@ -2949,22 +2931,41 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     $('gradeInfo').innerHTML = body;
     $('gradeScore').value = s.score ?? (s.autoScore ?? '');
     $('gradeComment').value = s.comment ?? '';
+    
+    // ⭐ Cập nhật label + max theo autoMax
+    $('gradeScoreLabel').textContent = `Điểm GV chấm (0 → ${maxScore})`;
+    $('gradeScore').max = maxScore;
+    
     show($('gradeModal'));
   }
 
   $('gradeCloseBtn').addEventListener('click', () => hide($('gradeModal')));
   $('gradeCancelBtn').addEventListener('click', () => hide($('gradeModal')));
 
+  // ⭐ SỬA 6: Validate điểm theo autoMax
   $('gradeSaveBtn').addEventListener('click', async () => {
     if (!currentGradeSubmission) return;
     const score = Number($('gradeScore').value);
-    if (isNaN(score) || score < 0 || score > 10) { toast('Điểm 0-10', 'error'); return; }
+    const maxScore = currentGradeSubmission.autoMax || 7;
+    
+    if (isNaN(score) || score < 0) {
+      toast(`Điểm phải từ 0 đến ${maxScore}`, 'error');
+      return;
+    }
+    if (score > maxScore) {
+      toast(`Điểm không được vượt quá ${maxScore}`, 'error');
+      return;
+    }
+    
     try {
       await updateDoc(doc(db, 'submissions', currentGradeSubmission.id), {
-        score, comment: $('gradeComment').value.trim(),
-        status: 'graded', gradedAt: serverTimestamp(), gradedBy: currentUser.uid
+        score, 
+        comment: $('gradeComment').value.trim(),
+        status: 'graded', 
+        gradedAt: serverTimestamp(), 
+        gradedBy: currentUser.uid
       });
-      toast('✅ Đã lưu!', 'success');
+      toast(`✅ Đã lưu! Điểm: ${score}/${maxScore}`, 'success');
       hide($('gradeModal'));
       loadTeacherAssignments();
     } catch (err) { toast('Lỗi: ' + err.message, 'error'); }
