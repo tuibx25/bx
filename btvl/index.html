@@ -592,7 +592,6 @@
     padding-left: 4px;
   }
 
-  /* ⭐ SETTINGS TOGGLE */
   .toggle-switch {
     display: inline-flex;
     align-items: center;
@@ -650,8 +649,8 @@
 
 <div class="container">
   <div class="tabs" id="mainTabs">
-    <button class="tab-btn active" data-tab="view">📖 Xem Bài Tập</button>
-    <button class="tab-btn" data-tab="submit">📊 Kết Quả Của Tôi</button>
+    <button class="tab-btn active" data-tab="view" id="viewTabBtn">📖 Xem Bài Tập</button>
+    <button class="tab-btn" data-tab="submit" id="submitTabBtn">📊 Kết Quả Của Tôi</button>
     <button class="tab-btn hidden" data-tab="teacher" id="teacherTabBtn">👨‍🏫 Quản Lý (GV)</button>
   </div>
 
@@ -887,7 +886,6 @@
   let mySubsCache = [];
   let myViewLogsCache = [];
 
-  // ⭐ SETTINGS TOÀN CỤC
   let globalSettings = { allowChangeClass: false };
 
   const $ = (id) => document.getElementById(id);
@@ -939,7 +937,6 @@
     } catch (e) { return url; }
   }
 
-  // ⭐ LOAD SETTINGS
   async function loadGlobalSettings() {
     try {
       const snap = await getDoc(doc(db, 'settings', 'system'));
@@ -956,7 +953,6 @@
     }
   }
 
-  // ⭐ LƯU SETTINGS
   async function saveGlobalSettings(partial) {
     if (currentProfile?.role !== 'teacher') {
       toast('Chỉ GV mới đổi được cài đặt', 'error');
@@ -1182,7 +1178,6 @@
     }
   });
 
-  // ⭐ XỬ LÝ ĐỔI LỚP
   $('changeClassBtn').addEventListener('click', () => {
     if (!currentUser || currentProfile?.role !== 'student') return;
     if (!globalSettings.allowChangeClass) {
@@ -1248,26 +1243,46 @@
         try { await updateDoc(doc(db, 'users', user.uid), { emailVerified: user.emailVerified }); currentProfile.emailVerified = user.emailVerified; } catch (e) {}
       }
 
-      // ⭐ LOAD SETTINGS trước khi render
       await loadGlobalSettings();
 
       const roleLabel = currentProfile.role === 'teacher' ? 'Giáo viên' : 'Học sinh';
       $('userLabel').textContent = `${currentProfile.name || user.email} (${roleLabel})`;
       $('authBtn').textContent = 'Đăng xuất';
       
+      // ⭐ PHÂN QUYỀN GV/HS
       if (currentProfile.role === 'teacher') {
+        // ⭐ Ẩn 2 tab HS
+        hide($('viewTabBtn'));
+        hide($('submitTabBtn'));
+        
         show($('teacherTabBtn'));
         hide($('verifyBanner'));
         show($('gradeTabsWrap'));
         hide($('changeClassBtn'));
         hide($('hsGradeInfo'));
+        
+        // ⭐ Tự chuyển sang tab Quản Lý
+        document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        $('teacherTabBtn').classList.add('active');
+        $('tab-teacher').classList.add('active');
+        
         renderTeacherTab();
       } else {
+        // ⭐ Hiện 2 tab HS
+        show($('viewTabBtn'));
+        show($('submitTabBtn'));
+        
         hide($('teacherTabBtn'));
         $('tab-teacher').innerHTML = '';
         hide($('gradeTabsWrap'));
         
-        // ⭐ Chỉ hiện nút Đổi lớp nếu GV cho phép
+        // ⭐ Đảm bảo tab Xem Bài Tập đang active
+        document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        $('viewTabBtn').classList.add('active');
+        $('tab-view').classList.add('active');
+        
         if (globalSettings.allowChangeClass) {
           show($('changeClassBtn'));
         } else {
@@ -1305,12 +1320,23 @@
       currentProfile = null;
       $('userLabel').textContent = 'Khách (chưa đăng nhập)';
       $('authBtn').textContent = 'Đăng nhập';
+      
+      // ⭐ Hiện 2 tab HS
+      show($('viewTabBtn'));
+      show($('submitTabBtn'));
+      
       hide($('teacherTabBtn'));
       hide($('verifyBanner'));
       hide($('changeClassBtn'));
       show($('gradeTabsWrap'));
       hide($('hsGradeInfo'));
       $('tab-teacher').innerHTML = '';
+      
+      // ⭐ Đảm bảo tab Xem Bài Tập đang active
+      document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      $('viewTabBtn').classList.add('active');
+      $('tab-view').classList.add('active');
     }
     
     await autoPublishExpiredAssignments();
@@ -1365,7 +1391,7 @@
   $('searchInput').addEventListener('input', () => renderAssignmentsFiltered());
   $('filterStatus').addEventListener('change', () => renderAssignmentsFiltered());
   $('filterType').addEventListener('change', () => renderAssignmentsFiltered());
-    // ==================== LOAD ASSIGNMENTS ====================
+  // ==================== LOAD ASSIGNMENTS ====================
   async function loadAssignments() {
     const list = $('assignmentsList');
     list.innerHTML = '<div class="empty">Đang tải...</div>';
@@ -1379,12 +1405,10 @@
       const aSnap = await getDocs(aq);
       let items = aSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-      // ⭐ LỌC ĐỀ ẨN — HS không thấy, GV vẫn thấy
       if (currentProfile?.role !== 'teacher') {
         items = items.filter(a => !a.hidden);
       }
 
-      // ⭐ LỌC THEO GIAO BÀI (chuẩn hoá lớp)
       if (currentProfile?.role === 'student' && currentUser) {
         const myClassNorm = normalizeClass(currentProfile.class);
         items = items.filter(a => {
@@ -1549,7 +1573,6 @@
   function renderAssignmentRow(a) {
     const isExternal = a.mode === 'external';
     
-    // ⭐ Badge phân loại — CHỈ GV THẤY
     const isTeacherView = currentProfile?.role === 'teacher';
     const modeBadge = isTeacherView
       ? (isExternal
@@ -1557,7 +1580,6 @@
           : '<span class="badge badge-inline">🎯 Đề có điểm</span>')
       : '';
 
-    // ⭐ Badge "Đã ẩn" — chỉ GV thấy
     const hiddenBadge = (isTeacherView && a.hidden) 
       ? '<span class="badge badge-hidden">🙈 Đã ẩn</span>' 
       : '';
@@ -2194,7 +2216,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     loadAssignments();
     loadMySubmissions();
   });
-    // ==================== MY SUBMISSIONS ====================
+  // ==================== MY SUBMISSIONS ====================
   async function loadMySubmissions() {
     const wrap = $('mySubmissions');
     if (!currentUser || currentProfile?.role === 'teacher') {
@@ -2601,7 +2623,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       </div>
     `;
 
-    // ⭐ Gắn sự kiện toggle Allow Change Class
     const toggleEl = $('allowChangeClassToggle');
     if (toggleEl) {
       toggleEl.checked = globalSettings.allowChangeClass === true;
@@ -3036,7 +3057,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         `;
       }).join('');
 
-      // ⭐ Toggle Ẩn/Hiện đề
       wrap.querySelectorAll('[data-toggle-hide]').forEach(btn => {
         btn.addEventListener('click', async () => {
           const aId = btn.dataset.toggleHide;
