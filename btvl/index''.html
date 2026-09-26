@@ -1140,160 +1140,6 @@
     padding-top: 10px;
     border-top: 1px dashed #E0E0E0;
   }
-
-  /* ⭐ LESSON TREE — Quản lý bài học dạng cây */
-  .lesson-tree-group {
-    background: #FFF;
-    border: 1px solid #D3D3D3;
-    border-radius: 10px;
-    margin-bottom: 12px;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  }
-  .lesson-tree-header {
-    background: linear-gradient(135deg, #8B5A2B 0%, #8B4513 100%);
-    color: #FFF;
-    padding: 14px 20px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    user-select: none;
-    transition: background 0.2s;
-  }
-  .lesson-tree-header:hover {
-    background: linear-gradient(135deg, #7A4B25 0%, #7A3A10 100%);
-  }
-  .lesson-tree-header .lt-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex: 1;
-    flex-wrap: wrap;
-  }
-  .lesson-tree-header .lt-icon {
-    font-size: 18px;
-  }
-  .lesson-tree-header .lt-name {
-    font-weight: 700;
-    font-size: 15px;
-  }
-  .lesson-tree-header .lt-count {
-    font-size: 13px;
-    opacity: 0.9;
-    background: rgba(255,255,255,0.2);
-    padding: 2px 10px;
-    border-radius: 12px;
-  }
-  .lesson-tree-header .lt-toggle {
-    font-size: 18px;
-    transition: transform 0.3s;
-  }
-  .lesson-tree-header.collapsed .lt-toggle {
-    transform: rotate(-90deg);
-  }
-  .lesson-tree-body {
-    max-height: 10000px;
-    overflow: hidden;
-    transition: max-height 0.4s ease;
-  }
-  .lesson-tree-body.collapsed {
-    max-height: 0;
-  }
-
-  .lesson-tree-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 12px 20px;
-    border-bottom: 1px solid #F0F0F0;
-    transition: background 0.15s;
-  }
-  .lesson-tree-row:last-child {
-    border-bottom: none;
-  }
-  .lesson-tree-row:hover {
-    background: #FAFAFA;
-  }
-  .lesson-tree-row .ltr-num {
-    flex-shrink: 0;
-    width: 32px;
-    height: 32px;
-    background: #F5F5DC;
-    color: #8B4513;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 13px;
-    border: 1px solid #D3D3D3;
-  }
-  .lesson-tree-row .ltr-info {
-    flex: 1;
-    min-width: 200px;
-  }
-  .lesson-tree-row .ltr-name {
-    font-weight: 600;
-    color: #000;
-    font-size: 14px;
-    margin-bottom: 2px;
-  }
-  .lesson-tree-row .ltr-desc {
-    font-size: 12px;
-    color: #777;
-    font-style: italic;
-  }
-  .lesson-tree-row .ltr-badges {
-    flex-shrink: 0;
-  }
-  .lesson-tree-row .ltr-badge {
-    display: inline-block;
-    background: #F0F0F0;
-    color: #666;
-    padding: 3px 10px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 600;
-  }
-  .lesson-tree-row .ltr-badge.has-assign {
-    background: #8B5A2B;
-    color: #FFF;
-  }
-  .lesson-tree-row .ltr-actions {
-    display: flex;
-    gap: 4px;
-    flex-shrink: 0;
-  }
-  .btn-icon {
-    width: 34px;
-    height: 34px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s;
-    font-family: inherit;
-  }
-  .btn-icon-edit {
-    background: #F5DEB3;
-    color: #8B4513;
-  }
-  .btn-icon-edit:hover {
-    background: #8B5A2B;
-    color: #FFF;
-  }
-  .btn-icon-danger {
-    background: #FBE9E7;
-    color: #c0392b;
-  }
-  .btn-icon-danger:hover {
-    background: #c0392b;
-    color: #FFF;
-  }
 </style>
 </head>
 <body>
@@ -1591,9 +1437,10 @@
   let teacherViewLogsCache = [];
   let teacherLessonsMapCache = {};
 
+  // ⭐ STATE CHO CLASS GRID
   let availableClassesByGrade = { '10': [], '11': [], '12': [] };
-  let selectedClasses = new Set();
-  let currentClassGridGrade = '10';
+  let selectedClasses = new Set();          // Set các lớp đã chọn (VD: "10A1")
+  let currentClassGridGrade = '10';         // Khối đang xem trong grid
 
   let globalSettings = { allowChangeClass: false };
 
@@ -3283,13 +3130,14 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
   $('studentDetailCloseBtn').addEventListener('click', () => hide($('studentDetailModal')));
 
   // ══════════════════════════════════════════════════════════════
-  // ⭐ CLASS GRID
+  // ⭐ CLASS GRID — Load danh sách lớp từ Firestore
   // ══════════════════════════════════════════════════════════════
   async function loadAvailableClasses() {
     try {
       const snap = await getDocs(collection(db, 'users'));
       const users = snap.docs.map(d => d.data()).filter(u => u.role === 'student');
 
+      // Đếm HS theo lớp
       const countMap = {};
       users.forEach(u => {
         if (u.class) {
@@ -3298,6 +3146,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         }
       });
 
+      // Group theo khối
       availableClassesByGrade = { '10': [], '11': [], '12': [] };
       Object.keys(countMap).forEach(cls => {
         const grade = getGradeFromClass(cls);
@@ -3309,6 +3158,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         }
       });
 
+      // Sắp xếp theo tên
       ['10', '11', '12'].forEach(g => {
         availableClassesByGrade[g].sort((a, b) => {
           const numA = parseInt(a.name.match(/\d+$/)?.[0] || 0);
@@ -3329,6 +3179,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
 
     const classes = availableClassesByGrade[currentClassGridGrade] || [];
 
+    // Update tab counts
     ['10', '11', '12'].forEach(g => {
       const count = (availableClassesByGrade[g] || []).length;
       const badge = $(`classTabCount${g}`);
@@ -3354,6 +3205,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       `;
     }).join('');
 
+    // Gắn sự kiện cho checkbox
     gridBody.querySelectorAll('input[type="checkbox"]').forEach(cb => {
       cb.addEventListener('change', (e) => {
         const cls = e.target.dataset.className;
@@ -3387,6 +3239,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       </span>
     `).join('');
 
+    // Gắn sự kiện nút "×"
     summaryList.querySelectorAll('.chip-remove').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -3398,6 +3251,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
   }
 
   function bindClassGridEvents() {
+    // Tab switching
     document.querySelectorAll('.class-grid-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.class-grid-tab').forEach(t => t.classList.remove('active'));
@@ -3407,6 +3261,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       });
     });
 
+    // Nút "Tất cả khối này"
     const selectAllBtn = $('classGridSelectAll');
     if (selectAllBtn) {
       selectAllBtn.addEventListener('click', () => {
@@ -3416,6 +3271,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       });
     }
 
+    // Nút "Bỏ chọn khối này"
     const deselectAllBtn = $('classGridDeselectAll');
     if (deselectAllBtn) {
       deselectAllBtn.addEventListener('click', () => {
@@ -3546,6 +3402,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
             </div>
           </div>
 
+          <!-- ⭐ GIAO BÀI — CHECKBOX GRID -->
           <div class="form-group" style="margin-top:14px;">
             <label style="font-weight:700; color:#8B4513; font-size:15px;">🎯 Giao bài cho ai?</label>
             <div class="hint" style="margin-bottom:10px; color:#555;">Tick chọn các lớp muốn giao bài. Chỉ hiện các lớp đã có học sinh.</div>
@@ -3654,6 +3511,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     $('showAddFormBtn').addEventListener('click', () => {
       $('addFormWrap').classList.toggle('hidden');
       if (!$('addFormWrap').classList.contains('hidden')) {
+        // Load danh sách lớp khi mở form
         loadAvailableClasses();
         bindClassGridEvents();
       }
@@ -4378,26 +4236,14 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     } catch (err) { toast('Lỗi: ' + err.message, 'error'); }
   });
 
-  // ⭐ LOAD LESSONS FOR TEACHER — DẠNG CÂY PHÂN CẤP
   async function loadLessonsForTeacher() {
     const wrap = $('lessonsList');
     const selectEl = $('addLesson');
     if (!wrap) return;
-    wrap.innerHTML = '<div class="empty">Đang tải...</div>';
     try {
       const snap = await getDocs(collection(db, 'lessons'));
       const lessons = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       lessons.sort((a, b) => (a.grade - b.grade) || (a.order || 0) - (b.order || 0));
-
-      // ⭐ Load số đề của mỗi bài
-      const aSnap = await getDocs(collection(db, 'assignments'));
-      const assignments = aSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-      const assignmentCountByLesson = {};
-      assignments.forEach(a => {
-        if (a.lessonId) {
-          assignmentCountByLesson[a.lessonId] = (assignmentCountByLesson[a.lessonId] || 0) + 1;
-        }
-      });
 
       if (selectEl) {
         selectEl.innerHTML = '<option value="">-- Chọn bài học --</option>' +
@@ -4409,171 +4255,37 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         return;
       }
 
-      // ⭐ Nhóm theo khối
       const byGrade = { 10: [], 11: [], 12: [] };
       lessons.forEach(l => { if (byGrade[l.grade]) byGrade[l.grade].push(l); });
 
       let html = '';
       [10, 11, 12].forEach(g => {
-        const gradeLessons = byGrade[g];
-        if (gradeLessons.length === 0) return;
-
-        const totalAssign = gradeLessons.reduce((s, l) => s + (assignmentCountByLesson[l.id] || 0), 0);
-
-        html += `
-          <div class="lesson-tree-group" data-grade="${g}">
-            <div class="lesson-tree-header lv1" data-grade-toggle="${g}">
-              <div class="lt-title">
-                <span class="lt-icon">📚</span>
-                <span class="lt-name">VẬT LÝ ${g}</span>
-                <span class="lt-count">${gradeLessons.length} bài học • ${totalAssign} đề</span>
+        if (byGrade[g].length === 0) return;
+        html += `<h4 style="color:#8B4513; margin: 14px 0 8px;">Vật Lý ${g}</h4>`;
+        html += byGrade[g].map(l => `
+          <div class="submission" style="margin-bottom:8px;">
+            <div class="space-between">
+              <div>
+                <strong>${esc(l.name)}</strong>
+                <div class="text-sm">${esc(l.description || '')}</div>
               </div>
-              <span class="lt-toggle">▼</span>
-            </div>
-            <div class="lesson-tree-body">
-              ${gradeLessons.map((l, idx) => {
-                const assignCount = assignmentCountByLesson[l.id] || 0;
-                return `
-                  <div class="lesson-tree-row">
-                    <div class="ltr-num">${idx + 1}</div>
-                    <div class="ltr-info">
-                      <div class="ltr-name">${esc(l.name)}</div>
-                      ${l.description ? `<div class="ltr-desc">${esc(l.description)}</div>` : ''}
-                    </div>
-                    <div class="ltr-badges">
-                      <span class="ltr-badge ${assignCount > 0 ? 'has-assign' : ''}">${assignCount} đề</span>
-                    </div>
-                    <div class="ltr-actions">
-                      <button class="btn-icon btn-icon-edit" data-edit-lesson="${l.id}" title="Sửa bài học">✏️</button>
-                      <button class="btn-icon btn-icon-danger" data-del-lesson="${l.id}" title="Xoá bài học">🗑</button>
-                    </div>
-                  </div>
-                `;
-              }).join('')}
+              <button class="btn btn-danger btn-sm" data-del-lesson="${l.id}">🗑 Xoá</button>
             </div>
           </div>
-        `;
+        `).join('');
       });
-
       wrap.innerHTML = html;
 
-      // ⭐ Toggle khối
-      wrap.querySelectorAll('[data-grade-toggle]').forEach(header => {
-        header.addEventListener('click', () => {
-          header.classList.toggle('collapsed');
-          const body = header.nextElementSibling;
-          if (body) body.classList.toggle('collapsed');
-        });
-      });
-
-      // ⭐ Xoá bài học
       wrap.querySelectorAll('[data-del-lesson]').forEach(btn => {
-        btn.addEventListener('click', async (e) => {
-          e.stopPropagation();
-          const lessonId = btn.dataset.delLesson;
-          const lesson = lessons.find(l => l.id === lessonId);
-          if (!lesson) return;
-
-          const assignCount = assignmentCountByLesson[lessonId] || 0;
-          let msg = `Xoá bài học "${lesson.name}"?`;
-          if (assignCount > 0) {
-            msg += `\n\n⚠️ Bài học này đang có ${assignCount} đề. Các đề vẫn được giữ nhưng sẽ chuyển sang "Chưa phân loại".`;
-          }
-          if (!confirm(msg)) return;
-
-          try {
-            await deleteDoc(doc(db, 'lessons', lessonId));
-            toast('✅ Đã xoá bài học', 'success');
-            loadLessonsForTeacher();
-            loadAssignments();
-          } catch (err) {
-            toast('Lỗi: ' + err.message, 'error');
-          }
+        btn.addEventListener('click', async () => {
+          if (!confirm('Xoá bài học?')) return;
+          await deleteDoc(doc(db, 'lessons', btn.dataset.delLesson));
+          toast('Đã xoá', 'success');
+          loadLessonsForTeacher();
+          loadAssignments();
         });
       });
-
-      // ⭐ Sửa bài học
-      wrap.querySelectorAll('[data-edit-lesson]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const lessonId = btn.dataset.editLesson;
-          const lesson = lessons.find(l => l.id === lessonId);
-          if (!lesson) return;
-          openEditLessonModal(lesson);
-        });
-      });
-
-    } catch (err) {
-      wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`;
-    }
-  }
-
-  // ⭐ MODAL SỬA BÀI HỌC
-  function openEditLessonModal(lesson) {
-    const existing = document.getElementById('editLessonModal');
-    if (existing) existing.remove();
-
-    const modal = document.createElement('div');
-    modal.id = 'editLessonModal';
-    modal.className = 'modal-overlay';
-    modal.innerHTML = `
-      <div class="modal">
-        <h2>✏️ Sửa Bài Học</h2>
-        <div class="form-group">
-          <label>Khối lớp</label>
-          <select id="editLessonGrade">
-            <option value="10" ${lesson.grade === '10' ? 'selected' : ''}>Vật Lý 10</option>
-            <option value="11" ${lesson.grade === '11' ? 'selected' : ''}>Vật Lý 11</option>
-            <option value="12" ${lesson.grade === '12' ? 'selected' : ''}>Vật Lý 12</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Tên bài học</label>
-          <input id="editLessonName" value="${esc(lesson.name || '')}" />
-        </div>
-        <div class="form-group">
-          <label>Mô tả</label>
-          <textarea id="editLessonDesc" style="min-height:60px;">${esc(lesson.description || '')}</textarea>
-        </div>
-        <div class="modal-actions">
-          <button class="btn btn-light" id="editLessonCancel">Hủy</button>
-          <button class="btn btn-primary" id="editLessonSave">💾 Lưu</button>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modal);
-
-    modal.querySelector('#editLessonCancel').addEventListener('click', () => modal.remove());
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) modal.remove();
-    });
-
-    modal.querySelector('#editLessonSave').addEventListener('click', async () => {
-      const newGrade = modal.querySelector('#editLessonGrade').value;
-      const newName = modal.querySelector('#editLessonName').value.trim();
-      const newDesc = modal.querySelector('#editLessonDesc').value.trim();
-
-      if (!newName) {
-        toast('Vui lòng nhập tên bài học', 'error');
-        return;
-      }
-
-      try {
-        await updateDoc(doc(db, 'lessons', lesson.id), {
-          grade: newGrade,
-          name: newName,
-          description: newDesc,
-          updatedAt: serverTimestamp()
-        });
-
-        toast('✅ Đã cập nhật bài học', 'success');
-        modal.remove();
-        loadLessonsForTeacher();
-        loadAssignments();
-      } catch (err) {
-        toast('Lỗi: ' + err.message, 'error');
-      }
-    });
+    } catch (err) { wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`; }
   }
 
   async function addAssignment() {
@@ -4622,8 +4334,10 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         payload.desc = $('addExternalDesc').value.trim();
       }
 
+      // ⭐ Lấy lớp từ checkbox grid
       payload.assignedClasses = Array.from(selectedClasses).sort();
       
+      // ⭐ Lấy email HS riêng (nếu có)
       const emailsStr = $('addAssignEmails').value.trim();
       payload.assignedTo = [];
       if (emailsStr) {
@@ -4640,6 +4354,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
 
       await addDoc(collection(db, 'assignments'), payload);
       
+      // Reset form
       $('addTitle').value = '';
       $('addQuestionsHtml').value = '';
       $('addExternalUrl').value = '';
@@ -4648,6 +4363,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       $('addAssignEmails').value = '';
       hide($('questionsPreview'));
       
+      // Reset chọn lớp
       selectedClasses.clear();
       renderClassGrid();
       
