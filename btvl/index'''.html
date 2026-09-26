@@ -195,7 +195,7 @@
     -moz-appearance: textfield;
   }
 
-  /* ⭐ CLASS GRID */
+  /* ⭐ CLASS GRID — CHECKBOX CHỌN LỚP */
   .class-grid-wrap {
     border: 1px solid #D3D3D3;
     border-radius: 8px;
@@ -382,164 +382,6 @@
   .class-selected-summary .empty-hint {
     color: #999;
     font-style: italic;
-  }
-
-  /* ⭐ SEARCHABLE SELECT */
-  .searchable-select {
-    position: relative;
-    width: 100%;
-  }
-  .searchable-select .ss-display {
-    width: 100%;
-    padding: 10px 40px 10px 12px;
-    border: 1px solid #D3D3D3;
-    border-radius: 6px;
-    font-size: 14px;
-    font-family: inherit;
-    background: #FFF;
-    color: #000;
-    cursor: pointer;
-  }
-  .searchable-select .ss-display:focus {
-    outline: none;
-    border-color: #8B5A2B;
-    box-shadow: 0 0 0 2px rgba(139,90,43,0.15);
-  }
-  .searchable-select .ss-display.has-value {
-    font-weight: 600;
-    color: #8B4513;
-  }
-  .searchable-select .ss-clear {
-    position: absolute;
-    top: 50%;
-    right: 32px;
-    transform: translateY(-50%);
-    background: #E0E0E0;
-    color: #666;
-    border: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 13px;
-    line-height: 1;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    font-family: inherit;
-    z-index: 2;
-  }
-  .searchable-select .ss-clear:hover {
-    background: #c0392b;
-    color: #FFF;
-  }
-  .searchable-select::after {
-    content: '▼';
-    position: absolute;
-    top: 50%;
-    right: 12px;
-    transform: translateY(-50%);
-    font-size: 10px;
-    color: #8B4513;
-    pointer-events: none;
-  }
-  .searchable-select .ss-dropdown {
-    position: absolute;
-    top: calc(100% + 4px);
-    left: 0;
-    right: 0;
-    background: #FFF;
-    border: 1px solid #8B5A2B;
-    border-radius: 8px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-    z-index: 100;
-    max-height: 400px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-  .searchable-select .ss-dropdown.hidden {
-    display: none;
-  }
-  .searchable-select .ss-search-wrap {
-    padding: 10px;
-    border-bottom: 1px solid #E0E0E0;
-    background: #FAFAFA;
-  }
-  .searchable-select .ss-search {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #D3D3D3;
-    border-radius: 6px;
-    font-size: 14px;
-    font-family: inherit;
-  }
-  .searchable-select .ss-search:focus {
-    outline: none;
-    border-color: #8B5A2B;
-    box-shadow: 0 0 0 2px rgba(139,90,43,0.15);
-  }
-  .searchable-select .ss-options {
-    overflow-y: auto;
-    max-height: 320px;
-    padding: 6px 0;
-  }
-  .searchable-select .ss-group-header {
-    padding: 8px 14px 4px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #8B4513;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    background: #FFF;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-  }
-  .searchable-select .ss-option {
-    padding: 8px 14px 8px 24px;
-    cursor: pointer;
-    font-size: 14px;
-    color: #333;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: background 0.12s;
-  }
-  .searchable-select .ss-option:hover,
-  .searchable-select .ss-option.highlighted {
-    background: #F5F5DC;
-  }
-  .searchable-select .ss-option.selected {
-    background: #F5DEB3;
-    font-weight: 700;
-    color: #8B4513;
-  }
-  .searchable-select .ss-option.selected::before {
-    content: '✓';
-    color: #8B5A2B;
-    font-weight: 900;
-    margin-left: -16px;
-    margin-right: 8px;
-  }
-  .searchable-select .ss-option .ss-num {
-    color: #999;
-    font-size: 12px;
-    min-width: 24px;
-  }
-  .searchable-select .ss-empty {
-    padding: 20px 14px;
-    text-align: center;
-    color: #999;
-    font-style: italic;
-    font-size: 13px;
-  }
-  .searchable-select .ss-option mark {
-    background: #FFE082;
-    color: #000;
-    font-weight: 700;
-    padding: 0 2px;
-    border-radius: 2px;
   }
 
   .modal-overlay {
@@ -1299,7 +1141,7 @@
     border-top: 1px dashed #E0E0E0;
   }
 
-  /* ⭐ LESSON TREE */
+  /* ⭐ LESSON TREE — Quản lý bài học dạng cây */
   .lesson-tree-group {
     background: #FFF;
     border: 1px solid #D3D3D3;
@@ -1752,12 +1594,6 @@
   let availableClassesByGrade = { '10': [], '11': [], '12': [] };
   let selectedClasses = new Set();
   let currentClassGridGrade = '10';
-
-  // ⭐ Searchable Select state
-  let _lessonsForSelect = [];
-  let currentLessonSelectSearch = '';
-  let currentLessonSelectOpen = false;
-  let currentHighlightedIndex = -1;
 
   let globalSettings = { allowChangeClass: false };
 
@@ -3591,208 +3427,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
   }
 
   // ══════════════════════════════════════════════════════════════
-  // ⭐ SEARCHABLE SELECT
-  // ══════════════════════════════════════════════════════════════
-  function escapeRegex(str) {
-    return String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  }
-
-  function updateLessonSelectOptions(lessons) {
-    const optionsEl = $('addLessonOptions');
-    if (!optionsEl) return;
-
-    const search = currentLessonSelectSearch.toLowerCase().trim();
-    const selectedId = $('addLesson')?.value || '';
-
-    const byGrade = { 10: [], 11: [], 12: [] };
-    lessons.forEach(l => {
-      if (byGrade[l.grade]) byGrade[l.grade].push(l);
-    });
-
-    let html = '';
-    let totalVisible = 0;
-    let visibleFlat = [];
-
-    [10, 11, 12].forEach(g => {
-      const lessonsInGrade = byGrade[g] || [];
-      const filtered = search
-        ? lessonsInGrade.filter(l => (l.name || '').toLowerCase().includes(search))
-        : lessonsInGrade;
-
-      if (filtered.length === 0) return;
-
-      html += `<div class="ss-group-header">── KHỐI ${g} (${filtered.length} bài) ──</div>`;
-      filtered.forEach(l => {
-        const idx = lessonsInGrade.indexOf(l) + 1;
-        const isSelected = l.id === selectedId;
-        let nameHtml = esc(l.name || '');
-        if (search) {
-          const regex = new RegExp(`(${escapeRegex(search)})`, 'gi');
-          nameHtml = nameHtml.replace(regex, '<mark>$1</mark>');
-        }
-        html += `
-          <div class="ss-option ${isSelected ? 'selected' : ''}" data-lesson-id="${l.id}" data-index="${totalVisible}">
-            <span class="ss-num">${idx}.</span>
-            <span>${nameHtml}</span>
-          </div>
-        `;
-        visibleFlat.push(l);
-        totalVisible++;
-      });
-    });
-
-    if (totalVisible === 0) {
-      optionsEl.innerHTML = '<div class="ss-empty">Không tìm thấy bài học nào</div>';
-      currentHighlightedIndex = -1;
-      return;
-    }
-
-    optionsEl.innerHTML = html;
-    currentHighlightedIndex = -1;
-
-    optionsEl.querySelectorAll('.ss-option').forEach(opt => {
-      opt.addEventListener('click', () => {
-        const lessonId = opt.dataset.lessonId;
-        const lesson = lessons.find(l => l.id === lessonId);
-        if (!lesson) return;
-        selectLesson(lesson);
-      });
-    });
-
-    optionsEl._visibleFlat = visibleFlat;
-  }
-
-  function selectLesson(lesson) {
-    const hiddenInput = $('addLesson');
-    const displayInput = $('addLessonDisplay');
-    const clearBtn = $('addLessonClear');
-    const dropdown = $('addLessonDropdown');
-
-    if (hiddenInput) hiddenInput.value = lesson.id;
-    if (displayInput) {
-      displayInput.value = `Khối ${lesson.grade}: ${lesson.name}`;
-      displayInput.classList.add('has-value');
-    }
-    if (clearBtn) clearBtn.style.display = 'flex';
-    if (dropdown) dropdown.classList.add('hidden');
-
-    currentLessonSelectOpen = false;
-    currentLessonSelectSearch = '';
-
-    const gradeSelect = $('addGrade');
-    if (gradeSelect && lesson.grade && gradeSelect.value !== lesson.grade) {
-      gradeSelect.value = lesson.grade;
-      currentClassGridGrade = lesson.grade;
-      document.querySelectorAll('.class-grid-tab').forEach(t => {
-        t.classList.toggle('active', t.dataset.grade === lesson.grade);
-      });
-      renderClassGrid();
-    }
-  }
-
-  function clearLessonSelection() {
-    const hiddenInput = $('addLesson');
-    const displayInput = $('addLessonDisplay');
-    const clearBtn = $('addLessonClear');
-
-    if (hiddenInput) hiddenInput.value = '';
-    if (displayInput) {
-      displayInput.value = '';
-      displayInput.placeholder = '-- Chọn bài học --';
-      displayInput.classList.remove('has-value');
-    }
-    if (clearBtn) clearBtn.style.display = 'none';
-  }
-
-  function bindLessonSearchableSelect() {
-    const ssWrap = $('addLessonSS');
-    const displayInput = $('addLessonDisplay');
-    const dropdown = $('addLessonDropdown');
-    const searchInput = $('addLessonSearch');
-    const clearBtn = $('addLessonClear');
-    if (!ssWrap || !displayInput || !dropdown) return;
-
-    displayInput.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isOpen = !dropdown.classList.contains('hidden');
-      if (isOpen) {
-        dropdown.classList.add('hidden');
-        currentLessonSelectOpen = false;
-      } else {
-        dropdown.classList.remove('hidden');
-        currentLessonSelectOpen = true;
-        currentLessonSelectSearch = '';
-        if (searchInput) {
-          searchInput.value = '';
-          setTimeout(() => searchInput.focus(), 50);
-        }
-        updateLessonSelectOptions(_lessonsForSelect || []);
-      }
-    });
-
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        currentLessonSelectSearch = e.target.value;
-        updateLessonSelectOptions(_lessonsForSelect || []);
-      });
-      searchInput.addEventListener('click', (e) => e.stopPropagation());
-      searchInput.addEventListener('keydown', (e) => {
-        const optionsEl = $('addLessonOptions');
-        if (!optionsEl) return;
-        const visibleOpts = Array.from(optionsEl.querySelectorAll('.ss-option'));
-        if (e.key === 'ArrowDown') {
-          e.preventDefault();
-          currentHighlightedIndex = Math.min(currentHighlightedIndex + 1, visibleOpts.length - 1);
-          updateHighlightedOption(visibleOpts);
-        } else if (e.key === 'ArrowUp') {
-          e.preventDefault();
-          currentHighlightedIndex = Math.max(currentHighlightedIndex - 1, 0);
-          updateHighlightedOption(visibleOpts);
-        } else if (e.key === 'Enter') {
-          e.preventDefault();
-          if (currentHighlightedIndex >= 0 && visibleOpts[currentHighlightedIndex]) {
-            visibleOpts[currentHighlightedIndex].click();
-          }
-        } else if (e.key === 'Escape') {
-          dropdown.classList.add('hidden');
-          currentLessonSelectOpen = false;
-        }
-      });
-    }
-
-    function updateHighlightedOption(visibleOpts) {
-      visibleOpts.forEach((opt, i) => {
-        opt.classList.toggle('highlighted', i === currentHighlightedIndex);
-        if (i === currentHighlightedIndex) opt.scrollIntoView({ block: 'nearest' });
-      });
-    }
-
-    if (clearBtn) {
-      clearBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        clearLessonSelection();
-      });
-    }
-
-    document.addEventListener('click', (e) => {
-      if (!ssWrap.contains(e.target)) {
-        dropdown.classList.add('hidden');
-        currentLessonSelectOpen = false;
-      }
-    });
-
-    displayInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        displayInput.click();
-      } else if (e.key === 'Escape') {
-        dropdown.classList.add('hidden');
-        currentLessonSelectOpen = false;
-      }
-    });
-  }
-
-  // ══════════════════════════════════════════════════════════════
   // TEACHER TAB
   // ══════════════════════════════════════════════════════════════
   function renderTeacherTab() {
@@ -3839,17 +3473,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
             </div>
             <div class="form-group" style="flex:2; min-width:200px;">
               <label>Thuộc Bài học</label>
-              <div class="searchable-select" id="addLessonSS">
-                <input type="text" class="ss-display" id="addLessonDisplay" placeholder="-- Chọn bài học --" readonly />
-                <input type="hidden" id="addLesson" value="" />
-                <button type="button" class="ss-clear" id="addLessonClear" title="Bỏ chọn">×</button>
-                <div class="ss-dropdown hidden" id="addLessonDropdown">
-                  <div class="ss-search-wrap">
-                    <input type="text" class="ss-search" id="addLessonSearch" placeholder="🔍 Tìm bài học..." />
-                  </div>
-                  <div class="ss-options" id="addLessonOptions"></div>
-                </div>
-              </div>
+              <select id="addLesson"><option value="">-- Chọn bài học --</option></select>
             </div>
           </div>
           <div class="form-group">
@@ -4032,7 +3656,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       if (!$('addFormWrap').classList.contains('hidden')) {
         loadAvailableClasses();
         bindClassGridEvents();
-        bindLessonSearchableSelect();
       }
     });
 
@@ -4755,8 +4378,10 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     } catch (err) { toast('Lỗi: ' + err.message, 'error'); }
   });
 
+  // ⭐ LOAD LESSONS FOR TEACHER — DẠNG CÂY PHÂN CẤP
   async function loadLessonsForTeacher() {
     const wrap = $('lessonsList');
+    const selectEl = $('addLesson');
     if (!wrap) return;
     wrap.innerHTML = '<div class="empty">Đang tải...</div>';
     try {
@@ -4764,6 +4389,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       const lessons = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       lessons.sort((a, b) => (a.grade - b.grade) || (a.order || 0) - (b.order || 0));
 
+      // ⭐ Load số đề của mỗi bài
       const aSnap = await getDocs(collection(db, 'assignments'));
       const assignments = aSnap.docs.map(d => ({ id: d.id, ...d.data() }));
       const assignmentCountByLesson = {};
@@ -4773,14 +4399,17 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         }
       });
 
-      // ⭐ Cập nhật cache cho searchable select
-      _lessonsForSelect = lessons;
+      if (selectEl) {
+        selectEl.innerHTML = '<option value="">-- Chọn bài học --</option>' +
+          lessons.map(l => `<option value="${l.id}">Khối ${l.grade}: ${esc(l.name)}</option>`).join('');
+      }
 
       if (lessons.length === 0) {
         wrap.innerHTML = '<div class="empty">Chưa có bài học nào.</div>';
         return;
       }
 
+      // ⭐ Nhóm theo khối
       const byGrade = { 10: [], 11: [], 12: [] };
       lessons.forEach(l => { if (byGrade[l.grade]) byGrade[l.grade].push(l); });
 
@@ -4828,6 +4457,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
 
       wrap.innerHTML = html;
 
+      // ⭐ Toggle khối
       wrap.querySelectorAll('[data-grade-toggle]').forEach(header => {
         header.addEventListener('click', () => {
           header.classList.toggle('collapsed');
@@ -4836,6 +4466,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         });
       });
 
+      // ⭐ Xoá bài học
       wrap.querySelectorAll('[data-del-lesson]').forEach(btn => {
         btn.addEventListener('click', async (e) => {
           e.stopPropagation();
@@ -4861,6 +4492,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         });
       });
 
+      // ⭐ Sửa bài học
       wrap.querySelectorAll('[data-edit-lesson]').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -4876,6 +4508,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     }
   }
 
+  // ⭐ MODAL SỬA BÀI HỌC
   function openEditLessonModal(lesson) {
     const existing = document.getElementById('editLessonModal');
     if (existing) existing.remove();
@@ -5015,7 +4648,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       $('addAssignEmails').value = '';
       hide($('questionsPreview'));
       
-      clearLessonSelection();
       selectedClasses.clear();
       renderClassGrid();
       
