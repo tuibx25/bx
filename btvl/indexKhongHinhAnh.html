@@ -554,8 +554,6 @@
   .html-preview .opt { display: block; padding: 4px 8px; margin: 2px 0; background: #FFF; border-radius: 4px; }
   .html-preview .tf-item { padding: 6px 8px; margin: 4px 0; background: #FFF; border-radius: 4px; }
   .html-preview .short-answer { width: 100%; padding: 6px 10px; border: 1px solid #D3D3D3; border-radius: 4px; }
-  /* ⭐ Ảnh trong preview */
-  .html-preview img { max-width: 100%; height: auto; border-radius: 4px; margin: 4px 0; }
 
   .viewlog-summary {
     background: #F5F8FF;
@@ -1094,9 +1092,6 @@
     }
   }
 
-  // ═══════════════════════════════════════════════════════════
-  // ⭐ PARSE QUESTIONS — ĐÃ SỬA: GIỮ ẢNH Ở TẤT CẢ CÁC PHẦN
-  // ═══════════════════════════════════════════════════════════
   function parseQuestionsHtml(htmlContent) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, 'text/html');
@@ -1110,44 +1105,29 @@
       
       if (!id || !type) return;
       
-      // ⭐ GIỮ CẢ TEXT VÀ HTML ĐỂ KHÔNG MẤT ẢNH
-      const qTextEl = qEl.querySelector('.q-text');
-      const qText = qTextEl?.textContent?.trim() || '';
-      const qTextHtml = qTextEl?.innerHTML?.trim() || '';
+      const qText = qEl.querySelector('.q-text')?.textContent?.trim() || '';
       
       if (type === 'choice') {
         const options = [];
         qEl.querySelectorAll('input[type="radio"]').forEach(inp => {
           const parent = inp.parentElement;
-          // ⭐ Lưu cả text VÀ html của option (giữ ảnh trong A/B/C/D)
-          const rawHtml = parent.innerHTML.trim();
-          const htmlAfterInput = rawHtml.replace(/^<input[^>]*>\s*/, '');
-          options.push({ 
-            value: inp.value, 
-            text: parent.textContent.trim().replace(/^[A-D]\.\s*/, ''),
-            html: htmlAfterInput
-          });
+          options.push({ value: inp.value, text: parent.textContent.trim().replace(/^[A-D]\.\s*/, '') });
         });
-        questions.push({ id, type: 'choice', text: qText, textHtml: qTextHtml, options, correctAnswer: answer, points });
+        questions.push({ id, type: 'choice', text: qText, options, correctAnswer: answer, points });
       } 
       else if (type === 'truefalse') {
         const statements = [];
         qEl.querySelectorAll('.tf-item').forEach(tfEl => {
-          const stmtEl = tfEl.querySelector('.tf-stmt') || tfEl.querySelector('span:first-child');
-          const stmtText = stmtEl?.textContent?.trim() || '';
-          let stmtHtml = stmtEl?.innerHTML?.trim() || '';
-          stmtHtml = stmtHtml.replace(/^[a-d]\)\s*/i, '');
           statements.push({
             statement: parseInt(tfEl.dataset.statement),
-            text: stmtText,
-            html: stmtHtml,
+            text: tfEl.querySelector('.tf-stmt')?.textContent?.trim() || tfEl.querySelector('span:first-child')?.textContent?.trim() || '',
             correct: tfEl.dataset.answer === 'true'
           });
         });
-        questions.push({ id, type: 'truefalse', text: qText, textHtml: qTextHtml, statements, points });
+        questions.push({ id, type: 'truefalse', text: qText, statements, points });
       } 
       else if (type === 'short') {
-        questions.push({ id, type: 'short', text: qText, textHtml: qTextHtml, correctAnswer: answer, points });
+        questions.push({ id, type: 'short', text: qText, correctAnswer: answer, points });
       }
     });
     
@@ -2042,9 +2022,6 @@
     }
   });
 
-  // ═══════════════════════════════════════════════════════════
-  // ⭐ SHOW QUIZ INLINE — ĐÃ SỬA: RENDER ẢNH Ở TẤT CẢ CÁC PHẦN
-  // ═══════════════════════════════════════════════════════════
   function showQuizInline(a, questions) {
     const container = document.getElementById('quizFrameContainer');
     if (!container) return;
@@ -2055,30 +2032,17 @@
     
     let questionsHtml = '';
     
-    // ⭐ HÀM HELPER: bỏ tiền tố "Câu N." trong HTML
-    const stripCauPrefix = (html) => {
-      return (html || '')
-        .replace(/^<?strong>?Câu\s+\d+[.:]?\s*<?\/?strong>?/i, '')
-        .replace(/^Câu\s+\d+[.:]?\s*/i, '')
-        .trim();
-    };
-    
     if (part1.length > 0) {
       questionsHtml += `<div class="section-header part-1">I. PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn</div>\n`;
       questionsHtml += `<p class="section-note">(Thí sinh trả lời từ câu 1 đến câu ${part1.length}. Mỗi câu hỏi thí sinh chỉ chọn một phương án)</p>\n`;
       
       part1.forEach((q, idx) => {
-        // ⭐ Dùng textHtml thay text để giữ ảnh
-        const bodyHtml = stripCauPrefix(q.textHtml || esc(q.text));
-        
         questionsHtml += `
           <div class="question" data-id="${q.id}" data-type="choice" data-answer="${q.correctAnswer}" data-points="${q.points || 1}">
-            <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${bodyHtml}</div>
-            ${q.options.map(opt => {
-              // ⭐ Dùng opt.html nếu có (giữ ảnh trong A/B/C/D)
-              const optContent = opt.html || esc(opt.text);
-              return `<label class="opt"><input type="radio" name="${q.id}" value="${opt.value}"> ${opt.value}. ${optContent}</label>`;
-            }).join('')}
+            <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${esc(q.text.replace(/^Câu\s+\d+\.\s*/i, ''))}</div>
+            ${q.options.map(opt => `
+              <label class="opt"><input type="radio" name="${q.id}" value="${opt.value}"> ${opt.value}. ${esc(opt.text)}</label>
+            `).join('')}
           </div>
         `;
       });
@@ -2089,24 +2053,18 @@
       questionsHtml += `<p class="section-note">(Thí sinh trả lời từ câu 1 đến câu ${part2.length}. Trong mỗi ý a), b), c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai)</p>\n`;
       
       part2.forEach((q, idx) => {
-        const bodyHtml = stripCauPrefix(q.textHtml || esc(q.text));
-        
         questionsHtml += `
           <div class="question" data-id="${q.id}" data-type="truefalse" data-points="${q.points || 1}">
-            <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${bodyHtml}</div>
-            ${q.statements.map(st => {
-              // ⭐ Dùng st.html nếu có (giữ ảnh trong ý a/b/c/d)
-              const stmtContent = st.html || esc(st.text);
-              return `
-                <div class="tf-item" data-statement="${st.statement}" data-answer="${st.correct}">
-                  <span class="tf-stmt">${String.fromCharCode(97 + st.statement)}) ${stmtContent}</span>
-                  <span class="tf-btns">
-                    <button type="button" class="tf-btn" data-q="${q.id}" data-s="${st.statement}" data-val="true">Đúng</button>
-                    <button type="button" class="tf-btn" data-q="${q.id}" data-s="${st.statement}" data-val="false">Sai</button>
-                  </span>
-                </div>
-              `;
-            }).join('')}
+            <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${esc(q.text.replace(/^Câu\s+\d+\.\s*/i, ''))}</div>
+            ${q.statements.map(st => `
+              <div class="tf-item" data-statement="${st.statement}" data-answer="${st.correct}">
+                <span class="tf-stmt">${String.fromCharCode(97 + st.statement)}) ${esc(st.text)}</span>
+                <span class="tf-btns">
+                  <button type="button" class="tf-btn" data-q="${q.id}" data-s="${st.statement}" data-val="true">Đúng</button>
+                  <button type="button" class="tf-btn" data-q="${q.id}" data-s="${st.statement}" data-val="false">Sai</button>
+                </span>
+              </div>
+            `).join('')}
           </div>
         `;
       });
@@ -2117,11 +2075,9 @@
       questionsHtml += `<p class="section-note">(Thí sinh trả lời từ câu 1 đến câu ${part3.length})</p>\n`;
       
       part3.forEach((q, idx) => {
-        const bodyHtml = stripCauPrefix(q.textHtml || esc(q.text));
-        
         questionsHtml += `
           <div class="question" data-id="${q.id}" data-type="short" data-answer="${esc(q.correctAnswer)}" data-points="${q.points || 1}">
-            <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${bodyHtml}</div>
+            <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${esc(q.text.replace(/^Câu\s+\d+\.\s*/i, ''))}</div>
             <input type="text" class="short-answer" placeholder="Nhập đáp án..." />
           </div>
         `;
@@ -2150,12 +2106,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
   .section-note { font-style: italic; color: #555; font-size: 13px; margin-bottom: 12px; padding-left: 4px; }
   .question { background: #F5F5F5; padding: 12px 14px; border-radius: 6px; margin-bottom: 12px; border-left: 3px solid #0066CC; }
   .q-text { font-weight: 600; margin-bottom: 8px; }
-  /* ⭐ CSS CHO ẢNH — QUAN TRỌNG */
-  img { max-width: 100%; height: auto; }
-  .q-text img { max-width: 100%; height: auto; border-radius: 4px; margin: 6px 0; display: block; }
-  .opt img { max-height: 80px; vertical-align: middle; margin: 2px 4px; }
-  .tf-stmt img { max-width: 100%; height: auto; vertical-align: middle; margin: 4px 0; }
-  /* ─────────────────────────── */
+  .q-text img { max-width: 100%; height: auto; border-radius: 4px; margin: 6px 0; }
   .opt { display: block; padding: 6px 10px; margin: 4px 0; background: #FFF; border: 1px solid #D3D3D3; border-radius: 6px; cursor: pointer; }
   .opt:hover { background: #F5F5DC; border-color: #8B5A2B; }
   .opt input { margin-right: 8px; }
@@ -2580,13 +2531,13 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         html += `
           <div class="question-detail ${cls}">
             <div class="q-num ${numCls}">Câu ${idx + 1} ${detail.isCorrect ? '✓' : '✗'} — ${detail.earned}/${detail.points} điểm</div>
-            <div class="q-text">${q.textHtml || esc(q.text)}</div>
+            <div class="q-text">${esc(q.text.replace(/^Câu\s+\d+\.\s*/i, ''))}</div>
             ${q.options.map(opt => {
               let optCls = ''; let mark = '';
               if (opt.value === detail.correct) { optCls = 'correct-answer'; mark = '<span class="mark check">✓ Đáp án</span>'; }
               if (opt.value === detail.student && opt.value !== detail.correct) { optCls = 'student-wrong'; mark = '<span class="mark cross">✗ HS</span>'; }
               if (opt.value === detail.student && opt.value === detail.correct) { optCls = 'student-correct'; mark = '<span class="mark check">✓ HS</span>'; }
-              return `<div class="option-row ${optCls}"><span class="label">${opt.value}.</span><span>${opt.html || esc(opt.text)}</span>${mark}</div>`;
+              return `<div class="option-row ${optCls}"><span class="label">${opt.value}.</span><span>${esc(opt.text)}</span>${mark}</div>`;
             }).join('')}
           </div>
         `;
@@ -2604,11 +2555,11 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         html += `
           <div class="question-detail ${cls}">
             <div class="q-num ${numCls}">Câu ${idx + 1} — ${detail.correctCount}/${detail.total} ý — ${detail.earned.toFixed(2)}/${detail.points} điểm</div>
-            <div class="q-text">${q.textHtml || esc(q.text)}</div>
+            <div class="q-text">${esc(q.text.replace(/^Câu\s+\d+\.\s*/i, ''))}</div>
             ${q.statements.map(st => {
               const d = stDetails[st.statement];
               if (!d) return '';
-              return `<div class="tf-row-detail"><div class="stmt">${String.fromCharCode(97 + st.statement)}) ${st.html || esc(st.text)}</div><div class="answers"><div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>ĐA:</strong> ${st.correct ? 'Đ' : 'S'}</div><div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>HS:</strong> ${d.student === true ? 'Đ' : (d.student === false ? 'S' : '(bỏ)')}</div></div></div>`;
+              return `<div class="tf-row-detail"><div class="stmt">${String.fromCharCode(97 + st.statement)}) ${esc(st.text)}</div><div class="answers"><div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>ĐA:</strong> ${st.correct ? 'Đ' : 'S'}</div><div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>HS:</strong> ${d.student === true ? 'Đ' : (d.student === false ? 'S' : '(bỏ)')}</div></div></div>`;
             }).join('')}
           </div>
         `;
@@ -2625,7 +2576,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         html += `
           <div class="question-detail ${cls}">
             <div class="q-num ${numCls}">Câu ${idx + 1} ${detail.isCorrect ? '✓' : '✗'} — ${detail.earned}/${detail.points} điểm</div>
-            <div class="q-text">${q.textHtml || esc(q.text)}</div>
+            <div class="q-text">${esc(q.text.replace(/^Câu\s+\d+\.\s*/i, ''))}</div>
             <div class="option-row ${detail.isCorrect ? 'student-correct' : 'student-wrong'}"><span class="label">HS:</span><span>${esc(detail.student || '(bỏ)')}</span></div>
             ${!detail.isCorrect ? `<div class="option-row correct-answer"><span class="label">ĐA:</span><span>${esc(detail.correct)}</span></div>` : ''}
           </div>
@@ -2710,7 +2661,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
           <div id="inlineFields">
             <div class="alert alert-info">
               💡 Dán HTML câu hỏi vào ô bên dưới. Dùng <strong>tool.html</strong> để chuyển đổi từ file Word.
-              <br>🖼️ <strong>Ảnh:</strong> Dùng URL tuyệt đối (https://...) để hiển thị đúng cho HS.
             </div>
             <div class="form-group">
               <label>📋 Dán HTML câu hỏi</label>
@@ -2867,23 +2817,23 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       if (part1.length > 0) {
         previewHtml += `<h4 style="color:#8B4513;margin-top:12px;">I. Trắc nghiệm (${part1.length})</h4>`;
         part1.forEach((q, i) => {
-          previewHtml += `<div class="question"><div class="q-text">Câu ${i+1}. ${q.textHtml || esc(q.text)} <span style="color:#0066CC;">[ĐA: ${q.correctAnswer}, ${q.points}đ]</span></div>`;
-          q.options.forEach(o => previewHtml += `<div class="opt">${o.value}. ${o.html || esc(o.text)}</div>`);
+          previewHtml += `<div class="question"><div class="q-text">Câu ${i+1}. ${esc(q.text)} <span style="color:#0066CC;">[ĐA: ${q.correctAnswer}, ${q.points}đ]</span></div>`;
+          q.options.forEach(o => previewHtml += `<div class="opt">${o.value}. ${esc(o.text)}</div>`);
           previewHtml += `</div>`;
         });
       }
       if (part2.length > 0) {
         previewHtml += `<h4 style="color:#0066CC;margin-top:12px;">II. Đúng/Sai (${part2.length})</h4>`;
         part2.forEach((q, i) => {
-          previewHtml += `<div class="question"><div class="q-text">Câu ${i+1}. ${q.textHtml || esc(q.text)} <span style="color:#0066CC;">[${q.points}đ]</span></div>`;
-          q.statements.forEach(st => previewHtml += `<div class="tf-item">${String.fromCharCode(97 + st.statement)}) ${st.html || esc(st.text)} → <strong>${st.correct ? 'Đ' : 'S'}</strong></div>`);
+          previewHtml += `<div class="question"><div class="q-text">Câu ${i+1}. ${esc(q.text)} <span style="color:#0066CC;">[${q.points}đ]</span></div>`;
+          q.statements.forEach(st => previewHtml += `<div class="tf-item">${String.fromCharCode(97 + st.statement)}) ${esc(st.text)} → <strong>${st.correct ? 'Đ' : 'S'}</strong></div>`);
           previewHtml += `</div>`;
         });
       }
       if (part3.length > 0) {
         previewHtml += `<h4 style="color:#2E7D32;margin-top:12px;">III. Trả lời ngắn (${part3.length})</h4>`;
         part3.forEach((q, i) => {
-          previewHtml += `<div class="question"><div class="q-text">Câu ${i+1}. ${q.textHtml || esc(q.text)} <span style="color:#0066CC;">[ĐA: ${q.correctAnswer}, ${q.points}đ]</span></div></div>`;
+          previewHtml += `<div class="question"><div class="q-text">Câu ${i+1}. ${esc(q.text)} <span style="color:#0066CC;">[ĐA: ${q.correctAnswer}, ${q.points}đ]</span></div></div>`;
         });
       }
       
@@ -3039,15 +2989,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         payload.duration = Number($('addQuizDuration').value) || 25;
         payload.maxAttempts = Number($('addQuizMaxAttempts').value) || 3;
         
-        // ⭐ Đếm số ảnh để báo cho GV biết
-        let imgCount = 0;
-        questions.forEach(q => {
-          if (q.textHtml && /<img/i.test(q.textHtml)) imgCount++;
-          if (q.options) q.options.forEach(o => { if (o.html && /<img/i.test(o.html)) imgCount++; });
-          if (q.statements) q.statements.forEach(s => { if (s.html && /<img/i.test(s.html)) imgCount++; });
-        });
-        
-        toast(`✅ Đã parse ${questions.length} câu${imgCount > 0 ? ` (${imgCount} ảnh)` : ''}`, 'success');
+        toast(`✅ Đã parse ${questions.length} câu hỏi`, 'success');
       } else {
         const externalUrl = $('addExternalUrl').value.trim();
         if (!externalUrl) { toast('Nhập URL file', 'error'); return; }
@@ -3407,13 +3349,13 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
               body += `
                 <div class="question-detail ${cls}">
                   <div class="q-num ${numCls}">Câu ${idx + 1} ${detail.isCorrect ? '✓' : '✗'} — ${detail.earned}/${detail.points}</div>
-                  <div class="q-text">${q.textHtml || esc(q.text)}</div>
+                  <div class="q-text">${esc(q.text.replace(/^Câu\s+\d+\.\s*/i, ''))}</div>
                   ${q.options.map(opt => {
                     let optCls = ''; let mark = '';
                     if (opt.value === detail.correct) { optCls = 'correct-answer'; mark = '<span class="mark check">✓ Đáp án</span>'; }
                     if (opt.value === detail.student && opt.value !== detail.correct) { optCls = 'student-wrong'; mark = '<span class="mark cross">✗ HS</span>'; }
                     if (opt.value === detail.student && opt.value === detail.correct) { optCls = 'student-correct'; mark = '<span class="mark check">✓ HS</span>'; }
-                    return `<div class="option-row ${optCls}"><span class="label">${opt.value}.</span><span>${opt.html || esc(opt.text)}</span>${mark}</div>`;
+                    return `<div class="option-row ${optCls}"><span class="label">${opt.value}.</span><span>${esc(opt.text)}</span>${mark}</div>`;
                   }).join('')}
                 </div>
               `;
@@ -3431,11 +3373,11 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
               body += `
                 <div class="question-detail ${cls}">
                   <div class="q-num ${numCls}">Câu ${idx + 1} — ${detail.correctCount}/${detail.total} — ${detail.earned.toFixed(2)}/${detail.points}</div>
-                  <div class="q-text">${q.textHtml || esc(q.text)}</div>
+                  <div class="q-text">${esc(q.text.replace(/^Câu\s+\d+\.\s*/i, ''))}</div>
                   ${q.statements.map(st => {
                     const d = stDetails[st.statement];
                     if (!d) return '';
-                    return `<div class="tf-row-detail"><div class="stmt">${String.fromCharCode(97 + st.statement)}) ${st.html || esc(st.text)}</div><div class="answers"><div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>ĐA:</strong> ${st.correct ? 'Đ' : 'S'}</div><div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>HS:</strong> ${d.student === true ? 'Đ' : (d.student === false ? 'S' : '(bỏ)')}</div></div></div>`;
+                    return `<div class="tf-row-detail"><div class="stmt">${String.fromCharCode(97 + st.statement)}) ${esc(st.text)}</div><div class="answers"><div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>ĐA:</strong> ${st.correct ? 'Đ' : 'S'}</div><div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>HS:</strong> ${d.student === true ? 'Đ' : (d.student === false ? 'S' : '(bỏ)')}</div></div></div>`;
                   }).join('')}
                 </div>
               `;
@@ -3452,7 +3394,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
               body += `
                 <div class="question-detail ${cls}">
                   <div class="q-num ${numCls}">Câu ${idx + 1} ${detail.isCorrect ? '✓' : '✗'} — ${detail.earned}/${detail.points}</div>
-                  <div class="q-text">${q.textHtml || esc(q.text)}</div>
+                  <div class="q-text">${esc(q.text.replace(/^Câu\s+\d+\.\s*/i, ''))}</div>
                   <div class="option-row ${detail.isCorrect ? 'student-correct' : 'student-wrong'}"><span class="label">HS:</span><span>${esc(detail.student || '(bỏ)')}</span></div>
                   ${!detail.isCorrect ? `<div class="option-row correct-answer"><span class="label">ĐA:</span><span>${esc(detail.correct)}</span></div>` : ''}
                 </div>
