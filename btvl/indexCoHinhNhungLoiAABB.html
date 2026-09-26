@@ -1095,7 +1095,7 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // ⭐ PARSE QUESTIONS — GIỮ ẢNH + BỎ TIỀN TỐ "A. " TRONG OPTIONS
+  // ⭐ PARSE QUESTIONS — ĐÃ SỬA: GIỮ ẢNH Ở TẤT CẢ CÁC PHẦN
   // ═══════════════════════════════════════════════════════════
   function parseQuestionsHtml(htmlContent) {
     const parser = new DOMParser();
@@ -1121,9 +1121,7 @@
           const parent = inp.parentElement;
           // ⭐ Lưu cả text VÀ html của option (giữ ảnh trong A/B/C/D)
           const rawHtml = parent.innerHTML.trim();
-          let htmlAfterInput = rawHtml.replace(/^<input[^>]*>\s*/, '');
-          // ⭐ Bỏ tiền tố "A. ", "B. ", "C. ", "D. " (tránh lặp "A. A.")
-          htmlAfterInput = htmlAfterInput.replace(/^\s*[A-D]\s*[.\s]\s*/i, '').trim();
+          const htmlAfterInput = rawHtml.replace(/^<input[^>]*>\s*/, '');
           options.push({ 
             value: inp.value, 
             text: parent.textContent.trim().replace(/^[A-D]\.\s*/, ''),
@@ -2045,7 +2043,7 @@
   });
 
   // ═══════════════════════════════════════════════════════════
-  // ⭐ SHOW QUIZ INLINE — ĐÃ SỬA: BỎ TIỀN TỐ "A. " TRONG OPTIONS
+  // ⭐ SHOW QUIZ INLINE — ĐÃ SỬA: RENDER ẢNH Ở TẤT CẢ CÁC PHẦN
   // ═══════════════════════════════════════════════════════════
   function showQuizInline(a, questions) {
     const container = document.getElementById('quizFrameContainer');
@@ -2078,9 +2076,7 @@
             <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${bodyHtml}</div>
             ${q.options.map(opt => {
               // ⭐ Dùng opt.html nếu có (giữ ảnh trong A/B/C/D)
-              let optContent = opt.html || esc(opt.text);
-              // ⭐ Bỏ tiền tố "A. ", "B. ", "C. ", "D. " nếu có (tránh lặp "A. A.")
-              optContent = optContent.replace(/^\s*[A-D]\s*[.\s]\s*/i, '').trim();
+              const optContent = opt.html || esc(opt.text);
               return `<label class="opt"><input type="radio" name="${q.id}" value="${opt.value}"> ${opt.value}. ${optContent}</label>`;
             }).join('')}
           </div>
@@ -2590,9 +2586,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
               if (opt.value === detail.correct) { optCls = 'correct-answer'; mark = '<span class="mark check">✓ Đáp án</span>'; }
               if (opt.value === detail.student && opt.value !== detail.correct) { optCls = 'student-wrong'; mark = '<span class="mark cross">✗ HS</span>'; }
               if (opt.value === detail.student && opt.value === detail.correct) { optCls = 'student-correct'; mark = '<span class="mark check">✓ HS</span>'; }
-              let optHtml = opt.html || esc(opt.text);
-              optHtml = optHtml.replace(/^\s*[A-D]\s*[.\s]\s*/i, '').trim();
-              return `<div class="option-row ${optCls}"><span class="label">${opt.value}.</span><span>${optHtml}</span>${mark}</div>`;
+              return `<div class="option-row ${optCls}"><span class="label">${opt.value}.</span><span>${opt.html || esc(opt.text)}</span>${mark}</div>`;
             }).join('')}
           </div>
         `;
@@ -2874,11 +2868,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         previewHtml += `<h4 style="color:#8B4513;margin-top:12px;">I. Trắc nghiệm (${part1.length})</h4>`;
         part1.forEach((q, i) => {
           previewHtml += `<div class="question"><div class="q-text">Câu ${i+1}. ${q.textHtml || esc(q.text)} <span style="color:#0066CC;">[ĐA: ${q.correctAnswer}, ${q.points}đ]</span></div>`;
-          q.options.forEach(o => {
-            let optHtml = o.html || esc(o.text);
-            optHtml = optHtml.replace(/^\s*[A-D]\s*[.\s]\s*/i, '').trim();
-            previewHtml += `<div class="opt">${o.value}. ${optHtml}</div>`;
-          });
+          q.options.forEach(o => previewHtml += `<div class="opt">${o.value}. ${o.html || esc(o.text)}</div>`);
           previewHtml += `</div>`;
         });
       }
@@ -3423,9 +3413,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
                     if (opt.value === detail.correct) { optCls = 'correct-answer'; mark = '<span class="mark check">✓ Đáp án</span>'; }
                     if (opt.value === detail.student && opt.value !== detail.correct) { optCls = 'student-wrong'; mark = '<span class="mark cross">✗ HS</span>'; }
                     if (opt.value === detail.student && opt.value === detail.correct) { optCls = 'student-correct'; mark = '<span class="mark check">✓ HS</span>'; }
-                    let optHtml = opt.html || esc(opt.text);
-                    optHtml = optHtml.replace(/^\s*[A-D]\s*[.\s]\s*/i, '').trim();
-                    return `<div class="option-row ${optCls}"><span class="label">${opt.value}.</span><span>${optHtml}</span>${mark}</div>`;
+                    return `<div class="option-row ${optCls}"><span class="label">${opt.value}.</span><span>${opt.html || esc(opt.text)}</span>${mark}</div>`;
                   }).join('')}
                 </div>
               `;

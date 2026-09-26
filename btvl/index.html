@@ -554,7 +554,6 @@
   .html-preview .opt { display: block; padding: 4px 8px; margin: 2px 0; background: #FFF; border-radius: 4px; }
   .html-preview .tf-item { padding: 6px 8px; margin: 4px 0; background: #FFF; border-radius: 4px; }
   .html-preview .short-answer { width: 100%; padding: 6px 10px; border: 1px solid #D3D3D3; border-radius: 4px; }
-  /* ⭐ Ảnh trong preview */
   .html-preview img { max-width: 100%; height: auto; border-radius: 4px; margin: 4px 0; }
 
   .viewlog-summary {
@@ -740,6 +739,183 @@
   .score-cell-wrap .attempt.best {
     color: #0066CC;
     font-weight: 600;
+  }
+
+  /* ⭐ FILTER BAR — DÙNG CHUNG CHO 2 TAB QUẢN LÝ */
+  .filter-bar {
+    background: #FFF;
+    border: 1px solid #D3D3D3;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .filter-bar label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #333;
+    white-space: nowrap;
+  }
+  .filter-bar select {
+    padding: 8px 12px;
+    border: 1px solid #D3D3D3;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #FFF;
+    min-width: 150px;
+    cursor: pointer;
+  }
+  .filter-bar input[type="text"] {
+    flex: 1;
+    min-width: 200px;
+    padding: 8px 12px;
+    border: 1px solid #D3D3D3;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+
+  /* ⭐ CÂY PHÂN CẤP */
+  .tree-group {
+    background: #FFF;
+    border: 1px solid #D3D3D3;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .tree-header {
+    padding: 14px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    transition: background 0.2s;
+  }
+  .tree-header:hover { background: #FAFAFA; }
+  .tree-header.lv1 {
+    background: linear-gradient(135deg, #8B5A2B 0%, #8B4513 100%);
+    color: #FFF;
+    font-weight: 700;
+  }
+  .tree-header.lv1:hover { background: linear-gradient(135deg, #7A4B25 0%, #7A3A10 100%); }
+  .tree-header.lv2 {
+    background: #F5F5DC;
+    color: #8B4513;
+    font-weight: 600;
+    border-top: 1px solid #E0E0E0;
+  }
+  .tree-header.lv2:hover { background: #F5DEB3; }
+  .tree-header .tree-toggle {
+    font-size: 18px;
+    transition: transform 0.3s;
+  }
+  .tree-header.collapsed .tree-toggle { transform: rotate(-90deg); }
+  .tree-header .tree-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+  }
+  .tree-header .tree-badges {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .tree-header .count-badge {
+    background: rgba(255,255,255,0.3);
+    color: #FFF;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .tree-header.lv2 .count-badge {
+    background: #8B5A2B;
+    color: #FFF;
+  }
+  .tree-body {
+    max-height: 10000px;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+  .tree-body.collapsed { max-height: 0; }
+  .tree-body .empty-child {
+    padding: 14px 22px;
+    color: #999;
+    font-style: italic;
+    font-size: 13px;
+    background: #FAFAFA;
+  }
+
+  /* ⭐ ROW HỌC SINH */
+  .student-row {
+    padding: 12px 22px;
+    border-top: 1px solid #F0F0F0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: #FFF;
+  }
+  .student-row:hover { background: #FAFAFA; }
+  .student-row .s-info { flex: 1; min-width: 250px; }
+  .student-row .s-name {
+    font-weight: 600;
+    color: #000;
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+  .student-row .s-meta {
+    font-size: 12px;
+    color: #666;
+  }
+
+  /* ⭐ ROW ĐỀ BÀI */
+  .assignment-item {
+    padding: 14px 22px;
+    border-top: 1px solid #F0F0F0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #FFF;
+  }
+  .assignment-item:hover { background: #FAFAFA; }
+  .assignment-item.hidden-item { opacity: 0.7; border-left: 4px solid #999; }
+  .assignment-item .a-info { flex: 1; min-width: 250px; }
+  .assignment-item .a-title {
+    font-weight: 600;
+    color: #000;
+    font-size: 15px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .assignment-item .a-meta {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 8px;
+  }
+  .assignment-item .a-actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .assignment-item .student-subs {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #E0E0E0;
   }
 </style>
 </head>
@@ -1008,6 +1184,13 @@
   let mySubsCache = [];
   let myViewLogsCache = [];
 
+  // ⭐ Cache cho 2 tab quản lý
+  let studentsCache = [];
+  let teacherAssignmentsCache = [];
+  let teacherSubmissionsCache = [];
+  let teacherViewLogsCache = [];
+  let teacherLessonsMapCache = {};
+
   let globalSettings = { allowChangeClass: false };
 
   const $ = (id) => document.getElementById(id);
@@ -1095,7 +1278,7 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // ⭐ PARSE QUESTIONS — ĐÃ SỬA: GIỮ ẢNH Ở TẤT CẢ CÁC PHẦN
+  // ⭐ PARSE QUESTIONS — GIỮ ẢNH + BỎ TIỀN TỐ "A. " TRONG OPTIONS
   // ═══════════════════════════════════════════════════════════
   function parseQuestionsHtml(htmlContent) {
     const parser = new DOMParser();
@@ -1110,7 +1293,6 @@
       
       if (!id || !type) return;
       
-      // ⭐ GIỮ CẢ TEXT VÀ HTML ĐỂ KHÔNG MẤT ẢNH
       const qTextEl = qEl.querySelector('.q-text');
       const qText = qTextEl?.textContent?.trim() || '';
       const qTextHtml = qTextEl?.innerHTML?.trim() || '';
@@ -1119,9 +1301,9 @@
         const options = [];
         qEl.querySelectorAll('input[type="radio"]').forEach(inp => {
           const parent = inp.parentElement;
-          // ⭐ Lưu cả text VÀ html của option (giữ ảnh trong A/B/C/D)
           const rawHtml = parent.innerHTML.trim();
-          const htmlAfterInput = rawHtml.replace(/^<input[^>]*>\s*/, '');
+          let htmlAfterInput = rawHtml.replace(/^<input[^>]*>\s*/, '');
+          htmlAfterInput = htmlAfterInput.replace(/^\s*[A-D]\s*[.\s]\s*/i, '').trim();
           options.push({ 
             value: inp.value, 
             text: parent.textContent.trim().replace(/^[A-D]\.\s*/, ''),
@@ -2042,9 +2224,6 @@
     }
   });
 
-  // ═══════════════════════════════════════════════════════════
-  // ⭐ SHOW QUIZ INLINE — ĐÃ SỬA: RENDER ẢNH Ở TẤT CẢ CÁC PHẦN
-  // ═══════════════════════════════════════════════════════════
   function showQuizInline(a, questions) {
     const container = document.getElementById('quizFrameContainer');
     if (!container) return;
@@ -2055,7 +2234,6 @@
     
     let questionsHtml = '';
     
-    // ⭐ HÀM HELPER: bỏ tiền tố "Câu N." trong HTML
     const stripCauPrefix = (html) => {
       return (html || '')
         .replace(/^<?strong>?Câu\s+\d+[.:]?\s*<?\/?strong>?/i, '')
@@ -2068,15 +2246,14 @@
       questionsHtml += `<p class="section-note">(Thí sinh trả lời từ câu 1 đến câu ${part1.length}. Mỗi câu hỏi thí sinh chỉ chọn một phương án)</p>\n`;
       
       part1.forEach((q, idx) => {
-        // ⭐ Dùng textHtml thay text để giữ ảnh
         const bodyHtml = stripCauPrefix(q.textHtml || esc(q.text));
         
         questionsHtml += `
           <div class="question" data-id="${q.id}" data-type="choice" data-answer="${q.correctAnswer}" data-points="${q.points || 1}">
             <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${bodyHtml}</div>
             ${q.options.map(opt => {
-              // ⭐ Dùng opt.html nếu có (giữ ảnh trong A/B/C/D)
-              const optContent = opt.html || esc(opt.text);
+              let optContent = opt.html || esc(opt.text);
+              optContent = optContent.replace(/^\s*[A-D]\s*[.\s]\s*/i, '').trim();
               return `<label class="opt"><input type="radio" name="${q.id}" value="${opt.value}"> ${opt.value}. ${optContent}</label>`;
             }).join('')}
           </div>
@@ -2095,7 +2272,6 @@
           <div class="question" data-id="${q.id}" data-type="truefalse" data-points="${q.points || 1}">
             <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${bodyHtml}</div>
             ${q.statements.map(st => {
-              // ⭐ Dùng st.html nếu có (giữ ảnh trong ý a/b/c/d)
               const stmtContent = st.html || esc(st.text);
               return `
                 <div class="tf-item" data-statement="${st.statement}" data-answer="${st.correct}">
@@ -2150,12 +2326,10 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
   .section-note { font-style: italic; color: #555; font-size: 13px; margin-bottom: 12px; padding-left: 4px; }
   .question { background: #F5F5F5; padding: 12px 14px; border-radius: 6px; margin-bottom: 12px; border-left: 3px solid #0066CC; }
   .q-text { font-weight: 600; margin-bottom: 8px; }
-  /* ⭐ CSS CHO ẢNH — QUAN TRỌNG */
   img { max-width: 100%; height: auto; }
   .q-text img { max-width: 100%; height: auto; border-radius: 4px; margin: 6px 0; display: block; }
   .opt img { max-height: 80px; vertical-align: middle; margin: 2px 4px; }
   .tf-stmt img { max-width: 100%; height: auto; vertical-align: middle; margin: 4px 0; }
-  /* ─────────────────────────── */
   .opt { display: block; padding: 6px 10px; margin: 4px 0; background: #FFF; border: 1px solid #D3D3D3; border-radius: 6px; cursor: pointer; }
   .opt:hover { background: #F5F5DC; border-color: #8B5A2B; }
   .opt input { margin-right: 8px; }
@@ -2586,7 +2760,9 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
               if (opt.value === detail.correct) { optCls = 'correct-answer'; mark = '<span class="mark check">✓ Đáp án</span>'; }
               if (opt.value === detail.student && opt.value !== detail.correct) { optCls = 'student-wrong'; mark = '<span class="mark cross">✗ HS</span>'; }
               if (opt.value === detail.student && opt.value === detail.correct) { optCls = 'student-correct'; mark = '<span class="mark check">✓ HS</span>'; }
-              return `<div class="option-row ${optCls}"><span class="label">${opt.value}.</span><span>${opt.html || esc(opt.text)}</span>${mark}</div>`;
+              let optHtml = opt.html || esc(opt.text);
+              optHtml = optHtml.replace(/^\s*[A-D]\s*[.\s]\s*/i, '').trim();
+              return `<div class="option-row ${optCls}"><span class="label">${opt.value}.</span><span>${optHtml}</span>${mark}</div>`;
             }).join('')}
           </div>
         `;
@@ -2638,7 +2814,9 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
 
   $('studentDetailCloseBtn').addEventListener('click', () => hide($('studentDetailModal')));
 
-  // ==================== TEACHER TAB (QUẢN LÝ - GV) ====================
+  // ══════════════════════════════════════════════════════════════
+  // ⭐ TEACHER TAB (QUẢN LÝ - GV)
+  // ══════════════════════════════════════════════════════════════
   function renderTeacherTab() {
     const tab = $('tab-teacher');
     if (tab.innerHTML.includes('Thêm Bài Học')) return;
@@ -2654,7 +2832,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
           </label>
           <div class="hint" style="margin-top:8px;">
             💡 Bật khi đầu năm học để HS cập nhật lớp mới (VD: 10A12 → 11A12).
-            <br>Khi TẮT: HS <strong>KHÔNG</strong> thấy nút "✏️ Đổi lớp" trên header.
           </div>
         </div>
       </div>
@@ -2868,7 +3045,11 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         previewHtml += `<h4 style="color:#8B4513;margin-top:12px;">I. Trắc nghiệm (${part1.length})</h4>`;
         part1.forEach((q, i) => {
           previewHtml += `<div class="question"><div class="q-text">Câu ${i+1}. ${q.textHtml || esc(q.text)} <span style="color:#0066CC;">[ĐA: ${q.correctAnswer}, ${q.points}đ]</span></div>`;
-          q.options.forEach(o => previewHtml += `<div class="opt">${o.value}. ${o.html || esc(o.text)}</div>`);
+          q.options.forEach(o => {
+            let optHtml = o.html || esc(o.text);
+            optHtml = optHtml.replace(/^\s*[A-D]\s*[.\s]\s*/i, '').trim();
+            previewHtml += `<div class="opt">${o.value}. ${optHtml}</div>`;
+          });
           previewHtml += `</div>`;
         });
       }
@@ -2904,7 +3085,9 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     loadStatsClassesAndLessons();
   }
 
-  // ==================== STUDENTS TAB ====================
+  // ══════════════════════════════════════════════════════════════
+  // ⭐ STUDENTS TAB — CÂY KHỐI → LỚP → HS
+  // ══════════════════════════════════════════════════════════════
   function renderStudentsTab() {
     const tab = $('tab-students');
     tab.innerHTML = `
@@ -2913,14 +3096,231 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
           <h3>👥 Quản Lý Học Sinh</h3>
           <button class="btn btn-light btn-sm" id="refreshStudentsBtn">🔄 Tải lại</button>
         </div>
-        <div id="userManagement"></div>
+        <div class="filter-bar">
+          <label>📚 Khối:</label>
+          <select id="stuFilterGrade">
+            <option value="all">Tất cả khối</option>
+            <option value="10">Khối 10</option>
+            <option value="11">Khối 11</option>
+            <option value="12">Khối 12</option>
+            <option value="none">Chưa có lớp</option>
+          </select>
+          <label>🏫 Lớp:</label>
+          <select id="stuFilterClass">
+            <option value="all">Tất cả lớp</option>
+          </select>
+          <label>📧 Trạng thái:</label>
+          <select id="stuFilterVerified">
+            <option value="all">Tất cả</option>
+            <option value="verified">Đã xác thực</option>
+            <option value="unverified">Chưa xác thực</option>
+          </select>
+          <input type="text" id="stuSearchInput" placeholder="🔍 Tìm theo tên/email..." />
+          <button class="btn btn-light btn-sm" id="stuExpandAll">📂 Mở hết</button>
+          <button class="btn btn-light btn-sm" id="stuCollapseAll">📁 Thu gọn</button>
+          <span class="count" id="stuResultCount" style="color:#8B4513; font-weight:600;"></span>
+        </div>
+        <div id="userManagementTree"></div>
       </div>
     `;
     $('refreshStudentsBtn').addEventListener('click', loadUserManagement);
+    $('stuFilterGrade').addEventListener('change', renderStudentsTree);
+    $('stuFilterVerified').addEventListener('change', renderStudentsTree);
+    $('stuSearchInput').addEventListener('input', renderStudentsTree);
+    $('stuFilterClass').addEventListener('change', renderStudentsTree);
+    $('stuExpandAll').addEventListener('click', () => {
+      document.querySelectorAll('#userManagementTree .tree-body').forEach(b => b.classList.remove('collapsed'));
+      document.querySelectorAll('#userManagementTree .tree-header').forEach(h => h.classList.remove('collapsed'));
+    });
+    $('stuCollapseAll').addEventListener('click', () => {
+      document.querySelectorAll('#userManagementTree .tree-body').forEach(b => b.classList.add('collapsed'));
+      document.querySelectorAll('#userManagementTree .tree-header').forEach(h => h.classList.add('collapsed'));
+    });
     loadUserManagement();
   }
 
-  // ==================== ASSIGNMENTS TAB ====================
+  async function loadUserManagement() {
+    const wrap = $('userManagementTree');
+    if (!wrap) return;
+    wrap.innerHTML = '<div class="empty">Đang tải...</div>';
+    try {
+      const snap = await getDocs(collection(db, 'users'));
+      studentsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+        .filter(u => u.role === 'student');
+
+      // Update class dropdown
+      const classSet = new Set();
+      studentsCache.forEach(u => {
+        if (u.class) classSet.add(u.class);
+      });
+      const classes = Array.from(classSet).sort();
+      const classSelect = $('stuFilterClass');
+      if (classSelect) {
+        classSelect.innerHTML = '<option value="all">Tất cả lớp</option>' +
+          classes.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+      }
+
+      renderStudentsTree();
+    } catch (err) {
+      wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`;
+    }
+  }
+
+  function renderStudentsTree() {
+    const wrap = $('userManagementTree');
+    if (!wrap) return;
+
+    const filterGrade = $('stuFilterGrade')?.value || 'all';
+    const filterClass = $('stuFilterClass')?.value || 'all';
+    const filterVerified = $('stuFilterVerified')?.value || 'all';
+    const keyword = ($('stuSearchInput')?.value || '').toLowerCase().trim();
+
+    // Lọc HS
+    let filtered = [...studentsCache];
+    if (filterGrade !== 'all') {
+      if (filterGrade === 'none') {
+        filtered = filtered.filter(u => !u.class || !getGradeFromClass(u.class));
+      } else {
+        filtered = filtered.filter(u => getGradeFromClass(u.class) === filterGrade);
+      }
+    }
+    if (filterClass !== 'all') {
+      filtered = filtered.filter(u => u.class === filterClass);
+    }
+    if (filterVerified === 'verified') {
+      filtered = filtered.filter(u => u.emailVerified === true);
+    } else if (filterVerified === 'unverified') {
+      filtered = filtered.filter(u => u.emailVerified !== true);
+    }
+    if (keyword) {
+      filtered = filtered.filter(u =>
+        (u.name || '').toLowerCase().includes(keyword) ||
+        (u.email || '').toLowerCase().includes(keyword)
+      );
+    }
+
+    // Sắp xếp theo tên A→Z
+    filtered.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'vi'));
+
+    // Nhóm theo Khối → Lớp
+    const byGrade = { '10': {}, '11': {}, '12': {}, 'none': {} };
+    filtered.forEach(u => {
+      const g = getGradeFromClass(u.class) || 'none';
+      const cls = u.class || '(Chưa có lớp)';
+      if (!byGrade[g][cls]) byGrade[g][cls] = [];
+      byGrade[g][cls].push(u);
+    });
+
+    $('stuResultCount').textContent = `Hiển thị ${filtered.length}/${studentsCache.length} HS`;
+
+    if (filtered.length === 0) {
+      wrap.innerHTML = '<div class="empty">Không tìm thấy học sinh nào.</div>';
+      return;
+    }
+
+    // Render
+    const gradeNames = { '10': '📚 Khối 10', '11': '📚 Khối 11', '12': '📚 Khối 12', 'none': '❓ Chưa có lớp' };
+    const gradeOrder = ['10', '11', '12', 'none'];
+
+    let html = '';
+    gradeOrder.forEach(g => {
+      const classesInGrade = byGrade[g];
+      const totalInGrade = Object.values(classesInGrade).reduce((s, arr) => s + arr.length, 0);
+      if (totalInGrade === 0) return;
+
+      const classCount = Object.keys(classesInGrade).length;
+      html += `
+        <div class="tree-group">
+          <div class="tree-header lv1" data-grade="${g}">
+            <div class="tree-title">
+              <span>${gradeNames[g]}</span>
+            </div>
+            <div class="tree-badges">
+              <span class="count-badge">${classCount} lớp</span>
+              <span class="count-badge">${totalInGrade} HS</span>
+              <span class="tree-toggle">▼</span>
+            </div>
+          </div>
+          <div class="tree-body">
+      `;
+
+      Object.keys(classesInGrade).sort().forEach(cls => {
+        const students = classesInGrade[cls];
+        const vCount = students.filter(s => s.emailVerified === true).length;
+        const uCount = students.length - vCount;
+
+        html += `
+            <div class="tree-group" style="margin:0; border:none; border-radius:0; box-shadow:none; border-top:1px solid #E0E0E0;">
+              <div class="tree-header lv2" data-class="${esc(cls)}">
+                <div class="tree-title">
+                  <span>🏫 ${esc(cls)}</span>
+                </div>
+                <div class="tree-badges">
+                  ${vCount > 0 ? `<span class="count-badge" style="background:#0066CC;">✓ ${vCount}</span>` : ''}
+                  ${uCount > 0 ? `<span class="count-badge" style="background:#999;">⏳ ${uCount}</span>` : ''}
+                  <span class="count-badge">${students.length} HS</span>
+                  <span class="tree-toggle">▼</span>
+                </div>
+              </div>
+              <div class="tree-body">
+                ${students.map(s => {
+                  const verified = s.emailVerified === true;
+                  const verBadge = verified
+                    ? '<span class="badge badge-verified">✅ Đã xác thực</span>'
+                    : '<span class="badge badge-unverified">⏳ Chưa xác thực</span>';
+                  return `
+                    <div class="student-row">
+                      <div class="s-info">
+                        <div class="s-name">${esc(s.name || '(Chưa có tên)')}</div>
+                        <div class="s-meta">📧 ${esc(s.email)} • ĐK: ${fmtDate(s.createdAt)}</div>
+                        <div style="margin-top:4px;">${verBadge}</div>
+                      </div>
+                      <button class="btn btn-danger btn-sm" data-del-user="${s.id}" data-email="${esc(s.email)}" data-name="${esc(s.name || '')}">🗑 Xoá</button>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+        `;
+      });
+
+      html += `
+          </div>
+        </div>
+      `;
+    });
+
+    wrap.innerHTML = html;
+
+    // Gắn sự kiện toggle
+    wrap.querySelectorAll('.tree-header').forEach(h => {
+      h.addEventListener('click', (e) => {
+        e.stopPropagation();
+        h.classList.toggle('collapsed');
+        const body = h.nextElementSibling;
+        if (body) body.classList.toggle('collapsed');
+      });
+    });
+
+    // Gắn sự kiện xoá HS
+    wrap.querySelectorAll('[data-del-user]').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const name = btn.dataset.name;
+        const email = btn.dataset.email;
+        if (!confirm(`Xoá HS "${name || email}"?\n\n⚠️ Không thể hoàn tác!`)) return;
+        try {
+          await deleteDoc(doc(db, 'users', btn.dataset.delUser));
+          toast('✅ Đã xoá HS.', 'success');
+          loadUserManagement();
+        } catch (err) { toast('Lỗi: ' + err.message, 'error'); }
+      });
+    });
+  }
+
+  // ══════════════════════════════════════════════════════════════
+  // ⭐ ASSIGNMENTS TAB — CÂY KHỐI → BÀI HỌC → ĐỀ
+  // ══════════════════════════════════════════════════════════════
   function renderAssignmentsTab() {
     const tab = $('tab-assignments');
     tab.innerHTML = `
@@ -2929,12 +3329,394 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
           <h3>📋 Danh Sách Đề & Bài Làm</h3>
           <button class="btn btn-light btn-sm" id="refreshAssignmentsBtn">🔄 Tải lại</button>
         </div>
-        <div id="teacherAssignments"></div>
+        <div class="filter-bar">
+          <label>📚 Khối:</label>
+          <select id="asgFilterGrade">
+            <option value="all">Tất cả khối</option>
+            <option value="10">Khối 10</option>
+            <option value="11">Khối 11</option>
+            <option value="12">Khối 12</option>
+          </select>
+          <label>📖 Bài học:</label>
+          <select id="asgFilterLesson">
+            <option value="all">Tất cả bài</option>
+          </select>
+          <label>📝 Loại:</label>
+          <select id="asgFilterType">
+            <option value="all">Tất cả loại</option>
+            <option value="quiz">🎯 Đề có điểm</option>
+            <option value="external">🔗 Luyện tập (file ngoài)</option>
+          </select>
+          <input type="text" id="asgSearchInput" placeholder="🔍 Tìm theo tên đề..." />
+          <button class="btn btn-light btn-sm" id="asgExpandAll">📂 Mở hết</button>
+          <button class="btn btn-light btn-sm" id="asgCollapseAll">📁 Thu gọn</button>
+          <span class="count" id="asgResultCount" style="color:#8B4513; font-weight:600;"></span>
+        </div>
+        <div id="teacherAssignmentsTree"></div>
       </div>
     `;
     $('refreshAssignmentsBtn').addEventListener('click', loadTeacherAssignments);
+    $('asgFilterGrade').addEventListener('change', () => { updateAsgLessonFilter(); renderAssignmentsTree(); });
+    $('asgFilterLesson').addEventListener('change', renderAssignmentsTree);
+    $('asgFilterType').addEventListener('change', renderAssignmentsTree);
+    $('asgSearchInput').addEventListener('input', renderAssignmentsTree);
+    $('asgExpandAll').addEventListener('click', () => {
+      document.querySelectorAll('#teacherAssignmentsTree .tree-body').forEach(b => b.classList.remove('collapsed'));
+      document.querySelectorAll('#teacherAssignmentsTree .tree-header').forEach(h => h.classList.remove('collapsed'));
+    });
+    $('asgCollapseAll').addEventListener('click', () => {
+      document.querySelectorAll('#teacherAssignmentsTree .tree-body').forEach(b => b.classList.add('collapsed'));
+      document.querySelectorAll('#teacherAssignmentsTree .tree-header').forEach(h => h.classList.add('collapsed'));
+    });
     loadTeacherAssignments();
   }
+
+  function updateAsgLessonFilter() {
+    const filterGrade = $('asgFilterGrade')?.value || 'all';
+    const lessons = Object.values(teacherLessonsMapCache);
+    let filteredLessons = lessons;
+    if (filterGrade !== 'all') {
+      filteredLessons = lessons.filter(l => l.grade === filterGrade);
+    }
+    const select = $('asgFilterLesson');
+    if (!select) return;
+    const currentVal = select.value;
+    select.innerHTML = '<option value="all">Tất cả bài</option>' +
+      filteredLessons.map(l => `<option value="${l.id}">${esc(l.name)}</option>`).join('');
+    if (filteredLessons.some(l => l.id === currentVal)) {
+      select.value = currentVal;
+    }
+  }
+
+  async function loadTeacherAssignments() {
+    const wrap = $('teacherAssignmentsTree');
+    if (!wrap) return;
+    wrap.innerHTML = '<div class="empty">Đang tải...</div>';
+    try {
+      const [aSnap, sSnap, vSnap, lSnap] = await Promise.all([
+        getDocs(collection(db, 'assignments')),
+        getDocs(collection(db, 'submissions')),
+        getDocs(collection(db, 'viewLogs')),
+        getDocs(collection(db, 'lessons'))
+      ]);
+      teacherAssignmentsCache = aSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      teacherSubmissionsCache = sSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      teacherViewLogsCache = vSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      teacherLessonsMapCache = {};
+      lSnap.docs.forEach(d => { teacherLessonsMapCache[d.id] = { id: d.id, ...d.data() }; });
+
+      updateAsgLessonFilter();
+      renderAssignmentsTree();
+    } catch (err) {
+      wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`;
+    }
+  }
+
+  function renderAssignmentsTree() {
+    const wrap = $('teacherAssignmentsTree');
+    if (!wrap) return;
+
+    const filterGrade = $('asgFilterGrade')?.value || 'all';
+    const filterLesson = $('asgFilterLesson')?.value || 'all';
+    const filterType = $('asgFilterType')?.value || 'all';
+    const keyword = ($('asgSearchInput')?.value || '').toLowerCase().trim();
+
+    // Lọc đề
+    let filtered = [...teacherAssignmentsCache];
+    if (filterGrade !== 'all') {
+      filtered = filtered.filter(a => a.grade === filterGrade);
+    }
+    if (filterLesson !== 'all') {
+      filtered = filtered.filter(a => a.lessonId === filterLesson);
+    }
+    if (filterType !== 'all') {
+      filtered = filtered.filter(a => a.mode === filterType);
+    }
+    if (keyword) {
+      filtered = filtered.filter(a =>
+        (a.title || '').toLowerCase().includes(keyword) ||
+        (a.desc || '').toLowerCase().includes(keyword)
+      );
+    }
+
+    $('asgResultCount').textContent = `Hiển thị ${filtered.length}/${teacherAssignmentsCache.length} đề`;
+
+    if (filtered.length === 0) {
+      wrap.innerHTML = '<div class="empty">Không tìm thấy đề nào phù hợp.</div>';
+      return;
+    }
+
+    // Nhóm theo Khối → Bài học
+    const gradeNames = { '10': '📚 Vật Lý 10', '11': '📚 Vật Lý 11', '12': '📚 Vật Lý 12' };
+    const gradeOrder = ['10', '11', '12'];
+
+    // byGrade[grade][lessonId] = [assignments]
+    const byGrade = { '10': {}, '11': {}, '12': {} };
+    filtered.forEach(a => {
+      const g = a.grade || '10';
+      if (!byGrade[g]) byGrade[g] = {};
+      const lessonId = a.lessonId || '_unassigned';
+      if (!byGrade[g][lessonId]) byGrade[g][lessonId] = [];
+      byGrade[g][lessonId].push(a);
+    });
+
+    let html = '';
+    gradeOrder.forEach(g => {
+      const lessonsInGrade = byGrade[g] || {};
+      const totalInGrade = Object.values(lessonsInGrade).reduce((s, arr) => s + arr.length, 0);
+      if (totalInGrade === 0) return;
+
+      const lessonCount = Object.keys(lessonsInGrade).length;
+      html += `
+        <div class="tree-group">
+          <div class="tree-header lv1" data-grade="${g}">
+            <div class="tree-title">
+              <span>${gradeNames[g]}</span>
+            </div>
+            <div class="tree-badges">
+              <span class="count-badge">${lessonCount} bài</span>
+              <span class="count-badge">${totalInGrade} đề</span>
+              <span class="tree-toggle">▼</span>
+            </div>
+          </div>
+          <div class="tree-body">
+      `;
+
+      // Sắp xếp bài học theo order
+      const lessonIds = Object.keys(lessonsInGrade).sort((a, b) => {
+        if (a === '_unassigned') return 1;
+        if (b === '_unassigned') return -1;
+        const la = teacherLessonsMapCache[a];
+        const lb = teacherLessonsMapCache[b];
+        return (la?.order || 0) - (lb?.order || 0);
+      });
+
+      lessonIds.forEach(lessonId => {
+        const assignments = lessonsInGrade[lessonId];
+        const lesson = teacherLessonsMapCache[lessonId];
+        const lessonName = lesson ? lesson.name : '📦 Chưa phân loại';
+        const lessonDesc = lesson?.description || '';
+
+        html += `
+            <div class="tree-group" style="margin:0; border:none; border-radius:0; box-shadow:none; border-top:1px solid #E0E0E0;">
+              <div class="tree-header lv2" data-lesson="${lessonId}">
+                <div class="tree-title">
+                  <span>📖 ${esc(lessonName)}</span>
+                  ${lessonDesc ? `<span style="font-size:12px; opacity:0.8; margin-left:8px;">${esc(lessonDesc)}</span>` : ''}
+                </div>
+                <div class="tree-badges">
+                  <span class="count-badge">${assignments.length} đề</span>
+                  <span class="tree-toggle">▼</span>
+                </div>
+              </div>
+              <div class="tree-body">
+                ${assignments.map(a => renderTeacherAssignmentItem(a)).join('')}
+              </div>
+            </div>
+        `;
+      });
+
+      html += `
+          </div>
+        </div>
+      `;
+    });
+
+    wrap.innerHTML = html;
+
+    // Gắn sự kiện toggle
+    wrap.querySelectorAll('.tree-header').forEach(h => {
+      h.addEventListener('click', (e) => {
+        e.stopPropagation();
+        h.classList.toggle('collapsed');
+        const body = h.nextElementSibling;
+        if (body) body.classList.toggle('collapsed');
+      });
+    });
+
+    // Gắn sự kiện cho các nút trong assignment
+    attachAssignmentActions(wrap);
+  }
+
+  function renderTeacherAssignmentItem(a) {
+    const isExternal = a.mode === 'external';
+    const subs = teacherSubmissionsCache.filter(s => s.assignmentId === a.id);
+    const logs = teacherViewLogsCache.filter(v => v.assignmentId === a.id && v.mode === (isExternal ? 'external' : 'essay'));
+
+    const modeBadge = isExternal
+      ? '<span class="badge badge-external">🔗 Luyện tập</span>'
+      : '<span class="badge badge-inline">🎯 Đề có điểm</span>';
+
+    const hiddenBadge = a.hidden ? '<span class="badge badge-hidden">🙈 Đã ẩn</span>' : '';
+
+    const submitted = subs.filter(s => s.status === 'submitted');
+    const graded = subs.filter(s => s.status === 'graded' || s.status === 'published');
+
+    const publishBtn = !isExternal && submitted.length > 0
+      ? `<button class="btn btn-secondary btn-sm" data-publish="${a.id}">📢 Công bố (${submitted.length})</button>`
+      : '';
+
+    const hideToggleBtn = `<button class="btn btn-light btn-sm" data-toggle-hide="${a.id}">
+      ${a.hidden ? '👁 Hiện đề' : '🙈 Ẩn đề'}
+    </button>`;
+
+    const bestScoreBtn = (!isExternal && a.type === 'quiz' && subs.length > 0)
+      ? `<button class="btn btn-secondary btn-sm" data-best-score="${a.id}">🏆 Điểm cao nhất</button>`
+      : '';
+
+    let statsSection = '';
+    if (isExternal) {
+      statsSection = `<div class="text-sm" style="color:#0066CC;">📊 ${logs.length} lượt mở • ${new Set(logs.map(l => l.studentId)).size} HS</div>`;
+    } else if (a.type === 'quiz') {
+      statsSection = `<div class="text-sm" style="color:#004488;">📝 ${subs.length} bài làm • ${graded.length} đã chấm</div>`;
+    }
+
+    // Danh sách bài làm (thu gọn)
+    let subsList = '';
+    if (!isExternal && subs.length > 0) {
+      subsList = `
+        <div class="student-subs">
+          ${subs.map(s => {
+            const maxScore = s.autoMax || 7;
+            const statusBadge = {
+              in_progress: '<span class="badge badge-inprogress">🔄 Đang làm</span>',
+              abandoned: '<span class="badge badge-pending">⚠️ Hủy</span>',
+              submitted: '<span class="badge badge-pending">⏳ Chưa công bố</span>',
+              published: '<span class="badge badge-published">✅ Đã công bố</span>',
+              graded: `<span class="badge badge-graded">Điểm: ${esc(s.score)}/${esc(maxScore)}</span>`
+            }[s.status] || '';
+
+            return `
+              <div class="submission ${s.status === 'graded' || s.status === 'published' ? 'graded' : ''}" style="margin-bottom:6px;">
+                <div class="space-between">
+                  <div>
+                    <strong>${esc(s.studentName)}</strong>${s.studentClass ? ` — Lớp ${esc(s.studentClass)}` : ''}
+                    <div class="text-sm">${s.submittedAt ? `Nộp: ${fmtDate(s.submittedAt)}` : (s.status === 'in_progress' ? 'Đang làm...' : '')}</div>
+                  </div>
+                  <div style="display:flex; gap:6px;">
+                    ${statusBadge}
+                    ${s.status !== 'in_progress' && s.status !== 'abandoned' ? `<button class="btn btn-secondary btn-sm" data-grade-sub="${s.id}">Chấm</button>` : ''}
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    } else if (isExternal && logs.length > 0) {
+      const byStudent = {};
+      logs.forEach(l => {
+        if (!byStudent[l.studentId]) byStudent[l.studentId] = { name: l.studentName, cls: l.studentClass, count: 0, totalDur: 0 };
+        byStudent[l.studentId].count++;
+        byStudent[l.studentId].totalDur += (l.durationSec || 0);
+      });
+      subsList = `
+        <div class="viewlog-summary">
+          <div style="margin-bottom:8px;">📊 <strong>${Object.keys(byStudent).length} HS</strong> đã truy cập • ${logs.length} lượt</div>
+          ${Object.values(byStudent).map(st => `
+            <div class="viewlog-row">
+              <span><strong>${esc(st.name)}</strong>${st.cls ? ` — ${esc(st.cls)}` : ''}</span>
+              <span>${st.count} lần • ${fmtDuration(st.totalDur)}</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    return `
+      <div class="assignment-item ${a.hidden ? 'hidden-item' : ''}">
+        <div class="a-info">
+          <div class="a-title">
+            📝 ${esc(a.title)} ${modeBadge} ${hiddenBadge}
+          </div>
+          <div class="a-meta">
+            ${a.deadline ? `📅 Hạn: ${esc(a.deadline)} • ` : ''}
+            ${a.type === 'quiz' ? `⏱ ${a.duration || 25} phút • 🔄 ${a.maxAttempts || 3} lượt` : ''}
+          </div>
+          ${statsSection}
+          ${subsList}
+        </div>
+        <div class="a-actions">
+          ${publishBtn}
+          ${bestScoreBtn}
+          ${hideToggleBtn}
+          <button class="btn btn-danger btn-sm" data-del-assignment="${a.id}">🗑 Xoá</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function attachAssignmentActions(wrap) {
+    wrap.querySelectorAll('[data-toggle-hide]').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const aId = btn.dataset.toggleHide;
+        const assignment = teacherAssignmentsCache.find(x => x.id === aId);
+        if (!assignment) return;
+        const newHidden = !assignment.hidden;
+        try {
+          await updateDoc(doc(db, 'assignments', aId), { hidden: newHidden });
+          toast(newHidden ? '🙈 Đã ẩn đề — HS không thấy nữa' : '👁 Đã hiện đề', 'success');
+          loadTeacherAssignments();
+          loadAssignments();
+        } catch (err) { toast('Lỗi: ' + err.message, 'error'); }
+      });
+    });
+
+    wrap.querySelectorAll('[data-best-score]').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const aId = btn.dataset.bestScore;
+        const assignment = teacherAssignmentsCache.find(x => x.id === aId);
+        if (!assignment) return;
+        const assignmentSubs = teacherSubmissionsCache.filter(s => s.assignmentId === aId);
+        showBestScoreModal(assignment, assignmentSubs);
+      });
+    });
+
+    wrap.querySelectorAll('[data-del-assignment]').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (!confirm('Xoá đề?\n\n⚠️ Các bài làm liên quan KHÔNG bị xoá nhưng sẽ không xem được chi tiết.')) return;
+        await deleteDoc(doc(db, 'assignments', btn.dataset.delAssignment));
+        toast('✅ Đã xoá đề', 'success');
+        loadAssignments();
+        loadTeacherAssignments();
+      });
+    });
+
+    wrap.querySelectorAll('[data-publish]').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (!confirm('📢 Công bố điểm cho tất cả bài đã nộp?')) return;
+        try {
+          const subQ = query(collection(db, 'submissions'), where('assignmentId', '==', btn.dataset.publish), where('status', '==', 'submitted'));
+          const subSnap = await getDocs(subQ);
+          const batch = writeBatch(db);
+          subSnap.docs.forEach(sDoc => {
+            batch.update(doc(db, 'submissions', sDoc.id), { status: 'published', publishedAt: serverTimestamp(), publishedReason: 'manual' });
+          });
+          await batch.commit();
+          toast(`✅ Đã công bố ${subSnap.size} bài!`, 'success');
+          loadTeacherAssignments();
+        } catch (err) { toast('Lỗi: ' + err.message, 'error'); }
+      });
+    });
+
+    wrap.querySelectorAll('[data-grade-sub]').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const s = teacherSubmissionsCache.find(x => x.id === btn.dataset.gradeSub);
+        if (!s) return;
+        const a = teacherAssignmentsCache.find(x => x.id === s.assignmentId);
+        await showGradeModal(s, a);
+      });
+    });
+  }
+
+  // ══════════════════════════════════════════════════════════════
+  // CÁC HÀM CÒN LẠI (giữ nguyên)
+  // ══════════════════════════════════════════════════════════════
 
   $('addLessonCancel').addEventListener('click', () => hide($('addLessonModal')));
   $('addLessonConfirm').addEventListener('click', async () => {
@@ -3039,7 +3821,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         payload.duration = Number($('addQuizDuration').value) || 25;
         payload.maxAttempts = Number($('addQuizMaxAttempts').value) || 3;
         
-        // ⭐ Đếm số ảnh để báo cho GV biết
         let imgCount = 0;
         questions.forEach(q => {
           if (q.textHtml && /<img/i.test(q.textHtml)) imgCount++;
@@ -3086,47 +3867,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       loadAssignments();
       loadTeacherAssignments();
     } catch (err) { toast('Lỗi: ' + err.message, 'error'); }
-  }
-
-  async function loadUserManagement() {
-    const wrap = $('userManagement');
-    if (!wrap) return;
-    wrap.innerHTML = '<div class="empty">Đang tải...</div>';
-    try {
-      const snap = await getDocs(collection(db, 'users'));
-      const users = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(u => u.role === 'student')
-        .sort((a, b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
-      if (!users.length) { wrap.innerHTML = '<div class="empty">Chưa có HS.</div>'; return; }
-      
-      wrap.innerHTML = users.map(u => {
-        const verified = u.emailVerified === true;
-        const verBadge = verified ? '<span class="badge badge-verified">✅ Đã xác thực</span>' : '<span class="badge badge-unverified">⏳ Chưa xác thực</span>';
-        const gradeInfo = u.class ? `Khối ${getGradeFromClass(u.class)} • ` : '';
-        return `
-          <div class="submission" style="margin-bottom:8px;">
-            <div class="space-between">
-              <div>
-                <strong>${esc(u.name)}</strong> — ${esc(u.email)}
-                <div class="text-sm">${gradeInfo}Lớp: ${esc(u.class || '—')} • ĐK: ${fmtDate(u.createdAt)}</div>
-                <div style="margin-top:4px;">${verBadge}</div>
-              </div>
-              <button class="btn btn-danger btn-sm" data-del-user="${u.id}" data-email="${esc(u.email)}">🗑 Xoá</button>
-            </div>
-          </div>
-        `;
-      }).join('');
-      
-      wrap.querySelectorAll('[data-del-user]').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          if (!confirm(`Xoá HS "${btn.dataset.email}"?`)) return;
-          try {
-            await deleteDoc(doc(db, 'users', btn.dataset.delUser));
-            toast('Đã xoá.', 'success');
-            loadUserManagement();
-          } catch (err) { toast('Lỗi: ' + err.message, 'error'); }
-        });
-      });
-    } catch (err) { wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`; }
   }
 
   async function showDataStats() {
@@ -3191,183 +3931,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     }
   }
 
-  async function loadTeacherAssignments() {
-    const wrap = $('teacherAssignments');
-    if (!wrap) return;
-    wrap.innerHTML = '<div class="empty">Đang tải...</div>';
-    try {
-      const [aSnap, sSnap, vSnap, lSnap] = await Promise.all([
-        getDocs(collection(db, 'assignments')),
-        getDocs(collection(db, 'submissions')),
-        getDocs(collection(db, 'viewLogs')),
-        getDocs(collection(db, 'lessons'))
-      ]);
-      const assignments = aSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
-      const submissions = sSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-      const viewLogs = vSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-      const lessonsMap = {};
-      lSnap.docs.forEach(d => { lessonsMap[d.id] = d.data(); });
-
-      if (!assignments.length) { wrap.innerHTML = '<div class="empty">Chưa có đề.</div>'; return; }
-
-      wrap.innerHTML = assignments.map(a => {
-        const isExternal = a.mode === 'external';
-        const subs = submissions.filter(s => s.assignmentId === a.id);
-        const logs = viewLogs.filter(v => v.assignmentId === a.id && v.mode === (isExternal ? 'external' : 'essay'));
-        const lessonName = a.lessonId && lessonsMap[a.lessonId] ? lessonsMap[a.lessonId].name : '📦 Chưa phân loại';
-        
-        const modeBadge = isExternal
-          ? '<span class="badge badge-external">🔗 Luyện tập</span>'
-          : '<span class="badge badge-inline">🎯 Đề có điểm</span>';
-
-        const hiddenBadge = a.hidden ? '<span class="badge badge-hidden">🙈 Đã ẩn</span>' : '';
-
-        const submitted = subs.filter(s => s.status === 'submitted');
-        const publishBtn = !isExternal && submitted.length > 0 
-          ? `<button class="btn btn-secondary btn-sm" data-publish="${a.id}">📢 Công bố (${submitted.length})</button>` 
-          : (!isExternal && subs.length > 0 ? '<span class="text-sm" style="color:#0066CC;">✅ Đã công bố</span>' : '');
-
-        const hideToggleBtn = `<button class="btn btn-light btn-sm" data-toggle-hide="${a.id}">
-          ${a.hidden ? '👁 Hiện đề' : '🙈 Ẩn đề'}
-        </button>`;
-
-        const bestScoreBtn = (!isExternal && a.type === 'quiz' && subs.length > 0)
-          ? `<button class="btn btn-secondary btn-sm" data-best-score="${a.id}">👁 Điểm cao nhất</button>`
-          : '';
-
-        let statsSection = '';
-        if (isExternal) {
-          const byStudent = {};
-          logs.forEach(l => {
-            if (!byStudent[l.studentId]) byStudent[l.studentId] = { name: l.studentName, cls: l.studentClass, count: 0, totalDur: 0 };
-            byStudent[l.studentId].count++;
-            byStudent[l.studentId].totalDur += (l.durationSec || 0);
-          });
-          
-          statsSection = `
-            <div class="viewlog-summary">
-              <div style="margin-bottom:8px;">📊 <strong>${Object.keys(byStudent).length} HS</strong> đã truy cập • ${logs.length} lượt</div>
-              ${Object.values(byStudent).map(st => `
-                <div class="viewlog-row">
-                  <span><strong>${esc(st.name)}</strong>${st.cls ? ` — ${esc(st.cls)}` : ''}</span>
-                  <span>${st.count} lần • ${fmtDuration(st.totalDur)}</span>
-                </div>
-              `).join('')}
-            </div>
-          `;
-        } else if (a.type === 'quiz') {
-          statsSection = subs.length ? subs.map(s => {
-            const maxScore = s.autoMax || 7;
-            const autoInfo = s.autoScore != null ? `<div class="text-sm" style="color:#004488;">🎯 ${esc(s.autoScore)}/${esc(maxScore)}</div>` : '';
-            const statusBadge = {
-              in_progress: '<span class="badge badge-inprogress">🔄 Đang làm</span>',
-              abandoned: '<span class="badge badge-pending">⚠️ Hủy</span>',
-              submitted: '<span class="badge badge-pending">⏳ Chưa công bố</span>',
-              published: '<span class="badge badge-published">✅ Đã công bố</span>',
-              graded: `<span class="badge badge-graded">Điểm: ${esc(s.score)}/${esc(maxScore)}</span>`
-            }[s.status] || '';
-
-            return `
-              <div class="submission ${s.status === 'graded' || s.status === 'published' ? 'graded' : ''}">
-                <div class="space-between">
-                  <div>
-                    <strong>${esc(s.studentName)}</strong>${s.studentClass ? ` — Lớp ${esc(s.studentClass)}` : ''}
-                    <div class="text-sm">${s.submittedAt ? `Nộp: ${fmtDate(s.submittedAt)}` : ''}</div>
-                  </div>
-                  <div style="display:flex; gap:6px;">
-                    ${statusBadge}
-                    ${s.status !== 'in_progress' && s.status !== 'abandoned' ? `<button class="btn btn-secondary btn-sm" data-grade-sub="${s.id}">Chấm</button>` : ''}
-                  </div>
-                </div>
-                ${autoInfo}
-              </div>
-            `;
-          }).join('') : '<div class="text-sm" style="padding:8px;">Chưa có bài nộp.</div>';
-        }
-
-        return `
-          <div class="card" ${a.hidden ? 'style="opacity:0.7; border-left:4px solid #999;"' : ''}>
-            <div class="space-between">
-              <div>
-                <div class="text-sm" style="color:#8B4513;">📖 ${esc(lessonName)}</div>
-                <h3>${esc(a.title)}</h3>
-                <div class="meta">Khối ${esc(a.grade)} • ${isExternal ? logs.length + ' lượt' : subs.length + ' bài'} ${modeBadge} ${hiddenBadge}</div>
-              </div>
-              <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                ${publishBtn}
-                ${bestScoreBtn}
-                ${hideToggleBtn}
-                <button class="btn btn-danger btn-sm" data-del-assignment="${a.id}">🗑 Xoá</button>
-              </div>
-            </div>
-            ${statsSection}
-          </div>
-        `;
-      }).join('');
-
-      wrap.querySelectorAll('[data-toggle-hide]').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const aId = btn.dataset.toggleHide;
-          const assignment = assignments.find(x => x.id === aId);
-          if (!assignment) return;
-          const newHidden = !assignment.hidden;
-          try {
-            await updateDoc(doc(db, 'assignments', aId), { hidden: newHidden });
-            toast(newHidden ? '🙈 Đã ẩn đề — HS không thấy nữa' : '👁 Đã hiện đề', 'success');
-            loadTeacherAssignments();
-            loadAssignments();
-          } catch (err) { toast('Lỗi: ' + err.message, 'error'); }
-        });
-      });
-
-      wrap.querySelectorAll('[data-best-score]').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const aId = btn.dataset.bestScore;
-          const assignment = assignments.find(x => x.id === aId);
-          if (!assignment) return;
-          const assignmentSubs = submissions.filter(s => s.assignmentId === aId);
-          showBestScoreModal(assignment, assignmentSubs);
-        });
-      });
-
-      wrap.querySelectorAll('[data-del-assignment]').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          if (!confirm('Xoá đề?')) return;
-          await deleteDoc(doc(db, 'assignments', btn.dataset.delAssignment));
-          toast('Đã xoá', 'success');
-          loadAssignments();
-          loadTeacherAssignments();
-        });
-      });
-
-      wrap.querySelectorAll('[data-publish]').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          if (!confirm('📢 Công bố điểm?')) return;
-          try {
-            const subQ = query(collection(db, 'submissions'), where('assignmentId', '==', btn.dataset.publish), where('status', '==', 'submitted'));
-            const subSnap = await getDocs(subQ);
-            const batch = writeBatch(db);
-            subSnap.docs.forEach(sDoc => {
-              batch.update(doc(db, 'submissions', sDoc.id), { status: 'published', publishedAt: serverTimestamp(), publishedReason: 'manual' });
-            });
-            await batch.commit();
-            toast(`✅ Đã công bố ${subSnap.size} bài!`, 'success');
-            loadTeacherAssignments();
-          } catch (err) { toast('Lỗi: ' + err.message, 'error'); }
-        });
-      });
-
-      wrap.querySelectorAll('[data-grade-sub]').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const s = submissions.find(x => x.id === btn.dataset.gradeSub);
-          if (!s) return;
-          const a = assignments.find(x => x.id === s.assignmentId);
-          await showGradeModal(s, a);
-        });
-      });
-    } catch (err) { wrap.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`; }
-  }
-
   async function showGradeModal(s, a) {
     currentGradeSubmission = s;
     const maxScore = s.autoMax || 7;
@@ -3413,7 +3976,9 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
                     if (opt.value === detail.correct) { optCls = 'correct-answer'; mark = '<span class="mark check">✓ Đáp án</span>'; }
                     if (opt.value === detail.student && opt.value !== detail.correct) { optCls = 'student-wrong'; mark = '<span class="mark cross">✗ HS</span>'; }
                     if (opt.value === detail.student && opt.value === detail.correct) { optCls = 'student-correct'; mark = '<span class="mark check">✓ HS</span>'; }
-                    return `<div class="option-row ${optCls}"><span class="label">${opt.value}.</span><span>${opt.html || esc(opt.text)}</span>${mark}</div>`;
+                    let optHtml = opt.html || esc(opt.text);
+                    optHtml = optHtml.replace(/^\s*[A-D]\s*[.\s]\s*/i, '').trim();
+                    return `<div class="option-row ${optCls}"><span class="label">${opt.value}.</span><span>${optHtml}</span>${mark}</div>`;
                   }).join('')}
                 </div>
               `;
