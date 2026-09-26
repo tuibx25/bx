@@ -768,8 +768,6 @@
     <button class="tab-btn active" data-tab="view" id="viewTabBtn">📖 Xem Bài Tập</button>
     <button class="tab-btn" data-tab="submit" id="submitTabBtn">📊 Kết Quả Của Tôi</button>
     <button class="tab-btn hidden" data-tab="teacher" id="teacherTabBtn">👨‍🏫 Quản Lý (GV)</button>
-    <button class="tab-btn hidden" data-tab="students" id="studentsTabBtn">👥 Quản Lý Học Sinh</button>
-    <button class="tab-btn hidden" data-tab="assignments" id="assignmentsTabBtn">📋 Danh Sách Đề & Bài Làm</button>
   </div>
 
   <div id="tab-view" class="tab-content active">
@@ -808,8 +806,6 @@
   </div>
 
   <div id="tab-teacher" class="tab-content"></div>
-  <div id="tab-students" class="tab-content"></div>
-  <div id="tab-assignments" class="tab-content"></div>
 </div>
 
 <!-- MODAL AUTH -->
@@ -1374,8 +1370,6 @@
         hide($('submitTabBtn'));
         
         show($('teacherTabBtn'));
-        show($('studentsTabBtn'));
-        show($('assignmentsTabBtn'));
         hide($('verifyBanner'));
         show($('gradeTabsWrap'));
         hide($('changeClassBtn'));
@@ -1387,18 +1381,12 @@
         $('tab-teacher').classList.add('active');
         
         renderTeacherTab();
-        renderStudentsTab();
-        renderAssignmentsTab();
       } else {
         show($('viewTabBtn'));
         show($('submitTabBtn'));
         
         hide($('teacherTabBtn'));
-        hide($('studentsTabBtn'));
-        hide($('assignmentsTabBtn'));
         $('tab-teacher').innerHTML = '';
-        $('tab-students').innerHTML = '';
-        $('tab-assignments').innerHTML = '';
         hide($('gradeTabsWrap'));
         
         document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
@@ -1448,15 +1436,11 @@
       show($('submitTabBtn'));
       
       hide($('teacherTabBtn'));
-      hide($('studentsTabBtn'));
-      hide($('assignmentsTabBtn'));
       hide($('verifyBanner'));
       hide($('changeClassBtn'));
       show($('gradeTabsWrap'));
       hide($('hsGradeInfo'));
       $('tab-teacher').innerHTML = '';
-      $('tab-students').innerHTML = '';
-      $('tab-assignments').innerHTML = '';
       
       document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -1516,7 +1500,6 @@
   $('searchInput').addEventListener('input', () => renderAssignmentsFiltered());
   $('filterStatus').addEventListener('change', () => renderAssignmentsFiltered());
   $('filterType').addEventListener('change', () => renderAssignmentsFiltered());
-
   // ==================== LOAD ASSIGNMENTS ====================
   async function loadAssignments() {
     const list = $('assignmentsList');
@@ -2342,7 +2325,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     loadAssignments();
     loadMySubmissions();
   });
-
   // ==================== MY SUBMISSIONS ====================
   async function loadMySubmissions() {
     const wrap = $('mySubmissions');
@@ -2589,7 +2571,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
 
   $('studentDetailCloseBtn').addEventListener('click', () => hide($('studentDetailModal')));
 
-  // ==================== TEACHER TAB (QUẢN LÝ - GV) ====================
+  // ==================== TEACHER TAB ====================
   function renderTeacherTab() {
     const tab = $('tab-teacher');
     if (tab.innerHTML.includes('Thêm Bài Học')) return;
@@ -2757,6 +2739,11 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         </div>
       </div>
 
+      <div class="card">
+        <h3>👥 Quản Lý Học Sinh</h3>
+        <div id="userManagement"></div>
+      </div>
+
       <div class="card" style="border-left: 5px solid #c0392b;">
         <h3 style="color: #c0392b;">⚠️ Xoá Dữ Liệu Cuối Năm</h3>
         <p class="text-sm" style="margin-bottom: 12px;">
@@ -2769,6 +2756,11 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
           <button class="btn btn-light" id="viewDataStatsBtn">📊 Xem thống kê dữ liệu</button>
         </div>
         <div id="dataStats" style="margin-top:12px;"></div>
+      </div>
+
+      <div class="card">
+        <h3>📋 Danh Sách Đề & Bài Làm</h3>
+        <div id="teacherAssignments"></div>
       </div>
     `;
 
@@ -2845,45 +2837,16 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     $('clearSubmissionsBtn').addEventListener('click', clearAllSubmissions);
     $('viewDataStatsBtn').addEventListener('click', showDataStats);
 
+    // ⭐ Gắn sự kiện cho thống kê
     $('loadStatsBtn').addEventListener('click', loadStats);
     $('statsGrade').addEventListener('change', () => {
       loadStatsClassesAndLessons();
     });
 
     loadLessonsForTeacher();
-    loadStatsClassesAndLessons();
-  }
-
-  // ==================== STUDENTS TAB ====================
-  function renderStudentsTab() {
-    const tab = $('tab-students');
-    tab.innerHTML = `
-      <div class="card">
-        <div class="space-between mb-2">
-          <h3>👥 Quản Lý Học Sinh</h3>
-          <button class="btn btn-light btn-sm" id="refreshStudentsBtn">🔄 Tải lại</button>
-        </div>
-        <div id="userManagement"></div>
-      </div>
-    `;
-    $('refreshStudentsBtn').addEventListener('click', loadUserManagement);
     loadUserManagement();
-  }
-
-  // ==================== ASSIGNMENTS TAB ====================
-  function renderAssignmentsTab() {
-    const tab = $('tab-assignments');
-    tab.innerHTML = `
-      <div class="card">
-        <div class="space-between mb-2">
-          <h3>📋 Danh Sách Đề & Bài Làm</h3>
-          <button class="btn btn-light btn-sm" id="refreshAssignmentsBtn">🔄 Tải lại</button>
-        </div>
-        <div id="teacherAssignments"></div>
-      </div>
-    `;
-    $('refreshAssignmentsBtn').addEventListener('click', loadTeacherAssignments);
     loadTeacherAssignments();
+    loadStatsClassesAndLessons();
   }
 
   $('addLessonCancel').addEventListener('click', () => hide($('addLessonModal')));
@@ -3173,6 +3136,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
           ${a.hidden ? '👁 Hiện đề' : '🙈 Ẩn đề'}
         </button>`;
 
+        // ⭐ Nút xem điểm cao nhất (chỉ với đề quiz, không có đề external)
         const bestScoreBtn = (!isExternal && a.type === 'quiz' && subs.length > 0)
           ? `<button class="btn btn-secondary btn-sm" data-best-score="${a.id}">👁 Điểm cao nhất</button>`
           : '';
@@ -3247,6 +3211,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         `;
       }).join('');
 
+      // ⭐ Handler nút Ẩn/Hiện đề
       wrap.querySelectorAll('[data-toggle-hide]').forEach(btn => {
         btn.addEventListener('click', async () => {
           const aId = btn.dataset.toggleHide;
@@ -3262,6 +3227,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         });
       });
 
+      // ⭐ Handler nút Xem điểm cao nhất
       wrap.querySelectorAll('[data-best-score]').forEach(btn => {
         btn.addEventListener('click', async () => {
           const aId = btn.dataset.bestScore;
@@ -3445,16 +3411,16 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       loadTeacherAssignments();
     } catch (err) { toast('Lỗi: ' + err.message, 'error'); }
   });
-
   // ═══════════════════════════════════════════════════════════
   // ⭐ THỐNG KÊ ĐIỂM
   // ═══════════════════════════════════════════════════════════
 
+  // Load danh sách lớp + bài học cho dropdown lọc
   async function loadStatsClassesAndLessons() {
-    const grade = $('statsGrade')?.value;
-    if (!grade) return;
+    const grade = $('statsGrade').value;
     
     try {
+      // Load lớp từ users
       const usersSnap = await getDocs(collection(db, 'users'));
       const users = usersSnap.docs.map(d => d.data()).filter(u => u.role === 'student');
       const classSet = new Set();
@@ -3466,32 +3432,27 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       });
       const classes = Array.from(classSet).sort();
 
+      // Load bài học của khối
       const lq = query(collection(db, 'lessons'), where('grade', '==', grade));
       const lSnap = await getDocs(lq);
       const lessons = lSnap.docs.map(d => ({ id: d.id, ...d.data() }));
       lessons.sort((a, b) => (a.order || 0) - (b.order || 0));
 
-      const statsClassEl = $('statsClass');
-      const statsLessonEl = $('statsLesson');
-      
-      if (statsClassEl) {
-        statsClassEl.innerHTML = '<option value="">-- Tất cả lớp --</option>' +
-          classes.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
-      }
+      // Update dropdowns
+      $('statsClass').innerHTML = '<option value="">-- Tất cả lớp --</option>' +
+        classes.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
 
-      if (statsLessonEl) {
-        statsLessonEl.innerHTML = '<option value="">-- Tất cả bài --</option>' +
-          lessons.map(l => `<option value="${l.id}">${esc(l.name)}</option>`).join('');
-      }
+      $('statsLesson').innerHTML = '<option value="">-- Tất cả bài --</option>' +
+        lessons.map(l => `<option value="${l.id}">${esc(l.name)}</option>`).join('');
 
     } catch (err) {
       console.error('Load stats filters error:', err);
     }
   }
 
+  // Load và hiển thị thống kê
   async function loadStats() {
     const wrap = $('statsResult');
-    if (!wrap) return;
     wrap.innerHTML = '<div class="empty">Đang tải...</div>';
 
     const grade = $('statsGrade').value;
@@ -3499,6 +3460,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     const filterLesson = $('statsLesson').value;
 
     try {
+      // Load tất cả dữ liệu cần thiết
       const [usersSnap, aSnap, sSnap, lSnap] = await Promise.all([
         getDocs(collection(db, 'users')),
         getDocs(collection(db, 'assignments')),
@@ -3514,6 +3476,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       const lessonsMap = {};
       allLessons.forEach(l => { lessonsMap[l.id] = l; });
 
+      // Lọc học sinh theo khối + lớp
       const filteredStudents = allUsers.filter(u => {
         const gradeFromClass = getGradeFromClass(u.class);
         if (gradeFromClass !== grade) return false;
@@ -3521,9 +3484,10 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         return true;
       });
 
+      // Lọc đề theo khối + bài học + loại quiz
       const filteredAssignments = allAssignments.filter(a => {
         if (a.grade !== grade) return false;
-        if (a.type !== 'quiz') return false;
+        if (a.type !== 'quiz') return false;  // Chỉ thống kê đề quiz
         if (filterLesson && a.lessonId !== filterLesson) return false;
         return true;
       }).sort((a, b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
@@ -3537,7 +3501,8 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         return;
       }
 
-      const studentScores = {};
+      // ⭐ Tính điểm cao nhất của mỗi HS cho mỗi đề (từ 3 lần làm)
+      const studentScores = {};  // { studentId: { assignmentId: { max, maxScore, count, allScores } } }
       
       filteredStudents.forEach(st => {
         studentScores[st.id] = {};
@@ -3571,8 +3536,10 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         }
       });
 
+      // ⭐ Tạo bảng HTML
       let html = '';
 
+      // Thống kê tổng quan
       const totalStudents = filteredStudents.length;
       let totalSubmissions = 0;
       let studentsDone = new Set();
@@ -3603,6 +3570,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         </div>
       `;
 
+      // Bảng chi tiết
       html += `
         <div style="overflow-x:auto;">
         <table class="stats-table">
@@ -3680,9 +3648,11 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     }
   }
 
+  // ⭐ Hiển thị modal điểm cao nhất cho 1 đề
   async function showBestScoreModal(assignment, subs) {
     const maxScore = subs[0]?.autoMax || 7;
 
+    // Nhóm theo HS
     const byStudent = {};
     subs.forEach(s => {
       if (s.status === 'in_progress' || s.status === 'abandoned') return;
@@ -3711,6 +3681,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
 
     students.sort((a, b) => b.bestScore - a.bestScore);
 
+    // Thống kê tổng quan
     const scores = students.map(s => s.bestScore);
     const avgScore = scores.length > 0 
       ? Math.round((scores.reduce((s, x) => s + x, 0) / scores.length) * 100) / 100 
@@ -3777,6 +3748,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       </div>
     `;
 
+    // Tạo modal động
     const modal = document.createElement('div');
     modal.className = 'modal-overlay';
     modal.innerHTML = `
