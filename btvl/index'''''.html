@@ -242,50 +242,6 @@
     background: #ccc;
     color: #666;
   }
-
-  /* ⭐ CHECKBOX "Giao cho cả khối" */
-  .grade-all-checkbox {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    background: #FFF9E6;
-    border-bottom: 1px solid #E0E0E0;
-    cursor: pointer;
-    user-select: none;
-    transition: background 0.15s;
-    font-weight: 600;
-    color: #8B4513;
-  }
-  .grade-all-checkbox:hover {
-    background: #FFF5CC;
-  }
-  .grade-all-checkbox.checked {
-    background: #F5DEB3;
-  }
-  .grade-all-checkbox input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    accent-color: #8B5A2B;
-    cursor: pointer;
-    flex-shrink: 0;
-  }
-  .grade-all-checkbox .gac-label {
-    flex: 1;
-    font-size: 14px;
-  }
-  .grade-all-checkbox .gac-count {
-    font-size: 12px;
-    background: #8B5A2B;
-    color: #FFF;
-    padding: 2px 10px;
-    border-radius: 10px;
-    font-weight: 600;
-  }
-  .grade-all-checkbox.checked .gac-count {
-    background: #c0392b;
-  }
-
   .class-grid-toolbar {
     display: flex;
     justify-content: space-between;
@@ -323,10 +279,6 @@
     gap: 8px;
     max-height: 280px;
     overflow-y: auto;
-  }
-  .class-grid-body.disabled {
-    opacity: 0.4;
-    pointer-events: none;
   }
   .class-grid-empty {
     padding: 20px;
@@ -408,9 +360,6 @@
     border-radius: 12px;
     font-size: 12px;
     font-weight: 600;
-  }
-  .class-selected-summary .class-chip.all-grade {
-    background: #c0392b;
   }
   .class-selected-summary .class-chip .chip-remove {
     background: rgba(255,255,255,0.3);
@@ -1802,14 +1751,7 @@
 
   let availableClassesByGrade = { '10': [], '11': [], '12': [] };
   let selectedClasses = new Set();
-  let assignToAllGrade = false;  // ⭐ NEW: Giao cho cả khối
   let currentClassGridGrade = '10';
-
-  // State cho Edit modal
-  let editingAssignmentId = null;
-  let editSelectedClasses = new Set();
-  let editAssignToAllGrade = false;  // ⭐ NEW
-  let editCurrentClassGridGrade = '10';
 
   let _lessonsForSelect = [];
   let currentLessonSelectSearch = '';
@@ -1834,11 +1776,12 @@
     return match ? match[1] : '';
   }
 
+  // ⭐ ĐÃ SỬA: Dùng "a" thường thay vì "A" hoa
   function buildClassName(grade, classNum) {
     if (!grade || !/^(10|11|12)$/.test(grade)) return null;
     const num = parseInt(classNum);
     if (!num || num < 1 || num > 99) return null;
-    return `${grade}a${num}`;
+    return `${grade}a${num}`;   // ← "a" thường
   }
 
   function toast(msg, type='info') {
@@ -2428,24 +2371,12 @@
 
       if (currentProfile?.role === 'student' && currentUser) {
         const myClassNorm = normalizeClass(currentProfile.class);
-        const myGrade = getGradeFromClass(currentProfile.class);
-
         items = items.filter(a => {
-          // ⭐ Đề không giao cho ai cả (không lớp, không HS, không cả khối) → KHÔNG cho HS thấy
-          const hasClassAssign = a.assignedClasses && a.assignedClasses.length > 0;
-          const hasStudentAssign = a.assignedTo && a.assignedTo.length > 0;
-          const hasAllGradeAssign = a.assignedAllGrade === true;
-
-          // Nếu không giao cho ai cả → KHÔNG hiện
-          if (!hasClassAssign && !hasStudentAssign && !hasAllGradeAssign) return false;
-
-          // ⭐ Nếu giao cho cả khối → HS cùng khối đều thấy
-          if (hasAllGradeAssign && a.grade === myGrade) return true;
-
-          // Giao theo lớp cụ thể
+          const noAssign = (!a.assignedTo || a.assignedTo.length === 0) && (!a.assignedClasses || a.assignedClasses.length === 0);
+          if (noAssign) return true;
           const toMe = a.assignedTo?.includes(currentUser.uid);
-          const toMyClass = a.assignedClasses?.some(c => normalizeClass(c) === myClassNorm);
-          return toMe || toMyClass;
+          const isAssignedToMyClass = a.assignedClasses?.some(c => normalizeClass(c) === myClassNorm);
+          return toMe || isAssignedToMyClass;
         });
       }
 
@@ -2619,7 +2550,7 @@
       const myClassNorm = normalizeClass(currentProfile.class);
       const toMe = a.assignedTo?.includes(currentUser.uid);
       const toMyClass = a.assignedClasses?.some(c => normalizeClass(c) === myClassNorm);
-      if (toMe || toMyClass || a.assignedAllGrade) {
+      if (toMe || toMyClass) {
         assignedBadge = '<span class="badge badge-assigned">📌 GV giao</span>';
         isAssignedToMe = true;
       }
@@ -3571,25 +3502,8 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       }
     });
 
-    // ⭐ Update checkbox "Giao cho cả khối"
-    const gradeAllCb = $('assignGradeAll');
-    const gradeAllWrap = $('assignGradeAllWrap');
-    const gradeAllCount = $('assignGradeAllCount');
-    if (gradeAllCb && gradeAllWrap) {
-      gradeAllCb.checked = assignToAllGrade;
-      gradeAllWrap.classList.toggle('checked', assignToAllGrade);
-    }
-    if (gradeAllCount) {
-      const totalHSInGrade = (availableClassesByGrade[currentClassGridGrade] || []).reduce((s, c) => s + c.count, 0);
-      gradeAllCount.textContent = `${totalHSInGrade} HS`;
-    }
-
-    // Nếu đang chọn "cả khối" → disable class grid
-    gridBody.classList.toggle('disabled', assignToAllGrade);
-
     if (classes.length === 0) {
       gridBody.innerHTML = `<div class="class-grid-empty">📭 Khối ${currentClassGridGrade} chưa có lớp nào có HS.</div>`;
-      updateClassSelectedSummary();
       return;
     }
 
@@ -3597,7 +3511,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       const isChecked = selectedClasses.has(c.name);
       return `
         <label class="class-checkbox ${isChecked ? 'checked' : ''}" data-class="${esc(c.name)}">
-          <input type="checkbox" ${isChecked ? 'checked' : ''} data-class-name="${esc(c.name)}" ${assignToAllGrade ? 'disabled' : ''}>
+          <input type="checkbox" ${isChecked ? 'checked' : ''} data-class-name="${esc(c.name)}">
           <span class="cb-name">${esc(c.name)}</span>
           <span class="cb-count">(${c.count})</span>
         </label>
@@ -3624,23 +3538,8 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     const summaryList = $('classSelectedList');
     if (!summaryList) return;
 
-    if (assignToAllGrade) {
-      summaryList.innerHTML = `
-        <span class="class-chip all-grade">
-          🌐 Cả khối ${currentClassGridGrade}
-          <button type="button" class="chip-remove" data-remove-all-grade title="Bỏ chọn">×</button>
-        </span>
-      `;
-      summaryList.querySelector('[data-remove-all-grade]').addEventListener('click', (e) => {
-        e.preventDefault();
-        assignToAllGrade = false;
-        renderClassGrid();
-      });
-      return;
-    }
-
     if (selectedClasses.size === 0) {
-      summaryList.innerHTML = '<span class="empty-hint">Chưa chọn lớp nào (đề sẽ không giao cho lớp nào)</span>';
+      summaryList.innerHTML = '<span class="empty-hint">Chưa chọn lớp nào</span>';
       return;
     }
 
@@ -3672,26 +3571,9 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       });
     });
 
-    // ⭐ Checkbox "Giao cho cả khối"
-    const gradeAllCb = $('assignGradeAll');
-    if (gradeAllCb) {
-      gradeAllCb.addEventListener('change', (e) => {
-        assignToAllGrade = e.target.checked;
-        if (assignToAllGrade) {
-          // Bỏ chọn tất cả lớp riêng lẻ
-          selectedClasses.clear();
-        }
-        renderClassGrid();
-      });
-    }
-
     const selectAllBtn = $('classGridSelectAll');
     if (selectAllBtn) {
       selectAllBtn.addEventListener('click', () => {
-        if (assignToAllGrade) {
-          toast('Đang chọn "Cả khối". Bỏ tick "Cả khối" trước.', 'error');
-          return;
-        }
         const classes = availableClassesByGrade[currentClassGridGrade] || [];
         classes.forEach(c => selectedClasses.add(c.name));
         renderClassGrid();
@@ -3709,172 +3591,23 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
   }
 
   // ══════════════════════════════════════════════════════════════
-  // ⭐ EDIT CLASS GRID (cho modal sửa)
-  // ══════════════════════════════════════════════════════════════
-  function renderEditClassGrid() {
-    const gridBody = $('editClassGridBody');
-    if (!gridBody) return;
-
-    const classes = availableClassesByGrade[editCurrentClassGridGrade] || [];
-
-    ['10', '11', '12'].forEach(g => {
-      const count = (availableClassesByGrade[g] || []).length;
-      const badge = $(`editClassTabCount${g}`);
-      if (badge) {
-        badge.textContent = count;
-        badge.classList.toggle('empty', count === 0);
-      }
-    });
-
-    // ⭐ Update checkbox "Giao cho cả khối"
-    const gradeAllCb = $('editAssignGradeAll');
-    const gradeAllWrap = $('editAssignGradeAllWrap');
-    const gradeAllCount = $('editAssignGradeAllCount');
-    if (gradeAllCb && gradeAllWrap) {
-      gradeAllCb.checked = editAssignToAllGrade;
-      gradeAllWrap.classList.toggle('checked', editAssignToAllGrade);
-    }
-    if (gradeAllCount) {
-      const totalHSInGrade = (availableClassesByGrade[editCurrentClassGridGrade] || []).reduce((s, c) => s + c.count, 0);
-      gradeAllCount.textContent = `${totalHSInGrade} HS`;
-    }
-
-    gridBody.classList.toggle('disabled', editAssignToAllGrade);
-
-    if (classes.length === 0) {
-      gridBody.innerHTML = `<div class="class-grid-empty">📭 Khối ${editCurrentClassGridGrade} chưa có lớp nào có HS.</div>`;
-      updateEditClassSelectedSummary();
-      return;
-    }
-
-    gridBody.innerHTML = classes.map(c => {
-      const isChecked = editSelectedClasses.has(c.name);
-      return `
-        <label class="class-checkbox ${isChecked ? 'checked' : ''}" data-class="${esc(c.name)}">
-          <input type="checkbox" ${isChecked ? 'checked' : ''} data-edit-class-name="${esc(c.name)}" ${editAssignToAllGrade ? 'disabled' : ''}>
-          <span class="cb-name">${esc(c.name)}</span>
-          <span class="cb-count">(${c.count})</span>
-        </label>
-      `;
-    }).join('');
-
-    gridBody.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-      cb.addEventListener('change', (e) => {
-        const cls = e.target.dataset.editClassName;
-        if (e.target.checked) {
-          editSelectedClasses.add(cls);
-        } else {
-          editSelectedClasses.delete(cls);
-        }
-        e.target.closest('.class-checkbox').classList.toggle('checked', e.target.checked);
-        updateEditClassSelectedSummary();
-      });
-    });
-
-    updateEditClassSelectedSummary();
-  }
-
-  function updateEditClassSelectedSummary() {
-    const summaryList = $('editClassSelectedList');
-    if (!summaryList) return;
-
-    if (editAssignToAllGrade) {
-      summaryList.innerHTML = `
-        <span class="class-chip all-grade">
-          🌐 Cả khối ${editCurrentClassGridGrade}
-          <button type="button" class="chip-remove" data-edit-remove-all-grade title="Bỏ chọn">×</button>
-        </span>
-      `;
-      summaryList.querySelector('[data-edit-remove-all-grade]').addEventListener('click', (e) => {
-        e.preventDefault();
-        editAssignToAllGrade = false;
-        renderEditClassGrid();
-      });
-      return;
-    }
-
-    if (editSelectedClasses.size === 0) {
-      summaryList.innerHTML = '<span class="empty-hint">Chưa chọn lớp nào (đề sẽ không giao cho lớp nào)</span>';
-      return;
-    }
-
-    const sorted = Array.from(editSelectedClasses).sort();
-    summaryList.innerHTML = sorted.map(cls => `
-      <span class="class-chip">
-        ${esc(cls)}
-        <button type="button" class="chip-remove" data-edit-remove-class="${esc(cls)}" title="Bỏ chọn">×</button>
-      </span>
-    `).join('');
-
-    summaryList.querySelectorAll('.chip-remove').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const cls = btn.dataset.editRemoveClass;
-        editSelectedClasses.delete(cls);
-        renderEditClassGrid();
-      });
-    });
-  }
-
-  function bindEditClassGridEvents() {
-    document.querySelectorAll('.edit-class-grid-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.edit-class-grid-tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        editCurrentClassGridGrade = tab.dataset.editGrade;
-        renderEditClassGrid();
-      });
-    });
-
-    const gradeAllCb = $('editAssignGradeAll');
-    if (gradeAllCb) {
-      gradeAllCb.addEventListener('change', (e) => {
-        editAssignToAllGrade = e.target.checked;
-        if (editAssignToAllGrade) {
-          editSelectedClasses.clear();
-        }
-        renderEditClassGrid();
-      });
-    }
-
-    const selectAllBtn = $('editClassGridSelectAll');
-    if (selectAllBtn) {
-      selectAllBtn.addEventListener('click', () => {
-        if (editAssignToAllGrade) {
-          toast('Đang chọn "Cả khối". Bỏ tick "Cả khối" trước.', 'error');
-          return;
-        }
-        const classes = availableClassesByGrade[editCurrentClassGridGrade] || [];
-        classes.forEach(c => editSelectedClasses.add(c.name));
-        renderEditClassGrid();
-      });
-    }
-
-    const deselectAllBtn = $('editClassGridDeselectAll');
-    if (deselectAllBtn) {
-      deselectAllBtn.addEventListener('click', () => {
-        const classes = availableClassesByGrade[editCurrentClassGridGrade] || [];
-        classes.forEach(c => editSelectedClasses.delete(c.name));
-        renderEditClassGrid();
-      });
-    }
-  }
-
-  // ══════════════════════════════════════════════════════════════
   // ⭐ SEARCHABLE SELECT
   // ══════════════════════════════════════════════════════════════
   function escapeRegex(str) {
     return String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
+  // ⭐ ĐÃ SỬA: Lọc bài học theo khối đang chọn
   function updateLessonSelectOptions(lessons) {
     const optionsEl = $('addLessonOptions');
     if (!optionsEl) return;
 
     const search = currentLessonSelectSearch.toLowerCase().trim();
     const selectedId = $('addLesson')?.value || '';
+    // ⭐ Lấy khối đang chọn ở dropdown "Khối lớp"
     const selectedGrade = $('addGrade')?.value || '';
 
+    // ⭐ Lọc bài học theo khối đã chọn
     let lessonsToShow = lessons;
     if (selectedGrade && /^(10|11|12)$/.test(selectedGrade)) {
       lessonsToShow = lessons.filter(l => l.grade === selectedGrade);
@@ -3897,6 +3630,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
 
       if (filtered.length === 0) return;
 
+      // ⭐ Chỉ hiện header nhóm nếu không filter theo khối cụ thể
       if (!selectedGrade || !/^(10|11|12)$/.test(selectedGrade)) {
         html += `<div class="ss-group-header">── KHỐI ${g} (${filtered.length} bài) ──</div>`;
       }
@@ -3922,6 +3656,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     });
 
     if (totalVisible === 0) {
+      // ⭐ Thông báo theo ngữ cảnh
       if (selectedGrade && /^(10|11|12)$/.test(selectedGrade)) {
         if (search) {
           optionsEl.innerHTML = `<div class="ss-empty">🔍 Không tìm thấy bài "${esc(search)}" trong khối ${selectedGrade}</div>`;
@@ -4212,10 +3947,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
 
           <div class="form-group" style="margin-top:14px;">
             <label style="font-weight:700; color:#8B4513; font-size:15px;">🎯 Giao bài cho ai?</label>
-            <div class="hint" style="margin-bottom:10px; color:#555;">
-              Tick <strong>"Cả khối"</strong> để giao cho TẤT CẢ HS của khối đang chọn.
-              <br>Hoặc tick từng lớp cụ thể. <strong>Không tick gì cả = không giao cho lớp nào</strong> (vẫn có thể giao riêng cho HS qua email).
-            </div>
+            <div class="hint" style="margin-bottom:10px; color:#555;">Tick chọn các lớp muốn giao bài. Chỉ hiện các lớp đã có học sinh.</div>
             
             <div class="class-grid-wrap">
               <div class="class-grid-tabs">
@@ -4229,14 +3961,8 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
                   Khối 12 <span class="tab-count" id="classTabCount12">0</span>
                 </button>
               </div>
-
-              <label class="grade-all-checkbox" id="assignGradeAllWrap">
-                <input type="checkbox" id="assignGradeAll" />
-                <span class="gac-label">🌐 Giao cho CẢ KHỐI <span id="assignGradeAllCount" style="color:#c0392b;">0 HS</span></span>
-              </label>
-
               <div class="class-grid-toolbar">
-                <span class="toolbar-label">Hoặc tick các lớp cụ thể:</span>
+                <span class="toolbar-label" id="classGridHint">Tick các lớp muốn giao bài</span>
                 <div class="toolbar-actions">
                   <button type="button" id="classGridSelectAll">✓ Tất cả</button>
                   <button type="button" id="classGridDeselectAll">✗ Bỏ chọn</button>
@@ -4246,16 +3972,16 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
                 <div class="class-grid-empty">Đang tải...</div>
               </div>
               <div class="class-selected-summary">
-                <span class="summary-label">📌 Sẽ giao cho:</span>
+                <span class="summary-label">📌 Đã chọn:</span>
                 <div class="summary-list" id="classSelectedList">
-                  <span class="empty-hint">Chưa chọn lớp nào (đề sẽ không giao cho lớp nào)</span>
+                  <span class="empty-hint">Chưa chọn lớp nào</span>
                 </div>
               </div>
             </div>
           </div>
 
           <div class="form-group" style="margin-top:14px;">
-            <label style="font-size:13px;">Giao riêng cho HS (theo email, cách nhau dấu phẩy)</label>
+            <label style="font-size:13px;">Hoặc giao riêng cho HS (theo email, cách nhau dấu phẩy)</label>
             <input id="addAssignEmails" placeholder="VD: hs1@gmail.com, hs2@gmail.com" />
           </div>
 
@@ -4330,12 +4056,16 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         loadAvailableClasses();
         bindClassGridEvents();
         bindLessonSearchableSelect();
+        // ⭐ Filter bài học theo khối đang chọn khi mở form
         updateLessonSelectOptions(_lessonsForSelect || []);
       }
     });
 
+    // ⭐ ĐÃ THÊM: Khi đổi khối lớp → filter lại bài học
     $('addGrade').addEventListener('change', () => {
+      // Reset bài học đang chọn (vì có thể không thuộc khối mới)
       clearLessonSelection();
+      // Filter lại options theo khối mới
       updateLessonSelectOptions(_lessonsForSelect || []);
     });
 
@@ -4871,28 +4601,15 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       ${a.hidden ? '👁 Hiện đề' : '🙈 Ẩn đề'}
     </button>`;
 
-    const editBtn = `<button class="btn btn-light btn-sm" data-edit-assignment="${a.id}">✏️ Sửa</button>`;
-
     const bestScoreBtn = (!isExternal && a.type === 'quiz' && subs.length > 0)
       ? `<button class="btn btn-secondary btn-sm" data-best-score="${a.id}">🏆 Điểm cao nhất</button>`
       : '';
-
-    // ⭐ Badge giao cho cả khối
-    let allGradeBadge = '';
-    if (a.assignedAllGrade) {
-      allGradeBadge = `<span style="display:inline-block; background:#c0392b; color:#FFF; padding:2px 10px; border-radius:10px; font-size:11px; font-weight:700;">🌐 CẢ KHỐI ${a.grade}</span>`;
-    }
 
     let classBadges = '';
     if (a.assignedClasses && a.assignedClasses.length > 0) {
       classBadges = `<div style="margin-top:6px; display:flex; gap:4px; flex-wrap:wrap;">` +
         a.assignedClasses.map(c => `<span style="display:inline-block; background:#8B5A2B; color:#FFF; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600;">📌 ${esc(c)}</span>`).join('') +
         `</div>`;
-    }
-
-    let noAssignBadge = '';
-    if (!a.assignedAllGrade && (!a.assignedClasses || a.assignedClasses.length === 0) && (!a.assignedTo || a.assignedTo.length === 0)) {
-      noAssignBadge = `<span style="display:inline-block; background:#999; color:#FFF; padding:2px 10px; border-radius:10px; font-size:11px; font-weight:700;">⚠️ KHÔNG GIAO CHO AI</span>`;
     }
 
     let statsSection = '';
@@ -4958,8 +4675,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         <div class="a-info">
           <div class="a-title">
             📝 ${esc(a.title)} ${modeBadge} ${hiddenBadge}
-            ${allGradeBadge}
-            ${noAssignBadge}
           </div>
           <div class="a-meta">
             ${a.deadline ? `📅 Hạn: ${esc(a.deadline)} • ` : ''}
@@ -4972,7 +4687,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         <div class="a-actions">
           ${publishBtn}
           ${bestScoreBtn}
-          ${editBtn}
           ${hideToggleBtn}
           <button class="btn btn-danger btn-sm" data-del-assignment="${a.id}">🗑 Xoá</button>
         </div>
@@ -5005,16 +4719,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         if (!assignment) return;
         const assignmentSubs = teacherSubmissionsCache.filter(s => s.assignmentId === aId);
         showBestScoreModal(assignment, assignmentSubs);
-      });
-    });
-
-    wrap.querySelectorAll('[data-edit-assignment]').forEach(btn => {
-      btn.addEventListener('click', async (e) => {
-        e.stopPropagation();
-        const aId = btn.dataset.editAssignment;
-        const assignment = teacherAssignmentsCache.find(x => x.id === aId);
-        if (!assignment) return;
-        await openEditAssignmentModal(assignment);
       });
     });
 
@@ -5055,264 +4759,6 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         const a = teacherAssignmentsCache.find(x => x.id === s.assignmentId);
         await showGradeModal(s, a);
       });
-    });
-  }
-
-  // ══════════════════════════════════════════════════════════════
-  // ⭐ EDIT ASSIGNMENT MODAL
-  // ══════════════════════════════════════════════════════════════
-  async function openEditAssignmentModal(assignment) {
-    editingAssignmentId = assignment.id;
-    editSelectedClasses = new Set(assignment.assignedClasses || []);
-    editAssignToAllGrade = assignment.assignedAllGrade === true;
-    editCurrentClassGridGrade = assignment.grade || '10';
-
-    await loadAvailableClasses();
-
-    const relatedSubs = teacherSubmissionsCache.filter(s => s.assignmentId === assignment.id);
-    const subCount = relatedSubs.length;
-    const gradedCount = relatedSubs.filter(s => s.status === 'graded' || s.status === 'published').length;
-    const assignedToCount = (assignment.assignedTo || []).length;
-
-    const existing = document.getElementById('editAssignmentModal');
-    if (existing) existing.remove();
-
-    const lessonsInGrade = (_lessonsForSelect || []).filter(l => l.grade === assignment.grade);
-
-    const modal = document.createElement('div');
-    modal.id = 'editAssignmentModal';
-    modal.className = 'modal-overlay';
-    modal.innerHTML = `
-      <div class="modal modal-large" style="max-width: 800px;">
-        <div class="space-between mb-2">
-          <h2>✏️ Sửa đề bài tập</h2>
-          <button class="btn btn-light btn-sm" id="editAssCloseBtn">✖ Đóng</button>
-        </div>
-
-        <div class="alert alert-info">
-          ℹ️ <strong>Chỉ sửa thông tin</strong> (tiêu đề, hạn nộp, giao lớp, ...). 
-          <br>🚫 <strong>Không sửa nội dung câu hỏi</strong> để tránh làm lệch bài làm cũ của HS.
-        </div>
-
-        ${subCount > 0 ? `
-          <div class="alert alert-warn">
-            ⚠️ Đề này đã có <strong>${subCount}</strong> bài làm (${gradedCount} đã chấm).
-            Việc sửa metadata <strong>KHÔNG ảnh hưởng</strong> bài làm cũ.
-          </div>
-        ` : ''}
-
-        <div class="form-group">
-          <label>Tiêu đề đề bài</label>
-          <input id="editAssTitle" value="${esc(assignment.title || '')}" />
-        </div>
-
-        <div class="row">
-          <div class="form-group" style="flex:1; min-width:200px;">
-            <label>Khối lớp (không đổi)</label>
-            <input value="${esc(assignment.grade === '10' ? 'Vật Lý 10' : assignment.grade === '11' ? 'Vật Lý 11' : 'Vật Lý 12')}" disabled />
-          </div>
-          <div class="form-group" style="flex:2; min-width:250px;">
-            <label>Thuộc bài học</label>
-            <select id="editAssLesson">
-              <option value="">-- Không thuộc bài học nào --</option>
-              ${lessonsInGrade.map(l => `
-                <option value="${l.id}" ${l.id === assignment.lessonId ? 'selected' : ''}>
-                  ${esc(l.name)}
-                </option>
-              `).join('')}
-            </select>
-            <div class="hint">Chỉ hiện bài học của khối ${esc(assignment.grade)}</div>
-          </div>
-        </div>
-
-        ${assignment.type === 'quiz' ? `
-          <div class="row">
-            <div class="form-group" style="flex:1;">
-              <label>⏱ Thời gian (phút)</label>
-              <input type="number" id="editAssDuration" value="${assignment.duration || 25}" min="1" max="180" />
-            </div>
-            <div class="form-group" style="flex:1;">
-              <label>Số lượt tối đa</label>
-              <input type="number" id="editAssMaxAttempts" value="${assignment.maxAttempts || 3}" min="1" max="10" />
-            </div>
-          </div>
-        ` : `
-          <div class="row">
-            <div class="form-group" style="flex:1;">
-              <label>Số lần mở tối đa</label>
-              <input type="number" id="editAssMaxAttempts" value="${assignment.maxAttempts || 0}" min="0" max="100" />
-            </div>
-          </div>
-        `}
-
-        <div class="row">
-          <div class="form-group" style="flex:1;">
-            <label>Hạn nộp</label>
-            <input type="date" id="editAssDeadline" value="${esc(assignment.deadline || '')}" />
-          </div>
-          <div class="form-group" style="flex:1; display:flex; align-items:end;">
-            <label class="toggle-switch" style="padding:10px 0;">
-              <input type="checkbox" id="editAssHidden" ${assignment.hidden ? 'checked' : ''} />
-              <span class="toggle-slider"></span>
-              <span style="font-weight:600;">🙈 Ẩn đề (HS không thấy)</span>
-            </label>
-          </div>
-        </div>
-
-        <div class="form-group" style="margin-top:14px;">
-          <label style="font-weight:700; color:#8B4513; font-size:15px;">🎯 Giao bài cho ai?</label>
-          <div class="hint" style="margin-bottom:10px; color:#555;">
-            Tick <strong>"Cả khối"</strong> để giao cho TẤT CẢ HS của khối đang chọn.
-            <br>Hoặc tick từng lớp cụ thể. <strong>Không tick gì cả = không giao cho lớp nào</strong> (vẫn có thể giao riêng cho HS qua email).
-          </div>
-          
-          <div class="class-grid-wrap">
-            <div class="class-grid-tabs">
-              <button type="button" class="edit-class-grid-tab class-grid-tab ${editCurrentClassGridGrade === '10' ? 'active' : ''}" data-edit-grade="10">
-                Khối 10 <span class="tab-count" id="editClassTabCount10">0</span>
-              </button>
-              <button type="button" class="edit-class-grid-tab class-grid-tab ${editCurrentClassGridGrade === '11' ? 'active' : ''}" data-edit-grade="11">
-                Khối 11 <span class="tab-count" id="editClassTabCount11">0</span>
-              </button>
-              <button type="button" class="edit-class-grid-tab class-grid-tab ${editCurrentClassGridGrade === '12' ? 'active' : ''}" data-edit-grade="12">
-                Khối 12 <span class="tab-count" id="editClassTabCount12">0</span>
-              </button>
-            </div>
-
-            <label class="grade-all-checkbox" id="editAssignGradeAllWrap">
-              <input type="checkbox" id="editAssignGradeAll" />
-              <span class="gac-label">🌐 Giao cho CẢ KHỐI <span id="editAssignGradeAllCount" style="color:#c0392b;">0 HS</span></span>
-            </label>
-
-            <div class="class-grid-toolbar">
-              <span class="toolbar-label">Hoặc tick các lớp cụ thể:</span>
-              <div class="toolbar-actions">
-                <button type="button" id="editClassGridSelectAll">✓ Tất cả</button>
-                <button type="button" id="editClassGridDeselectAll">✗ Bỏ chọn</button>
-              </div>
-            </div>
-            <div class="class-grid-body" id="editClassGridBody">
-              <div class="class-grid-empty">Đang tải...</div>
-            </div>
-            <div class="class-selected-summary">
-              <span class="summary-label">📌 Sẽ giao cho:</span>
-              <div class="summary-list" id="editClassSelectedList">
-                <span class="empty-hint">Chưa chọn lớp nào</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group" style="margin-top:14px;">
-          <label style="font-size:13px;">Giao riêng cho HS (theo email, cách nhau dấu phẩy)</label>
-          <input id="editAssAssignEmails" placeholder="VD: hs1@gmail.com, hs2@gmail.com" value="${esc((assignment.assignedEmails || []).join(', '))}" />
-          <div class="hint">
-            Hiện tại có <strong>${assignedToCount}</strong> HS được giao riêng.
-            ${assignedToCount > 0 ? '<br>⚠️ Nếu để trống → sẽ bỏ giao cho các HS này.' : ''}
-          </div>
-        </div>
-
-        <div class="modal-actions">
-          <button class="btn btn-light" id="editAssCancelBtn">Hủy</button>
-          <button class="btn btn-primary" id="editAssSaveBtn">💾 Lưu thay đổi</button>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modal);
-
-    renderEditClassGrid();
-    bindEditClassGridEvents();
-
-    modal.querySelector('#editAssCloseBtn').addEventListener('click', () => modal.remove());
-    modal.querySelector('#editAssCancelBtn').addEventListener('click', () => modal.remove());
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) modal.remove();
-    });
-
-    modal.querySelector('#editAssSaveBtn').addEventListener('click', async () => {
-      const saveBtn = modal.querySelector('#editAssSaveBtn');
-      saveBtn.disabled = true;
-      saveBtn.textContent = '⏳ Đang lưu...';
-
-      try {
-        const newTitle = modal.querySelector('#editAssTitle').value.trim();
-        if (!newTitle) {
-          toast('Vui lòng nhập tiêu đề', 'error');
-          saveBtn.disabled = false;
-          saveBtn.textContent = '💾 Lưu thay đổi';
-          return;
-        }
-
-        const newLessonId = modal.querySelector('#editAssLesson').value;
-        const newDeadline = modal.querySelector('#editAssDeadline').value;
-        const newHidden = modal.querySelector('#editAssHidden').checked;
-        const newMaxAttempts = Number(modal.querySelector('#editAssMaxAttempts')?.value) || 0;
-
-        const emailsStr = modal.querySelector('#editAssAssignEmails').value.trim();
-        let assignedTo = [];
-        let assignedEmails = [];
-        if (emailsStr) {
-          const emails = emailsStr.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
-          const uSnap = await getDocs(collection(db, 'users'));
-          const foundUsers = uSnap.docs.map(d => ({ id: d.id, ...d.data() }))
-            .filter(u => emails.includes((u.email || '').toLowerCase()));
-          assignedTo = foundUsers.map(u => u.id);
-          assignedEmails = foundUsers.map(u => u.email);
-          
-          // Không chọn gì cả (không cả khối, không lớp, không HS) → cần xác nhận
-          if (assignedTo.length === 0 && editSelectedClasses.size === 0 && !editAssignToAllGrade) {
-            if (!confirm('⚠️ Bạn KHÔNG giao đề cho ai cả (không lớp, không HS).\n\nĐề sẽ bị "treo" — HS không thể thấy.\n\nTiếp tục?')) {
-              saveBtn.disabled = false;
-              saveBtn.textContent = '💾 Lưu thay đổi';
-              return;
-            }
-          }
-        } else {
-          // Không nhập email + không chọn lớp + không cả khối
-          if (editSelectedClasses.size === 0 && !editAssignToAllGrade) {
-            if (!confirm('⚠️ Bạn KHÔNG giao đề cho ai cả (không lớp, không HS).\n\nĐề sẽ bị "treo" — HS không thể thấy.\n\nTiếp tục?')) {
-              saveBtn.disabled = false;
-              saveBtn.textContent = '💾 Lưu thay đổi';
-              return;
-            }
-          }
-        }
-
-        const payload = {
-          title: newTitle,
-          lessonId: newLessonId || null,
-          deadline: newDeadline,
-          hidden: newHidden,
-          assignedAllGrade: editAssignToAllGrade,
-          assignedClasses: editAssignToAllGrade ? [] : Array.from(editSelectedClasses).sort(),
-          assignedTo: assignedTo,
-          assignedEmails: assignedEmails,
-          updatedAt: serverTimestamp()
-        };
-
-        if (assignment.type === 'quiz') {
-          const newDuration = Number(modal.querySelector('#editAssDuration')?.value) || 25;
-          payload.duration = newDuration;
-        }
-
-        if (newMaxAttempts >= 0) {
-          payload.maxAttempts = newMaxAttempts;
-        }
-
-        await updateDoc(doc(db, 'assignments', assignment.id), payload);
-
-        toast('✅ Đã cập nhật đề!', 'success');
-        modal.remove();
-        editingAssignmentId = null;
-        editSelectedClasses.clear();
-        editAssignToAllGrade = false;
-        loadTeacherAssignments();
-        loadAssignments();
-      } catch (err) {
-        toast('Lỗi: ' + err.message, 'error');
-        saveBtn.disabled = false;
-        saveBtn.textContent = '💾 Lưu thay đổi';
-      }
     });
   }
 
@@ -5575,26 +5021,18 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         payload.desc = $('addExternalDesc').value.trim();
       }
 
-      // ⭐ Giao cho cả khối
-      payload.assignedAllGrade = assignToAllGrade;
-      // ⭐ Giao lớp cụ thể (chỉ khi không giao cả khối)
-      payload.assignedClasses = assignToAllGrade ? [] : Array.from(selectedClasses).sort();
+      payload.assignedClasses = Array.from(selectedClasses).sort();
       
       const emailsStr = $('addAssignEmails').value.trim();
       payload.assignedTo = [];
-      payload.assignedEmails = [];
       if (emailsStr) {
         const emails = emailsStr.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
         const uSnap = await getDocs(collection(db, 'users'));
-        const foundUsers = uSnap.docs.map(d => ({ id: d.id, ...d.data() }))
-          .filter(u => emails.includes((u.email || '').toLowerCase()));
-        payload.assignedTo = foundUsers.map(u => u.id);
-        payload.assignedEmails = foundUsers.map(u => u.email);
-      }
-
-      // ⭐ Kiểm tra: nếu không giao cho ai cả → xác nhận
-      if (!payload.assignedAllGrade && payload.assignedClasses.length === 0 && payload.assignedTo.length === 0) {
-        if (!confirm('⚠️ Bạn KHÔNG giao đề cho ai cả (không lớp, không HS).\n\nĐề sẽ bị "treo" — HS không thể thấy.\n\nTiếp tục?')) {
+        payload.assignedTo = uSnap.docs.map(d => ({ id: d.id, ...d.data() }))
+          .filter(u => emails.includes((u.email || '').toLowerCase()))
+          .map(u => u.id);
+        if (payload.assignedTo.length === 0 && payload.assignedClasses.length === 0) {
+          toast('Không tìm thấy HS và chưa chọn lớp', 'error');
           return;
         }
       }
@@ -5611,19 +5049,11 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
       
       clearLessonSelection();
       selectedClasses.clear();
-      assignToAllGrade = false;
       renderClassGrid();
       
-      let classMsg = '';
-      if (payload.assignedAllGrade) {
-        classMsg = ` cho CẢ KHỐI ${grade}`;
-      } else if (payload.assignedClasses.length > 0) {
-        classMsg = ` cho ${payload.assignedClasses.length} lớp`;
-      } else if (payload.assignedTo.length > 0) {
-        classMsg = ` cho ${payload.assignedTo.length} HS`;
-      } else {
-        classMsg = ' (chưa giao cho ai)';
-      }
+      const classMsg = payload.assignedClasses.length > 0 
+        ? ` cho ${payload.assignedClasses.length} lớp` 
+        : (payload.assignedTo.length > 0 ? ` cho ${payload.assignedTo.length} HS` : '');
       
       toast(`✅ Đã thêm đề${classMsg}!`, 'success');
       loadAssignments();
