@@ -1557,7 +1557,7 @@
         </div>
       </div>
       <div class="hint" id="authClassPreview">
-        💡 Chỉ cần gõ <strong>số lớp</strong> (VD: <code>12</code> → lớp <strong>10a12</strong>)
+        💡 Chỉ cần gõ <strong>số lớp</strong> (VD: <code>12</code> → lớp <strong>10A12</strong>)
       </div>
     </div>
     <div class="modal-actions">
@@ -1575,7 +1575,7 @@
   <div class="modal">
     <h2>✏️ Đổi lớp học</h2>
     <div class="alert alert-info">
-      💡 Cập nhật lớp khi bạn lên lớp mới (VD: 10a12 → 11a12).
+      💡 Cập nhật lớp khi bạn lên lớp mới (VD: 10A12 → 11A12).
       Hệ thống sẽ tự chuyển sang bài tập của khối mới.
     </div>
     <div class="form-group">
@@ -1753,6 +1753,7 @@
   let selectedClasses = new Set();
   let currentClassGridGrade = '10';
 
+  // ⭐ Searchable Select state
   let _lessonsForSelect = [];
   let currentLessonSelectSearch = '';
   let currentLessonSelectOpen = false;
@@ -1776,12 +1777,11 @@
     return match ? match[1] : '';
   }
 
-  // ⭐ ĐÃ SỬA: Dùng "a" thường thay vì "A" hoa
   function buildClassName(grade, classNum) {
     if (!grade || !/^(10|11|12)$/.test(grade)) return null;
     const num = parseInt(classNum);
     if (!num || num < 1 || num > 99) return null;
-    return `${grade}a${num}`;   // ← "a" thường
+    return `${grade}A${num}`;
   }
 
   function toast(msg, type='info') {
@@ -2029,7 +2029,7 @@
     const num = $('authClassNum').value.trim();
     const previewEl = $('authClassPreview');
     if (!num) {
-      previewEl.innerHTML = `💡 Chỉ cần gõ <strong>số lớp</strong> (VD: <code>12</code> → lớp <strong>${grade}a12</strong>)`;
+      previewEl.innerHTML = `💡 Chỉ cần gõ <strong>số lớp</strong> (VD: <code>12</code> → lớp <strong>${grade}A12</strong>)`;
       previewEl.style.color = '#666';
     } else {
       const result = buildClassName(grade, num);
@@ -2130,7 +2130,7 @@
     const num = $('newClassNum').value.trim();
     const previewEl = $('newClassPreview');
     if (!num) {
-      previewEl.innerHTML = `💡 Nhập số lớp (VD: <code>1</code> → <strong>${grade}a1</strong>)`;
+      previewEl.innerHTML = `💡 Nhập số lớp (VD: <code>1</code> → <strong>${grade}A1</strong>)`;
       previewEl.style.color = '#666';
     } else {
       const result = buildClassName(grade, num);
@@ -3597,24 +3597,15 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     return String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
-  // ⭐ ĐÃ SỬA: Lọc bài học theo khối đang chọn
   function updateLessonSelectOptions(lessons) {
     const optionsEl = $('addLessonOptions');
     if (!optionsEl) return;
 
     const search = currentLessonSelectSearch.toLowerCase().trim();
     const selectedId = $('addLesson')?.value || '';
-    // ⭐ Lấy khối đang chọn ở dropdown "Khối lớp"
-    const selectedGrade = $('addGrade')?.value || '';
-
-    // ⭐ Lọc bài học theo khối đã chọn
-    let lessonsToShow = lessons;
-    if (selectedGrade && /^(10|11|12)$/.test(selectedGrade)) {
-      lessonsToShow = lessons.filter(l => l.grade === selectedGrade);
-    }
 
     const byGrade = { 10: [], 11: [], 12: [] };
-    lessonsToShow.forEach(l => {
+    lessons.forEach(l => {
       if (byGrade[l.grade]) byGrade[l.grade].push(l);
     });
 
@@ -3630,14 +3621,9 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
 
       if (filtered.length === 0) return;
 
-      // ⭐ Chỉ hiện header nhóm nếu không filter theo khối cụ thể
-      if (!selectedGrade || !/^(10|11|12)$/.test(selectedGrade)) {
-        html += `<div class="ss-group-header">── KHỐI ${g} (${filtered.length} bài) ──</div>`;
-      }
-
+      html += `<div class="ss-group-header">── KHỐI ${g} (${filtered.length} bài) ──</div>`;
       filtered.forEach(l => {
-        const allLessonsInGrade = lessons.filter(x => x.grade === l.grade);
-        const idx = allLessonsInGrade.indexOf(l) + 1;
+        const idx = lessonsInGrade.indexOf(l) + 1;
         const isSelected = l.id === selectedId;
         let nameHtml = esc(l.name || '');
         if (search) {
@@ -3656,16 +3642,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
     });
 
     if (totalVisible === 0) {
-      // ⭐ Thông báo theo ngữ cảnh
-      if (selectedGrade && /^(10|11|12)$/.test(selectedGrade)) {
-        if (search) {
-          optionsEl.innerHTML = `<div class="ss-empty">🔍 Không tìm thấy bài "${esc(search)}" trong khối ${selectedGrade}</div>`;
-        } else {
-          optionsEl.innerHTML = `<div class="ss-empty">📭 Khối ${selectedGrade} chưa có bài học nào. Vui lòng tạo bài học trước.</div>`;
-        }
-      } else {
-        optionsEl.innerHTML = '<div class="ss-empty">📭 Chưa có bài học nào trong hệ thống</div>';
-      }
+      optionsEl.innerHTML = '<div class="ss-empty">Không tìm thấy bài học nào</div>';
       currentHighlightedIndex = -1;
       return;
     }
@@ -3832,7 +3809,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
             <span style="font-weight:600;">🔓 Cho phép HS tự đổi lớp</span>
           </label>
           <div class="hint" style="margin-top:8px;">
-            💡 Bật khi đầu năm học để HS cập nhật lớp mới (VD: 10a12 → 11a12).
+            💡 Bật khi đầu năm học để HS cập nhật lớp mới (VD: 10A12 → 11A12).
           </div>
         </div>
       </div>
@@ -4056,17 +4033,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         loadAvailableClasses();
         bindClassGridEvents();
         bindLessonSearchableSelect();
-        // ⭐ Filter bài học theo khối đang chọn khi mở form
-        updateLessonSelectOptions(_lessonsForSelect || []);
       }
-    });
-
-    // ⭐ ĐÃ THÊM: Khi đổi khối lớp → filter lại bài học
-    $('addGrade').addEventListener('change', () => {
-      // Reset bài học đang chọn (vì có thể không thuộc khối mới)
-      clearLessonSelection();
-      // Filter lại options theo khối mới
-      updateLessonSelectOptions(_lessonsForSelect || []);
     });
 
     tab.querySelectorAll('.mode-option').forEach(opt => {
@@ -4806,6 +4773,7 @@ window.MathJax = { tex: { inlineMath: [['\\\\(', '\\\\)'], ['$', '$']] }, svg: {
         }
       });
 
+      // ⭐ Cập nhật cache cho searchable select
       _lessonsForSelect = lessons;
 
       if (lessons.length === 0) {
