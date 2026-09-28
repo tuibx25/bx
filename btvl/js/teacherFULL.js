@@ -25,9 +25,6 @@ let _allClassesCache = null;
 let _gradeAssignmentsCache = [];
 let _gradeSubmissionsCache = [];
 
-// ⭐ State cho nhóm bài học (collapse/expand)
-let _collapsedLessons = new Set();
-
 // ══════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════
@@ -1262,7 +1259,6 @@ export async function loadStatsClassesAndLessons() {
 
 // ══════════════════════════════════════════
 // RENDER ASSIGNMENTS TAB — với ĐẦY ĐỦ bộ lọc
-// + GIẢI PHÁP 5: Thu gọn bài làm + Nhóm theo bài học
 // ══════════════════════════════════════════
 let _teacherAsgCache = [];
 let _teacherLessonsCache = {};
@@ -1277,11 +1273,7 @@ export function renderAssignmentsTab() {
     <div class="card">
       <div class="space-between mb-2">
         <h3>📋 Danh Sách Đề & Bài Làm</h3>
-        <div style="display:flex; gap:8px;">
-          <button class="btn btn-light btn-sm" id="expandAllBtn" title="Mở tất cả bài học">📂 Mở hết</button>
-          <button class="btn btn-light btn-sm" id="collapseAllBtn" title="Thu gọn tất cả bài học">📁 Thu gọn</button>
-          <button class="btn btn-light btn-sm" id="refreshAssignmentsBtn">🔄 Tải lại</button>
-        </div>
+        <button class="btn btn-light btn-sm" id="refreshAssignmentsBtn">🔄 Tải lại</button>
       </div>
       <div class="filter-bar">
         <label>📚 Khối:</label>
@@ -1324,20 +1316,6 @@ export function renderAssignmentsTab() {
   $('refreshAssignmentsBtn')?.addEventListener('click', () => {
     _allClassesCache = null;
     loadTeacherAssignmentsList();
-  });
-
-  // ⭐ Mở hết bài học
-  $('expandAllBtn')?.addEventListener('click', () => {
-    _collapsedLessons.clear();
-    renderTeacherAssignmentsList();
-  });
-
-  // ⭐ Thu gọn hết bài học
-  $('collapseAllBtn')?.addEventListener('click', () => {
-    const allLessonIds = Object.keys(_teacherLessonsCache);
-    allLessonIds.push('_unassigned');
-    _collapsedLessons = new Set(allLessonIds);
-    renderTeacherAssignmentsList();
   });
 
   $('asgFilterGrade')?.addEventListener('change', async () => {
@@ -1394,6 +1372,7 @@ async function loadTeacherAssignmentsList() {
     state.teacherSubmissionsCache = subs;
     state.teacherLessonsMapCache = _teacherLessonsCache;
 
+    // ⭐ Cache cho modal chấm điểm
     _gradeAssignmentsCache = _teacherAsgCache;
     _gradeSubmissionsCache = subs;
 
@@ -1406,6 +1385,7 @@ async function loadTeacherAssignmentsList() {
   }
 }
 
+// ⭐ Load TẤT CẢ các lớp có HS
 async function loadAllClasses() {
   if (_allClassesCache) return _allClassesCache;
 
@@ -1532,9 +1512,6 @@ function updateAsgAssignmentFilter() {
   else select.value = 'all';
 }
 
-// ══════════════════════════════════════════
-// ⭐ RENDER DANH SÁCH ĐỀ — NHÓM THEO BÀI HỌC
-// ══════════════════════════════════════════
 function renderTeacherAssignmentsList() {
   const wrap = $('teacherAssignmentsList');
   if (!wrap) return;
@@ -1566,6 +1543,8 @@ function renderTeacherAssignmentsList() {
 
   if (keyword) items = items.filter(a => (a.title || '').toLowerCase().includes(keyword));
 
+  items.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+
   const countEl = $('asgResultCount');
   if (countEl) countEl.textContent = `${items.length} đề`;
 
@@ -1574,117 +1553,7 @@ function renderTeacherAssignmentsList() {
     return;
   }
 
-  // ⭐ NHÓM THEO BÀI HỌC
-  const byLesson = {};
-  items.forEach(a => {
-    const lessonId = a.lessonId || '_unassigned';
-    if (!byLesson[lessonId]) byLesson[lessonId] = [];
-    byLesson[lessonId].push(a);
-  });
-
-  // Sắp xếp bài học theo grade + order
-  const sortedLessonIds = Object.keys(byLesson).sort((a, b) => {
-    if (a === '_unassigned') return 1;
-    if (b === '_unassigned') return -1;
-    const la = _teacherLessonsCache[a];
-    const lb = _teacherLessonsCache[b];
-    if (!la) return 1;
-    if (!lb) return -1;
-    if (la.grade !== lb.grade) return (la.grade || 0) - (lb.grade || 0);
-    return (la.order || 0) - (lb.order || 0);
-  });
-
-  // ⭐ RENDER TỪNG NHÓM BÀI HỌC
-  let html = '';
-  sortedLessonIds.forEach(lessonId => {
-    const lesson = _teacherLessonsCache[lessonId];
-    const lessonName = lesson ? lesson.name : '📦 Chưa phân loại';
-    const lessonGrade = lesson?.grade || '';
-    const lessonHidden = lesson?.hidden === true;
-    const lessonAssigns = byLesson[lessonId];
-    const isCollapsed = _collapsedLessons.has(lessonId);
-
-    // Đếm số bài làm + chờ công bố trong nhóm
-    const totalSubs = lessonAssigns.reduce((s, a) => s + (a._subCount || 0), 0);
-    const totalSubmitted = lessonAssigns.reduce((s, a) => s + (a._submittedCount || 0), 0);
-
-    html += `
-      <div class="lesson-group" style="margin-bottom:16px; border:1px solid #D3D3D3; border-radius:10px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.05);">
-        
-        <!-- ⭐ HEADER BÀI HỌC -->
-        <div class="lesson-group-header" data-lesson-toggle="${lessonId}" style="
-          background:linear-gradient(135deg, #8B5A2B, #8B4513);
-          color:#FFF;
-          padding:14px 20px;
-          cursor:pointer;
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          flex-wrap:wrap;
-          gap:10px;
-          user-select:none;
-        ">
-          <div style="flex:1; min-width:200px;">
-            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-              <strong style="font-size:15px;">📖 ${esc(lessonName)}</strong>
-              ${lessonHidden ? '<span class="badge" style="background:#999; color:#FFF;">🙈 Bài ẩn</span>' : ''}
-              ${lessonGrade ? `<span class="badge" style="background:rgba(255,255,255,0.2); color:#FFF;">Khối ${lessonGrade}</span>` : ''}
-            </div>
-            ${lesson?.description ? `<div style="font-size:12px; opacity:0.85; margin-top:4px;">${esc(lesson.description)}</div>` : ''}
-          </div>
-          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-            <span style="background:rgba(255,255,255,0.2); padding:4px 12px; border-radius:12px; font-size:13px; font-weight:600;">
-              ${lessonAssigns.length} đề
-            </span>
-            ${totalSubs > 0 ? `
-              <span style="background:rgba(255,255,255,0.15); padding:4px 12px; border-radius:12px; font-size:12px;">
-                📊 ${totalSubs} bài
-              </span>
-            ` : ''}
-            ${totalSubmitted > 0 ? `
-              <span style="background:#c0392b; padding:4px 12px; border-radius:12px; font-size:12px; font-weight:600;">
-                ⏳ ${totalSubmitted} chờ
-              </span>
-            ` : ''}
-            <span class="lesson-toggle-icon" style="font-size:18px; transition:transform 0.3s; ${isCollapsed ? 'transform:rotate(-90deg);' : ''}">▼</span>
-          </div>
-        </div>
-        
-        <!-- ⭐ BODY BÀI HỌC (chứa các đề) -->
-        <div class="lesson-group-body" data-lesson-body="${lessonId}" ${isCollapsed ? 'style="display:none;"' : ''} style="padding:14px; background:#FAFAFA;">
-          ${lessonAssigns
-            .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
-            .map(a => renderAssignmentItem(a))
-            .join('')}
-        </div>
-      </div>
-    `;
-  });
-
-  wrap.innerHTML = html;
-
-  // ⭐ BIND: Toggle collapse bài học
-  wrap.querySelectorAll('[data-lesson-toggle]').forEach(header => {
-    header.addEventListener('click', () => {
-      const lessonId = header.dataset.lessonToggle;
-      const body = wrap.querySelector(`[data-lesson-body="${lessonId}"]`);
-      const icon = header.querySelector('.lesson-toggle-icon');
-      if (!body) return;
-
-      const isHidden = body.style.display === 'none';
-      if (isHidden) {
-        body.style.display = 'block';
-        _collapsedLessons.delete(lessonId);
-        if (icon) icon.style.transform = 'rotate(0deg)';
-      } else {
-        body.style.display = 'none';
-        _collapsedLessons.add(lessonId);
-        if (icon) icon.style.transform = 'rotate(-90deg)';
-      }
-    });
-  });
-
-  // ═══ Bind các nút bên trong (giữ nguyên như cũ) ═══
+  wrap.innerHTML = items.map(a => renderAssignmentItem(a)).join('');
 
   // Bind: Publish
   wrap.querySelectorAll('[data-publish]').forEach(btn => {
@@ -1752,7 +1621,7 @@ function renderTeacherAssignmentsList() {
     });
   });
 
-  // Bind: Delete
+  // ⭐ Bind: Delete — xoá đề + xoá hết bài làm (2 lớp xác nhận)
   wrap.querySelectorAll('[data-del-assignment]').forEach(btn => {
     btn.addEventListener('click', async () => {
       const aId = btn.dataset.delAssignment;
@@ -1837,7 +1706,7 @@ function renderTeacherAssignmentsList() {
     });
   });
 
-  // Bind: Chấm bài (grade-sub)
+  // ⭐ Bind: Chấm bài (grade-sub)
   wrap.querySelectorAll('[data-grade-sub]').forEach(btn => {
     btn.addEventListener('click', async () => {
       const s = _gradeSubmissionsCache.find(x => x.id === btn.dataset.gradeSub);
@@ -1846,25 +1715,13 @@ function renderTeacherAssignmentsList() {
       await showGradeModal(s, a);
     });
   });
-
-  // ⭐ Bind: Toggle stats section (thu gọn bài làm)
-  wrap.querySelectorAll('[data-toggle-stats]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const aId = btn.dataset.toggleStats;
-      const section = wrap.querySelector(`[data-stats-for="${aId}"]`);
-      if (!section) return;
-
-      const isHidden = section.classList.contains('hidden');
-      section.classList.toggle('hidden');
-      btn.innerHTML = isHidden ? '🙈 Thu gọn' : '👁 Xem chi tiết';
-    });
-  });
 }
 
-// ⭐ RENDER 1 ĐỀ — có thu gọn bài làm
+// ⭐ Render assignment item với ĐẦY ĐỦ thông tin như indexFULL.html
 function renderAssignmentItem(a) {
   const isExternal = a.mode === 'external';
   const lesson = a.lessonId ? _teacherLessonsCache[a.lessonId] : null;
+  const lessonName = lesson ? lesson.name : '(Không thuộc bài học)';
   const lessonHidden = lesson?.hidden === true;
 
   const modeBadge = isExternal
@@ -1893,16 +1750,22 @@ function renderAssignmentItem(a) {
     classBadges = `<span style="display:inline-block; background:#999; color:#FFF; padding:2px 10px; border-radius:10px; font-size:11px; font-weight:700;">⚠️ Chưa giao</span>`;
   }
 
-  // ⭐ Stats section (bài làm của HS)
+  // ⭐ Stats section: viewLogs cho external, submissions cho quiz
   let statsSection = '';
 
   if (isExternal) {
     const logs = _teacherViewLogsCache.filter(v => v.assignmentId === a.id && v.mode === 'external');
+
     if (logs.length > 0) {
       const byStudent = {};
       logs.forEach(l => {
         if (!byStudent[l.studentId]) {
-          byStudent[l.studentId] = { name: l.studentName, cls: l.studentClass, count: 0, totalDur: 0 };
+          byStudent[l.studentId] = {
+            name: l.studentName,
+            cls: l.studentClass,
+            count: 0,
+            totalDur: 0
+          };
         }
         byStudent[l.studentId].count++;
         byStudent[l.studentId].totalDur += (l.durationSec || 0);
@@ -1922,6 +1785,7 @@ function renderAssignmentItem(a) {
     }
   } else if (a.type === 'quiz') {
     const subs = _gradeSubmissionsCache.filter(s => s.assignmentId === a.id);
+
     if (subs.length > 0) {
       statsSection = subs.map(s => {
         const maxScore = s.autoMax || 7;
@@ -1954,15 +1818,16 @@ function renderAssignmentItem(a) {
         `;
       }).join('');
     } else {
-      statsSection = '<div class="text-sm" style="padding:8px; color:#999; font-style:italic;">Chưa có bài nộp.</div>';
+      statsSection = '<div class="text-sm" style="padding:8px;">Chưa có bài nộp.</div>';
     }
   }
 
   return `
-    <div class="card" style="margin-bottom:12px; ${a.hidden ? 'opacity:0.7; border-left:4px solid #999;' : ''}">
+    <div class="card" ${a.hidden ? 'style="opacity:0.7; border-left:4px solid #999;"' : ''}>
       <div class="space-between">
-        <div style="flex:1; min-width:200px;">
-          <h3 style="margin-bottom:6px;">📝 ${esc(a.title)}</h3>
+        <div>
+          <div class="text-sm" style="color:#8B4513;">📖 ${esc(lessonName)}</div>
+          <h3>📝 ${esc(a.title)}</h3>
           <div class="meta">
             Khối ${esc(a.grade)}
             ${isExternal ? `• ${(_teacherViewLogsCache.filter(v => v.assignmentId === a.id && v.mode === 'external').length)} lượt` : `• ${a._subCount} bài`}
@@ -1982,33 +1847,13 @@ function renderAssignmentItem(a) {
           <button class="btn btn-danger btn-sm" data-del-assignment="${a.id}">🗑 Xoá</button>
         </div>
       </div>
-      
-      <!-- ⭐ THU GỌN: Hiện tóm tắt + nút "Xem chi tiết" -->
-      <div style="margin-top:10px; padding:10px 14px; background:#F5F5DC; border-radius:6px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-        <div class="text-sm" style="color:#8B4513; font-weight:500;">
-          📊 <strong>${a._subCount}</strong> bài làm
-          ${a._submittedCount > 0 ? `• <strong style="color:#c0392b;">${a._submittedCount}</strong> chờ công bố` : ''}
-          ${isExternal ? `• ${_teacherViewLogsCache.filter(v => v.assignmentId === a.id && v.mode === 'external').length} lượt mở` : ''}
-        </div>
-        ${statsSection ? `
-          <button class="btn btn-light btn-sm" data-toggle-stats="${a.id}">
-            👁 Xem chi tiết
-          </button>
-        ` : ''}
-      </div>
-      
-      <!-- ⭐ Body thu gọn (mặc định ẩn) -->
-      ${statsSection ? `
-        <div class="stats-section hidden" data-stats-for="${a.id}" style="margin-top:10px;">
-          ${statsSection}
-        </div>
-      ` : ''}
+      ${statsSection}
     </div>
   `;
 }
 
 // ══════════════════════════════════════════
-// ⭐ MODAL ĐIỂM CAO NHẤT
+// ⭐ MODAL ĐIỂM CAO NHẤT (từ indexFULL.html)
 // ══════════════════════════════════════════
 async function showBestScoreModal(assignment, subs) {
   const maxScore = subs[0]?.autoMax || 7;
@@ -2129,9 +1974,10 @@ async function showBestScoreModal(assignment, subs) {
 }
 
 // ══════════════════════════════════════════
-// ⭐ MODAL CHẤM BÀI
+// ⭐ MODAL CHẤM BÀI (từ indexFULL.html)
 // ══════════════════════════════════════════
 async function showGradeModal(s, a) {
+  // Tạo modal động
   const existing = $('gradeModal');
   if (existing) existing.remove();
 
@@ -2165,6 +2011,7 @@ async function showGradeModal(s, a) {
   `;
   document.body.appendChild(modal);
 
+  // ═══ Build chi tiết bài làm ═══
   let body = `
     <div class="detail-header">
       <div class="info">
@@ -2264,6 +2111,7 @@ async function showGradeModal(s, a) {
 
   modal.querySelector('#gradeInfo').innerHTML = body;
 
+  // ═══ Bind events ═══
   const closeModal = () => modal.remove();
 
   modal.querySelector('#gradeCloseBtn').addEventListener('click', closeModal);
@@ -2309,7 +2157,7 @@ async function showGradeModal(s, a) {
 }
 
 // ══════════════════════════════════════════
-// EDIT ASSIGNMENT MODAL
+// EDIT ASSIGNMENT MODAL (giữ nguyên)
 // ══════════════════════════════════════════
 async function openEditAssignmentModal(assignment) {
   editingAssignmentId = assignment.id;
