@@ -4,7 +4,7 @@
 
 import './firebase-init.js';
 import { db, updateDoc, doc, serverTimestamp } from './firebase-init.js';
-import { state, on, EVENTS } from './state.js';
+import { state } from './state.js';
 import {
   $, show, hide, toast,
   getGradeFromClass, buildClassName, normalizeClass
@@ -30,19 +30,19 @@ async function bootstrap() {
   console.log('%c📚 Bài Tập Vật Lý THPT', 'color:#8B5A2B; font-size:16px; font-weight:bold;');
   console.log('🚀 Bootstrap started');
 
-  // ─── GLOBAL: open login modal ───
+  // GLOBAL: open login modal
   window.addEventListener('open:login', () => openAuthModal('login'));
 
-  // ─── TABS ───
+  // TABS
   bindTabs();
 
-  // ─── AUTH ───
+  // AUTH
   initAuth({
     onLogin: handleLogin,
     onLogout: handleLogout
   });
 
-  // ─── MODULES ───
+  // MODULES
   initAssignments();
   initEssayExternal();
   initQuiz();
@@ -52,16 +52,16 @@ async function bootstrap() {
   initAddLessonModal();
   initNotifModals();
 
-  // ─── CLASS CHANGE BUTTON ───
+  // CLASS CHANGE BUTTON
   initChangeClassButton();
 
-  // ─── LISTEN data:refresh ───
+  // LISTEN data:refresh
   window.addEventListener('data:refresh', () => {
     loadAssignments();
     loadMySubmissions();
   });
 
-  // ─── LISTEN verify:done ───
+  // LISTEN verify:done
   window.addEventListener('verify:done', () => {
     loadAssignments();
     loadMySubmissions();
@@ -188,7 +188,9 @@ function initChangeClassButton() {
       hide($('changeClassModal'));
       toast(`✅ Đã đổi lớp thành ${newClass}`, 'success');
 
-      $('userLabel').textContent = state.currentProfile.name || state.currentUser.email;
+      // ⭐ Hiện tên + lớp mới ở header
+      const name = state.currentProfile.name || state.currentUser.email;
+      $('userLabel').textContent = `${name} · ${newClass}`;
 
       state.currentGrade = grade;
       await loadAssignments();

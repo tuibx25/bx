@@ -4,7 +4,7 @@ import {
   signOut, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail,
   doc, setDoc, getDoc, updateDoc, serverTimestamp
 } from './firebase-init.js';
-import { state, emit, EVENTS, on } from './state.js';
+import { state, emit, EVENTS } from './state.js';
 import {
   $, show, hide, esc, toast,
   buildClassName, getGradeFromClass
@@ -18,7 +18,7 @@ let forgotCooldownInterval = null;
 // INIT AUTH
 // ══════════════════════════════════════════
 export function initAuth({ onLogin, onLogout }) {
-  // ═══ AUTH BUTTON ═══
+  // AUTH BUTTON
   $('authBtn')?.addEventListener('click', () => {
     if (state.currentUser) {
       signOut(auth).then(() => toast('Đã đăng xuất'));
@@ -27,20 +27,20 @@ export function initAuth({ onLogin, onLogout }) {
     }
   });
 
-  // ═══ MODAL CLOSE ═══
+  // MODAL CLOSE
   $('authCancelBtn')?.addEventListener('click', () => hide($('authModal')));
   $('authModalCloseX')?.addEventListener('click', () => hide($('authModal')));
   $('authModal')?.addEventListener('click', (e) => {
     if (e.target === $('authModal')) hide($('authModal'));
   });
 
-  // ═══ TOGGLE LOGIN/REGISTER ═══
+  // TOGGLE LOGIN/REGISTER
   $('toggleAuthMode')?.addEventListener('click', (e) => {
     e.preventDefault();
     openAuthModal(authMode === 'login' ? 'register' : 'login');
   });
 
-  // ═══ FORGOT PASSWORD ═══
+  // FORGOT PASSWORD
   $('forgotPasswordLink')?.addEventListener('click', (e) => {
     e.preventDefault();
     showForgotForm();
@@ -56,7 +56,7 @@ export function initAuth({ onLogin, onLogout }) {
     if (e.key === 'Enter') { e.preventDefault(); handleForgotPassword(); }
   });
 
-  // ═══ AUTH SUBMIT ═══
+  // AUTH SUBMIT
   $('authSubmitBtn')?.addEventListener('click', handleAuthSubmit);
   $('authPassword')?.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && authMode === 'login') {
@@ -65,11 +65,11 @@ export function initAuth({ onLogin, onLogout }) {
     }
   });
 
-  // ═══ PREVIEW CLASS NAME ═══
+  // PREVIEW CLASS NAME
   $('authGrade')?.addEventListener('change', updateAuthClassPreview);
   $('authClassNum')?.addEventListener('input', updateAuthClassPreview);
 
-  // ═══ AUTH STATE CHANGE ═══
+  // AUTH STATE CHANGE
   onAuthStateChanged(auth, async (user) => {
     state.currentUser = user;
 
@@ -92,7 +92,7 @@ export function initAuth({ onLogin, onLogout }) {
     emit(user ? EVENTS.USER_LOGIN : EVENTS.USER_LOGOUT, { user, profile: state.currentProfile });
   });
 
-  // ═══ VERIFY EMAIL ═══
+  // VERIFY EMAIL
   $('resendVerifyBtn')?.addEventListener('click', async () => {
     if (!state.currentUser) return;
     try {
@@ -159,13 +159,14 @@ async function loadUserProfile(user) {
 // UI FOR USER (đã đăng nhập)
 // ══════════════════════════════════════════
 function updateUIForUser() {
-  $('userLabel').textContent = state.currentProfile.name || state.currentUser.email;
   $('authBtn').textContent = 'Đăng xuất';
 
   const isTeacher = state.currentProfile.role === 'teacher';
 
   if (isTeacher) {
     // ═══════════ GV ═══════════
+    $('userLabel').textContent = state.currentProfile.name || state.currentUser.email;
+
     hide($('viewTabBtn'));
     hide($('submitTabBtn'));
     show($('teacherTabBtn'));
@@ -173,9 +174,8 @@ function updateUIForUser() {
     show($('assignmentsTabBtn'));
     hide($('verifyBanner'));
     hide($('changeClassBtn'));
-    hide($('hsGradeInfo'));
 
-    // ⭐ GV thấy tabs chọn khối
+    // GV thấy tabs chọn khối
     show($('gradeTabsWrap'));
 
     document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
@@ -190,7 +190,7 @@ function updateUIForUser() {
     hide($('studentsTabBtn'));
     hide($('assignmentsTabBtn'));
 
-    // ⭐ HS KHÔNG thấy tabs chọn khối
+    // HS KHÔNG thấy tabs chọn khối
     hide($('gradeTabsWrap'));
 
     document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
@@ -201,19 +201,21 @@ function updateUIForUser() {
     if (state.globalSettings.allowChangeClass) show($('changeClassBtn'));
     else hide($('changeClassBtn'));
 
-    // ⭐ Set khối của HS
+    // ⭐ Set khối
     const hsGrade = getGradeFromClass(state.currentProfile.class);
+    const className = state.currentProfile.class || '';
+    const name = state.currentProfile.name || state.currentUser.email;
+
     if (hsGrade) {
       state.currentGrade = hsGrade;
-      $('hsGradeText').textContent = `Lớp ${state.currentProfile.class}`;
-      show($('hsGradeInfo'));
     } else {
-      $('hsGradeText').textContent = '⚠️ Chưa cập nhật lớp';
-      show($('hsGradeInfo'));
       toast('⚠️ Vui lòng cập nhật lớp để xem bài tập', 'error');
     }
 
-    // ═══ Email verification ═══
+    // ⭐ Hiện tên + lớp ở header
+    $('userLabel').textContent = className ? `${name} · ${className}` : name;
+
+    // Email verification
     if (!state.currentUser.emailVerified) {
       show($('verifyBanner'));
       state.verifyPollInterval = setInterval(async () => {
@@ -242,7 +244,7 @@ function updateUIForUser() {
 }
 
 // ══════════════════════════════════════════
-// UI FOR GUEST (chưa đăng nhập)
+// UI FOR GUEST
 // ══════════════════════════════════════════
 function updateUIForGuest() {
   $('userLabel').textContent = 'Khách';
@@ -256,9 +258,8 @@ function updateUIForGuest() {
   hide($('assignmentsTabBtn'));
   hide($('verifyBanner'));
   hide($('changeClassBtn'));
-  hide($('hsGradeInfo'));
 
-  // ⭐ Guest vẫn thấy tabs chọn khối để xem trước
+  // Guest vẫn thấy tabs chọn khối
   show($('gradeTabsWrap'));
 
   document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
