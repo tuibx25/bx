@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề Tự Luận - Bài 5 Vật Lý 10</title>
+    
+    <!-- Cấu hình MathJax -->
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <!-- Ưu tiên máy chủ cục bộ -->
+    <script src="/bx/mathjax/tex-svg.js" id="MathJax-script" async></script>
+    <!-- Dự phòng CDN -->
+    <script>
+        window.MathJax = window.MathJax || {};
+        if (!window.MathJax.startup) {
+            var script = document.createElement('script');
+            script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js";
+            script.async = true;
+            document.head.appendChild(script);
+        }
+    </script>
+
+    <style>
+        /* Cấu hình chung, tối ưu cho điện thoại */
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 16px; /* Kích thước cơ bản cho mobile */
+            line-height: 1.6;
+            color: #000000;
+            background-color: #FFFFFF;
+            margin: 0 auto;
+            padding: 16px;
+            max-width: 800px; /* Giới hạn chiều rộng cho desktop */
+        }
+
+        /* Tiêu đề */
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #8B5A2B;
+            padding-bottom: 12px;
+        }
+        .header h1 {
+            font-size: 1.3em;
+            color: #8B4513;
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+        }
+        .header h2 {
+            font-size: 1.1em;
+            color: #000000;
+            margin: 0;
+            font-weight: normal;
+        }
+
+        /* Câu hỏi */
+        .question {
+            margin-bottom: 24px;
+            page-break-inside: avoid;
+        }
+        .question-title {
+            font-weight: bold;
+            color: #004488;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+        .question-content {
+            text-align: justify;
+        }
+
+        /* Điểm số */
+        .points {
+            font-weight: bold;
+            color: #8B4513;
+            float: right;
+            font-size: 0.95em;
+        }
+
+        /* Ghi chú */
+        .note {
+            font-style: italic;
+            color: #8B4513;
+            background-color: #F5F5DC;
+            padding: 8px 12px;
+            border-left: 3px solid #8B5A2B;
+            margin: 12px 0;
+            font-size: 0.95em;
+        }
+
+        /* Công thức toán */
+        .math-block {
+            margin: 12px 0;
+            text-align: center;
+            background-color: #F5F5F5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto; /* Cho phép cuộn ngang nếu công thức dài trên mobile */
+        }
+
+        /* Nút bấm (không in) */
+        .no-print {
+            text-align: center;
+            margin-top: 32px;
+        }
+        .btn-print {
+            padding: 12px 24px;
+            background-color: #0066CC;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-family: inherit;
+            width: 100%;
+            max-width: 300px;
+        }
+        .btn-print:hover {
+            background-color: #004488;
+        }
+
+        /* Tối ưu cho màn hình lớn */
+        @media (min-width: 600px) {
+            body { font-size: 18px; padding: 24px; }
+            .header h1 { font-size: 1.5em; }
+            .header h2 { font-size: 1.2em; }
+        }
+
+        /* Cấu hình khi in */
+        @page {
+            size: A4;
+            margin: 20mm 15mm 20mm 15mm;
+        }
+        @media print {
+            .no-print { display: none; }
+            body { padding: 0; font-size: 14pt; }
+            .math-block { background-color: #FFFFFF; border: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>BÀI KIỂM TRA TỰ LUẬN</h1>
+        <h2>Bài 5: Tốc độ và Vận tốc</h2>
+    </div>
+
+    <!-- Câu 1 -->
+    <div class="question">
+        <div class="question-title">
+            Câu 1. <span class="points">(1,5 điểm)</span>
+        </div>
+        <div class="question-content">
+            <p>Một vận động viên chạy 100 m hết 11,54 s. Sau đó, vận động viên này tiếp tục chạy thêm 200 m nữa hết 19,94 s.</p>
+            <p>a) Tính tốc độ trung bình của vận động viên trong 100 m đầu tiên.</p>
+            <p>b) Tính tốc độ trung bình của vận động viên trong cả quãng đường 300 m.</p>
+        </div>
+    </div>
+
+    <!-- Câu 2 -->
+    <div class="question">
+        <div class="question-title">
+            Câu 2. <span class="points">(1,5 điểm)</span>
+        </div>
+        <div class="question-content">
+            <p>Một ca nô chạy trong hồ nước yên lặng có vận tốc tối đa 18 km/h. Ca nô này chạy ngang một con sông có dòng chảy theo hướng Bắc - Nam với vận tốc 5 m/s.</p>
+            <p>a) Xác định vận tốc tổng hợp của ca nô so với bờ sông (độ lớn và hướng).</p>
+            <p>b) Nếu ca nô muốn đi thẳng vuông góc với bờ sông thì người lái phải hướng ca nô lệch một góc bao nhiêu so với hướng Đông? Biết bờ sông chạy theo hướng Đông - Tây.</p>
+        </div>
+    </div>
+
+</body>
+</html>
