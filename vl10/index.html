@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vật Lý 10 KNTT</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+    <style>
+        :root {
+            --primary: #8B4513;
+            --secondary: #A0522D;
+            --accent: #D2691E;
+            --dark: #2C1810;
+            --light: #F5F5DC;
+            --neutral: #D2B48C;
+            --light-brown: #DEB887;
+            --dark-brown: #5D4037;
+            
+            --bg-color: #FDF5E6;
+            --header-bg: #8B4513;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            
+            --shadow: 0 10px 30px rgba(139, 69, 19, 0.1);
+            --shadow-hover: 0 20px 50px rgba(139, 69, 19, 0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            /* Chống chọn và sao chép */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* Watermark cố định */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.jsdelivr.net/gh/tuibx25/images/bx/tuibx.png');
+            background-repeat: repeat;
+            background-size: 400px 150px;
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(139, 69, 19, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(210, 180, 140, 0.05) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        /* Lớp bảo vệ */
+        .protector {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+            pointer-events: none;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 30px;
+            background-color: var(--header-bg);
+            border-radius: 24px;
+            color: white;
+            position: relative;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, 
+                #A0522D 0%, 
+                #8B4513 25%, 
+                #D2691E 50%, 
+                #DEB887 75%, 
+                #A0522D 100%);
+            animation: shimmer 3s infinite linear;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: 200px 0; }
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            letter-spacing: -0.5px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .chapters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .chapter-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(139, 69, 19, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        
+        .chapter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+        
+        .chapter-card:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .chapter-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(139, 69, 19, 0.2);
+        }
+        
+        .chapter-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid;
+            border-image: linear-gradient(90deg, currentColor, transparent) 1;
+        }
+        
+        .chapter-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .chapter-card:nth-child(1) .chapter-icon { background-color: #8B4513; }
+        .chapter-card:nth-child(2) .chapter-icon { background-color: #A0522D; }
+        .chapter-card:nth-child(3) .chapter-icon { background-color: #D2691E; }
+        .chapter-card:nth-child(4) .chapter-icon { background-color: #5D4037; }
+        .chapter-card:nth-child(5) .chapter-icon { background-color: #8B4513; }
+        .chapter-card:nth-child(6) .chapter-icon { background-color: #A0522D; }
+        .chapter-card:nth-child(7) .chapter-icon { background-color: #D2691E; }
+        
+        .chapter-title {
+            color: var(--dark);
+            font-size: 1.5rem;
+            font-weight: 600;
+            flex: 1;
+        }
+        
+        .lesson-list {
+            list-style-type: none;
+        }
+        
+        .lesson-item {
+            padding: 0;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        .lesson-link {
+            text-decoration: none;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 12px;
+            transition: all 0.3s;
+            background: rgba(245, 245, 220, 0.5);
+            border: 1px solid rgba(139, 69, 19, 0.1);
+            position: relative;
+            overflow: hidden;
+            /* Cho phép click trên link */
+            pointer-events: auto;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+        
+        .lesson-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--primary);
+            transform: scaleY(0);
+            transition: transform 0.3s;
+        }
+        
+        .lesson-link:hover {
+            background: white;
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.1);
+            border-color: rgba(139, 69, 19, 0.2);
+        }
+        
+        .lesson-link:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .lesson-link:hover .lesson-arrow {
+            transform: translateX(5px);
+            opacity: 1;
+            color: var(--primary);
+        }
+        
+        .lesson-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px;
+            margin-right: 15px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(139, 69, 19, 0.3);
+            flex-shrink: 0;
+        }
+        
+        .lesson-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .lesson-title {
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+        
+        .lesson-subtitle {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+        
+        .lesson-arrow {
+            width: 24px;
+            height: 24px;
+            opacity: 0.5;
+            transition: all 0.3s;
+            color: var(--primary);
+        }
+        
+        .home-button {
+            position: absolute;
+            top: 50%;
+            left: 30px;
+            transform: translateY(-50%);
+            padding: 14px 28px;
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--primary);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(139, 69, 19, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid rgba(139, 69, 19, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+            pointer-events: auto;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+        
+        .home-button:hover {
+            background: white;
+            color: var(--primary);
+            transform: translateY(-50%) translateX(-5px);
+            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.2);
+            border-color: rgba(139, 69, 19, 0.3);
+        }
+        
+        .home-button .button-icon {
+            transition: transform 0.3s;
+        }
+        
+        .home-button:hover .button-icon {
+            transform: translateX(-3px);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px;
+            color: var(--dark);
+            font-size: 0.95rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(139, 69, 19, 0.05);
+            border: 1px solid rgba(139, 69, 19, 0.1);
+        }
+        
+        .footer-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .footer-subtext {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        /* Floating particles */
+        .particle {
+            position: fixed;
+            border-radius: 50%;
+            background-color: var(--primary);
+            opacity: 0.05;
+            z-index: -1;
+        }
+        
+        /* Progress indicator */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background-color: var(--primary);
+            z-index: 1000;
+            transition: width 0.3s;
+        }
+        
+        @media (max-width: 768px) {
+            .chapters {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+                margin-top: 20px;
+            }
+            
+            .home-button {
+                position: relative;
+                top: auto;
+                left: auto;
+                transform: none;
+                margin: 0 auto 20px;
+                display: inline-flex;
+                width: fit-content;
+            }
+            
+            header {
+                padding: 30px 20px;
+                text-align: center;
+            }
+            
+            .chapter-card {
+                padding: 25px;
+            }
+            
+            .lesson-link {
+                padding: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .chapters {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .chapter-card {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .chapter-card:nth-child(1) { animation-delay: 0.1s; }
+        .chapter-card:nth-child(2) { animation-delay: 0.2s; }
+        .chapter-card:nth-child(3) { animation-delay: 0.3s; }
+        .chapter-card:nth-child(4) { animation-delay: 0.4s; }
+        .chapter-card:nth-child(5) { animation-delay: 0.5s; }
+        .chapter-card:nth-child(6) { animation-delay: 0.6s; }
+        .chapter-card:nth-child(7) { animation-delay: 0.7s; }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Lớp bảo vệ chống xem mã nguồn -->
+    <div class="protector" id="pageProtector"></div>
+    
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1>Vật Lý 10</h1>
+                <p class="subtitle">Kết Nối Tri Thức Với Cuộc Sống</p>
+                <a href="../" class="home-button">
+                    <span class="button-icon">←</span>
+                    Trang chủ
+                </a>
+            </div>
+        </header>
+        
+        <div class="chapters" id="chapters-container">
+            <!-- Nội dung sẽ được tạo tự động bằng JavaScript -->
+        </div>
+        
+        <footer>
+            <p class="footer-text">TuiBX</p>
+            <p class="footer-subtext">© 2025 - Tài liệu học tập Vật Lý 10</p>
+        </footer>
+    </div>
+
+    <script>
+        // Các biện pháp bảo mật nâng cao (không hiển thị cảnh báo)
+        (function() {
+            'use strict';
+            
+            // Chống nhấp chuột phải
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // Chống các phím tắt xem mã nguồn
+            const blockedKeys = new Set(['F12', 'I', 'J', 'C', 'S', 'U']);
+            const blockedCombinations = [
+                {ctrl: true, shift: true, key: 'I'},
+                {ctrl: true, shift: true, key: 'J'},
+                {ctrl: true, shift: true, key: 'C'},
+                {ctrl: true, shift: true, key: 'S'},
+                {ctrl: true, key: 'U'},
+                {ctrl: true, key: 'S'},
+                {meta: true, alt: true, key: 'I'}
+            ];
+            
+            document.addEventListener('keydown', function(e) {
+                // Chặn phím F12
+                if (e.key === 'F12') {
+                    e.preventDefault();
+                    return false;
+                }
+                
+                // Chặn tổ hợp phím
+                for (const combo of blockedCombinations) {
+                    if ((combo.ctrl === undefined || combo.ctrl === e.ctrlKey) &&
+                        (combo.shift === undefined || combo.shift === e.shiftKey) &&
+                        (combo.alt === undefined || combo.alt === e.altKey) &&
+                        (combo.meta === undefined || combo.meta === e.metaKey) &&
+                        e.key.toUpperCase() === combo.key.toUpperCase()) {
+                        e.preventDefault();
+                        return false;
+                    }
+                }
+                
+                // Chặn khi chỉ nhấn Ctrl/Shift + phím bị chặn
+                if ((e.ctrlKey || e.shiftKey) && blockedKeys.has(e.key.toUpperCase())) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            
+            // Chống sao chép nội dung
+            document.addEventListener('copy', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // Chống cắt nội dung
+            document.addEventListener('cut', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // Chống kéo thả hình ảnh và nội dung
+            document.addEventListener('dragstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // Chống chọn văn bản (ngoại trừ liên kết và nút)
+            document.addEventListener('selectstart', function(e) {
+                if (!e.target.closest('.lesson-link') && !e.target.closest('.home-button')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            
+            // Bảo vệ khi mở DevTools (không hiển thị cảnh báo)
+            let devToolsOpen = false;
+            const threshold = 160;
+            
+            const checkDevTools = function() {
+                const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+                const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+                const orientation = widthThreshold || heightThreshold;
+                
+                if (orientation && !devToolsOpen) {
+                    devToolsOpen = true;
+                    // Vô hiệu hóa tất cả các liên kết và nút
+                    document.querySelectorAll('a, button').forEach(el => {
+                        el.style.pointerEvents = 'none';
+                    });
+                }
+            };
+            
+            // Kiểm tra định kỳ
+            setInterval(checkDevTools, 1000);
+            
+        })();
+        
+        // Dữ liệu và hàm hiện có vẫn giữ nguyên
+        const physicsChapters = [
+            {
+                title: "CHƯƠNG I. MỞ ĐẦU",
+                subtitle: "Làm quen với Vật lí và các quy tắc an toàn",
+                lessons: [
+                    {title: "Bài 1. Làm quen với Vật lí", type: "Lý thuyết"},
+                    {title: "Bài 2. Các quy tắc an toàn trong phòng thực hành Vật lí", type: "Lý thuyết"},
+                    {title: "Bài 3. Thực hành tính sai số trong phép đo. Ghi kết quả đo", type: "Thực hành"}
+                ]
+            },
+            {
+                title: "CHƯƠNG II. ĐỘNG HỌC",
+                subtitle: "Nghiên cứu chuyển động của vật",
+                lessons: [
+                    {title: "Bài 4. Độ dịch chuyển và quãng đường đi được", type: "Lý thuyết"},
+                    {title: "Bài 5. Tốc độ và vận tốc", type: "Lý thuyết"},
+                    {title: "Bài 6. Thực hành: Đo tốc độ của vật chuyển động", type: "Thực hành"},
+                    {title: "Bài 7. Đồ thị độ dịch chuyển – thời gian", type: "Lý thuyết"},
+                    {title: "Bài 8. Chuyển động biến đổi. Gia tốc", type: "Lý thuyết"},
+                    {title: "Bài 9. Chuyển động thẳng biến đổi đều", type: "Lý thuyết"},
+                    {title: "Bài 10. Sự rơi tự do", type: "Lý thuyết"},
+                    {title: "Bài 11. Thực hành: Đo gia tốc rơi tự do", type: "Thực hành"},
+                    {title: "Bài 12. Chuyển động ném", type: "Lý thuyết"}
+                ]
+            },
+            {
+                title: "CHƯƠNG III. ĐỘNG LỰC HỌC",
+                subtitle: "Nghiên cứu nguyên nhân gây ra chuyển động",
+                lessons: [
+                    {title: "Bài 13. Tổng hợp và phân tích lực. Cân bằng lực", type: "Lý thuyết"},
+                    {title: "Bài 14. Định luật 1 Newton", type: "Lý thuyết"},
+                    {title: "Bài 15. Định luật 2 Newton", type: "Lý thuyết"},
+                    {title: "Bài 16. Định luật 3 Newton", type: "Lý thuyết"},
+                    {title: "Bài 17. Trọng lực và lực căng", type: "Lý thuyết"},
+                    {title: "Bài 18. Lực ma sát", type: "Lý thuyết"},
+                    {title: "Bài 19. Lực cân và lực nâng", type: "Lý thuyết"},
+                    {title: "Bài 20. Một số ví dụ về cách giải các bài toán thuộc phần động lực học", type: "Bài tập"},
+                    {title: "Bài 21. Moment lực. Cân bằng của vật rắn", type: "Lý thuyết"},
+                    {title: "Bài 22. Thực hành: Tổng hợp lực", type: "Thực hành"}
+                ]
+            },
+            {
+                title: "CHƯƠNG IV. NĂNG LƯỢNG, CÔNG, CÔNG SUẤT",
+                subtitle: "Nghiên cứu các dạng năng lượng và sự chuyển hoá",
+                lessons: [
+                    {title: "Bài 23. Năng lượng. Công cơ học", type: "Lý thuyết"},
+                    {title: "Bài 24. Công suất", type: "Lý thuyết"},
+                    {title: "Bài 25. Động năng, thế năng", type: "Lý thuyết"},
+                    {title: "Bài 26. Cơ năng và định luật bảo toàn cơ năng", type: "Lý thuyết"},
+                    {title: "Bài 27. Hiệu suất", type: "Lý thuyết"}
+                ]
+            },
+            {
+                title: "CHƯƠNG V. ĐỘNG LƯỢNG",
+                subtitle: "Nghiên cứu đại lượng đặc trưng cho chuyển động",
+                lessons: [
+                    {title: "Bài 28. Động lượng", type: "Lý thuyết"},
+                    {title: "Bài 29. Định luật bảo toàn động lượng", type: "Lý thuyết"},
+                    {title: "Bài 30. Thực hành: Xác định động lượng của vật trước và sau va chạm", type: "Thực hành"}
+                ]
+            },
+            {
+                title: "CHƯƠNG VI. CHUYỂN ĐỘNG TRÒN",
+                subtitle: "Nghiên cứu chuyển động theo quỹ đạo tròn",
+                lessons: [
+                    {title: "Bài 31. Động học của chuyển động tròn đều", type: "Lý thuyết"},
+                    {title: "Bài 32. Lực hướng tâm và gia tốc hướng tâm", type: "Lý thuyết"}
+                ]
+            },
+            {
+                title: "CHƯƠNG VII. BIẾN DẠNG CỦA VẬT RẮN. ÁP SUẤT CHẤT LỎNG",
+                subtitle: "Nghiên cứu tính chất của vật chất",
+                lessons: [
+                    {title: "Bài 33. Biến dạng của vật rắn", type: "Lý thuyết"},
+                    {title: "Bài 34. Khối lượng riêng. Áp suất chất lỏng", type: "Lý thuyết"}
+                ]
+            }
+        ];
+
+        const chapterIcons = ["🔬", "🚀", "⚖️", "🔋", "🎯", "🌀", "💧"];
+
+        // ✅ ĐÃ SỬA: link trỏ đến ./sgk/01 → ./sgk/34
+        function generateLessonLink(lessonIndex) {
+            const lessonNumber = (lessonIndex + 1).toString().padStart(2, '0');
+            return `./sgk/${lessonNumber}`;
+        }
+
+        function createParticles() {
+            const colors = ['#8B4513', '#A0522D', '#D2691E', '#5D4037', '#DEB887', '#D2B48C', '#2C1810'];
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.width = `${Math.random() * 100 + 50}px`;
+                particle.style.height = particle.style.width;
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.opacity = `${Math.random() * 0.05 + 0.02}`;
+                particle.style.animation = `float ${Math.random() * 20 + 10}s infinite ease-in-out`;
+                document.body.appendChild(particle);
+            }
+        }
+
+        function updateProgressBar() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progressBar").style.width = scrolled + "%";
+        }
+
+        function renderChapters() {
+            const container = document.getElementById('chapters-container');
+            let lessonCounter = 0;
+            
+            physicsChapters.forEach((chapter, chapterIndex) => {
+                const chapterCard = document.createElement('div');
+                chapterCard.className = 'chapter-card';
+                
+                // Tạo header chương
+                const chapterHeader = document.createElement('div');
+                chapterHeader.className = 'chapter-header';
+                
+                const chapterIcon = document.createElement('div');
+                chapterIcon.className = 'chapter-icon';
+                chapterIcon.textContent = chapterIcons[chapterIndex];
+                
+                const chapterTitleDiv = document.createElement('div');
+                chapterTitleDiv.className = 'chapter-title';
+                chapterTitleDiv.innerHTML = `
+                    <div>${chapter.title}</div>
+                    <div style="font-size: 0.9rem; opacity: 0.7; font-weight: 400; margin-top: 5px;">
+                        ${chapter.subtitle}
+                    </div>
+                `;
+                
+                chapterHeader.appendChild(chapterIcon);
+                chapterHeader.appendChild(chapterTitleDiv);
+                
+                // Tạo danh sách bài học
+                const lessonList = document.createElement('ul');
+                lessonList.className = 'lesson-list';
+                
+                chapter.lessons.forEach((lesson, index) => {
+                    const lessonItem = document.createElement('li');
+                    lessonItem.className = 'lesson-item';
+                    
+                    const lessonLink = document.createElement('a');
+                    lessonLink.className = 'lesson-link';
+                    lessonLink.href = generateLessonLink(lessonCounter);
+                    lessonLink.target = "_blank";
+                    lessonLink.rel = "noopener noreferrer";
+                    
+                    // Tạo nội dung bài học
+                    lessonLink.innerHTML = `
+                        <div class="lesson-number">${(lessonCounter + 1).toString().padStart(2, '0')}</div>
+                        <div class="lesson-content">
+                            <div class="lesson-title">${lesson.title}</div>
+                            <div class="lesson-subtitle">${lesson.type}</div>
+                        </div>
+                        <svg class="lesson-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    `;
+                    
+                    lessonLink.addEventListener('click', function(e) {
+                        const lessonNum = (lessonCounter + 1).toString().padStart(2, '0');
+                        console.log(`Chuyển đến bài ${lessonNum}: ${generateLessonLink(lessonCounter)}`);
+                    });
+                    
+                    lessonItem.appendChild(lessonLink);
+                    lessonList.appendChild(lessonItem);
+                    lessonCounter++;
+                });
+                
+                chapterCard.appendChild(chapterHeader);
+                chapterCard.appendChild(lessonList);
+                container.appendChild(chapterCard);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderChapters();
+            createParticles();
+            window.addEventListener('scroll', updateProgressBar);
+        });
+    </script>
+</body>
+</html>
