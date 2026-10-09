@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧹 Công Cụ Dọn Tài Khoản</title>
+<link rel="icon" href="https://cdn.jsdelivr.net/gh/tuibx25/images/bx/favicon.ico" type="image/x-icon">
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif;
+    background: #F5F5F5;
+    color: #000;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ═══ SCREENS — Chỉ 1 active ═══ */
+  .screen { display: none; }
+  #screenLoading.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  #screenDenied.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 20px;
+    text-align: center;
+  }
+  #screenMain.active {
+    display: block;
+  }
+
+  /* ═══ SPINNER ═══ */
+  .spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #D3D3D3;
+    border-top-color: #c0392b;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ═══ DENIED ═══ */
+  #screenDenied .icon { font-size: 64px; margin-bottom: 16px; }
+  #screenDenied h2 { color: #c0392b; margin-bottom: 12px; font-size: 22px; }
+  #screenDenied p { color: #666; max-width: 400px; margin-bottom: 20px; }
+
+  /* ═══ HEADER ═══ */
+  .tool-header {
+    background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+    color: #FFF;
+    padding: 20px 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .tool-header h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+  .tool-header .subtitle { font-size: 13px; opacity: 0.9; }
+  .tool-header .user-info { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .tool-header #userLabel {
+    font-size: 13px;
+    padding: 6px 12px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ═══ BUTTONS ═══ */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+    min-height: 40px;
+    white-space: nowrap;
+  }
+  .btn:hover:not(:disabled) { transform: translateY(-1px); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-primary { background: #8B5A2B; color: #FFF; }
+  .btn-primary:hover:not(:disabled) { background: #8B4513; }
+  .btn-light { background: #FFF; color: #333; border: 1px solid #D3D3D3; }
+  .btn-light:hover:not(:disabled) { background: #F5F5F5; }
+  .btn-danger { background: #c0392b; color: #FFF; }
+  .btn-danger:hover:not(:disabled) { background: #a93226; }
+  .btn-sm { padding: 7px 12px; font-size: 13px; min-height: 34px; }
+  .btn-lg { padding: 14px 28px; font-size: 16px; min-height: 48px; }
+
+  /* ═══ CONTAINER ═══ */
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
+
+  /* ═══ CARDS ═══ */
+  .card {
+    background: #FFF;
+    border: 1px solid #D3D3D3;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .card h2 { color: #c0392b; font-size: 18px; margin-bottom: 16px; }
+
+  /* ═══ WARNING ═══ */
+  .warning-box {
+    display: flex;
+    gap: 16px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #FFF9E6 0%, #F5DEB3 100%);
+    border: 2px solid #D4A017;
+    border-left: 6px solid #8B4513;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  .warning-box .icon { font-size: 32px; flex-shrink: 0; }
+  .warning-box .content { flex: 1; font-size: 14px; color: #8B4513; }
+  .warning-box strong { display: block; margin-bottom: 8px; }
+  .warning-box ul { margin-left: 20px; margin-top: 4px; }
+  .warning-box li { margin-bottom: 4px; }
+
+  /* ═══ STATS ═══ */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
+  .stat-card {
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    border: 2px solid transparent;
+    transition: transform 0.15s;
+  }
+  .stat-card:hover { transform: translateY(-2px); }
+  .stat-card .stat-value { font-size: 32px; font-weight: 700; line-height: 1; margin-bottom: 8px; }
+  .stat-card .stat-label { font-size: 13px; font-weight: 600; opacity: 0.85; }
+  .stat-total { background: linear-gradient(135deg, #F5F5DC, #F5DEB3); color: #8B4513; border-color: #8B5A2B; }
+  .stat-verified { background: linear-gradient(135deg, #E8F5E9, #C8E6C9); color: #2E7D32; border-color: #2E7D32; }
+  .stat-unverified { background: linear-gradient(135deg, #FFF9E6, #FFE082); color: #E65100; border-color: #E65100; }
+  .stat-old { background: linear-gradient(135deg, #FFEBEE, #FFCDD2); color: #c0392b; border-color: #c0392b; }
+
+  /* ═══ FILTER CHIPS ═══ */
+  .filter-chips { display: flex; gap: 10px; flex-wrap: wrap; }
+  .filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: #F5F5DC;
+    color: #8B4513;
+    border: 2px solid transparent;
+    border-radius: 24px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .filter-chip:hover { background: #F5DEB3; }
+  .filter-chip.active {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    color: #FFF;
+    border-color: #c0392b;
+    box-shadow: 0 2px 8px rgba(192,57,43,0.3);
+  }
+  .filter-chip .count {
+    background: rgba(0,0,0,0.15);
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    min-width: 28px;
+    text-align: center;
+  }
+  .filter-chip.active .count { background: rgba(255,255,255,0.25); }
+
+  /* ═══ LIST ═══ */
+  .list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .list-header h2 { margin-bottom: 0; }
+  .list-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .selection-info {
+    padding: 10px 14px;
+    background: #F5F5DC;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #8B4513;
+  }
+  .selection-info strong { color: #c0392b; font-size: 16px; }
+
+  .student-list {
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    background: #FAFAFA;
+  }
+  .student-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #F0F0F0;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .student-item:last-child { border-bottom: none; }
+  .student-item:hover { background: #F5F5DC; }
+  .student-item.checked { background: #FFF9E6; border-left: 4px solid #c0392b; }
+  .student-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #c0392b;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .student-info { flex: 1; min-width: 0; }
+  .student-name {
+    font-weight: 600;
+    font-size: 15px;
+    color: #000;
+    margin-bottom: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .student-email {
+    font-size: 13px;
+    color: #666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .student-meta { text-align: right; flex-shrink: 0; font-size: 12px; }
+  .student-days { font-weight: 700; color: #c0392b; font-size: 14px; }
+  .student-days.small { color: #E65100; font-size: 12px; }
+  .student-date { color: #999; font-size: 11px; margin-top: 2px; }
+
+  /* ═══ DANGER ZONE ═══ */
+  .danger-zone {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
+    border: 2px solid #c0392b;
+    border-radius: 10px;
+    margin-bottom: 16px;
+  }
+  .danger-info strong { color: #c0392b; font-size: 16px; display: block; margin-bottom: 4px; }
+  .danger-info p { font-size: 13px; color: #8B4513; }
+
+  /* ═══ EMPTY ═══ */
+  .empty {
+    text-align: center;
+    color: #999;
+    padding: 40px 20px;
+    font-style: italic;
+    font-size: 14px;
+  }
+
+  /* ═══ LOGS ═══ */
+  .delete-logs {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    background: #FAFAFA;
+  }
+  .log-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #F0F0F0;
+    font-size: 13px;
+  }
+  .log-item:last-child { border-bottom: none; }
+  .log-item .log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .log-item .log-count { font-weight: 700; color: #c0392b; font-size: 15px; }
+  .log-item .log-time { color: #999; font-size: 12px; }
+  .log-item .log-emails {
+    color: #666;
+    font-size: 12px;
+    font-family: 'Courier New', monospace;
+    word-break: break-all;
+  }
+
+  /* ═══ MODAL ═══ */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+  }
+  .modal-overlay.active {
+    display: flex;
+  }
+  .modal {
+    background: #FFF;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.25s;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .modal h2 { color: #c0392b; font-size: 20px; margin-bottom: 16px; }
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+  .confirm-warning {
+    padding: 14px 16px;
+    background: #FFEBEE;
+    border-left: 4px solid #c0392b;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: #c0392b;
+  }
+  .confirm-preview {
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 12px;
+    background: #F5F5F5;
+    border-radius: 6px;
+    font-size: 12px;
+    margin-bottom: 16px;
+    border: 1px solid #E0E0E0;
+  }
+  .confirm-preview .preview-item {
+    padding: 4px 0;
+    border-bottom: 1px dashed #D3D3D3;
+    font-family: 'Courier New', monospace;
+  }
+  .confirm-preview .preview-item:last-child { border-bottom: none; }
+
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; margin-bottom: 8px; font-size: 14px; color: #333; }
+  .form-group label code {
+    background: #FFEBEE;
+    color: #c0392b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .form-group input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid #D3D3D3;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .form-group input:focus {
+    outline: none;
+    border-color: #c0392b;
+    box-shadow: 0 0 0 3px rgba(192,57,43,0.15);
+  }
+
+  /* ═══ RESULT ═══ */
+  #resultTitle.success { color: #2E7D32; }
+  #resultTitle.error { color: #c0392b; }
+  .result-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .result-stat {
+    padding: 14px;
+    background: #F5F5F5;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .result-stat .value { font-size: 24px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+  .result-stat .label { font-size: 12px; color: #666; }
+
+  /* ═══ TOAST ═══ */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #8B4513;
+    color: #FFF;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 2000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s, transform 0.3s;
+    font-size: 14px;
+    max-width: 340px;
+    pointer-events: none;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+  #toast.error { background: #c0392b; }
+  #toast.success { background: #2E7D32; }
+
+  /* ═══ MOBILE ═══ */
+  @media (max-width: 640px) {
+    .tool-header { padding: 14px 16px; }
+    .tool-header h1 { font-size: 18px; }
+    .container { padding: 16px 10px 40px; }
+    .card { padding: 16px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .stat-card .stat-value { font-size: 24px; }
+    .filter-chips { flex-direction: column; }
+    .filter-chip { width: 100%; justify-content: space-between; min-height: 48px; }
+    .list-header { flex-direction: column; align-items: stretch; }
+    .list-actions { width: 100%; }
+    .list-actions .btn { flex: 1; }
+    .danger-zone { flex-direction: column; align-items: stretch; text-align: center; }
+    .btn-lg { width: 100%; }
+    .modal { padding: 20px; }
+    .modal-actions { flex-direction: column-reverse; }
+    .modal-actions .btn { width: 100%; }
+    #toast { left: 12px; right: 12px; bottom: 12px; max-width: none; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ SCREEN: LOADING ══════════ -->
+<div id="screenLoading" class="screen active">
+  <div class="spinner"></div>
+  <p style="color:#666;">Đang kiểm tra quyền truy cập...</p>
+</div>
+
+<!-- ══════════ SCREEN: DENIED ══════════ -->
+<div id="screenDenied" class="screen">
+  <div class="icon">🔒</div>
+  <h2>Không có quyền truy cập</h2>
+  <p>Công cụ này chỉ dành cho <strong>giáo viên</strong>. Vui lòng đăng nhập tài khoản giáo viên để tiếp tục.</p>
+  <a href="../index.html" class="btn btn-primary">← Về trang chủ</a>
+</div>
+
+<!-- ══════════ SCREEN: MAIN ══════════ -->
+<div id="screenMain" class="screen">
+  <header class="tool-header">
+    <div>
+      <h1>🧹 Công Cụ Dọn Tài Khoản</h1>
+      <div class="subtitle">Xoá tài khoản HS chưa xác thực email sau 30 ngày</div>
+    </div>
+    <div class="user-info">
+      <span id="userLabel">—</span>
+      <button id="btnBack" class="btn btn-light btn-sm">← Về trang chủ</button>
+      <button id="btnLogout" class="btn btn-light btn-sm">Đăng xuất</button>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- CẢNH BÁO -->
+    <div class="warning-box">
+      <div class="icon">⚠️</div>
+      <div class="content">
+        <strong>Lưu ý quan trọng:</strong>
+        <ul>
+          <li>Công cụ xoá <strong>profile</strong> trong Firestore, <strong>KHÔNG</strong> xoá Firebase Auth.</li>
+          <li>HS bị xoá profile vẫn có thể đăng nhập lại (nhưng profile sẽ rỗng).</li>
+          <li><strong>Chỉ xoá HS đã &gt; 30 ngày chưa xác thực</strong> — HS còn quan tâm thì đã xác thực rồi.</li>
+          <li><strong>Không thể hoàn tác</strong> sau khi xoá.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- TỔNG QUAN -->
+    <div class="card">
+      <h2>📊 Tổng Quan</h2>
+      <div class="stats-grid">
+        <div class="stat-card stat-total">
+          <div class="stat-value" id="statTotal">—</div>
+          <div class="stat-label">👥 Tổng HS</div>
+        </div>
+        <div class="stat-card stat-verified">
+          <div class="stat-value" id="statVerified">—</div>
+          <div class="stat-label">✅ Đã xác thực</div>
+        </div>
+        <div class="stat-card stat-unverified">
+          <div class="stat-value" id="statUnverified">—</div>
+          <div class="stat-label">⏳ Chưa xác thực</div>
+        </div>
+        <div class="stat-card stat-old">
+          <div class="stat-value" id="statOld">—</div>
+          <div class="stat-label">🔴 Cần dọn (&gt; 30 ngày)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BỘ LỌC -->
+    <div class="card">
+      <h2>🎯 Lọc Theo Ngày Đăng Ký</h2>
+      <p style="font-size:13px; color:#666; margin-bottom:12px; font-style:italic;">
+        Chọn khoảng thời gian để xem HS chưa xác thực cần dọn
+      </p>
+      <div class="filter-chips">
+        <button class="filter-chip active" data-days="all">📋 Tất cả <span class="count" id="countAll">—</span></button>
+        <button class="filter-chip" data-days="7">🕐 &gt; 7 ngày <span class="count" id="count7">—</span></button>
+        <button class="filter-chip" data-days="30">📅 &gt; 30 ngày <span class="count" id="count30">—</span></button>
+        <button class="filter-chip" data-days="60">📅 &gt; 60 ngày <span class="count" id="count60">—</span></button>
+        <button class="filter-chip" data-days="90">📅 &gt; 90 ngày <span class="count" id="count90">—</span></button>
+      </div>
+    </div>
+
+    <!-- DANH SÁCH HS -->
+    <div class="card">
+      <div class="list-header">
+        <h2>👥 Danh Sách HS Chưa Xác Thực</h2>
+        <div class="list-actions">
+          <button id="btnSelectAll" class="btn btn-light btn-sm">✓ Chọn tất cả</button>
+          <button id="btnDeselectAll" class="btn btn-light btn-sm">✗ Bỏ chọn</button>
+          <button id="btnRefresh" class="btn btn-light btn-sm">🔄 Tải lại</button>
+        </div>
+      </div>
+      <div class="selection-info">
+        Đã chọn: <strong id="selectedCount">0</strong> / <span id="totalFiltered">0</span>
+      </div>
+      <div id="studentList" class="student-list">
+        <div class="empty">Đang tải...</div>
+      </div>
+    </div>
+
+    <!-- NÚT XOÁ -->
+    <div class="danger-zone">
+      <div class="danger-info">
+        <strong>🗑 Xoá tài khoản đã chọn</strong>
+        <p>Hành động này không thể hoàn tác. Vui lòng kiểm tra kỹ trước khi xoá.</p>
+      </div>
+      <button id="btnDelete" class="btn btn-danger btn-lg" disabled>
+        🗑 XOÁ <span id="deleteCount">0</span> TÀI KHOẢN
+      </button>
+    </div>
+
+    <!-- LỊCH SỬ -->
+    <div class="card">
+      <div class="list-header">
+        <h2>📜 Lịch Sử Xoá Gần Đây</h2>
+        <button id="btnRefreshLogs" class="btn btn-light btn-sm">🔄</button>
+      </div>
+      <div id="deleteLogs" class="delete-logs">
+        <div class="empty">Đang tải...</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════ MODAL CONFIRM ══════════ -->
+<div id="modalConfirm" class="modal-overlay">
+  <div class="modal">
+    <h2>⚠️ Xác nhận xoá</h2>
+    <div class="confirm-warning">
+      <p><strong>Bạn sắp xoá <span id="confirmCount">0</span> tài khoản HS.</strong></p>
+      <p>Hành động này <strong>KHÔNG THỂ HOÀN TÁC</strong>.</p>
+    </div>
+    <div id="confirmPreview" class="confirm-preview"></div>
+    <div class="form-group">
+      <label>Để xác nhận, gõ chính xác: <code>XOA TAI KHOAN</code></label>
+      <input type="text" id="confirmInput" placeholder="Gõ chính xác cụm từ trên..." autocomplete="off" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-light" id="btnCancelConfirm">Hủy</button>
+      <button class="btn btn-danger" id="btnConfirmDelete" disabled>🗑 XÁC NHẬN XOÁ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL RESULT ══════════ -->
+<div id="modalResult" class="modal-overlay">
+  <div class="modal">
+    <h2 id="resultTitle">✅ Hoàn tất</h2>
+    <div id="resultBody"></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="btnCloseResult">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TOAST ══════════ -->
+<div id="toast"></div>
+
+<!-- ══════════ FIREBASE + LOGIC ══════════ -->
+<script type="module">
+  // ═══ Import Firebase ═══
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import {
+    getAuth, onAuthStateChanged, signOut
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import {
+    getFirestore, collection, getDocs, doc, writeBatch, addDoc, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  // ═══ Firebase Config ═══
+  const firebaseConfig = {
+    apiKey: "AIzaSyDX1tt6PyBUxCwU6qTe9Cn9bbbWhgLKLKU",
+    authDomain: "bx-vlpt.firebaseapp.com",
+    projectId: "bx-vlpt",
+    storageBucket: "bx-vlpt.firebasestorage.app",
+    messagingSenderId: "223423849238",
+    appId: "1:223423849238:web:5407c3bc93d68654dc2637",
+    measurementId: "G-S37RM7Q5C5"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const TEACHER_EMAIL = "trntui6@gmail.com";
+
+  // ═══ State ═══
+  let currentUser = null;
+  let allStudents = [];
+  let filteredStudents = [];
+  let selectedIds = new Set();
+  let currentFilter = 'all';
+
+  // ═══ Helpers ═══
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => (s ?? '').toString().replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+
+  function showScreen(screenId) {
+    ['screenLoading', 'screenDenied', 'screenMain'].forEach(id => {
+      const el = $(id);
+      if (el) el.classList.remove('active');
+    });
+    const target = $(screenId);
+    if (target) target.classList.add('active');
+  }
+
+  function openModal(id) {
+    const el = $(id);
+    if (el) el.classList.add('active');
+  }
+  function closeModal(id) {
+    const el = $(id);
+    if (el) el.classList.remove('active');
+  }
+
+  function toast(msg, type = 'info') {
+    const t = $('toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.className = '';
+    t.classList.add('show');
+    if (type === 'error') t.classList.add('error');
+    if (type === 'success') t.classList.add('success');
+    clearTimeout(t._timeout);
+    t._timeout = setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  function fmtDate(ts) {
+    if (!ts) return '—';
+    const d = ts.toDate ? ts.toDate() : new Date(ts);
+    return d.toLocaleString('vi-VN', {
+      day: '2-digit', month: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    });
+  }
+
+  function daysSince(ts) {
+    if (!ts) return 0;
+    const d = ts.toDate ? ts.toDate() : new Date(ts);
+    return Math.floor((Date.now() - d.getTime()) / (1000 * 60 * 60 * 24));
+  }
+
+  // ═══ AUTH CHECK ═══
+  onAuthStateChanged(auth, async (user) => {
+    console.log('🔐 Auth state:', user?.email || 'null');
+
+    if (!user) {
+      console.log('❌ Chưa đăng nhập → denied');
+      showScreen('screenDenied');
+      return;
+    }
+
+    if (user.email.toLowerCase() !== TEACHER_EMAIL.toLowerCase()) {
+      console.log('❌ Không phải GV → denied');
+      showScreen('screenDenied');
+      return;
+    }
+
+    console.log('✅ GV đăng nhập:', user.email);
+    currentUser = user;
+
+    const name = user.displayName || user.email;
+    const label = $('userLabel');
+    if (label) label.textContent = `👨‍🏫 ${name}`;
+
+    // Hiện màn hình chính NGAY
+    showScreen('screenMain');
+
+    // Load dữ liệu
+    try {
+      await loadStudents();
+      await loadDeleteLogs();
+    } catch (err) {
+      console.error('Load error:', err);
+      toast('Lỗi tải dữ liệu: ' + err.message, 'error');
+    }
+  });
+
+  // ═══ EVENTS ═══
+  $('btnBack')?.addEventListener('click', () => {
+    window.location.href = '../index.html';
+  });
+
+  $('btnLogout')?.addEventListener('click', async () => {
+    if (!confirm('Đăng xuất khỏi công cụ?')) return;
+    await signOut(auth);
+    window.location.href = '../index.html';
+  });
+
+  $('btnRefresh')?.addEventListener('click', async () => {
+    toast('🔄 Đang tải lại...', 'info');
+    selectedIds.clear();
+    await loadStudents();
+    await loadDeleteLogs();
+  });
+
+  $('btnRefreshLogs')?.addEventListener('click', loadDeleteLogs);
+
+  $('btnSelectAll')?.addEventListener('click', () => {
+    filteredStudents.forEach(s => selectedIds.add(s.id));
+    renderStudentList();
+    updateSelectionInfo();
+  });
+
+  $('btnDeselectAll')?.addEventListener('click', () => {
+    selectedIds.clear();
+    renderStudentList();
+    updateSelectionInfo();
+  });
+
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      currentFilter = chip.dataset.days;
+      applyFilter();
+    });
+  });
+
+  $('btnDelete')?.addEventListener('click', openConfirmModal);
+
+  $('btnCancelConfirm')?.addEventListener('click', () => {
+    closeModal('modalConfirm');
+    $('confirmInput').value = '';
+    $('btnConfirmDelete').disabled = true;
+  });
+
+  $('confirmInput')?.addEventListener('input', (e) => {
+    const val = e.target.value.trim().toUpperCase();
+    $('btnConfirmDelete').disabled = val !== 'XOA TAI KHOAN';
+  });
+
+  $('btnConfirmDelete')?.addEventListener('click', performDelete);
+
+  $('modalConfirm')?.addEventListener('click', (e) => {
+    if (e.target === $('modalConfirm')) {
+      closeModal('modalConfirm');
+      $('confirmInput').value = '';
+      $('btnConfirmDelete').disabled = true;
+    }
+  });
+
+  $('modalResult')?.addEventListener('click', (e) => {
+    if (e.target === $('modalResult')) closeModal('modalResult');
+  });
+
+  $('btnCloseResult')?.addEventListener('click', () => {
+    closeModal('modalResult');
+  });
+
+  // ═══ LOAD STUDENTS ═══
+  async function loadStudents() {
+    const list = $('studentList');
+    if (!list) return;
+    list.innerHTML = '<div class="empty">Đang tải...</div>';
+
+    try {
+      const snap = await getDocs(collection(db, 'users'));
+      const allUsers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      const allHS = allUsers.filter(u => u.role === 'student');
+
+      allStudents = allHS.filter(u => u.emailVerified !== true);
+      allStudents.sort((a, b) =>
+        (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0)
+      );
+
+      const total = allHS.length;
+      const verified = allHS.filter(u => u.emailVerified === true).length;
+      const unverified = total - verified;
+      const oldCount = allStudents.filter(s => daysSince(s.createdAt) >= 30).length;
+
+      $('statTotal').textContent = total;
+      $('statVerified').textContent = verified;
+      $('statUnverified').textContent = unverified;
+      $('statOld').textContent = oldCount;
+
+      $('countAll').textContent = allStudents.length;
+      $('count7').textContent = allStudents.filter(s => daysSince(s.createdAt) >= 7).length;
+      $('count30').textContent = allStudents.filter(s => daysSince(s.createdAt) >= 30).length;
+      $('count60').textContent = allStudents.filter(s => daysSince(s.createdAt) >= 60).length;
+      $('count90').textContent = allStudents.filter(s => daysSince(s.createdAt) >= 90).length;
+
+      applyFilter();
+      console.log(`✅ Loaded ${allStudents.length} unverified students`);
+    } catch (err) {
+      console.error('Load students error:', err);
+      list.innerHTML = `<div class="empty" style="color:#c0392b;">Lỗi: ${esc(err.message)}</div>`;
+    }
+  }
+
+  // ═══ APPLY FILTER ═══
+  function applyFilter() {
+    if (currentFilter === 'all') {
+      filteredStudents = [...allStudents];
+    } else {
+      const days = parseInt(currentFilter);
+      filteredStudents = allStudents.filter(s => daysSince(s.createdAt) >= days);
+    }
+
+    const validIds = new Set(filteredStudents.map(s => s.id));
+    selectedIds.forEach(id => {
+      if (!validIds.has(id)) selectedIds.delete(id);
+    });
+
+    renderStudentList();
+    updateSelectionInfo();
+  }
+
+  // ═══ RENDER LIST ═══
+  function renderStudentList() {
+    const list = $('studentList');
+    if (!list) return;
+
+    $('totalFiltered').textContent = filteredStudents.length;
+
+    if (filteredStudents.length === 0) {
+      list.innerHTML = '<div class="empty">🎉 Không có tài khoản nào cần dọn với bộ lọc này!</div>';
+      return;
+    }
+
+    list.innerHTML = filteredStudents.map(s => {
+      const isChecked = selectedIds.has(s.id);
+      const days = daysSince(s.createdAt);
+      const daysClass = days >= 30 ? '' : 'small';
+
+      return `
+        <label class="student-item ${isChecked ? 'checked' : ''}">
+          <input type="checkbox" ${isChecked ? 'checked' : ''} data-id="${s.id}">
+          <div class="student-info">
+            <div class="student-name">👤 ${esc(s.name || '(Chưa có tên)')}</div>
+            <div class="student-email">📧 ${esc(s.email || '')}</div>
+          </div>
+          <div class="student-meta">
+            <div class="student-days ${daysClass}">${days} ngày</div>
+            <div class="student-date">${fmtDate(s.createdAt)}</div>
+          </div>
+        </label>
+      `;
+    }).join('');
+
+    list.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      cb.addEventListener('change', (e) => {
+        const id = e.target.dataset.id;
+        if (e.target.checked) {
+          selectedIds.add(id);
+          e.target.closest('.student-item')?.classList.add('checked');
+        } else {
+          selectedIds.delete(id);
+          e.target.closest('.student-item')?.classList.remove('checked');
+        }
+        updateSelectionInfo();
+      });
+    });
+  }
+
+  // ═══ UPDATE SELECTION ═══
+  function updateSelectionInfo() {
+    const count = selectedIds.size;
+    $('selectedCount').textContent = count;
+    $('deleteCount').textContent = count;
+
+    const btn = $('btnDelete');
+    if (btn) btn.disabled = count === 0;
+  }
+
+  // ═══ OPEN CONFIRM ═══
+  function openConfirmModal() {
+    const count = selectedIds.size;
+    if (count === 0) return;
+
+    $('confirmCount').textContent = count;
+
+    const selectedStudents = allStudents.filter(s => selectedIds.has(s.id));
+    const previewHtml = selectedStudents.slice(0, 20).map(s =>
+      `<div class="preview-item">📧 ${esc(s.email)} — ${esc(s.name || 'Chưa tên')}</div>`
+    ).join('');
+
+    const remaining = selectedStudents.length - 20;
+    const moreHtml = remaining > 0
+      ? `<div class="preview-item" style="color:#c0392b; font-style:italic;">... và ${remaining} tài khoản khác</div>`
+      : '';
+
+    $('confirmPreview').innerHTML = previewHtml + moreHtml;
+    $('confirmInput').value = '';
+    $('btnConfirmDelete').disabled = true;
+
+    openModal('modalConfirm');
+    setTimeout(() => $('confirmInput').focus(), 100);
+  }
+
+  // ═══ PERFORM DELETE ═══
+  async function performDelete() {
+    const btn = $('btnConfirmDelete');
+    btn.disabled = true;
+    btn.textContent = '⏳ Đang xoá...';
+
+    const idsToDelete = Array.from(selectedIds);
+    const studentsToDelete = allStudents.filter(s => selectedIds.has(s.id));
+    const emailsDeleted = studentsToDelete.map(s => s.email);
+
+    let successCount = 0;
+
+    try {
+      for (let i = 0; i < idsToDelete.length; i += 500) {
+        const batch = writeBatch(db);
+        const chunk = idsToDelete.slice(i, i + 500);
+        chunk.forEach(id => {
+          batch.delete(doc(db, 'users', id));
+        });
+        await batch.commit();
+        successCount += chunk.length;
+      }
+
+      try {
+        await addDoc(collection(db, 'deleteLogs'), {
+          type: 'cleanup-unverified',
+          count: successCount,
+          emails: emailsDeleted.slice(0, 100),
+          deletedBy: currentUser.uid,
+          deletedByName: currentUser.displayName || currentUser.email,
+          deletedAt: serverTimestamp()
+        });
+      } catch (logErr) {
+        console.warn('Không ghi được log:', logErr);
+      }
+
+      closeModal('modalConfirm');
+      showResult({ success: true, count: successCount });
+
+      selectedIds.clear();
+      await loadStudents();
+      await loadDeleteLogs();
+    } catch (err) {
+      console.error('Delete error:', err);
+      closeModal('modalConfirm');
+      showResult({
+        success: false,
+        count: successCount,
+        fail: idsToDelete.length - successCount,
+        error: err.message
+      });
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '🗑 XÁC NHẬN XOÁ';
+    }
+  }
+
+  // ═══ SHOW RESULT ═══
+  function showResult({ success, count, fail, error }) {
+    const titleEl = $('resultTitle');
+    titleEl.textContent = success ? '✅ Hoàn tất' : '❌ Có lỗi xảy ra';
+    titleEl.className = success ? 'success' : 'error';
+
+    let bodyHtml = '';
+    if (success) {
+      bodyHtml = `
+        <p style="margin-bottom:16px; color:#2E7D32; font-size:15px;">
+          🎉 Đã xoá thành công <strong>${count}</strong> tài khoản HS chưa xác thực.
+        </p>
+        <div class="result-stats">
+          <div class="result-stat">
+            <div class="value" style="color:#2E7D32;">${count}</div>
+            <div class="label">Đã xoá</div>
+          </div>
+          <div class="result-stat">
+            <div class="value" style="color:#999;">0</div>
+            <div class="label">Thất bại</div>
+          </div>
+        </div>
+        <div style="padding:12px; background:#FFF9E6; border-radius:8px; font-size:13px; color:#8B4513;">
+          💡 <strong>Lưu ý:</strong> Tài khoản Firebase Auth vẫn còn.
+          HS bị xoá profile có thể đăng nhập lại nhưng sẽ có profile rỗng.
+        </div>
+      `;
+    } else {
+      bodyHtml = `
+        <p style="margin-bottom:16px; color:#c0392b; font-size:15px;">
+          Đã xoá được <strong>${count}</strong> tài khoản. <strong>${fail}</strong> tài khoản bị lỗi.
+        </p>
+        <div class="result-stats">
+          <div class="result-stat">
+            <div class="value" style="color:#2E7D32;">${count}</div>
+            <div class="label">Thành công</div>
+          </div>
+          <div class="result-stat">
+            <div class="value" style="color:#c0392b;">${fail}</div>
+            <div class="label">Thất bại</div>
+          </div>
+        </div>
+        <div style="padding:12px; background:#FFEBEE; border-radius:8px; font-size:13px; color:#c0392b;">
+          ❌ <strong>Lỗi:</strong> ${esc(error || 'Không xác định')}
+        </div>
+      `;
+    }
+
+    $('resultBody').innerHTML = bodyHtml;
+    openModal('modalResult');
+  }
+
+  // ═══ LOAD LOGS ═══
+  async function loadDeleteLogs() {
+    const wrap = $('deleteLogs');
+    if (!wrap) return;
+
+    try {
+      const snap = await getDocs(collection(db, 'deleteLogs'));
+      const logs = snap.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => (b.deletedAt?.seconds || 0) - (a.deletedAt?.seconds || 0))
+        .slice(0, 20);
+
+      if (logs.length === 0) {
+        wrap.innerHTML = '<div class="empty">Chưa có lịch sử xoá.</div>';
+        return;
+      }
+
+      wrap.innerHTML = logs.map(log => `
+        <div class="log-item">
+          <div class="log-header">
+            <span class="log-count">🗑 ${log.count || 0} tài khoản</span>
+            <span class="log-time">${fmtDate(log.deletedAt)}</span>
+          </div>
+          ${log.emails && log.emails.length > 0 ? `
+            <div class="log-emails">
+              ${log.emails.slice(0, 5).map(e => esc(e)).join(', ')}
+              ${log.emails.length > 5 ? `... +${log.emails.length - 5}` : ''}
+            </div>
+          ` : ''}
+          <div style="font-size:11px; color:#999; margin-top:4px;">
+            👨‍🏫 Bởi: ${esc(log.deletedByName || 'GV')}
+          </div>
+        </div>
+      `).join('');
+    } catch (err) {
+      console.error('Load logs error:', err);
+      wrap.innerHTML = `<div class="empty">Không tải được lịch sử: ${esc(err.message)}</div>`;
+    }
+  }
+
+  console.log('%c🧹 Cleanup Tool', 'color:#c0392b; font-size:16px; font-weight:bold;');
+  console.log('Chỉ dành cho GV:', TEACHER_EMAIL);
+</script>
+
+</body>
+</html>

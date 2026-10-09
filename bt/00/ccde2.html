@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tool chuyển đổi đề thi → HTML (v2)</title>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]'],['$$','$$']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,'Segoe UI',Tahoma,sans-serif;background:#F5F5F5;color:#000;line-height:1.6;padding:20px}
+header{background:linear-gradient(135deg,#8B5A2B,#8B4513);color:#FFF;padding:16px 22px;border-radius:10px;margin-bottom:16px;font-size:20px;font-weight:700}
+header .ver{background:#FFF;color:#8B4513;border-radius:10px;padding:2px 10px;font-size:12px;margin-left:8px}
+.wrap{max-width:1200px;margin:0 auto}
+.help{background:#F5F5DC;border-left:5px solid #8B5A2B;padding:12px 16px;border-radius:6px;font-size:13px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
+label{font-weight:600;font-size:14px;display:block;margin-bottom:6px}
+textarea{width:100%;min-height:220px;padding:10px;border:1px solid #D3D3D3;border-radius:6px;font-family:monospace;font-size:12px}
+.cfg{background:#FFF;border:1px solid #D3D3D3;border-radius:8px;padding:14px;margin:14px 0;display:flex;flex-wrap:wrap;gap:14px;align-items:end}
+.cfg .box{display:flex;flex-direction:column;gap:4px;font-size:13px}
+.cfg input{width:80px;padding:7px 9px;border:1px solid #D3D3D3;border-radius:5px}
+.cfg .total{font-weight:800;color:#8B4513;font-size:15px;padding:8px 12px;background:#F5F5DC;border-radius:6px}
+button{padding:10px 18px;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-family:inherit;font-size:14px}
+.b-main{background:#8B5A2B;color:#FFF}.b-main:hover{background:#8B4513}
+.b-light{background:#F5DEB3;color:#333;border:1px solid #D3D3D3}
+.b-ok{background:#2E7D32;color:#FFF}.b-ok:disabled{opacity:.4;cursor:not-allowed}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.tabs{display:flex;gap:6px;margin:10px 0}
+.tabs button{background:#EEE;color:#333}
+.tabs button.active{background:#8B5A2B;color:#FFF}
+.hidden{display:none!important}
+.preview{background:#FFF;border:1px solid #D3D3D3;border-radius:8px;padding:16px;max-height:60vh;overflow:auto}
+.preview .question{background:#F5F5F5;padding:12px;border-radius:6px;margin-bottom:10px;border-left:3px solid #0066CC}
+.preview .opt{display:block;padding:5px 9px;margin:3px 0;background:#FFF;border-radius:4px}
+#logBox{background:#222;color:#0F0;font-family:monospace;font-size:12px;padding:14px;border-radius:8px;max-height:50vh;overflow:auto;white-space:pre-wrap}
+.log-err{color:#FF6B6B}.log-warn{color:#FFD93D}.log-ok{color:#7CFC00}
+</style>
+</head>
+<body>
+<header>🔧 Tool chuyển đổi đề thi → HTML <span class="ver">v2 · tự kiểm tra lỗi</span></header>
+<div class="wrap">
+<div class="help">
+📋 <strong>Cách dùng:</strong> ① Dán file đề (ch.html) + file đáp án (da.html) → ② Chọn preset điểm → ③ Bấm Chuyển đổi → ④ Xem Debug log (phải hết dòng đỏ) → ⑤ Copy HTML dán vào form thêm đề.<br>
+📄 <strong>Định dạng hỗ trợ:</strong> câu hỏi đánh số "Câu 1.", "Câu 2."…; trắc nghiệm có phương án A. B. C. D.; đúng/sai có ý a) b) c) d); tiêu đề "PHẦN II"/"PHẦN III" để tự nhận diện phần (không có tiêu đề thì dùng số câu cấu hình bên dưới). Đáp án: "1. A", "Câu 3: a) Đ; b) S…", "4: 5 m/s".
+</div>
+<div class="grid">
+  <div><label>📄 File đề (ch.html) — dán toàn bộ</label><textarea id="inDe"></textarea></div>
+  <div><label>✅ File đáp án (da.html) — dán toàn bộ</label><textarea id="inDa"></textarea></div>
+</div>
+<div class="cfg">
+  <div class="box"><label>⚡ Preset</label>
+    <div style="display:flex;gap:6px">
+      <button class="b-light" onclick="applyPreset(7)">📐 7đ (16-2-2)</button>
+      <button class="b-light" onclick="applyPreset(10)">📐 10đ (16-2-2)</button>
+    </div>
+  </div>
+  <div class="box"><label>Số câu I</label><input id="cnt1" type="number" value="16" oninput="updateTotal()"></div>
+  <div class="box"><label>Điểm/câu I</label><input id="pt1" type="number" step="0.05" value="0.25" oninput="updateTotal()"></div>
+  <div class="box"><label>Số câu II</label><input id="cnt2" type="number" value="2" oninput="updateTotal()"></div>
+  <div class="box"><label>Điểm/câu II</label><input id="pt2" type="number" step="0.05" value="1" oninput="updateTotal()"></div>
+  <div class="box"><label>Số câu III</label><input id="cnt3" type="number" value="2" oninput="updateTotal()"></div>
+  <div class="box"><label>Điểm/câu III</label><input id="pt3" type="number" step="0.05" value="0.5" oninput="updateTotal()"></div>
+  <div class="total" id="totalBox">TỔNG: 0.00đ</div>
+</div>
+<div class="actions">
+  <button class="b-main" id="btnConvert">🔄 Chuyển đổi</button>
+  <button class="b-light" id="btnClear">🗑 Xóa hết</button>
+  <button class="b-light" id="btnSample">📥 Load ví dụ mẫu</button>
+</div>
+<div class="tabs">
+  <button data-tab="out" class="active">📋 HTML output</button>
+  <button data-tab="prev">👁 Preview</button>
+  <button data-tab="log">🐛 Debug log <span id="logCount"></span></button>
+</div>
+<div id="tab-out">
+  <textarea id="outHtml" readonly style="min-height:260px"></textarea>
+  <div class="actions">
+    <button class="b-ok" id="btnCopy" disabled>📋 Copy HTML</button>
+    <button class="b-light" id="btnDownload">💾 Tải file .html</button>
+  </div>
+</div>
+<div id="tab-prev" class="hidden"><div id="previewBox" class="preview"></div></div>
+<div id="tab-log" class="hidden"><div id="logBox"></div></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+let logs=[];
+const addLog=(t,m)=>logs.push({t,m});
+function renderLog(){
+  $('logCount').textContent=logs.length?`(${logs.filter(l=>l.t==='err').length} lỗi)`:'';
+  $('logBox').innerHTML=logs.map(l=>`<span class="log-${l.t}">${l.t==='err'?'❌':l.t==='warn'?'⚠️':'✅'} ${esc(l.m)}</span>`).join('\n')||'(chưa có log)';
+  $('btnCopy').disabled=logs.some(l=>l.t==='err')||!$('outHtml').value;
+}
+function esc(s){return (s??'').toString().replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function updateTotal(){
+  const t=(+$('cnt1').value||0)*(+$('pt1').value||0)+(+$('cnt2').value||0)*(+$('pt2').value||0)+(+$('cnt3').value||0)*(+$('pt3').value||0);
+  $('totalBox').textContent='TỔNG: '+t.toFixed(2)+'đ';
+}
+function applyPreset(total){
+  if(total===7){$('pt1').value=0.25;$('pt2').value=1;$('pt3').value=0.5;}
+  else{$('pt1').value=0.25;$('pt2').value=1.5;$('pt3').value=1.5;}
+  updateTotal();
+}
+function stripScripts(r){return (r||'').replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<style[\s\S]*?<\/style>/gi,'').replace(/<!--[\s\S]*?-->/g,'');}
+function norm(r){return stripScripts(r).replace(/<br\s*\/?>/gi,'\n').replace(/<\/(p|div|li|tr)>/gi,'\n');}
+function cleanHtml(s){return (s||'').replace(/\s*\n\s*/g,' ').replace(/<[^>]+>/g,m=>m).trim();}
+function splitBlocks(raw){
+  const clean=norm(raw);const re=/Câu\s*(\d+)\s*[:.)]/gi;const marks=[];const seen={};let m;
+  while((m=re.exec(clean))!==null){const n=parseInt(m[1]);if(seen[n])continue;seen[n]=1;marks.push({num:n,idx:m.index,end:m.index+m[0].length});}
+  return marks.map((mk,i)=>({num:mk.num,idx:mk.idx,body:clean.slice(mk.end,i+1<marks.length?marks[i+1].idx:clean.length)}));
+}
+function parseMarks(body,re){const marks=[];let m;while((m=re.exec(body))!==null)marks.push({tag:m[2]||m[1],from:m.index,content:m.index+m[0].length});return marks;}
+function parseOptions(body){
+  const marks=parseMarks(body,/(^|\n)\s*([A-D])\s*[.)]\s*/g);
+  if(marks.length<2)return{opts:[],textEnd:body.length};
+  return{opts:marks.map((mk,i)=>({value:mk.tag,html:cleanHtml(body.slice(mk.content,i+1<marks.length?marks[i+1].from:body.length))})),textEnd:marks[0].from};
+}
+function parseStatements(body){
+  const marks=parseMarks(body,/(^|\n)\s*([a-d])\s*\)\s*/g);
+  if(!marks.length)return{sts:[],textEnd:body.length};
+  return{sts:marks.map((mk,i)=>({letter:mk.tag,html:cleanHtml(body.slice(mk.content,i+1<marks.length?marks[i+1].from:body.length))})),textEnd:marks[0].from};
+}
+function parseAnswers(raw){
+  const clean=norm(raw);const ans={choice:{},tf:{},short:{}};
+  let re=/(^|\n)\s*(\d+)\s*[:.)-]\s*([A-D])\s*(?=$|\n|[^a-zA-Z])/g,m;
+  while((m=re.exec(clean))!==null)ans.choice[parseInt(m[2])]=m[3];
+  splitBlocks(clean).forEach(b=>{
+    const reTF=/([a-d])\s*\)\s*(Đ|Đúng|S|Sai|True|False)/gi;
+    const found={};let mm;let isTF=false;
+    while((mm=reTF.exec(b.body))!==null){isTF=true;const v=mm[2].toLowerCase();found[mm[1].toLowerCase()]=(v==='đ'||v==='đúng'||v==='true');}
+    if(isTF)ans.tf[b.num]=found;
+    else if(b.body.trim())ans.short[b.num]=cleanHtml(b.body).replace(/[:.)]\s*$/,'');
+  });
+  return ans;
+}
+// ═══ VALIDATOR: đúng "hợp đồng" mà web v2 yêu cầu ═══
+function validateOutput(html){
+  const errs=[],warns=[];
+  const doc=new DOMParser().parseFromString(html,'text/html');
+  const qs=[...doc.querySelectorAll('.question')];
+  if(!qs.length)errs.push('Không có .question nào');
+  const ids=qs.map(q=>q.dataset.id);
+  const dup=ids.filter((v,i)=>ids.indexOf(v)!==i);
+  if(dup.length)errs.push('Trùng data-id: '+[...new Set(dup)].join(', '));
+  qs.forEach(q=>{
+    const t=q.dataset.type,pts=q.dataset.points||'';
+    if(!['choice','truefalse','short'].includes(t))errs.push(q.dataset.id+': type lạ "'+t+'"');
+    if(!pts||isNaN(parseFloat(pts))||pts.includes(','))errs.push(q.dataset.id+': data-points sai ("'+pts+'") — dùng dấu chấm');
+    if(!q.querySelector('.q-text'))warns.push(q.dataset.id+': thiếu .q-text');
+    if(t==='choice'){
+      const radios=[...q.querySelectorAll('input[type="radio"]')];
+      const vals=radios.map(r=>r.value);
+      if(radios.length<2)errs.push(q.dataset.id+': thiếu phương án');
+      if(vals.some(v=>!/^[A-D]$/.test(v)))errs.push(q.dataset.id+': value radio phải A-D');
+      if(new Set(vals).size!==vals.length)errs.push(q.dataset.id+': trùng value radio');
+      if(radios.some(r=>r.name!==q.dataset.id))errs.push(q.dataset.id+': name radio phải = data-id');
+      if(!vals.includes(q.dataset.answer))errs.push(q.dataset.id+': data-answer "'+q.dataset.answer+'" ngoài phương án');
+    }
+    if(t==='truefalse'){
+      const tfs=[...q.querySelectorAll('.tf-item')];
+      if(!tfs.length)errs.push(q.dataset.id+': thiếu .tf-item');
+      if(tfs.some((tf,i)=>tf.dataset.statement!==String(i)))errs.push(q.dataset.id+': data-statement phải 0,1,2...');
+      if(tfs.some(tf=>!['true','false'].includes(tf.dataset.answer)))errs.push(q.dataset.id+': data-answer tf phải "true"/"false"');
+    }
+    if(t==='short'&&!q.dataset.answer)errs.push(q.dataset.id+': short thiếu data-answer');
+  });
+  if(/<script/i.test(html))errs.push('Còn <script> trong output');
+  const rel=[...doc.querySelectorAll('img')].filter(im=>!/^(https?:|data:)/i.test(im.getAttribute('src')||''));
+  if(rel.length)warns.push(rel.length+' ảnh đường dẫn tương đối — sẽ hỏng trên web');
+  const counts={choice:0,truefalse:0,short:0};
+  qs.forEach(q=>counts[q.dataset.type]++);
+  return{errs,warns,counts};
+}
+// ═══ CONVERT ═══
+$('btnConvert').addEventListener('click',()=>{
+  logs=[];$('outHtml').value='';
+  const de=$('inDe').value,da=$('inDa').value;
+  if(!de.trim()){alert('Dán file đề trước!');return;}
+  const blocks=splitBlocks(de);
+  if(!blocks.length){addLog('err','Không tìm thấy "Câu N." nào trong file đề');renderLog();return;}
+  const cleanDe=stripScripts(de);
+  const h2=cleanDe.search(/PHẦN\s*II/i),h3=cleanDe.search(/PHẦN\s*III/i);
+  let p1=[],p2=[],p3=[];
+  if(h2>-1&&h3>-1&&h3>h2){
+    blocks.forEach(b=>{if(b.idx<h2)p1.push(b);else if(b.idx<h3)p2.push(b);else p3.push(b);});
+    $('cnt1').value=p1.length;$('cnt2').value=p2.length;$('cnt3').value=p3.length;
+    addLog('ok','Nhận diện phần theo tiêu đề: '+p1.length+' / '+p2.length+' / '+p3.length);
+  }else{
+    const c1=+$('cnt1').value||0,c2=+$('cnt2').value||0,c3=+$('cnt3').value||0;
+    if(blocks.length!==c1+c2+c3){addLog('err','Tìm thấy '+blocks.length+' câu ≠ cấu hình '+(c1+c2+c3)+'. Sửa số câu hoặc thêm tiêu đề PHẦN II/III vào file đề.');renderLog();return;}
+    p1=blocks.slice(0,c1);p2=blocks.slice(c1,c1+c2);p3=blocks.slice(c1+c2);
+    addLog('warn','Không thấy tiêu đề PHẦN — chia theo số câu cấu hình');
+  }
+  updateTotal();
+  const A=parseAnswers(da);
+  let out='',ci=0,ti=0,si=0;
+  p1.forEach(b=>{
+    ci++;const id='c'+String(ci).padStart(2,'0');
+    const{opts,textEnd}=parseOptions(b.body);
+    if(opts.length<2)addLog('err','Câu '+b.num+': không parse được phương án A-D');
+    if(opts.length!==4)addLog('warn','Câu '+b.num+': có '+opts.length+' phương án (khác 4)');
+    const ans=A.choice[b.num];
+    if(!ans)addLog('err','Câu '+b.num+': thiếu đáp án trong da.html');
+    out+='<div class="question" data-id="'+id+'" data-type="choice" data-answer="'+esc(ans||'')+'" data-points="'+(+$('pt1').value||0)+'" data-tool="ccde2">\n<div class="q-text">'+cleanHtml(b.body.slice(0,textEnd))+'</div>\n'+opts.map(o=>'<label class="opt"><input type="radio" name="'+id+'" value="'+o.value+'"> '+o.value+'. '+o.html+'</label>').join('\n')+'\n</div>\n';
+  });
+  p2.forEach(b=>{
+    ti++;const id='t'+String(ti).padStart(2,'0');
+    const{sts,textEnd}=parseStatements(b.body);
+    if(!sts.length)addLog('err','Câu '+b.num+': không parse được ý a) b) c) d)');
+    const tfAns=A.tf[b.num]||{};
+    out+='<div class="question" data-id="'+id+'" data-type="truefalse" data-points="'+(+$('pt2').value||0)+'" data-tool="ccde2">\n<div class="q-text">'+cleanHtml(b.body.slice(0,textEnd))+'</div>\n';
+    sts.forEach((st,i)=>{
+      const val=tfAns[st.letter];
+      if(val===undefined)addLog('err','Câu '+b.num+' ý '+st.letter+'): thiếu đáp án Đ/S');
+      out+='<div class="tf-item" data-statement="'+i+'" data-answer="'+(val===true?'true':'false')+'"><span class="tf-stmt">'+String.fromCharCode(97+i)+') '+st.html+'</span><span class="tf-btns"><button type="button" class="tf-btn" data-q="'+id+'" data-s="'+i+'" data-val="true">Đúng</button><button type="button" class="tf-btn" data-q="'+id+'" data-s="'+i+'" data-val="false">Sai</button></span></div>\n';
+    });
+    out+='</div>\n';
+  });
+  p3.forEach(b=>{
+    si++;const id='s'+String(si).padStart(2,'0');
+    const ans=A.short[b.num];
+    if(!ans)addLog('err','Câu '+b.num+': thiếu đáp án trả lời ngắn');
+    out+='<div class="question" data-id="'+id+'" data-type="short" data-answer="'+esc(ans||'')+'" data-points="'+(+$('pt3').value||0)+'" data-tool="ccde2">\n<div class="q-text">'+cleanHtml(b.body)+'</div>\n<input type="text" class="short-answer" placeholder="Nhập đáp án..." />\n</div>\n';
+  });
+  const v=validateOutput(out);
+  v.errs.forEach(e=>addLog('err',e));
+  v.warns.forEach(w=>addLog('warn',w));
+  const total=(p1.length*(+$('pt1').value||0)+p2.length*(+$('pt2').value||0)+p3.length*(+$('pt3').value||0)).toFixed(2);
+  addLog(v.errs.length?'err':'ok','Tổng kết: '+v.counts.choice+' TN + '+v.counts.truefalse+' Đ/S + '+v.counts.short+' ngắn = '+total+' điểm'+(v.errs.length?' — SỬA LỖI TRƯỚC KHI COPY':' — SẴN SÀNG COPY'));
+  $('outHtml').value=out;
+  $('previewBox').innerHTML=out||'(trống)';
+  if(window.MathJax?.typesetPromise)MathJax.typesetPromise([$('previewBox')]).catch(()=>{});
+  renderLog();
+});
+$('btnCopy').addEventListener('click',async()=>{
+  const ta=$('outHtml');ta.focus();ta.select();
+  try{await navigator.clipboard.writeText(ta.value);}catch(e){document.execCommand('copy');}
+  alert('✅ Đã copy HTML — dán vào form Thêm đề trên web.');
+});
+$('btnDownload').addEventListener('click',()=>{
+  if(!$('outHtml').value)return alert('Chưa có output!');
+  const blob=new Blob([$('outHtml').value],{type:'text/html'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='de_vatly.html';a.click();
+});
+$('btnClear').addEventListener('click',()=>{$('inDe').value='';$('inDa').value='';$('outHtml').value='';logs=[];renderLog();});
+$('btnSample').addEventListener('click',()=>{
+$('inDe').value=`PHẦN I
+Câu 1: Một vật chuyển động thẳng đều với vận tốc 2 m/s. Quãng đường đi được sau 3 s là
+A. 2 m.
+B. 6 m.
+C. 3 m.
+D. 9 m.
+Câu 2: Gia tốc rơi tự do ký hiệu là
+A. v.
+B. a.
+C. g.
+D. s.
+PHẦN II
+Câu 3: Phát biểu sau đúng hay sai?
+a) Lực là đại lượng vectơ.
+b) Công là đại lượng vectơ.
+PHẦN III
+Câu 4: Tốc độ của vật bằng bao nhiêu m/s? Biết quãng đường 10 m đi trong 2 s.`;
+$('inDa').value=`1. B
+2. C
+Câu 3: a) Đ; b) S
+4: 5`;
+$('cnt1').value=2;$('cnt2').value=1;$('cnt3').value=1;applyPreset(7);
+});
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  ['out','prev','log'].forEach(t=>$('tab-'+t).classList.toggle('hidden',t!==b.dataset.tab));
+}));
+updateTotal();renderLog();
+</script>
+</body>
+</html>
