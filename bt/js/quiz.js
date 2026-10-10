@@ -64,7 +64,7 @@ export function parseQuestionsHtml(htmlContent) {
         const stmtEl = tfEl.querySelector('.tf-stmt') || tfEl.querySelector('span:first-child');
         const stmtText = stmtEl?.textContent?.trim() || '';
         let stmtHtml = stmtEl?.innerHTML?.trim() || '';
-        stmtHtml = stmtHtml.replace(/^[a-d])\s*/i, '');
+        stmtHtml = stmtHtml.replace(/^\s*[a-d]\s*\)\s*/i, '');
         statements.push({
           statement: parseInt(tfEl.dataset.statement),
           text: stmtText,
