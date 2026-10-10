@@ -12,13 +12,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-functions.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDX1tt6PyBUxCwU6qTe9Cn9bbbWhgLKLKU",
-  authDomain: "bx-vlpt.firebaseapp.com",
-  projectId: "bx-vlpt",
-  storageBucket: "bx-vlpt.firebasestorage.app",
-  messagingSenderId: "223423849238",
-  appId: "1:223423849238:web:5407c3bc93d68654dc2637",
-  measurementId: "G-S37RM7Q5C5"
+  apiKey: "AIzaSyDh0fxRRsxEX8BGkzJv-TOxujDS9Md7aDo",
+  authDomain: "vlpt-bx.firebaseapp.com",
+  projectId: "vlpt-bx",
+  storageBucket: "vlpt-bx.firebasestorage.app",
+  messagingSenderId: "431143022843",
+  appId: "1:431143022843:web:6d674d4db184d232f7005e",
+  measurementId: "G-ZQVK5KZ565"
 };
 
 export const app = initializeApp(firebaseConfig);
