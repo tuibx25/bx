@@ -1,0 +1,111 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn()  { return request.auth != null; }
+    function userData()  { return get(/databases/$(database)/documents/users/$(request.auth.uid)).data; }
+    function isTeacher() { return signedIn() && userData().role == 'teacher'; }
+    function isSelf(uid) { return signedIn() && request.auth.uid == uid; }
+    function classChangeOn() {
+      return get(/databases/$(database)/documents/settings/system).data.allowChangeClass == true;
+    }
+    function changedKeys() { return request.resource.data.diff(resource.data).affectedKeys(); }
+
+    // ── USERS ──
+    match /users/{uid} {
+      allow get:  if isSelf(uid) || isTeacher();
+      allow list: if isTeacher();
+      allow create: if isSelf(uid) && (
+        (request.resource.data.role == 'student' && request.resource.data.email == request.auth.token.email) ||
+        request.resource.data.email == 'trntui6@gmail.com'
+      );
+      allow update: if isTeacher() || (
+        isSelf(uid) &&
+        request.resource.data.role == resource.data.role &&
+        request.resource.data.email == resource.data.email &&
+        changedKeys().hasOnly(['name', 'class', 'emailVerified', 'updatedAt']) &&
+        (!('class' in changedKeys()) || classChangeOn()
+          || resource.data.class == null || resource.data.class == '')
+      );
+      allow delete: if isTeacher();
+    }
+
+    // ── SETTINGS ─
+    match /settings/{docId} {
+      allow read:  if true;
+      allow write: if isTeacher();
+    }
+
+    // ── LESSONS ──
+    match /lessons/{id} {
+      allow get, list: if isTeacher() || resource.data.hidden != true;
+      allow write:     if isTeacher();
+    }
+
+    // ── ASSIGNMENTS + ĐÁP ÁN ẨN (HS không đọc được answerKey) ──
+    match /assignments/{id} {
+      allow get, list: if isTeacher()
+        || (resource.data.hidden != true && resource.data.lessonHidden != true);
+      allow write:     if isTeacher();
+      match /answerKey/{keyId} {
+        allow read, write: if isTeacher();
+      }
+    }
+
+    // ── SUBMISSIONS: HS KHÔNG BAO GIỜ ghi được điểm ──
+    match /submissions/{id} {
+      allow get, list: if isTeacher() || (signedIn() && resource.data.studentId == request.auth.uid);
+      // HS tự tạo phiên làm bài (bản lite không có Functions) — nhưng cấm kèm điểm
+      allow create: if signedIn()
+        && userData().role == 'student'
+        && request.resource.data.studentId == request.auth.uid
+        && request.resource.data.status == 'in_progress'
+        && request.resource.data.score == null
+        && request.resource.data.autoScore == null;
+      allow update: if isTeacher() || (
+        signedIn() && resource.data.studentId == request.auth.uid && (
+          // (a) lưu đáp án nháp khi đang làm
+          (resource.data.status == 'in_progress'
+            && changedKeys().hasOnly(['draftAnswers', 'draftAt'])) ||
+          // (b) nộp bài: CHỈ đáp án + thời gian, KHÔNG điểm
+          (resource.data.status == 'in_progress'
+            && request.resource.data.status == 'submitted'
+            && changedKeys().hasOnly(['status', 'answers', 'answer', 'submittedAt',
+                                      'submittedAtMs', 'timeSpent', 'isLate', 'isTimeout'])) ||
+          // (c) tự hủy lượt
+          (resource.data.status == 'in_progress'
+            && request.resource.data.status == 'abandoned'
+            && changedKeys().hasOnly(['status', 'answer', 'abandonedAt', 'submittedAt'])) ||
+          // (d) đánh dấu đã xem điểm
+          (changedKeys().hasOnly(['studentViewed']) && request.resource.data.studentViewed == true)
+        )
+      );
+      allow delete: if isTeacher();
+    }
+
+    // ── VIEW LOGS ──
+    match /viewLogs/{id} {
+      allow get, list: if isTeacher() || (signedIn() && resource.data.studentId == request.auth.uid);
+      allow create:    if signedIn() && request.resource.data.studentId == request.auth.uid;
+      allow update:    if isTeacher() || (
+        signedIn() && resource.data.studentId == request.auth.uid &&
+        changedKeys().hasOnly(['durationSec', 'lastHeartbeat', 'closedAt'])
+      );
+      allow delete:    if isTeacher();
+    }
+
+    // ── NOTIFICATIONS ──
+    match /notifications/{id} {
+      allow read:   if signedIn();
+      allow create, update, delete: if isTeacher();
+    }
+
+    // ── AUDIT LOGS: GV ghi khi chấm/công bố ──
+    match /auditLogs/{id} {
+      allow read, create: if isTeacher();
+      allow update, delete: if false;
+    }
+
+    match /{document=**} { allow read, write: if false; }
+  }
+}

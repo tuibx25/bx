@@ -1,24 +1,14 @@
-import {
-  db, collection, getDocs, query, where
-} from './firebase-init.js';
+import { db, collection, getDocs, query, where } from './firebase-init.js';
 import { state } from './state.js';
-import {
-  $, esc, toast, mapError, normalizeClass, getGradeFromClass, fmtDuration
-} from './utils.js';
+import { $, esc, toast, normalizeClass, getGradeFromClass, fmtDuration } from './utils.js';
 
-// ══════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════
 export function initAssignments() {
   $('searchInput')?.addEventListener('input', renderAssignmentsFiltered);
   $('filterStatus')?.addEventListener('change', renderAssignmentsFiltered);
   $('filterType')?.addEventListener('change', renderAssignmentsFiltered);
   document.querySelectorAll('.grade-tab').forEach(btn => {
     btn.addEventListener('click', () => {
-      if (state.currentProfile?.role !== 'teacher') {
-        toast('Chỉ giáo viên mới đổi khối', 'error');
-        return;
-      }
+      if (state.currentProfile?.role !== 'teacher') { toast('Chỉ giáo viên mới đổi khối', 'error'); return; }
       document.querySelectorAll('.grade-tab').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       state.currentGrade = btn.dataset.grade;
@@ -27,38 +17,33 @@ export function initAssignments() {
   });
 }
 
-// ══════════════════════════════════════════
-// LOAD ASSIGNMENTS
-// ══════════════════════════════════════════
 export async function loadAssignments() {
   const list = $('assignmentsList');
   if (!list) return;
   list.innerHTML = '<div class="empty">Đang tải...</div>';
   try {
-    const isTeacher = state.currentProfile?.role === 'teacher';
-    // ⭐ v2.1: truy vấn HS kèm điều kiện khớp Rules bảo mật
-    const lessonConstraints = [where('grade', '==', state.currentGrade)];
-    const assignConstraints = [where('grade', '==', state.currentGrade)];
-    if (!isTeacher) {
-      lessonConstraints.push(where('hidden', '==', false));
-      assignConstraints.push(where('hidden', '==', false));
-      assignConstraints.push(where('lessonHidden', '==', false));
-    }
-    const lSnap = await getDocs(query(collection(db, 'lessons'), ...lessonConstraints));
+    // ⭐ v2: chỉ query theo grade — filter ẩn làm bằng JS sau (nhanh hơn, không cần composite index)
+    const lq = query(collection(db, 'lessons'), where('grade', '==', state.currentGrade));
+    const lSnap = await getDocs(lq);
     const allLessons = lSnap.docs.map(d => ({ id: d.id, ...d.data() }));
     allLessons.sort((a, b) => (a.order || 0) - (b.order || 0));
 
     let lessons = allLessons;
-    if (!isTeacher) lessons = allLessons.filter(l => l.hidden !== true);
+    if (state.currentProfile?.role !== 'teacher') {
+      lessons = allLessons.filter(l => l.hidden !== true);
+    }
 
-    const aSnap = await getDocs(query(collection(db, 'assignments'), ...assignConstraints));
+    const aq = query(collection(db, 'assignments'), where('grade', '==', state.currentGrade));
+    const aSnap = await getDocs(aq);
     let items = aSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-    if (!isTeacher) {
-      const hiddenLessonIds = new Set(allLessons.filter(l => l.hidden === true).map(l => id2(l)));
-      function id2(l) { return l.id; }
+    if (state.currentProfile?.role !== 'teacher') {
+      const hiddenLessonIds = new Set(allLessons.filter(l => l.hidden === true).map(l => l.id));
       items = items.filter(a => !a.hidden);
-      items = items.filter(a => !a.lessonId || !hiddenLessonIds.has(a.lessonId));
+      items = items.filter(a => {
+        if (!a.lessonId) return true;
+        return !hiddenLessonIds.has(a.lessonId);
+      });
     }
 
     if (state.currentProfile?.role === 'student' && state.currentUser) {
@@ -78,10 +63,12 @@ export async function loadAssignments() {
 
     let mySubs = [];
     let myViewLogs = [];
-    if (state.currentUser && !isTeacher) {
-      const ss = await getDocs(query(collection(db, 'submissions'), where('studentId', '==', state.currentUser.uid)));
+    if (state.currentUser && state.currentProfile?.role !== 'teacher') {
+      const sq = query(collection(db, 'submissions'), where('studentId', '==', state.currentUser.uid));
+      const ss = await getDocs(sq);
       mySubs = ss.docs.map(d => ({ id: d.id, ...d.data() }));
-      const vls = await getDocs(query(collection(db, 'viewLogs'), where('studentId', '==', state.currentUser.uid)));
+      const vlq = query(collection(db, 'viewLogs'), where('studentId', '==', state.currentUser.uid));
+      const vls = await getDocs(vlq);
       myViewLogs = vls.docs.map(d => ({ id: d.id, ...d.data() }));
     }
 
@@ -92,11 +79,11 @@ export async function loadAssignments() {
     renderAssignmentsFiltered();
   } catch (err) {
     console.error('Load assignments error:', err);
-    list.innerHTML = `<div class="empty">Lỗi: ${esc(mapError(err))}</div>`;
+    list.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`;
   }
 }
 
-// ══════════════════════════════════════════
+// ═════════════════════════════════════════
 // RENDER FILTERED
 // ══════════════════════════════════════════
 function renderAssignmentsFiltered() {
@@ -123,13 +110,10 @@ function renderAssignmentsFiltered() {
   if (filterStatus !== 'all' && state.currentProfile?.role === 'student') {
     items = items.filter(a => {
       const myClassNorm = normalizeClass(state.currentProfile.class);
-      // ⭐ v2: tính cả đề giao cả khối
       const toMe = a.assignedTo?.includes(state.currentUser?.uid) ||
         a.assignedClasses?.some(c => normalizeClass(c) === myClassNorm) ||
         a.assignedAllGrade === true;
-      const mySubs = state.mySubsCache.filter(s =>
-        s.assignmentId === a.id && s.status !== 'in_progress'
-      );
+      const mySubs = state.mySubsCache.filter(s => s.assignmentId === a.id && s.status !== 'in_progress');
       const hasDone = mySubs.length > 0;
       const hasGraded = mySubs.some(s => s.status === 'graded' || s.status === 'published');
       if (filterStatus === 'assigned') return toMe;
@@ -162,65 +146,40 @@ function renderAssignmentsFiltered() {
       unassigned
     );
   }
-  if (!html.trim()) {
-    list.innerHTML = '<div class="empty">Không tìm thấy bài tập phù hợp.</div>';
-    return;
-  }
+  if (!html.trim()) { list.innerHTML = '<div class="empty">Không tìm thấy bài tập phù hợp.</div>'; return; }
   list.innerHTML = html;
 
   list.querySelectorAll('.lesson-header').forEach(h => {
-    h.addEventListener('click', () => {
-      h.nextElementSibling?.classList.toggle('collapsed');
-      h.classList.toggle('collapsed');
-    });
+    h.addEventListener('click', () => { h.nextElementSibling?.classList.toggle('collapsed'); h.classList.toggle('collapsed'); });
   });
   list.querySelectorAll('[data-do-quiz]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const a = items.find(x => x.id === btn.dataset.doQuiz);
-      if (a) window.dispatchEvent(new CustomEvent('open:quiz', { detail: a }));
-    });
+    btn.addEventListener('click', (e) => { e.stopPropagation(); const a = items.find(x => x.id === btn.dataset.doQuiz); if (a) window.dispatchEvent(new CustomEvent('open:quiz', { detail: a })); });
   });
   list.querySelectorAll('[data-open-external]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const a = items.find(x => x.id === btn.dataset.openExternal);
-      if (a) window.dispatchEvent(new CustomEvent('open:external', { detail: a }));
-    });
+    btn.addEventListener('click', (e) => { e.stopPropagation(); const a = items.find(x => x.id === btn.dataset.openExternal); if (a) window.dispatchEvent(new CustomEvent('open:external', { detail: a })); });
   });
   list.querySelectorAll('[data-view-essay]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const a = items.find(x => x.id === btn.dataset.viewEssay);
-      if (a) window.dispatchEvent(new CustomEvent('open:essay', { detail: a }));
-    });
+    btn.addEventListener('click', (e) => { e.stopPropagation(); const a = items.find(x => x.id === btn.dataset.viewEssay); if (a) window.dispatchEvent(new CustomEvent('open:essay', { detail: a })); });
   });
   list.querySelectorAll('[data-require-login]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      window.dispatchEvent(new CustomEvent('open:login'));
-    });
+    btn.addEventListener('click', (e) => { e.stopPropagation(); window.dispatchEvent(new CustomEvent('open:login')); });
   });
 }
 
-// ══════════════════════════════════════════
-// RENDER LESSON BLOCK
-// ══════════════════════════════════════════
 function renderLessonBlock(lesson, lessonAssigns) {
   const isUnassigned = lesson._unassigned;
   const lessonName = esc(lesson.name || 'Bài học');
   const lessonDesc = esc(lesson.description || '');
   let bodyHtml = '';
-  if (lessonAssigns.length === 0) {
-    bodyHtml = '<div class="empty-lesson">📭 Chưa có đề nào.</div>';
-  } else {
+  if (lessonAssigns.length === 0) bodyHtml = '<div class="empty-lesson"> Chưa có đề nào.</div>';
+  else {
     lessonAssigns.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     bodyHtml = lessonAssigns.map(a => renderAssignmentRow(a)).join('');
   }
   return `<div class="lesson-block">
     <div class="lesson-header">
       <div class="lesson-info">
-        <h3>${isUnassigned ? '📦 ' + lessonName : '📖 ' + lessonName}</h3>
+        <h3>${isUnassigned ? ' ' + lessonName : '📖 ' + lessonName}</h3>
         ${lessonDesc ? `<div class="lesson-desc">${lessonDesc}</div>` : ''}
       </div>
       <div style="display:flex; align-items:center; gap:10px;">
@@ -232,21 +191,13 @@ function renderLessonBlock(lesson, lessonAssigns) {
   </div>`;
 }
 
-// ══════════════════════════════════════════
-// RENDER ASSIGNMENT ROW
-// ══════════════════════════════════════════
 function renderAssignmentRow(a) {
   const isExternal = a.mode === 'external';
   const isTeacherView = state.currentProfile?.role === 'teacher';
   const modeBadge = isTeacherView
-    ? (isExternal
-      ? '<span class="badge badge-external">🔗 Luyện tập</span>'
-      : '<span class="badge badge-inline">🎯 Đề có điểm</span>')
+    ? (isExternal ? '<span class="badge badge-external"> Luyện tập</span>' : '<span class="badge badge-inline">🎯 Đề có điểm</span>')
     : '';
-  const hiddenBadge = (isTeacherView && a.hidden)
-    ? '<span class="badge badge-hidden">🙈 Đã ẩn</span>'
-    : '';
-
+  const hiddenBadge = (isTeacherView && a.hidden) ? '<span class="badge badge-hidden">🙈 Đã ẩn</span>' : '';
   let assignedBadge = '';
   let isAssignedToMe = false;
   if (state.currentProfile?.role === 'student' && state.currentUser) {
@@ -258,22 +209,17 @@ function renderAssignmentRow(a) {
       isAssignedToMe = true;
     }
   }
-
-  const mySubsOfA = state.mySubsCache.filter(s =>
-    s.assignmentId === a.id && s.status !== 'in_progress'
-  );
+  const mySubsOfA = state.mySubsCache.filter(s => s.assignmentId === a.id && s.status !== 'in_progress');
   const newPublished = mySubsOfA.some(s => s.status === 'published' && !s.studentViewed);
   const newBadge = newPublished ? '<span class="badge badge-new">🆕 Có điểm mới</span>' : '';
-
   const maxAttempts = a.maxAttempts || 3;
   const doneCount = mySubsOfA.length;
   const viewLogsOfA = state.myViewLogsCache.filter(v => v.assignmentId === a.id);
   const accessCount = viewLogsOfA.length;
   const totalDuration = viewLogsOfA.reduce((s, v) => s + (v.durationSec || 0), 0);
-
   const isLoggedIn = !!state.currentUser;
   const isEmailVerified = state.currentUser?.emailVerified === true;
-  const isTeacher = isTeacherView;
+  const isTeacher = state.currentProfile?.role === 'teacher';
 
   let actionBtn = '';
   if (isExternal) {
@@ -284,25 +230,23 @@ function renderAssignmentRow(a) {
     else actionBtn = `<button class="btn btn-secondary btn-sm" data-open-external="${a.id}">🔗 Mở luyện tập (${accessCount}${maxAttempts > 0 ? '/' + maxAttempts : ''})</button>`;
   } else {
     if (a.type === 'essay') {
-      if (!isLoggedIn) actionBtn = `<button class="btn lock-btn btn-sm" data-require-login>🔒 Đăng nhập</button>`;
+      if (!isLoggedIn) actionBtn = `<button class="btn lock-btn btn-sm" data-require-login> Đăng nhập</button>`;
       else if (isTeacher) actionBtn = `<button class="btn btn-primary btn-sm" data-view-essay="${a.id}">👁 Xem đề</button>`;
       else if (!isEmailVerified) actionBtn = `<span class="text-sm" style="color:#c0392b;">📧 Xác thực email</span>`;
       else actionBtn = `<button class="btn btn-primary btn-sm" data-view-essay="${a.id}">📖 Xem đề</button>`;
     } else {
       if (!isLoggedIn) actionBtn = `<button class="btn lock-btn btn-sm" data-require-login>🔒 Đăng nhập</button>`;
-      else if (isTeacher) actionBtn = `<span class="text-sm" style="color:#8B4513;">👨‍ GV</span>`;
+      else if (isTeacher) actionBtn = `<span class="text-sm" style="color:#8B4513;">👨‍🏫 GV</span>`;
       else if (!isEmailVerified) actionBtn = `<span class="text-sm" style="color:#c0392b;">📧 Xác thực email</span>`;
       else if (doneCount >= maxAttempts) actionBtn = `<span class="text-sm" style="color:#c0392b;">✋ Đã làm ${maxAttempts} lần</span>`;
-      else actionBtn = `<button class="btn btn-primary btn-sm" data-do-quiz="${a.id}">🎯 Làm bài (${doneCount}/${maxAttempts})</button>`;
+      else actionBtn = `<button class="btn btn-primary btn-sm" data-do-quiz="${a.id}"> Làm bài (${doneCount}/${maxAttempts})</button>`;
     }
   }
 
   let metaInfo = [];
   if (isExternal) {
     metaInfo.push(`🔗 File ngoài`);
-    if (state.currentProfile?.role === 'student') {
-      metaInfo.push(`Đã mở ${accessCount} lần${totalDuration > 0 ? ` • ${fmtDuration(totalDuration)}` : ''}`);
-    }
+    if (state.currentProfile?.role === 'student') metaInfo.push(`Đã mở ${accessCount} lần${totalDuration > 0 ? ` • ${fmtDuration(totalDuration)}` : ''}`);
     if (maxAttempts > 0) metaInfo.push(`Tối đa ${maxAttempts} lần`);
   } else {
     if (a.type === 'quiz') {
@@ -316,10 +260,7 @@ function renderAssignmentRow(a) {
     <div class="a-info">
       <div class="a-title">
         ${isExternal ? '📄' : '📝'} ${esc(a.title)}
-        ${modeBadge}
-        ${hiddenBadge}
-        ${assignedBadge}
-        ${newBadge}
+        ${modeBadge}${hiddenBadge}${assignedBadge}${newBadge}
       </div>
       ${metaInfo.length ? `<div class="a-meta">${metaInfo.join(' • ')}</div>` : ''}
     </div>
