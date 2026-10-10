@@ -1,14 +1,24 @@
-import { db, collection, getDocs, query, where } from './firebase-init.js';
+import {
+  db, collection, getDocs, query, where
+} from './firebase-init.js';
 import { state } from './state.js';
-import { $, esc, toast, normalizeClass, getGradeFromClass, fmtDuration } from './utils.js';
+import {
+  $, esc, toast, normalizeClass, getGradeFromClass, fmtDuration
+} from './utils.js';
 
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
 export function initAssignments() {
   $('searchInput')?.addEventListener('input', renderAssignmentsFiltered);
   $('filterStatus')?.addEventListener('change', renderAssignmentsFiltered);
   $('filterType')?.addEventListener('change', renderAssignmentsFiltered);
   document.querySelectorAll('.grade-tab').forEach(btn => {
     btn.addEventListener('click', () => {
-      if (state.currentProfile?.role !== 'teacher') { toast('Chỉ giáo viên mới đổi khối', 'error'); return; }
+      if (state.currentProfile?.role !== 'teacher') {
+        toast('Chỉ giáo viên mới đổi khối', 'error');
+        return;
+      }
       document.querySelectorAll('.grade-tab').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       state.currentGrade = btn.dataset.grade;
@@ -17,65 +27,74 @@ export function initAssignments() {
   });
 }
 
+// ══════════════════════════════════════════
+//  LOAD ASSIGNMENTS — TỐI ƯU TỐC ĐỘ
+// ══════════════════════════════════════════
 export async function loadAssignments() {
   const list = $('assignmentsList');
   if (!list) return;
   list.innerHTML = '<div class="empty">Đang tải...</div>';
+  
+  const isTeacher = state.currentProfile?.role === 'teacher';
+  const isStudent = state.currentProfile?.role === 'student';
+  const myUid = state.currentUser?.uid;
+  const myClassNorm = isStudent ? normalizeClass(state.currentProfile.class) : null;
+  const myGrade = isStudent ? getGradeFromClass(state.currentProfile.class) : state.currentGrade;
+
   try {
-    // ⭐ v2: chỉ query theo grade — filter ẩn làm bằng JS sau (nhanh hơn, không cần composite index)
-    const lq = query(collection(db, 'lessons'), where('grade', '==', state.currentGrade));
-    const lSnap = await getDocs(lq);
-    const allLessons = lSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    // ⭐ 1. Load lessons + assignments SONG SONG (chỉ theo khối)
+    const [lSnap, aSnap] = await Promise.all([
+      getDocs(query(collection(db, 'lessons'), where('grade', '==', myGrade))),
+      getDocs(query(collection(db, 'assignments'), where('grade', '==', myGrade)))
+    ]);
+    
+    let allLessons = lSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    let items = aSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    
+    // Sort lessons theo thứ tự
     allLessons.sort((a, b) => (a.order || 0) - (b.order || 0));
 
-    let lessons = allLessons;
-    if (state.currentProfile?.role !== 'teacher') {
-      lessons = allLessons.filter(l => l.hidden !== true);
+    // ⭐ 2. Filter ẩn (chỉ với HS)
+    if (isStudent) {
+      const hiddenLessonIds = new Set(
+        allLessons.filter(l => l.hidden === true).map(l => l.id)
+      );
+      items = items.filter(a => 
+        !a.hidden && 
+        (!a.lessonId || !hiddenLessonIds.has(a.lessonId))
+      );
     }
 
-    const aq = query(collection(db, 'assignments'), where('grade', '==', state.currentGrade));
-    const aSnap = await getDocs(aq);
-    let items = aSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-
-    if (state.currentProfile?.role !== 'teacher') {
-      const hiddenLessonIds = new Set(allLessons.filter(l => l.hidden === true).map(l => l.id));
-      items = items.filter(a => !a.hidden);
+    // ⭐ 3. Filter theo đối tượng giao bài (chỉ với HS)
+    if (isStudent && myUid) {
       items = items.filter(a => {
-        if (!a.lessonId) return true;
-        return !hiddenLessonIds.has(a.lessonId);
+        if (a.assignedAllGrade && a.grade === myGrade) return true;
+        if (a.assignedTo?.includes(myUid)) return true;
+        if (a.assignedClasses?.some(c => normalizeClass(c) === myClassNorm)) return true;
+        return false;
       });
     }
 
-    if (state.currentProfile?.role === 'student' && state.currentUser) {
-      const myClassNorm = normalizeClass(state.currentProfile.class);
-      const myGrade = getGradeFromClass(state.currentProfile.class);
-      items = items.filter(a => {
-        const hasClassAssign = a.assignedClasses && a.assignedClasses.length > 0;
-        const hasStudentAssign = a.assignedTo && a.assignedTo.length > 0;
-        const hasAllGradeAssign = a.assignedAllGrade === true;
-        if (!hasClassAssign && !hasStudentAssign && !hasAllGradeAssign) return false;
-        if (hasAllGradeAssign && a.grade === myGrade) return true;
-        const toMe = a.assignedTo?.includes(state.currentUser.uid);
-        const toMyClass = a.assignedClasses?.some(c => normalizeClass(c) === myClassNorm);
-        return toMe || toMyClass;
-      });
-    }
-
+    // ⭐ 4. Load submissions + viewLogs SONG SONG (chỉ với HS)
     let mySubs = [];
     let myViewLogs = [];
-    if (state.currentUser && state.currentProfile?.role !== 'teacher') {
-      const sq = query(collection(db, 'submissions'), where('studentId', '==', state.currentUser.uid));
-      const ss = await getDocs(sq);
-      mySubs = ss.docs.map(d => ({ id: d.id, ...d.data() }));
-      const vlq = query(collection(db, 'viewLogs'), where('studentId', '==', state.currentUser.uid));
-      const vls = await getDocs(vlq);
-      myViewLogs = vls.docs.map(d => ({ id: d.id, ...d.data() }));
+    if (isStudent && myUid) {
+      const [sSnap, vSnap] = await Promise.all([
+        getDocs(query(collection(db, 'submissions'), where('studentId', '==', myUid))),
+        getDocs(query(collection(db, 'viewLogs'), where('studentId', '==', myUid)))
+      ]);
+      mySubs = sSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      myViewLogs = vSnap.docs.map(d => ({ id: d.id, ...d.data() }));
     }
 
-    state.allLessonsCache = lessons;
+    // ⭐ 5. Cache và render
+    state.allLessonsCache = isStudent 
+      ? allLessons.filter(l => l.hidden !== true) 
+      : allLessons;
     state.allAssignmentsCache = items;
     state.mySubsCache = mySubs;
     state.myViewLogsCache = myViewLogs;
+    
     renderAssignmentsFiltered();
   } catch (err) {
     console.error('Load assignments error:', err);
@@ -83,18 +102,21 @@ export async function loadAssignments() {
   }
 }
 
-// ═════════════════════════════════════════
-// RENDER FILTERED
 // ══════════════════════════════════════════
+// RENDER FILTERED
+// ═════════════════════════════════════════
 function renderAssignmentsFiltered() {
   const list = $('assignmentsList');
   if (!list) return;
+  
   const keyword = ($('searchInput')?.value || '').toLowerCase().trim();
   const filterStatus = $('filterStatus')?.value || 'all';
   const filterType = $('filterType')?.value || 'all';
+  
   let lessons = [...state.allLessonsCache];
   let items = [...state.allAssignmentsCache];
 
+  // Filter từ khóa
   if (keyword) {
     items = items.filter(a =>
       (a.title || '').toLowerCase().includes(keyword) ||
@@ -106,14 +128,22 @@ function renderAssignmentsFiltered() {
       (l.name || '').toLowerCase().includes(keyword) || matchedLessonIds.has(l.id)
     );
   }
-  if (filterType !== 'all') items = items.filter(a => a.mode === filterType);
+  
+  // Filter loại đề
+  if (filterType !== 'all') {
+    items = items.filter(a => a.mode === filterType);
+  }
+  
+  // Filter trạng thái (chỉ HS)
   if (filterStatus !== 'all' && state.currentProfile?.role === 'student') {
     items = items.filter(a => {
       const myClassNorm = normalizeClass(state.currentProfile.class);
       const toMe = a.assignedTo?.includes(state.currentUser?.uid) ||
         a.assignedClasses?.some(c => normalizeClass(c) === myClassNorm) ||
         a.assignedAllGrade === true;
-      const mySubs = state.mySubsCache.filter(s => s.assignmentId === a.id && s.status !== 'in_progress');
+      const mySubs = state.mySubsCache.filter(s =>
+        s.assignmentId === a.id && s.status !== 'in_progress'
+      );
       const hasDone = mySubs.length > 0;
       const hasGraded = mySubs.some(s => s.status === 'graded' || s.status === 'published');
       if (filterStatus === 'assigned') return toMe;
@@ -127,6 +157,7 @@ function renderAssignmentsFiltered() {
   const countEl = $('resultCount');
   if (countEl) countEl.textContent = `Hiển thị ${items.length} đề`;
 
+  // Nhóm theo lesson
   const byLesson = {};
   const unassigned = [];
   items.forEach(a => {
@@ -146,33 +177,59 @@ function renderAssignmentsFiltered() {
       unassigned
     );
   }
-  if (!html.trim()) { list.innerHTML = '<div class="empty">Không tìm thấy bài tập phù hợp.</div>'; return; }
+  if (!html.trim()) {
+    list.innerHTML = '<div class="empty">Không tìm thấy bài tập phù hợp.</div>';
+    return;
+  }
   list.innerHTML = html;
 
+  // Bind events
   list.querySelectorAll('.lesson-header').forEach(h => {
-    h.addEventListener('click', () => { h.nextElementSibling?.classList.toggle('collapsed'); h.classList.toggle('collapsed'); });
+    h.addEventListener('click', () => {
+      h.nextElementSibling?.classList.toggle('collapsed');
+      h.classList.toggle('collapsed');
+    });
   });
   list.querySelectorAll('[data-do-quiz]').forEach(btn => {
-    btn.addEventListener('click', (e) => { e.stopPropagation(); const a = items.find(x => x.id === btn.dataset.doQuiz); if (a) window.dispatchEvent(new CustomEvent('open:quiz', { detail: a })); });
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const a = items.find(x => x.id === btn.dataset.doQuiz);
+      if (a) window.dispatchEvent(new CustomEvent('open:quiz', { detail: a }));
+    });
   });
   list.querySelectorAll('[data-open-external]').forEach(btn => {
-    btn.addEventListener('click', (e) => { e.stopPropagation(); const a = items.find(x => x.id === btn.dataset.openExternal); if (a) window.dispatchEvent(new CustomEvent('open:external', { detail: a })); });
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const a = items.find(x => x.id === btn.dataset.openExternal);
+      if (a) window.dispatchEvent(new CustomEvent('open:external', { detail: a }));
+    });
   });
   list.querySelectorAll('[data-view-essay]').forEach(btn => {
-    btn.addEventListener('click', (e) => { e.stopPropagation(); const a = items.find(x => x.id === btn.dataset.viewEssay); if (a) window.dispatchEvent(new CustomEvent('open:essay', { detail: a })); });
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const a = items.find(x => x.id === btn.dataset.viewEssay);
+      if (a) window.dispatchEvent(new CustomEvent('open:essay', { detail: a }));
+    });
   });
   list.querySelectorAll('[data-require-login]').forEach(btn => {
-    btn.addEventListener('click', (e) => { e.stopPropagation(); window.dispatchEvent(new CustomEvent('open:login')); });
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      window.dispatchEvent(new CustomEvent('open:login'));
+    });
   });
 }
 
+// ══════════════════════════════════════════
+// RENDER LESSON BLOCK
+// ══════════════════════════════════════════
 function renderLessonBlock(lesson, lessonAssigns) {
   const isUnassigned = lesson._unassigned;
   const lessonName = esc(lesson.name || 'Bài học');
   const lessonDesc = esc(lesson.description || '');
   let bodyHtml = '';
-  if (lessonAssigns.length === 0) bodyHtml = '<div class="empty-lesson"> Chưa có đề nào.</div>';
-  else {
+  if (lessonAssigns.length === 0) {
+    bodyHtml = '<div class="empty-lesson"> Chưa có đề nào.</div>';
+  } else {
     lessonAssigns.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     bodyHtml = lessonAssigns.map(a => renderAssignmentRow(a)).join('');
   }
@@ -191,6 +248,9 @@ function renderLessonBlock(lesson, lessonAssigns) {
   </div>`;
 }
 
+// ══════════════════════════════════════════
+// RENDER ASSIGNMENT ROW
+// ══════════════════════════════════════════
 function renderAssignmentRow(a) {
   const isExternal = a.mode === 'external';
   const isTeacherView = state.currentProfile?.role === 'teacher';
@@ -198,25 +258,32 @@ function renderAssignmentRow(a) {
     ? (isExternal ? '<span class="badge badge-external"> Luyện tập</span>' : '<span class="badge badge-inline">🎯 Đề có điểm</span>')
     : '';
   const hiddenBadge = (isTeacherView && a.hidden) ? '<span class="badge badge-hidden">🙈 Đã ẩn</span>' : '';
+  
   let assignedBadge = '';
   let isAssignedToMe = false;
   if (state.currentProfile?.role === 'student' && state.currentUser) {
     const myClassNorm = normalizeClass(state.currentProfile.class);
-    const toMe = a.assignedTo?.includes(state.currentUser.uid);
-    const toMyClass = a.assignedClasses?.some(c => normalizeClass(c) === myClassNorm);
-    if (toMe || toMyClass || a.assignedAllGrade) {
+    const toMe = a.assignedTo?.includes(state.currentUser.uid) ||
+      a.assignedClasses?.some(c => normalizeClass(c) === myClassNorm) ||
+      a.assignedAllGrade;
+    if (toMe) {
       assignedBadge = '<span class="badge badge-assigned">📌 GV giao</span>';
       isAssignedToMe = true;
     }
   }
-  const mySubsOfA = state.mySubsCache.filter(s => s.assignmentId === a.id && s.status !== 'in_progress');
+  
+  const mySubsOfA = state.mySubsCache.filter(s =>
+    s.assignmentId === a.id && s.status !== 'in_progress'
+  );
   const newPublished = mySubsOfA.some(s => s.status === 'published' && !s.studentViewed);
-  const newBadge = newPublished ? '<span class="badge badge-new">🆕 Có điểm mới</span>' : '';
+  const newBadge = newPublished ? '<span class="badge badge-new"> Có điểm mới</span>' : '';
+  
   const maxAttempts = a.maxAttempts || 3;
   const doneCount = mySubsOfA.length;
   const viewLogsOfA = state.myViewLogsCache.filter(v => v.assignmentId === a.id);
   const accessCount = viewLogsOfA.length;
   const totalDuration = viewLogsOfA.reduce((s, v) => s + (v.durationSec || 0), 0);
+  
   const isLoggedIn = !!state.currentUser;
   const isEmailVerified = state.currentUser?.emailVerified === true;
   const isTeacher = state.currentProfile?.role === 'teacher';
@@ -225,13 +292,13 @@ function renderAssignmentRow(a) {
   if (isExternal) {
     if (!isLoggedIn) actionBtn = `<button class="btn lock-btn btn-sm" data-require-login>🔒 Đăng nhập</button>`;
     else if (isTeacher) actionBtn = `<button class="btn btn-primary btn-sm" data-open-external="${a.id}">🔗 Mở (GV)</button>`;
-    else if (!isEmailVerified) actionBtn = `<span class="text-sm" style="color:#c0392b;">📧 Xác thực email</span>`;
+    else if (!isEmailVerified) actionBtn = `<span class="text-sm" style="color:#c0392b;"> Xác thực email</span>`;
     else if (maxAttempts > 0 && accessCount >= maxAttempts) actionBtn = `<span class="text-sm" style="color:#c0392b;">✋ Đã mở ${maxAttempts} lần</span>`;
     else actionBtn = `<button class="btn btn-secondary btn-sm" data-open-external="${a.id}">🔗 Mở luyện tập (${accessCount}${maxAttempts > 0 ? '/' + maxAttempts : ''})</button>`;
   } else {
     if (a.type === 'essay') {
-      if (!isLoggedIn) actionBtn = `<button class="btn lock-btn btn-sm" data-require-login> Đăng nhập</button>`;
-      else if (isTeacher) actionBtn = `<button class="btn btn-primary btn-sm" data-view-essay="${a.id}">👁 Xem đề</button>`;
+      if (!isLoggedIn) actionBtn = `<button class="btn lock-btn btn-sm" data-require-login>🔒 Đăng nhập</button>`;
+      else if (isTeacher) actionBtn = `<button class="btn btn-primary btn-sm" data-view-essay="${a.id}"> Xem đề</button>`;
       else if (!isEmailVerified) actionBtn = `<span class="text-sm" style="color:#c0392b;">📧 Xác thực email</span>`;
       else actionBtn = `<button class="btn btn-primary btn-sm" data-view-essay="${a.id}">📖 Xem đề</button>`;
     } else {
@@ -239,14 +306,16 @@ function renderAssignmentRow(a) {
       else if (isTeacher) actionBtn = `<span class="text-sm" style="color:#8B4513;">👨‍🏫 GV</span>`;
       else if (!isEmailVerified) actionBtn = `<span class="text-sm" style="color:#c0392b;">📧 Xác thực email</span>`;
       else if (doneCount >= maxAttempts) actionBtn = `<span class="text-sm" style="color:#c0392b;">✋ Đã làm ${maxAttempts} lần</span>`;
-      else actionBtn = `<button class="btn btn-primary btn-sm" data-do-quiz="${a.id}"> Làm bài (${doneCount}/${maxAttempts})</button>`;
+      else actionBtn = `<button class="btn btn-primary btn-sm" data-do-quiz="${a.id}">🎯 Làm bài (${doneCount}/${maxAttempts})</button>`;
     }
   }
 
   let metaInfo = [];
   if (isExternal) {
     metaInfo.push(`🔗 File ngoài`);
-    if (state.currentProfile?.role === 'student') metaInfo.push(`Đã mở ${accessCount} lần${totalDuration > 0 ? ` • ${fmtDuration(totalDuration)}` : ''}`);
+    if (state.currentProfile?.role === 'student') {
+      metaInfo.push(`Đã mở ${accessCount} lần${totalDuration > 0 ? ` • ${fmtDuration(totalDuration)}` : ''}`);
+    }
     if (maxAttempts > 0) metaInfo.push(`Tối đa ${maxAttempts} lần`);
   } else {
     if (a.type === 'quiz') {
