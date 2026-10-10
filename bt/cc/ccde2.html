@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tool chuyển đổi đề thi → HTML (v3)</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, 'Segoe UI', Tahoma, sans-serif; background: #F5F5F5; color: #000; line-height: 1.6; padding: 20px; }
+h1 { color: #8B4513; font-size: 20px; margin-bottom: 8px; }
+.guide { background: #FFF9E6; border: 1px solid #D4A017; border-radius: 8px; padding: 12px 16px; font-size: 13px; margin-bottom: 16px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+.panel { background: #FFF; border: 1px solid #D3D3D3; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+label { font-weight: 600; font-size: 13px; display: block; margin-bottom: 4px; }
+textarea { width: 100%; min-height: 220px; padding: 10px; border: 1px solid #D3D3D3; border-radius: 6px; font-family: Consolas, monospace; font-size: 12px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+button { padding: 9px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; background: #8B5A2B; color: #FFF; }
+button.light { background: #F5DEB3; color: #8B4513; border: 1px solid #D3D3D3; }
+button:hover { filter: brightness(1.08); }
+.cfg { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+.cfg div { display: flex; flex-direction: column; font-size: 12px; }
+.cfg input { width: 80px; padding: 6px; border: 1px solid #D3D3D3; border-radius: 4px; }
+#total { font-weight: 700; color: #0066CC; font-size: 15px; }
+#debug { background: #111; color: #0F0; font-family: Consolas, monospace; font-size: 12px; padding: 10px; border-radius: 6px; max-height: 240px; overflow: auto; white-space: pre-wrap; }
+#debug .err { color: #FF6B6B; }
+#debug .warn { color: #FFD93D; }
+#out { min-height: 140px; }
+#previewBox { border: 1px solid #D3D3D3; border-radius: 6px; padding: 10px; max-height: 340px; overflow: auto; background: #FAFAFA; }
+#previewBox .opt { display: block; margin: 2px 0; }
+#previewBox .tf-item { margin: 2px 0; }
+#previewBox .question { background: #F5F5F5; padding: 10px; border-radius: 6px; margin-bottom: 10px; border-left: 3px solid #0066CC; }
+</style>
+</head>
+<body>
+<h1>🔧 Tool chuyển đổi đề thi → HTML · v3</h1>
+<div class="guide">📋 <strong>Cách dùng:</strong> ① Dán nội dung file đề (ch.html) + file đáp án (da.html) → ② Chọn preset điểm → ③ Bấm "🔄 Chuyển đổi" → ④ Xem Debug log (<strong>phải hết dòng đỏ</strong>) → ⑤ "📋 Copy HTML" rồi dán vào form "Thêm Đề" trên web.</div>
+
+<div class="panel">
+  <label>⚡ Preset & cấu hình điểm</label>
+  <div class="row">
+    <button type="button" class="light" id="preset7">📐 7đ (16-2-2)</button>
+    <button type="button" class="light" id="preset10">📐 10đ (16-2-2)</button>
+  </div>
+  <div class="row cfg">
+    <div><label>Số câu I</label><input type="number" id="nI" value="16"></div>
+    <div><label>Điểm/câu I</label><input type="number" id="pI" step="0.05" value="0.25"></div>
+    <div><label>Số câu II</label><input type="number" id="nII" value="2"></div>
+    <div><label>Điểm/câu II</label><input type="number" id="pII" step="0.05" value="1"></div>
+    <div><label>Số câu III</label><input type="number" id="nIII" value="2"></div>
+    <div><label>Điểm/câu III</label><input type="number" id="pIII" step="0.05" value="0.5"></div>
+    <div><label>TỔNG</label><span id="total">0.00đ</span></div>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="panel">
+    <label>📄 File đề (ch.html) — dán toàn bộ</label>
+    <textarea id="inCh" placeholder="Dán nội dung file đề vào đây..."></textarea>
+  </div>
+  <div class="panel">
+    <label>✅ File đáp án (da.html) — dán toàn bộ</label>
+    <textarea id="inDa" placeholder="Dán nội dung file đáp án vào đây..."></textarea>
+  </div>
+</div>
+
+<div class="row">
+  <button type="button" id="btnConvert">🔄 Chuyển đổi</button>
+  <button type="button" class="light" id="btnClear">🗑 Xóa hết</button>
+  <button type="button" class="light" id="btnSample">📥 Load ví dụ mẫu</button>
+</div>
+
+<div class="panel" style="margin-top:14px;">
+  <label>🐛 Debug log</label>
+  <div id="debug">Chưa chạy chuyển đổi.</div>
+</div>
+
+<div class="panel">
+  <label>📋 HTML output</label>
+  <textarea id="out" readonly placeholder="Kết quả HTML sẽ hiện ở đây..."></textarea>
+  <div class="row">
+    <button type="button" id="btnPreview">👁 Preview</button>
+    <button type="button" id="btnCopy">📋 Copy HTML</button>
+    <button type="button" class="light" id="btnDownload">💾 Tải file .html</button>
+  </div>
+  <div id="previewBox" class="hidden" style="margin-top:10px;"></div>
+</div>
+
+<script type="text/plain" id="sampleCh">
+ĐỀ KIỂM TRA VẬT LÝ 10
+PHẦN I. TRẮC NGHIỆM NHIỀU PHƯƠNG ÁN LỰA CHỌN
+Câu 1: Đại lượng nào sau đây là đại lượng vectơ?
+A. Độ dịch chuyển.
+B. Tốc độ.
+C. Quãng đường đi được.
+D. Thời gian chuyển động.
+Câu 2: Một vật chuyển động thẳng đều với vận tốc \(v = 2\) m/s. Quãng đường vật đi được sau 3 s là
+A. 2 m.
+B. 6 m.
+C. 3 m.
+D. 9 m.
+PHẦN II. TRẮC NGHIỆM ĐÚNG SAI
+Câu 3: Một vật được thả rơi tự do. Trong các phát biểu sau, phát biểu nào đúng, phát biểu nào sai?
+a) Gia tốc của vật không đổi trong quá trình rơi.
+b) Vận tốc của vật giảm dần theo thời gian.
+c) Trong chân không, vật nặng rơi nhanh hơn vật nhẹ.
+d) Quãng đường rơi tỉ lệ với bình phương thời gian rơi.
+PHẦN III. TRẢ LỜI NGẮN
+Câu 4: Một ô tô chuyển động với tốc độ 54 km/h. Tốc độ này bằng bao nhiêu m/s?
+</script>
+<script type="text/plain" id="sampleDa">
+1. A
+2. B
+Câu 3: a) Đ; b) S; c) S; d) Đ
+Câu 4: 15
+</script>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const attr = (s) => esc(s).replace(/"/g, '&quot;');
+
+function updateTotal() {
+  const t = (+$('nI').value || 0) * (+$('pI').value || 0)
+          + (+$('nII').value || 0) * (+$('pII').value || 0)
+          + (+$('nIII').value || 0) * (+$('pIII').value || 0);
+  $('total').textContent = (Math.round(t * 100) / 100).toFixed(2) + 'đ';
+}
+['nI','pI','nII','pII','nIII','pIII'].forEach(id => $(id).addEventListener('input', updateTotal));
+$('preset7').addEventListener('click', () => {
+  $('nI').value = 16; $('pI').value = 0.25;
+  $('nII').value = 2; $('pII').value = 1;
+  $('nIII').value = 2; $('pIII').value = 0.5;
+  updateTotal();
+});
+$('preset10').addEventListener('click', () => {
+  $('nI').value = 16; $('pI').value = 0.25;
+  $('nII').value = 2; $('pII').value = 2;
+  $('nIII').value = 2; $('pIII').value = 1;
+  updateTotal();
+});
+
+// ═══ PARSE CÂU HỎI ═══
+function parseQuestions(text) {
+  const ROMAN = { 'I': 1, 'II': 2, 'III': 3, 'IV': 4 };
+  const lines = text.split(/\r?\n/);
+  const qs = [];
+  let cur = null, part = null, lastKind = null;
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line) continue;
+    const ph = line.match(/^PHẦN\s*(I{1,3}V?|IV)\b/i);
+    if (ph) { part = ROMAN[ph[1].toUpperCase()] || null; lastKind = null; continue; }
+    const qm = line.match(/^Câu\s*(\d+)\s*[:.]\s*(.*)$/i);
+    if (qm) {
+      cur = { num: parseInt(qm[1]), part: part, text: qm[2], options: [], statements: [] };
+      qs.push(cur); lastKind = 'text'; continue;
+    }
+    if (!cur) continue;
+    const om = line.match(/^([A-D])[\.\)]\s*(.*)$/);
+    const sm = line.match(/^([a-dA-D])[\)\.]\s*(.*)$/);
+    const asStmt = sm && (part === 2 || cur.statements.length > 0 || lastKind === 'stmt') && !om;
+    const asStmt2 = sm && !om && (part === 2 || cur.statements.length > 0);
+    if (om && !(part === 2) && lastKind !== 'stmt') {
+      cur.options.push({ value: om[1].toUpperCase(), text: om[2] });
+      lastKind = 'opt'; continue;
+    }
+    if (sm && (asStmt || asStmt2 || (!om && part !== 1))) {
+      cur.statements.push({ idx: sm[1].toLowerCase().charCodeAt(0) - 97, text: sm[2] });
+      lastKind = 'stmt'; continue;
+    }
+    if (om) {
+      cur.options.push({ value: om[1].toUpperCase(), text: om[2] });
+      lastKind = 'opt'; continue;
+    }
+    if (lastKind === 'opt' && cur.options.length) cur.options[cur.options.length - 1].text += ' ' + line;
+    else if (lastKind === 'stmt' && cur.statements.length) cur.statements[cur.statements.length - 1].text += ' ' + line;
+    else cur.text += ' ' + line;
+  }
+  qs.forEach(q => {
+    if (q.part === 2) q.type = 'truefalse';
+    else if (q.part === 3) q.type = 'short';
+    else q.type = q.options.length ? 'choice' : (q.statements.length ? 'truefalse' : 'short');
+  });
+  return qs;
+}
+
+// ═══ PARSE ĐÁP ÁN ═══
+function parseAnswers(text) {
+  const map = {};
+  for (const raw of text.split(/\r?\n/)) {
+    const line = raw.trim();
+    if (!line) continue;
+    const m = line.match(/^(?:Câu\s*)?(\d+)\s*[:.]\s*(.*)$/i);
+    if (!m) continue;
+    const num = parseInt(m[1]);
+    const val = m[2].trim();
+    const tf = [...val.matchAll(/([a-d])\s*\)\s*(Đ|S|Đúng|Sai)/gi)];
+    if (tf.length) {
+      const obj = {};
+      tf.forEach(p => { obj[p[1].toLowerCase().charCodeAt(0) - 97] = /^đ/i.test(p[2]); });
+      map[num] = { type: 'truefalse', val: obj };
+    } else if (/^[A-D]$/i.test(val)) {
+      map[num] = { type: 'choice', val: val.toUpperCase() };
+    } else if (val) {
+      map[num] = { type: 'short', val: val };
+    }
+  }
+  return map;
+}
+
+// ═══ BUILD HTML (khớp parseQuestionsHtml của web) ═══
+function buildHtml(qs, ans, pts) {
+  const out = [];
+  qs.forEach(q => {
+    const id = 'q' + q.num;
+    const points = pts[q.type] != null ? pts[q.type] : 1;
+    const a = ans[q.num];
+    if (q.type === 'choice') {
+      out.push('<div class="question" data-id="' + id + '" data-type="choice" data-points="' + points + '" data-answer="' + attr(a ? a.val : '') + '">');
+      out.push('<div class="q-text">' + esc(q.text) + '</div>');
+      q.options.forEach(o => out.push('<label class="opt"><input type="radio" name="' + id + '" value="' + o.value + '">' + o.value + '. ' + esc(o.text) + '</label>'));
+      out.push('</div>');
+    } else if (q.type === 'truefalse') {
+      out.push('<div class="question" data-id="' + id + '" data-type="truefalse" data-points="' + points + '">');
+      out.push('<div class="q-text">' + esc(q.text) + '</div>');
+      q.statements.forEach(st => {
+        const ok = a && a.val[st.idx] === true;
+        out.push('<div class="tf-item" data-statement="' + st.idx + '" data-answer="' + (ok ? 'true' : 'false') + '"><span class="tf-stmt">' + String.fromCharCode(97 + st.idx) + ') ' + esc(st.text) + '</span></div>');
+      });
+      out.push('</div>');
+    } else {
+      out.push('<div class="question" data-id="' + id + '" data-type="short" data-points="' + points + '" data-answer="' + attr(a ? a.val : '') + '">');
+      out.push('<div class="q-text">' + esc(q.text) + '</div>');
+      out.push('</div>');
+    }
+  });
+  return out.join('\n');
+}
+
+// ═══ CHUYỂN ĐỔI + DEBUG ═══
+function convert() {
+  const dbg = [];
+  const err = (m) => dbg.push('<span class="err">❌ ' + m + '</span>');
+  const warn = (m) => dbg.push('<span class="warn">⚠️ ' + m + '</span>');
+  const ok = (m) => dbg.push('✅ ' + m);
+  const chText = $('inCh').value;
+  const daText = $('inDa').value;
+  if (!chText.trim() || !daText.trim()) { err('Chưa dán đủ file đề + file đáp án.'); $('debug').innerHTML = dbg.join('\n'); $('out').value = ''; return; }
+  const qs = parseQuestions(chText);
+  const ans = parseAnswers(daText);
+  if (qs.length === 0) { err('Không parse được câu hỏi nào. Kiểm tra định dạng "Câu 1:".'); $('debug').innerHTML = dbg.join('\n'); return; }
+  const pts = { choice: +$('pI').value || 0, truefalse: +$('pII').value || 0, short: +$('pIII').value || 0 };
+  const cfg = { choice: +$('nI').value || 0, truefalse: +$('nII').value || 0, short: +$('nIII').value || 0 };
+  // đếm theo loại
+  const cnt = { choice: 0, truefalse: 0, short: 0 };
+  qs.forEach(q => cnt[q.type]++);
+  ['choice', 'truefalse', 'short'].forEach(t => {
+    if (cnt[t] !== cfg[t]) err('Số câu ' + t + ': parse được ' + cnt[t] + ' nhưng cấu hình ' + cfg[t] + '.');
+    else ok('Số câu ' + t + ': ' + cnt[t] + ' (khớp cấu hình).');
+  });
+  // trùng số câu
+  const seen = {};
+  qs.forEach(q => { if (seen[q.num]) err('Trùng số câu: ' + q.num); seen[q.num] = true; });
+  // kiểm tra từng câu
+  qs.forEach(q => {
+    const a = ans[q.num];
+    if (!a) { err('Câu ' + q.num + ': THIẾU đáp án trong da.html.'); return; }
+    if (q.type === 'choice') {
+      if (q.options.length !== 4) err('Câu ' + q.num + ': có ' + q.options.length + ' phương án (cần 4).');
+      if (!/^[A-D]$/.test(a.val)) err('Câu ' + q.num + ': đáp án trắc nghiệm không hợp lệ (' + a.val + ').');
+    } else if (q.type === 'truefalse') {
+      if (q.statements.length < 3) err('Câu ' + q.num + ': có ' + q.statements.length + ' ý (cần 3-4).');
+      else if (q.statements.length === 4) ok('Câu ' + q.num + ': 4 ý Đ/S đủ.');
+      else warn('Câu ' + q.num + ': có 3 ý.');
+    } else {
+      if (!a.val) err('Câu ' + q.num + ': thiếu đáp án trả lời ngắn.');
+    }
+  });
+  // đáp án thừa
+  Object.keys(ans).forEach(n => { if (!seen[n]) warn('Dòng đáp án số ' + n + ' không khớp câu hỏi nào.'); });
+  // tổng điểm
+  const total = cnt.choice * pts.choice + cnt.truefalse * pts.truefalse + cnt.short * pts.short;
+  ok('Tổng điểm toàn đề: ' + (Math.round(total * 100) / 100).toFixed(2) + 'đ');
+  const hasErr = dbg.some(l => l.indexOf('class="err"') >= 0);
+  if (!hasErr) ok('Sẵn sàng copy HTML dán lên web.');
+  else err('Sửa hết dòng đỏ rồi bấm Chuyển đổi lại.');
+  $('debug').innerHTML = dbg.join('\n');
+  $('out').value = hasErr ? '' : buildHtml(qs, ans, pts);
+}
+
+$('btnConvert').addEventListener('click', convert);
+$('btnClear').addEventListener('click', () => { $('inCh').value = ''; $('inDa').value = ''; $('out').value = ''; $('debug').textContent = 'Đã xóa.'; $('previewBox').innerHTML = ''; });
+$('btnSample').addEventListener('click', () => { $('inCh').value = $('sampleCh').textContent.trim(); $('inDa').value = $('sampleDa').textContent.trim(); updateTotal(); });
+$('btnPreview').addEventListener('click', () => {
+  const box = $('previewBox');
+  if (!$('out').value) { alert('Chưa có HTML. Bấm Chuyển đổi trước.'); return; }
+  box.classList.remove('hidden');
+  box.innerHTML = $('out').value;
+});
+$('btnCopy').addEventListener('click', async () => {
+  if (!$('out').value) { alert('Chưa có HTML. Bấm Chuyển đổi trước.'); return; }
+  try { await navigator.clipboard.writeText($('out').value); alert('✅ Đã copy HTML!'); }
+  catch (e) { $('out').select(); document.execCommand('copy'); alert('✅ Đã copy HTML!'); }
+});
+$('btnDownload').addEventListener('click', () => {
+  if (!$('out').value) { alert('Chưa có HTML. Bấm Chuyển đổi trước.'); return; }
+  const blob = new Blob([$('out').value], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'de_vat_ly.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+updateTotal();
+</script>
+</body>
+</html>

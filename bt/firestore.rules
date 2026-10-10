@@ -1,0 +1,112 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function userDoc() { return get(/databases/$(database)/documents/users/$(request.auth.uid)).data; }
+    function isTeacher() { return signedIn() && userDoc().role == 'teacher'; }
+    function isVerified() { return signedIn() && userDoc().emailVerified == true; }
+    function isTeacherEmail() { return request.auth.token.email.lower() == 'trntui6@gmail.com'; }
+    function only(keys) { return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys); }
+    function validClass(c) { return c == '' || c.matches('^(10|11|12)(a([1-9]|[1-9][0-9]))?$'); }
+
+    // ─── HỒ SƠ NGƯỜI DÙNG ───
+    match /users/{uid} {
+      allow get: if signedIn() && (request.auth.uid == uid || isTeacher());
+      allow list: if isTeacher();
+      allow create: if signedIn() && request.auth.uid == uid
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.role == (isTeacherEmail() ? 'teacher' : 'student')
+        && request.resource.data.emailVerified == request.auth.token.email_verified
+        && validClass(request.resource.data.class);
+      allow update: if isTeacher()
+        || (signedIn() && request.auth.uid == uid
+            && only(['class', 'updatedAt', 'emailVerified', 'role'])
+            && (request.resource.data.emailVerified == true
+                || request.resource.data.emailVerified == resource.data.emailVerified)
+            && (request.resource.data.role == resource.data.role
+                || (isTeacherEmail() && request.resource.data.role == 'teacher'))
+            && (request.resource.data.class == resource.data.class
+                || (validClass(request.resource.data.class)
+                    && (isTeacher()
+                        || get(/databases/$(database)/documents/settings/system).data.allowChangeClass == true))));
+      allow delete: if isTeacher();
+    }
+
+    // ─── CÀI ĐẶT HỆ THỐNG ───
+    match /settings/{docId} {
+      allow read: if signedIn();
+      allow write: if isTeacher();
+    }
+
+    // ─── BÀI HỌC ───
+    match /lessons/{id} {
+      allow read: if signedIn();
+      allow write: if isTeacher();
+    }
+
+    // ─── ĐỀ BÀI (bản public KHÔNG đáp án) + ĐÁP ÁN (chỉ GV) ───
+    match /assignments/{id} {
+      allow read: if signedIn();
+      allow write: if isTeacher();
+      match /answerKey/{keyId} {
+        allow read, write: if isTeacher();
+      }
+    }
+
+    // ─── BÀI LÀM ───
+    match /submissions/{id} {
+      allow get, list: if signedIn() && (resource.data.studentId == request.auth.uid || isTeacher());
+      allow create: if isVerified()
+        && request.resource.data.studentId == request.auth.uid
+        && request.resource.data.status == 'in_progress'
+        && request.resource.data.score == null
+        && request.resource.data.autoScore == null
+        && request.resource.data.details == null
+        && request.resource.data.deadlineAt >= request.time.toMillis() + request.resource.data.duration * 60000 - 15000
+        && request.resource.data.deadlineAt <= request.time.toMillis() + request.resource.data.duration * 60000 + 15000;
+      allow update: if isTeacher()
+        || (signedIn() && resource.data.studentId == request.auth.uid && (
+             (resource.data.status == 'in_progress'
+              && request.resource.data.status == 'in_progress'
+              && only(['draftAnswers', 'draftAt']))
+          || (resource.data.status == 'in_progress'
+              && (request.resource.data.status == 'submitted' || request.resource.data.status == 'abandoned')
+              && only(['status', 'answers', 'answer', 'submittedAt', 'submittedAtMs',
+                       'timeSpent', 'isLate', 'isTimeout', 'abandonedAt'])
+              && request.resource.data.score == null
+              && request.resource.data.autoScore == null)
+          || (request.resource.data.status == resource.data.status
+              && only(['studentViewed'])
+              && request.resource.data.studentViewed == true)
+        ));
+      allow delete: if isTeacher();
+    }
+
+    // ─── LOG XEM FILE ───
+    match /viewLogs/{id} {
+      allow get, list: if signedIn() && (resource.data.studentId == request.auth.uid || isTeacher());
+      allow create: if isVerified() && request.resource.data.studentId == request.auth.uid;
+      allow update: if isTeacher()
+        || (signedIn() && resource.data.studentId == request.auth.uid
+            && only(['durationSec', 'lastHeartbeat', 'closedAt']));
+      allow delete: if isTeacher()
+        || (signedIn() && resource.data.studentId == request.auth.uid
+            && resource.data.durationSec == 0
+            && request.time.toMillis() - resource.data.startedAt < 30000);
+    }
+
+    // ─── THÔNG BÁO ───
+    match /notifications/{id} {
+      allow read: if signedIn();
+      allow create, update, delete: if isTeacher();
+    }
+
+    // ─── NHẬT KÝ THAO TÁC GV ───
+    match /auditLogs/{id} {
+      allow read, create: if isTeacher();
+      allow update, delete: if false;
+    }
+  }
+}
