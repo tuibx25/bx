@@ -5,65 +5,38 @@ import {
   doc, setDoc, getDoc, updateDoc, serverTimestamp
 } from './firebase-init.js';
 import { state, emit, EVENTS } from './state.js';
-import {
-  $, show, hide, esc, toast,
-  buildClassName, getGradeFromClass
-} from './utils.js';
+import { $, show, hide, esc, toast, buildClassName, getGradeFromClass } from './utils.js';
 
 let authMode = 'login';
 let forgotCooldown = 0;
 let forgotCooldownInterval = null;
 
-// ══════════════════════════════════════════
+// ═════════════════════════════════════════
 // INIT AUTH
 // ══════════════════════════════════════════
 export function initAuth({ onLogin, onLogout }) {
-  console.log('🔐 initAuth called');
+  console.log('🔐 initAuth: bắt đầu bind events');
   
-  // DEBUG: Kiểm tra element tồn tại
-  const authBtn = $('authBtn');
-  const authModal = $('authModal');
-  
-  if (!authBtn) {
-    console.error('❌ authBtn không tồn tại trong DOM!');
-  } else {
-    console.log('✅ authBtn tìm thấy:', authBtn);
-  }
-  
-  if (!authModal) {
-    console.error('❌ authModal không tồn tại trong DOM!');
-  } else {
-    console.log('✅ authModal tìm thấy:', authModal);
-  }
-
   // AUTH BUTTON
+  const authBtn = $('authBtn');
   if (authBtn) {
     authBtn.addEventListener('click', () => {
-      console.log('🖱️ authBtn clicked');
+      console.log('️ authBtn clicked, currentUser:', state.currentUser);
       if (state.currentUser) {
-        console.log('👤 User đã đăng nhập, đăng xuất...');
-        signOut(auth).then(() => toast('Đã đăng xuất'));
+        signOut(auth).then(() => toast('Đã đăng xuất')).catch(e => console.error(e));
       } else {
-        console.log(' User chưa đăng nhập, mở modal...');
         openAuthModal('login');
       }
     });
+  } else {
+    console.error('❌ authBtn không tồn tại!');
   }
 
   // MODAL CLOSE
-  $('authCancelBtn')?.addEventListener('click', () => {
-    console.log('❌ Đóng modal (cancel)');
-    hide($('authModal'));
-  });
-  $('authModalCloseX')?.addEventListener('click', () => {
-    console.log('❌ Đóng modal (X)');
-    hide($('authModal'));
-  });
+  $('authCancelBtn')?.addEventListener('click', () => hide($('authModal')));
+  $('authModalCloseX')?.addEventListener('click', () => hide($('authModal')));
   $('authModal')?.addEventListener('click', (e) => {
-    if (e.target === $('authModal')) {
-      console.log('❌ Đóng modal (click outside)');
-      hide($('authModal'));
-    }
+    if (e.target === $('authModal')) hide($('authModal'));
   });
 
   // TOGGLE LOGIN/REGISTER
@@ -87,7 +60,16 @@ export function initAuth({ onLogin, onLogout }) {
   });
 
   // AUTH SUBMIT
-  $('authSubmitBtn')?.addEventListener('click', handleAuthSubmit);
+  const submitBtn = $('authSubmitBtn');
+  if (submitBtn) {
+    submitBtn.addEventListener('click', () => {
+      console.log('️ authSubmitBtn clicked, mode:', authMode);
+      handleAuthSubmit();
+    });
+  } else {
+    console.error('❌ authSubmitBtn không tồn tại!');
+  }
+  
   $('authPassword')?.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && authMode === 'login') {
       e.preventDefault();
@@ -101,7 +83,7 @@ export function initAuth({ onLogin, onLogout }) {
 
   // AUTH STATE CHANGE
   onAuthStateChanged(auth, async (user) => {
-    console.log('🔑 Auth state changed:', user ? 'logged in' : 'logged out');
+    console.log('🔑 Auth state changed:', user ? 'logged in as ' + user.email : 'logged out');
     state.currentUser = user;
     if (state.verifyPollInterval) {
       clearInterval(state.verifyPollInterval);
@@ -145,14 +127,15 @@ export function initAuth({ onLogin, onLogout }) {
       toast('Email chưa xác thực.', 'error');
     }
   });
+  
+  console.log('✅ initAuth: hoàn tất bind events');
 }
 
 // ══════════════════════════════════════════
 // OPEN AUTH MODAL
 // ══════════════════════════════════════════
 export function openAuthModal(mode) {
-  console.log('🔓 openAuthModal called với mode:', mode);
-  
+  console.log('🔓 openAuthModal:', mode);
   const authModal = $('authModal');
   if (!authModal) {
     console.error('❌ authModal không tồn tại!');
@@ -173,10 +156,287 @@ export function openAuthModal(mode) {
   $('authFormWrap').classList.remove('hidden');
   $('forgotFormWrap').classList.add('hidden');
   if (mode === 'register') updateAuthClassPreview();
-  
-  console.log('✅ Hiển thị modal, class list:', authModal.classList.toString());
   show(authModal);
-  console.log('✅ Sau khi show, class list:', authModal.classList.toString());
+  console.log('✅ Modal hiển thị');
 }
 
-// ... (giữ nguyên các hàm khác)
+// ══════════════════════════════════════════
+// SHOW/HIDE FORGOT FORM
+// ══════════════════════════════════════════
+function showForgotForm() {
+  $('authFormWrap').classList.add('hidden');
+  $('forgotFormWrap').classList.remove('hidden');
+  $('forgotError').innerHTML = '';
+  $('forgotSuccess').innerHTML = '';
+  const emailInput = $('authEmail').value.trim();
+  if (emailInput) $('forgotEmail').value = emailInput;
+  setTimeout(() => $('forgotEmail').focus(), 100);
+}
+function hideForgotForm() {
+  $('forgotFormWrap').classList.add('hidden');
+  $('authFormWrap').classList.remove('hidden');
+  $('authError').innerHTML = '';
+}
+
+// ══════════════════════════════════════════
+// UPDATE AUTH CLASS PREVIEW
+// ══════════════════════════════════════════
+function updateAuthClassPreview() {
+  const grade = $('authGrade').value;
+  const num = $('authClassNum').value.trim();
+  const previewEl = $('authClassPreview');
+  if (!num) {
+    previewEl.innerHTML = `💡 Gõ <strong>số lớp</strong> (VD: <code>12</code> → lớp <strong>${grade}a12</strong>)`;
+    previewEl.style.color = '#666';
+  } else {
+    const result = buildClassName(grade, num);
+    if (!result) {
+      previewEl.innerHTML = '️ Số lớp không hợp lệ (1-99)';
+      previewEl.style.color = '#c0392b';
+    } else {
+      previewEl.innerHTML = `✅ Sẽ tạo lớp: <strong style="color:#0066CC;">${result}</strong>`;
+      previewEl.style.color = '#666';
+    }
+  }
+}
+
+// ══════════════════════════════════════════
+// HANDLE LOGIN/REGISTER
+// ══════════════════════════════════════════
+async function handleAuthSubmit() {
+  console.log('📝 handleAuthSubmit bắt đầu, mode:', authMode);
+  
+  const email = $('authEmail').value.trim();
+  const pass = $('authPassword').value;
+  $('authError').innerHTML = '';
+  $('authSuccess').innerHTML = '';
+  
+  if (!email || pass.length < 6) {
+    $('authError').innerHTML = '<div class="alert alert-error">Email hợp lệ và mật khẩu ≥ 6 ký tự.</div>';
+    return;
+  }
+  
+  const btn = $('authSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = ' Đang xử lý...';
+  
+  try {
+    if (authMode === 'login') {
+      console.log('🔑 Đang đăng nhập...');
+      await signInWithEmailAndPassword(auth, email, pass);
+      toast('Đăng nhập thành công', 'success');
+      hide($('authModal'));
+    } else {
+      console.log('📝 Đang đăng ký...');
+      const name = $('authName').value.trim();
+      if (!name) {
+        $('authError').innerHTML = '<div class="alert alert-error">Vui lòng nhập họ tên.</div>';
+        return;
+      }
+      const grade = $('authGrade').value;
+      const classNum = $('authClassNum').value.trim();
+      let cls = grade;
+      if (classNum) {
+        cls = buildClassName(grade, classNum);
+        if (!cls) {
+          $('authError').innerHTML = '<div class="alert alert-error">Số lớp không hợp lệ (1-99).</div>';
+          return;
+        }
+      }
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      const isTeacher = email.toLowerCase() === TEACHER_EMAIL.toLowerCase();
+      try { await sendEmailVerification(cred.user); } catch (e) { console.error(e); }
+      await setDoc(doc(db, 'users', cred.user.uid), {
+        email, name, class: cls,
+        role: isTeacher ? 'teacher' : 'student',
+        emailVerified: false,
+        createdAt: serverTimestamp()
+      });
+      $('authSuccess').innerHTML = `<div class="alert alert-success">
+        ✅ Đã tạo tài khoản! Mail xác thực gửi đến <strong>${esc(email)}</strong>.
+        <br>Lớp: <strong>${esc(cls)}</strong>
+      </div>`;
+    }
+  } catch (err) {
+    console.error('❌ Lỗi auth:', err);
+    $('authError').innerHTML = `<div class="alert alert-error">${esc(err.message)}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = authMode === 'login' ? 'Đăng nhập' : 'Đăng ký';
+    console.log('✅ handleAuthSubmit hoàn tất');
+  }
+}
+
+// ══════════════════════════════════════════
+// LOAD USER PROFILE
+// ══════════════════════════════════════════
+async function loadUserProfile(user) {
+  const isTeacherEmail = user.email.toLowerCase() === TEACHER_EMAIL.toLowerCase();
+  const snap = await getDoc(doc(db, 'users', user.uid));
+  if (snap.exists()) {
+    state.currentProfile = snap.data();
+    if (isTeacherEmail && state.currentProfile.role !== 'teacher') {
+      try {
+        await updateDoc(doc(db, 'users', user.uid), { role: 'teacher' });
+        state.currentProfile.role = 'teacher';
+      } catch (e) {}
+    }
+  } else {
+    state.currentProfile = {
+      email: user.email,
+      name: user.email,
+      class: '',
+      role: isTeacherEmail ? 'teacher' : 'student',
+      emailVerified: user.emailVerified,
+      createdAt: serverTimestamp()
+    };
+    try { await setDoc(doc(db, 'users', user.uid), state.currentProfile); } catch (e) {}
+  }
+  if (state.currentProfile.emailVerified !== user.emailVerified) {
+    try {
+      await updateDoc(doc(db, 'users', user.uid), { emailVerified: user.emailVerified });
+      state.currentProfile.emailVerified = user.emailVerified;
+    } catch (e) {}
+  }
+}
+
+// ══════════════════════════════════════════
+// UI FOR USER
+// ══════════════════════════════════════════
+function updateUIForUser() {
+  $('authBtn').textContent = 'Đăng xuất';
+  const isTeacher = state.currentProfile.role === 'teacher';
+  if (isTeacher) {
+    $('userLabel').textContent = state.currentProfile.name || state.currentUser.email;
+    hide($('viewTabBtn'));
+    hide($('submitTabBtn'));
+    show($('teacherTabBtn'));
+    show($('studentsTabBtn'));
+    show($('assignmentsTabBtn'));
+    hide($('verifyBanner'));
+    hide($('changeClassBtn'));
+    show($('gradeTabsWrap'));
+    document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    $('teacherTabBtn').classList.add('active');
+    $('tab-teacher').classList.add('active');
+  } else {
+    show($('viewTabBtn'));
+    show($('submitTabBtn'));
+    hide($('teacherTabBtn'));
+    hide($('studentsTabBtn'));
+    hide($('assignmentsTabBtn'));
+    hide($('gradeTabsWrap'));
+    document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    $('viewTabBtn').classList.add('active');
+    $('tab-view').classList.add('active');
+    if (state.globalSettings.allowChangeClass) show($('changeClassBtn'));
+    else hide($('changeClassBtn'));
+    const hsGrade = getGradeFromClass(state.currentProfile.class);
+    const className = state.currentProfile.class || '';
+    const name = state.currentProfile.name || state.currentUser.email;
+    if (hsGrade) state.currentGrade = hsGrade;
+    else toast('️ Vui lòng cập nhật lớp để xem bài tập', 'error');
+    $('userLabel').textContent = className ? `${name} · ${className}` : name;
+    if (!state.currentUser.emailVerified) {
+      show($('verifyBanner'));
+    } else {
+      hide($('verifyBanner'));
+    }
+  }
+}
+
+function updateUIForGuest() {
+  $('userLabel').textContent = 'Khách';
+  $('authBtn').textContent = 'Đăng nhập';
+  $('notificationBanners').innerHTML = '';
+  show($('viewTabBtn'));
+  show($('submitTabBtn'));
+  hide($('teacherTabBtn'));
+  hide($('studentsTabBtn'));
+  hide($('assignmentsTabBtn'));
+  hide($('verifyBanner'));
+  hide($('changeClassBtn'));
+  show($('gradeTabsWrap'));
+  document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  $('viewTabBtn').classList.add('active');
+  $('tab-view').classList.add('active');
+}
+
+async function loadGlobalSettings() {
+  try {
+    const snap = await getDoc(doc(db, 'settings', 'system'));
+    if (snap.exists()) state.globalSettings = { ...state.globalSettings, ...snap.data() };
+    else await setDoc(doc(db, 'settings', 'system'), { allowChangeClass: false, updatedAt: serverTimestamp() });
+  } catch (e) { console.error('Load settings error:', e); }
+}
+
+// ══════════════════════════════════════════
+// HANDLE FORGOT PASSWORD
+// ══════════════════════════════════════════
+async function handleForgotPassword() {
+  if (forgotCooldown > 0) {
+    toast(`Vui lòng chờ ${forgotCooldown}s trước khi gửi lại`, 'error');
+    return;
+  }
+  const email = $('forgotEmail').value.trim();
+  $('forgotError').innerHTML = '';
+  $('forgotSuccess').innerHTML = '';
+  if (!email) {
+    $('forgotError').innerHTML = '<div class="alert alert-error">Vui lòng nhập email.</div>';
+    return;
+  }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    $('forgotError').innerHTML = '<div class="alert alert-error">Email không hợp lệ.</div>';
+    return;
+  }
+  const btn = $('forgotSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Đang gửi...';
+  try {
+    await sendPasswordResetEmail(auth, email, {
+      url: window.location.origin + window.location.pathname,
+      handleCodeInApp: false
+    });
+    $('forgotSuccess').innerHTML = `
+      <div class="alert alert-success">
+        ✅ Đã gửi link đặt lại mật khẩu đến <strong>${esc(email)}</strong>.<br>
+        📬 Vui lòng kiểm tra hộp thư (cả <em>Spam</em>).<br>
+        ⏱ Link có hiệu lực trong <strong>1 giờ</strong>.
+      </div>
+    `;
+    toast(' Đã gửi email đặt lại mật khẩu!', 'success');
+    startForgotCooldown();
+  } catch (err) {
+    console.error('Password reset error:', err);
+    let errMsg = err.message;
+    if (err.code === 'auth/user-not-found') errMsg = 'Không tìm thấy tài khoản với email này.';
+    else if (err.code === 'auth/invalid-email') errMsg = 'Email không hợp lệ.';
+    else if (err.code === 'auth/too-many-requests') errMsg = 'Quá nhiều yêu cầu. Vui lòng thử lại sau vài phút.';
+    $('forgotError').innerHTML = `<div class="alert alert-error">❌ ${esc(errMsg)}</div>`;
+    btn.disabled = false;
+    btn.textContent = '📧 Gửi link đặt lại';
+  }
+}
+function startForgotCooldown() {
+  forgotCooldown = 60;
+  const btn = $('forgotSubmitBtn');
+  btn.disabled = true;
+  if (forgotCooldownInterval) clearInterval(forgotCooldownInterval);
+  forgotCooldownInterval = setInterval(() => {
+    forgotCooldown--;
+    if (forgotCooldown <= 0) {
+      clearInterval(forgotCooldownInterval);
+      forgotCooldownInterval = null;
+      btn.disabled = false;
+      btn.textContent = '📧 Gửi link đặt lại';
+    } else {
+      btn.textContent = `⏳ Chờ ${forgotCooldown}s...`;
+    }
+  }, 1000);
+}
+
+export { auth, signOut, updateDoc, doc, serverTimestamp };
