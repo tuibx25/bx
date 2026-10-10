@@ -31,7 +31,7 @@ function maxOfT(a, s) {
   return t;
 }
 
-// ⭐ v2.2: getAnswerKey có FALLBACK parse từ assignment.questionsHtml
+// ⭐ getAnswerKey có FALLBACK parse từ assignment.questionsHtml
 async function getAnswerKey(assignmentId) {
   if (_keyCache[assignmentId] !== undefined) return _keyCache[assignmentId];
 
@@ -40,19 +40,21 @@ async function getAnswerKey(assignmentId) {
     const s = await getDoc(doc(db, 'assignments', assignmentId, 'answerKey', 'key'));
     if (s.exists()) {
       const qs = s.data().questions || null;
-      _keyCache[assignmentId] = qs;
-      return qs;
+      if (qs && qs.length > 0) {
+        _keyCache[assignmentId] = qs;
+        return qs;
+      }
     }
   } catch (e) {
     console.warn('[answerKey] subcollection read failed:', e);
   }
 
-  // (2) Fallback parse từ assignment.questionsHtml (GV đọc được)
+  // (2) Fallback parse từ field questionsHtml trên parent (chỉ GV đọc được)
   try {
     const aSnap = await getDoc(doc(db, 'assignments', assignmentId));
     if (aSnap.exists()) {
       const a = aSnap.data();
-      const html = a.questionsHtml || a.questionsPublicHtml;
+      const html = a.questionsHtml;
       if (html) {
         const qs = parseQuestionsHtml(html);
         const hasAnswers = qs.some(q =>
@@ -69,7 +71,7 @@ async function getAnswerKey(assignmentId) {
       }
     }
   } catch (e) {
-    console.warn('[answerKey] fallback parse failed:', e);
+    console.warn('[answerKey] fallback failed:', e);
   }
 
   _keyCache[assignmentId] = null;
@@ -366,7 +368,7 @@ function bindTeacherEvents() {
 }
 
 // ══════════════════════════════════════════
-// ⭐ THU BÀI HẾT GIỜ + ĐÓNG LOG MỒ CÔI
+// THU BÀI HẾT GIỜ + ĐÓNG LOG MỒ CÔI
 // ══════════════════════════════════════════
 async function collectDueSessions() {
   if (!confirm('⏱ Thu bài các phiên ĐÃ QUÁ HẠN (>1 phút) và chấm từ đáp án nháp?\nĐồng thời đóng các log xem file bị treo.')) return;
@@ -401,7 +403,7 @@ async function collectDueSessions() {
 }
 
 // ══════════════════════════════════════════
-// ⭐ BACKUP JSON
+// BACKUP JSON
 // ══════════════════════════════════════════
 async function backupJson() {
   toast('⏳ Đang backup...', 'info');
@@ -743,7 +745,6 @@ function previewQuestions() {
   }
   $('questionsPreviewBox').innerHTML = previewHtml;
   show($('questionsPreview'));
-  // ⭐ v2.2: render công thức Toán/Lý trong preview
   typesetMath($('questionsPreviewBox'));
 }
 
@@ -792,12 +793,18 @@ async function addAssignment() {
       if (questions.length === 0) { toast('Không parse được câu hỏi!', 'error'); return; }
       payload.type = 'quiz';
       payload.questionsPublicHtml = stripPublicHtml(questionsHtml);
+      payload.questionsHtml = questionsHtml;
       payload.totalPoints = totalPoints(questions);
       payload.duration = Number($('addQuizDuration').value) || 25;
       payload.maxAttempts = Number($('addQuizMaxAttempts').value) || 3;
       const ref = await addDoc(collection(db, 'assignments'), payload);
-      await setDoc(doc(db, 'assignments', ref.id, 'answerKey', 'key'),
-        { questions, questionsHtml, updatedAt: serverTimestamp() });
+      try {
+        await setDoc(doc(db, 'assignments', ref.id, 'answerKey', 'key'),
+          { questions, questionsHtml, updatedAt: serverTimestamp() });
+      } catch (e) {
+        console.warn('[answerKey] save failed (rules?):', e);
+        toast('⚠️ Đã lưu đề nhưng CHƯA lưu được đáp án. Cần kiểm tra Firestore Rules cho answerKey.', 'error');
+      }
       let classMsg = assignedAllGrade ? `cho CẢ KHỐI ${grade}` : assignedClasses.length ? `cho ${assignedClasses.length} lớp` : assignedTo.length ? `cho ${assignedTo.length} HS` : ' (chưa giao ai)';
       toast(`✅ Đã thêm đề${classMsg} — ${questions.length} câu, đáp án đã ẩn`, 'success');
     } else {
@@ -1247,6 +1254,13 @@ function renderTeacherAssignmentsList() {
       if (assignment) showBestScoreModal(assignment, _gradeSubmissionsCache.filter(s => s.assignmentId === assignment.id));
     });
   });
+  // ⭐ Nút 🔑 Đáp án
+  wrap.querySelectorAll('[data-update-key]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const a = _teacherAsgCache.find(x => x.id === btn.dataset.updateKey);
+      if (a) await openUpdateAnswerKeyModal(a);
+    });
+  });
   wrap.querySelectorAll('[data-toggle-hide]').forEach(btn => {
     btn.addEventListener('click', async () => {
       const a = _teacherAsgCache.find(x => x.id === btn.dataset.toggleHide);
@@ -1303,7 +1317,7 @@ function renderTeacherAssignmentsList() {
       } catch (err) { toast(mapError(err), 'error'); }
     });
   });
-  // ⭐ v2.2: sửa nút Chấm — báo lỗi rõ ràng nếu không tìm thấy sub
+  // Nút Chấm
   wrap.querySelectorAll('[data-grade-sub]').forEach(btn => {
     btn.addEventListener('click', async (e) => {
       e.stopPropagation();
@@ -1321,7 +1335,6 @@ function renderTeacherAssignmentsList() {
       btn.innerHTML = isHidden ? '🙈 Thu gọn' : '👁 Xem chi tiết';
     });
   });
-  // ⭐ v2.2: render công thức trong list đề (nếu có $...$ trong tiêu đề)
   typesetMath(wrap);
 }
 
@@ -1335,6 +1348,8 @@ function renderAssignmentItem(a) {
     ? `<button class="btn btn-secondary btn-sm" data-publish="${a.id}">📢 Công bố (${a._submittedCount})</button>` : '';
   const bestScoreBtn = (!isExternal && a.type === 'quiz' && a._subCount > 0)
     ? `<button class="btn btn-secondary btn-sm" data-best-score="${a.id}">👁 Điểm cao nhất</button>` : '';
+  const updateKeyBtn = (!isExternal && a.type === 'quiz')
+    ? `<button class="btn btn-light btn-sm" data-update-key="${a.id}" title="Nạp / cập nhật đáp án để chấm tự động">🔑 Đáp án</button>` : '';
   let classBadges = '';
   if (a.assignedAllGrade) classBadges = `<span style="display:inline-block; background:#c0392b; color:#FFF; padding:2px 10px; border-radius:10px; font-size:11px; font-weight:700;">🌐 CẢ KHỐI ${a.grade}</span>`;
   else if (a.assignedClasses && a.assignedClasses.length > 0) classBadges = a.assignedClasses.map(c => `<span style="display:inline-block; background:#8B5A2B; color:#FFF; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600; margin-right:4px;">📌 ${esc(c)}</span>`).join('');
@@ -1396,6 +1411,7 @@ function renderAssignmentItem(a) {
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
         ${publishBtn}
         ${bestScoreBtn}
+        ${updateKeyBtn}
         <button class="btn btn-light btn-sm" data-edit-assignment="${a.id}">✏️ Sửa</button>
         <button class="btn btn-light btn-sm" data-toggle-hide="${a.id}">${a.hidden ? '👁 Hiện' : '🙈 Ẩn'}</button>
         <button class="btn btn-danger btn-sm" data-del-assignment="${a.id}">🗑 Xoá</button>
@@ -1476,25 +1492,23 @@ async function showBestScoreModal(assignment, subs) {
     </div>
   </div>`;
   document.body.appendChild(modal);
-  // ⭐ v2.2: typeset công thức trong modal điểm cao nhất
   typesetMath(modal);
   modal.querySelector('#bestScoreCloseBtn').addEventListener('click', () => modal.remove());
   modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
 }
 
 // ══════════════════════════════════════════
-// ⭐ GRADE MODAL — bản v2.2 (tự chấm + typeset + báo lỗi rõ)
+// GRADE MODAL — tự chấm + typeset + báo lỗi rõ
 // ══════════════════════════════════════════
 async function showGradeModal(s, a) {
   try {
     const existing = $('gradeModal');
     if (existing) existing.remove();
-
     if (!a) a = _gradeAssignmentsCache.find(x => x.id === s.assignmentId) || null;
 
-    // ⭐ Tự chấm nếu THIẾU điểm HOẶC THIẾU details
-    const needGrade = (s.autoScore == null || !s.details) && s.answers;
-    if (needGrade) {
+    let keyMissing = false;
+
+    if ((s.autoScore == null || !s.details) && s.answers) {
       const key = await getAnswerKey(s.assignmentId);
       if (key) {
         try {
@@ -1508,11 +1522,13 @@ async function showGradeModal(s, a) {
           console.warn('[grade] save autoScore failed:', e);
         }
       } else {
-        toast('⚠️ Không đọc được đáp án để chấm tự động. Báo GV kiểm tra đề.', 'error');
+        keyMissing = true;
       }
     }
 
     const maxScore = maxOfT(a, s);
+    const questions = a ? getPublicQuestions(a) : [];
+
     const modal = document.createElement('div');
     modal.id = 'gradeModal';
     modal.className = 'modal-overlay';
@@ -1550,18 +1566,26 @@ async function showGradeModal(s, a) {
     if (s.isLate) body += `<div class="alert alert-error">⚠️ HS nộp trễ</div>`;
     if (s.isTimeout) body += `<div class="alert alert-warn">⏱ Hết giờ — tự nộp</div>`;
 
-    const questions = a ? getPublicQuestions(a) : [];
-    const review = renderReviewHtml(s, questions);
-    if (review) body += review;
-    else if (questions.length === 0) {
+    if (keyMissing) {
+      body += `<div class="alert alert-warn">
+        ⚠️ <strong>Đề này chưa có đáp án lưu trong hệ thống.</strong><br>
+        Cô vào tab <strong>📋 Đề & Bài Làm</strong> → tìm đề này → bấm nút <strong>🔑 Đáp án</strong> để nạp đáp án, sau đó hệ thống sẽ tự chấm.
+      </div>`;
+    }
+
+    if (s.details) {
+      const review = renderReviewHtml(s, questions);
+      if (review) body += review;
+      else if (questions.length === 0) {
+        body += `<div class="alert alert-warn">⚠️ Không tìm thấy đề hoặc đề không có câu hỏi.</div>`;
+      }
+    } else if (questions.length > 0) {
+      body += renderStudentAnswersOnly(s, questions);
+    } else {
       body += `<div class="alert alert-warn">⚠️ Không tìm thấy đề hoặc đề không có câu hỏi.</div>`;
-    } else if (!s.details) {
-      body += `<div class="alert alert-warn">⚠️ Chưa chấm được tự động. Kiểm tra đáp án trong đề.</div>`;
     }
 
     modal.querySelector('#gradeInfo').innerHTML = body;
-
-    // ⭐ v2.2: render công thức SAU khi đã có DOM
     typesetMath(modal);
 
     const closeModal = () => modal.remove();
@@ -1594,6 +1618,129 @@ async function showGradeModal(s, a) {
     console.error('showGradeModal error:', err);
     toast('❌ Lỗi mở bảng chấm: ' + (err.message || err), 'error');
   }
+}
+
+// ⭐ Hiển thị câu hỏi + đáp án HS chọn (khi chưa có đáp án để chấm tự động)
+// Nhãn A/B/C/D theo VỊ TRÍ XÁO
+function renderStudentAnswersOnly(sub, questions) {
+  if (!sub || !questions?.length) return '';
+  const answers = sub.answers || {};
+  let html = `<div class="alert alert-info">📋 Đang hiển thị <strong>${questions.length} câu</strong> và đáp án HS đã chọn. Nạp đáp án (🔑) để chấm tự động.</div>`;
+  const part1 = questions.filter(q => q.type === 'choice');
+  const part2 = questions.filter(q => q.type === 'truefalse');
+  const part3 = questions.filter(q => q.type === 'short');
+  if (part1.length > 0) {
+    html += `<div class="section-header part-1">I. Trắc nghiệm (${part1.length})</div>`;
+    part1.forEach((q, i) => {
+      const studentAns = answers[q.id];
+      html += `<div class="question-detail">
+        <div class="q-num">Câu ${i + 1}</div>
+        <div class="q-text">${q.textHtml || esc(q.text)}</div>
+        ${(q.options || []).map((opt, pos) => {
+          const picked = opt.value === studentAns;
+          let optHtml = opt.html || esc(opt.text);
+          optHtml = optHtml.replace(/^\s*[A-D]\s*[.\s]\s*/i, '').trim();
+          const displayLabel = 'ABCD'[pos] || opt.value;
+          return `<div class="option-row ${picked ? 'student-correct' : ''}">
+            <span class="label">${displayLabel}.</span>
+            <span>${optHtml}</span>
+            ${picked ? '<span class="mark check">✓ HS chọn</span>' : ''}
+          </div>`;
+        }).join('')}
+      </div>`;
+    });
+  }
+  if (part2.length > 0) {
+    html += `<div class="section-header part-2">II. Đúng/Sai (${part2.length})</div>`;
+    part2.forEach((q, i) => {
+      const studentAns = answers[q.id] || {};
+      html += `<div class="question-detail">
+        <div class="q-num">Câu ${i + 1}</div>
+        <div class="q-text">${q.textHtml || esc(q.text)}</div>
+        ${(q.statements || []).map((st, pos) => {
+          const v = studentAns[st.statement];
+          return `<div class="tf-row-detail">
+            <div class="stmt">${String.fromCharCode(97 + pos)}) ${st.html || esc(st.text)}</div>
+            <div class="answers"><div class="item"><strong>HS chọn:</strong> ${v === true ? 'Đ' : v === false ? 'S' : '(bỏ)'}</div></div>
+          </div>`;
+        }).join('')}
+      </div>`;
+    });
+  }
+  if (part3.length > 0) {
+    html += `<div class="section-header part-3">III. Trả lời ngắn (${part3.length})</div>`;
+    part3.forEach((q, i) => {
+      const studentAns = answers[q.id] || '(bỏ)';
+      html += `<div class="question-detail">
+        <div class="q-num">Câu ${i + 1}</div>
+        <div class="q-text">${q.textHtml || esc(q.text)}</div>
+        <div class="option-row student-correct"><span class="label">HS:</span><span>${esc(studentAns)}</span></div>
+      </div>`;
+    });
+  }
+  return html;
+}
+
+// ══════════════════════════════════════════
+// ⭐ NẠP / CẬP NHẬT ĐÁP ÁN CHO ĐỀ CŨ
+// ══════════════════════════════════════════
+async function openUpdateAnswerKeyModal(assignment) {
+  const existing = $('updateKeyModal');
+  if (existing) existing.remove();
+  const hasKey = !!(await getAnswerKey(assignment.id));
+  const modal = document.createElement('div');
+  modal.id = 'updateKeyModal';
+  modal.className = 'modal-overlay';
+  modal.innerHTML = `<div class="modal modal-large">
+    <div class="modal-header">
+      <h2>🔑 Nạp / Cập nhật đáp án</h2>
+      <button class="btn btn-light btn-sm" data-close-key>✖ Đóng</button>
+    </div>
+    <div class="alert alert-info">
+      <strong>Đề:</strong> ${esc(assignment.title)}<br>
+      <strong>Trạng thái:</strong> ${hasKey ? '✅ Đã có đáp án trong hệ thống' : '❌ Chưa có đáp án'}
+    </div>
+    <div class="alert alert-warn">
+      ⚠️ Dán lại <strong>HTML gốc</strong> của đề (bản có <code>data-answer="..."</code> trong mỗi câu).<br>
+      💡 Đây là bản HTML cô dùng để tạo đề lúc đầu — không phải bản đã bị ẩn đáp án.
+    </div>
+    <div class="form-group">
+      <label>📋 HTML câu hỏi (có đáp án)</label>
+      <textarea id="updateKeyHtml" style="min-height:250px; font-family:monospace; font-size:12px;" placeholder='<div class="question" data-id="q1" data-type="choice" data-answer="A" data-points="1">...'></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-light" data-close-key>Hủy</button>
+      <button class="btn btn-primary" id="updateKeySaveBtn">💾 Lưu đáp án</button>
+    </div>
+  </div>`;
+  document.body.appendChild(modal);
+  modal.querySelectorAll('[data-close-key]').forEach(b => b.addEventListener('click', () => modal.remove()));
+  modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+  modal.querySelector('#updateKeySaveBtn').addEventListener('click', async () => {
+    const html = modal.querySelector('#updateKeyHtml').value.trim();
+    if (!html) { toast('Chưa dán HTML', 'error'); return; }
+    const questions = parseQuestionsHtml(html);
+    if (questions.length === 0) { toast('Không parse được câu hỏi!', 'error'); return; }
+    const hasAnswers = questions.some(q =>
+      q.correctAnswer != null ||
+      (q.statements && q.statements.some(st => st.correct !== undefined))
+    );
+    if (!hasAnswers) { toast('HTML không chứa đáp án (thiếu data-answer)', 'error'); return; }
+    const btn = modal.querySelector('#updateKeySaveBtn');
+    btn.disabled = true; btn.textContent = '⏳ Đang lưu...';
+    try {
+      await setDoc(doc(db, 'assignments', assignment.id, 'answerKey', 'key'), {
+        questions, questionsHtml: html, updatedAt: serverTimestamp(), _manual: true
+      });
+      delete _keyCache[assignment.id];
+      toast(`✅ Đã nạp đáp án cho ${questions.length} câu!`, 'success');
+      modal.remove();
+      loadTeacherAssignmentsList();
+    } catch (err) {
+      toast(mapError(err), 'error');
+      btn.disabled = false; btn.textContent = '💾 Lưu đáp án';
+    }
+  });
 }
 
 // ══════════════════════════════════════════

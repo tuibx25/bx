@@ -80,8 +80,7 @@ export function parseQuestionsHtml(htmlContent) {
   return questions;
 }
 
-// ⭐ v2.1: BẢN CÔNG KHAI — fallback questionsHtml CHỈ dành cho GV
-// (HS tuyệt đối không chạm bản chứa đáp án)
+// ⭐ BẢN CÔNG KHAI — fallback questionsHtml CHỈ dành cho GV
 export function getPublicQuestions(a) {
   const isTeacher = state.currentProfile?.role === 'teacher';
   const html = a?.questionsPublicHtml || (isTeacher ? a?.questionsHtml : '') || '';
@@ -90,7 +89,7 @@ export function getPublicQuestions(a) {
 }
 
 // ══════════════════════════════════════════
-// ⭐ RENDER REVIEW CHUNG (HS xem lại + GV chấm)
+// ⭐ RENDER REVIEW — nhãn A/B/C/D theo VỊ TRÍ XÁO
 // ══════════════════════════════════════════
 export function renderReviewHtml(sub, questions) {
   if (!sub || !sub.details || !questions?.length) return '';
@@ -109,7 +108,7 @@ export function renderReviewHtml(sub, questions) {
       html += `<div class="question-detail ${cls}">
         <div class="q-num ${numCls}">Câu ${idx + 1} ${detail.isCorrect ? '✓' : '✗'} — ${detail.earned}/${detail.points} điểm</div>
         <div class="q-text">${q.textHtml || esc(q.text)}</div>
-        ${(q.options || []).map(opt => {
+        ${(q.options || []).map((opt, pos) => {
           let optCls = '';
           let mark = '';
           if (opt.value === detail.correct) { optCls = 'correct-answer'; mark = '<span class="mark check">✓ Đáp án</span>'; }
@@ -117,8 +116,9 @@ export function renderReviewHtml(sub, questions) {
           if (opt.value === detail.student && opt.value === detail.correct) { optCls = 'student-correct'; mark = '<span class="mark check">✓ Bạn</span>'; }
           let optHtml = opt.html || esc(opt.text);
           optHtml = optHtml.replace(/^\s*[A-D]\s*[.\s]\s*/i, '').trim();
+          const displayLabel = 'ABCD'[pos] || opt.value;
           return `<div class="option-row ${optCls}">
-            <span class="label">${opt.value}.</span>
+            <span class="label">${displayLabel}.</span>
             <span>${optHtml}</span>${mark}
           </div>`;
         }).join('')}
@@ -136,11 +136,11 @@ export function renderReviewHtml(sub, questions) {
       html += `<div class="question-detail ${cls}">
         <div class="q-num ${numCls}">Câu ${idx + 1} — ${detail.correctCount}/${detail.total} ý — ${Number(detail.earned).toFixed(2)}/${detail.points} điểm</div>
         <div class="q-text">${q.textHtml || esc(q.text)}</div>
-        ${(q.statements || []).map(st => {
+        ${(q.statements || []).map((st, pos) => {
           const d = stDetails[st.statement];
           if (!d) return '';
           return `<div class="tf-row-detail">
-            <div class="stmt">${String.fromCharCode(97 + st.statement)}) ${st.html || esc(st.text)}</div>
+            <div class="stmt">${String.fromCharCode(97 + pos)}) ${st.html || esc(st.text)}</div>
             <div class="answers">
               <div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>ĐA:</strong> ${d.correct ? 'Đ' : 'S'}</div>
               <div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>Bạn:</strong> ${d.student === true ? 'Đ' : (d.student === false ? 'S' : '(bỏ)')}</div>
@@ -172,7 +172,7 @@ export function renderReviewHtml(sub, questions) {
 }
 
 // ══════════════════════════════════════════
-// ⭐ v2.1: TỰ CHỐT PHIÊN MỒ CÔI (HS tắt máy giữa chừng)
+// TỰ CHỐT PHIÊN MỒ CÔI
 // ══════════════════════════════════════════
 async function finalizeOrphanSession(sub) {
   const answers = sub.draftAnswers || {};
@@ -203,13 +203,11 @@ async function openStartQuizModal(a) {
   }
   if (state.currentProfile?.role === 'teacher') { toast('GV không làm bài', 'error'); return; }
   if (!state.currentUser.emailVerified) { toast('Vui lòng xác thực email', 'error'); return; }
-  // ⭐ v2.1: đề đã ẩn thì chặn luôn
   if (a.hidden === true || a.lessonHidden === true) {
     toast('Đề này đã bị ẩn. Không thể làm bài.', 'error');
     return;
   }
   const mySubs = state.mySubsCache.filter(s => s.assignmentId === a.id);
-  // ⭐ v2.1: xử lý phiên "mồ côi" trước khi cho làm lượt mới
   const orphan = mySubs.find(s => s.status === 'in_progress');
   if (orphan) {
     const now = Date.now();
@@ -240,7 +238,7 @@ async function openStartQuizModal(a) {
 }
 
 // ══════════════════════════════════════════
-// ⭐ START QUIZ — bản LITE: HS tự tạo phiên (Rules chặn ghi điểm)
+// START QUIZ
 // ══════════════════════════════════════════
 async function startQuiz() {
   if (_submitting || !state.currentQuizAssignment) return;
@@ -254,7 +252,7 @@ async function startQuiz() {
     if (mySubs.length >= maxAttempts) { toast('Đã hết lượt làm', 'error'); return; }
     if (mySubs.some(s => s.status === 'in_progress')) { toast('Bạn đang có phiên chưa kết thúc', 'error'); return; }
     if (a.deadline && Date.now() > new Date(a.deadline + 'T23:59:59').getTime()) { toast('Đã quá hạn nộp', 'error'); return; }
-    const shuffleSeed = randomSeed(); // ⭐ v2.1: seed luôn ≥ 1
+    const shuffleSeed = randomSeed();
     const questions = applyShuffle(getPublicQuestions(a), shuffleSeed);
     if (questions.length === 0) { toast('Đề không có câu hỏi hợp lệ! Báo GV nhé.', 'error'); return; }
     const duration = Number(a.duration) || 25;
@@ -297,7 +295,7 @@ async function startQuiz() {
 }
 
 // ══════════════════════════════════════════
-// SHOW QUIZ INLINE (iframe KHÔNG nhúng đáp án)
+// ⭐ SHOW QUIZ INLINE — nhãn A/B/C/D theo VỊ TRÍ XÁO
 // ══════════════════════════════════════════
 function showQuizInline(a, questions) {
   const container = document.getElementById('quizFrameContainer');
@@ -317,12 +315,13 @@ function showQuizInline(a, questions) {
       const bodyHtml = stripCauPrefix(q.textHtml || esc(q.text));
       questionsHtml += `<div class="question" data-id="${q.id}" data-type="choice" data-points="${q.points || 1}">
         <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${bodyHtml}</div>
-        ${q.options.map(opt => {
+        ${q.options.map((opt, pos) => {
           let optContent = opt.html || esc(opt.text);
           optContent = optContent.replace(/^\s*[A-D]\s*[.\s]\s*/i, '').trim();
+          const displayLabel = 'ABCD'[pos] || opt.value;
           return `<label class="opt">
             <input type="radio" name="${q.id}" value="${opt.value}">
-            ${opt.value}. ${optContent}
+            ${displayLabel}. ${optContent}
           </label>`;
         }).join('')}
       </div>`;
@@ -335,8 +334,8 @@ function showQuizInline(a, questions) {
       const bodyHtml = stripCauPrefix(q.textHtml || esc(q.text));
       questionsHtml += `<div class="question" data-id="${q.id}" data-type="truefalse" data-points="${q.points || 1}">
         <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${bodyHtml}</div>
-        ${q.statements.map(st => `<div class="tf-item" data-statement="${st.statement}">
-          <span class="tf-stmt">${String.fromCharCode(97 + st.statement)}) ${st.html || esc(st.text)}</span>
+        ${q.statements.map((st, pos) => `<div class="tf-item" data-statement="${st.statement}">
+          <span class="tf-stmt">${String.fromCharCode(97 + pos)}) ${st.html || esc(st.text)}</span>
           <span class="tf-btns">
             <button type="button" class="tf-btn" data-q="${q.id}" data-s="${st.statement}" data-val="true">Đúng</button>
             <button type="button" class="tf-btn" data-q="${q.id}" data-s="${st.statement}" data-val="false">Sai</button>
@@ -439,7 +438,7 @@ mjx-container { overflow-x: auto; max-width: 100%; }
 }
 
 // ══════════════════════════════════════════
-// INJECT RUNTIME — ⭐ v2.1: chống bind trùng 2 lần
+// INJECT RUNTIME
 // ══════════════════════════════════════════
 function injectQuizRuntime() {
   const iframe = document.getElementById('inlineQuizFrame');
@@ -507,7 +506,7 @@ function updateInlineAnsweredCount() {
   if (m) m.textContent = answered === total ? '✅ Đã trả lời hết' : `Còn ${total - answered} câu chưa trả lời`;
 }
 
-// ⭐ Chỉ tính câu ĐÃ trả lời thật
+// Chỉ tính câu ĐÃ trả lời thật
 function collectInlineAnswers() {
   const iframe = document.getElementById('inlineQuizFrame');
   if (!iframe?.contentDocument) return {};
@@ -579,7 +578,6 @@ function updateCountdown() {
   else timerEl.classList.remove('warning');
 }
 
-// ⭐ v2.1: hết giờ → nộp lại tối đa 3 lần nếu mất mạng
 async function autoSubmitOnTimeout() {
   if (!state.currentQuizSession) return;
   const answers = collectInlineAnswers();
@@ -592,7 +590,7 @@ async function autoSubmitOnTimeout() {
 }
 
 // ══════════════════════════════════════════
-// ⭐ NỘP BÀI — v2.1: nộp lỗi thì PHỤC HỒI để bấm nộp lại
+// NỘP BÀI
 // ══════════════════════════════════════════
 async function submitQuizToServer(answers, isTimeout, opts = {}) {
   if (!state.currentQuizSession) return false;
@@ -617,7 +615,6 @@ async function submitQuizToServer(answers, isTimeout, opts = {}) {
   } catch (err) {
     console.error(err);
     if (!opts.silentFail) toast('❌ Nộp lỗi: ' + mapError(err) + ' — bấm Nộp bài thử lại.', 'error');
-    // ⭐ phục hồi phiên để HS nộp lại
     startDraftHeartbeat();
     startCountdownTimer();
     const btn = document.getElementById('inlineQuizFrame')?.contentDocument?.getElementById('submitBtn');
