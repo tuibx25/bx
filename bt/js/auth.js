@@ -70,7 +70,6 @@ export function initAuth({ onLogin, onLogout }) {
   // AUTH STATE CHANGE
   onAuthStateChanged(auth, async (user) => {
     state.currentUser = user;
-    // ⭐ v2: dừng poll cũ nếu có
     stopVerifyWatch();
     if (user) {
       await loadUserProfile(user);
@@ -140,7 +139,7 @@ async function markVerified() {
 
 // ══════════════════════════════════════════
 // LOAD USER PROFILE
-// ═════════════════════════════════════════
+// ══════════════════════════════════════════
 async function loadUserProfile(user) {
   const isTeacherEmail = user.email.toLowerCase() === TEACHER_EMAIL.toLowerCase();
   const snap = await getDoc(doc(db, 'users', user.uid));
@@ -212,7 +211,7 @@ function updateUIForUser() {
     $('userLabel').textContent = className ? `${name} · ${className}` : name;
     if (!state.currentUser.emailVerified) {
       show($('verifyBanner'));
-      startVerifyWatch(); // ⭐ v2: sự kiện thay vì poll 5s
+      startVerifyWatch();
     } else {
       hide($('verifyBanner'));
     }

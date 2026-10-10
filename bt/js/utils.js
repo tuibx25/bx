@@ -2,7 +2,7 @@ export const $ = (id) => document.getElementById(id);
 export const show = (el) => el?.classList.remove('hidden');
 export const hide = (el) => el?.classList.add('hidden');
 
-// ⭐ Escape HTML chuẩn (bản v1 bị lỗi bảng ký tự)
+// ⭐ Escape HTML chuẩn
 export const esc = (s) => (s ?? '').toString().replace(/[&<>"']/g, c => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 }[c]));

@@ -56,7 +56,7 @@ async function loadStats() {
   const filterLesson = $('statsLesson').value;
   const assignmentId = $('statsAssignment').value;
   const searchStudent = ($('statsSearchStudent').value || '').toLowerCase().trim();
-  const onlyAssigned = $('statsOnlyAssigned')?.checked === true; // ⭐ v2
+  const onlyAssigned = $('statsOnlyAssigned')?.checked === true;
 
   if (!assignmentId) {
     wrap.innerHTML = '<div class="empty">⚠️ Vui lòng chọn <strong>Đề cụ thể</strong>.</div>';
@@ -77,7 +77,7 @@ async function loadStats() {
       return;
     }
     const maxAttempts = assignment.maxAttempts || 3;
-    // ⭐ v2: thang điểm THẬT từ đề (hết hardcode 7)
+    // ⭐ Thang điểm THẬT từ đề (hết hardcode 7)
     let maxScoreOfAssignment = totalPoints(getPublicQuestions(assignment));
     if (!maxScoreOfAssignment) maxScoreOfAssignment = 7;
 
@@ -102,7 +102,7 @@ async function loadStats() {
       }
       return true;
     });
-    // ⭐ v2: chỉ HS được giao đề
+    // ⭐ Chỉ HS được giao đề
     if (onlyAssigned) {
       filteredStudents = filteredStudents.filter(st => {
         if (assignment.assignedAllGrade === true) return getGradeFromClass(st.class) === assignment.grade;

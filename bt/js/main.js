@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════
 // MAIN ENTRY POINT
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 import './firebase-init.js';
 import { db, updateDoc, doc, serverTimestamp } from './firebase-init.js';
 import { state } from './state.js';
@@ -23,7 +23,7 @@ import { renderStudentsTab } from './students.js';
 
 // ══════════════════════════════════════════
 // BOOTSTRAP
-// ═════════════════════════════════════════
+// ══════════════════════════════════════════
 async function bootstrap() {
   console.log('%c📚 Bài Tập Vật Lý THPT', 'color:#8B5A2B; font-size:16px; font-weight:bold;');
   console.log('🚀 Bootstrap started');
@@ -61,7 +61,7 @@ async function bootstrap() {
   console.log('✅ App initialized');
 }
 
-// ═════════════════════════════════════════
+// ══════════════════════════════════════════
 // LOGIN HANDLER — ⭐ v2: load SONG SONG
 // ══════════════════════════════════════════
 async function handleLogin(user, profile, settings) {
@@ -71,7 +71,7 @@ async function handleLogin(user, profile, settings) {
     renderStudentsTab();
     renderAssignmentsTab();
   } else {
-    // ⭐ Chạy song song: giảm từ ~4-6s → ~2-3s trên mobile
+    // ⭐ Chạy song song: giảm thời gian chờ trên mobile
     await Promise.all([
       loadNotificationsForUser(),
       loadAssignments(),

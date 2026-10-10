@@ -86,6 +86,7 @@ export function renderReviewHtml(sub, questions) {
   const part1 = ordered.filter(q => q.type === 'choice');
   const part2 = ordered.filter(q => q.type === 'truefalse');
   const part3 = ordered.filter(q => q.type === 'short');
+
   if (part1.length > 0) {
     html += `<div class="section-header part-1">I. PHẦN I — Trắc nghiệm</div>`;
     part1.forEach((q, idx) => {
@@ -93,20 +94,19 @@ export function renderReviewHtml(sub, questions) {
       if (!detail) return;
       const cls = detail.isCorrect ? 'correct' : 'wrong';
       const numCls = detail.isCorrect ? 'correct-bg' : 'wrong-bg';
-      html += `
-        <div class="question-detail ${cls}">
-          <div class="q-num ${numCls}">Câu ${idx + 1} ${detail.isCorrect ? '✓' : '✗'} — ${detail.earned}/${detail.points} điểm</div>
-          <div class="q-text">${q.textHtml || esc(q.text)}</div>
-          ${(q.options || []).map(opt => {
-            let optCls = ''; let mark = '';
-            if (opt.value === detail.correct) { optCls = 'correct-answer'; mark = '<span class="mark check">✓ Đáp án</span>'; }
-            if (opt.value === detail.student && opt.value !== detail.correct) { optCls = 'student-wrong'; mark = '<span class="mark cross">✗ Bạn</span>'; }
-            if (opt.value === detail.student && opt.value === detail.correct) { optCls = 'student-correct'; mark = '<span class="mark check">✓ Bạn</span>'; }
-            let optHtml = opt.html || esc(opt.text);
-            optHtml = optHtml.replace(/^\s*[A-D]\s*[.\s]\s*/i, '').trim();
-            return `<div class="option-row ${optCls}"><span class="label">${opt.value}.</span><span>${optHtml}</span>${mark}</div>`;
-          }).join('')}
-        </div>`;
+      html += `<div class="question-detail ${cls}">
+        <div class="q-num ${numCls}">Câu ${idx + 1} ${detail.isCorrect ? '✓' : '✗'} — ${detail.earned}/${detail.points} điểm</div>
+        <div class="q-text">${q.textHtml || esc(q.text)}</div>
+        ${(q.options || []).map(opt => {
+          let optCls = ''; let mark = '';
+          if (opt.value === detail.correct) { optCls = 'correct-answer'; mark = '<span class="mark check">✓ Đáp án</span>'; }
+          if (opt.value === detail.student && opt.value !== detail.correct) { optCls = 'student-wrong'; mark = '<span class="mark cross">✗ Bạn</span>'; }
+          if (opt.value === detail.student && opt.value === detail.correct) { optCls = 'student-correct'; mark = '<span class="mark check">✓ Bạn</span>'; }
+          let optHtml = opt.html || esc(opt.text);
+          optHtml = optHtml.replace(/^\s*[A-D]\s*[.\s]\s*/i, '').trim();
+          return `<div class="option-row ${optCls}"><span class="label">${opt.value}.</span><span>${optHtml}</span>${mark}</div>`;
+        }).join('')}
+      </div>`;
     });
   }
   if (part2.length > 0) {
@@ -117,23 +117,21 @@ export function renderReviewHtml(sub, questions) {
       const stDetails = detail.details || {};
       const cls = detail.correctCount === detail.total ? 'correct' : (detail.correctCount === 0 ? 'wrong' : 'partial');
       const numCls = detail.correctCount === detail.total ? 'correct-bg' : (detail.correctCount === 0 ? 'wrong-bg' : 'partial-bg');
-      html += `
-        <div class="question-detail ${cls}">
-          <div class="q-num ${numCls}">Câu ${idx + 1} — ${detail.correctCount}/${detail.total} ý — ${Number(detail.earned).toFixed(2)}/${detail.points} điểm</div>
-          <div class="q-text">${q.textHtml || esc(q.text)}</div>
-          ${(q.statements || []).map(st => {
-            const d = stDetails[st.statement];
-            if (!d) return '';
-            return `
-              <div class="tf-row-detail">
-                <div class="stmt">${String.fromCharCode(97 + st.statement)}) ${st.html || esc(st.text)}</div>
-                <div class="answers">
-                  <div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>ĐA:</strong> ${d.correct ? 'Đ' : 'S'}</div>
-                  <div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>Bạn:</strong> ${d.student === true ? 'Đ' : (d.student === false ? 'S' : '(bỏ)')}</div>
-                </div>
-              </div>`;
-          }).join('')}
-        </div>`;
+      html += `<div class="question-detail ${cls}">
+        <div class="q-num ${numCls}">Câu ${idx + 1} — ${detail.correctCount}/${detail.total} ý — ${Number(detail.earned).toFixed(2)}/${detail.points} điểm</div>
+        <div class="q-text">${q.textHtml || esc(q.text)}</div>
+        ${(q.statements || []).map(st => {
+          const d = stDetails[st.statement];
+          if (!d) return '';
+          return `<div class="tf-row-detail">
+            <div class="stmt">${String.fromCharCode(97 + st.statement)}) ${st.html || esc(st.text)}</div>
+            <div class="answers">
+              <div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>ĐA:</strong> ${d.correct ? 'Đ' : 'S'}</div>
+              <div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>Bạn:</strong> ${d.student === true ? 'Đ' : (d.student === false ? 'S' : '(bỏ)')}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
     });
   }
   if (part3.length > 0) {
@@ -143,13 +141,12 @@ export function renderReviewHtml(sub, questions) {
       if (!detail) return;
       const cls = detail.isCorrect ? 'correct' : 'wrong';
       const numCls = detail.isCorrect ? 'correct-bg' : 'wrong-bg';
-      html += `
-        <div class="question-detail ${cls}">
-          <div class="q-num ${numCls}">Câu ${idx + 1} ${detail.isCorrect ? '✓' : '✗'} — ${detail.earned}/${detail.points} điểm</div>
-          <div class="q-text">${q.textHtml || esc(q.text)}</div>
-          <div class="option-row ${detail.isCorrect ? 'student-correct' : 'student-wrong'}"><span class="label">Bạn:</span><span>${esc(detail.student || '(bỏ)')}</span></div>
-          ${!detail.isCorrect ? `<div class="option-row correct-answer"><span class="label">ĐA:</span><span>${esc(detail.correct)}</span></div>` : ''}
-        </div>`;
+      html += `<div class="question-detail ${cls}">
+        <div class="q-num ${numCls}">Câu ${idx + 1} ${detail.isCorrect ? '✓' : '✗'} — ${detail.earned}/${detail.points} điểm</div>
+        <div class="q-text">${q.textHtml || esc(q.text)}</div>
+        <div class="option-row ${detail.isCorrect ? 'student-correct' : 'student-wrong'}"><span class="label">Bạn:</span><span>${esc(detail.student || '(bỏ)')}</span></div>
+        ${!detail.isCorrect ? `<div class="option-row correct-answer"><span class="label">ĐA:</span><span>${esc(detail.correct)}</span></div>` : ''}
+      </div>`;
     });
   }
   return html;
@@ -172,13 +169,12 @@ async function openStartQuizModal(a) {
   if (mySubs.length >= maxAttempts) { toast(`Đã làm ${maxAttempts} lần`, 'error'); return; }
   state.currentQuizAssignment = a;
   const attempt = mySubs.length + 1;
-  $('startQuizInfo').innerHTML = `
-    <div style="background:#F5F5DC; padding:12px; border-radius:6px;">
-      <strong>${esc(a.title)}</strong><br>
-      <span style="font-size:13px; color:#555;">Lần ${attempt}/${maxAttempts}</span>
-      <div style="margin-top:10px;">⏱ ${esc(a.duration || 25)} phút</div>
-      <div style="margin-top:6px; font-size:12px; color:#0066CC;">🔀 Thứ tự câu hỏi & phương án xáo ngẫu nhiên mỗi lượt.</div>
-    </div>`;
+  $('startQuizInfo').innerHTML = `<div style="background:#F5F5DC; padding:12px; border-radius:6px;">
+    <strong>${esc(a.title)}</strong><br>
+    <span style="font-size:13px; color:#555;">Lần ${attempt}/${maxAttempts}</span>
+    <div style="margin-top:10px;">⏱ ${esc(a.duration || 25)} phút</div>
+    <div style="margin-top:6px; font-size:12px; color:#0066CC;">🔀 Thứ tự câu hỏi & phương án xáo ngẫu nhiên mỗi lượt.</div>
+  </div>`;
   show($('startQuizModal'));
 }
 
@@ -255,20 +251,20 @@ function showQuizInline(a, questions) {
     .replace(/^<?strong>?Câu\s+\d+[.:]?\s*<?\/?strong>?/i, '')
     .replace(/^Câu\s+\d+[.:]?\s*/i, '')
     .trim();
+
   if (part1.length > 0) {
     questionsHtml += `<div class="section-header part-1">I. PHẦN I. Trắc nghiệm nhiều phương án lựa chọn</div>\n`;
     questionsHtml += `<p class="section-note">(Trả lời từ câu 1 đến câu ${part1.length}. Mỗi câu chọn một phương án)</p>\n`;
     part1.forEach((q, idx) => {
       const bodyHtml = stripCauPrefix(q.textHtml || esc(q.text));
-      questionsHtml += `
-        <div class="question" data-id="${q.id}" data-type="choice" data-points="${q.points || 1}">
-          <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${bodyHtml}</div>
-          ${q.options.map(opt => {
-            let optContent = opt.html || esc(opt.text);
-            optContent = optContent.replace(/^\s*[A-D]\s*[.\s]\s*/i, '').trim();
-            return `<label class="opt"><input type="radio" name="${q.id}" value="${opt.value}"> ${opt.value}. ${optContent}</label>`;
-          }).join('')}
-        </div>`;
+      questionsHtml += `<div class="question" data-id="${q.id}" data-type="choice" data-points="${q.points || 1}">
+        <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${bodyHtml}</div>
+        ${q.options.map(opt => {
+          let optContent = opt.html || esc(opt.text);
+          optContent = optContent.replace(/^\s*[A-D]\s*[.\s]\s*/i, '').trim();
+          return `<label class="opt"><input type="radio" name="${q.id}" value="${opt.value}"> ${opt.value}. ${optContent}</label>`;
+        }).join('')}
+      </div>`;
     });
   }
   if (part2.length > 0) {
@@ -276,18 +272,16 @@ function showQuizInline(a, questions) {
     questionsHtml += `<p class="section-note">(Trong mỗi ý a), b), c), d) ở mỗi câu, chọn đúng hoặc sai)</p>\n`;
     part2.forEach((q, idx) => {
       const bodyHtml = stripCauPrefix(q.textHtml || esc(q.text));
-      questionsHtml += `
-        <div class="question" data-id="${q.id}" data-type="truefalse" data-points="${q.points || 1}">
-          <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${bodyHtml}</div>
-          ${q.statements.map(st => `
-            <div class="tf-item" data-statement="${st.statement}">
-              <span class="tf-stmt">${String.fromCharCode(97 + st.statement)}) ${st.html || esc(st.text)}</span>
-              <span class="tf-btns">
-                <button type="button" class="tf-btn" data-q="${q.id}" data-s="${st.statement}" data-val="true">Đúng</button>
-                <button type="button" class="tf-btn" data-q="${q.id}" data-s="${st.statement}" data-val="false">Sai</button>
-              </span>
-            </div>`).join('')}
-        </div>`;
+      questionsHtml += `<div class="question" data-id="${q.id}" data-type="truefalse" data-points="${q.points || 1}">
+        <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${bodyHtml}</div>
+        ${q.statements.map(st => `<div class="tf-item" data-statement="${st.statement}">
+          <span class="tf-stmt">${String.fromCharCode(97 + st.statement)}) ${st.html || esc(st.text)}</span>
+          <span class="tf-btns">
+            <button type="button" class="tf-btn" data-q="${q.id}" data-s="${st.statement}" data-val="true">Đúng</button>
+            <button type="button" class="tf-btn" data-q="${q.id}" data-s="${st.statement}" data-val="false">Sai</button>
+          </span>
+        </div>`).join('')}
+      </div>`;
     });
   }
   if (part3.length > 0) {
@@ -295,13 +289,13 @@ function showQuizInline(a, questions) {
     questionsHtml += `<p class="section-note">(Trả lời từ câu 1 đến câu ${part3.length})</p>\n`;
     part3.forEach((q, idx) => {
       const bodyHtml = stripCauPrefix(q.textHtml || esc(q.text));
-      questionsHtml += `
-        <div class="question" data-id="${q.id}" data-type="short" data-points="${q.points || 1}">
-          <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${bodyHtml}</div>
-          <input type="text" class="short-answer" placeholder="Nhập đáp án..." />
-        </div>`;
+      questionsHtml += `<div class="question" data-id="${q.id}" data-type="short" data-points="${q.points || 1}">
+        <div class="q-text"><strong>Câu ${idx + 1}.</strong> ${bodyHtml}</div>
+        <input type="text" class="short-answer" placeholder="Nhập đáp án..." />
+      </div>`;
     });
   }
+
   const html = `<!DOCTYPE html>
 <html>
 <head>
@@ -435,6 +429,7 @@ function injectQuizRuntime() {
   }
   updateInlineAnsweredCount();
 }
+
 function updateInlineAnsweredCount() {
   const iframe = document.getElementById('inlineQuizFrame');
   if (!iframe?.contentDocument) return;
@@ -449,6 +444,7 @@ function updateInlineAnsweredCount() {
   const m = doc.getElementById('statusMsg');
   if (m) m.textContent = answered === total ? '✅ Đã trả lời hết' : `Còn ${total - answered} câu chưa trả lời`;
 }
+
 // ⭐ Chỉ tính câu ĐÃ trả lời thật
 function collectInlineAnswers() {
   const iframe = document.getElementById('inlineQuizFrame');
@@ -520,6 +516,7 @@ function updateCountdown() {
   if (sec < 60) timerEl.classList.add('warning');
   else timerEl.classList.remove('warning');
 }
+
 // ⭐ Hết giờ → nộp đáp án ĐANG CÓ (không mất trắng)
 async function autoSubmitOnTimeout() {
   if (!state.currentQuizSession) return;

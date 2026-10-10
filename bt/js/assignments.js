@@ -3,7 +3,7 @@ import {
 } from './firebase-init.js';
 import { state } from './state.js';
 import {
-  $, esc, toast, normalizeClass, getGradeFromClass, fmtDuration
+  $, esc, toast, mapError, normalizeClass, getGradeFromClass, fmtDuration
 } from './utils.js';
 
 // ══════════════════════════════════════════
@@ -28,16 +28,22 @@ export function initAssignments() {
 }
 
 // ══════════════════════════════════════════
-//  LOAD ASSIGNMENTS — TỐI ƯU TỐC ĐỘ
+// ⭐ LOAD ASSIGNMENTS — TỐI ƯU TỐC ĐỘ
 // ══════════════════════════════════════════
 export async function loadAssignments() {
   const list = $('assignmentsList');
   if (!list) return;
   list.innerHTML = '<div class="empty">Đang tải...</div>';
-  
+
+  // Khách chưa đăng nhập → không query (tránh lỗi permission)
+  if (!state.currentUser) {
+    list.innerHTML = '<div class="empty">🔒 Đăng nhập để xem bài tập.</div>';
+    return;
+  }
+
   const isTeacher = state.currentProfile?.role === 'teacher';
   const isStudent = state.currentProfile?.role === 'student';
-  const myUid = state.currentUser?.uid;
+  const myUid = state.currentUser.uid;
   const myClassNorm = isStudent ? normalizeClass(state.currentProfile.class) : null;
   const myGrade = isStudent ? getGradeFromClass(state.currentProfile.class) : state.currentGrade;
 
@@ -47,20 +53,15 @@ export async function loadAssignments() {
       getDocs(query(collection(db, 'lessons'), where('grade', '==', myGrade))),
       getDocs(query(collection(db, 'assignments'), where('grade', '==', myGrade)))
     ]);
-    
     let allLessons = lSnap.docs.map(d => ({ id: d.id, ...d.data() }));
     let items = aSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-    
-    // Sort lessons theo thứ tự
     allLessons.sort((a, b) => (a.order || 0) - (b.order || 0));
 
     // ⭐ 2. Filter ẩn (chỉ với HS)
     if (isStudent) {
-      const hiddenLessonIds = new Set(
-        allLessons.filter(l => l.hidden === true).map(l => l.id)
-      );
-      items = items.filter(a => 
-        !a.hidden && 
+      const hiddenLessonIds = new Set(allLessons.filter(l => l.hidden === true).map(l => l.id));
+      items = items.filter(a =>
+        !a.hidden &&
         (!a.lessonId || !hiddenLessonIds.has(a.lessonId))
       );
     }
@@ -88,35 +89,31 @@ export async function loadAssignments() {
     }
 
     // ⭐ 5. Cache và render
-    state.allLessonsCache = isStudent 
-      ? allLessons.filter(l => l.hidden !== true) 
+    state.allLessonsCache = isStudent
+      ? allLessons.filter(l => l.hidden !== true)
       : allLessons;
     state.allAssignmentsCache = items;
     state.mySubsCache = mySubs;
     state.myViewLogsCache = myViewLogs;
-    
     renderAssignmentsFiltered();
   } catch (err) {
     console.error('Load assignments error:', err);
-    list.innerHTML = `<div class="empty">Lỗi: ${esc(err.message)}</div>`;
+    list.innerHTML = `<div class="empty">Lỗi: ${esc(mapError(err))}</div>`;
   }
 }
 
 // ══════════════════════════════════════════
 // RENDER FILTERED
-// ═════════════════════════════════════════
+// ══════════════════════════════════════════
 function renderAssignmentsFiltered() {
   const list = $('assignmentsList');
   if (!list) return;
-  
   const keyword = ($('searchInput')?.value || '').toLowerCase().trim();
   const filterStatus = $('filterStatus')?.value || 'all';
   const filterType = $('filterType')?.value || 'all';
-  
   let lessons = [...state.allLessonsCache];
   let items = [...state.allAssignmentsCache];
 
-  // Filter từ khóa
   if (keyword) {
     items = items.filter(a =>
       (a.title || '').toLowerCase().includes(keyword) ||
@@ -128,13 +125,7 @@ function renderAssignmentsFiltered() {
       (l.name || '').toLowerCase().includes(keyword) || matchedLessonIds.has(l.id)
     );
   }
-  
-  // Filter loại đề
-  if (filterType !== 'all') {
-    items = items.filter(a => a.mode === filterType);
-  }
-  
-  // Filter trạng thái (chỉ HS)
+  if (filterType !== 'all') items = items.filter(a => a.mode === filterType);
   if (filterStatus !== 'all' && state.currentProfile?.role === 'student') {
     items = items.filter(a => {
       const myClassNorm = normalizeClass(state.currentProfile.class);
@@ -157,7 +148,6 @@ function renderAssignmentsFiltered() {
   const countEl = $('resultCount');
   if (countEl) countEl.textContent = `Hiển thị ${items.length} đề`;
 
-  // Nhóm theo lesson
   const byLesson = {};
   const unassigned = [];
   items.forEach(a => {
@@ -228,7 +218,7 @@ function renderLessonBlock(lesson, lessonAssigns) {
   const lessonDesc = esc(lesson.description || '');
   let bodyHtml = '';
   if (lessonAssigns.length === 0) {
-    bodyHtml = '<div class="empty-lesson"> Chưa có đề nào.</div>';
+    bodyHtml = '<div class="empty-lesson">📭 Chưa có đề nào.</div>';
   } else {
     lessonAssigns.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     bodyHtml = lessonAssigns.map(a => renderAssignmentRow(a)).join('');
@@ -236,7 +226,7 @@ function renderLessonBlock(lesson, lessonAssigns) {
   return `<div class="lesson-block">
     <div class="lesson-header">
       <div class="lesson-info">
-        <h3>${isUnassigned ? ' ' + lessonName : '📖 ' + lessonName}</h3>
+        <h3>${isUnassigned ? '📦 ' + lessonName : '📖 ' + lessonName}</h3>
         ${lessonDesc ? `<div class="lesson-desc">${lessonDesc}</div>` : ''}
       </div>
       <div style="display:flex; align-items:center; gap:10px;">
@@ -255,10 +245,14 @@ function renderAssignmentRow(a) {
   const isExternal = a.mode === 'external';
   const isTeacherView = state.currentProfile?.role === 'teacher';
   const modeBadge = isTeacherView
-    ? (isExternal ? '<span class="badge badge-external"> Luyện tập</span>' : '<span class="badge badge-inline">🎯 Đề có điểm</span>')
+    ? (isExternal
+      ? '<span class="badge badge-external">🔗 Luyện tập</span>'
+      : '<span class="badge badge-inline">🎯 Đề có điểm</span>')
     : '';
-  const hiddenBadge = (isTeacherView && a.hidden) ? '<span class="badge badge-hidden">🙈 Đã ẩn</span>' : '';
-  
+  const hiddenBadge = (isTeacherView && a.hidden)
+    ? '<span class="badge badge-hidden">🙈 Đã ẩn</span>'
+    : '';
+
   let assignedBadge = '';
   let isAssignedToMe = false;
   if (state.currentProfile?.role === 'student' && state.currentUser) {
@@ -271,34 +265,34 @@ function renderAssignmentRow(a) {
       isAssignedToMe = true;
     }
   }
-  
+
   const mySubsOfA = state.mySubsCache.filter(s =>
     s.assignmentId === a.id && s.status !== 'in_progress'
   );
   const newPublished = mySubsOfA.some(s => s.status === 'published' && !s.studentViewed);
-  const newBadge = newPublished ? '<span class="badge badge-new"> Có điểm mới</span>' : '';
-  
+  const newBadge = newPublished ? '<span class="badge badge-new">🆕 Có điểm mới</span>' : '';
+
   const maxAttempts = a.maxAttempts || 3;
   const doneCount = mySubsOfA.length;
   const viewLogsOfA = state.myViewLogsCache.filter(v => v.assignmentId === a.id);
   const accessCount = viewLogsOfA.length;
   const totalDuration = viewLogsOfA.reduce((s, v) => s + (v.durationSec || 0), 0);
-  
+
   const isLoggedIn = !!state.currentUser;
   const isEmailVerified = state.currentUser?.emailVerified === true;
-  const isTeacher = state.currentProfile?.role === 'teacher';
+  const isTeacher = isTeacherView;
 
   let actionBtn = '';
   if (isExternal) {
     if (!isLoggedIn) actionBtn = `<button class="btn lock-btn btn-sm" data-require-login>🔒 Đăng nhập</button>`;
     else if (isTeacher) actionBtn = `<button class="btn btn-primary btn-sm" data-open-external="${a.id}">🔗 Mở (GV)</button>`;
-    else if (!isEmailVerified) actionBtn = `<span class="text-sm" style="color:#c0392b;"> Xác thực email</span>`;
+    else if (!isEmailVerified) actionBtn = `<span class="text-sm" style="color:#c0392b;">📧 Xác thực email</span>`;
     else if (maxAttempts > 0 && accessCount >= maxAttempts) actionBtn = `<span class="text-sm" style="color:#c0392b;">✋ Đã mở ${maxAttempts} lần</span>`;
     else actionBtn = `<button class="btn btn-secondary btn-sm" data-open-external="${a.id}">🔗 Mở luyện tập (${accessCount}${maxAttempts > 0 ? '/' + maxAttempts : ''})</button>`;
   } else {
     if (a.type === 'essay') {
       if (!isLoggedIn) actionBtn = `<button class="btn lock-btn btn-sm" data-require-login>🔒 Đăng nhập</button>`;
-      else if (isTeacher) actionBtn = `<button class="btn btn-primary btn-sm" data-view-essay="${a.id}"> Xem đề</button>`;
+      else if (isTeacher) actionBtn = `<button class="btn btn-primary btn-sm" data-view-essay="${a.id}">👁 Xem đề</button>`;
       else if (!isEmailVerified) actionBtn = `<span class="text-sm" style="color:#c0392b;">📧 Xác thực email</span>`;
       else actionBtn = `<button class="btn btn-primary btn-sm" data-view-essay="${a.id}">📖 Xem đề</button>`;
     } else {
