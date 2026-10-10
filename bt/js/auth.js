@@ -70,7 +70,7 @@ export function initAuth({ onLogin, onLogout }) {
   // AUTH STATE CHANGE
   onAuthStateChanged(auth, async (user) => {
     state.currentUser = user;
-    //  v2: dừng poll cũ nếu có
+    // ⭐ v2: dừng poll cũ nếu có
     stopVerifyWatch();
     if (user) {
       await loadUserProfile(user);
@@ -208,7 +208,7 @@ function updateUIForUser() {
     const className = state.currentProfile.class || '';
     const name = state.currentProfile.name || state.currentUser.email;
     if (hsGrade) state.currentGrade = hsGrade;
-    else toast('️ Vui lòng cập nhật lớp để xem bài tập', 'error');
+    else toast('⚠️ Vui lòng cập nhật lớp để xem bài tập', 'error');
     $('userLabel').textContent = className ? `${name} · ${className}` : name;
     if (!state.currentUser.emailVerified) {
       show($('verifyBanner'));
@@ -383,7 +383,7 @@ async function handleForgotPassword() {
         ⏱ Link có hiệu lực trong <strong>1 giờ</strong>.
       </div>
     `;
-    toast(' Đã gửi email đặt lại mật khẩu!', 'success');
+    toast('📧 Đã gửi email đặt lại mật khẩu!', 'success');
     startForgotCooldown();
   } catch (err) {
     console.error('Password reset error:', err);
@@ -393,7 +393,7 @@ async function handleForgotPassword() {
     else if (err.code === 'auth/too-many-requests') errMsg = 'Quá nhiều yêu cầu. Vui lòng thử lại sau vài phút.';
     $('forgotError').innerHTML = `<div class="alert alert-error">❌ ${esc(errMsg)}</div>`;
     btn.disabled = false;
-    btn.textContent = ' Gửi link đặt lại';
+    btn.textContent = '📧 Gửi link đặt lại';
   }
 }
 function startForgotCooldown() {
