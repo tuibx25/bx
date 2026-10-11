@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tool chuyển đổi đề thi → HTML (v5)</title>
+<title>Tool chuyển đổi đề thi → HTML (v6)</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, 'Segoe UI', Tahoma, sans-serif; background: #F5F5F5; color: #000; line-height: 1.6; padding: 20px; }
@@ -26,6 +26,7 @@ button:hover { filter: brightness(1.08); }
 #debug { background: #111; color: #0F0; font-family: Consolas, monospace; font-size: 12px; padding: 10px; border-radius: 6px; max-height: 240px; overflow: auto; white-space: pre-wrap; }
 #debug .err { color: #FF6B6B; }
 #debug .warn { color: #FFD93D; }
+#debug .info { color: #66CCFF; }
 #out { min-height: 140px; }
 #previewBox { border: 1px solid #D3D3D3; border-radius: 6px; padding: 10px; max-height: 500px; overflow: auto; background: #FAFAFA; }
 #previewBox .opt { display: block; margin: 2px 0; }
@@ -53,11 +54,12 @@ window.MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
 </head>
 <body>
-<h1>🔧 Tool chuyển đổi đề thi → HTML · v5</h1>
+<h1>🔧 Tool chuyển đổi đề thi → HTML · v6</h1>
 <div class="guide">
   📋 <strong>Cách dùng:</strong> ① Dán nội dung file đề (ch.html) + file đáp án (da.html) → ② Chọn preset điểm → ③ Bấm "🔄 Chuyển đổi" → ④ Xem Debug log (<strong>phải hết dòng đỏ</strong>) → ⑤ "📋 Copy HTML" rồi dán vào form "Thêm Đề" trên web.<br>
   🖼️ <strong>Hỗ trợ ảnh</strong>: dán thẻ <code>&lt;img src="https://..."&gt;</code> trực tiếp vào câu hỏi hoặc đáp án. Tool sẽ <strong>tự bỏ style/width/height</strong> để app chính áp CSS căn giữa chuẩn.<br>
-  ✨ <strong>Thẻ cho phép</strong>: <code>&lt;img&gt;</code>, <code>&lt;br&gt;</code>, <code>&lt;sub&gt;</code>, <code>&lt;sup&gt;</code>, <code>&lt;b&gt;</code>, <code>&lt;i&gt;</code>, <code>&lt;u&gt;</code>, <code>&lt;em&gt;</code>, <code>&lt;strong&gt;</code>, <code>&lt;span&gt;</code>, <code>&lt;figure&gt;</code>, <code>&lt;figcaption&gt;</code>.
+  ✨ <strong>Thẻ cho phép</strong>: <code>&lt;img&gt;</code>, <code>&lt;br&gt;</code>, <code>&lt;sub&gt;</code>, <code>&lt;sup&gt;</code>, <code>&lt;b&gt;</code>, <code>&lt;i&gt;</code>, <code>&lt;u&gt;</code>, <code>&lt;em&gt;</code>, <code>&lt;strong&gt;</code>, <code>&lt;span&gt;</code>, <code>&lt;figure&gt;</code>, <code>&lt;figcaption&gt;</code>.<br>
+  🎯 <strong>Mẹo</strong>: Bấm "📥 Load ví dụ mẫu" → tool tự điều chỉnh preset cho khớp ví dụ.
 </div>
 
 <div class="panel">
@@ -149,7 +151,7 @@ Câu 5: 15
 const $ = (id) => document.getElementById(id);
 
 // ═══════════════════════════════════════════════════════════════
-// ⭐ v5: ESCAPE THÔNG MINH — cho phép một số thẻ HTML an toàn
+// v5: ESCAPE THÔNG MINH — cho phép một số thẻ HTML an toàn
 //   - Whitelist: img, br, sub, sup, b, i, u, em, strong, span, figure, figcaption
 //   - Tự động BỎ: onclick/onerror/... (chống XSS)
 //   - Tự động BỎ: style, width, height (để CSS app chính áp dụng chuẩn)
@@ -160,34 +162,26 @@ const ALLOWED_TAGS = 'img|br|sub|sup|b|i|u|em|strong|span|figure|figcaption';
 function safeHtml(str) {
   if (!str) return '';
   const allowedTags = [];
-  // Bước 1: Tạm thay các thẻ an toàn bằng placeholder
   let result = String(str).replace(
     new RegExp('<\\/?(?:' + ALLOWED_TAGS + ')[^>]*>', 'gi'),
     (m) => {
-      // ⭐ Chuỗi sanitize nhiều bước
       let safe = m
-        // Bỏ các sự kiện on* (onclick, onerror, onload...)
         .replace(/\son\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
-        // Bỏ javascript: trong URL
         .replace(/\s(href|src)\s*=\s*(["']?)\s*javascript:[^"'>\s]*\2/gi, '')
-        // ⭐ Bỏ style, width, height → để CSS app chính kiểm soát kích thước
         .replace(/\sstyle\s*=\s*("[^"]*"|'[^']*')/gi, '')
         .replace(/\s(width|height)\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '');
       allowedTags.push(safe);
       return `\u0001TAG${allowedTags.length - 1}\u0001`;
     }
   );
-  // Bước 2: Escape toàn bộ phần còn lại
   result = result
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
-  // Bước 3: Khôi phục thẻ an toàn
   result = result.replace(/\u0001TAG(\d+)\u0001/g, (_, i) => allowedTags[parseInt(i)]);
   return result;
 }
 
-// Escape thuần cho attribute (data-answer)
 const attr = (s) => String(s || '')
   .replace(/&/g, '&amp;')
   .replace(/"/g, '&quot;')
@@ -375,12 +369,10 @@ function convert() {
     } else {
       if (!a.val) err('Câu ' + q.num + ': thiếu đáp án trả lời ngắn.');
     }
-    // Đếm ảnh trong câu hỏi + đáp án
     const allText = q.text + ' ' + q.options.map(o => o.text).join(' ') + ' ' + q.statements.map(s => s.text).join(' ');
     const imgMatches = allText.match(/<img[^>]*>/gi);
     if (imgMatches) {
       imgCount += imgMatches.length;
-      // Đếm số thẻ img có style
       imgMatches.forEach(m => { if (/\sstyle\s*=/.test(m)) strippedStyleCount++; });
     }
   });
@@ -398,7 +390,37 @@ function convert() {
 
 $('btnConvert').addEventListener('click', convert);
 $('btnClear').addEventListener('click', () => { $('inCh').value = ''; $('inDa').value = ''; $('out').value = ''; $('debug').textContent = 'Đã xóa.'; $('previewBox').innerHTML = ''; });
-$('btnSample').addEventListener('click', () => { $('inCh').value = $('sampleCh').textContent.trim(); $('inDa').value = $('sampleDa').textContent.trim(); updateTotal(); });
+
+// ⭐ v6: Load ví dụ mẫu + TỰ ĐỘNG ĐIỀU CHỈNH PRESET CHO KHỚP
+$('btnSample').addEventListener('click', () => {
+  const chText = $('sampleCh').textContent.trim();
+  const daText = $('sampleDa').textContent.trim();
+  $('inCh').value = chText;
+  $('inDa').value = daText;
+
+  // ⭐ Đếm số câu trong ví dụ mẫu để set preset
+  const qs = parseQuestions(chText);
+  const cnt = { choice: 0, truefalse: 0, short: 0 };
+  qs.forEach(q => cnt[q.type]++);
+
+  // Điểm hợp lý cho ví dụ mẫu: TN 1đ, Đ/S 2đ, TLN 2đ → tổng đẹp
+  // Hoặc: TN 0.25đ, Đ/S 1đ, TLN 0.5đ (giống đề 7đ)
+  // Ta dùng: TN 0.5đ, Đ/S 2đ, TLN 1đ để tổng cũng dễ nhìn
+  $('nI').value = cnt.choice;
+  $('pI').value = cnt.choice > 0 ? 0.5 : 0;
+  $('nII').value = cnt.truefalse;
+  $('pII').value = cnt.truefalse > 0 ? 2 : 0;
+  $('nIII').value = cnt.short;
+  $('pIII').value = cnt.short > 0 ? 1 : 0;
+  updateTotal();
+
+  const total = cnt.choice * 0.5 + cnt.truefalse * 2 + cnt.short * 1;
+  $('debug').innerHTML =
+    '<span class="info">✅ Đã load ví dụ mẫu (' + cnt.choice + ' câu TN, ' + cnt.truefalse + ' câu Đ/S, ' + cnt.short + ' câu TLN).</span><br>' +
+    '<span class="info">⚙️ Tự động điều chỉnh preset cho khớp: ' + cnt.choice + '-' + cnt.truefalse + '-' + cnt.short + '.</span><br>' +
+    '<span class="info">📊 Tổng điểm: ' + (Math.round(total * 100) / 100).toFixed(2) + 'đ (TN 0.5đ × ' + cnt.choice + ' + Đ/S 2đ × ' + cnt.truefalse + ' + TLN 1đ × ' + cnt.short + ').</span><br>' +
+    '👉 Bấm <strong>"🔄 Chuyển đổi"</strong> để tiếp tục.';
+});
 
 // ⭐ PREVIEW — render MathJax
 $('btnPreview').addEventListener('click', () => {
