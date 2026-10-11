@@ -1,0 +1,430 @@
+/* ═══════════════════════════════════════════════════
+   MOBILE OPTIMIZATION — max-width: 640px
+   ═══════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+
+  /* ─── BASE ─────────────────────────────────── */
+  body { font-size: 15px; }
+  h1 { font-size: 17px; }
+  h2 { font-size: 17px; }
+  h3 { font-size: 15px; }
+
+  /* ─── HEADER ──────────────────────────────── */
+  header {
+    padding: 12px 14px;
+    position: relative;
+  }
+  header h1 {
+    font-size: 16px;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  header .user-info {
+    width: 100%;
+    justify-content: space-between;
+  }
+  #userLabel {
+    font-size: 12px;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+  }
+
+  /* ─── CONTAINER ──────────────────────────── */
+  .container { padding: 12px 10px; }
+
+  /* ─── TABS — scroll ngang ────────────────── */
+  #mainTabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-bottom: 14px;
+    padding-bottom: 0;
+  }
+  .tab-btn {
+    padding: 10px 16px;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  /* ─── SEARCH BAR — dọc ──────────────────── */
+  .search-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+    gap: 8px;
+  }
+  .search-bar input[type="text"],
+  .search-bar select {
+    width: 100%;
+    min-width: 0;
+    font-size: 16px;
+    padding: 12px;
+  }
+  .search-bar input[type="text"] { order: -1; }
+  .search-bar .count { text-align: center; font-size: 12px; }
+
+  /* ─── BUTTONS — vùng chạm ≥ 44px ────────── */
+  .btn { min-height: 44px; padding: 12px 18px; font-size: 15px; }
+  .btn-sm { min-height: 40px; padding: 10px 14px; font-size: 14px; }
+  .btn-icon { width: 44px; height: 44px; font-size: 18px; }
+  .modal-close-x { width: 40px; height: 40px; }
+
+  /* ─── CARDS ──────────────────────────────── */
+  .card { padding: 14px; border-radius: 10px; margin-bottom: 12px; }
+
+  /* ─── LESSON BLOCKS ──────────────────────── */
+  .lesson-header { padding: 14px 16px; }
+  .lesson-header h3 { font-size: 15px; }
+  .lesson-header .lesson-desc { font-size: 12px; }
+
+  .assignment-row {
+    padding: 14px 16px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .assignment-row .a-info { min-width: 0; }
+  .assignment-row .a-title { font-size: 14px; gap: 6px; }
+  .assignment-row .a-meta { font-size: 12px; }
+  .assignment-row .a-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+  .assignment-row .a-actions .btn { flex: 1; }
+
+  /* ─── MODALS — FULL SCREEN ──────────────── */
+  .modal-overlay {
+    padding: 0;
+    align-items: stretch;
+  }
+  .modal, .modal-large, .modal-xl {
+    width: 100%;
+    max-width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    padding: 16px;
+    animation: slideUpMobile 0.25s;
+  }
+  @keyframes slideUpMobile {
+    from { opacity: 0; transform: translateY(100%); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .modal h2 {
+    position: sticky;
+    top: 0;
+    background: #FFF;
+    padding: 8px 0;
+    margin-bottom: 14px;
+    z-index: 10;
+    font-size: 17px;
+  }
+  .modal-actions {
+    position: sticky;
+    bottom: 0;
+    background: #FFF;
+    padding: 12px 0 0;
+    margin-top: 20px;
+    border-top: 1px solid var(--c-border-light);
+    flex-direction: column-reverse;
+    z-index: 5;
+  }
+  .modal-actions .btn { width: 100%; }
+
+  /* ─── FORM INPUTS — tránh iOS zoom ──────── */
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    font-size: 16px;
+    padding: 12px 14px;
+  }
+
+  /* ─── CLASS PICKER (a + số) ─────────────── */
+  .class-picker { flex-direction: column; gap: 8px; }
+  .class-picker select { width: 100%; font-size: 16px; }
+  .class-picker .class-input-wrap input { font-size: 16px; }
+
+  /* ─── CLASS GRID ────────────────────────── */
+  .class-grid-body {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 10px;
+    gap: 8px;
+    max-height: 400px;
+  }
+  .class-checkbox {
+    padding: 12px 10px;
+    min-height: 52px;
+  }
+  .class-checkbox input[type="checkbox"] { width: 22px; height: 22px; }
+  .class-checkbox .cb-name { font-size: 13px; }
+  .class-checkbox .cb-count { font-size: 11px; }
+
+  .class-grid-tab {
+    padding: 12px 10px;
+    font-size: 13px;
+    min-height: 48px;
+  }
+
+  .grade-all-checkbox {
+    padding: 14px 16px;
+    font-size: 14px;
+    min-height: 56px;
+  }
+  .grade-all-checkbox input[type="checkbox"] { width: 22px; height: 22px; }
+
+  .class-chip { font-size: 13px; }
+  .class-chip .chip-remove { width: 22px; height: 22px; font-size: 14px; }
+
+  /* ─── SEARCHABLE SELECT → BOTTOM SHEET ─── */
+  .searchable-select .ss-dropdown {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 75vh;
+    border-radius: 16px 16px 0 0;
+    z-index: 2000;
+    box-shadow: 0 -8px 24px rgba(0,0,0,0.2);
+  }
+  .searchable-select .ss-search { font-size: 16px; padding: 14px; }
+  .searchable-select .ss-option { padding: 14px 20px; font-size: 15px; min-height: 48px; }
+  .searchable-select .ss-clear { width: 32px; height: 32px; right: 38px; }
+
+  /* ─── NOTIFICATION BANNERS ──────────────── */
+  .notification-banner {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+  .notification-banner .nb-icon { font-size: 20px; }
+  .notification-banner .nb-title { font-size: 14px; }
+  .notification-banner .nb-content { font-size: 13px; }
+  .notification-banner .nb-close { width: 36px; height: 36px; }
+
+  /* ─── QUIZ OVERLAY ──────────────────────── */
+  #countdownOverlay { padding: 0; }
+  #countdownOverlay .quiz-header {
+    border-radius: 0;
+    padding: 10px 12px;
+    margin-bottom: 0;
+    gap: 8px;
+  }
+  #countdownOverlay .quiz-header strong { font-size: 14px; }
+  #countdownOverlay .quiz-header .sub { font-size: 11px; }
+  #countdownOverlay .timer-box {
+    font-size: 18px;
+    padding: 8px 14px;
+    min-width: 85px;
+  }
+  #quizFrameContainer { border-radius: 0; border: none; }
+
+  /* ─── SUBMISSIONS / DETAIL ──────────────── */
+  .submission { padding: 12px; }
+  .detail-header {
+    padding: 16px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .detail-header .score-box { width: 100%; padding: 12px; }
+  .detail-header .score-box .score { font-size: 28px; }
+
+  .question-detail { padding: 12px; }
+  .option-row {
+    padding: 10px 12px;
+    font-size: 13px;
+    flex-wrap: wrap;
+  }
+  .option-row .mark {
+    width: 100%;
+    text-align: right;
+    margin-top: 4px;
+    margin-left: 0;
+  }
+  .tf-row-detail {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .tf-row-detail .answers {
+    width: 100%;
+    justify-content: space-between;
+    font-size: 13px;
+  }
+
+  /* ─── STATS ─────────────────────────────── */
+  .stats-summary { padding: 12px; font-size: 13px; }
+  .stats-summary .item { display: block; margin: 4px 0; }
+
+  .stats-filters {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+  }
+  .stats-filters > * { width: 100%; }
+  .stats-filters select,
+  .stats-filters input[type="text"] { font-size: 16px; width: 100%; }
+
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+  }
+  .filter-bar select,
+  .filter-bar input[type="text"] { width: 100%; font-size: 16px; }
+
+  /* ─── TREE ──────────────────────────────── */
+  .tree-header { padding: 14px 16px; min-height: 56px; }
+  .tree-header .tree-title { font-size: 14px; }
+  .tree-header .count-badge { font-size: 11px; padding: 2px 8px; }
+
+  .student-row,
+  .assignment-item,
+  .notif-item {
+    padding: 14px 16px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .assignment-item .a-actions,
+  .notif-item .n-actions,
+  .student-row > .btn {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .assignment-item .a-actions .btn { flex: 1; min-width: 0; }
+
+  .lesson-tree-header { padding: 14px 16px; }
+  .lesson-tree-header .lt-name { font-size: 14px; }
+  .lesson-tree-header .lt-count { font-size: 11px; }
+
+  .lesson-tree-row {
+    padding: 14px 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .lesson-tree-row .ltr-info { min-width: calc(100% - 46px); }
+  .lesson-tree-row .ltr-badges { order: 3; }
+  .lesson-tree-row .ltr-actions { order: 4; margin-left: auto; }
+  .btn-icon-edit,
+  .btn-icon-danger { width: 44px; height: 44px; }
+
+  /* ─── TOAST ─────────────────────────────── */
+  #toast {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    max-width: none;
+    text-align: center;
+  }
+
+  /* ─── VERIFY BANNER ─────────────────────── */
+  #verifyBanner {
+    padding: 12px 16px;
+    font-size: 13px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .verify-actions { display: flex; gap: 8px; }
+  .verify-actions .btn { flex: 1; }
+
+  /* ─── HTML PREVIEW ──────────────────────── */
+  .html-preview { max-height: 300px; padding: 12px; }
+  .html-preview .question { padding: 10px; }
+
+  /* ─── IFRAME ────────────────────────────── */
+  #htmlFrame { height: 75vh; }
+
+  /* ═══════════════════════════════════════════
+     ⭐ TAB KẾT QUẢ HS — Chips + Nhóm bài học
+     ═══════════════════════════════════════════ */
+
+  /* Chips lọc */
+  .my-chip {
+    padding: 10px 14px;
+    font-size: 13px;
+    min-height: 44px;
+    flex: 1 0 auto;
+    justify-content: center;
+  }
+
+  /* Header nhóm bài học */
+  .my-lesson-header {
+    padding: 12px 14px !important;
+    gap: 8px;
+  }
+  .my-lesson-header strong {
+    font-size: 14px;
+  }
+  .my-lesson-header > div:last-child {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* Card 1 đề */
+  .my-assignment-header {
+    padding: 12px 14px !important;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .my-assignment-header > div:first-child {
+    width: 100%;
+  }
+  .my-assignment-header > div:last-child {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .my-assignment-header .expand-text {
+    display: inline;
+  }
+  .my-assignment-header .btn-sm {
+    flex: 1;
+  }
+
+  /* Body các lần làm */
+  .my-subs-body {
+    padding: 10px !important;
+  }
+
+  /* Search input trong tab Kết quả */
+  #mySearchInput {
+    font-size: 16px !important;
+  }
+
+  /* Nút Mở hết / Thu gọn */
+  #myExpandAllBtn,
+  #myCollapseAllBtn {
+    flex: 1;
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   TABLET — 641px → 900px
+   ═══════════════════════════════════════════════════ */
+@media (min-width: 641px) and (max-width: 900px) {
+  .container { padding: 20px 16px; }
+  .modal { max-width: 90%; }
+  .class-grid-body { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ═══════════════════════════════════════════════════
+   TOUCH DEVICE — active states
+   ═══════════════════════════════════════════════════ */
+@media (hover: none) and (pointer: coarse) {
+  .btn:active { transform: scale(0.96); }
+  .tab-btn:active { background: var(--c-primary-light); }
+  .class-checkbox:active { background: var(--c-bg-soft); }
+  .tree-header:active,
+  .lesson-header:active { filter: brightness(0.94); }
+  .my-lesson-header:active { filter: brightness(0.94); }
+  .my-assignment-header:active { background: #F5F5DC !important; }
+  .my-chip:active { transform: scale(0.96); }
+}
