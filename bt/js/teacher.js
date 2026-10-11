@@ -3,7 +3,7 @@ import {
   query, where, getDoc, setDoc, serverTimestamp, writeBatch
 } from './firebase-init.js';
 import { state } from './state.js';
-import { $, show, hide, esc, toast, fmtDate, fmtDuration, getGradeFromClass, mapError, totalPoints, typesetMath } from './utils.js';
+import { $, show, hide, esc, toast, fmtDate, fmtDuration, getGradeFromClass, mapError, totalPoints, typesetMath, applyShuffle } from './utils.js';
 import { parseQuestionsHtml, getPublicQuestions, renderReviewHtml } from './quiz.js';
 import {
   loadAvailableClasses, bindClassGridEvents, bindEditClassGridEvents,
@@ -51,7 +51,6 @@ function getDisplayName(s) {
 async function getAnswerKey(assignmentId) {
   if (_keyCache[assignmentId] !== undefined) return _keyCache[assignmentId];
 
-  // (1) Đọc subcollection answerKey
   try {
     const s = await getDoc(doc(db, 'assignments', assignmentId, 'answerKey', 'key'));
     if (s.exists()) {
@@ -65,7 +64,6 @@ async function getAnswerKey(assignmentId) {
     console.warn('[answerKey] subcollection read failed:', e);
   }
 
-  // (2) Fallback parse từ field questionsHtml trên parent (chỉ GV đọc được)
   try {
     const aSnap = await getDoc(doc(db, 'assignments', assignmentId));
     if (aSnap.exists()) {
@@ -223,7 +221,7 @@ export function renderTeacherTab() {
       <input type="hidden" id="addMode" value="inline" />
     </div>
     <div id="inlineFields">
-      <div class="alert alert-info">💡 Dán HTML từ tool ccde2. Đáp án sẽ được <strong>tách ẩn</strong> ngay trên máy cô.</div>
+      <div class="alert alert-info">💡 Dán HTML từ tool ccde2. Đáp án sẽ được <strong>tách ẩn</strong> ngay trên máy thầy.</div>
       <div class="form-group">
         <label>📋 Dán HTML câu hỏi</label>
         <textarea id="addQuestionsHtml" placeholder='<div class="question" data-id="q1"...></div>' style="min-height: 250px; font-family: monospace; font-size: 12px;"></textarea>
@@ -236,6 +234,18 @@ export function renderTeacherTab() {
       <div class="row">
         <div class="form-group" style="flex:1;"><label>⏱ Thời gian (phút)</label><input type="number" id="addQuizDuration" value="25" min="1" max="180" /></div>
         <div class="form-group" style="flex:1;"><label>Số lượt tối đa</label><input type="number" id="addQuizMaxAttempts" value="3" min="1" max="10" /></div>
+      </div>
+      <!-- ⭐ CHECKBOX XÁO TRỘN -->
+      <div class="form-group" style="padding:12px; background:#F5F5DC; border-radius:8px; border-left:4px solid #8B5A2B;">
+        <label class="toggle-switch" style="font-size:15px;">
+          <input type="checkbox" id="addShuffleToggle" checked />
+          <span class="toggle-slider"></span>
+          <span style="font-weight:600;">🔀 Xáo trộn câu hỏi & đáp án</span>
+        </label>
+        <div class="hint" style="margin-top:8px; color:#555;">
+          💡 <strong>BẬT</strong> (mặc định): mỗi lượt làm HS sẽ thấy thứ tự khác nhau — chống gian lận.<br>
+          💡 <strong>TẮT</strong>: giữ nguyên thứ tự gốc — dùng khi đề có câu kiểu <em>"Cả A và B đều đúng"</em> hoặc <em>"Đáp án câu trên là A"</em>.
+        </div>
       </div>
     </div>
     <div id="externalFields" class="hidden">
@@ -791,9 +801,14 @@ async function addAssignment() {
   if (!assignedAllGrade && assignedClasses.length === 0 && assignedTo.length === 0) {
     if (!confirm('⚠️ Bạn KHÔNG giao đề cho ai cả.\n\nĐề sẽ bị "treo".\n\nTiếp tục?')) return;
   }
+  // ⭐ Đọc giá trị checkbox xáo trộn (mặc định BẬT)
+  const shuffleEl = $('addShuffleToggle');
+  const shuffle = shuffleEl ? shuffleEl.checked : true;
+
   const payload = {
     grade, lessonId: lessonId || null, title, mode, deadline,
     hidden: false,
+    shuffle,
     lessonHidden: lesson ? lesson.hidden === true : false,
     teacherId: state.currentUser.uid,
     assignedAllGrade, assignedClasses, assignedTo, assignedEmails,
@@ -822,7 +837,8 @@ async function addAssignment() {
         toast('⚠️ Đã lưu đề nhưng CHƯA lưu được đáp án. Cần kiểm tra Firestore Rules cho answerKey.', 'error');
       }
       let classMsg = assignedAllGrade ? `cho CẢ KHỐI ${grade}` : assignedClasses.length ? `cho ${assignedClasses.length} lớp` : assignedTo.length ? `cho ${assignedTo.length} HS` : ' (chưa giao ai)';
-      toast(`✅ Đã thêm đề${classMsg} — ${questions.length} câu, đáp án đã ẩn`, 'success');
+      const shuffleMsg = shuffle ? '🔀 có xáo trộn' : '📌 giữ nguyên thứ tự';
+      toast(`✅ Đã thêm đề${classMsg} — ${questions.length} câu, ${shuffleMsg}`, 'success');
     } else {
       const externalUrl = $('addExternalUrl').value.trim();
       if (!externalUrl) { toast('Nhập URL file', 'error'); return; }
@@ -836,6 +852,8 @@ async function addAssignment() {
     $('addTitle').value = ''; $('addQuestionsHtml').value = '';
     $('addExternalUrl').value = ''; $('addExternalDesc').value = '';
     $('addDeadline').value = ''; $('addAssignEmails').value = '';
+    // Reset checkbox về mặc định BẬT
+    if (shuffleEl) shuffleEl.checked = true;
     hide($('questionsPreview'));
     clearLessonSelection();
     resetClassGrid('assign');
@@ -1238,7 +1256,6 @@ function renderTeacherAssignmentsList() {
       if (icon) icon.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(-90deg)';
     });
   });
-  // PUBLISH = chấm lại tự động rồi mới công bố
   wrap.querySelectorAll('[data-publish]').forEach(btn => {
     btn.addEventListener('click', async () => {
       const aId = btn.dataset.publish;
@@ -1268,8 +1285,6 @@ function renderTeacherAssignmentsList() {
       } catch (err) { toast(mapError(err), 'error'); }
     });
   });
-  // ⭐ ĐÃ BỎ NÚT "Điểm cao nhất"
-  // Nút 🔑 Đáp án
   wrap.querySelectorAll('[data-update-key]').forEach(btn => {
     btn.addEventListener('click', async () => {
       const a = _teacherAsgCache.find(x => x.id === btn.dataset.updateKey);
@@ -1332,7 +1347,6 @@ function renderTeacherAssignmentsList() {
       } catch (err) { toast(mapError(err), 'error'); }
     });
   });
-  // Nút Chấm
   wrap.querySelectorAll('[data-grade-sub]').forEach(btn => {
     btn.addEventListener('click', async (e) => {
       e.stopPropagation();
@@ -1359,9 +1373,12 @@ function renderAssignmentItem(a) {
   const modeBadge = isExternal ? '<span class="badge badge-external">🔗 Luyện tập</span>' : '<span class="badge badge-inline">🎯 Đề có điểm</span>';
   const hiddenBadge = a.hidden ? '<span class="badge badge-hidden">🙈 Đã ẩn</span>' : '';
   const lessonHiddenBadge = lesson?.hidden === true ? '<span class="badge" style="background:#999;color:#FFF;">📖 Bài ẩn</span>' : '';
+  // ⭐ Badge xáo trộn
+  const shuffleBadge = (!isExternal && a.shuffle === false)
+    ? '<span class="badge" style="background:#999;color:#FFF;" title="Đề này giữ nguyên thứ tự gốc, không xáo trộn">📌 Không xáo</span>'
+    : '';
   const publishBtn = (!isExternal && a._submittedCount > 0)
     ? `<button class="btn btn-secondary btn-sm" data-publish="${a.id}">📢 Công bố (${a._submittedCount})</button>` : '';
-  // ⭐ ĐÃ BỎ NÚT "Điểm cao nhất" — chỉ giữ nút 🔑 Đáp án
   const updateKeyBtn = (!isExternal && a.type === 'quiz')
     ? `<button class="btn btn-light btn-sm" data-update-key="${a.id}" title="Nạp / cập nhật đáp án để chấm tự động">🔑 Đáp án</button>` : '';
   let classBadges = '';
@@ -1419,7 +1436,7 @@ function renderAssignmentItem(a) {
     <div class="space-between">
       <div style="flex:1; min-width:200px;">
         <h3 style="margin-bottom:6px;">📝 ${esc(a.title)}</h3>
-        <div class="meta">Khối ${esc(a.grade)} ${isExternal ? `• ${extCount} lượt` : `• ${a._subCount} bài`} ${modeBadge}${hiddenBadge}${lessonHiddenBadge}</div>
+        <div class="meta">Khối ${esc(a.grade)} ${isExternal ? `• ${extCount} lượt` : `• ${a._subCount} bài`} ${modeBadge}${shuffleBadge}${hiddenBadge}${lessonHiddenBadge}</div>
         <div style="margin-top:6px;">${classBadges}</div>
       </div>
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
@@ -1444,7 +1461,7 @@ function renderAssignmentItem(a) {
 }
 
 // ══════════════════════════════════════════
-// GRADE MODAL — tự chấm + typeset + báo lỗi rõ
+// GRADE MODAL
 // ══════════════════════════════════════════
 async function showGradeModal(s, a) {
   try {
@@ -1566,14 +1583,15 @@ async function showGradeModal(s, a) {
   }
 }
 
-// ⭐ Hiển thị câu hỏi + đáp án HS chọn (khi chưa có đáp án để chấm tự động)
+// ⭐ Hiển thị câu hỏi + đáp án HS chọn (khi chưa có đáp án) — có áp shuffleSeed
 function renderStudentAnswersOnly(sub, questions) {
   if (!sub || !questions?.length) return '';
+  const ordered = applyShuffle(questions, sub.shuffleSeed || 0);
   const answers = sub.answers || {};
-  let html = `<div class="alert alert-info">📋 Đang hiển thị <strong>${questions.length} câu</strong> và đáp án HS đã chọn. Nạp đáp án (🔑) để chấm tự động.</div>`;
-  const part1 = questions.filter(q => q.type === 'choice');
-  const part2 = questions.filter(q => q.type === 'truefalse');
-  const part3 = questions.filter(q => q.type === 'short');
+  let html = `<div class="alert alert-info">📋 Đang hiển thị <strong>${ordered.length} câu</strong> và đáp án HS đã chọn. Nạp đáp án (🔑) để chấm tự động.</div>`;
+  const part1 = ordered.filter(q => q.type === 'choice');
+  const part2 = ordered.filter(q => q.type === 'truefalse');
+  const part3 = ordered.filter(q => q.type === 'short');
   if (part1.length > 0) {
     html += `<div class="section-header part-1">I. Trắc nghiệm (${part1.length})</div>`;
     part1.forEach((q, i) => {
@@ -1627,7 +1645,7 @@ function renderStudentAnswersOnly(sub, questions) {
 }
 
 // ══════════════════════════════════════════
-// NẠP / CẬP NHẬT ĐÁP ÁN CHO ĐỀ CŨ
+// NẠP / CẬP NHẬT ĐÁP ÁN
 // ══════════════════════════════════════════
 async function openUpdateAnswerKeyModal(assignment) {
   const existing = $('updateKeyModal');
@@ -1689,7 +1707,7 @@ async function openUpdateAnswerKeyModal(assignment) {
 }
 
 // ══════════════════════════════════════════
-// EDIT ASSIGNMENT MODAL
+// EDIT ASSIGNMENT MODAL — có checkbox xáo trộn
 // ══════════════════════════════════════════
 async function openEditAssignmentModal(assignment) {
   editingAssignmentId = assignment.id;
@@ -1702,6 +1720,7 @@ async function openEditAssignmentModal(assignment) {
   const subCount = assignment._subCount || 0;
   const gradedCount = assignment._gradedCount || 0;
   const assignedToCount = (assignment.assignedTo || []).length;
+  const shuffleValue = assignment.shuffle !== false;
   const existing = $('editAssignmentModal');
   if (existing) existing.remove();
   const modal = document.createElement('div');
@@ -1733,19 +1752,25 @@ async function openEditAssignmentModal(assignment) {
   <div class="row">
     <div class="form-group" style="flex:1;"><label>⏱ Thời gian (phút)</label><input type="number" id="editAssDuration" value="${assignment.duration || 25}" min="1" max="180" /></div>
     <div class="form-group" style="flex:1;"><label>Số lượt tối đa</label><input type="number" id="editAssMaxAttempts" value="${assignment.maxAttempts || 3}" min="1" max="10" /></div>
+  </div>
+  <!-- ⭐ CHECKBOX XÁO TRỘN -->
+  <div class="form-group" style="padding:12px; background:#F5F5DC; border-radius:8px; border-left:4px solid #8B5A2B;">
+    <label class="toggle-switch" style="font-size:15px;">
+      <input type="checkbox" id="editAssShuffle" ${shuffleValue ? 'checked' : ''} />
+      <span class="toggle-slider"></span>
+      <span style="font-weight:600;">🔀 Xáo trộn câu hỏi & đáp án</span>
+    </label>
+    <div class="hint" style="margin-top:8px; color:#555;">
+      💡 <strong>BẬT</strong>: mỗi lượt làm HS thấy thứ tự khác nhau — chống gian lận.<br>
+      💡 <strong>TẮT</strong>: giữ nguyên thứ tự gốc — dùng khi đề có câu kiểu <em>"Cả A và B đều đúng"</em>.
+    </div>
+    ${subCount > 0 ? '<div class="hint" style="margin-top:6px; color:#c0392b;">⚠️ Đề đã có bài làm → đổi xáo trộn CHỈ ảnh hưởng các lượt làm MỚI.</div>' : ''}
   </div>` : `
   <div class="row">
     <div class="form-group" style="flex:1;"><label>Số lần mở tối đa</label><input type="number" id="editAssMaxAttempts" value="${assignment.maxAttempts || 0}" min="0" max="100" /></div>
   </div>`}
-  <div class="row">
+    <div class="row">
     <div class="form-group" style="flex:1;"><label>Hạn nộp</label><input type="date" id="editAssDeadline" value="${esc(assignment.deadline || '')}" /></div>
-    <div class="form-group" style="flex:1; display:flex; align-items:end;">
-      <label class="toggle-switch" style="padding:10px 0;">
-        <input type="checkbox" id="editAssHidden" ${assignment.hidden ? 'checked' : ''} />
-        <span class="toggle-slider"></span>
-        <span style="font-weight:600;">🙈 Ẩn đề</span>
-      </label>
-    </div>
   </div>
   <div class="form-group" style="margin-top:14px;">
     <label class="form-label-bold">🎯 Giao bài cho ai?</label>
@@ -1813,13 +1838,16 @@ async function openEditAssignmentModal(assignment) {
         lessonId: newLessonId || null,
         lessonHidden: newLesson ? newLesson.hidden === true : false,
         deadline: modal.querySelector('#editAssDeadline').value,
-        hidden: modal.querySelector('#editAssHidden').checked,
         assignedAllGrade: editGrid.allGrade,
         assignedClasses: editGrid.allGrade ? [] : Array.from(editGrid.selected).sort(),
         assignedTo, assignedEmails,
         updatedAt: serverTimestamp()
       };
-      if (assignment.type === 'quiz') payload.duration = Number(modal.querySelector('#editAssDuration')?.value) || 25;
+      if (assignment.type === 'quiz') {
+        payload.duration = Number(modal.querySelector('#editAssDuration')?.value) || 25;
+        const shufEl = modal.querySelector('#editAssShuffle');
+        if (shufEl) payload.shuffle = shufEl.checked;
+      }
       const newMax = Number(modal.querySelector('#editAssMaxAttempts')?.value);
       if (newMax >= 0) payload.maxAttempts = newMax;
       await updateDoc(doc(db, 'assignments', assignment.id), payload);

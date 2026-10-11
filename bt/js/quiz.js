@@ -88,6 +88,11 @@ export function getPublicQuestions(a) {
   return parseQuestionsHtml(html);
 }
 
+// ⭐ Kiểm tra đề có bật xáo trộn không (mặc định = true)
+export function shouldShuffle(a) {
+  return a?.shuffle !== false;
+}
+
 // ══════════════════════════════════════════
 // ⭐ RENDER REVIEW — nhãn A/B/C/D theo VỊ TRÍ XÁO
 // ══════════════════════════════════════════
@@ -192,7 +197,7 @@ async function finalizeOrphanSession(sub) {
 }
 
 // ══════════════════════════════════════════
-// ⭐ XỬ LÝ PHIÊN LÀM DỞ
+// XỬ LÝ PHIÊN LÀM DỞ
 // ══════════════════════════════════════════
 async function handleOrphanSession(orphan) {
   const now = Date.now();
@@ -201,7 +206,6 @@ async function handleOrphanSession(orphan) {
   const isExpired = now > orphanDeadline + 60000;
   const isStale = lastActivity > 0 && now > lastActivity + 5 * 60000;
 
-  // Case 1: Đã hết hạn → tự chốt submitted
   if (isExpired) {
     try {
       await finalizeOrphanSession(orphan);
@@ -215,7 +219,6 @@ async function handleOrphanSession(orphan) {
     }
   }
 
-  // Case 2: Bỏ dở > 5 phút không tương tác → tự huỷ
   if (isStale) {
     const minIdle = Math.round((now - lastActivity) / 60000);
     if (!confirm(
@@ -240,7 +243,6 @@ async function handleOrphanSession(orphan) {
     }
   }
 
-  // Case 3: Còn trong thời gian làm → hỏi HS
   const remainMin = Math.max(0, Math.ceil((orphanDeadline - now) / 60000));
   const startTime = orphan.startedAtMs
     ? new Date(orphan.startedAtMs).toLocaleTimeString('vi-VN')
@@ -308,11 +310,16 @@ async function openStartQuizModal(a) {
 
   state.currentQuizAssignment = a;
   const attempt = attemptsUsed + 1;
+  // ⭐ Hiển thị có/không xáo trộn trong modal
+  const shuffleOn = shouldShuffle(a);
+  const shuffleNote = shuffleOn
+    ? `<div style="margin-top:6px; font-size:12px; color:#0066CC;">🔀 Thứ tự câu hỏi & phương án xáo ngẫu nhiên mỗi lượt.</div>`
+    : `<div style="margin-top:6px; font-size:12px; color:#8B4513;">📌 Đề giữ nguyên thứ tự gốc (không xáo trộn).</div>`;
   $('startQuizInfo').innerHTML = `<div style="background:#F5F5DC; padding:12px; border-radius:6px;">
     <strong>${esc(a.title)}</strong><br>
     <span style="font-size:13px; color:#555;">Lần ${attempt}/${maxAttempts}</span>
     <div style="margin-top:10px;">⏱ ${esc(a.duration || 25)} phút</div>
-    <div style="margin-top:6px; font-size:12px; color:#0066CC;">🔀 Thứ tự câu hỏi & phương án xáo ngẫu nhiên mỗi lượt.</div>
+    ${shuffleNote}
   </div>`;
   show($('startQuizModal'));
 }
@@ -332,7 +339,10 @@ async function startQuiz() {
     if (mySubs.length >= maxAttempts) { toast('Đã hết lượt làm', 'error'); return; }
     if (mySubs.some(s => s.status === 'in_progress')) { toast('Bạn đang có phiên chưa kết thúc', 'error'); return; }
     if (a.deadline && Date.now() > new Date(a.deadline + 'T23:59:59').getTime()) { toast('Đã quá hạn nộp', 'error'); return; }
-    const shuffleSeed = randomSeed();
+
+    // ⭐ Kiểm tra xáo trộn: nếu đề TẮT xáo → seed = 0 (giữ nguyên thứ tự)
+    const doShuffle = shouldShuffle(a);
+    const shuffleSeed = doShuffle ? randomSeed() : 0;
     const questions = applyShuffle(getPublicQuestions(a), shuffleSeed);
     if (questions.length === 0) { toast('Đề không có câu hỏi hợp lệ! Báo GV nhé.', 'error'); return; }
     const duration = Number(a.duration) || 25;
@@ -346,6 +356,7 @@ async function startQuiz() {
       answer: '[Đang làm]', status: 'in_progress', duration,
       sessionId: 'sess_' + now + '_' + Math.random().toString(36).slice(2, 10),
       shuffleSeed,
+      shuffleApplied: doShuffle,
       startedAt: serverTimestamp(), startedAtMs: now,
       deadlineAt: now + duration * 60000,
       draftAnswers: {}, answers: null,
@@ -375,8 +386,7 @@ async function startQuiz() {
 }
 
 // ══════════════════════════════════════════
-// ⭐ SHOW QUIZ INLINE — nhãn A/B/C/D theo VỊ TRÍ XÁO
-//    + CSS ảnh căn giữa, giới hạn size
+// SHOW QUIZ INLINE — nhãn A/B/C/D theo VỊ TRÍ XÁO
 // ══════════════════════════════════════════
 function showQuizInline(a, questions) {
   const container = document.getElementById('quizFrameContainer');
@@ -459,37 +469,9 @@ h1 { color: #8B4513; font-size: 1.4em; text-align: center; border-bottom: 2px so
 .section-note { font-style: italic; color: #555; font-size: 13px; margin-bottom: 12px; padding-left: 4px; }
 .question { background: #F5F5F5; padding: 12px 14px; border-radius: 6px; margin-bottom: 12px; border-left: 3px solid #0066CC; }
 .q-text { font-weight: 600; margin-bottom: 8px; }
-
-/* ⭐ v2.2: Ảnh câu hỏi — căn giữa, max 400px */
-.q-text img {
-  max-width: 100%;
-  max-height: 400px;
-  width: auto;
-  height: auto;
-  display: block;
-  margin: 12px auto;
-  border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-  object-fit: contain;
-}
-/* ⭐ Ảnh trong đáp án — inline với chữ, max 80px */
-.opt img {
-  max-height: 80px;
-  width: auto;
-  vertical-align: middle;
-  margin: 2px 6px;
-  border-radius: 4px;
-}
-/* ⭐ Ảnh trong Đúng/Sai — max 70px */
-.tf-stmt img {
-  max-width: 100%;
-  max-height: 70px;
-  width: auto;
-  vertical-align: middle;
-  margin: 2px 6px;
-  border-radius: 4px;
-}
-
+.q-text img { max-width: 100%; max-height: 400px; width: auto; height: auto; display: block; margin: 12px auto; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); object-fit: contain; }
+.opt img { max-height: 80px; width: auto; vertical-align: middle; margin: 2px 6px; border-radius: 4px; }
+.tf-stmt img { max-width: 100%; max-height: 70px; width: auto; vertical-align: middle; margin: 2px 6px; border-radius: 4px; }
 .opt { display: block; padding: 8px 12px; margin: 4px 0; background: #FFF; border: 1px solid #D3D3D3; border-radius: 6px; cursor: pointer; }
 .opt:hover { background: #F5F5DC; border-color: #8B5A2B; }
 .opt input { margin-right: 8px; }
@@ -506,8 +488,6 @@ h1 { color: #8B4513; font-size: 1.4em; text-align: center; border-bottom: 2px so
 .btn-primary { background: #8B5A2B; color: #FFF; }
 .btn-primary:hover { background: #8B4513; }
 mjx-container { overflow-x: auto; max-width: 100%; }
-
-/* ⭐ v2.2: MOBILE — giảm size ảnh */
 @media (max-width: 640px) {
   body { padding: 8px; }
   .quiz-container { padding: 12px; border-radius: 0; border-left-width: 3px; padding-bottom: 90px; }
