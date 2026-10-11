@@ -143,7 +143,7 @@ export function renderReviewHtml(sub, questions) {
             <div class="stmt">${String.fromCharCode(97 + pos)}) ${st.html || esc(st.text)}</div>
             <div class="answers">
               <div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>ĐA:</strong> ${d.correct ? 'Đ' : 'S'}</div>
-              <div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>Bạn:</strong> ${d.student === true ? 'Đ' : (d.student === false ? 'S' : '(bỏ)')}</div>
+              <div class="item ${d.isCorrect ? 'correct' : 'wrong'}"><strong>HS:</strong> ${d.student === true ? 'Đ' : (d.student === false ? 'S' : '(bỏ)')}</div>
             </div>
           </div>`;
         }).join('')}
@@ -193,9 +193,6 @@ async function finalizeOrphanSession(sub) {
 
 // ══════════════════════════════════════════
 // ⭐ XỬ LÝ PHIÊN LÀM DỞ
-//   - Quá hạn → tự nộp từ draft
-//   - Bỏ dở > 5 phút → tự huỷ
-//   - Còn trong giờ → hỏi HS có muốn huỷ để làm lượt mới
 // ══════════════════════════════════════════
 async function handleOrphanSession(orphan) {
   const now = Date.now();
@@ -296,14 +293,13 @@ async function openStartQuizModal(a) {
   const mySubs = state.mySubsCache.filter(s => s.assignmentId === a.id);
   const orphan = mySubs.find(s => s.status === 'in_progress');
 
-  // ⭐ Có phiên dở → xử lý
   if (orphan) {
     const handled = await handleOrphanSession(orphan);
-    if (!handled) return; // HS chọn không huỷ, hoặc lỗi
+    if (!handled) return;
   }
 
   const maxAttempts = a.maxAttempts || 3;
-  const attemptsUsed = mySubs.length; // orphan đã bị đổi status nhưng vẫn nằm trong mảng
+  const attemptsUsed = mySubs.length;
 
   if (attemptsUsed >= maxAttempts) {
     toast(`Bạn đã dùng hết ${maxAttempts} lượt làm bài.`, 'error');
@@ -353,7 +349,7 @@ async function startQuiz() {
       startedAt: serverTimestamp(), startedAtMs: now,
       deadlineAt: now + duration * 60000,
       draftAnswers: {}, answers: null,
-      autoScore: null, autoMax: null, score: null, comment: '',
+      autoScore: null, autoMax: null, score: null, details: null, comment: '',
       submittedAt: null
     });
     hide($('startQuizModal'));
@@ -380,6 +376,7 @@ async function startQuiz() {
 
 // ══════════════════════════════════════════
 // ⭐ SHOW QUIZ INLINE — nhãn A/B/C/D theo VỊ TRÍ XÁO
+//    + CSS ảnh căn giữa, giới hạn size
 // ══════════════════════════════════════════
 function showQuizInline(a, questions) {
   const container = document.getElementById('quizFrameContainer');
@@ -462,10 +459,37 @@ h1 { color: #8B4513; font-size: 1.4em; text-align: center; border-bottom: 2px so
 .section-note { font-style: italic; color: #555; font-size: 13px; margin-bottom: 12px; padding-left: 4px; }
 .question { background: #F5F5F5; padding: 12px 14px; border-radius: 6px; margin-bottom: 12px; border-left: 3px solid #0066CC; }
 .q-text { font-weight: 600; margin-bottom: 8px; }
-img { max-width: 100%; height: auto; }
-.q-text img { max-width: 100%; border-radius: 4px; margin: 6px 0; display: block; }
-.opt img { max-height: 80px; vertical-align: middle; margin: 2px 4px; }
-.tf-stmt img { max-width: 100%; vertical-align: middle; margin: 4px 0; }
+
+/* ⭐ v2.2: Ảnh câu hỏi — căn giữa, max 400px */
+.q-text img {
+  max-width: 100%;
+  max-height: 400px;
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 12px auto;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  object-fit: contain;
+}
+/* ⭐ Ảnh trong đáp án — inline với chữ, max 80px */
+.opt img {
+  max-height: 80px;
+  width: auto;
+  vertical-align: middle;
+  margin: 2px 6px;
+  border-radius: 4px;
+}
+/* ⭐ Ảnh trong Đúng/Sai — max 70px */
+.tf-stmt img {
+  max-width: 100%;
+  max-height: 70px;
+  width: auto;
+  vertical-align: middle;
+  margin: 2px 6px;
+  border-radius: 4px;
+}
+
 .opt { display: block; padding: 8px 12px; margin: 4px 0; background: #FFF; border: 1px solid #D3D3D3; border-radius: 6px; cursor: pointer; }
 .opt:hover { background: #F5F5DC; border-color: #8B5A2B; }
 .opt input { margin-right: 8px; }
@@ -482,6 +506,8 @@ img { max-width: 100%; height: auto; }
 .btn-primary { background: #8B5A2B; color: #FFF; }
 .btn-primary:hover { background: #8B4513; }
 mjx-container { overflow-x: auto; max-width: 100%; }
+
+/* ⭐ v2.2: MOBILE — giảm size ảnh */
 @media (max-width: 640px) {
   body { padding: 8px; }
   .quiz-container { padding: 12px; border-radius: 0; border-left-width: 3px; padding-bottom: 90px; }
@@ -490,9 +516,12 @@ mjx-container { overflow-x: auto; max-width: 100%; }
   .section-note { font-size: 12px; }
   .question { padding: 10px; margin-bottom: 10px; }
   .q-text { font-size: 14px; }
+  .q-text img { max-height: 250px; margin: 8px auto; }
   .opt { padding: 12px; font-size: 14px; }
+  .opt img { max-height: 55px; }
   .tf-item { padding: 10px; flex-direction: column; gap: 8px; }
   .tf-stmt { font-size: 14px; }
+  .tf-stmt img { max-height: 50px; }
   .tf-btns { width: 100%; }
   .tf-btn { flex: 1; padding: 12px; font-size: 15px; }
   .short-answer { padding: 12px; font-size: 16px; }
@@ -590,7 +619,6 @@ function updateInlineAnsweredCount() {
   if (m) m.textContent = answered === total ? '✅ Đã trả lời hết' : `Còn ${total - answered} câu chưa trả lời`;
 }
 
-// Chỉ tính câu ĐÃ trả lời thật
 function collectInlineAnswers() {
   const iframe = document.getElementById('inlineQuizFrame');
   if (!iframe?.contentDocument) return {};
