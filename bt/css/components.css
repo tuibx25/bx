@@ -740,3 +740,82 @@ GRADE INPUTS
 .my-assignment-card:hover {
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
+
+/* ═══════════════════════════════════════════════════
+   ⭐ IMG v2.2 — Hiển thị ảnh trong đề bài
+   - Ảnh câu hỏi: căn giữa, max 400px (desktop)
+   - Ảnh đáp án/Đ-S: inline với chữ, max 80px
+   - Mobile: giảm max-height để không chiếm hết màn hình
+   ═══════════════════════════════════════════════════ */
+
+/* ── Base: ảnh không tràn khung, bo góc + đổ bóng nhẹ ── */
+.q-text img,
+.question-detail img,
+.option-row img,
+.tf-row-detail img,
+.tf-stmt img,
+.html-preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  background: #FFF;
+}
+
+/* ── Ảnh trong CÂU HỎI: căn giữa, max 400px ── */
+.question-detail .q-text img,
+.html-preview .q-text img,
+.q-text img {
+  display: block;
+  margin: 12px auto;
+  max-height: 400px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* ── Ảnh trong ĐÁP ÁN A/B/C/D: nhỏ, inline với chữ ── */
+.option-row img,
+.html-preview .opt img {
+  display: inline-block;
+  vertical-align: middle;
+  max-height: 80px;
+  width: auto;
+  margin: 2px 6px;
+  box-shadow: none;
+}
+
+/* ── Ảnh trong ĐÚNG/SAI a/b/c/d: nhỏ gọn ── */
+.tf-stmt img,
+.tf-row-detail .stmt img {
+  display: inline-block;
+  vertical-align: middle;
+  max-height: 70px;
+  width: auto;
+  margin: 2px 6px;
+  box-shadow: none;
+}
+
+/* ── Preview trong form Thêm Đề: giữ chữ căn trái, ảnh tự căn giữa ── */
+.html-preview .question {
+  text-align: left;
+}
+
+/* ═══════════════════════════════════════════════════
+   MOBILE — giảm kích thước ảnh để không chiếm hết màn
+   ═══════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  .question-detail .q-text img,
+  .html-preview .q-text img,
+  .q-text img {
+    max-height: 250px;
+    margin: 8px auto;
+  }
+  .option-row img,
+  .html-preview .opt img {
+    max-height: 55px;
+  }
+  .tf-stmt img,
+  .tf-row-detail .stmt img {
+    max-height: 50px;
+  }
+}
