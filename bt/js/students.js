@@ -13,7 +13,7 @@ import {
   getUnregisteredInRoster, getExtraUsersInClass, normalizeName
 } from './roster.js';
 
-const FIREBASE_PROJECT_ID = 'bx-vlpt';   // ⭐ ĐÃ SỬA: vlpt-bx → bx-vlpt
+const FIREBASE_PROJECT_ID = 'vlpt-bx';
 
 // ══════════════════════════════════════════
 // RENDER TAB
@@ -85,7 +85,7 @@ export function renderStudentsTab() {
   `;
 
   $('refreshStudentsBtn').addEventListener('click', loadUserManagement);
-  $('uploadRosterBtn').addEventListener('click', openRosterUploadModal);
+  $('uploadRosterBtn').addEventListener('click', () => openRosterUploadModal(''));
   ['stuFilterGrade','stuFilterVerified','stuFilterHidden','stuFilterRoster'].forEach(id => {
     $(id).addEventListener('change', renderStudentsTree);
   });
@@ -112,10 +112,8 @@ async function loadUserManagement() {
   wrap.innerHTML = '<div class="empty">Đang tải...</div>';
 
   try {
-    const [usersSnap] = await Promise.all([
-      getDocs(collection(db, 'users')),
-      loadAllRosters(true)
-    ]);
+    await loadAllRosters(true);
+    const usersSnap = await getDocs(collection(db, 'users'));
 
     state.studentsCache = usersSnap.docs.map(d => ({ id: d.id, ...d.data() }))
       .filter(u => u.role === 'student');
@@ -182,7 +180,7 @@ function renderStudentsTree() {
     );
   }
 
-  // ⭐ Filter theo trạng thái roster
+  // Filter theo trạng thái roster
   if (filterRoster === 'matched') {
     filtered = filtered.filter(u => {
       const m = matchStudentToRoster(u.name, u.class);
@@ -195,7 +193,7 @@ function renderStudentsTree() {
     });
   }
 
-  // ⭐ Sort theo STT roster (nếu có), rồi theo tên
+  // Sort theo STT roster (nếu có), rồi theo tên
   filtered.sort((a, b) => {
     const aHidden = a.hidden === true ? 1 : 0;
     const bHidden = b.hidden === true ? 1 : 0;
@@ -261,10 +259,10 @@ function renderStudentsTree() {
       const uCount = students.length - vCount;
       const hCount = students.filter(s => s.hidden === true).length;
 
-      const hasRoster = !!getRosterForClass(cls);
-      const rosterUnreg = hasRoster ? getUnregisteredInRoster(cls, state.studentsCache) : [];
-      const rosterExtra = hasRoster ? getExtraUsersInClass(cls, state.studentsCache) : [];
-      const rosterInfo = hasRoster
+      const hasRosterClass = !!getRosterForClass(cls);
+      const rosterUnreg = hasRosterClass ? getUnregisteredInRoster(cls, state.studentsCache) : [];
+      const rosterExtra = hasRosterClass ? getExtraUsersInClass(cls, state.studentsCache) : [];
+      const rosterInfo = hasRosterClass
         ? `<button class="btn btn-light btn-sm" data-view-roster="${esc(cls)}" style="margin-left:auto;">
              📋 Xem danh sách lớp
              ${rosterUnreg.length > 0 ? `<span class="badge" style="background:#c0392b; color:#FFF; margin-left:4px;">${rosterUnreg.length} chưa ĐK</span>` : ''}
@@ -373,7 +371,7 @@ function renderStudentRow(s) {
       </div>`
     : '';
 
-  // ⭐ Roster badge
+  // Roster badge
   const match = matchStudentToRoster(s.name, s.class);
   let rosterBadge = '';
   if (match === null) {
@@ -471,7 +469,6 @@ function openRosterUploadModal(prefilledClass = '') {
     if (e.target === modal) modal.remove();
   });
 
-  // Upload file → fill textarea
   modal.querySelector('#rosterFileInput').addEventListener('change', async (e) => {
     const f = e.target.files[0];
     if (!f) return;
@@ -480,7 +477,6 @@ function openRosterUploadModal(prefilledClass = '') {
     toast('✅ Đã đọc file: ' + f.name, 'success');
   });
 
-  // Preview
   modal.querySelector('#rosterPreviewBtn').addEventListener('click', () => {
     const text = modal.querySelector('#rosterTextInput').value;
     const result = parseRosterText(text);
@@ -504,7 +500,6 @@ function openRosterUploadModal(prefilledClass = '') {
     preview.innerHTML = html;
   });
 
-  // Save
   modal.querySelector('#rosterSaveBtn').addEventListener('click', async () => {
     const className = modal.querySelector('#rosterClassInput').value.trim();
     const text = modal.querySelector('#rosterTextInput').value;
@@ -633,7 +628,7 @@ function openRosterViewModal(className) {
 }
 
 // ══════════════════════════════════════════
-// ẨN / BỎ ẨN HS (giữ nguyên từ trước)
+// ẨN / BỎ ẨN HS
 // ══════════════════════════════════════════
 async function hideStudent(student) {
   const name = student.name || student.email;

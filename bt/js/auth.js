@@ -17,7 +17,7 @@ let justRegistered = false;
 let pendingProfile = null;
 
 // ══════════════════════════════════════════
-// HELPER: Kiểm tra tên có phải là email / rỗng
+// HELPER
 // ══════════════════════════════════════════
 function isNameEmailLike(name, email) {
   if (!name) return true;
@@ -33,7 +33,6 @@ function isNameEmailLike(name, email) {
 // INIT AUTH
 // ══════════════════════════════════════════
 export function initAuth({ onLogin, onLogout }) {
-  // AUTH BUTTON
   $('authBtn')?.addEventListener('click', () => {
     if (state.currentUser) {
       signOut(auth).then(() => toast('Đã đăng xuất'));
@@ -42,20 +41,17 @@ export function initAuth({ onLogin, onLogout }) {
     }
   });
 
-  // MODAL CLOSE
   $('authCancelBtn')?.addEventListener('click', () => hide($('authModal')));
   $('authModalCloseX')?.addEventListener('click', () => hide($('authModal')));
   $('authModal')?.addEventListener('click', (e) => {
     if (e.target === $('authModal')) hide($('authModal'));
   });
 
-  // TOGGLE LOGIN/REGISTER
   $('toggleAuthMode')?.addEventListener('click', (e) => {
     e.preventDefault();
     openAuthModal(authMode === 'login' ? 'register' : 'login');
   });
 
-  // FORGOT PASSWORD
   $('forgotPasswordLink')?.addEventListener('click', (e) => {
     e.preventDefault();
     showForgotForm();
@@ -69,7 +65,6 @@ export function initAuth({ onLogin, onLogout }) {
     if (e.key === 'Enter') { e.preventDefault(); handleForgotPassword(); }
   });
 
-  // AUTH SUBMIT
   $('authSubmitBtn')?.addEventListener('click', handleAuthSubmit);
   $('authPassword')?.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && authMode === 'login') {
@@ -78,26 +73,18 @@ export function initAuth({ onLogin, onLogout }) {
     }
   });
 
-  // PREVIEW CLASS NAME
   $('authGrade')?.addEventListener('change', updateAuthClassPreview);
   $('authClassNum')?.addEventListener('input', updateAuthClassPreview);
 
-  // ══════════════════════════════════════════
-  // AUTH STATE CHANGE — ⭐ v3.1: guard sau loadUserProfile
-  // ══════════════════════════════════════════
   onAuthStateChanged(auth, async (user) => {
     state.currentUser = user;
     stopVerifyWatch();
     if (user) {
       await loadUserProfile(user);
-
-      // ⭐ v3.1: Nếu HS bị ẩn, loadUserProfile đã gọi signOut(auth)
-      //          và KHÔNG set state.currentProfile → không chạy tiếp
       if (!state.currentProfile) {
         console.log('🚫 User bị ẩn / profile không tồn tại → bỏ qua init UI');
         return;
       }
-
       await loadGlobalSettings();
       updateUIForUser();
       if (onLogin) await onLogin(user, state.currentProfile, state.globalSettings);
@@ -111,7 +98,6 @@ export function initAuth({ onLogin, onLogout }) {
     emit(user ? EVENTS.USER_LOGIN : EVENTS.USER_LOGOUT, { user, profile: state.currentProfile });
   });
 
-  // VERIFY EMAIL — nút thủ công
   $('resendVerifyBtn')?.addEventListener('click', async () => {
     if (!state.currentUser) return;
     try {
@@ -132,7 +118,6 @@ export function initAuth({ onLogin, onLogout }) {
   });
 }
 
-// ⭐ Theo dõi xác thực bằng sự kiện
 function startVerifyWatch() {
   stopVerifyWatch();
   const check = async () => {
@@ -165,11 +150,7 @@ async function markVerified() {
 }
 
 // ══════════════════════════════════════════
-// ⭐ v3.1: LOAD USER PROFILE — chặn HS bị ẩn
-//   1. Đọc doc user
-//   2. Nếu hidden === true và KHÔNG phải GV → signOut ngay
-//   3. Alert thông báo kèm lý do (nếu GV có nhập)
-//   4. Return sớm (không set state.currentProfile)
+// LOAD USER PROFILE
 // ══════════════════════════════════════════
 async function loadUserProfile(user) {
   const isTeacherEmail = user.email.toLowerCase() === TEACHER_EMAIL.toLowerCase();
@@ -178,31 +159,24 @@ async function loadUserProfile(user) {
   if (snap.exists()) {
     const data = snap.data();
 
-    // ⭐ v3.1: Chặn HS đã bị ẩn
     if (data.hidden === true && !isTeacherEmail) {
       const hiddenAt = data.hiddenAt?.toDate?.() || null;
       const hiddenReason = (data.hiddenReason || '').trim();
 
-      // Đăng xuất ngay lập tức
       try { await signOut(auth); } catch (e) {}
       hide($('authModal'));
       hide($('verifyBanner'));
 
-      // Đợi 200ms để onAuthStateChanged xử lý xong, rồi hiện alert
       setTimeout(() => {
         let msg = '🚫 TÀI KHOẢN ĐÃ BỊ TẠM ẨN\n\n';
         msg += `Tài khoản "${user.email}" đã bị giáo viên tạm ẩn khỏi hệ thống.\n\n`;
-        if (hiddenAt) {
-          msg += `📅 Thời gian ẩn: ${hiddenAt.toLocaleString('vi-VN')}\n`;
-        }
-        if (hiddenReason) {
-          msg += `📝 Lý do: ${hiddenReason}\n`;
-        }
+        if (hiddenAt) msg += `📅 Thời gian ẩn: ${hiddenAt.toLocaleString('vi-VN')}\n`;
+        if (hiddenReason) msg += `📝 Lý do: ${hiddenReason}\n`;
         msg += `\n👉 Vui lòng liên hệ giáo viên phụ trách để được MỞ LẠI.\n\n`;
         msg += `Nếu bạn cho rằng đây là nhầm lẫn, hãy gửi email tới giáo viên.`;
         alert(msg);
       }, 200);
-      return;   // ⚠️ Return sớm — không set currentProfile
+      return;
     }
 
     state.currentProfile = data;
@@ -226,7 +200,6 @@ async function loadUserProfile(user) {
     justRegistered = false;
     pendingProfile = null;
   } else {
-    // Fallback: user Auth không có profile (tạo tay trên Console)
     state.currentProfile = {
       email: user.email,
       name: user.email,
