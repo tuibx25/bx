@@ -13,7 +13,7 @@ import {
   getUnregisteredInRoster, getExtraUsersInClass, normalizeName
 } from './roster.js';
 
-const FIREBASE_PROJECT_ID = 'vlpt-bx';
+const FIREBASE_PROJECT_ID = 'bx-vlpt';   // ⭐ ĐÃ SỬA: vlpt-bx → bx-vlpt
 
 // ══════════════════════════════════════════
 // RENDER TAB
