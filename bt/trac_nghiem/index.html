@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Trắc nghiệm – Online</title>
+<title>Trắc nghiệm – Luyện tập Online</title>
 
 <!-- ============ KaTeX ============ -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
@@ -25,14 +25,13 @@ body{
   font-size:15px; line-height:1.35;
 }
 .hidden{display:none !important}
-
-/* ============ KaTeX ============ */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type=number] { -moz-appearance: textfield; }
 .katex{font-size:1.02em}
 .katex-display{overflow-x:auto; overflow-y:hidden; margin:6px 0; padding:2px 0}
 .katex-display::-webkit-scrollbar{height:6px}
 .katex-display::-webkit-scrollbar-thumb{background:var(--line); border-radius:3px}
-
-/* ============ HÌNH ẢNH ============ */
 .q-img-wrap{margin:10px 0; text-align:center}
 .q-img-wrap img{
   max-width:100%; max-height:340px;
@@ -49,22 +48,14 @@ body{
   object-fit:contain; margin-top:6px;
   border:1px solid var(--line); border-radius:8px; background:#fff;
 }
-
-/* ============ HEADER ============ */
 header{
   background:#FFFFFF; border-bottom:2px solid var(--brown-d);
-  padding:4px 10px; display:flex; align-items:center; gap:5px;
+  padding:6px 14px; display:flex; align-items:center; gap:8px;
   flex-wrap:nowrap; overflow-x:auto;
   position:sticky; top:0; z-index:50;
   box-shadow:0 1px 4px rgba(0,0,0,.06); font-size:13.5px;
 }
-header h1{font-size:.95em; font-weight:800; color:var(--brown-d); letter-spacing:.2px; margin-right:2px; white-space:nowrap}
-.badge{
-  background:var(--beige); border:1px solid var(--brown);
-  color:var(--brown-d); padding:2px 7px; border-radius:5px;
-  font-weight:700; font-size:.78em; letter-spacing:.3px;
-  white-space:nowrap; flex-shrink:0;
-}
+header h1{font-size:1.1em; font-weight:800; color:var(--brown-d); letter-spacing:.2px; margin-right:8px; white-space:nowrap}
 .stat-badge{
   background:#FFFFFF; border:1.5px solid var(--line);
   padding:3px 8px; border-radius:6px;
@@ -76,30 +67,30 @@ header .spacer{flex:1 1 auto; min-width:4px}
 button{font-family:inherit; cursor:pointer}
 .btn{
   background:#FFFFFF; color:var(--ink);
-  border:1.5px solid var(--line); padding:3px 8px;
-  border-radius:6px; font-weight:600; font-size:.78em;
+  border:1.5px solid var(--line); padding:4px 10px;
+  border-radius:6px; font-weight:600; font-size:.82em;
   transition:.15s; white-space:nowrap; flex-shrink:0;
 }
 .btn:hover:not(:disabled){background:var(--soft); border-color:var(--brown)}
 .btn:disabled{opacity:.4; cursor:not-allowed}
 .btn-primary{
   background:var(--blue-d); color:#FFFFFF;
-  border:1.5px solid var(--blue-d); padding:4px 11px;
-  border-radius:6px; font-weight:700; font-size:.8em;
+  border:1.5px solid var(--blue-d); padding:5px 14px;
+  border-radius:6px; font-weight:700; font-size:.85em;
   white-space:nowrap; flex-shrink:0;
 }
 .btn-primary:hover:not(:disabled){background:var(--blue); border-color:var(--blue)}
 .btn-primary:disabled{opacity:.4; cursor:not-allowed}
 .btn-brown{
   background:var(--brown-d); color:#FFFFFF;
-  border:1.5px solid var(--brown-d); padding:4px 11px;
-  border-radius:6px; font-weight:700; font-size:.8em;
+  border:1.5px solid var(--brown-d); padding:5px 14px;
+  border-radius:6px; font-weight:700; font-size:.85em;
   white-space:nowrap; flex-shrink:0;
 }
 .btn-brown:hover:not(:disabled){background:var(--brown); border-color:var(--brown)}
 .timer{
   display:flex; align-items:center; gap:4px;
-  background:var(--soft); padding:2px 6px;
+  background:var(--soft); padding:3px 8px;
   border-radius:6px; border:1px solid var(--line);
   white-space:nowrap; flex-shrink:0;
 }
@@ -107,108 +98,84 @@ button{font-family:inherit; cursor:pointer}
   background:#FFFFFF; color:var(--ink); border:1px solid var(--line);
   border-radius:5px; padding:2px 4px; font-family:inherit; font-size:.78em;
 }
-#tDisp{font-weight:800; font-variant-numeric:tabular-nums; min-width:42px; text-align:center; color:var(--brown-d); font-size:.88em}
+#tDisp{font-weight:800; font-variant-numeric:tabular-nums; min-width:42px; text-align:center; color:var(--brown-d); font-size:.9em}
 .timer .btn{padding:3px 7px; font-size:.76em}
-
-/* ============ MODAL CHỌN ĐỀ ============ */
-#cfgOverlay{
+#loadOverlay {
   position:fixed; inset:0; background:rgba(0,0,0,0.4);
   z-index:300; display:flex; align-items:center; justify-content:center;
 }
-.load-card{
-  background:#fff; border-radius:12px; padding:20px; width:440px;
+.load-card {
+  background:#fff; border-radius:12px; padding:20px; width:410px;
   box-shadow:0 10px 30px rgba(0,0,0,0.25); text-align:left;
   max-height:90vh; overflow-y:auto;
 }
-.load-card h3{
-  margin-bottom:14px; font-size:1.1em; color:var(--brown-d); text-align:center;
+.load-card h3 {
+  margin-bottom:16px; font-size:1.1em; color:var(--brown-d); text-align:center;
 }
-.score-config{
+.score-config {
   background:var(--soft); border:1px solid var(--line); border-radius:8px;
-  padding:12px; margin-top:8px; margin-bottom:10px;
-  display:flex; flex-direction:column; gap:8px;
+  padding:12px; margin-top:8px; margin-bottom:12px; display:flex; flex-direction:column; gap:8px;
+  align-items: stretch;
 }
-.score-config label{
+.score-config label {
   display:flex; justify-content:space-between; align-items:center;
   font-size:13px; font-weight:600;
 }
-.score-config input{
-  width:70px; padding:4px 8px; border:1px solid var(--line); border-radius:4px;
+.score-config input {
+  width:65px; padding:4px 8px; border:1px solid var(--line); border-radius:4px;
   font-family:inherit; font-weight:700; text-align:right;
 }
-.cfg-title{font-weight:800; color:var(--blue-d); font-size:13.5px}
-.cfg-sub{font-size:12px; color:#555; font-weight:600; margin:2px 0 4px; line-height:1.35}
-.p2-grid{
-  display:grid; grid-template-columns:1fr 1fr; gap:6px;
-  margin:2px 0 4px 0; padding:6px; background:#fff; border-radius:6px; border:1px solid #eee;
+.p2-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  margin: 2px 0 6px 0; padding: 6px; background:#fff; border-radius:6px; border:1px solid #eee;
 }
-
-/* SỬA CSS PHẦN TỔNG SỐ CÂU (P.I, P.II, P.III) */
-.struct-total-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
+.score-config .total-score {
+  text-align:right; font-size:13px; font-weight:800;
+  color:var(--blue-d); border-top:1px dashed var(--line); padding-top:8px; margin-top:4px;
 }
-.struct-total-row label {
-  display: flex; align-items: center; gap: 4px;
-  font-size: 11px; font-weight: 700; background: #fff;
-  border: 1px solid #eee; border-radius: 6px; padding: 4px 6px;
-  min-width: 0; /* Cho phép co lại */
+.lv-grid{
+  display:grid; grid-template-columns:52px 1fr 1fr 1fr 1fr; gap:6px;
+  background:#fff; border:1px solid #eee; border-radius:6px; padding:6px; align-items:center;
 }
-.struct-total-row input {
-  width: 100%; padding: 3px 4px; border: 1px solid var(--line); border-radius: 4px;
-  font-family: inherit; font-weight: 700; text-align: right; font-size: 12px;
-  min-width: 0; /* Auto-fit */
+.lv-grid .lv-head{font-size:12px; font-weight:700; text-align:center; color:var(--brown-d)}
+.lv-grid .lv-row{font-size:12px; font-weight:700}
+.lv-grid input{
+  width:100%; padding:4px 6px; border:1px solid var(--line); border-radius:4px;
+  font-family:inherit; font-weight:700; text-align:center;
 }
-
-/* SỬA CSS BẢNG CẤU TRÚC MỨC ĐỘ */
-.struct-table{
-  width:100%; border-collapse:collapse; background:#fff;
-  border:1px solid #eee; border-radius:6px; overflow:hidden;
-  table-layout: fixed; /* Chia đều cột */
+.lv-grid .lv-val{
+  text-align:center; font-size:12px; font-weight:700; color:#888;
+  background:#f7f7f7; border:1px dashed var(--line); border-radius:4px; padding:5px 2px;
 }
-.struct-table th{
-  font-size:12.5px; color:var(--brown-d); padding:6px 2px; text-align:center;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+.lm-input{
+  width:100% !important; padding:8px 10px; border:1px solid var(--line); border-radius:6px;
+  font-family:inherit; font-size:12px; font-weight:600; color:var(--ink); background:#fff;
+  box-sizing: border-box; transition: 0.15s; display: block;
 }
-.struct-table th.rowlab{text-align:left; padding-left:8px; color:var(--ink); font-size:13px; width: 20%;}
-.struct-table td{padding:4px 3px; text-align:center}
-.struct-table input{
-  width:100%; padding:4px 2px; border:1px solid var(--line); border-radius:4px;
-  font-family:inherit; font-weight:700; text-align:center; background:#fff;
-  font-size: 13px; box-sizing: border-box;
+.lm-input:focus{outline:none; border-color:var(--blue); box-shadow: 0 0 0 2px rgba(0,102,204,0.2);}
+.btn-create-row { width:100%; padding:10px; font-size:14px; }
+.btn-close-row { width:100%; padding:8px; margin-top:8px; background:#e0e0e0; border:none; color:#333; }
+.btn-close-row:hover { background:#d0d0d0; }
+.warn-banner {
+  background: #FFF3CD; color: #856404; padding: 10px 16px;
+  border-left: 4px solid #FFC107; border-radius: 4px;
+  margin-bottom: 16px; font-size: 0.95em; font-weight: 600;
+  display: flex; align-items: center; gap: 8px;
 }
-.struct-table td.free input{border:1.5px dashed var(--line); background:#fafafa}
-
-.btn-create-row{width:100%; padding:10px; font-size:14px; margin-top:4px}
-.btn-close-row{width:100%; padding:8px; margin-top:8px; background:#e0e0e0; border:none; color:#333}
-.btn-close-row:hover{background:#d0d0d0}
-.total-score-display {
-  display: flex; justify-content: space-between; align-items: center;
-  font-weight: 800; color: var(--blue-d); font-size: 13.5px;
-  margin-top: 4px; padding-top: 8px; border-top: 1px dashed var(--line);
-}
-.total-score-display span:last-child {
-  font-size: 1.2em; color: var(--brown-d);
-}
-
-/* ============ TABS ============ */
 nav.tabs{
   display:flex; padding:0 14px; background:var(--soft);
   border-bottom:1px solid var(--line); overflow-x:auto;
 }
 nav.tabs button{
   background:transparent; border:none; color:var(--ink);
-  padding:10px 18px; font-weight:700; font-size:.88em;
-  border-bottom:2.5px solid transparent; transition:.15s;
+  padding:12px 20px; font-weight:700; font-size:.95em;
+  border-bottom:3px solid transparent; transition:.15s;
 }
 nav.tabs button:hover{background:var(--beige)}
 nav.tabs button.active{color:var(--brown-d); border-bottom-color:var(--brown-d); background:#FFFFFF}
-
 main{max-width:1150px; margin:0 auto; padding:16px 20px 40px; font-size:var(--fs); line-height:1.35}
 section.tab{display:none}
 section.tab.active{display:block}
-
 .part-title{
   font-weight:800; font-size:1em; color:var(--brown-d);
   margin:18px 0 4px; padding:9px 16px;
@@ -216,14 +183,12 @@ section.tab.active{display:block}
   border-radius:0 8px 8px 0; line-height:1.25;
 }
 .note{margin:0 0 10px; color:#555; font-style:italic; font-size:.88em; padding-left:6px; line-height:1.3}
-
 .q{
   background:#FFFFFF; border:2px solid var(--line);
   border-radius:12px; padding:12px 18px; margin:10px 0; transition:.2s;
 }
 .q-text{font-weight:600; color:var(--ink); margin-bottom:2px; line-height:1.4}
 .q-no{color:var(--brown-d); font-weight:800; margin-right:8px}
-
 .options{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px}
 @media(max-width:820px){.options{grid-template-columns:1fr}}
 .opt{
@@ -237,8 +202,6 @@ section.tab.active{display:block}
 .opt b{color:var(--brown-d); font-weight:800; min-width:22px}
 .opt > .opt-body{flex:1; min-width:0}
 .opt.selected{background:var(--wheat); border-color:var(--brown-d)}
-.opt.locked{cursor:default}
-
 .statements{margin-top:10px; display:flex; flex-direction:column; gap:8px}
 .st-row{
   display:flex; align-items:flex-start; gap:10px;
@@ -258,8 +221,6 @@ section.tab.active{display:block}
 .st-btn input{display:none}
 .st-btn:hover{background:var(--soft); border-color:var(--brown)}
 .st-btn.selected{background:var(--wheat); border-color:var(--brown-d)}
-.st-btn.locked{cursor:default}
-
 .short-wrap{margin-top:10px; display:flex; align-items:center; gap:12px; flex-wrap:wrap}
 .short-input{
   padding:10px 20px; border:2px solid var(--line);
@@ -269,20 +230,17 @@ section.tab.active{display:block}
 }
 .short-input::placeholder{font-size:.72em; font-weight:600; color:#888}
 .short-input:focus{outline:none; border-color:var(--blue); background:#FAFCFF}
-
 .result{
   background:#FFFFFF; border:2px solid var(--brown-d);
-  border-radius:14px; padding:20px 24px; margin:14px 0;
-  box-shadow:0 4px 16px rgba(139,69,19,.1);
-  text-align:center;
+  border-radius:14px; padding:30px; margin:20px auto; text-align:center;
+  max-width: 600px; box-shadow:0 4px 16px rgba(139,69,19,.1);
 }
-.score-big{font-size:2.6em; font-weight:900; color:var(--blue-d); line-height:1.1}
-.score-big .unit{font-size:.4em; color:#555; font-weight:600}
-.result-meta{color:#555; margin-top:4px; font-size:.95em; line-height:1.3}
+.score-big{font-size:4em; font-weight:900; color:var(--blue-d); line-height:1.1; margin-bottom: 10px;}
+.score-big .unit{font-size:.3em; color:#555; font-weight:600}
+.result-meta{color:#555; margin-top:10px; font-size:1.1em; line-height:1.5}
 .result-meta b{color:var(--blue-d)}
-
 @media print{
-  header,nav.tabs{display:none !important}
+  header,nav.tabs,#loadOverlay{display:none !important}
   section.tab{display:block !important}
   body{background:#FFFFFF}
 }
@@ -291,147 +249,117 @@ section.tab.active{display:block}
 <body>
 
 <header>
-  <h1>⚡ TRẮC NGHIỆM</h1>
-  <span class="badge" id="codeBadge">Mã: MẶC ĐỊNH</span>
+  <h1>⚡ LUYỆN TẬP TRẮC NGHIỆM</h1>
   <span class="stat-badge">Đã trả lời: <b id="answeredCount">0</b>/<span id="totalCount">0</span></span>
   <button class="btn-primary" id="btnSubmit">📝 Nộp bài</button>
   <button class="btn-brown hidden" id="btnRedo">🔄 Làm lại</button>
-  <button class="btn" id="btnShuffle">🔀 Đảo đề</button>
-  <button class="btn" id="btnDefault">↩ Gốc</button>
-  <button class="btn" id="btnCfg" title="Biểu điểm & cấu trúc đề">🎛 Chọn đề</button>
+  
+  <button class="btn" id="btnLoadMenu" title="Chọn cấu trúc đề & Tạo">⚙️ Chọn</button>
+  
   <span class="spacer"></span>
   <div class="timer">
     <select id="tMin">
       <option value="5">5′</option><option value="10">10′</option>
       <option value="15">15′</option><option value="20">20′</option>
-      <option value="25">25′</option><option value="30">30′</option>
-      <option value="40" selected>40′</option>
+      <option value="25" selected>25′</option><option value="30">30′</option>
       <option value="45">45′</option>
     </select>
-    <span id="tDisp">40:00</span>
+    <span id="tDisp">25:00</span>
     <button class="btn" id="tBtn">Bắt đầu</button>
   </div>
   <button class="btn" id="fsDown">A−</button>
   <button class="btn" id="fsUp">A+</button>
 </header>
 
-<!-- MODAL CHỌN ĐỀ / CẤU HÌNH -->
-<div id="cfgOverlay" class="hidden">
+<div id="loadOverlay" class="hidden">
   <div class="load-card">
-    <h3>🎛 Chọn đề</h3>
-
+    <h3>Tạo Cấu Trúc Đề</h3>
+    
     <div class="score-config">
-      <div class="cfg-title">Biểu điểm:</div>
+      <div style="font-weight:700; margin-bottom:4px; color:var(--blue-d)">Biểu điểm:</div>
       <label>Phần I (mỗi câu): <input type="number" id="pt1" value="0.25" min="0" step="0.05"> đ</label>
-      <div class="cfg-sub">Phần II (theo số ý đúng):</div>
+      <div style="margin: 4px 0 2px 0; font-size:12px; color:#555; font-weight:600;">Phần II (theo số ý đúng):</div>
       <div class="p2-grid">
-        <label>1 ý: <input type="number" id="p2_1" value="0.25" step="0.05"> đ</label>
-        <label>2 ý: <input type="number" id="p2_2" value="0.5" step="0.05"> đ</label>
-        <label>3 ý: <input type="number" id="p2_3" value="0.75" step="0.05"> đ</label>
+        <label>1 ý: <input type="number" id="p2_1" value="0.1" step="0.05"> đ</label>
+        <label>2 ý: <input type="number" id="p2_2" value="0.25" step="0.05"> đ</label>
+        <label>3 ý: <input type="number" id="p2_3" value="0.5" step="0.05"> đ</label>
         <label>4 ý: <input type="number" id="p2_4" value="1.0" step="0.05"> đ</label>
       </div>
       <label>Phần III (mỗi câu): <input type="number" id="pt3" value="0.5" min="0" step="0.05"> đ</label>
-      
-      <!-- TỔNG ĐIỂM -->
-      <div class="total-score-display">
-        <span>Tổng điểm tối đa (dự kiến):</span>
-        <span><span id="modalTotalScore">0</span> đ</span>
+      <div class="total-score" id="ptTotalLabel" style="display:none;">
+        <span id="ptTotalLabelText">Tổng điểm (tạm tính):</span> <span id="ptTotal">0</span> đ
       </div>
     </div>
 
     <div class="score-config">
-      <div class="cfg-title">Cấu trúc đề khi tạo / đảo:</div>
-      <div class="cfg-sub">Tổng số câu mỗi phần (để trống = tất cả):</div>
-      <div class="struct-total-row">
-        <label>P.I: <input type="number" id="stT1" min="0" placeholder="max"></label>
-        <label>P.II: <input type="number" id="stT2" min="0" placeholder="max"></label>
-        <label>P.III: <input type="number" id="stT3" min="0" placeholder="max"></label>
+      <div style="font-weight:700; margin-bottom:4px; color:var(--blue-d)">Cấu trúc đề:</div>
+      <div style="font-size:12px; color:#555; font-weight:600;">Tổng số câu mỗi phần (để trống = tất cả):</div>
+      <div class="p2-grid" style="grid-template-columns:1fr 1fr 1fr;">
+        <label>P.I: <input type="number" id="sc1" min="0" step="1" placeholder="tất cả"></label>
+        <label>P.II: <input type="number" id="sc2" min="0" step="1" placeholder="tất cả"></label>
+        <label>P.III: <input type="number" id="sc3" min="0" step="1" placeholder="tất cả"></label>
+      </div>
+      <div style="font-size:12px; color:#555; font-weight:600; margin-top:2px;">Hoặc chọn theo mức độ (ưu tiên hơn ô tổng):</div>
+      <div class="lv-grid">
+        <span></span>
+        <span class="lv-head">Dễ</span><span class="lv-head">Vừa</span><span class="lv-head">Khó</span><span class="lv-head">Tự do</span>
+        <span class="lv-row">Phần I</span>
+        <input type="number" id="lv1_easy" min="0" step="1"><input type="number" id="lv1_medium" min="0" step="1"><input type="number" id="lv1_hard" min="0" step="1"><span class="lv-val" id="lv1_wild">0</span>
+        <span class="lv-row">Phần II</span>
+        <input type="number" id="lv2_easy" min="0" step="1"><input type="number" id="lv2_medium" min="0" step="1"><input type="number" id="lv2_hard" min="0" step="1"><span class="lv-val" id="lv2_wild">0</span>
+        <span class="lv-row">Phần III</span>
+        <input type="number" id="lv3_easy" min="0" step="1"><input type="number" id="lv3_medium" min="0" step="1"><input type="number" id="lv3_hard" min="0" step="1"><span class="lv-val" id="lv3_wild">0</span>
       </div>
       
-      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:4px;">
-        <div class="cfg-sub" style="margin:0;">Hoặc chọn theo mức độ (ưu tiên hơn ô tổng):</div>
-        <button class="btn" style="font-size:11px; padding:2px 6px;" id="btnDefaultStruct">↩ 4-8-4 | 1-2-1 | 1-2-1</button>
-      </div>
-      
-      <table class="struct-table">
-        <tr>
-          <th class="rowlab"></th>
-          <th>Dễ</th>
-          <th>Vừa</th>
-          <th>Khó</th>
-          <th title="Câu chưa gắn mức độ">Tự do</th>
-        </tr>
-        <tr>
-          <th class="rowlab">Phần I</th>
-          <td><input type="number" id="st1de" min="0" placeholder="max"></td>
-          <td><input type="number" id="st1vua" min="0" placeholder="max"></td>
-          <td><input type="number" id="st1kho" min="0" placeholder="max"></td>
-          <td class="free"><input type="number" id="st1free" min="0" placeholder="max"></td>
-        </tr>
-        <tr>
-          <th class="rowlab">Phần II</th>
-          <td><input type="number" id="st2de" min="0" placeholder="max"></td>
-          <td><input type="number" id="st2vua" min="0" placeholder="max"></td>
-          <td><input type="number" id="st2kho" min="0" placeholder="max"></td>
-          <td class="free"><input type="number" id="st2free" min="0" placeholder="max"></td>
-        </tr>
-        <tr>
-          <th class="rowlab">Phần III</th>
-          <td><input type="number" id="st3de" min="0" placeholder="max"></td>
-          <td><input type="number" id="st3vua" min="0" placeholder="max"></td>
-          <td><input type="number" id="st3kho" min="0" placeholder="max"></td>
-          <td class="free"><input type="number" id="st3free" min="0" placeholder="max"></td>
-        </tr>
-      </table>
+      <div style="font-size:12px; color:#555; font-weight:600; margin-top:2px;">Gán nhanh mức độ (nếu file chưa đánh dấu):</div>
+      <input type="text" class="lm-input" id="lm1" placeholder="P.I: easy 1-10, medium 11-22" title="VD: easy 1-10, medium 11-22, hard 23-32">
+      <input type="text" class="lm-input" id="lm2" placeholder="P.II: easy 1-2, medium 3" title="VD: easy 1-2, medium 3, hard 4">
+      <input type="text" class="lm-input" id="lm3" placeholder="P.III: easy 1, medium 2-3" title="VD: easy 1, medium 2-3, hard 4">
     </div>
 
-    <button class="btn-primary btn-create-row" id="btnApplyCfg">🚀 Áp dụng & tạo đề</button>
-    <button class="btn btn-close-row" id="btnCloseCfg">Đóng</button>
+    <button class="btn-primary btn-create-row" id="btnCreateQuiz">🚀 Tạo Trắc Nghiệm</button>
+    <button class="btn btn-close-row" id="btnCloseLoad">Đóng</button>
   </div>
 </div>
 
 <nav class="tabs">
   <button data-tab="tab1" class="active">📄 Đề bài</button>
-  <button data-tab="tab3">🎯 Kết quả chấm</button>
+  <button data-tab="tab3">🎯 Kết quả</button>
 </nav>
 
 <main>
   <section id="tab1" class="tab active"><div id="examBody"></div></section>
   <section id="tab3" class="tab">
     <div id="resultBody">
-      <p class="note" style="margin-top:30px">Chưa nộp bài. Hãy làm bài ở tab “Đề bài” rồi nhấn <b>Nộp bài</b>.</p>
+      <p class="note" style="margin-top:30px; text-align:center;">Chưa có kết quả. Hãy làm bài rồi nhấn <b>Nộp bài</b>.</p>
     </div>
   </section>
 </main>
 
 <script>
-/* ==================================================================
-   0. CẤU HÌNH FILE ĐỀ / ĐÁP ÁN MẶC ĐỊNH (CÙNG THƯ MỤC)
-================================================================== */
-const EXAM_FILE = 'tn_de.html';
-const ANS_FILE  = 'tn_da.html';
-
-/* ==================================================================
-   1. RENDER CÔNG THỨC KATEX
-================================================================== */
+/* 0. KATEX */
 function renderMath(el){
-  if(!el || typeof renderMathInElement !== 'function') return;
-  renderMathInElement(el, {
-    delimiters: [
-      {left:'$$', right:'$$', display:true},
-      {left:'\\[', right:'\\]', display:true},
-      {left:'$',  right:'$',  display:false},
-      {left:'\\(', right:'\\)', display:false}
-    ],
-    throwOnError: false,
-    errorColor: '#8B4513',
-    ignoredTags: ['script','noscript','style','textarea','pre','code','option']
-  });
+  if(!el) return;
+  // Nếu thư viện KaTeX đã sẵn sàng
+  if(typeof renderMathInElement === 'function'){
+    renderMathInElement(el, {
+      delimiters: [
+        {left:'$$', right:'$$', display:true},
+        {left:'\\[', right:'\\]', display:true},
+        {left:'$',  right:'$',  display:false},
+        {left:'\\(', right:'\\)', display:false}
+      ],
+      throwOnError: false,
+      errorColor: '#8B4513',
+      ignoredTags: ['script','noscript','style','textarea','pre','code','option']
+    });
+  } else {
+    // Nếu mạng chậm, thư viện chưa tải xong -> Đợi 100ms và thử lại
+    setTimeout(() => renderMath(el), 100);
+  }
 }
 
-/* ==================================================================
-   2. CẤU HÌNH ĐIỂM MẶC ĐỊNH
-================================================================== */
+/* 1. CẤU HÌNH */
 const CONFIG = {
   p1: { point: 0.25, title:"PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn",
         note:"Chọn một phương án đúng nhất cho mỗi câu." },
@@ -440,11 +368,9 @@ const CONFIG = {
   p3: { point: 0.5, title:"PHẦN III. Câu trắc nghiệm trả lời ngắn",
         note:"Ghi kết quả (số) vào ô trả lời." }
 };
-let P2_RULE = [0, 0.25, 0.5, 0.75, 1.0];
+let P2_RULE = [0, 0.1, 0.25, 0.5, 1.0];
 
-/* ==================================================================
-   3. DỮ LIỆU MẶC ĐỊNH
-================================================================== */
+/* 2. DỮ LIỆU MẶC ĐỊNH */
 const BANK = {
   p1: [
     { text:"Đơn vị đo cường độ điện trường trong hệ SI là",
@@ -467,15 +393,11 @@ const BANK = {
   ]
 };
 
-/* ==================================================================
-   4. TIỆN ÍCH
-================================================================== */
+/* 3. TIỆN ÍCH */
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const esc = s => String(s).replace(/[&<>"']/g, c =>
   ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const isBlank = id => String($(id).value).trim() === '';
-
 function mulberry32(a){
   return function(){
     a |= 0; a = a + 0x6D2B79F5 | 0;
@@ -491,7 +413,6 @@ function shuffle(arr, rng){
   }
   return arr;
 }
-function seedToCode(seed){ return (seed >>> 0).toString(36).toUpperCase().padStart(7,'0').slice(-7); }
 function parseNum(str){
   if(str === undefined || str === null) return NaN;
   let s = String(str).trim().replace(/\s+/g,'').replace(',', '.');
@@ -506,13 +427,20 @@ function parseNum(str){
 }
 const fmt = x => String(Math.round(x * 1000) / 1000);
 
+function parseScoreInput(id) {
+    const el = $('#' + id);
+    if (!el) return 0;
+    let val = String(el.value).trim().replace(',', '.');
+    const num = parseFloat(val);
+    return isNaN(num) ? 0 : num;
+}
+
 function normOption(o){
   return (typeof o === 'string') ? { text:o, img:null } : { text:o.text||'', img:o.img||null, imgAlt:o.imgAlt||'' };
 }
 function normStatement(s){
   return (typeof s === 'string') ? { text:s, img:null } : { text:s.text||'', img:s.img||null, imgAlt:s.imgAlt||'' };
 }
-
 function imgHTML(src, alt, caption, cls){
   if(!src) return '';
   const clsAttr = cls ? ` class="${cls}"` : '';
@@ -528,82 +456,101 @@ function imgError(img){
   wrap.innerHTML = `<span class="q-img-error">⚠ Không tải được ảnh: ${esc(img.getAttribute('src'))}</span>`;
 }
 
-/* ==================================================================
-   5. BIẾN TOÀN CỤC
-================================================================== */
+/* 4. BIẾN TOÀN CỤC */
 let exam = null;
-let activeBaseline = null; // Lưu trữ đề gốc hiện tại
 let parsedOriginal = null;
+let lastParsedExamText = null;
 let answers = {};
 let submitted = false;
-let currentCode = null;
-let currentExamLabel = 'MẶC ĐỊNH';
 let missingAnswers = [];
 
-/* Cấu trúc đề (số câu mỗi phần / theo mức độ) */
-let STRUCT = {
-  total: { p1:null, p2:null, p3:null },
-  levels: {
-    p1:{de:0, vua:0, kho:0, free:0},
-    p2:{de:0, vua:0, kho:0, free:0},
-    p3:{de:0, vua:0, kho:0, free:0}
-  }
-};
-
-/* ==================================================================
-   6. MỨC ĐỘ CÂU HỎI ([Dễ] / [Vừa] / [Khó], không gắn = Tự do)
-================================================================== */
-const LEVEL_RE = /\s*\[(dễ|vừa|khó|de|vua|kho)\]\s*/i;
-function detectLevel(t){
-  const m = t.match(LEVEL_RE);
-  if(!m) return null;
-  const s = m[1].toLowerCase();
-  if(s==='dễ'||s==='de') return 'de';
-  if(s==='vừa'||s==='vua') return 'vua';
-  if(s==='khó'||s==='kho') return 'kho';
-  return null;
-}
-function stripLevel(t){ return t.replace(LEVEL_RE,' ').trim(); }
-
-function poolCounts(arr){
-  const c = {total:arr.length, de:0, vua:0, kho:0, free:0};
-  arr.forEach(q=>{
-    if(q.level==='de') c.de++;
-    else if(q.level==='vua') c.vua++;
-    else if(q.level==='kho') c.kho++;
-    else c.free++;
-  });
-  return c;
-}
-
-/* ==================================================================
-   7. XÂY DỰNG ĐỀ MẶC ĐỊNH
-================================================================== */
+/* 5. ĐỀ MẶC ĐỊNH */
 function buildDefaultExam(){
   return {
     p1: BANK.p1.map((q,i) => ({
-      uid:'p1-'+i, text:q.text, img:null, imgAlt:'', level:null,
-      options: q.options.map(normOption), correct:q.correct
+      uid:'p1-'+i, text:q.text, img:null, imgAlt:'',
+      options: q.options.map(normOption), correct:q.correct, level:null
     })),
     p2: BANK.p2.map((q,i) => ({
-      uid:'p2-'+i, text:q.text, img:null, imgAlt:'', level:null,
-      statements: q.statements.map(normStatement), answers:[...q.answers]
+      uid:'p2-'+i, text:q.text, img:null, imgAlt:'',
+      statements: q.statements.map(normStatement), answers:[...q.answers], level:null
     })),
     p3: BANK.p3.map((q,i) => ({
-      uid:'p3-'+i, text:q.text, img:null, imgAlt:'', level:null, answer:q.answer
+      uid:'p3-'+i, text:q.text, img:null, imgAlt:'', answer:q.answer, level:null
     }))
   };
 }
 
-/* ==================================================================
-   8. PARSER NẠP TỪ HTML
-================================================================== */
+/* 6. NHẬN DIỆN MỨC ĐỘ + PARSER */
+const LEVEL_RE = /[\[\(](easy|medium|hard|dễ|de|vừa|vua|tb|khó|kho)[\)\]]\s*/i;
+const LEVEL_ATTR_NAMES = ['data-level','data-muc','data-muc-do','data-do-kho','data-difficulty','data-level-id','title'];
+function normLevelToken(t){
+  t = String(t||'').toLowerCase().trim();
+  if(t==='easy'||t==='de'||t==='dễ') return 'easy';
+  if(t==='medium'||t==='vua'||t==='vừa'||t==='tb') return 'medium';
+  if(t==='hard'||t==='kho'||t==='khó') return 'hard';
+  return null;
+}
+function normLevel(s){
+  s = String(s||'').toLowerCase().trim();
+  if(!s) return null;
+  if(s==='easy'||s==='e'||s==='de'||s==='dễ'||s==='1') return 'easy';
+  if(s==='medium'||s==='m'||s==='vua'||s==='vừa'||s==='tb'||s==='2') return 'medium';
+  if(s==='hard'||s==='h'||s==='kho'||s==='khó'||s==='3') return 'hard';
+  return normLevelToken(s);
+}
+function scanNodeAttrs(n){
+  if(!n || !n.attributes) return null;
+  for(const attr of Array.from(n.attributes)){
+    const name = String(attr.name||'').toLowerCase();
+    const v = String(attr.value||'');
+    if(!v) continue;
+    if(LEVEL_ATTR_NAMES.includes(name)){
+      const L = normLevel(v);
+      if(L) return L;
+    }
+    if(name==='class' || name.startsWith('data-')){
+      const toks = v.toLowerCase().split(/[^a-zà-ỹ0-9]+/i).filter(Boolean);
+      for(const t of toks){
+        const L = normLevelToken(t);
+        if(L) return L;
+      }
+    }
+  }
+  return null;
+}
+function detectLevel(el, fallbackText){
+  let n = el, depth = 0;
+  while(n && n.nodeType === 1 && depth < 5){
+    const L = scanNodeAttrs(n);
+    if(L) return L;
+    n = n.parentElement;
+    depth++;
+  }
+  if(el.querySelectorAll){
+    for(const d of Array.from(el.querySelectorAll('*'))){
+      const L = scanNodeAttrs(d);
+      if(L) return L;
+      if(d.childElementCount === 0){
+        const t = String(d.textContent||'').trim();
+        if(t && t.length <= 8){
+          const L2 = normLevel(t);
+          if(L2) return L2;
+        }
+      }
+    }
+  }
+  const m = String(fallbackText||'').match(LEVEL_RE);
+  if(m) return normLevel(m[1]);
+  const m2 = String(fallbackText||'').match(/mức\s*(độ)?\s*[:\-]?\s*(easy|medium|hard|dễ|de|vừa|vua|tb|khó|kho)/i);
+  if(m2) return normLevel(m2[2]);
+  return null;
+}
+
 function parseOldExamFormat(examHtml, ansHtml) {
   const examDoc = new DOMParser().parseFromString(examHtml, 'text/html');
   const ansDoc = new DOMParser().parseFromString(ansHtml, 'text/html');
-
   const p1 = [], p2 = [], p3 = [];
-
   function getPart(elText) {
     const t = elText.toUpperCase();
     if (/PHẦN\s*III/i.test(t)) return 3;
@@ -611,8 +558,6 @@ function parseOldExamFormat(examHtml, ansHtml) {
     if (/PHẦN\s*I(?!I)/i.test(t)) return 1;
     return 0;
   }
-
-  // --- PARSE ĐỀ ---
   let currentPart = 0;
   examDoc.querySelectorAll('h2, .question').forEach(el => {
     if (el.tagName === 'H2') {
@@ -627,56 +572,40 @@ function parseOldExamFormat(examHtml, ansHtml) {
         });
         text = clone.innerHTML.trim();
       }
-
-      // ==== NHẬN DIỆN MỨC ĐỘ TỪ CLASS HOẶC DATA-DIFF ====
-      let level = null;
-      if (el.classList.contains('easy') || el.getAttribute('data-diff') === 'easy') level = 'de';
-      else if (el.classList.contains('medium') || el.getAttribute('data-diff') === 'medium') level = 'vua';
-      else if (el.classList.contains('hard') || el.getAttribute('data-diff') === 'hard') level = 'kho';
-      
-      // Nếu không có class/data-diff thì thử tìm trong text [Dễ], [Vừa], [Khó]
-      if (!level) {
-        level = detectLevel(text);
-        if(level) text = stripLevel(text);
-      }
-
+      const lvl = detectLevel(el, el.textContent);
+      if (lvl) text = text.replace(LEVEL_RE, '');
       const imgNode = el.querySelector('.img-container img');
       const img = imgNode ? imgNode.getAttribute('src') : null;
       const imgAlt = imgNode ? imgNode.getAttribute('alt') : '';
-
       if (currentPart === 1) {
         const opts = [];
         el.querySelectorAll('ul.options li').forEach(li => {
           let optText = li.innerHTML.trim().replace(/^[A-D]\.\s*/i, '');
           opts.push({ text: optText, img: null, imgAlt: '' });
         });
-        p1.push({ uid: `p1-${p1.length + 1}`, text, img, imgAlt, level, options: opts, correct: null });
+        p1.push({ uid: `p1-${p1.length + 1}`, text, img, imgAlt, options: opts, correct: null, level: lvl });
       } else if (currentPart === 2) {
         const sts = [];
         el.querySelectorAll('ul.options li').forEach(li => {
           let stText = li.innerHTML.trim().replace(/^[a-d]\)\s*/i, '');
           sts.push({ text: stText, img: null, imgAlt: '' });
         });
-        p2.push({ uid: `p2-${p2.length + 1}`, text, img, imgAlt, level, statements: sts, answers: [null,null,null,null] });
+        p2.push({ uid: `p2-${p2.length + 1}`, text, img, imgAlt, statements: sts, answers: [null,null,null,null], level: lvl });
       } else if (currentPart === 3) {
-        p3.push({ uid: `p3-${p3.length + 1}`, text, img, imgAlt, level, answer: null });
+        p3.push({ uid: `p3-${p3.length + 1}`, text, img, imgAlt, answer: null, level: lvl });
       }
     }
   });
 
-  // --- PARSE ĐÁP ÁN ---
   currentPart = 0;
   ansDoc.querySelectorAll('h2, .answer-section').forEach(el => {
     if (el.tagName === 'H2') {
       currentPart = getPart(el.textContent);
     } else if (currentPart > 0 && el.classList.contains('answer-section')) {
-
       const fullText = el.textContent.replace(/\s+/g, ' ').trim();
-
       const qMatch = fullText.match(/Câu\s*(\d+)/i);
       if (!qMatch) return;
       const qNum = parseInt(qMatch[1]);
-
       if (currentPart === 1) {
         const aMatch = fullText.match(/Câu\s*\d+\s*[:\.\-]?\s*\(?([A-D])\b/i);
         if (aMatch && p1[qNum - 1]) {
@@ -718,234 +647,71 @@ function parseOldExamFormat(examHtml, ansHtml) {
 
   const missing = [];
   p1.forEach((q,i) => { if(q.correct === null) missing.push('I.' + (i+1)); });
-  p2.forEach((q,i) => {
-    if(q.answers.some(a => a === null)) missing.push('II.' + (i+1));
-  });
+  p2.forEach((q,i) => { if(q.answers.some(a => a === null)) missing.push('II.' + (i+1)); });
   p3.forEach((q,i) => { if(q.answer === null) missing.push('III.' + (i+1)); });
-
   return { p1, p2, p3, missing };
 }
 
-/* ==================================================================
-   9. CHỌN CÂU HỎI THEO CẤU TRÚC (tổng / mức độ)
-================================================================== */
-function intOrNull(v){
-  v = String(v==null?'':v).trim();
-  if(v==='') return null;
-  const n = parseInt(v,10);
-  return isNaN(n) ? null : n;
+/* 6b. GÁN MỨC ĐỘ NHANH THEO SỐ CÂU */
+function parseLevelMapStr(str){
+  const map = new Map();
+  if(!str) return map;
+  const re = /(easy|medium|hard|dễ|de|vừa|vua|tb|khó|kho)\s*[:\-]?\s*([0-9][0-9,\-\s]*)/gi;
+  let m;
+  while((m = re.exec(str)) !== null){
+    const L = normLevel(m[1]);
+    if(!L) continue;
+    m[2].split(',').forEach(tok => {
+      tok = tok.trim();
+      if(!tok) return;
+      const r = tok.match(/^(\d+)\s*-\s*(\d+)$/);
+      if(r){
+        const a = +r[1], b = +r[2];
+        for(let i=Math.min(a,b); i<=Math.max(a,b); i++) map.set(i, L);
+      } else if(/^\d+$/.test(tok)) map.set(+tok, L);
+    });
+  }
+  return map;
 }
-function intOr0(v){
-  const n = parseInt(String(v==null?'':v).trim(),10);
-  return isNaN(n) ? 0 : n;
-}
-function floatOr0(sel){ return parseFloat($(sel).value) || 0; }
-
-function pickArr(arr, n, rng){
-  if(n <= 0) return [];
-  if(n >= arr.length) return arr.slice();
-  const c = arr.slice();
-  if(rng) shuffle(c, rng);
-  return c.slice(0, n);
-}
-
-function selectByStructure(source, rng){
-  const out = {p1:[], p2:[], p3:[]};
-  ['p1','p2','p3'].forEach(part=>{
-    const items = source[part] || [];
-    const lv = STRUCT.levels[part];
-    const lvSum = lv.de + lv.vua + lv.kho + lv.free;
-
-    if(lvSum > 0){
-      const pools = {
-        de:   items.filter(q=>q.level==='de'),
-        vua:  items.filter(q=>q.level==='vua'),
-        kho:  items.filter(q=>q.level==='kho'),
-        free: items.filter(q=>!q.level)
-      };
-      const picked = []
-        .concat(pickArr(pools.de,   lv.de,   rng))
-        .concat(pickArr(pools.vua,  lv.vua,  rng))
-        .concat(pickArr(pools.kho,  lv.kho,  rng))
-        .concat(pickArr(pools.free, lv.free, rng));
-      out[part] = items.filter(q=>picked.includes(q)); // giữ thứ tự gốc
-    } else {
-      const tot = STRUCT.total[part];
-      if(tot !== null && tot >= 0 && tot < items.length){
-        const picked = pickArr(items, tot, rng);
-        out[part] = items.filter(q=>picked.includes(q));
-      } else {
-        out[part] = items.slice();
-      }
-    }
+function withLevelMap(src){
+  const maps = {
+    p1: parseLevelMapStr($('#lm1').value),
+    p2: parseLevelMapStr($('#lm2').value),
+    p3: parseLevelMapStr($('#lm3').value)
+  };
+  const out = { missing: src.missing };
+  ['p1','p2','p3'].forEach(p => {
+    const mp = maps[p];
+    out[p] = (mp && mp.size)
+      ? src[p].map((q,i) => mp.has(i+1) ? Object.assign({}, q, {level: mp.get(i+1)}) : q)
+      : src[p];
   });
   return out;
 }
 
-/* Tạo lại đề gốc (có thể ngẫu nhiên hoặc không) */
-function rebuildOriginal(isRandom = false){
-  let rng = null;
-  let seed = null;
-  if (isRandom) {
-    seed = Math.floor(Math.random() * 4294967296);
-    rng = mulberry32(seed);
-  }
-  
-  const source = parsedOriginal || buildDefaultExam();
-  const sel = selectByStructure(source, rng);
-  
-  activeBaseline = JSON.parse(JSON.stringify(sel));
-  exam = JSON.parse(JSON.stringify(sel));
-  
-  currentCode = null;
-  submitted = false;
-  answers = {};
-  setCodeBadge();
-}
-
-/* ==================================================================
-   10. MODAL "CHỌN ĐỀ"
-================================================================== */
-function updateModalTotalScore() {
-  const source = parsedOriginal || buildDefaultExam();
-  const c1 = poolCounts(source.p1 || []);
-  const c2 = poolCounts(source.p2 || []);
-  const c3 = poolCounts(source.p3 || []);
-
-  // Đọc số lượng câu từ các ô mức độ
-  const p1LevelSum = intOr0($('#st1de').value) + intOr0($('#st1vua').value) + intOr0($('#st1kho').value) + intOr0($('#st1free').value);
-  const p2LevelSum = intOr0($('#st2de').value) + intOr0($('#st2vua').value) + intOr0($('#st2kho').value) + intOr0($('#st2free').value);
-  const p3LevelSum = intOr0($('#st3de').value) + intOr0($('#st3vua').value) + intOr0($('#st3kho').value) + intOr0($('#st3free').value);
-
-  // Đọc số lượng câu từ ô tổng
-  const p1Total = intOr0($('#stT1').value);
-  const p2Total = intOr0($('#stT2').value);
-  const p3Total = intOr0($('#stT3').value);
-
-  // Đọc điểm số
-  const pt1 = floatOr0('#pt1');
-  const pt2Max = floatOr0('#p2_4'); // Điểm tối đa 1 câu phần II
-  const pt3 = floatOr0('#pt3');
-
-  // Xác định số câu thực tế sẽ tạo (Ưu tiên mức độ > Tổng > Tất cả)
-  let p1Final = p1LevelSum > 0 ? p1LevelSum : (isBlank('#stT1') ? c1.total : p1Total);
-  let p2Final = p2LevelSum > 0 ? p2LevelSum : (isBlank('#stT2') ? c2.total : p2Total);
-  let p3Final = p3LevelSum > 0 ? p3LevelSum : (isBlank('#stT3') ? c3.total : p3Total);
-
-  // Giới hạn số câu không vượt quá ngân hàng (cap)
-  if (p1Final > c1.total) p1Final = c1.total;
-  if (p2Final > c2.total) p2Final = c2.total;
-  if (p3Final > c3.total) p3Final = c3.total;
-
-  const total = (p1Final * pt1) + (p2Final * pt2Max) + (p3Final * pt3);
-  $('#modalTotalScore').textContent = fmt(total);
-}
-
-function openCfg(){
-  const source = parsedOriginal || buildDefaultExam();
-  const c1 = poolCounts(source.p1 || []);
-  const c2 = poolCounts(source.p2 || []);
-  const c3 = poolCounts(source.p3 || []);
-
-  // biểu điểm hiện tại
-  $('#pt1').value = CONFIG.p1.point;
-  $('#p2_1').value = P2_RULE[1];
-  $('#p2_2').value = P2_RULE[2];
-  $('#p2_3').value = P2_RULE[3];
-  $('#p2_4').value = P2_RULE[4];
-  $('#pt3').value = CONFIG.p3.point;
-
-  const setT = (id, val, max) => {
-    const el = $(id);
-    el.value = val !== null ? val : '';
-    el.placeholder = 'max ' + max;
-  };
-  setT('#stT1', STRUCT.total.p1, c1.total);
-  setT('#stT2', STRUCT.total.p2, c2.total);
-  setT('#stT3', STRUCT.total.p3, c3.total);
-
-  const setL = (id, val, max) => {
-    const el = $(id);
-    el.value = val > 0 ? val : '';
-    el.placeholder = max > 0 ? max : '0'; // Auto-fit placeholder
-  };
-  setL('#st1de', STRUCT.levels.p1.de, c1.de);   setL('#st1vua', STRUCT.levels.p1.vua, c1.vua);
-  setL('#st1kho', STRUCT.levels.p1.kho, c1.kho); setL('#st1free', STRUCT.levels.p1.free, c1.free);
-  setL('#st2de', STRUCT.levels.p2.de, c2.de);   setL('#st2vua', STRUCT.levels.p2.vua, c2.vua);
-  setL('#st2kho', STRUCT.levels.p2.kho, c2.kho); setL('#st2free', STRUCT.levels.p2.free, c2.free);
-  setL('#st3de', STRUCT.levels.p3.de, c3.de);   setL('#st3vua', STRUCT.levels.p3.vua, c3.vua);
-  setL('#st3kho', STRUCT.levels.p3.kho, c3.kho); setL('#st3free', STRUCT.levels.p3.free, c3.free);
-
-  updateModalTotalScore();
-  $('#cfgOverlay').classList.remove('hidden');
-}
-
-// Lắng nghe sự thay đổi để cập nhật tổng điểm realtime
-document.querySelectorAll('#cfgOverlay input').forEach(inp => {
-  inp.addEventListener('input', updateModalTotalScore);
-});
-
-$('#btnDefaultStruct').addEventListener('click', () => {
-  // Điền nhanh cấu trúc mẫu 4-8-4, 1-2-1, 1-2-1
-  $('#st1de').value = 4; $('#st1vua').value = 8; $('#st1kho').value = 4; $('#st1free').value = '';
-  $('#st2de').value = 1; $('#st2vua').value = 2; $('#st2kho').value = 1; $('#st2free').value = '';
-  $('#st3de').value = 1; $('#st3vua').value = 2; $('#st3kho').value = 1; $('#st3free').value = '';
-  updateModalTotalScore();
-});
-
-function readCfg(){
-  CONFIG.p1.point = floatOr0('#pt1');
-  const a = floatOr0('#p2_1'), b = floatOr0('#p2_2'), c = floatOr0('#p2_3'), d = floatOr0('#p2_4');
-  P2_RULE = [0, a, b, c, d];
-  CONFIG.p2.point = d;
-  CONFIG.p3.point = floatOr0('#pt3');
-
-  STRUCT.total.p1 = intOrNull($('#stT1').value);
-  STRUCT.total.p2 = intOrNull($('#stT2').value);
-  STRUCT.total.p3 = intOrNull($('#stT3').value);
-
-  STRUCT.levels.p1 = {de:intOr0($('#st1de').value), vua:intOr0($('#st1vua').value), kho:intOr0($('#st1kho').value), free:intOr0($('#st1free').value)};
-  STRUCT.levels.p2 = {de:intOr0($('#st2de').value), vua:intOr0($('#st2vua').value), kho:intOr0($('#st2kho').value), free:intOr0($('#st2free').value)};
-  STRUCT.levels.p3 = {de:intOr0($('#st3de').value), vua:intOr0($('#st3vua').value), kho:intOr0($('#st3kho').value), free:intOr0($('#st3free').value)};
-}
-
-$('#btnCfg').addEventListener('click', openCfg);
-$('#btnCloseCfg').addEventListener('click', () => $('#cfgOverlay').classList.add('hidden'));
-$('#btnApplyCfg').addEventListener('click', () => {
-  readCfg();
-  rebuildOriginal(true); // Tạo đề gốc mới ngẫu nhiên
-  renderExam(); clearResultTab(); syncButtons();
-  $('#cfgOverlay').classList.add('hidden');
-  window.scrollTo({top:0, behavior:'smooth'});
-});
-
-/* ==================================================================
-   11. RENDER GIAO DIỆN (sau nộp: KHOÁ đề, KHÔNG hiện đáp án)
-================================================================== */
+/* 7. RENDER (GIỮ NGUYÊN TRẠNG THÁI LÀM BÀI) */
 function renderExam(){
   let html = '';
-  let n = 0;
-
-  if (submitted) {
-    html += `<p class="note">✅ Bạn đã nộp bài. Bài làm đã bị khoá — xem điểm ở tab “Kết quả chấm”.</p>`;
+  if (missingAnswers.length > 0) {
+    html += `<div class="warn-banner">⚠️ <b>Cảnh báo:</b> Các câu sau chưa có đáp án: ${missingAnswers.join(', ')} (sẽ tính là SAI).</div>`;
   }
-
+  let n1 = 0;
   html += `<div class="part-title">${CONFIG.p1.title}</div>
            <p class="note">${CONFIG.p1.note}</p>`;
-  (exam.p1||[]).forEach(q => {
-    n++;
+  exam.p1.forEach(q => {
+    n1++;
     const sel = answers[q.uid];
     html += `<div class="q">
-      <div class="q-text"><span class="q-no">Câu ${n}.</span>${q.text}</div>
+      <div class="q-text"><span class="q-no">Câu ${n1}.</span>${q.text}</div>
       ${imgHTML(q.img, q.imgAlt)}
       <div class="options">`;
     q.options.forEach((o,j) => {
       const letter = 'ABCD'[j];
-      let cls = 'opt' + (submitted ? ' locked' : '');
+      let cls = 'opt';
       if(sel === j) cls += ' selected';
       const optImg = o.img ? `<img class="opt-img" src="${o.img}" alt="${o.imgAlt||''}" onerror="imgError(this)">` : '';
       html += `<label class="${cls}">
-        <input type="radio" name="p1-${q.uid}" value="${j}" data-uid="${q.uid}" ${sel===j?'checked':''} ${submitted?'disabled':''}>
+        <input type="radio" name="p1-${q.uid}" value="${j}" data-uid="${q.uid}" ${sel===j?'checked':''}>
         <b>${letter}.</b>
         <span class="opt-body">${o.text}${optImg}</span>
       </label>`;
@@ -953,27 +719,29 @@ function renderExam(){
     html += `</div></div>`;
   });
 
+  let n2 = 0;
   html += `<div class="part-title">${CONFIG.p2.title}</div>
            <p class="note">${CONFIG.p2.note}</p>`;
-  (exam.p2||[]).forEach(q => {
-    n++;
+  exam.p2.forEach(q => {
+    n2++;
     const userAns = answers[q.uid] || [];
     html += `<div class="q">
-      <div class="q-text"><span class="q-no">Câu ${n}.</span>${q.text}</div>
+      <div class="q-text"><span class="q-no">Câu ${n2}.</span>${q.text}</div>
       ${imgHTML(q.img, q.imgAlt)}
       <div class="statements">`;
     q.statements.forEach((st,k) => {
       const letter = 'abcd'[k];
       const sel = userAns[k];
+      let stCls = 'st-row';
       const stImg = st.img ? `<img class="st-img" src="${st.img}" alt="${st.imgAlt||''}" onerror="imgError(this)">` : '';
-      html += `<div class="st-row">
+      html += `<div class="${stCls}">
         <div class="st-txt"><b>${letter})</b> ${st.text}${stImg}</div>
         <div class="st-btns">
-          <label class="st-btn ${sel==='T'?'selected':''} ${submitted?'locked':''}">
-            <input type="radio" name="p2-${q.uid}-${k}" value="T" data-uid="${q.uid}" data-k="${k}" ${sel==='T'?'checked':''} ${submitted?'disabled':''}>
+          <label class="st-btn ${sel==='T'?'selected':''}">
+            <input type="radio" name="p2-${q.uid}-${k}" value="T" data-uid="${q.uid}" data-k="${k}" ${sel==='T'?'checked':''}>
             <span>Đ</span></label>
-          <label class="st-btn ${sel==='F'?'selected':''} ${submitted?'locked':''}">
-            <input type="radio" name="p2-${q.uid}-${k}" value="F" data-uid="${q.uid}" data-k="${k}" ${sel==='F'?'checked':''} ${submitted?'disabled':''}>
+          <label class="st-btn ${sel==='F'?'selected':''}">
+            <input type="radio" name="p2-${q.uid}-${k}" value="F" data-uid="${q.uid}" data-k="${k}" ${sel==='F'?'checked':''}>
             <span>S</span></label>
         </div>
       </div>`;
@@ -981,13 +749,14 @@ function renderExam(){
     html += `</div></div>`;
   });
 
+  let n3 = 0;
   html += `<div class="part-title">${CONFIG.p3.title}</div>
            <p class="note">${CONFIG.p3.note}</p>`;
-  (exam.p3||[]).forEach(q => {
-    n++;
+  exam.p3.forEach(q => {
+    n3++;
     const val = answers[q.uid] || '';
     html += `<div class="q">
-      <div class="q-text"><span class="q-no">Câu ${n}.</span>${q.text}</div>
+      <div class="q-text"><span class="q-no">Câu ${n3}.</span>${q.text}</div>
       ${imgHTML(q.img, q.imgAlt)}
       <div class="short-wrap">
         <input type="text" class="short-input" data-uid="${q.uid}" value="${esc(val)}"
@@ -1001,20 +770,16 @@ function renderExam(){
   updateAnsweredCount();
 }
 
-/* ==================================================================
-   12. CHẤM ĐIỂM
-================================================================== */
+/* 8. CHẤM ĐIỂM (CHỈ TRẢ VỀ ĐIỂM TỔNG) */
 function calculateScore(){
   let mcScore = 0;
   let maxMcScore = 0;
-
-  (exam.p1||[]).forEach(q => {
+  exam.p1.forEach(q => {
     maxMcScore += CONFIG.p1.point;
     const chosen = answers[q.uid];
     if((q.correct !== null) && chosen === q.correct) mcScore += CONFIG.p1.point;
   });
-
-  (exam.p2||[]).forEach(q => {
+  exam.p2.forEach(q => {
     const userAns = answers[q.uid] || [];
     let correctCount = 0;
     q.answers.forEach((a,k) => {
@@ -1023,102 +788,311 @@ function calculateScore(){
     });
     mcScore += P2_RULE[correctCount];
   });
-  maxMcScore += (exam.p2||[]).length * P2_RULE[4];
-
-  (exam.p3||[]).forEach(q => {
+  maxMcScore += exam.p2.length * P2_RULE[4];
+  exam.p3.forEach(q => {
     maxMcScore += CONFIG.p3.point;
     const val = parseNum(answers[q.uid] || '');
     if((q.answer !== null) && !isNaN(val) && Math.abs(val - q.answer) < 1e-6) mcScore += CONFIG.p3.point;
   });
-
   return { mcScore, maxMcScore };
 }
 
-/* TAB KẾT QUẢ: CHỈ hiện tổng điểm / điểm tối đa */
 function renderTab3(){
   const { mcScore, maxMcScore } = calculateScore();
-  $('#resultBody').innerHTML = `<div class="result">
+  let html = `<div class="result">
+    <h2 style="color:var(--brown-d); margin-bottom: 15px;">KẾT QUẢ BÀI LÀM</h2>
     <div class="score-big">${fmt(mcScore)} <span class="unit">/ ${fmt(maxMcScore)} điểm</span></div>
-    <div class="result-meta">Mã đề: <b>${esc(currentCode || currentExamLabel)}</b></div>
+    <div class="result-meta">Tương đương hệ 10: <b>${fmt(maxMcScore ? (mcScore/maxMcScore)*10 : 0)}</b> điểm</div>
   </div>`;
+  $('#resultBody').innerHTML = html;
 }
 
 function clearResultTab(){
   $('#resultBody').innerHTML =
-    '<p class="note" style="margin-top:30px">Chưa nộp bài. Hãy làm bài ở tab “Đề bài” rồi nhấn <b>Nộp bài</b>.</p>';
+    '<p class="note" style="margin-top:30px; text-align:center;">Chưa có kết quả. Hãy làm bài rồi nhấn <b>Nộp bài</b>.</p>';
 }
 
-/* ==================================================================
-   13. ĐẾM & NHÃN MÃ ĐỀ
-================================================================== */
+/* 9. ĐẾM & NHÃN */
 function countAnswered(){
   let c = 0;
-  (exam.p1||[]).forEach(q => { if(answers[q.uid] !== undefined) c++; });
-  (exam.p2||[]).forEach(q => {
+  exam.p1.forEach(q => { if(answers[q.uid] !== undefined) c++; });
+  exam.p2.forEach(q => {
     const a = answers[q.uid] || [];
     if(a.length === 4 && a.every(x => x)) c++;
   });
-  (exam.p3||[]).forEach(q => { if(answers[q.uid] && String(answers[q.uid]).trim()) c++; });
+  exam.p3.forEach(q => { if(answers[q.uid] && String(answers[q.uid]).trim()) c++; });
   return c;
 }
 function updateAnsweredCount(){
   const c = countAnswered();
-  const total = (exam.p1||[]).length + (exam.p2||[]).length + (exam.p3||[]).length;
+  const total = exam.p1.length + exam.p2.length + exam.p3.length;
   $('#answeredCount').textContent = c;
   $('#totalCount').textContent = total;
 }
-function setCodeBadge(){
-  $('#codeBadge').textContent = 'Mã: ' + (currentCode || currentExamLabel);
-}
 
-/* ==================================================================
-   14. NẠP ĐỀ
-================================================================== */
+/* 10. CHỌN CÂU THEO TỔNG / MỨC ĐỘ */
 function syncButtons(){
   $('#btnSubmit').classList.toggle('hidden', submitted);
   $('#btnRedo').classList.toggle('hidden', !submitted);
 }
 
-function loadDefault(clear){
-  parsedOriginal = null;
-  currentExamLabel = 'MẶC ĐỊNH';
-  missingAnswers = [];
-  rebuildOriginal(false);
-  renderExam(); clearResultTab(); syncButtons();
+function readLevelCounts(){
+  const read = id => {
+      const el = $('#'+id);
+      if(!el) return 0;
+      const raw = String(el.value).trim();
+      if(raw === '') {
+          const ph = String(el.placeholder || '0').trim();
+          const v = parseInt(ph, 10);
+          return isNaN(v) ? 0 : Math.max(0, v);
+      }
+      const v = parseInt(raw, 10);
+      return isNaN(v) ? 0 : Math.max(0, v);
+  };
+  const has = ids => ids.some(id=>String($('#'+id).value).trim()!=='');
+  return {
+    p1:{easy:read('lv1_easy'),medium:read('lv1_medium'),hard:read('lv1_hard'),has:has(['lv1_easy','lv1_medium','lv1_hard'])},
+    p2:{easy:read('lv2_easy'),medium:read('lv2_medium'),hard:read('lv2_hard'),has:has(['lv2_easy','lv2_medium','lv2_hard'])},
+    p3:{easy:read('lv3_easy'),medium:read('lv3_medium'),hard:read('lv3_hard'),has:has(['lv3_easy','lv3_medium','lv3_hard'])}
+  };
+}
+function readScValue(part, len){
+  const id = 'sc' + ({p1:1,p2:2,p3:3}[part]);
+  const raw = String($('#'+id).value).trim();
+  if(raw==='') return null;
+  const v = parseInt(raw,10);
+  if(isNaN(v)) return null;
+  return Math.max(0, Math.min(v, len));
+}
+function pickIndices(pool, lc, rng){
+  const groups = {easy:[],medium:[],hard:[],wild:[]};
+  pool.forEach((q,i)=>{ groups[q.level||'wild'].push(i); });
+  if(rng){ for(const k in groups) shuffle(groups[k], rng); }
+  const picked = [];
+  let wildPos = 0;
+  ['easy','medium','hard'].forEach(L=>{
+    let need = lc[L]||0;
+    const g = groups[L];
+    const takeM = Math.min(need, g.length);
+    for(let i=0;i<takeM;i++) picked.push(g[i]);
+    need -= takeM;
+    if (need > 0) {
+        const takeW = Math.min(need, groups.wild.length - wildPos);
+        for(let i=0;i<takeW;i++){ picked.push(groups.wild[wildPos++]); }
+    }
+  });
+  return picked;
+}
+function simulateCount(pool, lc){
+  if(!pool) return 0;
+  let easyCount = pool.filter(q => q.level === 'easy').length;
+  let medCount = pool.filter(q => q.level === 'medium').length;
+  let hardCount = pool.filter(q => q.level === 'hard').length;
+  let wildCount = pool.filter(q => !q.level || !['easy','medium','hard'].includes(q.level)).length;
+
+  let total = 0;
+  let needEasy = lc.easy || 0;
+  let needMed = lc.medium || 0;
+  let needHard = lc.hard || 0;
+
+  let takeEasy = Math.min(needEasy, easyCount); total += takeEasy; needEasy -= takeEasy; easyCount -= takeEasy;
+  let takeMed = Math.min(needMed, medCount); total += takeMed; needMed -= takeMed; medCount -= takeMed;
+  let takeHard = Math.min(needHard, hardCount); total += takeHard; needHard -= takeHard; hardCount -= takeHard;
+
+  let totalNeed = needEasy + needMed + needHard;
+  let takeWild = Math.min(totalNeed, wildCount);
+  total += takeWild;
+
+  return total;
 }
 
-function loadExamFromParsed(data){
-  parsedOriginal = JSON.parse(JSON.stringify({p1:data.p1, p2:data.p2, p3:data.p3}));
-  missingAnswers = data.missing || [];
-  if(missingAnswers.length) console.warn('⚠ Thiếu đáp án các câu:', missingAnswers.join(', '));
-  rebuildOriginal(false);
-  renderExam(); clearResultTab(); syncButtons();
-}
-
-/* ---- TỰ NẠP FILE CÙNG THƯ MỤC (không thông báo) ---- */
-async function fetchText(url){
-  const r = await fetch(url, {cache:'no-store'});
-  if(!r.ok) throw new Error('HTTP ' + r.status);
-  return r.text();
-}
-
-async function autoLoadDefaultFiles(){
-  try{
-    const [exTxt, anTxt] = await Promise.all([fetchText(EXAM_FILE), fetchText(ANS_FILE)]);
-    const data = parseOldExamFormat(exTxt, anTxt);
-    if(data.p1.length + data.p2.length + data.p3.length === 0)
-      throw new Error('Không tìm thấy câu hỏi trong file đề.');
-    currentExamLabel = EXAM_FILE.replace(/\.html?$/i, '');
-    loadExamFromParsed(data);
-  }catch(err){
-    console.error('⚠ Không nạp được "' + EXAM_FILE + '" / "' + ANS_FILE + '" cùng thư mục — dùng đề mẫu mặc định.', err);
-    loadDefault(true);
+function selectPool(pool, part, rng){
+  if(!pool || !pool.length) return [];
+  const lc = readLevelCounts()[part];
+  if(lc.has){
+    let idx = pickIndices(pool, lc, rng);
+    idx.sort((a,b)=>a-b); 
+    return idx.map(i=>pool[i]);
   }
+  const sc = readScValue(part, pool.length);
+  if(sc!==null){
+    let idx = pool.map((_,i)=>i);
+    if(rng){ shuffle(idx, rng); }
+    idx = idx.slice(0,sc);
+    idx.sort((a,b)=>a-b); 
+    return idx.map(i=>pool[i]);
+  }
+  return rng ? shuffle(pool.slice(), rng) : pool.slice();
 }
 
-/* ==================================================================
-   15. NỘP BÀI & ĐẢO ĐỀ (đảo THEO CẤU TRÚC đã chọn)
-================================================================== */
+function buildExamFromSelection(rng){
+  const src = withLevelMap(parsedOriginal || buildDefaultExam());
+  return {
+    p1: selectPool(src.p1,'p1',rng),
+    p2: selectPool(src.p2,'p2',rng),
+    p3: selectPool(src.p3,'p3',rng)
+  };
+}
+
+function getPreviewSource(){
+  if(parsedOriginal) return withLevelMap(parsedOriginal);
+  return buildDefaultExam();
+}
+
+function updateSubsetPlaceholders(){
+  const src = getPreviewSource() || buildDefaultExam();
+  [['p1',1],['p2',2],['p3',3]].forEach(pair=>{
+    const p = pair[0], n = pair[1];
+    $('#sc'+n).placeholder = 'max ' + src[p].length;
+    const cnt = {easy:0,medium:0,hard:0,wild:0};
+    src[p].forEach(q=>{ cnt[q.level||'wild']++; });
+    $('#lv'+n+'_easy').placeholder = String(cnt.easy);
+    $('#lv'+n+'_medium').placeholder = String(cnt.medium);
+    $('#lv'+n+'_hard').placeholder = String(cnt.hard);
+    const wEl = $('#lv'+n+'_wild');
+    if(wEl) wEl.textContent = String(cnt.wild);
+  });
+}
+
+function updateCreateBtn(){
+  const btn = $('#btnCreateQuiz');
+  updateSubsetPlaceholders();
+  
+  const pt1 = parseScoreInput('pt1');
+  const p2_1 = parseScoreInput('p2_1');
+  const p2_2 = parseScoreInput('p2_2');
+  const p2_3 = parseScoreInput('p2_3');
+  const p2_4 = parseScoreInput('p2_4');
+  const pt3 = parseScoreInput('pt3');
+  
+  let total = 0;
+  if (parsedOriginal) {
+      try {
+          const td = withLevelMap(parsedOriginal);
+          const lcs = readLevelCounts();
+          const cntPart = p => {
+              if(lcs[p].has) return simulateCount(td[p], lcs[p]);
+              const sc = readScValue(p, td[p].length);
+              return sc!==null ? sc : td[p].length;
+          };
+          total = cntPart('p1')*pt1 + cntPart('p2')*p2_4 + cntPart('p3')*pt3;
+      } catch(e) { console.error(e); }
+  }
+  
+  if (total > 0) {
+      $('#ptTotalLabel').style.display = 'block';
+      $('#ptTotal').textContent = fmt(total);
+      const isAnyStructureInput = () => {
+          return ['sc1','sc2','sc3','lv1_easy','lv1_medium','lv1_hard','lv2_easy','lv2_medium','lv2_hard','lv3_easy','lv3_medium','lv3_hard'].some(id => String($('#'+id).value).trim() !== '');
+      };
+      if (!isAnyStructureInput()) {
+          $('#ptTotalLabelText').textContent = 'Tổng điểm tối đa (lấy toàn bộ đề):';
+      } else {
+          $('#ptTotalLabelText').textContent = 'Tổng điểm (tạm tính):';
+      }
+  } else {
+      $('#ptTotalLabel').style.display = 'none';
+  }
+  
+  const validScore = pt1 > 0 || p2_4 > 0 || pt3 > 0;
+  btn.disabled = !(parsedOriginal && validScore);
+}
+
+['pt1','p2_1','p2_2','p2_3','p2_4','pt3','sc1','sc2','sc3',
+ 'lv1_easy','lv1_medium','lv1_hard','lv2_easy','lv2_medium','lv2_hard','lv3_easy','lv3_medium','lv3_hard',
+ 'lm1','lm2','lm3']
+ .forEach(id => $('#'+id).addEventListener('input', updateCreateBtn));
+
+/* 11. SỰ KIỆN TẢI ĐỀ TỰ ĐỘNG VÀ TẠO ĐỀ */
+async function autoLoadExam() {
+  const saved = localStorage.getItem('tracnghiem_saved_exam');
+  if (saved) {
+      try {
+          const data = JSON.parse(saved);
+          if (data.parsedOriginal) {
+              parsedOriginal = data.parsedOriginal;
+              CONFIG.p1.point = data.pt1;
+              P2_RULE = [0, data.p2_1, data.p2_2, data.p2_3, data.p2_4];
+              CONFIG.p2.point = data.p2_4;
+              CONFIG.p3.point = data.pt3;
+              const seed = Math.floor(Math.random() * 4294967296);
+              const rng = mulberry32(seed);
+              exam = JSON.parse(JSON.stringify(buildExamFromSelection(rng)));
+              missingAnswers = data.missingAnswers || [];
+              renderExam(); clearResultTab(); syncButtons();
+              return;
+          }
+      } catch(e) {}
+  }
+
+  try {
+    const examRes = await fetch('tn_de.html');
+    const ansRes = await fetch('tn_da.html');
+    if (examRes.ok && ansRes.ok) {
+      const htmlExamText = await examRes.text();
+      const htmlAnsText = await ansRes.text();
+      const data = parseOldExamFormat(htmlExamText, htmlAnsText);
+      
+      parsedOriginal = JSON.parse(JSON.stringify({p1:data.p1, p2:data.p2, p3:data.p3}));
+      const seed = Math.floor(Math.random() * 4294967296);
+      const rng = mulberry32(seed);
+      exam = JSON.parse(JSON.stringify(buildExamFromSelection(rng)));
+      missingAnswers = data.missing || [];
+      renderExam(); clearResultTab(); syncButtons();
+      
+      const dataToSave = {
+        parsedOriginal, missingAnswers,
+        pt1: 0.25, p2_1: 0.1, p2_2: 0.25, p2_3: 0.5, p2_4: 1.0, pt3: 0.5
+      };
+      localStorage.setItem('tracnghiem_saved_exam', JSON.stringify(dataToSave));
+      return;
+    }
+  } catch (err) {
+    console.warn("Không tìm thấy file tn_de.html / tn_da.html trong cùng thư mục.");
+  }
+  
+  exam = buildDefaultExam();
+  parsedOriginal = null;
+  renderExam(); clearResultTab(); syncButtons();
+}
+
+$('#btnLoadMenu').addEventListener('click', async () => {
+  $('#loadOverlay').classList.remove('hidden');
+  updateCreateBtn();
+});
+
+$('#btnCloseLoad').addEventListener('click', () => {
+  $('#loadOverlay').classList.add('hidden');
+});
+
+$('#btnCreateQuiz').addEventListener('click', () => {
+  if(!parsedOriginal) return;
+  const pt1 = parseScoreInput('pt1');
+  const p2_1 = parseScoreInput('p2_1');
+  const p2_2 = parseScoreInput('p2_2');
+  const p2_3 = parseScoreInput('p2_3');
+  const p2_4 = parseScoreInput('p2_4');
+  const pt3 = parseScoreInput('pt3');
+  
+  CONFIG.p1.point = pt1;
+  CONFIG.p2.point = p2_4;
+  CONFIG.p3.point = pt3;
+  P2_RULE = [0, p2_1, p2_2, p2_3, p2_4];
+  
+  const seed = Math.floor(Math.random() * 4294967296);
+  const rng = mulberry32(seed);
+  
+  const sel = buildExamFromSelection(rng);
+  exam = JSON.parse(JSON.stringify(sel));
+  
+  submitted = false;
+  answers = {};
+  renderExam(); clearResultTab(); syncButtons();
+  $('#loadOverlay').classList.add('hidden');
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+/* 12. NỘP BÀI & LÀM LẠI (ĐẢO ĐỀ) */
 function submitExam(){
   submitted = true;
   renderExam(); renderTab3(); syncButtons();
@@ -1129,60 +1103,39 @@ function submitExam(){
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
-function shuffleCurrentExam(){
-  const seed = Math.floor(Math.random() * 4294967296);
-  const rng = mulberry32(seed);
-  // Đảo đề sẽ lấy từ parsedOriginal để bốc ra đề hoàn toàn mới, hoặc có thể lấy từ activeBaseline để chỉ đảo đề hiện tại.
-  // Ở đây dùng activeBaseline nếu có, để đảm bảo tính nhất quán với đề gốc vừa tạo.
-  const source = activeBaseline || parsedOriginal || buildDefaultExam();
-  const sel = selectByStructure(source, rng);
+$('#btnSubmit').addEventListener('click', submitExam);
 
-  const p1 = shuffle(sel.p1.map(q => {
-    const correctOpt = q.options[q.correct];
-    const correctKey = correctOpt.img || correctOpt.text;
-    const opts = shuffle(q.options.map(o => ({...o})), rng);
-    const newCorrect = opts.findIndex(o => (o.img||o.text) === correctKey);
-    return { ...q, options: opts, correct: newCorrect };
-  }), rng);
-
-  const p2 = shuffle(sel.p2.map(q => ({...q})), rng);
-  const p3 = shuffle(sel.p3.map(q => ({...q})), rng);
-
-  exam = { p1, p2, p3, seed, code: seedToCode(seed) };
-  currentCode = exam.code;
-  submitted = false;
-  answers = {};
-  setCodeBadge(); renderExam(); clearResultTab(); syncButtons();
-}
-
-function redoExam(){
-  shuffleCurrentExam();
-  $$('nav.tabs button').forEach(b => b.classList.remove('active'));
-  $$('section.tab').forEach(s => s.classList.remove('active'));
-  document.querySelector('nav.tabs button[data-tab="tab1"]').classList.add('active');
-  $('#tab1').classList.add('active');
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-
-$('#btnDefault').addEventListener('click', () => {
-  if(activeBaseline) {
-    exam = JSON.parse(JSON.stringify(activeBaseline));
-    currentCode = null;
+$('#btnRedo').addEventListener('click', () => {
+  if(confirm("Bạn có chắc muốn làm lại từ đầu? (Câu hỏi và đáp án sẽ được đảo thứ tự)")) {
+    // Đảo thứ tự câu hỏi và đáp án (giữ nguyên nhóm câu hỏi hiện tại)
+    const seed = Math.floor(Math.random() * 4294967296);
+    const rng = mulberry32(seed);
+    
+    const p1 = shuffle(exam.p1.map(q => {
+      const correctOpt = q.options[q.correct];
+      const correctKey = correctOpt.img || correctOpt.text;
+      const opts = shuffle(q.options.map(o => ({...o})), rng);
+      const newCorrect = opts.findIndex(o => (o.img||o.text) === correctKey);
+      return { ...q, options: opts, correct: newCorrect };
+    }), rng);
+    const p2 = shuffle(exam.p2.map(q => ({...q})), rng);
+    const p3 = shuffle(exam.p3.map(q => ({...q})), rng);
+    
+    exam = { ...exam, p1, p2, p3 };
+    
     submitted = false;
     answers = {};
-    setCodeBadge();
-  } else {
-    rebuildOriginal(false);
+    renderExam(); clearResultTab(); syncButtons();
+    
+    $$('nav.tabs button').forEach(b => b.classList.remove('active'));
+    $$('section.tab').forEach(s => s.classList.remove('active'));
+    document.querySelector('nav.tabs button[data-tab="tab1"]').classList.add('active');
+    $('#tab1').classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
   }
-  renderExam(); clearResultTab(); syncButtons();
 });
-$('#btnShuffle').addEventListener('click', shuffleCurrentExam);
-$('#btnSubmit').addEventListener('click', submitExam);
-$('#btnRedo').addEventListener('click', redoExam);
 
-/* ==================================================================
-   16. TƯƠNG TÁC TÍCH ĐÁP ÁN
-================================================================== */
+/* 13. TÍCH ĐÁP ÁN */
 $('#examBody').addEventListener('change', e => {
   if(submitted) return;
   const t = e.target;
@@ -1208,9 +1161,7 @@ $('#examBody').addEventListener('input', e => {
   updateAnsweredCount();
 });
 
-/* ==================================================================
-   17. TABS
-================================================================== */
+/* 14. TABS */
 $$('nav.tabs button').forEach(btn => {
   btn.addEventListener('click', () => {
     $$('nav.tabs button').forEach(b => b.classList.remove('active'));
@@ -1220,10 +1171,8 @@ $$('nav.tabs button').forEach(btn => {
   });
 });
 
-/* ==================================================================
-   18. ĐỒNG HỒ (MẶC ĐỊNH 40 PHÚT) & FONT SIZE
-================================================================== */
-let tRemain = 2400, tTimer = null, tRunning = false; // 2400s = 40 phút
+/* 15. ĐỒNG HỒ & FONT */
+let tRemain = 25 * 60, tTimer = null, tRunning = false;
 function tShow(){
   const m = Math.floor(tRemain / 60), s = tRemain % 60;
   $('#tDisp').textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
@@ -1239,6 +1188,7 @@ $('#tBtn').addEventListener('click', () => {
       if(tRemain <= 0){
         tRemain = 0; clearInterval(tTimer); tRunning = false;
         $('#tBtn').textContent = 'Hết giờ';
+        submitExam();
       }
       tShow();
     }, 1000);
@@ -1249,7 +1199,6 @@ $('#tMin').addEventListener('change', e => {
   $('#tBtn').textContent = 'Bắt đầu';
   tRemain = Number(e.target.value) * 60; tShow();
 });
-
 let fs = 18;
 $('#fsUp').addEventListener('click', () => {
   fs = Math.min(40, fs + 2);
@@ -1260,12 +1209,11 @@ $('#fsDown').addEventListener('click', () => {
   document.documentElement.style.setProperty('--fs', fs + 'px');
 });
 
-/* ==================================================================
-   19. KHỞI TẠO
-================================================================== */
-tShow();
-if(document.readyState === 'complete') autoLoadDefaultFiles();
-else window.addEventListener('load', autoLoadDefaultFiles);
+/* 16. KHỞI TẠO - ĐỢI TẢI XONG XUÔI MỚI CHẠY ĐỂ TRÁNH LỖI KATEX */
+window.addEventListener('load', () => {
+  tShow();
+  autoLoadExam();
+});
 </script>
 </body>
 </html>
