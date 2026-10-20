@@ -30,42 +30,30 @@
   const db = getFirestore(app);
   const auth = getAuth(app);
 
-  // Hàm lấy dữ liệu từ Firebase
   window.getFirebaseQuestions = async function() {
     try {
         const querySnapshot = await getDocs(collection(db, "vl10_questions"));
         let questions = [];
-        querySnapshot.forEach((doc) => {
-            questions.push(doc.data());
-        });
+        querySnapshot.forEach((doc) => { questions.push(doc.data()); });
         return questions;
-    } catch(e) {
-        console.error("Lỗi lấy dữ liệu Firebase:", e);
-        return null;
-    }
+    } catch(e) { return null; }
   };
 
-  // Hàm Đăng Nhập
   window.loginFirebase = async function(email, password) {
     try {
         await signInWithEmailAndPassword(auth, email, password);
         return { success: true };
     } catch (e) {
-        let msg = "Sai email hoặc mật khẩu!";
-        if(e.code === 'auth/invalid-email') msg = "Email không hợp lệ!";
-        return { success: false, message: msg };
+        return { success: false, message: "Sai email hoặc mật khẩu!" };
     }
   };
 
-  // Lắng nghe trạng thái đăng nhập (Tự động đồng bộ với app chính)
   window.checkAuthState = function(callback) {
       onAuthStateChanged(auth, (user) => {
           if (user) {
               document.getElementById('authUserEmail').textContent = user.email;
               callback(true);
-          } else {
-              callback(false);
-          }
+          } else { callback(false); }
       });
   };
 
@@ -87,10 +75,20 @@ body{
   background:var(--bg); color:var(--ink);
   font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   font-size:15px; line-height:1.35;
+  /* BẢO MẬT: CHỐNG BÔI ĐEN */
   user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
 }
 input, textarea { user-select: text; -webkit-user-select: text; }
 .hidden{display:none !important}
+
+/* BẢO MẬT: MÀN HÌNH CHẶN DEVTOOLS */
+#security-trap {
+  position: fixed; inset: 0; background: #8B4513; color: white;
+  z-index: 99999; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center; padding: 20px;
+}
+#security-trap h2 { font-size: 2em; margin-bottom: 10px; }
+#security-trap p { font-size: 1.2em; }
 
 /* MÀN HÌNH ĐĂNG NHẬP */
 #loginOverlay {
@@ -121,8 +119,6 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 input[type=number] { -moz-appearance: textfield; }
 .katex{font-size:1.02em}
 .katex-display{overflow-x:auto; overflow-y:hidden; margin:6px 0; padding:2px 0}
-.katex-display::-webkit-scrollbar{height:6px}
-.katex-display::-webkit-scrollbar-thumb{background:var(--line); border-radius:3px}
 .q-img-wrap{margin:10px 0; text-align:center}
 .q-img-wrap img{ max-width:100%; max-height:340px; object-fit:contain; background:#fff; border:2px solid var(--line); border-radius:10px; padding:4px; }
 .opt-img{ display:block; max-width:100%; max-height:160px; object-fit:contain; margin-top:6px; border:1px solid var(--line); border-radius:6px; background:#fff; }
@@ -210,7 +206,14 @@ section.tab.active{display:block}
 </head>
 <body>
 
-<!-- POPUP ĐĂNG NHẬP (Không có nút Đăng ký) -->
+<!-- BẢO MẬT: MÀN HÌNH CHẶN -->
+<div id="security-trap" class="hidden">
+  <h2>⛔ CẢNH BÁO BẢO MẬT</h2>
+  <p>Hệ thống phát hiện bạn đang cố gắng can thiệp hoặc xem mã nguồn.</p>
+  <p>Hành vi này vi phạm quy định làm bài. Vui lòng đóng Developer Tools và tải lại trang.</p>
+</div>
+
+<!-- POPUP ĐĂNG NHẬP -->
 <div id="loginOverlay" class="hidden">
     <div class="login-card">
         <h2>🔒 Đăng Nhập Hệ Thống</h2>
@@ -339,6 +342,32 @@ section.tab.active{display:block}
 </div>
 
 <script>
+/* BẢO MẬT 1: CHỐNG F12, CHUỘT PHẢI, COPY */
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', e => {
+  if (e.key === 'F12') { e.preventDefault(); return false; }
+  if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) { e.preventDefault(); return false; }
+  if (e.ctrlKey && (e.key === 'U' || e.key === 'S' || e.key === 'u' || e.key === 's')) { e.preventDefault(); return false; }
+});
+document.addEventListener('dragstart', e => e.preventDefault());
+document.addEventListener('copy', e => {
+    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') e.preventDefault();
+});
+
+/* BẢO MẬT 2: BẪY DEVTOOLS */
+let devtoolsOpen = false;
+const trap = document.getElementById('security-trap');
+setInterval(() => {
+    const threshold = 160;
+    const widthDiff = window.outerWidth - window.innerWidth;
+    const heightDiff = window.outerHeight - window.innerHeight;
+    if (widthDiff > threshold || heightDiff > threshold) {
+        if(!devtoolsOpen) { devtoolsOpen = true; trap.classList.remove('hidden'); }
+    } else {
+        if(devtoolsOpen) { devtoolsOpen = false; trap.classList.add('hidden'); }
+    }
+}, 500);
+
 /* 0. KATEX */
 function renderMath(el){
   if(!el) return;
@@ -770,24 +799,20 @@ window.addEventListener('load', () => {
     tShow();
     window.checkAuthState((isLoggedIn) => {
         if (isLoggedIn) {
-            // Nếu đã đăng nhập từ trước (hoặc từ app chính), tự động mở khóa
             document.getElementById('loginOverlay').classList.add('hidden');
             document.getElementById('appContent').classList.remove('hidden');
             if(typeof autoLoadExam === 'function') autoLoadExam();
         } else {
-            // Chưa đăng nhập -> Hiện popup
             document.getElementById('loginOverlay').classList.remove('hidden');
             document.getElementById('appContent').classList.add('hidden');
         }
     });
 });
 
-// XỬ LÝ SỰ KIỆN ĐĂNG NHẬP
 document.getElementById('btnLogin').addEventListener('click', async () => {
     const email = document.getElementById('loginEmail').value;
     const pass = document.getElementById('loginPassword').value;
     const errBox = document.getElementById('authMessage');
-    
     if(!email || !pass) { errBox.textContent = "Vui lòng nhập đủ Email và Mật khẩu!"; return; }
     errBox.textContent = "Đang kiểm tra...";
     const res = await window.loginFirebase(email, pass);
