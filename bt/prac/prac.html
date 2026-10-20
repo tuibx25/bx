@@ -316,41 +316,25 @@ section.tab.active{display:block}
 </div>
 
 <script>
-/* =========================================================
- * BẢO MẬT 1: CHỐNG COPY / CHỐNG XEM MÃ NGUỒN / CHỐNG PHÍM TẮT
- * ========================================================= */
 (function() {
-  // 1) Chặn menu chuột phải
   document.addEventListener('contextmenu', e => { e.preventDefault(); return false; }, { capture: true });
 
-  // 2) Chặn phím tắt nguy hiểm
   document.addEventListener('keydown', function(e) {
     const k = (e.key || '').toLowerCase();
     const tag = (e.target && e.target.tagName) || '';
     const isInput = (tag === 'INPUT' || tag === 'TEXTAREA');
 
-    // F12 - mở DevTools
     if (e.key === 'F12' || e.keyCode === 123) { e.preventDefault(); e.stopPropagation(); return false; }
-    // Ctrl+Shift+I / J / C / K - DevTools
     if (e.ctrlKey && e.shiftKey && (k === 'i' || k === 'j' || k === 'c' || k === 'k')) { e.preventDefault(); e.stopPropagation(); return false; }
-    // Ctrl+U (view-source), Ctrl+S (save)
     if (e.ctrlKey && !e.shiftKey && (k === 'u' || k === 's')) { e.preventDefault(); e.stopPropagation(); return false; }
-    // Ctrl+P (in ấn)
     if (e.ctrlKey && !e.shiftKey && k === 'p') { e.preventDefault(); e.stopPropagation(); return false; }
-    // Ctrl+A - chặn chọn toàn bộ ngoài ô nhập
     if (e.ctrlKey && !e.shiftKey && k === 'a' && !isInput) { e.preventDefault(); return false; }
-    // Ctrl+C / Ctrl+X - chặn copy/cut ngoài ô nhập
     if (e.ctrlKey && !e.shiftKey && (k === 'c' || k === 'x') && !isInput) { e.preventDefault(); return false; }
-    // PrintScreen - xoá clipboard (hạn chế chụp màn hình)
     if (e.key === 'PrintScreen' || e.keyCode === 44) {
       try { navigator.clipboard.writeText(''); } catch(err) {}
     }
   }, { capture: true });
-
-  // 3) Chặn kéo-thả
   document.addEventListener('dragstart', e => e.preventDefault(), { capture: true });
-
-  // 4) Chặn copy / cut ngoài ô nhập
   document.addEventListener('copy', function(e) {
     const tag = (e.target && e.target.tagName) || '';
     if (tag !== 'INPUT' && tag !== 'TEXTAREA') { e.preventDefault(); return false; }
@@ -359,20 +343,14 @@ section.tab.active{display:block}
     const tag = (e.target && e.target.tagName) || '';
     if (tag !== 'INPUT' && tag !== 'TEXTAREA') { e.preventDefault(); return false; }
   }, { capture: true });
-
-  // 5) Chặn bôi đen văn bản ngoài ô nhập
   document.addEventListener('selectstart', function(e) {
     const tag = (e.target && e.target.tagName) || '';
     if (tag !== 'INPUT' && tag !== 'TEXTAREA') { e.preventDefault(); return false; }
   }, { capture: true });
 
-  // 6) Chặn kéo ảnh
   document.addEventListener('drag', e => e.preventDefault(), { capture: true });
 })();
 
-/* =========================================================
- * BẢO MẬT 2: BẪY DEVTOOLS (DETECT KÍCH THƯỚC)
- * ========================================================= */
 let devtoolsOpen = false;
 const trap = document.getElementById('security-trap');
 setInterval(() => {
@@ -397,7 +375,6 @@ function renderMath(el){
   } else { setTimeout(() => renderMath(el), 100); }
 }
 
-/* 1. CẤU HÌNH */
 const CONFIG = {
   p1: { point: 0.25, title:"PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn", note:"Chọn một phương án đúng nhất cho mỗi câu." },
   p2: { point: 1.0, title:"PHẦN II. Câu trắc nghiệm đúng – sai", note:"Với mỗi ý a), b), c), d) chọn Đúng hoặc Sai." },
@@ -405,14 +382,12 @@ const CONFIG = {
 };
 let P2_RULE = [0, 0.1, 0.25, 0.5, 1.0];
 
-/* 2. DỮ LIỆU MẶC ĐỊNH */
 const BANK = {
   p1: [{ text:"Đơn vị đo cường độ điện trường trong hệ SI là", options:["$\\text{V/m}$", "$\\text{V.m}$", "$\\text{N.m}$", "$\\text{J/C}$"], correct:0 }],
   p2: [{ text:"Xét điện trường đều...", statements:["Các đường sức...", "Cường độ...", "Hiệu điện thế...", "Công của lực..."], answers:[true,true,false,false] }],
   p3: [{ text:"Cho điện trở $R = 10...", answer: 2 }]
 };
 
-/* 3. TIỆN ÍCH */
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -426,12 +401,10 @@ function normStatement(s){ return (typeof s === 'string') ? { text:s, img:null }
 function imgHTML(src, alt, caption, cls){ if(!src) return ''; const clsAttr = cls ? ` class="${cls}"` : ''; const capHTML = caption ? `<div class="q-img-caption">${esc(caption)}</div>` : ''; return `<div class="q-img-wrap"><img src="${esc(src)}" alt="${esc(alt||'Hình minh hoạ')}" onerror="imgError(this)"${clsAttr}>${capHTML}</div>`; }
 function imgError(img){ const wrap = img.closest('.q-img-wrap') || img.parentElement; if(!wrap) return; wrap.innerHTML = `<span class="q-img-error">⚠ Không tải được ảnh: ${esc(img.getAttribute('src'))}</span>`; }
 
-/* 4. BIẾN TOÀN CỤC */
 let exam = null; let parsedOriginal = null; let answers = {}; let submitted = false; let missingAnswers = [];
 let allFirebaseQuestions = [];
 let availableLessons = new Set();
 
-/* 5. ĐỀ MẶC ĐỊNH */
 function buildDefaultExam(){
   return {
     p1: BANK.p1.map((q,i) => ({ uid:'p1-'+i, text:q.text, img:null, imgAlt:'', options: q.options.map(normOption), correct:q.correct, level:null })),
@@ -440,7 +413,6 @@ function buildDefaultExam(){
   };
 }
 
-/* 6. NHẬN DIỆN MỨC ĐỘ */
 function normLevelToken(t){
   t = String(t||'').toLowerCase().trim();
   if(t==='easy'||t==='de'||t==='dễ') return 'easy';
@@ -459,7 +431,6 @@ function normLevel(s){
   return normLevelToken(s);
 }
 
-/* 7. RENDER */
 function renderExam(){
   let html = '';
   if (missingAnswers.length > 0) { html += `<div class="warn-banner">⚠️ <b>Cảnh báo:</b> Các câu sau chưa có đáp án: ${missingAnswers.join(', ')} (sẽ tính là SAI).</div>`; }
@@ -496,7 +467,6 @@ function renderExam(){
   updateAnsweredCount();
 }
 
-/* 8. CHẤM ĐIỂM */
 function calculateScore(){
   let mcScore = 0, maxMcScore = 0;
   exam.p1.forEach(q => { maxMcScore += CONFIG.p1.point; const chosen = answers[q.uid]; if((q.correct !== null) && chosen === q.correct) mcScore += CONFIG.p1.point; });
@@ -513,12 +483,10 @@ function renderTab3(){
 }
 function clearResultTab(){ $('#resultBody').innerHTML = '<p class="note" style="margin-top:30px; text-align:center;">Chưa có kết quả. Hãy làm bài rồi nhấn <b>Nộp bài</b>.</p>'; }
 
-/* 9. ĐẾM & NHÃN */
 function countAnswered(){ let c = 0; exam.p1.forEach(q => { if(answers[q.uid] !== undefined) c++; }); exam.p2.forEach(q => { const a = answers[q.uid] || []; if(a.length === 4 && a.every(x => x)) c++; }); exam.p3.forEach(q => { if(answers[q.uid] && String(answers[q.uid]).trim()) c++; }); return c; }
 function updateAnsweredCount(){ const c = countAnswered(); const total = exam.p1.length + exam.p2.length + exam.p3.length; $('#answeredCount').textContent = c; $('#totalCount').textContent = total; }
 function syncButtons(){ $('#btnSubmit').classList.toggle('hidden', submitted); $('#btnRedo').classList.toggle('hidden', !submitted); }
 
-/* 10. CHỌN CÂU THEO TỔNG / MỨC ĐỘ */
 function readLevelCounts(){
   const read = id => { const el = $('#'+id); if(!el) return 0; const raw = String(el.value).trim(); if(raw === '') { const ph = String(el.placeholder || '0').trim(); const v = parseInt(ph, 10); return isNaN(v) ? 0 : Math.max(0, v); } const v = parseInt(raw, 10); return isNaN(v) ? 0 : Math.max(0, v); };
   const has = ids => ids.some(id=>String($('#'+id).value).trim()!=='');
@@ -660,7 +628,6 @@ function updateCreateBtn(){
 
 ['pt1','p2_1','p2_2','p2_3','p2_4','pt3','sc1','sc2','sc3','lv1_easy','lv1_medium','lv1_hard','lv1_very_hard','lv2_easy','lv2_medium','lv2_hard','lv2_very_hard','lv3_easy','lv3_medium','lv3_hard','lv3_very_hard'].forEach(id => $('#'+id).addEventListener('input', updateCreateBtn));
 
-/* 11. SỰ KIỆN TẢI ĐỀ TỪ FIREBASE */
 async function autoLoadExam() {
   const errorBanner = document.getElementById('errorBanner');
   if (errorBanner) errorBanner.classList.add('hidden'); 
@@ -752,7 +719,6 @@ $('#btnCreateQuiz').addEventListener('click', () => {
   window.scrollTo({top:0, behavior:'smooth'});
 });
 
-/* 12. NỘP BÀI & LÀM LẠI */
 function submitExam(){
   submitted = true; renderExam(); renderTab3(); syncButtons();
   $$('nav.tabs button').forEach(b => b.classList.remove('active')); $$('section.tab').forEach(s => s.classList.remove('active'));
@@ -775,7 +741,6 @@ $('#btnRedo').addEventListener('click', () => {
   }
 });
 
-/* 13. TÍCH ĐÁP ÁN */
 $('#examBody').addEventListener('change', e => {
   if(submitted) return; const t = e.target; if(t.type !== 'radio') return; const uid = t.dataset.uid; if(!uid) return;
   if(uid.startsWith('p1-')) answers[uid] = Number(t.value);
@@ -788,7 +753,6 @@ $('#examBody').addEventListener('input', e => {
   answers[t.dataset.uid] = t.value; updateAnsweredCount();
 });
 
-/* 14. TABS */
 $$('nav.tabs button').forEach(btn => {
   btn.addEventListener('click', () => {
     $$('nav.tabs button').forEach(b => b.classList.remove('active')); $$('section.tab').forEach(s => s.classList.remove('active'));
@@ -796,7 +760,6 @@ $$('nav.tabs button').forEach(btn => {
   });
 });
 
-/* 15. ĐỒNG HỒ & FONT */
 let tRemain = 25 * 60, tTimer = null, tRunning = false;
 function tShow(){ const m = Math.floor(tRemain / 60), s = tRemain % 60; $('#tDisp').textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0'); }
 $('#tBtn').addEventListener('click', () => {
@@ -812,19 +775,17 @@ let fs = 18;
 $('#fsUp').addEventListener('click', () => { fs = Math.min(40, fs + 2); document.documentElement.style.setProperty('--fs', fs + 'px'); });
 $('#fsDown').addEventListener('click', () => { fs = Math.max(13, fs - 2); document.documentElement.style.setProperty('--fs', fs + 'px'); });
 
-/* 16. KHỞI TẠO VÀ ĐĂNG NHẬP ẨN DANH */
 window.addEventListener('load', () => {
     tShow();
     
-    // Bắt đầu quá trình đăng nhập ẩn danh (Loading Screen đã hiện sẵn trong HTML)
     window.initAnonymousAuth((isLoggedIn) => {
         if (isLoggedIn) {
-            // Đăng nhập thành công -> Ẩn màn hình chờ, hiện App, tải đề
+            
             document.getElementById('loadingScreen').style.display = 'none';
             document.getElementById('appContent').classList.remove('hidden');
             if(typeof autoLoadExam === 'function') autoLoadExam();
         } else {
-            // Lỗi đăng nhập -> Báo lỗi
+            
             document.getElementById('loadingScreen').innerHTML = '<div style="color: red; text-align: center;">❌ Không thể kết nối đến máy chủ.<br>Vui lòng kiểm tra mạng và tải lại trang!</div>';
         }
     });
