@@ -1,10 +1,20 @@
-// firebase-init.js
+// /bx/firebase-init.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { getAuth, signInAnonymously, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import {
+  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  signOut, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail,
+  signInAnonymously
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import {
+  getFirestore, collection, addDoc, getDocs, doc, deleteDoc,
+  updateDoc, query, where, getDoc, setDoc, serverTimestamp, writeBatch,
+  limit, orderBy, startAfter
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import {
+  getFunctions, httpsCallable
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-functions.js";
 import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-check.js";
 
-// Cấu hình Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyDX1tt6PyBUxCwU6qTe9Cn9bbbWhgLKLKU",
   authDomain: "bx-vlpt.firebaseapp.com",
@@ -15,22 +25,34 @@ const firebaseConfig = {
   measurementId: "G-S37RM7Q5C5"
 };
 
-// Khởi tạo Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+// 1. Khởi tạo Firebase
+export const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+export const functions = getFunctions(app);
 
-// Khởi tạo App Check
+// 2. Khởi tạo App Check
 const appCheck = initializeAppCheck(app, {
   provider: new ReCaptchaV3Provider('6LcZFfktAAAAADOJQgaH33dc5liMbbO90SqdMLfj'),
   isTokenAutoRefreshEnabled: true 
 });
 
-// ==========================================
-// CÁC HÀM DÙNG CHUNG (Gắn vào window để HTML gọi được)
-// ==========================================
+export const TEACHER_EMAIL = "trntui6@gmail.com";
 
-// Dành cho prac.html (Tài khoản ẩn danh)
+// ==========================================
+// XUẤT CÁC HÀM (DÀNH CHO TRANG CHỦ DÙNG IMPORT)
+// ==========================================
+export {
+  createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  signOut, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail,
+  collection, addDoc, getDocs, doc, deleteDoc, updateDoc,
+  query, where, getDoc, setDoc, serverTimestamp, writeBatch,
+  limit, orderBy, startAfter, httpsCallable
+};
+
+// ==========================================
+// GẮN HÀM VÀO WINDOW (DÀNH CHO CÁC TRANG CON: INDEX1, SELF_PRAC)
+// ==========================================
 window.getFirebaseQuestions = async function() {
   try {
       const querySnapshot = await getDocs(collection(db, "vl10_questions"));
@@ -58,7 +80,6 @@ window.initAnonymousAuth = function(callback) {
   });
 };
 
-// Dành cho index1.html (Đăng nhập Email/Password)
 window.loginFirebase = async function(email, password) {
   try {
       await signInWithEmailAndPassword(auth, email, password);
@@ -71,12 +92,14 @@ window.loginFirebase = async function(email, password) {
 window.checkAuthState = function(callback) {
     onAuthStateChanged(auth, (user) => {
         if (user) {
+            // KIỂM TRA XÁC MINH EMAIL
             if (!user.emailVerified) {
                 callback(false, "Tài khoản chưa được xác minh email. Vui lòng kiểm tra hộp thư!");
                 signOut(auth);
                 return;
             }
-            document.getElementById('authUserEmail').textContent = user.email;
+            const emailEl = document.getElementById('authUserEmail');
+            if(emailEl) emailEl.textContent = user.email;
             callback(true);
         } else { callback(false); }
     });
