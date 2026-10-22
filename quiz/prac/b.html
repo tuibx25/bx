@@ -8,10 +8,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-
-<!-- GỌI FILE CẤU HÌNH FIREBASE DÙNG CHUNG -->
 <script type="module" src="/bx/bt/js/firebase-init.js"></script>
-
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -592,16 +589,11 @@ async function autoLoadExam() {
     
     const allQuestions = await window.getFirebaseQuestions();
     if (!allQuestions || allQuestions.length === 0) throw new Error("Database trống hoặc chưa có câu hỏi.");
-
-    // 🟢 LỚP KHIÊN BẢO VỆ DỮ LIỆU: Tự động sửa lỗi từ Firebase
     const normalizedQuestions = allQuestions.map((q, index) => {
-        // 1. Tự tạo uid nếu thiếu (CÓ TIỀN TỐ CHUẨN p1-, p2-, p3-)
         if (!q.uid) {
             const prefix = q.part === 1 ? 'p1' : (q.part === 2 ? 'p2' : 'p3');
             q.uid = `${prefix}-auto_${index}_${Math.random().toString(36).substring(2, 8)}`;
         }
-
-        // 2. Chuẩn hóa Phần I
         if (q.part === 1 && q.options) {
             q.options = q.options.map(normOption);
             if (typeof q.correct === 'string') {
@@ -609,14 +601,12 @@ async function autoLoadExam() {
                 if (idx !== -1) q.correct = idx;
             }
         } 
-        // 3. Chuẩn hóa Phần II
         else if (q.part === 2 && q.statements) {
             q.statements = q.statements.map(normStatement);
             if (Array.isArray(q.answers)) {
                 q.answers = q.answers.map(a => a === true || a === 'T' || a === 'Đ' || a === 'true' || a === 1);
             }
         }
-        // 4. Chuẩn hóa Phần III
         else if (q.part === 3) {
             if (typeof q.answer === 'string') {
                 const num = parseNum(q.answer);
@@ -722,7 +712,6 @@ $('#btnRedo').addEventListener('click', () => {
 
 $('#examBody').addEventListener('change', e => {
   if(submitted) return; const t = e.target; if(t.type !== 'radio') return; const uid = t.dataset.uid; if(!uid) return;
-  // Dùng t.name thay vì uid để kiểm tra phần (an toàn tuyệt đối)
   if(t.name.startsWith('p1-')) answers[uid] = Number(t.value);
   else if(t.name.startsWith('p2-')){ const k = Number(t.dataset.k); if(!answers[uid]) answers[uid] = []; answers[uid][k] = t.value; }
   document.querySelectorAll(`input[name="${t.name}"]`).forEach(inp => { inp.closest('label').classList.toggle('selected', inp.checked); });
@@ -797,13 +786,9 @@ window.addEventListener('load', () => {
       const p23 = document.getElementById('p2_3');
       const p24 = document.getElementById('p2_4');
       const inputs = [p21, p22, p23, p24];
-
-      // Hàm kích hoạt để code gốc tự tính lại tổng điểm
       function triggerUpdate() {
           p21.dispatchEvent(new Event('input', { bubbles: true }));
       }
-
-      // Hàm xử lý khi chọn "chia đều"
       function setEven() {
           p21.value = '0.25';
           p22.value = '0.5';
@@ -813,8 +798,6 @@ window.addEventListener('load', () => {
           btnEven.classList.add('active');
           btnDefault.classList.remove('active');
       }
-
-      // Hàm xử lý khi chọn "mặc định"
       function setDefault() {
           p21.value = '0.1';
           p22.value = '0.25';
@@ -826,19 +809,14 @@ window.addEventListener('load', () => {
       }
 
       if (btnDefault && btnEven && p21) {
-          // Gắn sự kiện click cho 2 nút
           btnDefault.addEventListener('click', setDefault);
           btnEven.addEventListener('click', setEven);
-
-          // Nếu người dùng tự gõ số vào ô -> Xóa trạng thái đậm của cả 2 nút
           inputs.forEach(inp => {
               inp.addEventListener('input', () => {
                   btnDefault.classList.remove('active');
                   btnEven.classList.remove('active');
               });
           });
-
-          // TỰ ĐỘNG CHỌN "CHIA ĐỀU" KHI TẢI TRANG
           setEven();
       }
   });
