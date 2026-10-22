@@ -59,7 +59,11 @@ window.getFirebaseQuestions = async function() {
   try {
       const querySnapshot = await getDocs(collection(db, "vl10_questions"));
       let questions = [];
-      querySnapshot.forEach((doc) => { questions.push(doc.data()); });
+      querySnapshot.forEach((doc) => { 
+          let q = doc.data();
+          q.uid = doc.id; // 🟢 QUAN TRỌNG: Gán ID của Firestore làm uid
+          questions.push(q); 
+      });
       return questions;
   } catch(e) { 
       console.error("Lỗi lấy câu hỏi:", e);
