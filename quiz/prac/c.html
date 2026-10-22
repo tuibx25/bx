@@ -9,7 +9,6 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 
-<!-- GỌI FILE CẤU HÌNH FIREBASE DÙNG CHUNG -->
 <script type="module" src="/bx/firebase-init.js"></script>
 
 <style>
@@ -25,13 +24,12 @@ body{
   background:var(--bg); color:var(--ink);
   font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   font-size:15px; line-height:1.35;
-  /* BẢO MẬT: CHỐNG BÔI ĐEN */
+  
   user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
 }
 input, textarea { user-select: text; -webkit-user-select: text; }
 .hidden{display:none !important}
 
-/* BẢO MẬT: MÀN HÌNH CHẶN DEVTOOLS */
 #security-trap {
   position: fixed; inset: 0; background: #8B4513; color: white;
   z-index: 99999; display: flex; flex-direction: column;
@@ -40,7 +38,6 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 #security-trap h2 { font-size: 2em; margin-bottom: 10px; }
 #security-trap p { font-size: 1.2em; }
 
-/* MÀN HÌNH YÊU CẦU ĐĂNG NHẬP */
 #loginOverlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.6);
     z-index: 9999; display: flex; align-items: center; justify-content: center;
@@ -58,7 +55,6 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 .btn-login { background: var(--blue-d); color: white; }
 .btn-login:hover { background: var(--blue); }
 
-/* CSS CHÍNH */
 input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 input[type=number] { -moz-appearance: textfield; }
 .katex{font-size:1.02em}
@@ -147,7 +143,6 @@ section.tab.active{display:block}
 .lesson-checkbox:hover .lesson-chip { background: var(--soft); border-color: var(--brown); }
 .lesson-checkbox input:checked + .lesson-chip { background: var(--blue-d); color: #fff; border-color: var(--blue-d); box-shadow: 0 2px 4px rgba(0,68,136,0.2); }
 
-/* CSS CHO NÚT CHỌN NHANH BIỂU ĐIỂM PHẦN II */
 .p2-mode-btn { cursor: pointer; color: var(--blue-d); margin-left: 12px; font-size: 13px; font-weight: normal; user-select: none; transition: 0.2s; }
 .p2-mode-btn:hover { text-decoration: underline; }
 .p2-mode-btn.active { font-weight: 800; text-decoration: underline; }
@@ -155,14 +150,12 @@ section.tab.active{display:block}
 </head>
 <body>
 
-<!-- BẢO MẬT: MÀN HÌNH CHẶN -->
 <div id="security-trap" class="hidden">
   <h2>⛔ CẢNH BÁO BẢO MẬT</h2>
   <p>Hệ thống phát hiện bạn đang cố gắng can thiệp hoặc xem mã nguồn.</p>
   <p>Hành vi này vi phạm quy định làm bài. Vui lòng đóng Developer Tools và tải lại trang.</p>
 </div>
 
-<!-- POPUP YÊU CẦU ĐĂNG NHẬP -->
 <div id="loginOverlay" class="hidden">
     <div class="login-card">
         <h2>🔒 Yêu Cầu Đăng Nhập</h2>
@@ -180,7 +173,6 @@ section.tab.active{display:block}
     </div>
 </div>
 
-<!-- NỘI DUNG CHÍNH CỦA APP -->
 <div id="appContent" class="hidden">
     <header>
       <h1>⚡ LUYỆN TẬP TRẮC NGHIỆM</h1>
@@ -232,7 +224,6 @@ section.tab.active{display:block}
           <div style="font-weight:700; margin-bottom:4px; color:var(--blue-d)">Biểu điểm:</div>
           <label>Phần I (mỗi câu): <input type="number" id="pt1" value="0.25" min="0" step="0.05"> đ</label>
           
-          <!-- DÒNG CHỮ PHẦN II ĐÃ ĐƯỢC SỬA RÕ NÉT VÀ THÊM 2 NÚT -->
           <div style="margin: 6px 0 4px 0; font-size:13px; color:#000000; font-weight:600; display: flex; justify-content: space-between; align-items: center;">
               <span>Phần II (theo số ý đúng):</span>
               <span>
@@ -298,7 +289,6 @@ section.tab.active{display:block}
 </div>
 
 <script>
-/* BẢO MẬT 1: CHỐNG F12, CHUỘT PHẢI, COPY */
 document.addEventListener('contextmenu', e => e.preventDefault());
 document.addEventListener('keydown', e => {
   if (e.key === 'F12') { e.preventDefault(); return false; }
@@ -310,7 +300,6 @@ document.addEventListener('copy', e => {
     if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') e.preventDefault();
 });
 
-/* BẢO MẬT 2: BẪY DEVTOOLS */
 let devtoolsOpen = false;
 const trap = document.getElementById('security-trap');
 setInterval(() => {
@@ -324,7 +313,6 @@ setInterval(() => {
     }
 }, 500);
 
-/* 0. KATEX */
 function renderMath(el){
   if(!el) return;
   if(typeof renderMathInElement === 'function'){
@@ -335,7 +323,6 @@ function renderMath(el){
   } else { setTimeout(() => renderMath(el), 100); }
 }
 
-/* 1. CẤU HÌNH */
 const CONFIG = {
   p1: { point: 0.25, title:"PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn", note:"Chọn một phương án đúng nhất cho mỗi câu." },
   p2: { point: 1.0, title:"PHẦN II. Câu trắc nghiệm đúng – sai", note:"Với mỗi ý a), b), c), d) chọn Đúng hoặc Sai." },
@@ -343,14 +330,12 @@ const CONFIG = {
 };
 let P2_RULE = [0, 0.25, 0.5, 0.75, 1.0];
 
-/* 2. DỮ LIỆU MẶC ĐỊNH */
 const BANK = {
   p1: [{ text:"Đơn vị đo cường độ điện trường trong hệ SI là", options:["$\\text{V/m}$", "$\\text{V.m}$", "$\\text{N.m}$", "$\\text{J/C}$"], correct:0 }],
   p2: [{ text:"Xét điện trường đều...", statements:["Các đường sức...", "Cường độ...", "Hiệu điện thế...", "Công của lực..."], answers:[true,true,false,false] }],
   p3: [{ text:"Cho điện trở $R = 10...", answer: 2 }]
 };
 
-/* 3. TIỆN ÍCH */
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -364,12 +349,10 @@ function normStatement(s){ return (typeof s === 'string') ? { text:s, img:null }
 function imgHTML(src, alt, caption, cls){ if(!src) return ''; const clsAttr = cls ? ` class="${cls}"` : ''; const capHTML = caption ? `<div class="q-img-caption">${esc(caption)}</div>` : ''; return `<div class="q-img-wrap"><img src="${esc(src)}" alt="${esc(alt||'Hình minh hoạ')}" onerror="imgError(this)"${clsAttr}>${capHTML}</div>`; }
 function imgError(img){ const wrap = img.closest('.q-img-wrap') || img.parentElement; if(!wrap) return; wrap.innerHTML = `<span class="q-img-error">⚠ Không tải được ảnh: ${esc(img.getAttribute('src'))}</span>`; }
 
-/* 4. BIẾN TOÀN CỤC */
 let exam = null; let parsedOriginal = null; let answers = {}; let submitted = false; let missingAnswers = [];
 let allFirebaseQuestions = [];
 let availableLessons = new Set();
 
-/* 5. ĐỀ MẶC ĐỊNH */
 function buildDefaultExam(){
   return {
     p1: BANK.p1.map((q,i) => ({ uid:'p1-'+i, text:q.text, img:null, imgAlt:'', options: q.options.map(normOption), correct:q.correct, level:null })),
@@ -378,7 +361,6 @@ function buildDefaultExam(){
   };
 }
 
-/* 6. NHẬN DIỆN MỨC ĐỘ */
 function normLevelToken(t){
   t = String(t||'').toLowerCase().trim();
   if(t==='easy'||t==='de'||t==='dễ') return 'easy';
@@ -397,7 +379,6 @@ function normLevel(s){
   return normLevelToken(s);
 }
 
-/* 7. RENDER */
 function renderExam(){
   let html = '';
   if (missingAnswers.length > 0) { html += `<div class="warn-banner">⚠️ <b>Cảnh báo:</b> Các câu sau chưa có đáp án: ${missingAnswers.join(', ')} (sẽ tính là SAI).</div>`; }
@@ -434,7 +415,6 @@ function renderExam(){
   updateAnsweredCount();
 }
 
-/* 8. CHẤM ĐIỂM */
 function calculateScore(){
   let mcScore = 0, maxMcScore = 0;
   exam.p1.forEach(q => { maxMcScore += CONFIG.p1.point; const chosen = answers[q.uid]; if((q.correct !== null) && chosen === q.correct) mcScore += CONFIG.p1.point; });
@@ -451,12 +431,10 @@ function renderTab3(){
 }
 function clearResultTab(){ $('#resultBody').innerHTML = '<p class="note" style="margin-top:30px; text-align:center;">Chưa có kết quả. Hãy làm bài rồi nhấn <b>Nộp bài</b>.</p>'; }
 
-/* 9. ĐẾM & NHÃN */
 function countAnswered(){ let c = 0; exam.p1.forEach(q => { if(answers[q.uid] !== undefined) c++; }); exam.p2.forEach(q => { const a = answers[q.uid] || []; if(a.length === 4 && a.every(x => x)) c++; }); exam.p3.forEach(q => { if(answers[q.uid] && String(answers[q.uid]).trim()) c++; }); return c; }
 function updateAnsweredCount(){ const c = countAnswered(); const total = exam.p1.length + exam.p2.length + exam.p3.length; $('#answeredCount').textContent = c; $('#totalCount').textContent = total; }
 function syncButtons(){ $('#btnSubmit').classList.toggle('hidden', submitted); $('#btnRedo').classList.toggle('hidden', !submitted); }
 
-/* 10. CHỌN CÂU THEO TỔNG / MỨC ĐỘ */
 function readLevelCounts(){
   const read = id => { const el = $('#'+id); if(!el) return 0; const raw = String(el.value).trim(); if(raw === '') { const ph = String(el.placeholder || '0').trim(); const v = parseInt(ph, 10); return isNaN(v) ? 0 : Math.max(0, v); } const v = parseInt(raw, 10); return isNaN(v) ? 0 : Math.max(0, v); };
   const has = ids => ids.some(id=>String($('#'+id).value).trim()!=='');
@@ -598,7 +576,6 @@ function updateCreateBtn(){
 
 ['pt1','p2_1','p2_2','p2_3','p2_4','pt3','sc1','sc2','sc3','lv1_easy','lv1_medium','lv1_hard','lv1_very_hard','lv2_easy','lv2_medium','lv2_hard','lv2_very_hard','lv3_easy','lv3_medium','lv3_hard','lv3_very_hard'].forEach(id => $('#'+id).addEventListener('input', updateCreateBtn));
 
-/* 11. SỰ KIỆN TẢI ĐỀ TỪ FIREBASE */
 async function autoLoadExam() {
   const errorBanner = document.getElementById('errorBanner');
   if (errorBanner) errorBanner.classList.add('hidden'); 
@@ -609,15 +586,14 @@ async function autoLoadExam() {
     const allQuestions = await window.getFirebaseQuestions();
     if (!allQuestions || allQuestions.length === 0) throw new Error("Database trống hoặc chưa có câu hỏi.");
 
-    // 🟢 LỚP KHIÊN BẢO VỆ DỮ LIỆU: Tự động sửa lỗi từ Firebase
     const normalizedQuestions = allQuestions.map((q, index) => {
-        // 1. Tự tạo uid nếu thiếu (CÓ TIỀN TỐ CHUẨN p1-, p2-, p3-)
+      
         if (!q.uid) {
             const prefix = q.part === 1 ? 'p1' : (q.part === 2 ? 'p2' : 'p3');
             q.uid = `${prefix}-auto_${index}_${Math.random().toString(36).substring(2, 8)}`;
         }
 
-        // 2. Chuẩn hóa Phần I
+        
         if (q.part === 1 && q.options) {
             q.options = q.options.map(normOption);
             if (typeof q.correct === 'string') {
@@ -625,14 +601,14 @@ async function autoLoadExam() {
                 if (idx !== -1) q.correct = idx;
             }
         } 
-        // 3. Chuẩn hóa Phần II
+        
         else if (q.part === 2 && q.statements) {
             q.statements = q.statements.map(normStatement);
             if (Array.isArray(q.answers)) {
                 q.answers = q.answers.map(a => a === true || a === 'T' || a === 'Đ' || a === 'true' || a === 1);
             }
         }
-        // 4. Chuẩn hóa Phần III
+        
         else if (q.part === 3) {
             if (typeof q.answer === 'string') {
                 const num = parseNum(q.answer);
@@ -714,7 +690,6 @@ $('#btnCreateQuiz').addEventListener('click', () => {
   window.scrollTo({top:0, behavior:'smooth'});
 });
 
-/* 12. NỘP BÀI & LÀM LẠI */
 function submitExam(){
   submitted = true; renderExam(); renderTab3(); syncButtons();
   $$('nav.tabs button').forEach(b => b.classList.remove('active')); $$('section.tab').forEach(s => s.classList.remove('active'));
@@ -737,10 +712,9 @@ $('#btnRedo').addEventListener('click', () => {
   }
 });
 
-/* 13. TÍCH ĐÁP ÁN */
 $('#examBody').addEventListener('change', e => {
   if(submitted) return; const t = e.target; if(t.type !== 'radio') return; const uid = t.dataset.uid; if(!uid) return;
-  // 🟢 SỬA TẠI ĐÂY: Dùng t.name thay vì uid để kiểm tra phần (an toàn tuyệt đối)
+  
   if(t.name.startsWith('p1-')) answers[uid] = Number(t.value);
   else if(t.name.startsWith('p2-')){ const k = Number(t.dataset.k); if(!answers[uid]) answers[uid] = []; answers[uid][k] = t.value; }
   document.querySelectorAll(`input[name="${t.name}"]`).forEach(inp => { inp.closest('label').classList.toggle('selected', inp.checked); });
@@ -751,7 +725,6 @@ $('#examBody').addEventListener('input', e => {
   answers[t.dataset.uid] = t.value; updateAnsweredCount();
 });
 
-/* 14. TABS */
 $$('nav.tabs button').forEach(btn => {
   btn.addEventListener('click', () => {
     $$('nav.tabs button').forEach(b => b.classList.remove('active')); $$('section.tab').forEach(s => s.classList.remove('active'));
@@ -759,7 +732,6 @@ $$('nav.tabs button').forEach(btn => {
   });
 });
 
-/* 15. ĐỒNG HỒ & FONT */
 let tRemain = 25 * 60, tTimer = null, tRunning = false;
 function tShow(){ const m = Math.floor(tRemain / 60), s = tRemain % 60; $('#tDisp').textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0'); }
 $('#tBtn').addEventListener('click', () => {
@@ -775,7 +747,6 @@ let fs = 18;
 $('#fsUp').addEventListener('click', () => { fs = Math.min(40, fs + 2); document.documentElement.style.setProperty('--fs', fs + 'px'); });
 $('#fsDown').addEventListener('click', () => { fs = Math.max(13, fs - 2); document.documentElement.style.setProperty('--fs', fs + 'px'); });
 
-/* 16. KHỞI TẠO VÀ KIỂM TRA ĐĂNG NHẬP */
 window.addEventListener('load', () => {
     tShow();
     window.checkAuthState((isLoggedIn) => {
@@ -790,7 +761,6 @@ window.addEventListener('load', () => {
     });
 });
 
-/* 17. XỬ LÝ CHỌN NHANH BIỂU ĐIỂM PHẦN II */
 document.addEventListener('DOMContentLoaded', () => {
     const btnP2Default = document.getElementById('btnP2Default');
     const btnP2Even = document.getElementById('btnP2Even');
@@ -820,13 +790,13 @@ document.addEventListener('DOMContentLoaded', () => {
         btnP2Default.addEventListener('click', setDefault);
         btnP2Even.addEventListener('click', setEven);
         
-        // Tự bỏ active khi người dùng tự nhập số
+        
         p2Inputs.forEach(inp => inp.addEventListener('input', () => {
             btnP2Default.classList.remove('active');
             btnP2Even.classList.remove('active');
         }));
         
-        // Tự động chọn "chia đều" khi mở menu
+        
         setEven();
     }
 });
