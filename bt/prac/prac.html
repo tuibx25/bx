@@ -9,60 +9,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 
-<!-- NHÚNG FIREBASE SDK -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-  import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-  // ⚠️ THAY ĐỔI THÔNG TIN NÀY BẰNG CONFIG CỦA BẠN
-  const firebaseConfig = {
-  apiKey: "AIzaSyDX1tt6PyBUxCwU6qTe9Cn9bbbWhgLKLKU",
-  authDomain: "bx-vlpt.firebaseapp.com",
-  projectId: "bx-vlpt",
-  storageBucket: "bx-vlpt.firebasestorage.app",
-  messagingSenderId: "223423849238",
-  appId: "1:223423849238:web:5407c3bc93d68654dc2637",
-  measurementId: "G-S37RM7Q5C5"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const auth = getAuth(app);
-
-  // Hàm tự động đăng nhập ẩn danh
-  window.initAnonymousAuth = function(callback) {
-      onAuthStateChanged(auth, (user) => {
-          if (user) {
-              // Đã đăng nhập (dù là ẩn danh hay thật)
-              callback(true);
-          } else {
-              // Chưa đăng nhập -> Tiến hành đăng nhập ẩn danh
-              signInAnonymously(auth)
-                  .then(() => {
-                      callback(true);
-                  })
-                  .catch((error) => {
-                      console.error("Lỗi đăng nhập ẩn danh:", error);
-                      callback(false);
-                  });
-          }
-      });
-  };
-
-  // Hàm lấy dữ liệu từ Firebase
-  window.getFirebaseQuestions = async function() {
-    try {
-        const querySnapshot = await getDocs(collection(db, "vl10_questions"));
-        let questions = [];
-        querySnapshot.forEach((doc) => { questions.push(doc.data()); });
-        return questions;
-    } catch(e) { 
-        console.error("Lỗi lấy câu hỏi:", e);
-        return null; 
-    }
-  };
-</script>
+<script type="module" src="/bx/firebase-init.js"></script>
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -83,7 +30,6 @@ body{
 input, textarea { user-select: text; -webkit-user-select: text; }
 .hidden{display:none !important}
 
-/* BẢO MẬT: CHẶN IN ẤN */
 @media print {
   body * { visibility: hidden !important; }
   body::before {
@@ -96,7 +42,6 @@ input, textarea { user-select: text; -webkit-user-select: text; }
   }
 }
 
-/* BẢO MẬT: MÀN HÌNH CHẶN DEVTOOLS */
 #security-trap {
   position: fixed; inset: 0; background: #8B4513; color: white;
   z-index: 99999; display: flex; flex-direction: column;
@@ -105,7 +50,6 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 #security-trap h2 { font-size: 2em; margin-bottom: 10px; }
 #security-trap p { font-size: 1.2em; }
 
-/* CSS CHÍNH */
 input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 input[type=number] { -moz-appearance: textfield; }
 .katex{font-size:1.02em}
@@ -197,21 +141,18 @@ section.tab.active{display:block}
 </head>
 <body>
 
-<!-- MÀN HÌNH CHỜ (LOADING) -->
 <div id="loadingScreen" style="position:fixed; inset:0; background:#fff; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:1.2em; font-weight:bold; color:var(--brown-d);">
     <div style="width: 40px; height: 40px; border: 4px solid var(--line); border-top: 4px solid var(--blue-d); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px;"></div>
     🔄 Đang kết nối máy chủ dữ liệu...
     <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
 </div>
 
-<!-- BẢO MẬT: MÀN HÌNH CHẶN DEVTOOLS -->
 <div id="security-trap" class="hidden">
   <h2>⛔ CẢNH BÁO BẢO MẬT</h2>
   <p>Hệ thống phát hiện bạn đang cố gắng can thiệp hoặc xem mã nguồn.</p>
   <p>Hành vi này vi phạm quy định làm bài. Vui lòng đóng Developer Tools và tải lại trang.</p>
 </div>
 
-<!-- NỘI DUNG CHÍNH CỦA APP -->
 <div id="appContent" class="hidden">
     <header>
       <h1>⚡ LUYỆN TẬP TRẮC NGHIỆM</h1>
@@ -258,7 +199,13 @@ section.tab.active{display:block}
         <div class="score-config">
           <div style="font-weight:700; margin-bottom:4px; color:var(--blue-d)">Biểu điểm:</div>
           <label>Phần I (mỗi câu): <input type="number" id="pt1" value="0.25" min="0" step="0.05"> đ</label>
-          <div style="margin: 4px 0 2px 0; font-size:12px; color:#555; font-weight:600;">Phần II (theo số ý đúng):</div>
+        <div style="margin: 6px 0 4px 0; font-size:13px; color:#000000; font-weight:600; display: flex; justify-content: space-between; align-items: center;">
+		<span>Phần II (theo số ý đúng):</span>
+		<span>
+        <span id="btnP2Default" class="p2-mode-btn">Mặc định</span>
+        <span id="btnP2Even" class="p2-mode-btn">Chia đều</span>
+		</span>
+		</div>
           <div class="p2-grid">
             <label>1 ý: <input type="number" id="p2_1" value="0.1" step="0.05"> đ</label>
             <label>2 ý: <input type="number" id="p2_2" value="0.25" step="0.05"> đ</label>
@@ -334,7 +281,9 @@ section.tab.active{display:block}
       try { navigator.clipboard.writeText(''); } catch(err) {}
     }
   }, { capture: true });
+
   document.addEventListener('dragstart', e => e.preventDefault(), { capture: true });
+
   document.addEventListener('copy', function(e) {
     const tag = (e.target && e.target.tagName) || '';
     if (tag !== 'INPUT' && tag !== 'TEXTAREA') { e.preventDefault(); return false; }
@@ -343,6 +292,7 @@ section.tab.active{display:block}
     const tag = (e.target && e.target.tagName) || '';
     if (tag !== 'INPUT' && tag !== 'TEXTAREA') { e.preventDefault(); return false; }
   }, { capture: true });
+
   document.addEventListener('selectstart', function(e) {
     const tag = (e.target && e.target.tagName) || '';
     if (tag !== 'INPUT' && tag !== 'TEXTAREA') { e.preventDefault(); return false; }
@@ -364,7 +314,6 @@ setInterval(() => {
     }
 }, 500);
 
-/* 0. KATEX */
 function renderMath(el){
   if(!el) return;
   if(typeof renderMathInElement === 'function'){
@@ -780,16 +729,88 @@ window.addEventListener('load', () => {
     
     window.initAnonymousAuth((isLoggedIn) => {
         if (isLoggedIn) {
-            
             document.getElementById('loadingScreen').style.display = 'none';
             document.getElementById('appContent').classList.remove('hidden');
             if(typeof autoLoadExam === 'function') autoLoadExam();
         } else {
-            
             document.getElementById('loadingScreen').innerHTML = '<div style="color: red; text-align: center;">❌ Không thể kết nối đến máy chủ.<br>Vui lòng kiểm tra mạng và tải lại trang!</div>';
         }
     });
 });
+</script>
+<style>
+    .p2-mode-btn {
+        cursor: pointer;
+        color: var(--blue-d);
+        margin-left: 12px;
+        font-size: 13px;
+        font-weight: normal;
+        user-select: none;
+        transition: 0.2s;
+    }
+    .p2-mode-btn:hover {
+        text-decoration: underline;
+    }
+    .p2-mode-btn.active {
+        font-weight: 800; /* Chữ đậm lên khi được chọn */
+        text-decoration: underline;
+    }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+      const btnDefault = document.getElementById('btnP2Default');
+      const btnEven = document.getElementById('btnP2Even');
+      const p21 = document.getElementById('p2_1');
+      const p22 = document.getElementById('p2_2');
+      const p23 = document.getElementById('p2_3');
+      const p24 = document.getElementById('p2_4');
+      const inputs = [p21, p22, p23, p24];
+
+      // Hàm kích hoạt để code gốc tự tính lại tổng điểm
+      function triggerUpdate() {
+          p21.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+
+      // Hàm xử lý khi chọn "chia đều"
+      function setEven() {
+          p21.value = '0.25';
+          p22.value = '0.5';
+          p23.value = '0.75';
+          p24.value = '1.0';
+          triggerUpdate();
+          btnEven.classList.add('active');
+          btnDefault.classList.remove('active');
+      }
+
+      // Hàm xử lý khi chọn "mặc định"
+      function setDefault() {
+          p21.value = '0.1';
+          p22.value = '0.25';
+          p23.value = '0.5';
+          p24.value = '1.0';
+          triggerUpdate();
+          btnDefault.classList.add('active');
+          btnEven.classList.remove('active');
+      }
+
+      if (btnDefault && btnEven && p21) {
+          // Gắn sự kiện click cho 2 nút
+          btnDefault.addEventListener('click', setDefault);
+          btnEven.addEventListener('click', setEven);
+
+          // Nếu người dùng tự gõ số vào ô -> Xóa trạng thái đậm của cả 2 nút
+          inputs.forEach(inp => {
+              inp.addEventListener('input', () => {
+                  btnDefault.classList.remove('active');
+                  btnEven.classList.remove('active');
+              });
+          });
+
+          // TỰ ĐỘNG CHỌN "CHIA ĐỀU" KHI TẢI TRANG
+          setEven();
+      }
+  });
 </script>
 </body>
 </html>
