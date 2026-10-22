@@ -1,4 +1,4 @@
-// /bx/firebase-init.js
+// /bx/bt/js/firebase-init.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import {
   getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
@@ -13,7 +13,8 @@ import {
 import {
   getFunctions, httpsCallable
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-functions.js";
-import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-check.js";
+// ⚠️ ĐÃ SỬA: Đổi sang ReCaptchaEnterpriseProvider
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-check.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDX1tt6PyBUxCwU6qTe9Cn9bbbWhgLKLKU",
@@ -31,9 +32,10 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const functions = getFunctions(app);
 
-// 2. Khởi tạo App Check
+// 2. Khởi tạo App Check (Dùng Enterprise)
 const appCheck = initializeAppCheck(app, {
-  provider: new ReCaptchaV3Provider('6LcZFfktAAAAADOJQgaH33dc5liMbbO90SqdMLfj'),
+  // ⚠️ ĐÃ SỬA: Dùng ReCaptchaEnterpriseProvider
+  provider: new ReCaptchaEnterpriseProvider('6LcZFfktAAAAADOJQgaH33dc5liMbbO90SqdMLfj'),
   isTokenAutoRefreshEnabled: true 
 });
 
