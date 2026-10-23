@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hệ Thống Thi Trực Tuyến</title>
+<!-- Nhúng MathJax để hiển thị công thức -->
+<script>
+    MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" id="MathJax-script" async></script>
+<!-- Gọi file cấu hình Firebase dùng chung -->
+<script type="module" src="/bx/firebase-init.js"></script>
+
+<style>
+    :root { --primary: #004488; --bg: #f4f4f9; --border: #ccc; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+    .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    h2 { color: var(--primary); text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
+    
+    /* Giao diện danh sách đề */
+    .exam-card { border: 1px solid var(--border); padding: 15px; margin-bottom: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .exam-card h3 { margin: 0 0 5px 0; color: #333; }
+    .exam-card p { margin: 0; color: #666; font-size: 14px; }
+    .btn { background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.2s;}
+    .btn:hover { opacity: 0.9; }
+    .btn-submit { background: #d9534f; width: 100%; padding: 12px; font-size: 16px; margin-top: 20px;}
+    .btn-submit:hover { background: #c9302c; }
+
+    /* Giao diện làm bài */
+    .question { border: 1px solid #eee; padding: 15px; margin-bottom: 15px; border-radius: 8px; }
+    .q-text { font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
+    .options { display: flex; flex-direction: column; gap: 8px; }
+    .option-label { padding: 10px; border: 1px solid var(--border); border-radius: 5px; cursor: pointer; display: flex; gap: 10px; transition: 0.1s; }
+    .option-label:hover { background: #f9f9f9; }
+    .option-label input[type="radio"] { margin-top: 4px; cursor: pointer; }
+    .statements { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+    .st-row { display: flex; gap: 15px; align-items: center; padding: 10px; border: 1px solid #eee; border-radius: 5px; }
+    .st-btns { display: flex; gap: 15px; }
+    .st-btns label { cursor: pointer; display: flex; align-items: center; gap: 5px; }
+    .short-input { padding: 10px; border: 1px solid var(--border); border-radius: 5px; width: 300px; font-size: 16px; }
+    
+    .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- 1. Màn hình chờ -->
+<div id="loadingScreen" style="text-align: center; margin-top: 50px;">
+    <h2>🔄 Đang kết nối máy chủ dữ liệu...</h2>
+</div>
+
+<!-- 2. Màn hình danh sách đề -->
+<div id="dashboardScreen" class="container hidden">
+    <!-- 🟢 ĐÃ ĐỔI CHỮ TẠI ĐÂY -->
+    <h2>📝 Danh Sách Đề</h2>
+    <div id="examList">Đang tải danh sách...</div>
+</div>
+
+<!-- 3. Màn hình làm bài -->
+<div id="quizScreen" class="container hidden">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: sticky; top: 0; background: #fff; z-index: 10; padding: 10px 0; border-bottom: 1px solid #eee;">
+        <h2 id="quizTitle" style="border: none; margin: 0; text-align: left; font-size: 20px;">Đang làm bài...</h2>
+        <div style="font-size: 24px; font-weight: bold; color: #d9534f; background: #ffe6e6; padding: 5px 15px; border-radius: 5px;" id="timerDisplay">15:00</div>
+    </div>
+    <div id="quizBody"></div>
+    <button class="btn btn-submit" onclick="submitExam()">NỘP BÀI</button>
+</div>
+
+<!-- 4. Màn hình hoàn tất -->
+<div id="doneScreen" class="container hidden" style="text-align: center;">
+    <h2 style="color: #28a745; border:none;">✅ Đã Nộp Bài Thành Công!</h2>
+    <p style="font-size: 16px;">Vui lòng chờ Giáo viên chấm điểm và công bố kết quả.</p>
+    <button class="btn" onclick="location.reload()" style="margin-top: 20px;">Quay lại trang chủ</button>
+</div>
+
+<script>
+    let currentUser = null;
+    let userClass = "";
+    let currentAssignment = null;
+    let currentExamData = null;
+    let userAnswers = {};
+    let timerInterval = null;
+
+    // Hàm chờ Firebase-init tải xong
+    window.addEventListener('load', () => {
+        window.checkAuthState((isLoggedIn) => {
+            if (!isLoggedIn) {
+                document.getElementById('loadingScreen').innerHTML = "<h2 style='color:red;'>❌ Bạn chưa đăng nhập! Vui lòng quay lại trang chủ.</h2>";
+                return;
+            }
+            document.getElementById('loadingScreen').classList.add('hidden');
+            document.getElementById('dashboardScreen').classList.remove('hidden');
+            loadDashboard();
+        });
+    });
+
+    // Tải danh sách đề (Dùng Client-side filtering để tránh lỗi Index)
+    async function loadDashboard() {
+        try {
+            const { auth, db } = await import('/bx/firebase-init.js');
+            const { doc, getDoc, collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+            
+            currentUser = auth.currentUser;
+            const userSnap = await getDoc(doc(db, "users", currentUser.uid));
+            if (userSnap.exists()) {
+                userClass = userSnap.data().class; // VD: "10a19"
+            }
+
+            if (!userClass) {
+                document.getElementById('examList').innerHTML = "<p style='color:red'>Lỗi: Tài khoản của bạn chưa được cập nhật Lớp (class). Vui lòng báo Giáo viên.</p>";
+                return;
+            }
+
+            // Tải toàn bộ bài giao
+            const querySnapshot = await getDocs(collection(db, "exam_assignments"));
+            
+            const listEl = document.getElementById('examList');
+            let html = "";
+            let count = 0;
+
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                
+                // Tự lọc bằng Javascript
+                if (data.assignedClasses && data.assignedClasses.includes(userClass) && data.isOpen === true) {
+                    html += `
+                        <div class="exam-card">
+                            <div>
+                                <h3>${data.title}</h3>
+                                <p>Thời gian: ${data.duration} phút</p>
+                            </div>
+                            <!-- 🟢 ĐÃ ĐỔI CHỮ TẠI ĐÂY -->
+                            <button class="btn" onclick="startExam('${docSnap.id}', '${data.examId}', ${data.duration})">Làm Bài</button>
+                        </div>
+                    `;
+                    count++;
+                }
+            });
+
+            if (count === 0) {
+                listEl.innerHTML = "<p>Hiện không có đề nào đang mở cho lớp của bạn.</p>";
+            } else {
+                listEl.innerHTML = html;
+            }
+
+        } catch (error) {
+            console.error("Lỗi tải danh sách:", error);
+            document.getElementById('examList').innerHTML = `<p style="color:red">Lỗi tải dữ liệu: ${error.message}</p>`;
+        }
+    }
+
+    // Bắt đầu làm bài
+    window.startExam = async function(assignmentId, examId, duration) {
+        document.getElementById('dashboardScreen').classList.add('hidden');
+        document.getElementById('loadingScreen').classList.remove('hidden');
+        document.getElementById('loadingScreen').innerHTML = "<h2>🔄 Đang tải đề thi...</h2>";
+
+        try {
+            const { db } = await import('/bx/firebase-init.js');
+            const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+            
+            currentAssignment = { id: assignmentId, examId: examId, duration: duration };
+            
+            // Tải nội dung đề
+            const examSnap = await getDoc(doc(db, "exams", examId));
+            if (!examSnap.exists()) throw new Error("Không tìm thấy đề thi trên hệ thống!");
+            
+            currentExamData = examSnap.data();
+            
+            document.getElementById('loadingScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+            document.getElementById('quizTitle').textContent = currentExamData.title || "Đề Thi";
+            
+            renderQuiz();
+            startTimer(duration);
+
+        } catch (error) {
+            console.error(error);
+            alert(error.message);
+            location.reload();
+        }
+    }
+
+    // Hiển thị câu hỏi
+    function renderQuiz() {
+        const body = document.getElementById('quizBody');
+        let html = "";
+        let count = 1;
+
+        currentExamData.questions.forEach(q => {
+            html += `<div class="question" id="q-${q.uid}">`;
+            html += `<div class="q-text">Câu ${count++}: ${q.text}</div>`;
+            
+            // Hình ảnh đính kèm (nếu có)
+            if(q.img) {
+                html += `<div style="margin: 10px 0;"><img src="${q.img}" style="max-width: 100%; max-height: 300px; border-radius: 5px;"></div>`;
+            }
+
+            if (q.part === 1) {
+                // Trắc nghiệm A, B, C, D
+                html += `<div class="options">`;
+                q.options.forEach((opt, idx) => {
+                    html += `
+                        <label class="option-label">
+                            <input type="radio" name="ans-${q.uid}" value="${idx}" onchange="saveAnswer('${q.uid}', ${idx})">
+                            <span>${String.fromCharCode(65 + idx)}. ${opt}</span>
+                        </label>`;
+                });
+                html += `</div>`;
+            } 
+            else if (q.part === 2) {
+                // Đúng / Sai
+                html += `<div class="statements">`;
+                q.statements.forEach((st, idx) => {
+                    html += `
+                        <div class="st-row">
+                            <div style="flex:1">${String.fromCharCode(97 + idx)}) ${st}</div>
+                            <div class="st-btns">
+                                <label><input type="radio" name="st-${q.uid}-${idx}" value="T" onchange="saveStatement('${q.uid}', ${idx}, 'T')"> Đúng</label>
+                                <label><input type="radio" name="st-${q.uid}-${idx}" value="F" onchange="saveStatement('${q.uid}', ${idx}, 'F')"> Sai</label>
+                            </div>
+                        </div>`;
+                });
+                html += `</div>`;
+            } 
+            else if (q.part === 3) {
+                // Trả lời ngắn
+                html += `
+                    <div style="margin-top:10px;">
+                        <input type="text" class="short-input" placeholder="Nhập đáp án..." oninput="saveAnswer('${q.uid}', this.value)">
+                    </div>`;
+            }
+            html += `</div>`;
+        });
+
+        body.innerHTML = html;
+        
+        // Render công thức Toán học
+        if (window.MathJax) {
+            MathJax.typesetPromise([body]).catch(err => console.log(err));
+        }
+    }
+
+    // Lưu đáp án tạm thời
+    window.saveAnswer = function(uid, value) {
+        userAnswers[uid] = value;
+    }
+    window.saveStatement = function(uid, stIndex, value) {
+        if (!userAnswers[uid]) userAnswers[uid] = ["", "", "", ""];
+        userAnswers[uid][stIndex] = value;
+    }
+
+    // Đồng hồ đếm ngược
+    function startTimer(minutes) {
+        let time = minutes * 60;
+        const display = document.getElementById('timerDisplay');
+        
+        // Xóa bộ đếm cũ nếu có
+        if (timerInterval) clearInterval(timerInterval);
+
+        timerInterval = setInterval(() => {
+            const m = Math.floor(time / 60);
+            const s = time % 60;
+            display.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            
+            if (time <= 0) {
+                clearInterval(timerInterval);
+                alert("⏰ Đã hết giờ làm bài! Hệ thống tự động thu bài.");
+                submitExam(true); // Gọi hàm nộp bài tự động
+            }
+            time--;
+        }, 1000);
+    }
+
+    // Nộp bài
+    window.submitExam = async function(isAutoSubmit = false) {
+        if (timerInterval) clearInterval(timerInterval);
+        
+        if (!isAutoSubmit) {
+            if (!confirm("Bạn có chắc chắn muốn nộp bài? Không thể sửa lại sau khi nộp.")) {
+                startTimer(currentAssignment.duration); // Tiếp tục đếm giờ nếu hủy
+                return;
+            }
+        }
+
+        document.getElementById('quizScreen').classList.add('hidden');
+        document.getElementById('loadingScreen').classList.remove('hidden');
+        document.getElementById('loadingScreen').innerHTML = "<h2>⏳ Đang nộp bài lên hệ thống...</h2>";
+
+        try {
+            const { db } = await import('/bx/firebase-init.js');
+            const { collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+
+            // Gửi lên collection 'exam_submissions'
+            await addDoc(collection(db, "exam_submissions"), {
+                assignmentId: currentAssignment.id,
+                examId: currentAssignment.examId,
+                studentId: currentUser.uid,
+                studentEmail: currentUser.email,
+                answers: userAnswers,
+                status: "submitted",
+                score: null,
+                isPublished: false,
+                submittedAt: serverTimestamp()
+            });
+
+            document.getElementById('loadingScreen').classList.add('hidden');
+            document.getElementById('doneScreen').classList.remove('hidden');
+
+        } catch (error) {
+            console.error("Lỗi nộp bài:", error);
+            alert("Lỗi nộp bài! Vui lòng chụp ảnh màn hình này gửi Giáo viên: " + error.message);
+            document.getElementById('loadingScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+        }
+    }
+</script>
+</body>
+</html>
