@@ -25,6 +25,7 @@
     .btn:disabled { background: #999; cursor: not-allowed; }
     .btn-submit { background: #d9534f; width: 100%; padding: 12px; font-size: 16px; margin-top: 20px;}
 
+    .part-title { font-weight: 800; font-size: 1.1em; color: var(--primary); margin: 25px 0 10px; padding: 10px; background: #e6f0fa; border-left: 5px solid var(--primary); border-radius: 0 5px 5px 0; }
     .question { border: 1px solid #eee; padding: 15px; margin-bottom: 15px; border-radius: 8px; }
     .q-text { font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
     .options { display: flex; flex-direction: column; gap: 8px; }
@@ -56,7 +57,7 @@
         <h2 id="quizTitle" style="border: none; margin: 0; text-align: left; font-size: 20px;">Đang làm bài...</h2>
         <div style="font-size: 24px; font-weight: bold; color: #d9534f; background: #ffe6e6; padding: 5px 15px; border-radius: 5px;" id="timerDisplay">15:00</div>
     </div>
-    <div id="quizBody"></div>
+    <div id="quizBody" autocomplete="off"></div>
     <button class="btn btn-submit" onclick="submitExam()">NỘP BÀI</button>
 </div>
 
@@ -73,7 +74,7 @@
     let currentExamData = null;
     let userAnswers = {};
     let timerInterval = null;
-    let currentEndTime = null; // Mốc thời gian kết thúc (miliseconds)
+    let currentEndTime = null; 
     let sessionKey = "";
 
     function shuffleArray(array) {
@@ -133,7 +134,6 @@
                     const done = attemptCounts[docSnap.id] || 0;
                     const isOutOfAttempts = done >= maxAttempts;
 
-                    // Kiểm tra xem có bài đang làm dở trong localStorage không
                     const sKey = `exam_session_${docSnap.id}_${currentUser.uid}`;
                     const savedSession = localStorage.getItem(sKey);
                     let hasDraft = false;
@@ -141,7 +141,7 @@
                         try {
                             const parsed = JSON.parse(savedSession);
                             if (parsed.endTime > Date.now()) hasDraft = true; 
-                            else localStorage.removeItem(sKey); // Xóa nếu đã quá hạn
+                            else localStorage.removeItem(sKey); 
                         } catch(e) {}
                     }
 
@@ -187,7 +187,7 @@
             if (savedSession) {
                 const parsed = JSON.parse(savedSession);
                 if (parsed.endTime > Date.now()) {
-                    const confirmResume = confirm("Hệ thống phát hiện bạn đang có bài làm dang dở. Bạn có muốn tiếp tục làm bài? (Thời gian vẫn đang tiếp tục chạy)");
+                    const confirmResume = confirm("Bạn đang có bài làm dang dở.\n\n- Nhấn OK để TIẾP TỤC làm bài (thời gian vẫn đang chạy).\n- Nhấn Cancel để HỦY và làm lại từ đầu.");
                     if (confirmResume) {
                         currentAssignment = parsed.assignment;
                         currentExamData = parsed.examData;
@@ -200,13 +200,8 @@
                         
                         renderQuiz();
                         startTimer(currentEndTime);
-                        return; // Dừng lại, không tải đề mới
+                        return;
                     } else {
-                        if(!confirm("Nếu bắt đầu lại, bài làm cũ sẽ bị xóa. Bạn chắc chắn chứ?")) {
-                            document.getElementById('loadingScreen').classList.add('hidden');
-                            document.getElementById('dashboardScreen').classList.remove('hidden');
-                            return;
-                        }
                         localStorage.removeItem(sessionKey);
                     }
                 } else {
@@ -225,11 +220,20 @@
             
             currentExamData = examSnap.data();
 
-            // Đảo đề & đáp án
+            // 🟢 SỬA LOGIC ĐẢO ĐỀ: Đảo từng phần riêng biệt
             if (doShuffleQ) {
-                currentExamData.questions = shuffleArray(currentExamData.questions);
+                let p1 = currentExamData.questions.filter(q => q.part === 1);
+                let p2 = currentExamData.questions.filter(q => q.part === 2);
+                let p3 = currentExamData.questions.filter(q => q.part === 3);
+                
+                p1 = shuffleArray(p1);
+                p2 = shuffleArray(p2);
+                p3 = shuffleArray(p3);
+                
+                currentExamData.questions = [...p1, ...p2, ...p3];
             }
 
+            // Đảo đáp án (Chỉ áp dụng cho phần 1)
             if (doShuffleO) {
                 currentExamData.questions.forEach(q => {
                     if (q.part === 1 && q.options) {
@@ -240,7 +244,6 @@
                 });
             }
             
-            // Khởi tạo session mới
             currentEndTime = Date.now() + (duration * 60 * 1000);
             userAnswers = {};
             saveSessionToLocal();
@@ -259,7 +262,6 @@
         }
     }
 
-    // Lưu trạng thái hiện tại vào ổ cứng máy tính
     function saveSessionToLocal() {
         if (!sessionKey || !currentEndTime) return;
         const dataToSave = {
@@ -273,10 +275,25 @@
 
     function renderQuiz() {
         const body = document.getElementById('quizBody');
+        body.innerHTML = ""; 
         let html = "";
         let count = 1;
+        let currentPartTitle = "";
 
         currentExamData.questions.forEach(q => {
+            // 🟢 HIỂN THỊ TIÊU ĐỀ PHẦN (I, II, III)
+            let partTitle = "";
+            if (q.part === 1) partTitle = "PHẦN I. TRẮC NGHIỆM NHIỀU PHƯƠNG ÁN LỰA CHỌN";
+            else if (q.part === 2) partTitle = "PHẦN II. CÂU TRẮC NGHIỆM ĐÚNG SAI";
+            else if (q.part === 3) partTitle = "PHẦN III. TRẮC NGHIỆM TRẢ LỜI NGẮN";
+
+            // Nếu sang phần mới thì reset số đếm câu và in tiêu đề
+            if (partTitle !== currentPartTitle) {
+                currentPartTitle = partTitle;
+                count = 1; // Reset lại câu 1 cho phần mới
+                html += `<div class="part-title">${currentPartTitle}</div>`;
+            }
+
             html += `<div class="question" id="q-${q.uid}">`;
             html += `<div class="q-text">Câu ${count++}: ${q.text}</div>`;
             
@@ -290,13 +307,11 @@
                     const isShuffled = typeof optObj === 'object';
                     const originalIndex = isShuffled ? optObj.originalIndex : displayIdx;
                     const optText = isShuffled ? optObj.text : optObj;
-                    
-                    // Khôi phục trạng thái đã chọn
                     const isChecked = (userAnswers[q.uid] !== undefined && userAnswers[q.uid] == originalIndex);
 
                     html += `
                         <label class="option-label">
-                            <input type="radio" name="ans-${q.uid}" value="${originalIndex}" ${isChecked ? 'checked' : ''} onchange="saveAnswer('${q.uid}', ${originalIndex})">
+                            <input type="radio" autocomplete="off" name="ans-${q.uid}" value="${originalIndex}" ${isChecked ? 'checked' : ''} onchange="saveAnswer('${q.uid}', ${originalIndex})">
                             <span>${String.fromCharCode(65 + displayIdx)}. ${optText}</span>
                         </label>`;
                 });
@@ -310,8 +325,8 @@
                         <div class="st-row">
                             <div style="flex:1">${String.fromCharCode(97 + idx)}) ${st}</div>
                             <div class="st-btns">
-                                <label><input type="radio" name="st-${q.uid}-${idx}" value="T" ${savedVal === 'T' ? 'checked' : ''} onchange="saveStatement('${q.uid}', ${idx}, 'T')"> Đúng</label>
-                                <label><input type="radio" name="st-${q.uid}-${idx}" value="F" ${savedVal === 'F' ? 'checked' : ''} onchange="saveStatement('${q.uid}', ${idx}, 'F')"> Sai</label>
+                                <label><input type="radio" autocomplete="off" name="st-${q.uid}-${idx}" value="T" ${savedVal === 'T' ? 'checked' : ''} onchange="saveStatement('${q.uid}', ${idx}, 'T')"> Đúng</label>
+                                <label><input type="radio" autocomplete="off" name="st-${q.uid}-${idx}" value="F" ${savedVal === 'F' ? 'checked' : ''} onchange="saveStatement('${q.uid}', ${idx}, 'F')"> Sai</label>
                             </div>
                         </div>`;
                 });
@@ -319,7 +334,7 @@
             } 
             else if (q.part === 3) {
                 const savedVal = userAnswers[q.uid] || "";
-                html += `<div style="margin-top:10px;"><input type="text" class="short-input" value="${savedVal}" placeholder="Nhập đáp án..." oninput="saveAnswer('${q.uid}', this.value)"></div>`;
+                html += `<div style="margin-top:10px;"><input type="text" autocomplete="off" class="short-input" value="${savedVal}" placeholder="Nhập đáp án..." oninput="saveAnswer('${q.uid}', this.value)"></div>`;
             }
             html += `</div>`;
         });
@@ -330,15 +345,14 @@
 
     window.saveAnswer = function(uid, value) {
         userAnswers[uid] = value;
-        saveSessionToLocal(); // Cập nhật liên tục
+        saveSessionToLocal();
     }
     window.saveStatement = function(uid, stIndex, value) {
         if (!userAnswers[uid]) userAnswers[uid] = ["", "", "", ""];
         userAnswers[uid][stIndex] = value;
-        saveSessionToLocal(); // Cập nhật liên tục
+        saveSessionToLocal();
     }
 
-    // Hàm đếm ngược dựa trên mốc thời gian thực
     function startTimer(endTime) {
         const display = document.getElementById('timerDisplay');
         if (timerInterval) clearInterval(timerInterval);
@@ -366,7 +380,7 @@
         
         if (!isAutoSubmit) {
             if (!confirm("Bạn có chắc chắn muốn nộp bài? Không thể sửa lại sau khi nộp.")) {
-                startTimer(currentEndTime); // Chạy tiếp đếm ngược nếu hủy
+                startTimer(currentEndTime); 
                 return;
             }
         }
@@ -391,7 +405,6 @@
                 submittedAt: serverTimestamp()
             });
 
-            // Xóa bộ nhớ tạm sau khi nộp thành công
             localStorage.removeItem(sessionKey);
 
             document.getElementById('loadingScreen').classList.add('hidden');
