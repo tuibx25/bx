@@ -401,6 +401,13 @@ function normLevel(s){
   return normLevelToken(s);
 }
 
+// 🟢 HÀM CHUẨN HÓA MỨC ĐỘ: Đảm bảo mọi câu hỏi đều rơi vào 1 trong 5 nhóm
+function getNormalizedLevel(q) {
+    const lvl = normLevel(q.level);
+    if (['easy', 'medium', 'hard', 'very_hard'].includes(lvl)) return lvl;
+    return 'wild'; // Nếu không xác định được, xếp vào Tự do
+}
+
 function renderExam(){
   let html = '';
   if (missingAnswers.length > 0) { html += `<div class="warn-banner">⚠️ <b>Cảnh báo:</b> Các câu sau chưa có đáp án: ${missingAnswers.join(', ')} (sẽ tính là SAI).</div>`; }
@@ -458,7 +465,18 @@ function updateAnsweredCount(){ const c = countAnswered(); const total = exam.p1
 function syncButtons(){ $('#btnSubmit').classList.toggle('hidden', submitted); $('#btnRedo').classList.toggle('hidden', !submitted); }
 
 function readLevelCounts(){
-  const read = id => { const el = $('#'+id); if(!el) return 0; const raw = String(el.value).trim(); if(raw === '') return 0; const v = parseInt(raw, 10); return isNaN(v) ? 0 : Math.max(0, v); };
+  const read = id => {
+      const el = $('#'+id);
+      if(!el) return 0;
+      const raw = String(el.value).trim();
+      if(raw === '') {
+          const ph = String(el.placeholder || '0').trim();
+          const v = parseInt(ph, 10);
+          return isNaN(v) ? 0 : Math.max(0, v);
+      }
+      const v = parseInt(raw, 10);
+      return isNaN(v) ? 0 : Math.max(0, v);
+  };
   const has = ids => ids.some(id=>String($('#'+id).value).trim()!=='');
   return {
     p1:{easy:read('lv1_easy'),medium:read('lv1_medium'),hard:read('lv1_hard'),very_hard:read('lv1_very_hard'),wild:read('lv1_wild'),has:has(['lv1_easy','lv1_medium','lv1_hard','lv1_very_hard','lv1_wild'])},
@@ -470,7 +488,10 @@ function readScValue(part, len){ const id = 'sc' + ({p1:1,p2:2,p3:3}[part]); con
 
 function pickIndices(pool, lc, rng){
   const groups = {easy:[],medium:[],hard:[],very_hard:[],wild:[]};
-  pool.forEach((q,i)=>{ groups[q.level||'wild'].push(i); });
+  
+  // Dùng hàm chuẩn hóa để phân loại
+  pool.forEach((q,i)=>{ groups[getNormalizedLevel(q)].push(i); });
+  
   if(rng){ for(const k in groups) shuffle(groups[k], rng); }
   
   const picked = [];
@@ -482,7 +503,7 @@ function pickIndices(pool, lc, rng){
     const g = groups[L];
     const take = Math.min(need, g.length);
     for(let i=0;i<take;i++) picked.push(g[i]);
-    deficit += (need - take); // Tính số câu bị thiếu
+    deficit += (need - take);
   });
 
   // 2. Bốc ngẫu nhiên cho phần "Tự do" + bù đắp số câu bị thiếu
@@ -504,7 +525,9 @@ function pickIndices(pool, lc, rng){
 function simulateCount(pool, lc){
   if(!pool) return 0;
   let cnt = {easy:0, medium:0, hard:0, very_hard:0, wild:0};
-  pool.forEach(q => { cnt[q.level||'wild']++; });
+  
+  // Dùng hàm chuẩn hóa để đếm
+  pool.forEach(q => { cnt[getNormalizedLevel(q)]++; });
   
   let total = 0;
   let deficit = 0;
@@ -584,15 +607,18 @@ function updateSubsetPlaceholders(){
     
     $('#sc'+n).placeholder = 'max ' + pool.length;
     const cnt = {easy:0,medium:0,hard:0,very_hard:0,wild:0};
-    pool.forEach(q=>{ cnt[q.level||'wild']++; });
+    
+    // Dùng hàm chuẩn hóa để đếm cho Placeholder
+    pool.forEach(q=>{ cnt[getNormalizedLevel(q)]++; });
+    
     $('#lv'+n+'_easy').placeholder = String(cnt.easy);
     $('#lv'+n+'_medium').placeholder = String(cnt.medium);
     $('#lv'+n+'_hard').placeholder = String(cnt.hard);
     $('#lv'+n+'_very_hard').placeholder = String(cnt.very_hard);
     
-    // Ô Tự do: placeholder là tổng số câu
+    // Ô Tự do: placeholder là số câu không phân mức
     const wEl = $('#lv'+n+'_wild');
-    if(wEl) wEl.placeholder = String(pool.length); 
+    if(wEl) wEl.placeholder = String(cnt.wild); 
   });
 }
 
@@ -620,9 +646,9 @@ function updateLevelWarnings() {
           if (totalReq > pool.length) {
               warnings.push(`P.${n}: Yêu cầu ${totalReq} câu, NH chỉ có ${pool.length} câu.`);
           } else {
-              // Cảnh báo nếu số câu từng mức vượt quá thực tế
+              // Dùng hàm chuẩn hóa để đếm
               const cnt = {easy:0, medium:0, hard:0, very_hard:0};
-              pool.forEach(q => { if(cnt[q.level] !== undefined) cnt[q.level]++; });
+              pool.forEach(q => { const lvl = getNormalizedLevel(q); if(cnt[lvl] !== undefined) cnt[lvl]++; });
               if (req.easy > cnt.easy) warnings.push(`P.${n} Dễ: Yêu cầu ${req.easy}, chỉ có ${cnt.easy}.`);
               if (req.medium > cnt.medium) warnings.push(`P.${n} Vừa: Yêu cầu ${req.medium}, chỉ có ${cnt.medium}.`);
               if (req.hard > cnt.hard) warnings.push(`P.${n} Khó: Yêu cầu ${req.hard}, chỉ có ${cnt.hard}.`);
@@ -688,7 +714,7 @@ async function autoLoadExam() {
     const allQuestions = await window.getFirebaseQuestions();
     if (!allQuestions || allQuestions.length === 0) throw new Error("Database trống hoặc chưa có câu hỏi.");
 
-    // 🟢 LỚP KHIÊN BẢO VỆ DỮ LIỆU
+    // LỚP KHIÊN BẢO VỆ DỮ LIỆU
     const normalizedQuestions = allQuestions.map((q, index) => {
         if (!q.uid) {
             const prefix = q.part === 1 ? 'p1' : (q.part === 2 ? 'p2' : 'p3');
