@@ -11,18 +11,20 @@
         --border: #D3D3D3; --primary: #004488; --primary-light: #0066CC;
         --brown: #8B5A2B; --brown-d: #8B4513;
         --beige: #F5F5DC; --wheat: #F5DEB3;
+        --warning-bg: #FFF3CD; --warning-border: #FFEBAA; --warning-text: #856404; --warning-d: #D35400;
     }
     body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; color: var(--ink); }
     .card { background: var(--white); width: 100%; max-width: 450px; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid var(--border); }
     h2 { text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 20px;}
     
     .tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid var(--border); }
-    .tab-btn { flex: 1; padding: 10px; background: none; border: none; font-size: 16px; font-weight: bold; cursor: pointer; color: #888; border-bottom: 3px solid transparent; margin-bottom: -2px;}
+    .tab-btn { flex: 1; padding: 10px; background: none; border: none; font-size: 16px; font-weight: bold; cursor: pointer; color: #888; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: 0.2s;}
     .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
 
     .form-group { margin-bottom: 15px; }
     .form-group label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
-    .form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; box-sizing: border-box; font-size: 14px;}
+    .form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; box-sizing: border-box; font-size: 14px; color: var(--ink);}
+    .form-control:focus { outline: none; border-color: var(--primary-light); }
     .form-control:disabled { background: var(--bg); color: #888; cursor: not-allowed; }
     
     .row { display: flex; gap: 10px; }
@@ -42,6 +44,7 @@
 
     .hidden { display: none !important; }
     .note { font-size: 13px; color: #666; text-align: center; margin-top: 15px; }
+    
     .user-info { text-align: center; margin-bottom: 20px; background: var(--bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border);}
     .user-info p { margin: 5px 0; font-size: 15px;}
     
@@ -114,14 +117,26 @@
 
     <!-- 2. MÀN HÌNH CHỜ XÁC THỰC EMAIL -->
     <div id="verifySection" class="hidden" style="text-align: center;">
-        <h2>📧 XÁC THỰC EMAIL</h2>
-        <div class="user-info">
-            <p>Tài khoản: <b id="vEmail"></b></p>
-            <p style="color: var(--brown-d); font-weight: bold; margin-top: 10px;">Tài khoản của bạn chưa được xác thực!</p>
-            <p style="font-size: 13px; color: #666;">Vui lòng kiểm tra hộp thư (kể cả mục Spam/Thư rác) và bấm vào liên kết xác thực. Nếu không thấy, hãy bấm nút bên dưới.</p>
+        <h2 style="color: var(--warning-d);">⚠️ CẦN XÁC THỰC EMAIL</h2>
+        
+        <div class="user-info" style="background: var(--warning-bg); border-color: var(--warning-border);">
+            <p style="font-size: 16px;">Tài khoản: <b id="vEmail" style="color: var(--warning-d);"></b></p>
+            <p style="color: var(--warning-text); font-weight: bold; margin-top: 10px; font-size: 15px;">
+                Bạn chưa thể làm bài vì chưa xác thực email!
+            </p>
+            <div style="text-align: left; font-size: 14px; color: #333; margin-top: 15px; background: var(--white); padding: 10px; border-radius: 5px; border: 1px solid var(--warning-border);">
+                <p style="margin-top: 0;"><b>Các bước thực hiện:</b></p>
+                <p>1. Mở hộp thư của email trên.</p>
+                <p>2. Tìm thư từ "Hệ thống thi online".</p>
+                <p>3. Bấm vào liên kết xác thực trong thư.</p>
+                <p style="margin-bottom: 0;"><i>(Nếu không thấy, hãy kiểm tra mục Thư rác/Spam)</i></p>
+            </div>
         </div>
+        
         <div id="verifyMsg" class="msg"></div>
-        <button class="btn btn-success" onclick="handleResendEmail()" style="margin-bottom: 15px;">Gửi Lại Thư Xác Thực</button>
+
+        <button class="btn" onclick="checkVerificationStatus()" style="background: var(--primary); margin-bottom: 10px;">🔄 Tôi Đã Xác Thực (Kiểm Tra Lại)</button>
+        <button class="btn btn-success" onclick="handleResendEmail()" style="margin-bottom: 15px;">📧 Gửi Lại Thư Xác Thực</button>
         <button class="btn" style="background: #d9534f;" onclick="handleLogout()">Đăng Xuất / Đổi Tài Khoản</button>
     </div>
 
@@ -197,10 +212,10 @@
             preview.textContent = '...';
         } else {
             const num = parseInt(numRaw, 10);
-            if (!isNaN(num)) {
+            if (!isNaN(num) && num >= 1 && num <= 99) {
                 preview.textContent = `${grade}a${num}`;
             } else {
-                preview.textContent = '...';
+                preview.textContent = 'Lỗi số';
             }
         }
     }
@@ -215,10 +230,10 @@
             preview.textContent = '...';
         } else {
             const num = parseInt(numRaw, 10);
-            if (!isNaN(num)) {
+            if (!isNaN(num) && num >= 1 && num <= 99) {
                 preview.textContent = `${grade}a${num}`;
             } else {
-                preview.textContent = '...';
+                preview.textContent = 'Lỗi số';
             }
         }
     }
@@ -242,7 +257,7 @@
             event.target.classList.add('active');
             document.getElementById('loginForm').classList.add('hidden');
             document.getElementById('registerForm').classList.remove('hidden');
-            updateRegPreview(); // Reset preview khi mở form
+            updateRegPreview();
         }
     }
 
@@ -363,6 +378,31 @@
         } catch (error) {
             console.error(error);
             showMsg("Lỗi gửi lại mail: " + error.message, "error", "verifyMsg");
+        }
+    }
+
+    // KIỂM TRA LẠI XEM ĐÃ XÁC THỰC CHƯA
+    window.checkVerificationStatus = async function() {
+        try {
+            const { auth } = await import('/bx/firebase-init.js');
+            if (auth.currentUser) {
+                showMsg("⏳ Đang kiểm tra trạng thái xác thực...", "info", "verifyMsg");
+                
+                // Tải lại thông tin user từ Firebase
+                await auth.currentUser.reload();
+                
+                if (auth.currentUser.emailVerified) {
+                    showMsg("✅ Xác thực thành công! Đang chuyển hướng...", "success", "verifyMsg");
+                    setTimeout(() => {
+                        loadUserProfile(auth.currentUser);
+                    }, 1000);
+                } else {
+                    showMsg("❌ Tài khoản vẫn chưa được xác thực. Vui lòng kiểm tra lại hộp thư (hoặc mục Spam).", "error", "verifyMsg");
+                }
+            }
+        } catch (error) {
+            console.error("Lỗi kiểm tra xác thực:", error);
+            showMsg("Lỗi kiểm tra: " + error.message, "error", "verifyMsg");
         }
     }
 
