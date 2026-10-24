@@ -17,28 +17,51 @@
         --brown: #8B5A2B; --brown-d: #8B4513;
         --beige: #F5F5DC; --wheat: #F5DEB3;
     }
+    
     body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: var(--ink); }
     .container { max-width: 900px; margin: 0 auto; background: var(--white); padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid var(--border); }
     h2 { color: var(--primary); text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
     
-    .exam-card { border: 1px solid var(--border); padding: 15px; margin-bottom: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; background: var(--white); }
+    /* Thanh thông tin học sinh */
+    .student-info-bar {
+        background: var(--beige);
+        border: 1px solid var(--wheat);
+        color: var(--brown-d);
+        padding: 10px 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 15px;
+    }
+    .student-info-bar span { color: var(--primary); font-size: 1.1em; text-transform: uppercase; }
+
+    /* Giao diện danh sách đề */
+    .exam-card { border: 1px solid var(--border); padding: 15px; margin-bottom: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; background: var(--white); transition: 0.2s;}
+    .exam-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
     .exam-card h3 { margin: 0 0 5px 0; color: var(--ink); }
     .exam-card p { margin: 0 0 5px 0; color: var(--brown-d); font-size: 14px; font-weight: 600;}
     
     .attempt-badge { display: inline-block; padding: 3px 8px; background: var(--beige); border: 1px solid var(--border); border-radius: 12px; font-size: 12px; font-weight: bold; margin-bottom: 8px;}
     
+    /* Giao diện nhãn điểm */
     .score-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
     .score-badge { padding: 4px 10px; border-radius: 6px; font-size: 13px; font-weight: bold; border: 1px solid var(--border); }
+    
     .score-badge.published { background: var(--wheat); color: var(--brown-d); border-color: var(--brown); }
     .score-badge.best { background: var(--primary); color: var(--white); border-color: var(--primary); }
     .score-badge.pending { background: var(--bg); color: #888888; border-color: var(--border); font-style: italic; font-weight: normal; opacity: 0.7; }
     
+    /* Nút bấm */
     .btn { background: var(--primary); color: var(--white); border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 14px;}
     .btn:hover:not(:disabled) { background: var(--primary-light); }
     .btn:disabled { background: var(--border); color: #888; cursor: not-allowed; }
     .btn-submit { background: var(--brown-d); width: 100%; padding: 12px; font-size: 16px; margin-top: 20px; color: var(--white);}
     .btn-submit:hover { background: var(--brown); }
 
+    /* Giao diện làm bài */
     .part-title { font-weight: 800; font-size: 1.1em; color: var(--brown-d); margin: 25px 0 10px; padding: 10px; background: var(--beige); border-left: 5px solid var(--brown-d); border-radius: 0 5px 5px 0; }
     .question { border: 1px solid var(--border); padding: 15px; margin-bottom: 15px; border-radius: 8px; background: var(--white); }
     .q-text { font-weight: 600; margin-bottom: 10px; line-height: 1.5; color: var(--ink); }
@@ -63,11 +86,17 @@
     <h2>🔄 Đang kết nối máy chủ dữ liệu...</h2>
 </div>
 
+<!-- MÀN HÌNH DANH SÁCH ĐỀ -->
 <div id="dashboardScreen" class="container hidden">
+    <div class="student-info-bar">
+        <div>👤 Học sinh: <span id="displayName">Đang tải...</span></div>
+        <div>🏫 Lớp: <span id="displayClass">...</span></div>
+    </div>
     <h2>📝 Danh Sách Đề</h2>
     <div id="examList">Đang tải danh sách...</div>
 </div>
 
+<!-- MÀN HÌNH LÀM BÀI -->
 <div id="quizScreen" class="container hidden">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: sticky; top: 0; background: var(--white); z-index: 10; padding: 10px 0; border-bottom: 1px solid var(--border);">
         <h2 id="quizTitle" style="border: none; margin: 0; text-align: left; font-size: 20px; color: var(--primary);">Đang làm bài...</h2>
@@ -77,6 +106,7 @@
     <button class="btn btn-submit" onclick="submitExam()">NỘP BÀI</button>
 </div>
 
+<!-- MÀN HÌNH HOÀN TẤT -->
 <div id="doneScreen" class="container hidden" style="text-align: center;">
     <h2 style="color: var(--primary); border:none;">✅ Đã Nộp Bài Thành Công!</h2>
     <p style="font-size: 16px; color: var(--ink);">Vui lòng chờ Giáo viên chấm điểm và công bố kết quả.</p>
@@ -105,7 +135,7 @@
     window.addEventListener('load', () => {
         window.checkAuthState((isLoggedIn) => {
             if (!isLoggedIn) {
-                document.getElementById('loadingScreen').innerHTML = "<h2 style='color:var(--brown-d);'>❌ Bạn chưa đăng nhập!</h2>";
+                document.getElementById('loadingScreen').innerHTML = "<h2 style='color:var(--brown-d);'>❌ Bạn chưa đăng nhập! Vui lòng quay lại trang chủ.</h2>";
                 return;
             }
             document.getElementById('loadingScreen').classList.add('hidden');
@@ -114,6 +144,7 @@
         });
     });
 
+    // Tải danh sách đề và thông tin học sinh
     async function loadDashboard() {
         try {
             const { auth, db } = await import('/bx/firebase-init.js');
@@ -121,13 +152,21 @@
             
             currentUser = auth.currentUser;
             const userSnap = await getDoc(doc(db, "users", currentUser.uid));
-            if (userSnap.exists()) userClass = userSnap.data().class; 
+            
+            // 🟢 HIỂN THỊ TÊN VÀ LỚP
+            if (userSnap.exists()) {
+                const userData = userSnap.data();
+                userClass = userData.class; 
+                document.getElementById('displayName').textContent = userData.name || currentUser.email;
+                document.getElementById('displayClass').textContent = (userData.class || "").toUpperCase();
+            }
 
             if (!userClass) {
-                document.getElementById('examList').innerHTML = "<p style='color:red'>Lỗi: Tài khoản chưa cập nhật Lớp.</p>";
+                document.getElementById('examList').innerHTML = "<p style='color:red'>Lỗi: Tài khoản của bạn chưa được cập nhật Lớp. Vui lòng cập nhật trong phần Hồ sơ.</p>";
                 return;
             }
 
+            // Lấy tất cả bài nộp
             const subQuery = query(collection(db, "exam_submissions"), where("studentId", "==", currentUser.uid));
             const subSnapshot = await getDocs(subQuery);
             const submissionsByAssignment = {}; 
@@ -182,7 +221,7 @@
                                 badgeText += `${sub.score}`;
                             } else {
                                 badgeClass += " pending";
-                                badgeText += `Chờ điểm`;
+                                badgeText += `Chờ công bố điểm`;
                             }
                             badgesHtml += `<span class="${badgeClass}">${badgeText}</span>`;
                         });
@@ -397,7 +436,7 @@
         if (window.MathJax) MathJax.typesetPromise([body]).catch(err => console.log(err));
     }
 
-    // 🟢 LƯU NHÁP TỰ ĐỘNG LÊN FIREBASE
+    // Lưu nháp tự động
     let saveTimeout = null;
     function saveAnswerToDB() {
         if (saveTimeout) clearTimeout(saveTimeout);
