@@ -39,9 +39,11 @@
     table { width: 100%; border-collapse: collapse; min-width: 800px; }
     th, td { border: 1px solid var(--border); padding: 10px; text-align: left; font-size: 14px; }
     th { background: #e9ecef; color: var(--primary); font-weight: bold; position: sticky; top: 0; text-align: center;}
-    tr:nth-child(even) { background: #fafafa; }
-    tr:hover { background: #f1f1f1; }
     
+    /* CSS cho các dòng con bị ẩn */
+    .sub-row { background: #f8f9fa; color: #555; font-size: 13px; }
+    .sub-row td { border-top: none; }
+
     .stt-col { width: 50px; text-align: center; font-weight: bold; }
     .score-input { width: 70px; padding: 5px; border: 1px solid var(--primary); border-radius: 4px; font-weight: bold; text-align: center; }
     .status-badge { padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; white-space: nowrap; }
@@ -345,7 +347,7 @@
     }
 
     // ==========================================
-    // TAB 2: CHẤM ĐIỂM & CHI TIẾT (HIỂN THỊ ĐỦ LƯỢT)
+    // TAB 2: CHẤM ĐIỂM & CHI TIẾT (CÓ NÚT MỞ RỘNG)
     // ==========================================
     window.loadSubmissions = async function() {
         const assignmentId = document.getElementById('selectAssignment').value;
@@ -377,6 +379,38 @@
 
         let html = `<table><thead><tr><th class="stt-col">STT</th><th>Họ Tên</th><th>Lần làm</th><th>Trạng thái</th><th>Điểm tự động</th><th>Điểm chốt</th><th>Hành động</th></tr></thead><tbody>`;
 
+        // Hàm tạo HTML cho 1 dòng bài nộp
+        const renderRow = (sub, attemptIdx, isHidden, isMain, st, user, index) => {
+            const autoScore = calculateScore(sub.answers, answerKey);
+            const displayScore = sub.score !== null ? sub.score : autoScore;
+            const status = sub.isPublished ? '<span class="status-badge status-published">Đã công bố</span>' : '<span class="status-badge status-pending">Chờ duyệt</span>';
+            
+            const rowClass = isHidden ? `sub-row hidden hidden-sub-${user.id}` : '';
+            
+            let actionHtml = `<button class="btn btn-sm btn-outline" onclick="viewDetail('${sub.id}', '${assignmentId}')">Chi tiết</button>`;
+            if (!sub.isPublished) actionHtml += ` <button class="btn btn-sm btn-success" onclick="publishScore('${sub.id}')">Công bố</button>`;
+            
+            // Nút Mở rộng / Thu gọn (chỉ hiện ở dòng chính và nếu HS có > 1 lần làm)
+            if (isMain) {
+                const userAllSubs = submissions.filter(s => s.studentId === user.id);
+                if (userAllSubs.length > 1) {
+                    actionHtml += ` <button class="btn btn-sm btn-outline" onclick="toggleExpand('${user.id}', this)">▼ Mở rộng</button>`;
+                }
+            }
+
+            return `
+                <tr class="${rowClass}">
+                    <td class="stt-col">${isMain ? index + 1 : ''}</td>
+                    <td>${isMain ? `<b>${st.name}</b><br><small>${user.email}</small>` : '<i style="color:#999;">(Lần khác)</i>'}</td>
+                    <td>Lần ${attemptIdx + 1} ${isMain && sub.isPublished ? '<b style="color:green;">(Điểm cao nhất)</b>' : ''}</td>
+                    <td>${status}</td>
+                    <td style="color: var(--primary); font-weight: bold;">${autoScore.toFixed(2)}</td>
+                    <td><input type="number" step="0.05" class="score-input" id="score-${sub.id}" value="${displayScore.toFixed(2)}" ${sub.isPublished ? 'disabled' : ''}></td>
+                    <td>${actionHtml}</td>
+                </tr>
+            `;
+        };
+
         roster.forEach((st, index) => {
             const normName = normalizeName(st.name);
             const user = usersInClass.find(u => normalizeName(u.name) === normName);
@@ -403,50 +437,43 @@
                         <td>-</td>
                     </tr>`;
                 } else {
-                    userSubs.forEach((sub, attemptIdx) => {
-                        const autoScore = calculateScore(sub.answers, answerKey);
-                        const displayScore = sub.score !== null ? sub.score : autoScore;
-                        const status = sub.isPublished ? '<span class="status-badge status-published">Đã công bố</span>' : '<span class="status-badge status-pending">Chờ duyệt</span>';
-                        
-                        html += `<tr>
-                            <td class="stt-col">${index + 1}</td>
-                            <td><b>${st.name}</b><br><small>${user.email}</small></td>
-                            <td>Lần ${attemptIdx + 1}</td>
-                            <td>${status}</td>
-                            <td style="color: var(--primary); font-weight: bold;">${autoScore.toFixed(2)}</td>
-                            <td><input type="number" step="0.05" class="score-input" id="score-${sub.id}" value="${displayScore.toFixed(2)}" ${sub.isPublished ? 'disabled' : ''}></td>
-                            <td>
-                                <button class="btn btn-sm btn-outline" onclick="viewDetail('${sub.id}', '${assignmentId}')">Chi tiết</button>
-                                ${!sub.isPublished ? `<button class="btn btn-sm btn-success" onclick="publishScore('${sub.id}')">Công bố</button>` : ''}
-                            </td>
-                        </tr>`;
+                    // Tìm dòng đại diện (Lần có điểm công bố cao nhất. Nếu không có, lấy lần mới nhất)
+                    let publishedSubs = userSubs.filter(s => s.isPublished);
+                    let bestSub = null;
+                    if (publishedSubs.length > 0) {
+                        bestSub = publishedSubs.reduce((prev, curr) => (prev.score > curr.score) ? prev : curr);
+                    } else {
+                        bestSub = userSubs[userSubs.length - 1]; // Lấy lần cuối cùng
+                    }
+
+                    // Render dòng chính (bestSub)
+                    html += renderRow(bestSub, userSubs.indexOf(bestSub), false, true, st, user, index);
+
+                    // Render các dòng phụ (các lần khác bị ẩn)
+                    userSubs.forEach((sub, idx) => {
+                        if (sub.id !== bestSub.id) {
+                            html += renderRow(sub, idx, true, false, st, user, index);
+                        }
                     });
                 }
             }
         });
 
-        const unmatchedSubs = submissions.filter(s => {
-            const user = usersInClass.find(u => u.id === s.studentId);
-            if (!user) return true;
-            return !roster.find(r => normalizeName(r.name) === normalizeName(user.name));
+        resultDiv.innerHTML = html + `</tbody></table>`;
+    }
+
+    // Hàm ẩn/hiện các dòng phụ
+    window.toggleExpand = function(userId, btn) {
+        const rows = document.querySelectorAll(`.hidden-sub-${userId}`);
+        if (rows.length === 0) return;
+        
+        const isHidden = rows[0].classList.contains('hidden');
+        rows.forEach(row => {
+            if (isHidden) row.classList.remove('hidden');
+            else row.classList.add('hidden');
         });
 
-        if (unmatchedSubs.length > 0) {
-            html += `<tr><td colspan="7" style="background: #f8d7da; color: #721c24; font-weight: bold; text-align: center;">Học sinh làm bài nhưng không có trong sổ điểm (Tên sai)</td></tr>`;
-            unmatchedSubs.forEach(sub => {
-                html += `<tr>
-                    <td class="stt-col">-</td>
-                    <td>${sub.studentEmail} <span style="color:red">(Lệch sổ điểm)</span></td>
-                    <td>Lần ?</td>
-                    <td><span class="status-badge status-pending">Chờ duyệt</span></td>
-                    <td>${calculateScore(sub.answers, answerKey).toFixed(2)}</td>
-                    <td><input type="number" step="0.05" class="score-input" id="score-${sub.id}" value="${(sub.score || 0).toFixed(2)}" ${sub.isPublished ? 'disabled' : ''}></td>
-                    <td><button class="btn btn-sm btn-success" onclick="publishScore('${sub.id}')">Công bố</button></td>
-                </tr>`;
-            });
-        }
-
-        resultDiv.innerHTML = html + `</tbody></table>`;
+        btn.textContent = isHidden ? '▲ Thu gọn' : '▼ Mở rộng';
     }
 
     function calculateScore(answers, answerKey) {
@@ -522,7 +549,7 @@
     }
 
     // ==========================================
-    // TAB 3: SỔ ĐIỂM LỚP (CHỈ LẤY ĐIỂM ĐÃ CÔNG BỐ)
+    // TAB 3: SỔ ĐIỂM LỚP (BỎ CỘT CAO NHẤT)
     // ==========================================
     window.loadGradebook = async function() {
         const className = document.getElementById('inputClassGradebook').value.trim().toLowerCase();
@@ -567,23 +594,19 @@
             const normRosterName = normalizeName(st.name);
             const matchedUser = usersInClass.find(u => normalizeName(u.name) === normRosterName);
             
-            let row = { stt: index + 1, rosterName: st.name, email: matchedUser ? matchedUser.email : "Chưa đăng ký", total: "Chưa thi" };
-            let maxScore = -1;
-
+            let row = { stt: index + 1, rosterName: st.name, email: matchedUser ? matchedUser.email : "Chưa đăng ký" };
+            
             classAssignments.forEach(a => {
                 if (matchedUser) {
-                    // CHỈ LẤY NHỮNG BÀI ĐÃ CÔNG BỐ (isPublished === true)
                     const subs = submissions.filter(s => s.studentId === matchedUser.id && s.assignmentId === a.id && s.isPublished === true);
                     const scores = subs.map(s => s.score).filter(s => s !== null && s !== undefined);
                     const best = scores.length > 0 ? Math.max(...scores) : null;
                     row[a.id] = best !== null ? best : "";
-                    if (best !== null && best > maxScore) maxScore = best;
                 } else {
                     row[a.id] = "";
                 }
             });
 
-            row.total = maxScore >= 0 ? maxScore : "";
             gradebookData.push(row);
         });
 
@@ -603,7 +626,8 @@
         assignments.forEach(a => {
             html += `<th>${a.title}</th>`;
         });
-        html += `<th style="background: #d4edda; color: #155724;">Cao Nhất</th></tr></thead><tbody>`;
+        // 🟢 ĐÃ XÓA CỘT "CAO NHẤT" Ở ĐÂY
+        html += `</tr></thead><tbody>`;
 
         data.forEach((row) => {
             html += `<tr class="data-row">
@@ -615,7 +639,7 @@
                 const color = score !== "" ? 'color: green; font-weight: bold;' : 'color: #ccc;';
                 html += `<td style="${color} text-align: center;">${score}</td>`;
             });
-            html += `<td style="background: #d4edda; font-weight: bold; text-align: center;">${row.total}</td></tr>`;
+            html += `</tr>`;
         });
         resultDiv.innerHTML = html + `</tbody></table>`;
     }
