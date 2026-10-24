@@ -11,11 +11,11 @@
 <style>
     :root { --primary: #004488; --bg: #f4f4f9; --border: #ccc; --success: #28a745; --danger: #d9534f; --warning: #ffc107; }
     body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-    .container { max-width: 1200px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .container { max-width: 1400px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     h2 { color: var(--primary); text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-top: 0; }
     
     /* Tabs */
-    .tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
     .tab-btn { padding: 12px 24px; cursor: pointer; border: none; background: none; font-size: 15px; font-weight: bold; color: #666; transition: 0.2s; }
     .tab-btn.active { color: var(--primary); border-bottom: 3px solid var(--primary); background: #f0f4f8; }
     .tab-content { display: none; }
@@ -43,20 +43,22 @@
     .table-wrap { overflow-x: auto; margin-top: 15px; }
     table { width: 100%; border-collapse: collapse; min-width: 800px; }
     th, td { border: 1px solid var(--border); padding: 10px; text-align: left; font-size: 14px; }
-    th { background: #e9ecef; color: var(--primary); font-weight: bold; position: sticky; top: 0; }
+    th { background: #e9ecef; color: var(--primary); font-weight: bold; position: sticky; top: 0; text-align: center;}
     tr:nth-child(even) { background: #fafafa; }
     tr:hover { background: #f1f1f1; }
     
+    .stt-col { width: 50px; text-align: center; font-weight: bold; }
     .score-input { width: 70px; padding: 5px; border: 1px solid var(--primary); border-radius: 4px; font-weight: bold; text-align: center; }
     .status-badge { padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; white-space: nowrap; }
     .status-pending { background: #ffeeba; color: #856404; }
     .status-published { background: #d4edda; color: #155724; }
+    .status-hidden { background: #f8d7da; color: #721c24; }
     
     /* Search Bar */
     .search-bar { display: flex; gap: 10px; margin-bottom: 15px; align-items: center; background: #fff; padding: 10px; border: 1px solid #ddd; border-radius: 5px;}
     .search-bar input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
 
-    /* Modal Xem chi tiết bài làm */
+    /* Modal */
     .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; overflow-y: auto; padding: 20px;}
     .modal-content { background: #fff; max-width: 800px; margin: 40px auto; padding: 20px; border-radius: 10px; }
     .modal-header { display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px; }
@@ -83,10 +85,11 @@
         <button class="tab-btn active" onclick="switchTab('tabManageAssign')">📝 Quản lý Giao Đề</button>
         <button class="tab-btn" onclick="switchTab('tabGrade')">🎯 Chấm Điểm & Chi Tiết</button>
         <button class="tab-btn" onclick="switchTab('tabGradebook')">📊 Sổ Điểm Lớp</button>
+        <button class="tab-btn" onclick="switchTab('tabManageStudents')">👥 Quản lý Học Sinh</button>
     </div>
 
     <!-- ========================================== -->
-    <!-- TAB 1: QUẢN LÝ GIAO ĐỀ & TÌM KIẾM ĐỀ -->
+    <!-- TAB 1: QUẢN LÝ GIAO ĐỀ -->
     <!-- ========================================== -->
     <div id="tabManageAssign" class="tab-content active">
         <div style="background: #e9ecef; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
@@ -168,6 +171,22 @@
             <p style="text-align: center;">Vui lòng nhập tên lớp để tải sổ điểm.</p>
         </div>
     </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: QUẢN LÝ HỌC SINH -->
+    <!-- ========================================== -->
+    <div id="tabManageStudents" class="tab-content">
+        <div class="search-bar">
+            <input type="text" id="inputClassStudentTab" placeholder="Lọc theo lớp (VD: 10a1)" style="max-width: 200px;" oninput="renderStudentTable()">
+            <input type="text" id="searchStudentTab" placeholder="🔍 Tìm tên hoặc email học sinh..." oninput="renderStudentTable()">
+            <button class="btn btn-primary" onclick="loadAllUsers()">Tải lại danh sách</button>
+        </div>
+        
+        <div class="table-wrap" id="studentListTable">
+            <p style="text-align: center;">Bấm "Tải lại danh sách" để xem học sinh.</p>
+        </div>
+    </div>
+
 </div>
 
 <!-- MODAL XEM CHI TIẾT BÀI LÀM -->
@@ -186,6 +205,7 @@
     let allExams = {};
     let allAssignments = {};
     let allStudents = [];
+    let allUsersList = []; 
     let allGradebookData = [];
 
     window.addEventListener('load', () => {
@@ -276,9 +296,11 @@
         const keyword = document.getElementById('searchAssign').value.toLowerCase();
         const tbody = document.getElementById('assignmentList');
         let html = `<table><thead><tr>
+            <th class="stt-col">STT</th>
             <th>Tên Bài</th><th>Lớp</th><th>Thời gian</th><th>Lượt</th><th>Trạng thái</th><th>Hành động</th>
         </tr></thead><tbody>`;
 
+        let stt = 1;
         for (const id in allAssignments) {
             const a = allAssignments[id];
             const textMatch = a.title.toLowerCase().includes(keyword) || a.assignedClasses.join(',').toLowerCase().includes(keyword);
@@ -289,6 +311,7 @@
                 : '<span class="status-badge status-pending">Đã ẩn</span>';
 
             html += `<tr>
+                <td class="stt-col">${stt++}</td>
                 <td><b>${a.title}</b></td>
                 <td>${a.assignedClasses.join(', ')}</td>
                 <td>${a.duration} phút</td>
@@ -312,7 +335,7 @@
     }
 
     window.deleteAssign = async function(id) {
-        if(!confirm("Bạn có chắc muốn xóa đợt giao bài này? Học sinh sẽ không thấy đề này nữa, nhưng điểm đã chấm vẫn được lưu trong Sổ Điểm.")) return;
+        if(!confirm("Bạn có chắc muốn xóa đợt giao bài này? (Điểm đã chấm vẫn được lưu trong Sổ Điểm)")) return;
         const { db } = await import('/bx/firebase-init.js');
         const { doc, deleteDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
         await deleteDoc(doc(db, "exam_assignments", id));
@@ -339,9 +362,11 @@
         if (subSnap.empty) return resultDiv.innerHTML = "<p style='color: orange;'>Chưa có học sinh nào nộp bài.</p>";
 
         let html = `<table><thead><tr>
+            <th class="stt-col">STT</th>
             <th>Email</th><th>Điểm tự động</th><th>Điểm chốt</th><th>Trạng thái</th><th>Hành động</th>
         </tr></thead><tbody>`;
 
+        let stt = 1;
         subSnap.forEach(subDoc => {
             const sub = subDoc.data();
             const autoScore = calculateScore(sub.answers, answerKey);
@@ -349,6 +374,7 @@
             const status = sub.isPublished ? '<span class="status-badge status-published">Đã công bố</span>' : '<span class="status-badge status-pending">Chờ duyệt</span>';
 
             html += `<tr>
+                <td class="stt-col">${stt++}</td>
                 <td>${sub.studentEmail}</td>
                 <td style="color: var(--primary); font-weight: bold;">${autoScore.toFixed(2)}</td>
                 <td><input type="number" step="0.05" class="score-input" id="score-${subDoc.id}" value="${displayScore.toFixed(2)}" ${sub.isPublished ? 'disabled' : ''}></td>
@@ -408,7 +434,6 @@
             
             if (q.part === 1) {
                 q.options.forEach((opt, oIdx) => {
-                    // Xử lý nếu đề bị đảo đáp án (opt là object)
                     const isShuffled = typeof opt === 'object';
                     const origIdx = isShuffled ? opt.originalIndex : oIdx;
                     const text = isShuffled ? opt.text : opt;
@@ -461,7 +486,6 @@
         const { db } = await import('/bx/firebase-init.js');
         const { collection, getDocs, query, where } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
 
-        // 1. Lấy danh sách HS
         const userSnap = await getDocs(query(collection(db, "users"), where("class", "==", className)));
         allStudents = [];
         userSnap.forEach(d => {
@@ -469,7 +493,6 @@
             allStudents.push({ id: d.id, email: u.email, name: u.name || "Chưa đặt tên", role: u.role });
         });
 
-        // 2. Lấy tất cả bài giao của lớp này
         const assignSnap = await getDocs(collection(db, "exam_assignments"));
         let classAssignments = [];
         assignSnap.forEach(d => {
@@ -479,11 +502,9 @@
             }
         });
 
-        // 3. Lấy tất cả bài nộp của lớp này
-        const subSnap = await getDocs(query(collection(db, "exam_submissions"), where("assignmentId", "in", classAssignments.map(a=>a.id).slice(0, 10)))); // Giới hạn 10 đề do Firestore giới hạn
+        const subSnap = await getDocs(query(collection(db, "exam_submissions"), where("assignmentId", "in", classAssignments.map(a=>a.id).slice(0, 10))));
         const submissions = subSnap.docs.map(d => d.data());
 
-        // 4. Tổng hợp dữ liệu
         allGradebookData = allStudents.map(st => {
             let row = { email: st.email, name: st.name, total: "Chưa thi" };
             let maxScore = -1;
@@ -508,18 +529,28 @@
         if (allGradebookData.length === 0) return resultDiv.innerHTML = "<p>Không có học sinh nào.</p>";
 
         let html = `<table id="excelTable"><thead><tr>
+            <th class="stt-col">STT</th>
             <th>Họ Tên</th><th>Email</th>`;
         
-        // Tên các cột (Tên đề)
         const assignIds = Object.keys(allGradebookData[0]).filter(k => k !== 'email' && k !== 'name' && k !== 'total');
+        
+        // Sắp xếp các cột đề theo thời gian tạo (createdAt) để sổ điểm có trình tự
+        assignIds.sort((a, b) => {
+            const dateA = allAssignments[a]?.createdAt?.seconds || 0;
+            const dateB = allAssignments[b]?.createdAt?.seconds || 0;
+            return dateA - dateB;
+        });
+
         assignIds.forEach(id => {
             const a = allAssignments[id];
             if(a) html += `<th>${a.title}</th>`;
         });
         html += `<th style="background: #d4edda; color: #155724;">Điểm Cao Nhất</th></tr></thead><tbody>`;
 
+        let stt = 1;
         allGradebookData.forEach((row, idx) => {
             html += `<tr class="data-row">
+                <td class="stt-col">${stt++}</td>
                 <td><input type="text" value="${row.name}" onchange="updateStudentName('${row.email}', this.value)" style="border: none; border-bottom: 1px dashed #ccc; width: 100%;"></td>
                 <td>${row.email}</td>`;
             assignIds.forEach(id => {
@@ -555,6 +586,102 @@
         const table = document.getElementById("excelTable");
         const wb = XLSX.utils.table_to_book(table, {sheet: "Diem"});
         XLSX.writeFile(wb, "So_Diem.xlsx");
+    }
+
+    // ==========================================
+    // TAB 4: QUẢN LÝ HỌC SINH
+    // ==========================================
+    window.loadAllUsers = async function() {
+        const div = document.getElementById('studentListTable');
+        div.innerHTML = "<p>⏳ Đang tải danh sách toàn bộ học sinh...</p>";
+        
+        const { db } = await import('/bx/firebase-init.js');
+        const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+        
+        const snap = await getDocs(collection(db, "users"));
+        allUsersList = [];
+        snap.forEach(d => {
+            const u = d.data();
+            if (u.role !== 'teacher') { 
+                allUsersList.push({ 
+                    id: d.id, 
+                    email: u.email || "Không có email", 
+                    name: u.name || "", 
+                    class: u.class || "", 
+                    isHidden: u.hidden || false,
+                    isVerified: u.emailVerified || false
+                });
+            }
+        });
+        
+        renderStudentTable();
+    }
+
+    window.renderStudentTable = function() {
+        const div = document.getElementById('studentListTable');
+        if (allUsersList.length === 0) return div.innerHTML = "<p>Chưa có dữ liệu. Bấm 'Tải lại danh sách' ở trên.</p>";
+
+        const filterClass = document.getElementById('inputClassStudentTab').value.trim().toLowerCase();
+        const keyword = document.getElementById('searchStudentTab').value.trim().toLowerCase();
+
+        let html = `<table><thead><tr>
+            <th class="stt-col">STT</th>
+            <th>Họ Tên (Có thể sửa)</th><th>Email</th><th>Lớp</th><th>Xác thực Email</th><th>Trạng thái</th><th>Hành động</th>
+        </tr></thead><tbody>`;
+
+        let stt = 1;
+        allUsersList.forEach(u => {
+            if (filterClass && u.class.toLowerCase() !== filterClass) return;
+            if (keyword && !u.name.toLowerCase().includes(keyword) && !u.email.toLowerCase().includes(keyword)) return;
+
+            const verifyStatus = u.isVerified 
+                ? '<span class="status-badge status-published">Đã xác thực</span>' 
+                : '<span class="status-badge status-pending">Chưa xác thực</span>';
+            const accountStatus = u.isHidden 
+                ? '<span class="status-badge status-hidden">Đã vô hiệu hóa</span>' 
+                : '<span class="status-badge status-published">Đang hoạt động</span>';
+
+            html += `<tr>
+                <td class="stt-col">${stt++}</td>
+                <td><input type="text" value="${u.name}" placeholder="Chưa đặt tên" onchange="updateStudentNameTab4('${u.id}', this.value)" style="border: none; border-bottom: 1px dashed var(--primary); width: 100%;"></td>
+                <td>${u.email}</td>
+                <td><b>${u.class}</b></td>
+                <td>${verifyStatus}</td>
+                <td>${accountStatus}</td>
+                <td>
+                    <button class="btn btn-sm ${u.isHidden ? 'btn-success' : 'btn-warning'}" onclick="toggleUserStatus('${u.id}', ${u.isHidden})">
+                        ${u.isHidden ? 'Mở khóa' : 'Vô hiệu hóa'}
+                    </button>
+                </td>
+            </tr>`;
+        });
+
+        if (stt === 1) html += `<tr><td colspan="7" style="text-align: center;">Không tìm thấy học sinh nào phù hợp.</td></tr>`;
+        div.innerHTML = html + `</tbody></table>`;
+    }
+
+    window.updateStudentNameTab4 = async function(uid, newName) {
+        const { db } = await import('/bx/firebase-init.js');
+        const { doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+        await updateDoc(doc(db, "users", uid), { name: newName });
+        
+        const user = allUsersList.find(u => u.id === uid);
+        if (user) user.name = newName;
+    }
+
+    window.toggleUserStatus = async function(uid, currentHidden) {
+        const action = currentHidden ? "MỞ KHÓA" : "VÔ HIỆU HÓA";
+        if (!confirm(`Bạn có chắc muốn ${action} tài khoản này?`)) return;
+
+        const { db } = await import('/bx/firebase-init.js');
+        const { doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+        
+        await updateDoc(doc(db, "users", uid), { hidden: !currentHidden });
+        
+        const user = allUsersList.find(u => u.id === uid);
+        if (user) user.isHidden = !currentHidden;
+        
+        renderStudentTable();
     }
 </script>
 </body>
