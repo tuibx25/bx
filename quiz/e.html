@@ -38,7 +38,7 @@
     .table-wrap { overflow-x: auto; margin-top: 15px; }
     table { width: 100%; border-collapse: collapse; min-width: 800px; }
     th, td { border: 1px solid var(--border); padding: 10px; text-align: left; font-size: 14px; }
-    th { background: #e9ecef; color: var(--primary); font-weight: bold; position: sticky; top: 0; text-align: center;}
+    th { background: #e9ecef; color: var(--primary); font-weight: bold; position: sticky; top: 0; text-align: center; word-break: break-word; min-width: 120px;}
     
     /* CSS cho các dòng con bị ẩn */
     .sub-row { background: #f8f9fa; color: #555; font-size: 13px; }
@@ -379,7 +379,6 @@
 
         let html = `<table><thead><tr><th class="stt-col">STT</th><th>Họ Tên</th><th>Lần làm</th><th>Trạng thái</th><th>Điểm tự động</th><th>Điểm chốt</th><th>Hành động</th></tr></thead><tbody>`;
 
-        // Hàm tạo HTML cho 1 dòng bài nộp
         const renderRow = (sub, attemptIdx, isHidden, isMain, st, user, index) => {
             const autoScore = calculateScore(sub.answers, answerKey);
             const displayScore = sub.score !== null ? sub.score : autoScore;
@@ -390,7 +389,6 @@
             let actionHtml = `<button class="btn btn-sm btn-outline" onclick="viewDetail('${sub.id}', '${assignmentId}')">Chi tiết</button>`;
             if (!sub.isPublished) actionHtml += ` <button class="btn btn-sm btn-success" onclick="publishScore('${sub.id}')">Công bố</button>`;
             
-            // Nút Mở rộng / Thu gọn (chỉ hiện ở dòng chính và nếu HS có > 1 lần làm)
             if (isMain) {
                 const userAllSubs = submissions.filter(s => s.studentId === user.id);
                 if (userAllSubs.length > 1) {
@@ -423,7 +421,6 @@
                 </tr>`;
             } else {
                 const userSubs = submissions.filter(s => s.studentId === user.id);
-                // Sắp xếp theo thời gian nộp
                 userSubs.sort((a, b) => (a.submittedAt?.seconds || 0) - (b.submittedAt?.seconds || 0));
 
                 if (userSubs.length === 0) {
@@ -437,19 +434,16 @@
                         <td>-</td>
                     </tr>`;
                 } else {
-                    // Tìm dòng đại diện (Lần có điểm công bố cao nhất. Nếu không có, lấy lần mới nhất)
                     let publishedSubs = userSubs.filter(s => s.isPublished);
                     let bestSub = null;
                     if (publishedSubs.length > 0) {
                         bestSub = publishedSubs.reduce((prev, curr) => (prev.score > curr.score) ? prev : curr);
                     } else {
-                        bestSub = userSubs[userSubs.length - 1]; // Lấy lần cuối cùng
+                        bestSub = userSubs[userSubs.length - 1];
                     }
 
-                    // Render dòng chính (bestSub)
                     html += renderRow(bestSub, userSubs.indexOf(bestSub), false, true, st, user, index);
 
-                    // Render các dòng phụ (các lần khác bị ẩn)
                     userSubs.forEach((sub, idx) => {
                         if (sub.id !== bestSub.id) {
                             html += renderRow(sub, idx, true, false, st, user, index);
@@ -462,7 +456,6 @@
         resultDiv.innerHTML = html + `</tbody></table>`;
     }
 
-    // Hàm ẩn/hiện các dòng phụ
     window.toggleExpand = function(userId, btn) {
         const rows = document.querySelectorAll(`.hidden-sub-${userId}`);
         if (rows.length === 0) return;
@@ -549,7 +542,7 @@
     }
 
     // ==========================================
-    // TAB 3: SỔ ĐIỂM LỚP (BỎ CỘT CAO NHẤT)
+    // TAB 3: SỔ ĐIỂM LỚP
     // ==========================================
     window.loadGradebook = async function() {
         const className = document.getElementById('inputClassGradebook').value.trim().toLowerCase();
@@ -584,9 +577,15 @@
         classAssignments.sort((a, b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0));
 
         let submissions = [];
-        if (classAssignments.length > 0) {
-            const subSnap = await getDocs(query(collection(db, "exam_submissions"), where("assignmentId", "in", classAssignments.map(a=>a.id).slice(0, 10))));
-            submissions = subSnap.docs.map(d => d.data());
+        const chunkSize = 10;
+        const assignmentIds = classAssignments.map(a => a.id);
+
+        for (let i = 0; i < assignmentIds.length; i += chunkSize) {
+            const chunk = assignmentIds.slice(i, i + chunkSize);
+            if (chunk.length > 0) {
+                const subSnap = await getDocs(query(collection(db, "exam_submissions"), where("assignmentId", "in", chunk)));
+                submissions = submissions.concat(subSnap.docs.map(d => d.data()));
+            }
         }
 
         let gradebookData = [];
@@ -626,7 +625,6 @@
         assignments.forEach(a => {
             html += `<th>${a.title}</th>`;
         });
-        // 🟢 ĐÃ XÓA CỘT "CAO NHẤT" Ở ĐÂY
         html += `</tr></thead><tbody>`;
 
         data.forEach((row) => {
