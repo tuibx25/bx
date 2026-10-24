@@ -34,16 +34,17 @@
     .checkbox-group label { font-weight: normal; cursor: pointer; display: flex; align-items: center; gap: 5px; color: var(--ink); }
     
     .btn { background: var(--primary); color: var(--white); border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.2s; }
-    .btn:hover { background: var(--primary-light); }
+    .btn:hover:not(:disabled) { background: var(--primary-light); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn-sm { padding: 5px 10px; font-size: 12px; }
     .btn-success { background: var(--primary); color: var(--white); }
-    .btn-success:hover { background: var(--primary-light); }
+    .btn-success:hover:not(:disabled) { background: var(--primary-light); }
     .btn-danger { background: var(--brown-d); color: var(--white); }
-    .btn-danger:hover { background: var(--brown); }
+    .btn-danger:hover:not(:disabled) { background: var(--brown); }
     .btn-warning { background: var(--wheat); color: var(--brown-d); border: 1px solid var(--brown);}
-    .btn-warning:hover { background: var(--beige); }
+    .btn-warning:hover:not(:disabled) { background: var(--beige); }
     .btn-outline { background: var(--white); border: 1px solid var(--primary); color: var(--primary); }
-    .btn-outline:hover { background: var(--bg); }
+    .btn-outline:hover:not(:disabled) { background: var(--bg); }
 
     .table-wrap { overflow-x: auto; margin-top: 15px; }
     table { width: 100%; border-collapse: collapse; min-width: 800px; background: var(--white); }
@@ -61,9 +62,20 @@
     .status-published { background: var(--primary); color: var(--white); }
     .status-hidden { background: var(--border); color: var(--ink); }
     
-    .search-bar { display: flex; gap: 10px; margin-bottom: 15px; align-items: center; background: var(--white); padding: 10px; border: 1px solid var(--border); border-radius: 5px;}
+    .search-bar { display: flex; gap: 10px; margin-bottom: 5px; align-items: center; background: var(--white); padding: 10px; border: 1px solid var(--border); border-radius: 5px;}
     .search-bar input { flex: 1; padding: 8px; border: 1px solid var(--border); border-radius: 4px; color: var(--ink); }
     .search-bar input:focus { outline: none; border-color: var(--primary-light); }
+
+    /* 🟢 CSS MỚI CHO THANH HÀNH ĐỘNG GỌN GÀNG */
+    .batch-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+    .batch-label { font-size: 13px; color: #666; }
+    .btn-batch { font-size: 12px; padding: 4px 10px; border-radius: 4px; }
 
     .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; overflow-y: auto; padding: 20px;}
     .modal-content { background: var(--white); max-width: 800px; margin: 40px auto; padding: 20px; border-radius: 10px; border: 1px solid var(--border); }
@@ -77,10 +89,6 @@
     .ans-neutral { color: var(--ink); }
 
     .hidden { display: none !important; }
-    
-    /* CSS cho phần Giao việc hàng loạt */
-    .batch-actions { display: flex; gap: 10px; align-items: center; background: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba; margin-bottom: 15px; }
-    .batch-actions h4 { margin: 0; color: #856404; margin-right: auto; }
 </style>
 </head>
 <body>
@@ -197,16 +205,16 @@
         </div>
 
         <div class="search-bar">
-            <input type="text" id="inputClassStudentTab" placeholder="Lọc theo lớp (VD: 10a11)" style="max-width: 200px;" oninput="loadAllUsersAndRender()">
+            <input type="text" id="inputClassStudentTab" placeholder="Lọc theo lớp (VD: 10a11)" style="max-width: 200px;" oninput="onClassFilterChange()">
             <input type="text" id="searchStudentTab" placeholder="🔍 Tìm tên hoặc email..." oninput="renderStudentTable()">
             <button class="btn btn-primary" onclick="loadAllUsersAndRender()">Tải lại danh sách</button>
         </div>
 
-        <!-- 🟢 KHU VỰC KHÓA/MỞ KHÓA HÀNG LOẠT -->
+        <!-- 🟢 KHU VỰC THU GỌN 2 NÚT KHÓA HÀNG LOẠT -->
         <div class="batch-actions">
-            <h4>⚡ Hành động cho cả lớp <span id="batchClassLabel" style="font-weight:bold; color:var(--brown-d);"></span>:</h4>
-            <button class="btn btn-warning" onclick="toggleClassProfileLock(true)">🔒 Khóa sửa Hồ Sơ</button>
-            <button class="btn btn-success" onclick="toggleClassProfileLock(false)">🔓 Mở khóa sửa Hồ Sơ</button>
+            <span class="batch-label"><b id="batchClassLabel">...</b>:</span>
+            <button class="btn btn-warning btn-batch" id="btnLockClass" onclick="toggleClassProfileLock(true)" disabled>🔒 Khóa sửa Hồ Sơ</button>
+            <button class="btn btn-success btn-batch" id="btnUnlockClass" onclick="toggleClassProfileLock(false)" disabled>🔓 Mở khóa sửa Hồ Sơ</button>
         </div>
 
         <div class="table-wrap" id="studentListTable">
@@ -771,17 +779,27 @@
         reader.readAsArrayBuffer(file);
     }
 
+    // 🟢 KHI GÕ VÀO Ô LỌC LỚP -> KHÓA NÚT HÀNH ĐỘNG ĐỂ TRÁNH NHẦM LẪN
+    window.onClassFilterChange = function() {
+        document.getElementById('btnLockClass').disabled = true;
+        document.getElementById('btnUnlockClass').disabled = true;
+        document.getElementById('batchClassLabel').textContent = "...";
+        document.getElementById('studentListTable').innerHTML = "<p style='text-align: center; color: var(--brown-d);'>Vui lòng bấm 'Tải lại danh sách' để xem học sinh.</p>";
+    }
+
     window.loadAllUsersAndRender = async function() {
         const div = document.getElementById('studentListTable');
         const className = document.getElementById('inputClassStudentTab').value.trim().toLowerCase();
         
+        // Khóa nút trong lúc đang tải
+        document.getElementById('btnLockClass').disabled = true;
+        document.getElementById('btnUnlockClass').disabled = true;
+
         if (!className) {
             div.innerHTML = "<p style='color: var(--brown-d); text-align: center;'>Vui lòng nhập tên lớp vào ô lọc để xem danh sách.</p>";
+            document.getElementById('batchClassLabel').textContent = "...";
             return;
         }
-
-        // Cập nhật nhãn tên lớp cho phần Hành động hàng loạt
-        document.getElementById('batchClassLabel').textContent = className.toUpperCase();
 
         div.innerHTML = "<p>⏳ Đang tải dữ liệu...</p>";
         
@@ -804,6 +822,11 @@
         });
 
         renderStudentTable(roster, allUsersList);
+
+        // Tải xong -> Mở khóa nút
+        document.getElementById('batchClassLabel').textContent = className.toUpperCase();
+        document.getElementById('btnLockClass').disabled = false;
+        document.getElementById('btnUnlockClass').disabled = false;
     }
 
     window.renderStudentTable = function(roster, users) {
@@ -899,13 +922,21 @@
         if (!confirm(`Bạn có chắc chắn muốn ${action} quyền sửa Hồ sơ (Tên/Lớp) cho TẤT CẢ học sinh lớp ${className.toUpperCase()}?`)) return;
 
         try {
+            // Khóa nút để tránh bấm 2 lần
+            document.getElementById('btnLockClass').disabled = true;
+            document.getElementById('btnUnlockClass').disabled = true;
+
             const { db } = await import('/bx/firebase-init.js');
             const { collection, query, where, getDocs, doc, writeBatch } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
 
             const snap = await getDocs(query(collection(db, "users"), where("class", "==", className)));
-            if (snap.empty) return alert("Không tìm thấy học sinh nào trong lớp này!");
+            if (snap.empty) {
+                alert("Không tìm thấy học sinh nào trong lớp này!");
+                document.getElementById('btnLockClass').disabled = false;
+                document.getElementById('btnUnlockClass').disabled = false;
+                return;
+            }
 
-            // Dùng batch để update 1 lần (nhanh hơn)
             const batch = writeBatch(db);
             snap.forEach(d => {
                 const userRef = doc(db, "users", d.id);
@@ -915,12 +946,14 @@
             await batch.commit();
             alert(`✅ Đã ${action} thành công hồ sơ của ${snap.size} học sinh lớp ${className.toUpperCase()}!`);
             
-            // Tải lại danh sách để thấy trạng thái mới
-            loadAllUsersAndRender();
+            loadAllUsersAndRender(); // Tải lại để cập nhật giao diện
 
         } catch (error) {
             console.error("Lỗi khóa hàng loạt:", error);
             alert("Lỗi: " + error.message);
+            // Mở lại nút nếu lỗi
+            document.getElementById('btnLockClass').disabled = false;
+            document.getElementById('btnUnlockClass').disabled = false;
         }
     }
 </script>
