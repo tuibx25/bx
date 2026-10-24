@@ -2,7 +2,8 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+<!-- 🟢 ĐÃ MỞ KHÓA ZOOM: Xóa maximum-scale và user-scalable=no -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trắc nghiệm – Luyện tập Online</title>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
@@ -25,6 +26,8 @@ body{
   font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   font-size:15px; line-height:1.35;
   user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
+  overflow-x: hidden; /* 🟢 Chống tràn ngang khi zoom */
+  -webkit-text-size-adjust: 100%;
 }
 input, textarea { user-select: text; -webkit-user-select: text; }
 .hidden{display:none !important}
@@ -141,16 +144,8 @@ section.tab.active{display:block}
     }
     header h1, header .spacer { display: none; }
 
-    /* Hàng 1: Đã trả lời | Chọn | A- | A+ */
     .stat-badge { 
-        order: 1; 
-        flex: 1; 
-        text-align: left; 
-        border: none; 
-        background: transparent; 
-        font-size: 13px; 
-        padding: 0;
-        white-space: nowrap;
+        order: 1; flex: 1; text-align: left; border: none; background: transparent; font-size: 13px; padding: 0; white-space: nowrap;
     }
     .stat-badge b { font-size: 1.1em; }
     
@@ -158,45 +153,29 @@ section.tab.active{display:block}
     #fsDown { order: 3; padding: 4px 8px; font-size: 13px; }
     #fsUp { order: 4; padding: 4px 8px; font-size: 13px; }
 
-    /* Hàng 2: Đồng hồ | Nộp bài */
     .timer { 
-        order: 5; 
-        flex: 1; 
-        margin-top: 4px; 
-        padding: 4px 8px;
-        justify-content: space-between;
-        background: var(--bg);
+        order: 5; flex: 1; margin-top: 4px; padding: 4px 8px; justify-content: space-between; background: var(--bg);
     }
     .timer select { font-size: 13px; }
     #tDisp { font-size: 15px; }
     .timer .btn { padding: 4px 8px; font-size: 13px; }
 
     #btnSubmit, #btnRedo { 
-        order: 6; 
-        flex: 1; 
-        margin-top: 4px; 
-        padding: 8px; 
-        font-size: 14px; 
-        text-align: center;
+        order: 6; flex: 1; margin-top: 4px; padding: 8px; font-size: 14px; text-align: center;
     }
 
-    /* Nội dung đề */
     main { padding: 10px; }
-    
-    /* Bảng chọn cấu trúc (Load Overlay) full chiều rộng */
     .load-card { width: 95%; max-width: 95%; padding: 15px; }
     .p2-grid { grid-template-columns: 1fr; }
     .lv-grid { grid-template-columns: 45px 1fr 1fr 1fr 1fr 1fr; gap: 4px; padding: 4px;}
     .lv-grid input { padding: 6px 2px; font-size: 12px; }
     .lv-head { font-size: 10px; }
 
-    /* Phần II (Đúng/Sai) full chiều ngang */
     .st-row { flex-direction: column; align-items: flex-start; }
     .st-txt { min-width: 100%; }
     .st-btns { width: 100%; display: flex; justify-content: space-between; margin-top: 8px; background: var(--soft); padding: 5px; border-radius: 6px; }
     .st-btn { flex: 1; margin: 0 4px; padding: 10px 0; font-size: 15px; }
 
-    /* Phần III (Trả lời ngắn) full chiều ngang */
     .short-input { min-width: 100%; width: 100%; padding: 12px; }
 }
 </style>
@@ -345,6 +324,7 @@ section.tab.active{display:block}
 
 <script>
 (function() {
+  // 1. CHẶN CONTEXT MENU & PHÍM TẮT (Chỉ dành cho Desktop)
   document.addEventListener('contextmenu', e => { e.preventDefault(); return false; }, { capture: true });
 
   document.addEventListener('keydown', function(e) {
@@ -380,20 +360,27 @@ section.tab.active{display:block}
   }, { capture: true });
 
   document.addEventListener('drag', e => e.preventDefault(), { capture: true });
+
+  // 🟢 ĐÃ XÓA TOÀN BỘ CODE CHẶN ZOOM (gesturestart, touchmove, touchend)
 })();
 
+// 3. BẪY DEVTOOLS (CHỈ BẬT TRÊN MÁY TÍNH)
 let devtoolsOpen = false;
 const trap = document.getElementById('security-trap');
-setInterval(() => {
-    const threshold = 160;
-    const widthDiff = window.outerWidth - window.innerWidth;
-    const heightDiff = window.outerHeight - window.innerHeight;
-    if (widthDiff > threshold || heightDiff > threshold) {
-        if(!devtoolsOpen) { devtoolsOpen = true; trap.classList.remove('hidden'); }
-    } else {
-        if(devtoolsOpen) { devtoolsOpen = false; trap.classList.add('hidden'); }
-    }
-}, 500);
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+
+if (!isMobile) {
+    setInterval(() => {
+        const threshold = 160;
+        const widthDiff = window.outerWidth - window.innerWidth;
+        const heightDiff = window.outerHeight - window.innerHeight;
+        if (widthDiff > threshold || heightDiff > threshold) {
+            if(!devtoolsOpen) { devtoolsOpen = true; trap.classList.remove('hidden'); }
+        } else {
+            if(devtoolsOpen) { devtoolsOpen = false; trap.classList.add('hidden'); }
+        }
+    }, 500);
+}
 
 function renderMath(el){
   if(!el) return;
@@ -832,7 +819,7 @@ async function autoLoadExam() {
   try {
     if (!window.getFirebaseQuestions) throw new Error("Firebase chưa tải xong, vui lòng thử lại sau vài giây.");
     
-    const allQuestions = await window.getFirebaseQuestions();
+    const allQuestions = await window.getFirebaseQuestions(10); // 🟢 Mặc định khối 10 cho prac.html
     if (!allQuestions || allQuestions.length === 0) throw new Error("Database trống hoặc chưa có câu hỏi.");
 
     const normalizedQuestions = allQuestions.map((q, index) => {
@@ -999,6 +986,13 @@ $$('nav.tabs button').forEach(btn => {
   });
 });
 
+// 🟢 LƯU CỠ CHỮ VÀO LOCALSTORAGE ĐỂ KHÔNG BỊ RESET KHI F5
+let fs = localStorage.getItem('prac_fs') ? parseInt(localStorage.getItem('prac_fs')) : 18;
+document.documentElement.style.setProperty('--fs', fs + 'px');
+
+$('#fsUp').addEventListener('click', () => { fs = Math.min(40, fs + 2); document.documentElement.style.setProperty('--fs', fs + 'px'); localStorage.setItem('prac_fs', fs); });
+$('#fsDown').addEventListener('click', () => { fs = Math.max(13, fs - 2); document.documentElement.style.setProperty('--fs', fs + 'px'); localStorage.setItem('prac_fs', fs); });
+
 let tRemain = 25 * 60, tTimer = null, tRunning = false;
 function tShow(){ const m = Math.floor(tRemain / 60), s = tRemain % 60; $('#tDisp').textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0'); }
 $('#tBtn').addEventListener('click', () => {
@@ -1010,9 +1004,6 @@ $('#tBtn').addEventListener('click', () => {
   }
 });
 $('#tMin').addEventListener('change', e => { clearInterval(tTimer); tRunning = false; $('#tBtn').textContent = 'Bắt đầu'; tRemain = Number(e.target.value) * 60; tShow(); });
-let fs = 18;
-$('#fsUp').addEventListener('click', () => { fs = Math.min(40, fs + 2); document.documentElement.style.setProperty('--fs', fs + 'px'); });
-$('#fsDown').addEventListener('click', () => { fs = Math.max(13, fs - 2); document.documentElement.style.setProperty('--fs', fs + 'px'); });
 
 window.addEventListener('load', () => {
     tShow();
