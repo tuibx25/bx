@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hệ Thống Thi Trực Tuyến</title>
+<!-- Nhúng MathJax để hiển thị công thức Toán/Lý -->
+<script>
+    MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" id="MathJax-script" async></script>
+<!-- Gọi file cấu hình Firebase dùng chung -->
+<script type="module" src="/bx/firebase-init.js"></script>
+
+<style>
+    :root { --primary: #004488; --bg: #f4f4f9; --border: #ccc; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+    .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    h2 { color: var(--primary); text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
+    
+    /* Giao diện danh sách đề */
+    .exam-card { border: 1px solid var(--border); padding: 15px; margin-bottom: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
+    .exam-card h3 { margin: 0 0 5px 0; color: #333; }
+    .exam-card p { margin: 0 0 5px 0; color: #666; font-size: 14px; }
+    .attempt-badge { display: inline-block; padding: 3px 8px; background: #e0e0e0; border-radius: 12px; font-size: 12px; font-weight: bold; }
+    .btn { background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.2s;}
+    .btn:hover:not(:disabled) { opacity: 0.9; }
+    .btn:disabled { background: #999; cursor: not-allowed; }
+    .btn-submit { background: #d9534f; width: 100%; padding: 12px; font-size: 16px; margin-top: 20px;}
+
+    /* Giao diện làm bài */
+    .part-title { font-weight: 800; font-size: 1.1em; color: var(--primary); margin: 25px 0 10px; padding: 10px; background: #e6f0fa; border-left: 5px solid var(--primary); border-radius: 0 5px 5px 0; }
+    .question { border: 1px solid #eee; padding: 15px; margin-bottom: 15px; border-radius: 8px; }
+    .q-text { font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
+    .options { display: flex; flex-direction: column; gap: 8px; }
+    .option-label { padding: 10px; border: 1px solid var(--border); border-radius: 5px; cursor: pointer; display: flex; gap: 10px; transition: 0.1s; }
+    .option-label:hover { background: #f9f9f9; }
+    .option-label input[type="radio"] { margin-top: 4px; cursor: pointer; }
+    .statements { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+    .st-row { display: flex; gap: 15px; align-items: center; padding: 10px; border: 1px solid #eee; border-radius: 5px; }
+    .st-btns { display: flex; gap: 15px; }
+    .st-btns label { cursor: pointer; display: flex; align-items: center; gap: 5px; }
+    .short-input { padding: 10px; border: 1px solid var(--border); border-radius: 5px; width: 300px; font-size: 16px; }
+    
+    .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- 1. Màn hình chờ -->
+<div id="loadingScreen" style="text-align: center; margin-top: 50px;">
+    <h2>🔄 Đang kết nối máy chủ dữ liệu...</h2>
+</div>
+
+<!-- 2. Màn hình danh sách đề -->
+<div id="dashboardScreen" class="container hidden">
+    <h2>📝 Danh Sách Đề</h2>
+    <div id="examList">Đang tải danh sách...</div>
+</div>
+
+<!-- 3. Màn hình làm bài -->
+<div id="quizScreen" class="container hidden">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: sticky; top: 0; background: #fff; z-index: 10; padding: 10px 0; border-bottom: 1px solid #eee;">
+        <h2 id="quizTitle" style="border: none; margin: 0; text-align: left; font-size: 20px;">Đang làm bài...</h2>
+        <div style="font-size: 24px; font-weight: bold; color: #d9534f; background: #ffe6e6; padding: 5px 15px; border-radius: 5px;" id="timerDisplay">15:00</div>
+    </div>
+    <div id="quizBody" autocomplete="off"></div>
+    <button class="btn btn-submit" onclick="submitExam()">NỘP BÀI</button>
+</div>
+
+<!-- 4. Màn hình hoàn tất -->
+<div id="doneScreen" class="container hidden" style="text-align: center;">
+    <h2 style="color: #28a745; border:none;">✅ Đã Nộp Bài Thành Công!</h2>
+    <p style="font-size: 16px;">Vui lòng chờ Giáo viên chấm điểm và công bố kết quả.</p>
+    <button class="btn" onclick="location.reload()" style="margin-top: 20px;">Quay lại Danh Sách Đề</button>
+</div>
+
+<script>
+    let currentUser = null;
+    let userClass = "";
+    let currentAssignment = null;
+    let currentExamData = null;
+    let userAnswers = {};
+    let timerInterval = null;
+    let currentEndTime = null; 
+    let sessionKey = "";
+
+    // Hàm xáo trộn mảng
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    window.addEventListener('load', () => {
+        window.checkAuthState((isLoggedIn) => {
+            if (!isLoggedIn) {
+                document.getElementById('loadingScreen').innerHTML = "<h2 style='color:red;'>❌ Bạn chưa đăng nhập! Vui lòng quay lại trang chủ.</h2>";
+                return;
+            }
+            document.getElementById('loadingScreen').classList.add('hidden');
+            document.getElementById('dashboardScreen').classList.remove('hidden');
+            loadDashboard();
+        });
+    });
+
+    // Tải danh sách đề (Có hiển thị điểm đã công bố)
+    async function loadDashboard() {
+        try {
+            const { auth, db } = await import('/bx/firebase-init.js');
+            const { doc, getDoc, collection, getDocs, query, where } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+            
+            currentUser = auth.currentUser;
+            const userSnap = await getDoc(doc(db, "users", currentUser.uid));
+            if (userSnap.exists()) {
+                userClass = userSnap.data().class; 
+            }
+
+            if (!userClass) {
+                document.getElementById('examList').innerHTML = "<p style='color:red'>Lỗi: Tài khoản của bạn chưa được cập nhật Lớp. Vui lòng báo Giáo viên.</p>";
+                return;
+            }
+
+            // 1. Tính số lượt đã làm và lấy điểm đã công bố
+            const subQuery = query(collection(db, "exam_submissions"), where("studentId", "==", currentUser.uid));
+            const subSnapshot = await getDocs(subQuery);
+            const attemptCounts = {};
+            const publishedScores = {}; // Chứa điểm cao nhất đã công bố
+
+            subSnapshot.forEach(doc => {
+                const data = doc.data();
+                const aId = data.assignmentId;
+                attemptCounts[aId] = (attemptCounts[aId] || 0) + 1;
+                
+                if (data.isPublished && data.score !== null) {
+                    if (!publishedScores[aId] || data.score > publishedScores[aId]) {
+                        publishedScores[aId] = data.score;
+                    }
+                }
+            });
+
+            // 2. Lấy danh sách bài giao
+            const querySnapshot = await getDocs(collection(db, "exam_assignments"));
+            
+            const listEl = document.getElementById('examList');
+            let html = "";
+            let count = 0;
+
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                
+                if (data.assignedClasses && data.assignedClasses.includes(userClass) && data.isOpen === true) {
+                    const maxAttempts = data.maxAttempts || 1;
+                    const done = attemptCounts[docSnap.id] || 0;
+                    const isOutOfAttempts = done >= maxAttempts;
+
+                    // Kiểm tra xem có bài đang làm dở trong localStorage không
+                    const sKey = `exam_session_${docSnap.id}_${currentUser.uid}`;
+                    const savedSession = localStorage.getItem(sKey);
+                    let hasDraft = false;
+                    if (savedSession) {
+                        try {
+                            const parsed = JSON.parse(savedSession);
+                            if (parsed.endTime > Date.now()) hasDraft = true; 
+                            else localStorage.removeItem(sKey); 
+                        } catch(e) {}
+                    }
+
+                    // Hiển thị điểm nếu có
+                    let scoreHtml = "";
+                    if (publishedScores[docSnap.id] !== undefined) {
+                        scoreHtml = `<span style="color: #d9534f; font-weight: bold; font-size: 16px; margin-left: 10px;">(Điểm: ${publishedScores[docSnap.id]})</span>`;
+                    }
+
+                    html += `
+                        <div class="exam-card" style="${isOutOfAttempts ? 'opacity: 0.6' : ''}">
+                            <div>
+                                <h3>${data.title} ${hasDraft ? '<span style="color:red; font-size:14px;">(Đang làm dở)</span>' : ''} ${scoreHtml}</h3>
+                                <p>Thời gian: ${data.duration} phút</p>
+                                <span class="attempt-badge">Đã làm: ${done} / ${maxAttempts} lượt</span>
+                            </div>
+                            <button class="btn" 
+                                onclick="startExam('${docSnap.id}', '${data.examId}', ${data.duration}, ${data.shuffleQuestions || false}, ${data.shuffleOptions || false})"
+                                ${isOutOfAttempts ? 'disabled' : ''}>
+                                ${isOutOfAttempts ? 'Hết lượt' : 'Làm Bài'}
+                            </button>
+                        </div>
+                    `;
+                    count++;
+                }
+            });
+
+            if (count === 0) {
+                listEl.innerHTML = "<p>Hiện không có đề nào đang mở cho lớp của bạn.</p>";
+            } else {
+                listEl.innerHTML = html;
+            }
+
+        } catch (error) {
+            console.error("Lỗi tải danh sách:", error);
+            document.getElementById('examList').innerHTML = `<p style="color:red">Lỗi tải dữ liệu: ${error.message}</p>`;
+        }
+    }
+
+    window.startExam = async function(assignmentId, examId, duration, doShuffleQ, doShuffleO) {
+        document.getElementById('dashboardScreen').classList.add('hidden');
+        document.getElementById('loadingScreen').classList.remove('hidden');
+        document.getElementById('loadingScreen').innerHTML = "<h2>🔄 Đang tải đề thi...</h2>";
+
+        try {
+            sessionKey = `exam_session_${assignmentId}_${currentUser.uid}`;
+            const savedSession = localStorage.getItem(sessionKey);
+
+            if (savedSession) {
+                const parsed = JSON.parse(savedSession);
+                if (parsed.endTime > Date.now()) {
+                    const confirmResume = confirm("Bạn đang có bài làm dang dở.\n\n- Nhấn OK để TIẾP TỤC làm bài (thời gian vẫn đang chạy).\n- Nhấn Cancel để HỦY và làm lại từ đầu.");
+                    if (confirmResume) {
+                        currentAssignment = parsed.assignment;
+                        currentExamData = parsed.examData;
+                        userAnswers = parsed.answers;
+                        currentEndTime = parsed.endTime;
+                        
+                        document.getElementById('loadingScreen').classList.add('hidden');
+                        document.getElementById('quizScreen').classList.remove('hidden');
+                        document.getElementById('quizTitle').textContent = currentExamData.title || "Đề Thi";
+                        
+                        renderQuiz();
+                        startTimer(currentEndTime);
+                        return; 
+                    } else {
+                        localStorage.removeItem(sessionKey);
+                    }
+                } else {
+                    alert("Bài làm trước đó của bạn đã quá thời gian quy định và đã bị hủy.");
+                    localStorage.removeItem(sessionKey);
+                }
+            }
+
+            // Tải đề mới
+            const { db } = await import('/bx/firebase-init.js');
+            const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+            
+            currentAssignment = { id: assignmentId, examId: examId, duration: duration };
+            
+            const examSnap = await getDoc(doc(db, "exams", examId));
+            if (!examSnap.exists()) throw new Error("Không tìm thấy đề thi!");
+            
+            currentExamData = examSnap.data();
+
+            // Đảo câu hỏi theo từng phần
+            if (doShuffleQ) {
+                let p1 = currentExamData.questions.filter(q => q.part === 1);
+                let p2 = currentExamData.questions.filter(q => q.part === 2);
+                let p3 = currentExamData.questions.filter(q => q.part === 3);
+                
+                p1 = shuffleArray(p1);
+                p2 = shuffleArray(p2);
+                p3 = shuffleArray(p3);
+                
+                currentExamData.questions = [...p1, ...p2, ...p3];
+            }
+
+            // Đảo đáp án (Chỉ phần 1)
+            if (doShuffleO) {
+                currentExamData.questions.forEach(q => {
+                    if (q.part === 1 && q.options) {
+                        let indexedOpts = q.options.map((opt, idx) => ({ originalIndex: idx, text: opt }));
+                        indexedOpts = shuffleArray(indexedOpts);
+                        q.options = indexedOpts;
+                    }
+                });
+            }
+            
+            currentEndTime = Date.now() + (duration * 60 * 1000);
+            userAnswers = {};
+            saveSessionToLocal();
+
+            document.getElementById('loadingScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+            document.getElementById('quizTitle').textContent = currentExamData.title || "Đề Thi";
+            
+            renderQuiz();
+            startTimer(currentEndTime);
+
+        } catch (error) {
+            console.error(error);
+            alert(error.message);
+            location.reload();
+        }
+    }
+
+    function saveSessionToLocal() {
+        if (!sessionKey || !currentEndTime) return;
+        const dataToSave = {
+            assignment: currentAssignment,
+            examData: currentExamData,
+            answers: userAnswers,
+            endTime: currentEndTime
+        };
+        localStorage.setItem(sessionKey, JSON.stringify(dataToSave));
+    }
+
+    function renderQuiz() {
+        const body = document.getElementById('quizBody');
+        body.innerHTML = ""; 
+        let html = "";
+        let count = 1;
+        let currentPartTitle = "";
+
+        currentExamData.questions.forEach(q => {
+            let partTitle = "";
+            if (q.part === 1) partTitle = "PHẦN I. TRẮC NGHIỆM NHIỀU PHƯƠNG ÁN LỰA CHỌN";
+            else if (q.part === 2) partTitle = "PHẦN II. CÂU TRẮC NGHIỆM ĐÚNG SAI";
+            else if (q.part === 3) partTitle = "PHẦN III. TRẮC NGHIỆM TRẢ LỜI NGẮN";
+
+            if (partTitle !== currentPartTitle) {
+                currentPartTitle = partTitle;
+                count = 1; 
+                html += `<div class="part-title">${currentPartTitle}</div>`;
+            }
+
+            html += `<div class="question" id="q-${q.uid}">`;
+            html += `<div class="q-text">Câu ${count++}: ${q.text}</div>`;
+            
+            if(q.img) {
+                html += `<div style="margin: 10px 0;"><img src="${q.img}" style="max-width: 100%; max-height: 300px; border-radius: 5px;"></div>`;
+            }
+
+            if (q.part === 1) {
+                html += `<div class="options">`;
+                q.options.forEach((optObj, displayIdx) => {
+                    const isShuffled = typeof optObj === 'object';
+                    const originalIndex = isShuffled ? optObj.originalIndex : displayIdx;
+                    const optText = isShuffled ? optObj.text : optObj;
+                    const isChecked = (userAnswers[q.uid] !== undefined && userAnswers[q.uid] == originalIndex);
+
+                    html += `
+                        <label class="option-label">
+                            <input type="radio" autocomplete="off" name="ans-${q.uid}" value="${originalIndex}" ${isChecked ? 'checked' : ''} onchange="saveAnswer('${q.uid}', ${originalIndex})">
+                            <span>${String.fromCharCode(65 + displayIdx)}. ${optText}</span>
+                        </label>`;
+                });
+                html += `</div>`;
+            } 
+            else if (q.part === 2) {
+                html += `<div class="statements">`;
+                q.statements.forEach((st, idx) => {
+                    const savedVal = userAnswers[q.uid] ? userAnswers[q.uid][idx] : "";
+                    html += `
+                        <div class="st-row">
+                            <div style="flex:1">${String.fromCharCode(97 + idx)}) ${st}</div>
+                            <div class="st-btns">
+                                <label><input type="radio" autocomplete="off" name="st-${q.uid}-${idx}" value="T" ${savedVal === 'T' ? 'checked' : ''} onchange="saveStatement('${q.uid}', ${idx}, 'T')"> Đúng</label>
+                                <label><input type="radio" autocomplete="off" name="st-${q.uid}-${idx}" value="F" ${savedVal === 'F' ? 'checked' : ''} onchange="saveStatement('${q.uid}', ${idx}, 'F')"> Sai</label>
+                            </div>
+                        </div>`;
+                });
+                html += `</div>`;
+            } 
+            else if (q.part === 3) {
+                const savedVal = userAnswers[q.uid] || "";
+                html += `<div style="margin-top:10px;"><input type="text" autocomplete="off" class="short-input" value="${savedVal}" placeholder="Nhập đáp án..." oninput="saveAnswer('${q.uid}', this.value)"></div>`;
+            }
+            html += `</div>`;
+        });
+
+        body.innerHTML = html;
+        if (window.MathJax) MathJax.typesetPromise([body]).catch(err => console.log(err));
+    }
+
+    window.saveAnswer = function(uid, value) {
+        userAnswers[uid] = value;
+        saveSessionToLocal();
+    }
+    window.saveStatement = function(uid, stIndex, value) {
+        if (!userAnswers[uid]) userAnswers[uid] = ["", "", "", ""];
+        userAnswers[uid][stIndex] = value;
+        saveSessionToLocal();
+    }
+
+    function startTimer(endTime) {
+        const display = document.getElementById('timerDisplay');
+        if (timerInterval) clearInterval(timerInterval);
+
+        timerInterval = setInterval(() => {
+            let remainMs = endTime - Date.now();
+            let time = Math.floor(remainMs / 1000);
+
+            if (time <= 0) {
+                clearInterval(timerInterval);
+                display.textContent = "00:00";
+                alert("⏰ Đã hết giờ làm bài! Hệ thống tự động thu bài.");
+                submitExam(true);
+                return;
+            }
+
+            const m = Math.floor(time / 60);
+            const s = time % 60;
+            display.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }, 1000);
+    }
+
+    window.submitExam = async function(isAutoSubmit = false) {
+        if (timerInterval) clearInterval(timerInterval);
+        
+        if (!isAutoSubmit) {
+            if (!confirm("Bạn có chắc chắn muốn nộp bài? Không thể sửa lại sau khi nộp.")) {
+                startTimer(currentEndTime); 
+                return;
+            }
+        }
+
+        document.getElementById('quizScreen').classList.add('hidden');
+        document.getElementById('loadingScreen').classList.remove('hidden');
+        document.getElementById('loadingScreen').innerHTML = "<h2>⏳ Đang nộp bài lên hệ thống...</h2>";
+
+        try {
+            const { db } = await import('/bx/firebase-init.js');
+            const { collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+
+            await addDoc(collection(db, "exam_submissions"), {
+                assignmentId: currentAssignment.id,
+                examId: currentAssignment.examId,
+                studentId: currentUser.uid,
+                studentEmail: currentUser.email,
+                answers: userAnswers,
+                status: "submitted",
+                score: null,
+                isPublished: false,
+                submittedAt: serverTimestamp()
+            });
+
+            localStorage.removeItem(sessionKey);
+
+            document.getElementById('loadingScreen').classList.add('hidden');
+            document.getElementById('doneScreen').classList.remove('hidden');
+
+        } catch (error) {
+            console.error("Lỗi nộp bài:", error);
+            alert("Lỗi nộp bài! " + error.message);
+            document.getElementById('loadingScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+        }
+    }
+</script>
+</body>
+</html>
