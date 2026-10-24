@@ -62,9 +62,20 @@
     .status-published { background: var(--primary); color: var(--white); }
     .status-hidden { background: var(--border); color: var(--ink); }
     
-    .search-bar { display: flex; gap: 10px; margin-bottom: 15px; align-items: center; background: var(--white); padding: 10px; border: 1px solid var(--border); border-radius: 5px;}
+    .search-bar { display: flex; gap: 10px; margin-bottom: 5px; align-items: center; background: var(--white); padding: 10px; border: 1px solid var(--border); border-radius: 5px;}
     .search-bar input { flex: 1; padding: 8px; border: 1px solid var(--border); border-radius: 4px; color: var(--ink); }
     .search-bar input:focus { outline: none; border-color: var(--primary-light); }
+
+    /* 🟢 CSS MỚI CHO THANH HÀNH ĐỘNG GỌN GÀNG */
+    .batch-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+    .batch-label { font-size: 13px; color: #666; }
+    .btn-batch { font-size: 12px; padding: 4px 10px; border-radius: 4px; }
 
     .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; overflow-y: auto; padding: 20px;}
     .modal-content { background: var(--white); max-width: 800px; margin: 40px auto; padding: 20px; border-radius: 10px; border: 1px solid var(--border); }
@@ -78,10 +89,6 @@
     .ans-neutral { color: var(--ink); }
 
     .hidden { display: none !important; }
-    
-    /* CSS cho phần Giao việc hàng loạt */
-    .batch-actions { display: flex; gap: 10px; align-items: center; background: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba; margin-bottom: 15px; }
-    .batch-actions h4 { margin: 0; color: #856404; margin-right: auto; }
 </style>
 </head>
 <body>
@@ -198,18 +205,16 @@
         </div>
 
         <div class="search-bar">
-            <!-- 🟢 SỬA SỰ KIỆN ONINPUT ĐỂ RESET NÚT KHI GÕ -->
             <input type="text" id="inputClassStudentTab" placeholder="Lọc theo lớp (VD: 10a11)" style="max-width: 200px;" oninput="onClassFilterChange()">
             <input type="text" id="searchStudentTab" placeholder="🔍 Tìm tên hoặc email..." oninput="renderStudentTable()">
             <button class="btn btn-primary" onclick="loadAllUsersAndRender()">Tải lại danh sách</button>
         </div>
 
-        <!-- 🟢 KHU VỰC KHÓA/MỞ KHÓA HÀNG LOẠT -->
+        <!-- 🟢 KHU VỰC THU GỌN 2 NÚT KHÓA HÀNG LOẠT -->
         <div class="batch-actions">
-            <h4>⚡ Hành động cho cả lớp <span id="batchClassLabel" style="font-weight:bold; color:var(--brown-d);">...</span>:</h4>
-            <!-- 🟢 THÊM THUỘC TÍNH DISABLED MẶC ĐỊNH -->
-            <button class="btn btn-warning" id="btnLockClass" onclick="toggleClassProfileLock(true)" disabled>🔒 Khóa sửa Hồ Sơ</button>
-            <button class="btn btn-success" id="btnUnlockClass" onclick="toggleClassProfileLock(false)" disabled>🔓 Mở khóa sửa Hồ Sơ</button>
+            <span class="batch-label">Thao tác hàng loạt cho lớp <b id="batchClassLabel">...</b>:</span>
+            <button class="btn btn-warning btn-batch" id="btnLockClass" onclick="toggleClassProfileLock(true)" disabled>🔒 Khóa sửa Hồ Sơ</button>
+            <button class="btn btn-success btn-batch" id="btnUnlockClass" onclick="toggleClassProfileLock(false)" disabled>🔓 Mở khóa sửa Hồ Sơ</button>
         </div>
 
         <div class="table-wrap" id="studentListTable">
