@@ -16,15 +16,23 @@
     .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     h2 { color: var(--primary); text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
     
+    /* Giao diện danh sách đề */
     .exam-card { border: 1px solid var(--border); padding: 15px; margin-bottom: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
     .exam-card h3 { margin: 0 0 5px 0; color: #333; }
     .exam-card p { margin: 0 0 5px 0; color: #666; font-size: 14px; }
     .attempt-badge { display: inline-block; padding: 3px 8px; background: #e0e0e0; border-radius: 12px; font-size: 12px; font-weight: bold; }
+    
+    /* Giao diện nhãn điểm */
+    .score-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .score-badge { background: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+    .score-badge.best { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+    
     .btn { background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.2s;}
     .btn:hover:not(:disabled) { opacity: 0.9; }
     .btn:disabled { background: #999; cursor: not-allowed; }
     .btn-submit { background: #d9534f; width: 100%; padding: 12px; font-size: 16px; margin-top: 20px;}
 
+    /* Giao diện làm bài */
     .part-title { font-weight: 800; font-size: 1.1em; color: var(--primary); margin: 25px 0 10px; padding: 10px; background: #e6f0fa; border-left: 5px solid var(--primary); border-radius: 0 5px 5px 0; }
     .question { border: 1px solid #eee; padding: 15px; margin-bottom: 15px; border-radius: 8px; }
     .q-text { font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
@@ -88,7 +96,7 @@
     window.addEventListener('load', () => {
         window.checkAuthState((isLoggedIn) => {
             if (!isLoggedIn) {
-                document.getElementById('loadingScreen').innerHTML = "<h2 style='color:red;'>❌ Bạn chưa đăng nhập!</h2>";
+                document.getElementById('loadingScreen').innerHTML = "<h2 style='color:red;'>❌ Bạn chưa đăng nhập! Vui lòng quay lại trang chủ.</h2>";
                 return;
             }
             document.getElementById('loadingScreen').classList.add('hidden');
@@ -97,6 +105,7 @@
         });
     });
 
+    // Tải danh sách đề (Hiển thị rõ điểm theo từng lần công bố)
     async function loadDashboard() {
         try {
             const { auth, db } = await import('/bx/firebase-init.js');
@@ -109,17 +118,38 @@
             }
 
             if (!userClass) {
-                document.getElementById('examList').innerHTML = "<p style='color:red'>Lỗi: Tài khoản chưa cập nhật Lớp.</p>";
+                document.getElementById('examList').innerHTML = "<p style='color:red'>Lỗi: Tài khoản của bạn chưa được cập nhật Lớp.</p>";
                 return;
             }
 
+            // Lấy tất cả bài nộp của HS
             const subQuery = query(collection(db, "exam_submissions"), where("studentId", "==", currentUser.uid));
             const subSnapshot = await getDocs(subQuery);
-            const attemptCounts = {};
+            const submissionsByAssignment = {}; 
+            
             subSnapshot.forEach(doc => {
-                const aId = doc.data().assignmentId;
-                attemptCounts[aId] = (attemptCounts[aId] || 0) + 1;
+                const data = doc.data();
+                const aId = data.assignmentId;
+                if (!submissionsByAssignment[aId]) submissionsByAssignment[aId] = [];
+                submissionsByAssignment[aId].push(data);
             });
+
+            const attemptCounts = {};
+            const publishedScores = {}; 
+
+            // Sắp xếp để lấy đúng thứ tự Lần 1, Lần 2...
+            for (const aId in submissionsByAssignment) {
+                const subs = submissionsByAssignment[aId];
+                subs.sort((a, b) => (a.submittedAt?.seconds || 0) - (b.submittedAt?.seconds || 0));
+                attemptCounts[aId] = subs.length;
+
+                publishedScores[aId] = [];
+                subs.forEach((sub, index) => {
+                    if (sub.isPublished && sub.score !== null) {
+                        publishedScores[aId].push({ attempt: index + 1, score: sub.score });
+                    }
+                });
+            }
 
             const querySnapshot = await getDocs(collection(db, "exam_assignments"));
             const listEl = document.getElementById('examList');
@@ -145,12 +175,26 @@
                         } catch(e) {}
                     }
 
+                    // 🟢 HIỂN THỊ NHÃN ĐIỂM ĐẸP MẮT
+                    let scoreHtml = "";
+                    if (publishedScores[docSnap.id] && publishedScores[docSnap.id].length > 0) {
+                        const maxS = Math.max(...publishedScores[docSnap.id].map(s => s.score));
+                        let badgesHtml = `<div class="score-badges">`;
+                        publishedScores[docSnap.id].forEach(s => {
+                            const isBest = s.score === maxS;
+                            badgesHtml += `<span class="score-badge ${isBest ? 'best' : ''}">Lần ${s.attempt}: ${s.score}</span>`;
+                        });
+                        badgesHtml += `</div>`;
+                        scoreHtml = badgesHtml;
+                    }
+
                     html += `
                         <div class="exam-card" style="${isOutOfAttempts ? 'opacity: 0.6' : ''}">
                             <div>
                                 <h3>${data.title} ${hasDraft ? '<span style="color:red; font-size:14px;">(Đang làm dở)</span>' : ''}</h3>
                                 <p>Thời gian: ${data.duration} phút</p>
                                 <span class="attempt-badge">Đã làm: ${done} / ${maxAttempts} lượt</span>
+                                ${scoreHtml}
                             </div>
                             <button class="btn" 
                                 onclick="startExam('${docSnap.id}', '${data.examId}', ${data.duration}, ${data.shuffleQuestions || false}, ${data.shuffleOptions || false})"
@@ -200,7 +244,7 @@
                         
                         renderQuiz();
                         startTimer(currentEndTime);
-                        return;
+                        return; 
                     } else {
                         localStorage.removeItem(sessionKey);
                     }
@@ -220,7 +264,6 @@
             
             currentExamData = examSnap.data();
 
-            // 🟢 SỬA LOGIC ĐẢO ĐỀ: Đảo từng phần riêng biệt
             if (doShuffleQ) {
                 let p1 = currentExamData.questions.filter(q => q.part === 1);
                 let p2 = currentExamData.questions.filter(q => q.part === 2);
@@ -233,7 +276,6 @@
                 currentExamData.questions = [...p1, ...p2, ...p3];
             }
 
-            // Đảo đáp án (Chỉ áp dụng cho phần 1)
             if (doShuffleO) {
                 currentExamData.questions.forEach(q => {
                     if (q.part === 1 && q.options) {
@@ -281,16 +323,14 @@
         let currentPartTitle = "";
 
         currentExamData.questions.forEach(q => {
-            // 🟢 HIỂN THỊ TIÊU ĐỀ PHẦN (I, II, III)
             let partTitle = "";
             if (q.part === 1) partTitle = "PHẦN I. TRẮC NGHIỆM NHIỀU PHƯƠNG ÁN LỰA CHỌN";
             else if (q.part === 2) partTitle = "PHẦN II. CÂU TRẮC NGHIỆM ĐÚNG SAI";
             else if (q.part === 3) partTitle = "PHẦN III. TRẮC NGHIỆM TRẢ LỜI NGẮN";
 
-            // Nếu sang phần mới thì reset số đếm câu và in tiêu đề
             if (partTitle !== currentPartTitle) {
                 currentPartTitle = partTitle;
-                count = 1; // Reset lại câu 1 cho phần mới
+                count = 1; 
                 html += `<div class="part-title">${currentPartTitle}</div>`;
             }
 
