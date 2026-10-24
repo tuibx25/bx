@@ -130,37 +130,55 @@ section.tab.active{display:block}
 .p2-mode-btn:hover { text-decoration: underline; }
 .p2-mode-btn.active { font-weight: 800; text-decoration: underline; }
 
-/* 🟢 TỐI ƯU HEADER CHO ĐIỆN THOẠI (1 HÀNG DUY NHẤT) */
+/* 🟢 TỐI ƯU HEADER CHO ĐIỆN THOẠI (CHIA 2 HÀNG GỌN GÀNG) */
 @media (max-width: 768px) {
     header {
-        flex-wrap: wrap; /* Cho phép rớt dòng nếu màn hình quá bé (như iPhone SE) */
-        padding: 6px 8px;
+        flex-wrap: wrap;
+        padding: 8px 10px;
         gap: 6px;
-        justify-content: center;
+        justify-content: space-between;
         overflow-x: hidden;
     }
-    header h1 { display: none; } /* Ẩn tiêu đề dài dòng */
-    header .spacer { display: none; }
-    #fsDown, #fsUp { display: none; } /* Ẩn nút tăng giảm cỡ chữ */
+    header h1, header .spacer { display: none; }
 
-    /* Thu nhỏ các nút để nhét vừa 1 hàng */
-    .btn, .btn-primary, .btn-brown {
-        padding: 6px 10px;
-        font-size: 13px;
+    /* Hàng 1: Đã trả lời | Chọn | A- | A+ */
+    .stat-badge { 
+        order: 1; 
+        flex: 1; 
+        text-align: left; 
+        border: none; 
+        background: transparent; 
+        font-size: 13px; 
+        padding: 0;
+        white-space: nowrap;
     }
-    .stat-badge {
-        font-size: 12px;
-        padding: 3px 6px;
+    .stat-badge b { font-size: 1.1em; }
+    
+    #btnLoadMenu { order: 2; padding: 4px 8px; font-size: 13px; }
+    #fsDown { order: 3; padding: 4px 8px; font-size: 13px; }
+    #fsUp { order: 4; padding: 4px 8px; font-size: 13px; }
+
+    /* Hàng 2: Đồng hồ | Nộp bài */
+    .timer { 
+        order: 5; 
+        flex: 1; 
+        margin-top: 4px; 
+        padding: 4px 8px;
+        justify-content: space-between;
+        background: var(--bg);
     }
-    .timer {
-        padding: 2px 6px;
-        gap: 4px;
+    .timer select { font-size: 13px; }
+    #tDisp { font-size: 15px; }
+    .timer .btn { padding: 4px 8px; font-size: 13px; }
+
+    #btnSubmit, #btnRedo { 
+        order: 6; 
+        flex: 1; 
+        margin-top: 4px; 
+        padding: 8px; 
+        font-size: 14px; 
+        text-align: center;
     }
-    .timer select {
-        font-size: 12px;
-    }
-    #tDisp { font-size: 14px; min-width: 35px; }
-    .timer .btn { font-size: 12px; padding: 4px 6px; }
 
     /* Nội dung đề */
     main { padding: 10px; }
