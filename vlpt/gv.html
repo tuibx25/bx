@@ -77,6 +77,10 @@
     .ans-neutral { color: var(--ink); }
 
     .hidden { display: none !important; }
+    
+    /* CSS cho phần Giao việc hàng loạt */
+    .batch-actions { display: flex; gap: 10px; align-items: center; background: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba; margin-bottom: 15px; }
+    .batch-actions h4 { margin: 0; color: #856404; margin-right: auto; }
 </style>
 </head>
 <body>
@@ -197,6 +201,14 @@
             <input type="text" id="searchStudentTab" placeholder="🔍 Tìm tên hoặc email..." oninput="renderStudentTable()">
             <button class="btn btn-primary" onclick="loadAllUsersAndRender()">Tải lại danh sách</button>
         </div>
+
+        <!-- 🟢 KHU VỰC KHÓA/MỞ KHÓA HÀNG LOẠT -->
+        <div class="batch-actions">
+            <h4>⚡ Hành động cho cả lớp <span id="batchClassLabel" style="font-weight:bold; color:var(--brown-d);"></span>:</h4>
+            <button class="btn btn-warning" onclick="toggleClassProfileLock(true)">🔒 Khóa sửa Hồ Sơ</button>
+            <button class="btn btn-success" onclick="toggleClassProfileLock(false)">🔓 Mở khóa sửa Hồ Sơ</button>
+        </div>
+
         <div class="table-wrap" id="studentListTable">
             <p style="text-align: center; color: var(--ink);">Bấm "Tải lại danh sách" để xem học sinh.</p>
         </div>
@@ -359,7 +371,7 @@
     }
 
     // ==========================================
-    // TAB 2: CHẤM ĐIỂM & CHI TIẾT (CÓ NÚT MỞ RỘNG)
+    // TAB 2: CHẤM ĐIỂM & CHI TIẾT
     // ==========================================
     window.loadSubmissions = async function() {
         const assignmentId = document.getElementById('selectAssignment').value;
@@ -395,7 +407,6 @@
             let status = '';
             let canPublish = false;
 
-            // Tự động thu bài nếu quá giờ
             if (sub.status === 'in_progress' && Date.now() > sub.endTime) {
                 sub.status = 'submitted'; 
                 updateDoc(doc(db, "exam_submissions", sub.id), { status: 'submitted' }); 
@@ -769,6 +780,9 @@
             return;
         }
 
+        // Cập nhật nhãn tên lớp cho phần Hành động hàng loạt
+        document.getElementById('batchClassLabel').textContent = className.toUpperCase();
+
         div.innerHTML = "<p>⏳ Đang tải dữ liệu...</p>";
         
         const { db } = await import('/bx/firebase-init.js');
@@ -785,7 +799,7 @@
         snap.forEach(d => {
             const u = d.data();
             if (u.role !== 'teacher') { 
-                allUsersList.push({ id: d.id, email: u.email || "Không có", name: u.name || "", isHidden: u.hidden || false, isVerified: u.emailVerified || false });
+                allUsersList.push({ id: d.id, email: u.email || "Không có", name: u.name || "", isHidden: u.hidden || false, isVerified: u.emailVerified || false, infoLocked: u.infoLocked || false });
             }
         });
 
@@ -802,7 +816,7 @@
 
         let html = `<table><thead><tr>
             <th class="stt-col">STT</th>
-            <th>Họ Tên (Sổ Điểm)</th><th>Email</th><th>Xác thực</th><th>Trạng thái</th><th>Hành động</th>
+            <th>Họ Tên (Sổ Điểm)</th><th>Email</th><th>Xác thực</th><th>Trạng thái Hồ sơ</th><th>Hành động</th>
         </tr></thead><tbody>`;
 
         let matchedUserIds = new Set();
@@ -818,8 +832,17 @@
                 const verifyStatus = user 
                     ? (user.isVerified ? '<span class="status-badge status-published">Đã xác thực</span>' : '<span class="status-badge status-pending">Chưa xác thực</span>')
                     : '<span class="status-badge" style="background:var(--border); color:#555;">Chưa ĐK</span>';
+                
+                // Trạng thái hồ sơ
+                let lockStatus = '';
+                if (user) {
+                    lockStatus = user.infoLocked ? '<span style="color:var(--brown-d); font-weight:bold;">Đã khóa</span>' : '<span style="color:green;">Mở</span>';
+                } else {
+                    lockStatus = '-';
+                }
+
                 const accountStatus = user 
-                    ? (user.isHidden ? '<span class="status-badge status-hidden">Đã khóa</span>' : '<span class="status-badge status-published">Hoạt động</span>')
+                    ? (user.isHidden ? '<span class="status-badge status-hidden">Đã khóa TK</span>' : '<span class="status-badge status-published">Hoạt động</span>')
                     : '';
 
                 html += `<tr>
@@ -827,8 +850,8 @@
                     <td><b>${st.name}</b></td>
                     <td>${user ? user.email : '<i style="color:#888">Chưa đăng ký</i>'}</td>
                     <td>${verifyStatus}</td>
-                    <td>${accountStatus}</td>
-                    <td>${user ? `<button class="btn btn-sm ${user.isHidden ? 'btn-success' : 'btn-warning'}" onclick="toggleUserStatus('${user.id}', ${user.isHidden})">${user.isHidden ? 'Mở khóa' : 'Vô hiệu hóa'}</button>` : ''}</td>
+                    <td>${lockStatus} <br><small>${accountStatus}</small></td>
+                    <td>${user ? `<button class="btn btn-sm ${user.isHidden ? 'btn-success' : 'btn-warning'}" onclick="toggleUserStatus('${user.id}', ${user.isHidden})">${user.isHidden ? 'Mở khóa TK' : 'Khóa TK'}</button>` : ''}</td>
                 </tr>`;
             });
         }
@@ -840,15 +863,17 @@
             unmatchedUsers.forEach(u => {
                 if (keyword && !u.name.toLowerCase().includes(keyword) && !u.email.toLowerCase().includes(keyword)) return;
                 const verifyStatus = u.isVerified ? '<span class="status-badge status-published">Đã xác thực</span>' : '<span class="status-badge status-pending">Chưa xác thực</span>';
-                const accountStatus = u.isHidden ? '<span class="status-badge status-hidden">Đã khóa</span>' : '<span class="status-badge status-published">Hoạt động</span>';
+                const accountStatus = u.isHidden ? '<span class="status-badge status-hidden">Đã khóa TK</span>' : '<span class="status-badge status-published">Hoạt động</span>';
                 
+                const lockStatus = u.infoLocked ? '<span style="color:var(--brown-d); font-weight:bold;">Đã khóa</span>' : '<span style="color:green;">Mở</span>';
+
                 html += `<tr style="background: var(--wheat);">
                     <td class="stt-col">-</td>
                     <td><b>${u.name || '<Chưa đặt tên>'}</b> <span style="color:var(--brown-d); font-size:12px;">(Không khớp)</span></td>
                     <td>${u.email}</td>
                     <td>${verifyStatus}</td>
-                    <td>${accountStatus}</td>
-                    <td><button class="btn btn-sm ${u.isHidden ? 'btn-success' : 'btn-warning'}" onclick="toggleUserStatus('${u.id}', ${u.isHidden})">${u.isHidden ? 'Mở khóa' : 'Vô hiệu hóa'}</button></td>
+                    <td>${lockStatus} <br><small>${accountStatus}</small></td>
+                    <td><button class="btn btn-sm ${u.isHidden ? 'btn-success' : 'btn-warning'}" onclick="toggleUserStatus('${u.id}', ${u.isHidden})">${u.isHidden ? 'Mở khóa TK' : 'Khóa TK'}</button></td>
                 </tr>`;
             });
         }
@@ -857,12 +882,46 @@
     }
 
     window.toggleUserStatus = async function(uid, currentHidden) {
-        const action = currentHidden ? "MỞ KHÓA" : "VÔ HIỆU HÓA";
-        if (!confirm(`Bạn có chắc muốn ${action} tài khoản này?`)) return;
+        const action = currentHidden ? "MỞ KHÓA" : "KHÓA TÀI KHOẢN";
+        if (!confirm(`Bạn có chắc muốn ${action} đăng nhập của tài khoản này?`)) return;
         const { db } = await import('/bx/firebase-init.js');
         const { doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
         await updateDoc(doc(db, "users", uid), { hidden: !currentHidden });
         loadAllUsersAndRender();
+    }
+
+    // 🟢 HÀM KHÓA/MỞ KHÓA HỒ SƠ HÀNG LOẠT
+    window.toggleClassProfileLock = async function(isLock) {
+        const className = document.getElementById('inputClassStudentTab').value.trim().toLowerCase();
+        if (!className) return alert("Vui lòng nhập tên lớp ở ô lọc trước khi thực hiện!");
+        
+        const action = isLock ? "KHÓA" : "MỞ KHÓA";
+        if (!confirm(`Bạn có chắc chắn muốn ${action} quyền sửa Hồ sơ (Tên/Lớp) cho TẤT CẢ học sinh lớp ${className.toUpperCase()}?`)) return;
+
+        try {
+            const { db } = await import('/bx/firebase-init.js');
+            const { collection, query, where, getDocs, doc, writeBatch } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+
+            const snap = await getDocs(query(collection(db, "users"), where("class", "==", className)));
+            if (snap.empty) return alert("Không tìm thấy học sinh nào trong lớp này!");
+
+            // Dùng batch để update 1 lần (nhanh hơn)
+            const batch = writeBatch(db);
+            snap.forEach(d => {
+                const userRef = doc(db, "users", d.id);
+                batch.update(userRef, { infoLocked: isLock });
+            });
+
+            await batch.commit();
+            alert(`✅ Đã ${action} thành công hồ sơ của ${snap.size} học sinh lớp ${className.toUpperCase()}!`);
+            
+            // Tải lại danh sách để thấy trạng thái mới
+            loadAllUsersAndRender();
+
+        } catch (error) {
+            console.error("Lỗi khóa hàng loạt:", error);
+            alert("Lỗi: " + error.message);
+        }
     }
 </script>
 </body>
