@@ -4,12 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hệ Thống Thi Trực Tuyến</title>
-<!-- Nhúng MathJax để hiển thị công thức Toán/Lý -->
 <script>
     MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" id="MathJax-script" async></script>
-<!-- Gọi file cấu hình Firebase dùng chung -->
 <script type="module" src="/bx/firebase-init.js"></script>
 
 <style>
@@ -18,7 +16,6 @@
     .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     h2 { color: var(--primary); text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
     
-    /* Giao diện danh sách đề */
     .exam-card { border: 1px solid var(--border); padding: 15px; margin-bottom: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
     .exam-card h3 { margin: 0 0 5px 0; color: #333; }
     .exam-card p { margin: 0 0 5px 0; color: #666; font-size: 14px; }
@@ -28,7 +25,6 @@
     .btn:disabled { background: #999; cursor: not-allowed; }
     .btn-submit { background: #d9534f; width: 100%; padding: 12px; font-size: 16px; margin-top: 20px;}
 
-    /* Giao diện làm bài */
     .part-title { font-weight: 800; font-size: 1.1em; color: var(--primary); margin: 25px 0 10px; padding: 10px; background: #e6f0fa; border-left: 5px solid var(--primary); border-radius: 0 5px 5px 0; }
     .question { border: 1px solid #eee; padding: 15px; margin-bottom: 15px; border-radius: 8px; }
     .q-text { font-weight: 600; margin-bottom: 10px; line-height: 1.5; }
@@ -47,18 +43,15 @@
 </head>
 <body>
 
-<!-- 1. Màn hình chờ -->
 <div id="loadingScreen" style="text-align: center; margin-top: 50px;">
     <h2>🔄 Đang kết nối máy chủ dữ liệu...</h2>
 </div>
 
-<!-- 2. Màn hình danh sách đề -->
 <div id="dashboardScreen" class="container hidden">
     <h2>📝 Danh Sách Đề</h2>
     <div id="examList">Đang tải danh sách...</div>
 </div>
 
-<!-- 3. Màn hình làm bài -->
 <div id="quizScreen" class="container hidden">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: sticky; top: 0; background: #fff; z-index: 10; padding: 10px 0; border-bottom: 1px solid #eee;">
         <h2 id="quizTitle" style="border: none; margin: 0; text-align: left; font-size: 20px;">Đang làm bài...</h2>
@@ -68,7 +61,6 @@
     <button class="btn btn-submit" onclick="submitExam()">NỘP BÀI</button>
 </div>
 
-<!-- 4. Màn hình hoàn tất -->
 <div id="doneScreen" class="container hidden" style="text-align: center;">
     <h2 style="color: #28a745; border:none;">✅ Đã Nộp Bài Thành Công!</h2>
     <p style="font-size: 16px;">Vui lòng chờ Giáo viên chấm điểm và công bố kết quả.</p>
@@ -85,7 +77,6 @@
     let currentEndTime = null; 
     let sessionKey = "";
 
-    // Hàm xáo trộn mảng
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -106,7 +97,7 @@
         });
     });
 
-    // Tải danh sách đề (Có hiển thị điểm đã công bố)
+    // Tải danh sách đề (Hiển thị TẤT CẢ các điểm đã công bố)
     async function loadDashboard() {
         try {
             const { auth, db } = await import('/bx/firebase-init.js');
@@ -123,11 +114,11 @@
                 return;
             }
 
-            // 1. Tính số lượt đã làm và lấy điểm đã công bố
+            // 1. Tính số lượt đã làm và lấy TẤT CẢ điểm đã công bố
             const subQuery = query(collection(db, "exam_submissions"), where("studentId", "==", currentUser.uid));
             const subSnapshot = await getDocs(subQuery);
             const attemptCounts = {};
-            const publishedScores = {}; // Chứa điểm cao nhất đã công bố
+            const publishedScores = {}; // Lưu mảng các điểm đã công bố
 
             subSnapshot.forEach(doc => {
                 const data = doc.data();
@@ -135,9 +126,8 @@
                 attemptCounts[aId] = (attemptCounts[aId] || 0) + 1;
                 
                 if (data.isPublished && data.score !== null) {
-                    if (!publishedScores[aId] || data.score > publishedScores[aId]) {
-                        publishedScores[aId] = data.score;
-                    }
+                    if (!publishedScores[aId]) publishedScores[aId] = [];
+                    publishedScores[aId].push(data.score);
                 }
             });
 
@@ -156,7 +146,6 @@
                     const done = attemptCounts[docSnap.id] || 0;
                     const isOutOfAttempts = done >= maxAttempts;
 
-                    // Kiểm tra xem có bài đang làm dở trong localStorage không
                     const sKey = `exam_session_${docSnap.id}_${currentUser.uid}`;
                     const savedSession = localStorage.getItem(sKey);
                     let hasDraft = false;
@@ -168,10 +157,11 @@
                         } catch(e) {}
                     }
 
-                    // Hiển thị điểm nếu có
+                    // 🟢 HIỂN THỊ TẤT CẢ ĐIỂM ĐÃ CÔNG BỐ
                     let scoreHtml = "";
-                    if (publishedScores[docSnap.id] !== undefined) {
-                        scoreHtml = `<span style="color: #d9534f; font-weight: bold; font-size: 16px; margin-left: 10px;">(Điểm: ${publishedScores[docSnap.id]})</span>`;
+                    if (publishedScores[docSnap.id] && publishedScores[docSnap.id].length > 0) {
+                        const scoresStr = publishedScores[docSnap.id].join(", ");
+                        scoreHtml = `<span style="color: #d9534f; font-weight: bold; font-size: 16px; margin-left: 10px;">(Điểm: ${scoresStr})</span>`;
                     }
 
                     html += `
@@ -239,7 +229,6 @@
                 }
             }
 
-            // Tải đề mới
             const { db } = await import('/bx/firebase-init.js');
             const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
             
@@ -250,7 +239,6 @@
             
             currentExamData = examSnap.data();
 
-            // Đảo câu hỏi theo từng phần
             if (doShuffleQ) {
                 let p1 = currentExamData.questions.filter(q => q.part === 1);
                 let p2 = currentExamData.questions.filter(q => q.part === 2);
@@ -263,7 +251,6 @@
                 currentExamData.questions = [...p1, ...p2, ...p3];
             }
 
-            // Đảo đáp án (Chỉ phần 1)
             if (doShuffleO) {
                 currentExamData.questions.forEach(q => {
                     if (q.part === 1 && q.options) {
