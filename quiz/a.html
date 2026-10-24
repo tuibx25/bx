@@ -20,20 +20,25 @@
     body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: var(--ink); }
     .container { max-width: 900px; margin: 0 auto; background: var(--white); padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid var(--border); }
     h2 { color: var(--primary); text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
+    
     .exam-card { border: 1px solid var(--border); padding: 15px; margin-bottom: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; background: var(--white); }
     .exam-card h3 { margin: 0 0 5px 0; color: var(--ink); }
     .exam-card p { margin: 0 0 5px 0; color: var(--brown-d); font-size: 14px; font-weight: 600;}
+    
     .attempt-badge { display: inline-block; padding: 3px 8px; background: var(--beige); border: 1px solid var(--border); border-radius: 12px; font-size: 12px; font-weight: bold; margin-bottom: 8px;}
+    
     .score-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
     .score-badge { padding: 4px 10px; border-radius: 6px; font-size: 13px; font-weight: bold; border: 1px solid var(--border); }
     .score-badge.published { background: var(--wheat); color: var(--brown-d); border-color: var(--brown); }
     .score-badge.best { background: var(--primary); color: var(--white); border-color: var(--primary); }
     .score-badge.pending { background: var(--bg); color: #888888; border-color: var(--border); font-style: italic; font-weight: normal; opacity: 0.7; }
+    
     .btn { background: var(--primary); color: var(--white); border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 14px;}
     .btn:hover:not(:disabled) { background: var(--primary-light); }
     .btn:disabled { background: var(--border); color: #888; cursor: not-allowed; }
     .btn-submit { background: var(--brown-d); width: 100%; padding: 12px; font-size: 16px; margin-top: 20px; color: var(--white);}
     .btn-submit:hover { background: var(--brown); }
+
     .part-title { font-weight: 800; font-size: 1.1em; color: var(--brown-d); margin: 25px 0 10px; padding: 10px; background: var(--beige); border-left: 5px solid var(--brown-d); border-radius: 0 5px 5px 0; }
     .question { border: 1px solid var(--border); padding: 15px; margin-bottom: 15px; border-radius: 8px; background: var(--white); }
     .q-text { font-weight: 600; margin-bottom: 10px; line-height: 1.5; color: var(--ink); }
@@ -41,12 +46,14 @@
     .option-label { padding: 10px; border: 1px solid var(--border); border-radius: 5px; cursor: pointer; display: flex; gap: 10px; transition: 0.1s; background: var(--white);}
     .option-label:hover { background: var(--bg); border-color: var(--brown);}
     .option-label input[type="radio"] { margin-top: 4px; cursor: pointer; }
+    
     .statements { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
     .st-row { display: flex; gap: 15px; align-items: center; padding: 10px; border: 1px solid var(--border); border-radius: 5px; background: var(--white);}
     .st-btns { display: flex; gap: 15px; }
     .st-btns label { cursor: pointer; display: flex; align-items: center; gap: 5px; color: var(--ink);}
     .short-input { padding: 10px; border: 1px solid var(--border); border-radius: 5px; width: 300px; font-size: 16px; color: var(--ink); background: var(--white);}
     .short-input:focus { outline: none; border-color: var(--primary-light); }
+    
     .hidden { display: none !important; }
 </style>
 </head>
@@ -84,8 +91,7 @@
     let userAnswers = {};
     let timerInterval = null;
     let currentEndTime = null; 
-    let currentSubmissionId = null; // Lưu ID bài nộp hiện tại để cập nhật
-    let sessionKey = "";
+    let currentSubmissionId = null; 
     let isSubmitting = false; 
 
     function shuffleArray(array) {
@@ -115,12 +121,10 @@
             
             currentUser = auth.currentUser;
             const userSnap = await getDoc(doc(db, "users", currentUser.uid));
-            if (userSnap.exists()) {
-                userClass = userSnap.data().class; 
-            }
+            if (userSnap.exists()) userClass = userSnap.data().class; 
 
             if (!userClass) {
-                document.getElementById('examList').innerHTML = "<p style='color:red'>Lỗi: Tài khoản của bạn chưa được cập nhật Lớp.</p>";
+                document.getElementById('examList').innerHTML = "<p style='color:red'>Lỗi: Tài khoản chưa cập nhật Lớp.</p>";
                 return;
             }
 
@@ -137,7 +141,6 @@
 
             const attemptCounts = {};
 
-            // Đếm số lượt (bao gồm cả đang làm dở và đã nộp)
             for (const aId in submissionsByAssignment) {
                 const subs = submissionsByAssignment[aId];
                 subs.sort((a, b) => (a.startTime || 0) - (b.startTime || 0));
@@ -179,7 +182,7 @@
                                 badgeText += `${sub.score}`;
                             } else {
                                 badgeClass += " pending";
-                                badgeText += `Chờ công bố điểm`;
+                                badgeText += `Chờ điểm`;
                             }
                             badgesHtml += `<span class="${badgeClass}">${badgeText}</span>`;
                         });
@@ -226,7 +229,6 @@
             
             currentAssignment = { id: assignmentId, examId: examId, duration: duration };
             
-            // 1. Kiểm tra bài làm dang dở hoặc đã hết lượt
             const subQuery = query(collection(db, "exam_submissions"), where("studentId", "==", currentUser.uid), where("assignmentId", "==", assignmentId));
             const subSnap = await getDocs(subQuery);
             
@@ -245,21 +247,16 @@
                 return;
             }
 
-            // 2. Nếu có bài đang làm dở
             if (inProgressDoc) {
-                // Kiểm tra xem đã quá thời gian chưa
                 if (Date.now() > inProgressDoc.endTime) {
-                    // Hết giờ -> Tự động nộp
                     await updateDoc(doc(db, "exam_submissions", inProgressDoc.id), { status: 'submitted' });
                     alert("Bài làm trước đó đã hết thời gian và được tự động thu bài.");
                     location.reload();
                     return;
                 }
 
-                // Tiếp tục làm bài
                 const confirmResume = confirm("Bạn có bài làm đang dang dở. Nhấn OK để TIẾP TỤC (thời gian vẫn đang chạy).\nNhấn Cancel để HỦY bỏ bài làm dở này và quay lại.");
                 if (!confirmResume) {
-                    // Nếu hủy, ta vẫn giữ nguyên bài in_progress trên Firebase để tính lượt, HS phải vào làm tiếp.
                     location.reload(); 
                     return;
                 }
@@ -268,12 +265,8 @@
                 currentEndTime = inProgressDoc.endTime;
                 userAnswers = inProgressDoc.answers || {};
                 
-                // Tải lại đề (phòng trường hợp F5)
                 const examSnap = await getDoc(doc(db, "exams", examId));
                 currentExamData = examSnap.data();
-                
-                // Lưu ý: Nếu F5, thứ tự câu hỏi có thể bị đảo lại, nhưng uid vẫn giữ nguyên nên đáp án không bị lệch.
-                // (Để chính xác 100%, ta phải lưu cả đề đã đảo vào DB, nhưng tạm thời thế này là đủ).
 
                 document.getElementById('loadingScreen').classList.add('hidden');
                 document.getElementById('quizScreen').classList.remove('hidden');
@@ -284,7 +277,6 @@
                 return;
             }
 
-            // 3. Nếu không có bài làm dở -> Tạo mới
             const examSnap = await getDoc(doc(db, "exams", examId));
             if (!examSnap.exists()) throw new Error("Không tìm thấy đề thi!");
             
@@ -309,7 +301,6 @@
             currentEndTime = Date.now() + (duration * 60 * 1000);
             userAnswers = {};
             
-            // Ghi nhận lượt làm bài ngay lập tức
             const newSubRef = await addDoc(collection(db, "exam_submissions"), {
                 assignmentId: assignmentId,
                 examId: examId,
@@ -406,7 +397,7 @@
         if (window.MathJax) MathJax.typesetPromise([body]).catch(err => console.log(err));
     }
 
-    // Cập nhật đáp án lên Firebase liên tục (debounce để tránh spam)
+    // 🟢 LƯU NHÁP TỰ ĐỘNG LÊN FIREBASE
     let saveTimeout = null;
     function saveAnswerToDB() {
         if (saveTimeout) clearTimeout(saveTimeout);
@@ -417,7 +408,7 @@
                 const { doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
                 await updateDoc(doc(db, "exam_submissions", currentSubmissionId), { answers: userAnswers });
             } catch(e) { console.log("Lỗi lưu nháp:", e); }
-        }, 2000); // Lưu sau khi ngừng thao tác 2 giây
+        }, 2000); 
     }
 
     window.saveAnswer = function(uid, value) {
@@ -464,7 +455,6 @@
         }
 
         isSubmitting = true;
-
         document.getElementById('quizScreen').classList.add('hidden');
         document.getElementById('loadingScreen').classList.remove('hidden');
         document.getElementById('loadingScreen').innerHTML = "<h2>⏳ Đang nộp bài lên hệ thống...</h2>";
@@ -473,7 +463,6 @@
             const { db } = await import('/bx/firebase-init.js');
             const { doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
 
-            // Cập nhật bản ghi từ in_progress thành submitted
             await updateDoc(doc(db, "exam_submissions", currentSubmissionId), {
                 answers: userAnswers,
                 status: "submitted",
