@@ -9,18 +9,11 @@
 
 <style>
     :root { 
-        --ink: #000000; 
-        --bg: #F5F5F5; 
-        --white: #FFFFFF;
-        --border: #D3D3D3; 
-        --primary: #004488; 
-        --primary-light: #0066CC;
-        --brown: #8B5A2B;
-        --brown-d: #8B4513;
-        --beige: #F5F5DC;
-        --wheat: #F5DEB3;
+        --ink: #000000; --bg: #F5F5F5; --white: #FFFFFF;
+        --border: #D3D3D3; --primary: #004488; --primary-light: #0066CC;
+        --brown: #8B5A2B; --brown-d: #8B4513;
+        --beige: #F5F5DC; --wheat: #F5DEB3;
     }
-    
     body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: var(--ink); }
     .container { max-width: 1400px; margin: 0 auto; background: var(--white); padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid var(--border); }
     h2 { color: var(--primary); text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-top: 0; }
@@ -43,17 +36,12 @@
     .btn { background: var(--primary); color: var(--white); border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.2s; }
     .btn:hover { background: var(--primary-light); }
     .btn-sm { padding: 5px 10px; font-size: 12px; }
-    
-    /* Custom Buttons in new palette */
     .btn-success { background: var(--primary); color: var(--white); }
     .btn-success:hover { background: var(--primary-light); }
-    
     .btn-danger { background: var(--brown-d); color: var(--white); }
     .btn-danger:hover { background: var(--brown); }
-    
     .btn-warning { background: var(--wheat); color: var(--brown-d); border: 1px solid var(--brown);}
     .btn-warning:hover { background: var(--beige); }
-    
     .btn-outline { background: var(--white); border: 1px solid var(--primary); color: var(--primary); }
     .btn-outline:hover { background: var(--bg); }
 
@@ -62,7 +50,6 @@
     th, td { border: 1px solid var(--border); padding: 10px; text-align: left; font-size: 14px; color: var(--ink); }
     th { background: var(--beige); color: var(--primary); font-weight: bold; position: sticky; top: 0; text-align: center; word-break: break-word; min-width: 120px;}
     
-    /* CSS cho các dòng con bị ẩn */
     .sub-row { background: var(--bg); font-size: 13px; }
     .sub-row td { border-top: none; }
 
@@ -381,7 +368,7 @@
         
         resultDiv.innerHTML = "<p>⏳ Đang tải dữ liệu lớp và bài nộp...</p>";
         const { db } = await import('/bx/firebase-init.js');
-        const { collection, getDocs, query, where, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+        const { collection, getDocs, query, where, doc, getDoc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
         
         const assignment = allAssignments[assignmentId];
         const keySnap = await getDoc(doc(db, "exam_keys", assignment.examId));
@@ -405,14 +392,31 @@
         let html = `<table><thead><tr><th class="stt-col">STT</th><th>Họ Tên</th><th>Lần làm</th><th>Trạng thái</th><th>Điểm tự động</th><th>Điểm chốt</th><th>Hành động</th></tr></thead><tbody>`;
 
         const renderRow = (sub, attemptIdx, isHidden, isMain, st, user, index) => {
-            const autoScore = calculateScore(sub.answers, answerKey);
+            let status = '';
+            let canPublish = false;
+
+            // Tự động thu bài nếu quá giờ
+            if (sub.status === 'in_progress' && Date.now() > sub.endTime) {
+                sub.status = 'submitted'; 
+                updateDoc(doc(db, "exam_submissions", sub.id), { status: 'submitted' }); 
+            }
+
+            if (sub.status === 'in_progress') {
+                status = '<span class="status-badge status-pending">Đang làm bài (Chưa nộp)</span>';
+            } else if (sub.status === 'submitted' && !sub.isPublished) {
+                status = '<span class="status-badge status-pending">Chờ duyệt</span>';
+                canPublish = true;
+            } else if (sub.isPublished) {
+                status = '<span class="status-badge status-published">Đã công bố</span>';
+            }
+
+            const autoScore = calculateScore(sub.answers || {}, answerKey);
             const displayScore = sub.score !== null ? sub.score : autoScore;
-            const status = sub.isPublished ? '<span class="status-badge status-published">Đã công bố</span>' : '<span class="status-badge status-pending">Chờ duyệt</span>';
             
             const rowClass = isHidden ? `sub-row hidden hidden-sub-${user.id}` : '';
             
             let actionHtml = `<button class="btn btn-sm btn-outline" onclick="viewDetail('${sub.id}', '${assignmentId}')">Chi tiết</button>`;
-            if (!sub.isPublished) actionHtml += ` <button class="btn btn-sm btn-success" onclick="publishScore('${sub.id}')">Công bố</button>`;
+            if (canPublish) actionHtml += ` <button class="btn btn-sm btn-success" onclick="publishScore('${sub.id}')">Công bố</button>`;
             
             if (isMain) {
                 const userAllSubs = submissions.filter(s => s.studentId === user.id);
@@ -427,8 +431,8 @@
                     <td>${isMain ? `<b>${st.name}</b><br><small>${user.email}</small>` : '<i style="color:#888;">(Lần khác)</i>'}</td>
                     <td>Lần ${attemptIdx + 1} ${isMain && sub.isPublished ? '<b style="color: var(--primary);">(Cao nhất)</b>' : ''}</td>
                     <td>${status}</td>
-                    <td style="color: var(--primary); font-weight: bold;">${autoScore.toFixed(2)}</td>
-                    <td><input type="number" step="0.05" class="score-input" id="score-${sub.id}" value="${displayScore.toFixed(2)}" ${sub.isPublished ? 'disabled' : ''}></td>
+                    <td style="color: var(--primary); font-weight: bold;">${sub.status === 'in_progress' ? '-' : autoScore.toFixed(2)}</td>
+                    <td><input type="number" step="0.05" class="score-input" id="score-${sub.id}" value="${sub.status === 'in_progress' ? '0.00' : displayScore.toFixed(2)}" ${sub.isPublished || sub.status === 'in_progress' ? 'disabled' : ''}></td>
                     <td>${actionHtml}</td>
                 </tr>
             `;
@@ -446,7 +450,7 @@
                 </tr>`;
             } else {
                 const userSubs = submissions.filter(s => s.studentId === user.id);
-                userSubs.sort((a, b) => (a.submittedAt?.seconds || 0) - (b.submittedAt?.seconds || 0));
+                userSubs.sort((a, b) => (a.startTime || 0) - (b.startTime || 0));
 
                 if (userSubs.length === 0) {
                     html += `<tr style="background: var(--wheat);">
@@ -459,10 +463,12 @@
                         <td>-</td>
                     </tr>`;
                 } else {
-                    let publishedSubs = userSubs.filter(s => s.isPublished);
+                    let completedSubs = userSubs.filter(s => s.status === 'submitted' || s.isPublished);
                     let bestSub = null;
-                    if (publishedSubs.length > 0) {
-                        bestSub = publishedSubs.reduce((prev, curr) => (prev.score > curr.score) ? prev : curr);
+                    if (completedSubs.length > 0) {
+                        let published = completedSubs.filter(s => s.isPublished);
+                        if(published.length > 0) bestSub = published.reduce((p, c) => (p.score > c.score) ? p : c);
+                        else bestSub = completedSubs[completedSubs.length - 1];
                     } else {
                         bestSub = userSubs[userSubs.length - 1];
                     }
@@ -495,6 +501,7 @@
     }
 
     function calculateScore(answers, answerKey) {
+        if (!answers) answers = {};
         let score = 0;
         for (const uid in answerKey) {
             const correct = answerKey[uid];
@@ -524,10 +531,16 @@
         const examData = examSnap.data();
         const answerKey = keySnap.data().answers;
         const subData = subSnap.data();
+        const studentAnswers = subData.answers || {};
+        
         let html = `<p><b>Học sinh:</b> ${subData.studentEmail}</p>`;
+        if (subData.status === 'in_progress') {
+            html += `<p style="color: var(--brown-d); font-weight: bold;">(Học sinh chưa nộp bài. Dưới đây là các đáp án đã lưu tạm)</p>`;
+        }
+
         examData.questions.forEach((q, idx) => {
             const correctAns = answerKey[q.uid];
-            const studentAns = subData.answers[q.uid];
+            const studentAns = studentAnswers[q.uid];
             html += `<div class="q-detail"><p><b>Câu ${idx + 1}:</b> ${q.text}</p>`;
             if (q.part === 1) {
                 q.options.forEach((opt, oIdx) => {
