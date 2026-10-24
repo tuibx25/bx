@@ -48,6 +48,9 @@
     /* CSS cho hàng nút link */
     .link-buttons { display: flex; gap: 10px; margin-top: 15px; }
     .link-buttons .btn { font-size: 14px; padding: 10px; }
+    
+    /* CSS cho phần Preview Lớp */
+    .class-preview { font-size: 16px; font-weight: bold; color: var(--brown-d); margin-left: 10px; background: var(--beige); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--wheat);}
 </style>
 </head>
 <body>
@@ -85,16 +88,16 @@
             </div>
             
             <div class="form-group">
-                <label>Khối và Lớp:</label>
+                <label>Khối và Lớp: <span id="regClassPreview" class="class-preview">...</span></label>
                 <div class="row">
                     <select id="regGrade" class="form-control">
                         <option value="10">Khối 10</option>
                         <option value="11">Khối 11</option>
                         <option value="12">Khối 12</option>
                     </select>
-                    <input type="number" id="regClassNum" class="form-control" placeholder="Số lớp (VD: 12)" min="1" max="99">
+                    <input type="number" id="regClassNum" class="form-control" placeholder="Số lớp (VD: 11)" min="1" max="99">
                 </div>
-                <small style="color:#666; font-size: 12px; margin-top: 5px; display: block;">Ví dụ chọn Khối 10 và gõ 12 -> Lớp: 10a12</small>
+                <small style="color:#666; font-size: 12px; margin-top: 5px; display: block;">Ví dụ chọn Khối 10 và gõ 11 -> Lớp hiển thị phía trên</small>
             </div>
 
             <div class="form-group">
@@ -109,7 +112,7 @@
         </div>
     </div>
 
-    <!-- 2. MÀN HÌNH CHỜ XÁC THỰC EMAIL (MỚI) -->
+    <!-- 2. MÀN HÌNH CHỜ XÁC THỰC EMAIL -->
     <div id="verifySection" class="hidden" style="text-align: center;">
         <h2>📧 XÁC THỰC EMAIL</h2>
         <div class="user-info">
@@ -122,19 +125,19 @@
         <button class="btn" style="background: #d9534f;" onclick="handleLogout()">Đăng Xuất / Đổi Tài Khoản</button>
     </div>
 
-    <!-- 3. MÀN HÌNH HỒ SƠ CÁ NHÂN (SAU KHI ĐÃ XÁC THỰC) -->
+    <!-- 3. MÀN HÌNH HỒ SƠ CÁ NHÂN -->
     <div id="profileSection" class="hidden">
         <h2>👤 HỒ SƠ CÁ NHÂN</h2>
         <div class="user-info">
             <p>Email: <b id="pEmail"></b></p>
-            <p>Lớp: <b id="pClassDisplay" style="color: var(--primary); font-size: 18px;"></b></p>
+            <p>Lớp: <b id="pClassDisplay" style="color: var(--primary); font-size: 18px; text-transform: uppercase;"></b></p>
         </div>
         <div class="form-group">
             <label>Họ và Tên:</label>
             <input type="text" id="pName" class="form-control">
         </div>
         <div class="form-group">
-            <label>Khối và Lớp:</label>
+            <label>Khối và Lớp: <span id="pClassPreview" class="class-preview">...</span></label>
             <div class="row">
                 <select id="pGrade" class="form-control">
                     <option value="10">Khối 10</option>
@@ -161,6 +164,12 @@
     let currentUserDoc = null;
 
     window.addEventListener('load', () => {
+        // Gắn sự kiện để cập nhật Preview Lớp ngay khi gõ
+        document.getElementById('regGrade').addEventListener('change', updateRegPreview);
+        document.getElementById('regClassNum').addEventListener('input', updateRegPreview);
+        document.getElementById('pGrade').addEventListener('change', updateProfilePreview);
+        document.getElementById('pClassNum').addEventListener('input', updateProfilePreview);
+
         import('/bx/firebase-init.js').then(({ auth, onAuthStateChanged }) => {
             onAuthStateChanged(auth, (user) => {
                 if (user) {
@@ -177,6 +186,42 @@
             });
         });
     });
+
+    // Hàm cập nhật preview lớp ở form Đăng ký
+    function updateRegPreview() {
+        const grade = document.getElementById('regGrade').value;
+        const numRaw = document.getElementById('regClassNum').value;
+        const preview = document.getElementById('regClassPreview');
+        
+        if (numRaw.trim() === '') {
+            preview.textContent = '...';
+        } else {
+            const num = parseInt(numRaw, 10);
+            if (!isNaN(num)) {
+                preview.textContent = `${grade}a${num}`;
+            } else {
+                preview.textContent = '...';
+            }
+        }
+    }
+
+    // Hàm cập nhật preview lớp ở form Hồ sơ
+    function updateProfilePreview() {
+        const grade = document.getElementById('pGrade').value;
+        const numRaw = document.getElementById('pClassNum').value;
+        const preview = document.getElementById('pClassPreview');
+        
+        if (numRaw.trim() === '') {
+            preview.textContent = '...';
+        } else {
+            const num = parseInt(numRaw, 10);
+            if (!isNaN(num)) {
+                preview.textContent = `${grade}a${num}`;
+            } else {
+                preview.textContent = '...';
+            }
+        }
+    }
 
     function showMsg(text, type, elId = 'alertMsg') {
         const el = document.getElementById(elId);
@@ -197,6 +242,7 @@
             event.target.classList.add('active');
             document.getElementById('loginForm').classList.add('hidden');
             document.getElementById('registerForm').classList.remove('hidden');
+            updateRegPreview(); // Reset preview khi mở form
         }
     }
 
@@ -205,7 +251,7 @@
         if (!classStr) return { grade: "10", num: "" };
         const match = classStr.toLowerCase().match(/^(10|11|12)a(\d+)$/);
         if (match) {
-            return { grade: match[1], num: parseInt(match[2], 10).toString() }; // Bỏ số 0 ở đầu
+            return { grade: match[1], num: parseInt(match[2], 10).toString() }; 
         }
         return { grade: "10", num: "" };
     }
@@ -222,7 +268,6 @@
             return showMsg("Vui lòng nhập đầy đủ thông tin!", "error");
         }
 
-        // Xử lý lớp (bỏ số 0 ở đầu)
         const classNum = parseInt(classNumRaw, 10);
         if (isNaN(classNum) || classNum < 1 || classNum > 99) {
             return showMsg("Số lớp phải từ 1 đến 99!", "error");
@@ -233,7 +278,7 @@
             return showMsg("Mật khẩu phải từ 6 ký tự trở lên!", "error");
         }
 
-        // 🟢 KIỂM TRA LỖI CHÍNH TẢ EMAIL PHỔ BIẾN
+        // Kiểm tra lỗi chính tả email
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             return showMsg("Định dạng email không hợp lệ!", "error");
@@ -243,7 +288,7 @@
         const isTypo = commonTypos.some(typo => email.endsWith(typo));
         if (isTypo) {
             if (!confirm("⚠️ Email của bạn có vẻ bị sai chính tả (VD: gmai.com thay vì gmail.com).\nBạn có chắc chắn muốn tiếp tục đăng ký với email này không?")) {
-                return; // Hủy nếu người dùng nhận ra lỗi
+                return; 
             }
         }
 
@@ -304,7 +349,7 @@
         document.getElementById('profileSection').classList.add('hidden');
         document.getElementById('verifySection').classList.remove('hidden');
         document.getElementById('vEmail').textContent = user.email;
-        document.getElementById('verifyMsg').className = 'msg'; // clear msg
+        document.getElementById('verifyMsg').className = 'msg'; 
     }
 
     // GỬI LẠI MAIL XÁC THỰC
@@ -321,7 +366,7 @@
         }
     }
 
-    // TẢI HỒ SƠ CÁ NHÂN (ĐÃ XÁC THỰC)
+    // TẢI HỒ SƠ CÁ NHÂN
     async function loadUserProfile(user) {
         document.getElementById('authSection').classList.add('hidden');
         document.getElementById('verifySection').classList.add('hidden');
@@ -344,6 +389,9 @@
                 const parsed = parseClassString(data.class);
                 document.getElementById('pGrade').value = parsed.grade;
                 document.getElementById('pClassNum').value = parsed.num;
+                
+                // Cập nhật preview ngay khi load xong
+                updateProfilePreview();
 
                 // Kiểm tra khóa thông tin
                 if (data.infoLocked === true) {
