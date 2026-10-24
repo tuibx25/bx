@@ -3,392 +3,311 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Quản Trị Hệ Thống Thi - Giáo Viên</title>
+<title>Đăng Nhập / Đăng Ký - Hệ Thống Thi</title>
 <script type="module" src="/bx/firebase-init.js"></script>
 <style>
-    :root { --primary: #004488; --bg: #f4f4f9; --border: #ccc; --success: #28a745; --danger: #d9534f; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-    .container { max-width: 1100px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    :root { 
+        --ink: #000000; --bg: #F5F5F5; --white: #FFFFFF;
+        --border: #D3D3D3; --primary: #004488; --primary-light: #0066CC;
+        --brown: #8B5A2B; --brown-d: #8B4513;
+        --beige: #F5F5DC; --wheat: #F5DEB3;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; color: var(--ink); }
+    .card { background: var(--white); width: 100%; max-width: 400px; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid var(--border); }
+    h2 { text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 20px;}
     
-    h2 { color: var(--primary); text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-top: 0;}
-    
-    /* Tabs */
-    .tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
-    .tab-btn { padding: 10px 20px; cursor: pointer; border: none; background: none; font-size: 16px; font-weight: bold; color: #666; }
-    .tab-btn.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
+    .tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid var(--border); }
+    .tab-btn { flex: 1; padding: 10px; background: none; border: none; font-size: 16px; font-weight: bold; cursor: pointer; color: #888; border-bottom: 3px solid transparent; margin-bottom: -2px;}
+    .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
 
-    /* Form Giao Đề */
     .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; font-weight: bold; margin-bottom: 5px; color: #333; }
-    .form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; box-sizing: border-box; font-size: 15px; }
-    .row { display: flex; gap: 15px; }
-    .row > .form-group { flex: 1; }
-    .checkbox-group { display: flex; gap: 20px; margin-top: 10px; }
-    .checkbox-group label { font-weight: normal; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+    .form-group label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
+    .form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; box-sizing: border-box; font-size: 14px;}
+    .form-control:disabled { background: var(--bg); color: #888; cursor: not-allowed; }
     
-    .btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.2s;}
-    .btn:hover { opacity: 0.9; }
-    .btn-success { background: var(--success); }
+    .btn { width: 100%; padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 16px; color: var(--white); transition: 0.2s; background: var(--primary); }
+    .btn:hover { background: var(--primary-light); }
+    .btn-submit { background: var(--brown-d); }
+    .btn-submit:hover { background: var(--brown); }
+    
+    .msg { padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 14px; display: none; text-align: center; font-weight: bold;}
+    .msg.error { display: block; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .msg.success { display: block; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .msg.info { display: block; background: var(--beige); color: var(--brown-d); border: 1px solid var(--wheat); }
 
-    /* Bảng Chấm Điểm */
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    th, td { border: 1px solid var(--border); padding: 10px; text-align: left; }
-    th { background: #f0f0f0; color: var(--primary); font-weight: bold; }
-    tr:nth-child(even) { background: #fafafa; }
-    
-    .score-input { width: 80px; padding: 5px; border: 1px solid var(--primary); border-radius: 4px; font-weight: bold; text-align: center; }
-    .status-badge { padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; }
-    .status-pending { background: #ffeeba; color: #856404; }
-    .status-published { background: #d4edda; color: #155724; }
-    
     .hidden { display: none !important; }
+    .note { font-size: 13px; color: #666; text-align: center; margin-top: 15px; }
+    
+    /* Thông tin cá nhân */
+    .user-info { text-align: center; margin-bottom: 20px; }
+    .user-info p { margin: 5px 0; }
 </style>
 </head>
 <body>
 
-<div id="loadingScreen" style="text-align: center; margin-top: 50px;">
-    <h2>🔄 Đang xác thực quyền Giáo viên...</h2>
-</div>
+<div class="card">
+    <!-- 1. MÀN HÌNH ĐĂNG NHẬP / ĐĂNG KÝ -->
+    <div id="authSection">
+        <h2>🎓 HỆ THỐNG THI ONLINE</h2>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchAuthTab('login')">Đăng Nhập</button>
+            <button class="tab-btn" onclick="switchAuthTab('register')">Đăng Ký</button>
+        </div>
 
-<div id="mainContent" class="container hidden">
-    <h2>👨‍🏫 TRANG QUẢN TRỊ GIÁO VIÊN</h2>
-    
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('tabAssign')">📝 Giao Đề Mới</button>
-        <button class="tab-btn" onclick="switchTab('tabGrade')">🎯 Chấm Điểm & Công Bố</button>
+        <div id="alertMsg" class="msg"></div>
+
+        <!-- Form Đăng Nhập -->
+        <div id="loginForm">
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="loginEmail" class="form-control" placeholder="Nhập email...">
+            </div>
+            <div class="form-group">
+                <label>Mật khẩu:</label>
+                <input type="password" id="loginPassword" class="form-control" placeholder="Nhập mật khẩu...">
+            </div>
+            <button class="btn" onclick="handleLogin()">Đăng Nhập</button>
+            <p class="note">Nếu chưa có tài khoản, vui lòng chuyển sang tab Đăng Ký.</p>
+        </div>
+
+        <!-- Form Đăng Ký -->
+        <div id="registerForm" class="hidden">
+            <div class="form-group">
+                <label>Họ và Tên:</label>
+                <input type="text" id="regName" class="form-control" placeholder="VD: Nguyễn Văn A">
+            </div>
+            <div class="form-group">
+                <label>Lớp (VD: 10a1):</label>
+                <input type="text" id="regClass" class="form-control" placeholder="VD: 10a1">
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="regEmail" class="form-control" placeholder="Nhập email...">
+            </div>
+            <div class="form-group">
+                <label>Mật khẩu:</label>
+                <input type="password" id="regPassword" class="form-control" placeholder="Tối thiểu 6 ký tự...">
+            </div>
+            <button class="btn btn-submit" onclick="handleRegister()">Đăng Ký Tài Khoản</button>
+        </div>
     </div>
 
-    <!-- TAB 1: GIAO ĐỀ -->
-    <div id="tabAssign" class="tab-content active">
-        <div class="form-group">
-            <label>Chọn Đề Thi (Từ ngân hàng đề):</label>
-            <select id="selectExam" class="form-control">
-                <option value="">-- Đang tải danh sách đề --</option>
-            </select>
+    <!-- 2. MÀN HÌNH HỒ SƠ CÁ NHÂN (SAU KHI ĐĂNG NHẬP) -->
+    <div id="profileSection" class="hidden">
+        <h2>👤 HỒ SƠ CÁ NHÂN</h2>
+        <div class="user-info">
+            <p>Email: <b id="pEmail"></b></p>
+            <p>Trạng thái: <b id="pStatus" style="color: green;">Đã xác thực</b></p>
         </div>
+        <div class="form-group">
+            <label>Họ và Tên:</label>
+            <input type="text" id="pName" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Lớp:</label>
+            <input type="text" id="pClass" class="form-control">
+        </div>
+        <div id="lockMsg" class="msg info hidden">⚠️ Tài khoản của bạn đã bị Giáo viên khóa. Không thể thay đổi thông tin.</div>
         
-        <div class="row">
-            <div class="form-group">
-                <label>Tên hiển thị (VD: Kiểm tra 15p Lý 10):</label>
-                <input type="text" id="inputTitle" class="form-control" placeholder="Nhập tên bài thi...">
-            </div>
-            <div class="form-group">
-                <label>Lớp được làm (Cách nhau dấu phẩy):</label>
-                <input type="text" id="inputClasses" class="form-control" placeholder="VD: 10a1, 10a2, 10a19">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="form-group">
-                <label>Thời gian làm bài (Phút):</label>
-                <input type="number" id="inputDuration" class="form-control" value="15" min="1">
-            </div>
-            <div class="form-group">
-                <label>Số lần làm tối đa:</label>
-                <input type="number" id="inputMaxAttempts" class="form-control" value="1" min="1">
-            </div>
-        </div>
-
-        <div class="checkbox-group form-group">
-            <label><input type="checkbox" id="chkShuffleQ" checked> Đảo thứ tự câu hỏi (theo từng phần)</label>
-            <label><input type="checkbox" id="chkShuffleO" checked> Đảo thứ tự đáp án (A, B, C, D)</label>
-        </div>
-
-        <button class="btn" onclick="assignExam()" style="width: 100%; padding: 15px; font-size: 18px;">🚀 GIAO BÀI CHO HỌC SINH</button>
-    </div>
-
-    <!-- TAB 2: CHẤM ĐIỂM -->
-    <div id="tabGrade" class="tab-content">
-        <div class="form-group">
-            <label>Chọn Đợt Thi Để Chấm:</label>
-            <select id="selectAssignment" class="form-control" onchange="loadSubmissions()">
-                <option value="">-- Chọn đợt giao bài --</option>
-            </select>
-        </div>
-
-        <div id="gradeResult">
-            <p style="text-align: center; color: #666;">Vui lòng chọn một đợt thi để xem bài nộp.</p>
-        </div>
+        <button class="btn btn-submit" id="btnSaveProfile" onclick="handleUpdateProfile()">Lưu Thay Đổi</button>
+        <button class="btn" style="margin-top: 10px; background: #d9534f;" onclick="handleLogout()">Đăng Xuất</button>
+        <a href="/bx/thi/index.html" class="btn" style="margin-top: 10px; display: block; text-align: center; text-decoration: none; background: var(--brown);">Đi Đến Trang Thi</a>
     </div>
 </div>
 
 <script>
-    let currentUser = null;
-    let allExams = {};
-    let allAssignments = {};
+    let currentUserDoc = null;
 
     window.addEventListener('load', () => {
-        window.checkAuthState((isLoggedIn) => {
-            if (!isLoggedIn) {
-                document.getElementById('loadingScreen').innerHTML = "<h2 style='color:red;'>❌ Bạn chưa đăng nhập!</h2>";
-                return;
-            }
-            
-            // Kiểm tra quyền Giáo viên
-            import('/bx/firebase-init.js').then(({ auth }) => {
-                currentUser = auth.currentUser;
-                if (currentUser.email !== 'trntui6@gmail.com') {
-                    document.getElementById('loadingScreen').innerHTML = "<h2 style='color:red;'>⛔ BẠN KHÔNG PHẢI LÀ GIÁO VIÊN!</h2>";
-                    return;
+        import('/bx/firebase-init.js').then(({ auth, onAuthStateChanged }) => {
+            onAuthStateChanged(auth, (user) => {
+                if (user && user.emailVerified) {
+                    // Đã đăng nhập và xác thực email -> Hiển thị hồ sơ
+                    loadUserProfile(user);
+                } else {
+                    // Chưa đăng nhập -> Hiển thị form
+                    document.getElementById('authSection').classList.remove('hidden');
+                    document.getElementById('profileSection').classList.add('hidden');
                 }
-                document.getElementById('loadingScreen').classList.add('hidden');
-                document.getElementById('mainContent').classList.remove('hidden');
-                
-                loadExamsForDropdown();
-                loadAssignmentsForDropdown();
             });
         });
     });
 
-    function switchTab(tabId) {
+    function showMsg(text, type) {
+        const el = document.getElementById('alertMsg');
+        el.textContent = text;
+        el.className = `msg ${type}`;
+    }
+
+    function switchAuthTab(tab) {
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.getElementById('alertMsg').className = 'msg'; // Ẩn thông báo cũ
         
-        event.target.classList.add('active');
-        document.getElementById(tabId).classList.add('active');
-    }
-
-    // ==========================================
-    // CHỨC NĂNG 1: GIAO ĐỀ
-    // ==========================================
-    async function loadExamsForDropdown() {
-        try {
-            const { db } = await import('/bx/firebase-init.js');
-            const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
-            
-            const snap = await getDocs(collection(db, "exams"));
-            const select = document.getElementById('selectExam');
-            select.innerHTML = '<option value="">-- Chọn đề thi --</option>';
-            
-            snap.forEach(doc => {
-                const data = doc.data();
-                allExams[doc.id] = data;
-                select.innerHTML += `<option value="${doc.id}">${data.title} (Khối ${data.grade})</option>`;
-            });
-        } catch (error) {
-            console.error(error);
-            alert("Lỗi tải danh sách đề!");
+        if (tab === 'login') {
+            event.target.classList.add('active');
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+        } else {
+            event.target.classList.add('active');
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
         }
     }
 
-    window.assignExam = async function() {
-        const examId = document.getElementById('selectExam').value;
-        const title = document.getElementById('inputTitle').value.trim();
-        const classesRaw = document.getElementById('inputClasses').value.trim();
-        const duration = parseInt(document.getElementById('inputDuration').value);
-        const maxAttempts = parseInt(document.getElementById('inputMaxAttempts').value);
-        const shuffleQ = document.getElementById('chkShuffleQ').checked;
-        const shuffleO = document.getElementById('chkShuffleO').checked;
+    // XỬ LÝ ĐĂNG KÝ
+    window.handleRegister = async function() {
+        const name = document.getElementById('regName').value.trim();
+        const className = document.getElementById('regClass').value.trim().toLowerCase();
+        const email = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPassword').value;
 
-        if (!examId || !title || !classesRaw) {
-            alert("Vui lòng nhập đầy đủ Tên hiển thị và Lớp!");
-            return;
+        if (!name || !className || !email || !password) {
+            return showMsg("Vui lòng nhập đầy đủ thông tin!", "error");
+        }
+        if (password.length < 6) {
+            return showMsg("Mật khẩu phải từ 6 ký tự trở lên!", "error");
         }
 
-        // Tách chuỗi lớp thành mảng (10a1, 10a2 -> ["10a1", "10a2"])
-        const assignedClasses = classesRaw.split(',').map(c => c.trim().toLowerCase()).filter(c => c);
-
         try {
-            const { db } = await import('/bx/firebase-init.js');
-            const { collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+            const { auth, db, createUserWithEmailAndPassword, sendEmailVerification, doc, setDoc, signOut } = await import('/bx/firebase-init.js');
+            
+            showMsg("⏳ Đang tạo tài khoản...", "info");
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
 
-            await addDoc(collection(db, "exam_assignments"), {
-                examId: examId,
-                title: title,
-                assignedClasses: assignedClasses,
-                duration: duration,
-                maxAttempts: maxAttempts,
-                shuffleQuestions: shuffleQ,
-                shuffleOptions: shuffleO,
-                isOpen: true,
-                createdAt: serverTimestamp()
+            // Lưu thông tin vào Firestore (Lúc này email chưa verify nên phải dùng setDoc)
+            await setDoc(doc(db, "users", user.uid), {
+                email: email,
+                name: name,
+                class: className,
+                role: "student",
+                emailVerified: false,
+                infoLocked: false, // Mặc định chưa bị khóa
+                createdAt: new Date()
             });
 
-            alert("✅ Đã giao bài thành công!");
+            // Gửi mail xác thực
+            await sendEmailVerification(user);
+            
+            showMsg("✅ Đăng ký thành công! Vui lòng kiểm tra hộp thư email để xác thực tài khoản.", "success");
+            
+            // Đăng xuất ngay để bắt HS vào mail verify
+            await signOut(auth);
             
             // Reset form
-            document.getElementById('inputTitle').value = "";
-            document.getElementById('inputClasses').value = "";
-            
-            // Load lại danh sách để chấm điểm
-            loadAssignmentsForDropdown();
+            document.getElementById('regName').value = "";
+            document.getElementById('regClass').value = "";
+            document.getElementById('regEmail').value = "";
+            document.getElementById('regPassword').value = "";
 
         } catch (error) {
             console.error(error);
-            alert("Lỗi giao bài: " + error.message);
+            if (error.code === 'auth/email-already-in-use') {
+                showMsg("Email này đã được sử dụng!", "error");
+            } else {
+                showMsg("Lỗi đăng ký: " + error.message, "error");
+            }
         }
     }
 
-    // ==========================================
-    // CHỨC NĂNG 2: CHẤM ĐIỂM
-    // ==========================================
-    async function loadAssignmentsForDropdown() {
-        try {
-            const { db } = await import('/bx/firebase-init.js');
-            const { collection, getDocs, query, orderBy } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
-            
-            // Lấy tất cả bài giao
-            const snap = await getDocs(collection(db, "exam_assignments"));
-            const select = document.getElementById('selectAssignment');
-            select.innerHTML = '<option value="">-- Chọn đợt giao bài --</option>';
-            
-            snap.forEach(doc => {
-                const data = doc.data();
-                allAssignments[doc.id] = data;
-                select.innerHTML += `<option value="${doc.id}">${data.title} (Lớp: ${data.assignedClasses.join(', ')})</option>`;
-            });
-        } catch (error) {
-            console.error(error);
-            alert("Lỗi tải danh sách đợt thi!");
-        }
-    }
+    // XỬ LÝ ĐĂNG NHẬP
+    window.handleLogin = async function() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
 
-    window.loadSubmissions = async function() {
-        const assignmentId = document.getElementById('selectAssignment').value;
-        const resultDiv = document.getElementById('gradeResult');
-        
-        if (!assignmentId) {
-            resultDiv.innerHTML = "<p style='text-align: center;'>Vui lòng chọn một đợt thi.</p>";
-            return;
-        }
-
-        resultDiv.innerHTML = "<p style='text-align: center;'>⏳ Đang tải và chấm điểm tự động...</p>";
+        if (!email || !password) return showMsg("Vui lòng nhập Email và Mật khẩu!", "error");
 
         try {
-            const { db } = await import('/bx/firebase-init.js');
-            const { collection, getDocs, query, where, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
-
-            const assignment = allAssignments[assignmentId];
-            const examId = assignment.examId;
-
-            // 1. Lấy đáp án gốc (exam_keys)
-            const keySnap = await getDoc(doc(db, "exam_keys", examId));
-            if (!keySnap.exists()) throw new Error("Không tìm thấy đáp án của đề này!");
-            const answerKey = keySnap.data().answers;
-
-            // 2. Lấy danh sách học sinh đã nộp
-            const subSnap = await getDocs(query(collection(db, "exam_submissions"), where("assignmentId", "==", assignmentId)));
+            const { auth, signInWithEmailAndPassword, signOut } = await import('/bx/firebase-init.js');
             
-            if (subSnap.empty) {
-                resultDiv.innerHTML = "<p style='text-align: center; color: orange;'>Chưa có học sinh nào nộp bài.</p>";
-                return;
+            showMsg("⏳ Đang đăng nhập...", "info");
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            
+            if (!userCredential.user.emailVerified) {
+                await signOut(auth);
+                return showMsg("❌ Tài khoản chưa được xác thực email. Vui lòng kiểm tra hộp thư và bấm vào link xác thực!", "error");
             }
 
-            // 3. Xử lý chấm điểm
-            let html = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Email Học Sinh</th>
-                            <th>Lượt làm</th>
-                            <th>Điểm tự động</th>
-                            <th>Điểm chốt (Có thể sửa)</th>
-                            <th>Trạng thái</th>
-                            <th>Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-            let index = 1;
-            subSnap.forEach(subDoc => {
-                const sub = subDoc.data();
-                const answers = sub.answers;
-                
-                // Tính điểm tự động
-                let autoScore = 0;
-                
-                for (const uid in answerKey) {
-                    const correctAns = answerKey[uid];
-                    const studentAns = answers[uid];
-
-                    if (studentAns === undefined || studentAns === null || studentAns === "") continue;
-
-                    // Chấm Phần I (Trắc nghiệm)
-                    if (typeof correctAns === 'number' && !Array.isArray(correctAns)) {
-                        // Nếu uid bắt đầu bằng p3 (Trả lời ngắn) -> so sánh số
-                        if (uid.startsWith('p3')) {
-                            if (parseFloat(studentAns) === correctAns) autoScore += 0.5;
-                        } 
-                        // Nếu là p1 (Trắc nghiệm A,B,C,D) -> so sánh index
-                        else {
-                            if (parseInt(studentAns) === correctAns) autoScore += 0.25;
-                        }
-                    } 
-                    // Chấm Phần II (Đúng/Sai)
-                    else if (Array.isArray(correctAns)) {
-                        let correctCount = 0;
-                        for (let i = 0; i < 4; i++) {
-                            if (studentAns[i] === correctAns[i]) correctCount++;
-                        }
-                        // Quy chế chấm điểm Đúng/Sai (4 đúng=1đ, 3 đúng=0.5đ, 2 đúng=0.25đ, 1 đúng=0.1đ)
-                        if (correctCount === 4) autoScore += 1.0;
-                        else if (correctCount === 3) autoScore += 0.5;
-                        else if (correctCount === 2) autoScore += 0.25;
-                        else if (correctCount === 1) autoScore += 0.1;
-                    }
-                }
-
-                const displayScore = sub.score !== null ? sub.score : autoScore;
-                const isPublished = sub.isPublished;
-                const statusHtml = isPublished 
-                    ? `<span class="status-badge status-published">Đã công bố</span>` 
-                    : `<span class="status-badge status-pending">Chờ duyệt</span>`;
-
-                html += `
-                    <tr id="row-${subDoc.id}">
-                        <td>${sub.studentEmail}</td>
-                        <td>Lượt ${index++}</td>
-                        <td style="color: #004488; font-weight: bold;">${autoScore.toFixed(2)}</td>
-                        <td>
-                            <input type="number" step="0.05" class="score-input" id="score-${subDoc.id}" value="${displayScore.toFixed(2)}" ${isPublished ? 'disabled' : ''}>
-                        </td>
-                        <td>${statusHtml}</td>
-                        <td>
-                            ${!isPublished ? `<button class="btn btn-success" style="padding: 5px 10px; font-size: 13px;" onclick="publishScore('${subDoc.id}')">Công bố</button>` : 'Đã xong'}
-                        </td>
-                    </tr>
-                `;
-            });
-
-            html += `</tbody></table>`;
-            resultDiv.innerHTML = html;
+            showMsg("✅ Đăng nhập thành công! Đang chuyển hướng...", "success");
+            setTimeout(() => {
+                loadUserProfile(userCredential.user);
+            }, 1000);
 
         } catch (error) {
             console.error(error);
-            resultDiv.innerHTML = `<p style='color: red; text-align: center;'>Lỗi chấm điểm: ${error.message}</p>`;
+            showMsg("Email hoặc mật khẩu không chính xác!", "error");
         }
     }
 
-    window.publishScore = async function(subId) {
-        const scoreVal = document.getElementById(`score-${subId}`).value;
-        const finalScore = parseFloat(scoreVal);
-
-        if (isNaN(finalScore)) {
-            alert("Điểm không hợp lệ!");
-            return;
-        }
-
-        if (!confirm("Bạn có chắc chắn muốn công bố điểm này cho Học sinh? (Không thể sửa sau khi công bố)")) return;
+    // TẢI HỒ SƠ CÁ NHÂN
+    async function loadUserProfile(user) {
+        document.getElementById('authSection').classList.add('hidden');
+        document.getElementById('profileSection').classList.remove('hidden');
+        document.getElementById('pEmail').textContent = user.email;
 
         try {
-            const { db } = await import('/bx/firebase-init.js');
-            const { doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+            const { db, doc, getDoc } = await import('/bx/firebase-init.js');
+            const userRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(userRef);
 
-            await updateDoc(doc(db, "exam_submissions", subId), {
-                score: finalScore,
-                isPublished: true
+            if (userSnap.exists()) {
+                const data = userSnap.data();
+                currentUserDoc = data;
+                
+                document.getElementById('pName').value = data.name || "";
+                document.getElementById('pClass').value = data.class || "";
+
+                // Kiểm tra xem Giáo viên có khóa thông tin không
+                if (data.infoLocked === true) {
+                    document.getElementById('pName').disabled = true;
+                    document.getElementById('pClass').disabled = true;
+                    document.getElementById('btnSaveProfile').style.display = 'none';
+                    document.getElementById('lockMsg').classList.remove('hidden');
+                } else {
+                    document.getElementById('pName').disabled = false;
+                    document.getElementById('pClass').disabled = false;
+                    document.getElementById('btnSaveProfile').style.display = 'block';
+                    document.getElementById('lockMsg').classList.add('hidden');
+                }
+            }
+        } catch (error) {
+            console.error("Lỗi tải hồ sơ:", error);
+            alert("Lỗi tải dữ liệu hồ sơ!");
+        }
+    }
+
+    // CẬP NHẬT HỒ SƠ
+    window.handleUpdateProfile = async function() {
+        const newName = document.getElementById('pName').value.trim();
+        const newClass = document.getElementById('pClass').value.trim().toLowerCase();
+
+        if (!newName || !newClass) return alert("Họ tên và Lớp không được để trống!");
+
+        try {
+            const { auth, db, doc, updateDoc } = await import('/bx/firebase-init.js');
+            const user = auth.currentUser;
+            
+            await updateDoc(doc(db, "users", user.uid), {
+                name: newName,
+                class: newClass,
+                updatedAt: new Date()
             });
 
-            alert("✅ Đã công bố điểm thành công!");
-            loadSubmissions(); // Load lại bảng để cập nhật giao diện
+            alert("✅ Đã lưu thay đổi thông tin cá nhân!");
+            currentUserDoc.name = newName;
+            currentUserDoc.class = newClass;
 
         } catch (error) {
-            console.error(error);
-            alert("Lỗi công bố điểm: " + error.message);
+            console.error("Lỗi cập nhật:", error);
+            alert("Lỗi cập nhật thông tin: " + error.message + "\n(Lưu ý: Có thể Giáo viên vừa khóa tài khoản của bạn)");
         }
+    }
+
+    // ĐĂNG XUẤT
+    window.handleLogout = async function() {
+        const { auth, signOut } = await import('/bx/firebase-init.js');
+        await signOut(auth);
+        location.reload();
     }
 </script>
 </body>
