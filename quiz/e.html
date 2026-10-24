@@ -130,7 +130,7 @@
         <div class="form-group">
             <label>Chọn Đợt Thi Để Chấm:</label>
             <select id="selectAssignment" class="form-control" onchange="loadSubmissions()">
-                <option value="">-- Chọn đợt giao bài --</option>
+                <option value="">-- Chọn đợt giao bài (Chỉ hiện đề Đang Mở) --</option>
             </select>
         </div>
 
@@ -246,10 +246,15 @@
         const snap = await getDocs(collection(db, "exams"));
         const select = document.getElementById('selectExam');
         select.innerHTML = '<option value="">-- Chọn đề thi --</option>';
+        allExams = {};
+        
         snap.forEach(doc => {
             const data = doc.data();
             allExams[doc.id] = data;
-            select.innerHTML += `<option value="${doc.id}">${data.title} (Khối ${data.grade})</option>`;
+            // 🟢 CHỈ HIỂN THỊ ĐỀ CHƯA BỊ ẨN
+            if (data.isHidden !== true) {
+                select.innerHTML += `<option value="${doc.id}">${data.title} (Khối ${data.grade})</option>`;
+            }
         });
     }
 
@@ -290,7 +295,6 @@
         snap.forEach(doc => {
             const data = doc.data();
             allAssignments[doc.id] = data;
-            // Chỉ thêm vào dropdown nếu đề đang mở
             if (data.isOpen) {
                 select.innerHTML += `<option value="${doc.id}">${data.title} (Lớp: ${data.assignedClasses.join(', ')})</option>`;
             }
@@ -318,11 +322,23 @@
         tbody.innerHTML = html + `</tbody></table>`;
     }
 
+    // 🟢 SỬA HÀM NÀY: Ẩn/Hiện đề gốc khi ẩn/hiện đợt giao bài
     window.toggleAssign = async function(id, currentStatus) {
         const { db } = await import('/bx/firebase-init.js');
         const { doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+        
+        // Cập nhật trạng thái đợt giao bài
         await updateDoc(doc(db, "exam_assignments", id), { isOpen: !currentStatus });
+        
+        // Cập nhật trạng thái ẩn của đề thi trong ngân hàng (exams)
+        const assignment = allAssignments[id];
+        if (assignment && assignment.examId) {
+            await updateDoc(doc(db, "exams", assignment.examId), { isHidden: currentStatus });
+        }
+        
+        // Tải lại toàn bộ danh sách và menu
         loadAssignmentsData();
+        loadExamsForDropdown(); 
     }
 
     window.deleteAssign = async function(id) {
@@ -346,21 +362,17 @@
         const { collection, getDocs, query, where, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
         
         const assignment = allAssignments[assignmentId];
-        // Lấy đáp án
         const keySnap = await getDoc(doc(db, "exam_keys", assignment.examId));
         const answerKey = keySnap.data().answers;
         
-        // Lấy sổ điểm của lớp được giao (Lấy lớp đầu tiên trong mảng assignedClasses)
         const targetClass = assignment.assignedClasses[0];
         const rosterSnap = await getDoc(doc(db, "exam_rosters", targetClass));
         let roster = rosterSnap.exists() ? rosterSnap.data().students : [];
 
-        // Lấy danh sách user của lớp
         const userSnap = await getDocs(query(collection(db, "users"), where("class", "==", targetClass)));
         let usersInClass = [];
         userSnap.forEach(d => usersInClass.push({id: d.id, ...d.data()}));
 
-        // Lấy bài nộp
         const subSnap = await getDocs(query(collection(db, "exam_submissions"), where("assignmentId", "==", assignmentId)));
         let submissions = subSnap.docs.map(d => ({id: d.id, ...d.data()}));
         
@@ -370,16 +382,14 @@
 
         let html = `<table><thead><tr><th class="stt-col">STT</th><th>Họ Tên</th><th>Trạng thái</th><th>Điểm tự động</th><th>Điểm chốt</th><th>Hành động</th></tr></thead><tbody>`;
 
-        // Duyệt theo sổ điểm để hiển thị đầy đủ (ai chưa làm vẫn hiện)
         roster.forEach((st, index) => {
             const normName = normalizeName(st.name);
             const user = usersInClass.find(u => normalizeName(u.name) === normName);
             
             let sub = null;
             if (user) {
-                // Lấy lượt làm bài cuối cùng (hoặc cao nhất)
                 const userSubs = submissions.filter(s => s.studentId === user.id);
-                if (userSubs.length > 0) sub = userSubs[0]; // Lấy bài nộp mới nhất
+                if (userSubs.length > 0) sub = userSubs[0]; 
             }
 
             if (!user) {
@@ -416,7 +426,6 @@
             }
         });
 
-        // Cảnh báo những HS nộp bài nhưng không có trong sổ điểm
         const unmatchedSubs = submissions.filter(s => {
             const user = usersInClass.find(u => u.id === s.studentId);
             if (!user) return true;
@@ -540,7 +549,6 @@
         let classAssignments = [];
         assignSnap.forEach(d => {
             const a = d.data();
-            // 🟢 CHỈ LẤY CÁC ĐỀ ĐANG MỞ
             if (a.assignedClasses.includes(className) && a.isOpen) {
                 classAssignments.push({ id: d.id, ...a });
             }
@@ -565,7 +573,6 @@
             classAssignments.forEach(a => {
                 if (matchedUser) {
                     const subs = submissions.filter(s => s.studentId === matchedUser.id && s.assignmentId === a.id);
-                    // Lấy điểm đã công bố hoặc điểm tự động
                     const scores = subs.map(s => s.score).filter(s => s !== null && s !== undefined);
                     const best = scores.length > 0 ? Math.max(...scores) : null;
                     row[a.id] = best !== null ? best : "";
