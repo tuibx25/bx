@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trắc nghiệm – Luyện tập Online</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+<script type="module" src="/bx/firebase-init.js"></script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#000000; --bg:#FFFFFF; --soft:#F5F5F5;
+  --beige:#F5F5DC; --wheat:#F5DEB3; --line:#D3D3D3;
+  --brown:#8B5A2B; --brown-d:#8B4513;
+  --blue:#0066CC; --blue-d:#004488;
+  --fs:18px;
+}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:15px; line-height:1.35;
+  user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+body.modal-open { overflow: hidden; }
+
+input, textarea { user-select: text; -webkit-user-select: text; }
+.hidden{display:none !important}
+.show-mobile { display: none; }
+
+#security-trap {
+  position: fixed; inset: 0; background: #8B4513; color: white;
+  z-index: 99999; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center; padding: 20px;
+}
+#security-trap h2 { font-size: 2em; margin-bottom: 10px; }
+#security-trap p { font-size: 1.2em; }
+
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type=number] { -moz-appearance: textfield; }
+.katex{font-size:1.02em}
+.katex-display{overflow-x:auto; overflow-y:hidden; margin:6px 0; padding:2px 0}
+.q-img-wrap{margin:10px 0; text-align:center}
+.q-img-wrap img{ max-width:100%; max-height:340px; object-fit:contain; background:#fff; border:2px solid var(--line); border-radius:10px; padding:4px; }
+.opt-img{ display:block; max-width:100%; max-height:160px; object-fit:contain; margin-top:6px; border:1px solid var(--line); border-radius:6px; background:#fff; }
+.st-img{ display:block; max-width:100%; max-height:200px; object-fit:contain; margin-top:6px; border:1px solid var(--line); border-radius:8px; background:#fff; }
+header{ background:#FFFFFF; border-bottom:2px solid var(--brown-d); padding:6px 14px; display:flex; align-items:center; gap:8px; flex-wrap:nowrap; overflow-x:auto; position:sticky; top:0; z-index:50; box-shadow:0 1px 4px rgba(0,0,0,.06); font-size:13.5px; }
+header h1{font-size:1.1em; font-weight:800; color:var(--brown-d); letter-spacing:.2px; margin-right:8px; white-space:nowrap}
+
+.stat-badge{ background:#FFFFFF; border:1.5px solid var(--line); padding:3px 8px; border-radius:6px; font-weight:700; font-size:.78em; color:#333; white-space:nowrap; flex-shrink:0; }
+.stat-badge b{color:var(--blue-d); font-size:1.05em}
+
+header .spacer{flex:1 1 auto; min-width:4px}
+button{font-family:inherit; cursor:pointer}
+.btn{ background:#FFFFFF; color:var(--ink); border:1.5px solid var(--line); padding:4px 10px; border-radius:6px; font-weight:600; font-size:.82em; transition:.15s; white-space:nowrap; flex-shrink:0; }
+.btn:hover:not(:disabled){background:var(--soft); border-color:var(--brown)}
+.btn:disabled{opacity:.4; cursor:not-allowed}
+.btn-primary{ background:var(--blue-d); color:#FFFFFF; border:1.5px solid var(--blue-d); padding:5px 14px; border-radius:6px; font-weight:700; font-size:.85em; white-space:nowrap; flex-shrink:0; }
+.btn-primary:hover:not(:disabled){background:var(--blue); border-color:var(--blue)}
+.btn-primary:disabled{opacity:.4; cursor:not-allowed}
+.btn-brown{ background:var(--brown-d); color:#FFFFFF; border:1.5px solid var(--brown-d); padding:5px 14px; border-radius:6px; font-weight:700; font-size:.85em; white-space:nowrap; flex-shrink:0; }
+.btn-brown:hover:not(:disabled){background:var(--brown); border-color:var(--brown)}
+.timer{ display:flex; align-items:center; gap:4px; background:var(--soft); padding:3px 8px; border-radius:6px; border:1px solid var(--line); white-space:nowrap; flex-shrink:0; }
+.timer select{ background:#FFFFFF; color:var(--ink); border:1px solid var(--line); border-radius:5px; padding:2px 4px; font-family:inherit; font-size:.78em; }
+#tDisp{font-weight:800; font-variant-numeric:tabular-nums; min-width:42px; text-align:center; color:var(--brown-d); font-size:.9em}
+.timer .btn{padding:3px 7px; font-size:.76em}
+
+#loadOverlay { 
+    position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:300; 
+    display:flex; align-items:center; justify-content:center; 
+    touch-action: pan-y pinch-zoom;
+}
+.load-card { 
+    background:#fff; border-radius:12px; width:450px; box-shadow:0 10px 30px rgba(0,0,0,0.25); 
+    display: flex; flex-direction: column; max-height: 90vh; overflow: hidden; padding: 0;
+    touch-action: pan-y pinch-zoom;
+}
+.load-card-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 20px; border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+}
+.load-card-header h3 { margin: 0; font-size: 1.1em; color: var(--brown-d); }
+.btn-close-x {
+    background: none; border: none; font-size: 26px; color: var(--brown-d); cursor: pointer; line-height: 1; padding: 0 5px;
+}
+.load-card-body {
+    padding: 0; overflow-y: auto; flex: 1; 
+    touch-action: pan-y pinch-zoom;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+.menu-tabs { display: flex; border-bottom: 1px solid var(--line); background: var(--bg); position: sticky; top: 0; z-index: 10; }
+.menu-tab-btn {
+    flex: 1; padding: 12px; border: none; background: none; font-size: 14px; font-weight: bold; color: #666; cursor: pointer;
+    border-bottom: 3px solid transparent; transition: 0.2s;
+}
+.menu-tab-btn.active { color: var(--blue-d); border-bottom-color: var(--blue-d); background: var(--white); }
+
+.menu-tab-content { 
+    display: none; 
+    padding: 15px 20px; 
+    padding-bottom: 30px;
+    transition: padding-bottom 0.1s ease-out;
+}
+.menu-tab-content.active { display: block; }
+
+.load-card-footer {
+    padding: 15px 20px; border-top: 1px solid var(--line); background: var(--white);
+    display: flex; flex-direction: column; gap: 8px;
+    flex-shrink: 0;
+}
+
+.score-config { background:var(--soft); border:1px solid var(--line); border-radius:8px; padding:12px; margin-bottom:12px; display:flex; flex-direction:column; gap:8px; align-items: stretch; }
+.score-config label { display:flex; justify-content:space-between; align-items:center; font-size:13px; font-weight:600; }
+.score-config input { width:65px; padding:4px 8px; border:1px solid var(--line); border-radius:4px; font-family:inherit; font-weight:700; text-align:right; font-size: 14px; }
+.score-config input::placeholder { font-size: 11px; color: #888; font-weight: normal; }
+.p2-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 2px 0 6px 0; padding: 6px; background:#fff; border-radius:6px; border:1px solid #eee; }
+.score-config .total-score { display: none; }
+.lv-grid{ display:grid; grid-template-columns:52px 1fr 1fr 1fr 1fr 1fr; gap:6px; background:#fff; border:1px solid #eee; border-radius:6px; padding:6px; align-items:center; }
+.lv-grid .lv-head{font-size:12px; font-weight:700; text-align:center; color:var(--brown-d)}
+.lv-grid .lv-row{font-size:12px; font-weight:700}
+.lv-grid input{ width:100%; padding:4px 6px; border:1px solid var(--line); border-radius:4px; font-family:inherit; font-weight:700; text-align:center; font-size: 14px; }
+.lv-grid input::placeholder { font-size: 11px; color: #888; font-weight: normal; }
+.lv-grid input[id$="_wild"] { background: #fdfbf7; border-style: dashed; }
+
+.footer-total { display: none; text-align: right; font-size: 14px; font-weight: 800; color: var(--blue-d); margin-bottom: 5px; }
+.footer-total span { color: var(--brown-d); font-size: 1.1em;}
+
+.btn-create-row { width:100%; padding:10px; font-size:14px; }
+.btn-close-row { width:100%; padding:10px; background:#e0e0e0; border:none; color:#333; border-radius: 5px; font-weight: bold; font-size: 14px;}
+.btn-close-row:hover { background:#d0d0d0; }
+
+.warn-banner { background: #FFF3CD; color: #856404; padding: 10px 16px; border-left: 4px solid #FFC107; border-radius: 4px; margin-bottom: 16px; font-size: 0.95em; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+nav.tabs{ display:flex; padding:0 14px; background:var(--soft); border-bottom:1px solid var(--line); overflow-x:auto; }
+nav.tabs button{ background:transparent; border:none; color:var(--ink); padding:12px 20px; font-weight:700; font-size:.95em; border-bottom:3px solid transparent; transition:.15s; }
+nav.tabs button:hover{background:var(--beige)}
+nav.tabs button.active{color:var(--brown-d); border-bottom-color:var(--brown-d); background:#FFFFFF}
+main{max-width:1150px; margin:0 auto; padding:16px 20px 40px; font-size:var(--fs); line-height:1.35}
+section.tab{display:none}
+section.tab.active{display:block}
+.part-title{ font-weight:800; font-size:1em; color:var(--brown-d); margin:18px 0 4px; padding:9px 16px; background:var(--beige); border-left:6px solid var(--brown-d); border-radius:0 8px 8px 0; line-height:1.25; }
+.note{margin:0 0 10px; color:#555; font-style:italic; font-size:.88em; padding-left:6px; line-height:1.3}
+.q{ background:#FFFFFF; border:2px solid var(--line); border-radius:12px; padding:12px 18px; margin:10px 0; transition:.2s; }
+.q-text{font-weight:600; color:var(--ink); margin-bottom:2px; line-height:1.4}
+.q-no{color:var(--brown-d); font-weight:800; margin-right:8px}
+.options{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px}
+@media(max-width:820px){.options{grid-template-columns:1fr}}
+.opt{ display:flex; align-items:flex-start; gap:8px; padding:9px 14px; border:2px solid var(--line); border-radius:10px; background:#FFFFFF; cursor:pointer; transition:.15s; line-height:1.4; }
+.opt:hover{background:var(--soft); border-color:var(--brown)}
+.opt input{display:none}
+.opt b{color:var(--brown-d); font-weight:800; min-width:22px}
+.opt > .opt-body{flex:1; min-width:0}
+.opt.selected{background:var(--wheat); border-color:var(--brown-d)}
+.statements{margin-top:10px; display:flex; flex-direction:column; gap:8px}
+.st-row{ display:flex; align-items:flex-start; gap:10px; padding:8px 14px; background:#FFFFFF; border:1px solid var(--line); border-radius:10px; flex-wrap:wrap; line-height:1.4; }
+.st-txt{flex:1; min-width:220px}
+.st-txt b{color:var(--brown-d); margin-right:6px}
+.st-btns{display:flex; gap:8px; align-items:center; align-self:center}
+.st-btn{ display:inline-flex; align-items:center; justify-content:center; min-width:46px; padding:6px 14px; border:2px solid var(--line); border-radius:8px; background:#FFFFFF; font-weight:800; transition:.15s; }
+.st-btn input{display:none}
+.st-btn:hover{background:var(--soft); border-color:var(--brown)}
+.st-btn.selected{background:var(--wheat); border-color:var(--brown-d)}
+.short-wrap{margin-top:10px; display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+.short-input{ padding:10px 20px; border:2px solid var(--line); border-radius:10px; min-width:340px; width:auto; max-width:100%; font-size:1.15em; font-weight:800; font-family:inherit; color:var(--ink); background:#FFFFFF; text-align:center; }
+.short-input::placeholder{font-size:.72em; font-weight:600; color:#888}
+.short-input:focus{outline:none; border-color:var(--blue); background:#FAFCFF}
+.result{ background:#FFFFFF; border:2px solid var(--brown-d); border-radius:14px; padding:30px; margin:20px auto; text-align:center; max-width: 600px; box-shadow:0 4px 16px rgba(139,69,19,.1); }
+.score-big{font-size:4em; font-weight:900; color:var(--blue-d); line-height:1.1; margin-bottom: 10px;}
+.score-big .unit{font-size:.3em; color:#555; font-weight:600}
+.result-meta{color:#555; margin-top:10px; font-size:1.1em; line-height:1.5}
+.result-meta b{color:var(--blue-d)}
+.lesson-grid { display: flex; flex-wrap: wrap; gap: 8px; background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #eee; max-height: 150px; overflow-y: auto; }
+.lesson-checkbox { cursor: pointer; user-select: none; font-size: 13px; font-weight: 600; margin: 0; }
+.lesson-checkbox input { display: none; }
+.lesson-chip { display: inline-block; padding: 6px 14px; border-radius: 20px; border: 1.5px solid var(--line); background: #fff; color: var(--ink); transition: all 0.2s; }
+.lesson-checkbox:hover .lesson-chip { background: var(--soft); border-color: var(--brown); }
+.lesson-checkbox input:checked + .lesson-chip { background: var(--blue-d); color: #fff; border-color: var(--blue-d); box-shadow: 0 2px 4px rgba(0,68,136,0.2); }
+
+.p2-mode-btn { cursor: pointer; color: var(--blue-d); margin-left: 12px; font-size: 13px; font-weight: normal; user-select: none; transition: 0.2s; }
+.p2-mode-btn:hover { text-decoration: underline; }
+.p2-mode-btn.active { font-weight: 800; text-decoration: underline; }
+
+@media (max-width: 768px) {
+    .hide-mobile { display: none !important; }
+    .show-mobile { display: inline !important; }
+    header { flex-wrap: nowrap; padding: 4px 6px; gap: 4px; justify-content: space-between; overflow-x: hidden; }
+    header h1, header .spacer { display: none; }
+    .stat-badge { border: none; background: transparent; font-size: 13px; padding: 0; white-space: nowrap; display: flex; align-items: center; }
+    #btnLoadMenu, #fsDown, #fsUp, .btn, .btn-primary, .btn-brown { padding: 4px 6px; font-size: 12px; border-radius: 4px; }
+    #btnSubmit, #btnRedo { padding: 4px 8px; font-size: 13px; }
+    .timer { padding: 2px 4px; gap: 2px; }
+    .timer select { font-size: 12px; padding: 1px 2px; }
+    #tDisp { font-size: 13px; min-width: 30px; }
+    .timer .btn { padding: 4px 6px; font-size: 12px; }
+    main { padding: 10px; }
+    #loadOverlay { align-items: flex-end; padding: 0; height: 100%; }
+    .load-card { width: 100%; max-width: 100%; height: 95%; max-height: 95dvh; border-radius: 16px 16px 0 0; }
+    .load-card-header { padding: 10px 15px; }
+    .load-card-body { padding: 0; }
+    .menu-tabs { display: flex; }
+    .menu-tab-content { padding: 10px 15px; padding-bottom: 30px; }
+    .load-card-footer { padding: 10px 15px; padding-bottom: calc(10px + env(safe-area-inset-bottom)); gap: 6px; }
+    .p2-grid { grid-template-columns: 1fr; }
+    .lv-grid { grid-template-columns: 52px 1fr 1fr 1fr 1fr 1fr; gap: 4px; padding: 4px;}
+    .lv-grid input { padding: 6px 2px; font-size: 16px; }
+    .lv-head { font-size: 10px; }
+    .lv-row { font-size: 11px; }
+    .score-config input { font-size: 16px; padding: 6px 8px; }
+    .p2-grid input { font-size: 16px; }
+    .st-row { flex-direction: column; align-items: flex-start; }
+    .st-txt { min-width: 100%; }
+    .st-btns { width: 100%; display: flex; justify-content: space-between; margin-top: 8px; background: var(--soft); padding: 5px; border-radius: 6px; }
+    .st-btn { flex: 1; margin: 0 4px; padding: 10px 0; font-size: 15px; }
+    .short-input { min-width: 100%; width: 100%; padding: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div id="loadingScreen" style="position:fixed; inset:0; background:#fff; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:1.2em; font-weight:bold; color:var(--brown-d);">
+    <div style="width: 40px; height: 40px; border: 4px solid var(--line); border-top: 4px solid var(--blue-d); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px;"></div>
+    🔄 Đang kết nối máy chủ dữ liệu...
+    <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+</div>
+
+<div id="security-trap" class="hidden">
+  <h2>⛔ CẢNH BÁO BẢO MẬT</h2>
+  <p>Hệ thống phát hiện bạn đang cố gắng can thiệp hoặc xem mã nguồn.</p>
+  <p>Hành vi này vi phạm quy định làm bài. Vui lòng đóng Developer Tools và tải lại trang.</p>
+</div>
+
+<div id="appContent" class="hidden">
+    <header>
+      <h1>⚡ LUYỆN TẬP TRẮC NGHIỆM</h1>
+      
+      <span class="stat-badge"><span class="hide-mobile">Đã trả lời: </span><b id="answeredCount">0</b>/<span id="totalCount">0</span></span>
+      
+      <button class="btn-primary hidden" id="btnSubmit"><span class="hide-mobile">📝 Nộp bài</span><span class="show-mobile">Nộp</span></button>
+      <button class="btn-brown hidden" id="btnRedo"><span class="hide-mobile">🔄 Làm lại</span><span class="show-mobile">Lại</span></button>
+      <button class="btn" id="btnLoadMenu" title="Chọn cấu trúc đề & Tạo"><span class="hide-mobile">⚙️ Chọn</span><span class="show-mobile">⚙️</span></button>
+      
+      <span class="spacer"></span>
+      <div class="timer">
+        <select id="tMin">
+          <option value="5">5′</option><option value="10">10′</option>
+          <option value="15">15′</option><option value="20">20′</option>
+          <option value="25" selected>25′</option><option value="30">30′</option>
+          <option value="45">45′</option>
+        </select>
+        <span id="tDisp">25'00</span>
+        <button class="btn" id="tBtn"><span class="hide-mobile">Bắt đầu</span><span class="show-mobile">▶</span></button>
+      </div>
+      <button class="btn" id="fsDown">A−</button>
+      <button class="btn" id="fsUp">A+</button>
+    </header>
+
+    <div id="errorBanner" class="warn-banner hidden" style="margin: 10px 20px 0;"></div>
+
+    <div id="loadOverlay" class="hidden">
+      <div class="load-card">
+        <div class="load-card-header">
+            <h3>Tạo Cấu Trúc Đề</h3>
+            <button class="btn-close-x" onclick="closeLoadMenu()">×</button>
+        </div>
+        
+        <div class="load-card-body">
+            <div class="menu-tabs">
+                <button class="menu-tab-btn active" onclick="switchMenuTab(1)">📝 Chọn bài & Điểm</button>
+                <button class="menu-tab-btn" onclick="switchMenuTab(2)">⚙️ Cấu trúc đề</button>
+            </div>
+
+            <div id="menu-tab-1" class="menu-tab-content active">
+                <div class="score-config">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <div style="font-weight:700; color:var(--blue-d)">Chọn Bài / Nhóm bài:</div>
+                    <div>
+                        <button class="btn" style="padding: 2px 6px; font-size: 11px;" onclick="toggleAllLessons(true)">Chọn tất cả</button>
+                        <button class="btn" style="padding: 2px 6px; font-size: 11px;" onclick="toggleAllLessons(false)">Bỏ chọn</button>
+                    </div>
+                  </div>
+                  <div class="lesson-grid" id="lessonCheckboxes">
+                    <div style="width: 100%; text-align: center; color: #888;">Đang tải danh sách bài...</div>
+                  </div>
+                </div>
+
+                <div class="score-config">
+                  <div style="font-weight:700; margin-bottom:4px; color:var(--blue-d)">Biểu điểm:</div>
+                  <label>Phần I (mỗi câu): <input type="number" inputmode="numeric" id="pt1" value="0.25" min="0" step="0.05"> đ</label>
+                  
+                  <div style="margin: 6px 0 4px 0; font-size:13px; color:#000000; font-weight:600; display: flex; justify-content: space-between; align-items: center;">
+                      <span>Phần II (theo số ý đúng):</span>
+                      <span>
+                          <span id="btnP2Default" class="p2-mode-btn">mặc định</span>
+                          <span id="btnP2Even" class="p2-mode-btn active">chia đều</span>
+                      </span>
+                  </div>
+                  
+                  <div class="p2-grid">
+                    <label>1 ý: <input type="number" inputmode="numeric" id="p2_1" value="0.25" step="0.05"> đ</label>
+                    <label>2 ý: <input type="number" inputmode="numeric" id="p2_2" value="0.5" step="0.05"> đ</label>
+                    <label>3 ý: <input type="number" inputmode="numeric" id="p2_3" value="0.75" step="0.05"> đ</label>
+                    <label>4 ý: <input type="number" inputmode="numeric" id="p2_4" value="1.0" step="0.05"> đ</label>
+                  </div>
+                  <label>Phần III (mỗi câu): <input type="number" inputmode="numeric" id="pt3" value="0.5" min="0" step="0.05"> đ</label>
+                </div>
+            </div>
+
+            <div id="menu-tab-2" class="menu-tab-content">
+                <div class="score-config">
+                  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
+                    <div style="font-weight:700; color:var(--blue-d)">Cấu trúc đề:</div>
+                    <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                        <button class="btn" id="btnPickNew" style="padding: 2px 8px; font-size: 11px; border-color: var(--blue); color: var(--blue-d); font-weight: 700;">🔀 Bốc câu mới</button>
+                        <button class="btn" id="btnResetStructure" style="padding: 2px 8px; font-size: 11px; border-color: var(--brown); color: var(--brown-d); font-weight: 700;">↺ Xóa chọn</button>
+                        <button class="btn" id="btnClearCache" style="padding: 2px 8px; font-size: 11px; border-color: #999; color: #666; font-weight: 700;" title="Xóa cache câu hỏi (dùng khi thấy đề cũ)">🗑️ Xóa cache</button>
+                    </div>
+                  </div>
+                  <div style="font-size:12px; color:#555; font-weight:600;">Tổng số câu mỗi phần (để trống = tất cả):</div>
+                  <div class="p2-grid" style="grid-template-columns:1fr 1fr 1fr;">
+                    <label>P.I: <input type="number" inputmode="numeric" id="sc1" min="0" step="1" placeholder="tất cả"></label>
+                    <label>P.II: <input type="number" inputmode="numeric" id="sc2" min="0" step="1" placeholder="tất cả"></label>
+                    <label>P.III: <input type="number" inputmode="numeric" id="sc3" min="0" step="1" placeholder="tất cả"></label>
+                  </div>
+                  <div style="font-size:12px; color:#555; font-weight:600; margin-top:2px;">Hoặc chọn theo mức độ (ưu tiên hơn ô tổng):</div>
+                  <div class="lv-grid">
+                    <span></span>
+                    <span class="lv-head">Dễ</span><span class="lv-head">Vừa</span><span class="lv-head">Khó</span><span class="lv-head">Rất Khó</span><span class="lv-head">Tự do</span>
+                    
+                    <span class="lv-row">Phần I</span>
+                    <input type="number" inputmode="numeric" id="lv1_easy" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv1_medium" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv1_hard" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv1_very_hard" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv1_wild" min="0" step="1" placeholder="0">
+                    
+                    <span class="lv-row">Phần II</span>
+                    <input type="number" inputmode="numeric" id="lv2_easy" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv2_medium" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv2_hard" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv2_very_hard" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv2_wild" min="0" step="1" placeholder="0">
+                    
+                    <span class="lv-row">Phần III</span>
+                    <input type="number" inputmode="numeric" id="lv3_easy" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv3_medium" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv3_hard" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv3_very_hard" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv3_wild" min="0" step="1" placeholder="0">
+                  </div>
+                  <div id="levelWarning" class="warn-banner hidden" style="margin-top: 8px; padding: 8px 12px; font-size: 12px; border-left-width: 3px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="load-card-footer">
+            <div class="footer-total" id="ptTotalLabel">
+                <span id="ptTotalLabelText">Tổng điểm (tạm tính):</span> <span id="ptTotal">0</span> đ
+            </div>
+            <button class="btn-primary btn-create-row" id="btnCreateQuiz">🚀 Tạo Trắc Nghiệm</button>
+            <button class="btn btn-close-row" id="btnCloseLoad">Đóng</button>
+        </div>
+      </div>
+    </div>
+
+    <nav class="tabs">
+      <button data-tab="tab1" class="active">📄 Đề bài</button>
+      <button data-tab="tab3">🎯 Kết quả</button>
+    </nav>
+
+    <main>
+      <section id="tab1" class="tab active"><div id="examBody"></div></section>
+      <section id="tab3" class="tab">
+        <div id="resultBody">
+          <p class="note" style="margin-top:30px; text-align:center;">Chưa có kết quả. Hãy làm bài rồi nhấn <b>Nộp bài</b>.</p>
+        </div>
+      </section>
+    </main>
+</div>
+
+<script>
+/* ============ BẢO MẬT / CHỐNG COPY ============ */
+(function() {
+  document.addEventListener('contextmenu', e => { e.preventDefault(); return false; }, { capture: true });
+  document.addEventListener('keydown', function(e) {
+    const k = (e.key || '').toLowerCase();
+    const tag = (e.target && e.target.tagName) || '';
+    const isInput = (tag === 'INPUT' || tag === 'TEXTAREA');
+    if (e.key === 'F12' || e.keyCode === 123) { e.preventDefault(); e.stopPropagation(); return false; }
+    if (e.ctrlKey && e.shiftKey && (k === 'i' || k === 'j' || k === 'c' || k === 'k')) { e.preventDefault(); e.stopPropagation(); return false; }
+    if (e.ctrlKey && !e.shiftKey && (k === 'u' || k === 's')) { e.preventDefault(); e.stopPropagation(); return false; }
+    if (e.ctrlKey && !e.shiftKey && k === 'p') { e.preventDefault(); e.stopPropagation(); return false; }
+    if (e.ctrlKey && !e.shiftKey && k === 'a' && !isInput) { e.preventDefault(); return false; }
+    if (e.ctrlKey && !e.shiftKey && (k === 'c' || k === 'x') && !isInput) { e.preventDefault(); return false; }
+    if (e.key === 'PrintScreen' || e.keyCode === 44) { try { navigator.clipboard.writeText(''); } catch(err) {} }
+  }, { capture: true });
+  document.addEventListener('dragstart', e => e.preventDefault(), { capture: true });
+  document.addEventListener('copy', function(e) { const tag = (e.target && e.target.tagName) || ''; if (tag !== 'INPUT' && tag !== 'TEXTAREA') { e.preventDefault(); return false; } }, { capture: true });
+  document.addEventListener('cut', function(e) { const tag = (e.target && e.target.tagName) || ''; if (tag !== 'INPUT' && tag !== 'TEXTAREA') { e.preventDefault(); return false; } }, { capture: true });
+  document.addEventListener('selectstart', function(e) { const tag = (e.target && e.target.tagName) || ''; if (tag !== 'INPUT' && tag !== 'TEXTAREA') { e.preventDefault(); return false; } }, { capture: true });
+  document.addEventListener('drag', e => e.preventDefault(), { capture: true });
+})();
+
+let devtoolsOpen = false;
+const trap = document.getElementById('security-trap');
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+if (!isMobile) {
+    setInterval(() => {
+        const threshold = 160;
+        const widthDiff = window.outerWidth - window.innerWidth;
+        const heightDiff = window.outerHeight - window.innerHeight;
+        if (widthDiff > threshold || heightDiff > threshold) {
+            if(!devtoolsOpen) { devtoolsOpen = true; trap.classList.remove('hidden'); }
+        } else {
+            if(devtoolsOpen) { devtoolsOpen = false; trap.classList.add('hidden'); }
+        }
+    }, 500);
+}
+
+function switchMenuTab(tabNum) {
+    if (document.activeElement && typeof document.activeElement.blur === 'function') { document.activeElement.blur(); }
+    document.querySelectorAll('.menu-tab-btn').forEach((btn, idx) => { btn.classList.toggle('active', idx === tabNum - 1); });
+    document.querySelectorAll('.menu-tab-content').forEach((content, idx) => { content.classList.toggle('active', idx === tabNum - 1); });
+    const bodyEl = document.querySelector('.load-card-body');
+    if (bodyEl) bodyEl.scrollTop = 0;
+}
+
+function updateKeyboardPadding() {
+    if (!window.visualViewport) return;
+    const overlay = document.getElementById('loadOverlay');
+    if (!overlay || overlay.classList.contains('hidden')) return;
+    const vv = window.visualViewport;
+    const kbHeight = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+    const extraPad = kbHeight > 100 ? Math.min(kbHeight, window.innerHeight * 0.6) : 0;
+    document.querySelectorAll('.menu-tab-content').forEach(el => { el.style.paddingBottom = (30 + extraPad) + 'px'; });
+}
+
+function handleViewportResize() {
+    if (!window.visualViewport) return;
+    const scale = window.visualViewport.scale || 1;
+    if (scale > 1.01) return;
+    const overlay = document.getElementById('loadOverlay');
+    if (!overlay) return;
+    if (!overlay.classList.contains('hidden')) {
+        overlay.style.height = window.visualViewport.height + 'px';
+        overlay.style.top = window.visualViewport.offsetTop + 'px';
+    } else {
+        overlay.style.height = ''; overlay.style.top = '';
+    }
+    updateKeyboardPadding();
+}
+if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', handleViewportResize);
+    window.visualViewport.addEventListener('scroll', handleViewportResize);
+}
+
+function openLoadMenu() {
+    document.body.classList.add('modal-open');
+    $('#loadOverlay').classList.remove('hidden');
+    setTimeout(handleViewportResize, 100);
+    switchMenuTab(1); 
+}
+function closeLoadMenu() {
+    document.body.classList.remove('modal-open');
+    $('#loadOverlay').classList.add('hidden');
+    const overlay = document.getElementById('loadOverlay');
+    if(overlay) { overlay.style.height = ''; overlay.style.top = ''; }
+    document.querySelectorAll('.menu-tab-content').forEach(el => { el.style.paddingBottom = ''; });
+}
+
+function renderMathIn(container) {
+    if (!container) return;
+    if (typeof renderMathInElement === 'function') {
+        renderMathInElement(container, {
+            delimiters: [{ left: '$$', right: '$$', display: true },{ left: '\\[', right: '\\]', display: true },{ left: '$', right: '$', display: false },{ left: '\\(', right: '\\)', display: false }],
+            throwOnError: false, errorColor: '#8B4513', ignoredTags: ['script','noscript','style','textarea','pre','code','option']
+        });
+        container.dataset.mathDone = '1';
+    } else { setTimeout(() => renderMathIn(container), 100); }
+}
+
+let mathObserver = null;
+function renderMathLazy(rootEl) {
+    if (!rootEl) return;
+    if (typeof renderMathInElement !== 'function') { setTimeout(() => renderMathLazy(rootEl), 100); return; }
+    if (!mathObserver) {
+        mathObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) { renderMathIn(entry.target); mathObserver.unobserve(entry.target); }
+            });
+        }, { rootMargin: '300px 0px' });
+    }
+    rootEl.querySelectorAll('.q').forEach(qEl => { if (qEl.dataset.mathDone) return; mathObserver.observe(qEl); });
+}
+
+// Đã đổi const thành let để có thể gán lại khi khôi phục config
+let CONFIG = {
+  p1: { point: 0.25, title:"PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn", note:"Chọn một phương án đúng nhất cho mỗi câu." },
+  p2: { point: 1.0, title:"PHẦN II. Câu trắc nghiệm đúng – sai", note:"Với mỗi ý a), b), c), d) chọn Đúng hoặc Sai." },
+  p3: { point: 0.5, title:"PHẦN III. Câu trắc nghiệm trả lời ngắn", note:"Ghi kết quả (số) vào ô trả lời." }
+};
+let P2_RULE = [0, 0.1, 0.25, 0.5, 1.0];
+
+const BANK = {
+  p1: [{ text:"Đơn vị đo cường độ điện trường trong hệ SI là", options:["$\\text{V/m}$", "$\\text{V.m}$", "$\\text{N.m}$", "$\\text{J/C}$"], correct:0 }],
+  p2: [{ text:"Xét điện trường đều...", statements:["Các đường sức...", "Cường độ...", "Hiệu điện thế...", "Công của lực..."], answers:[true,true,false,false] }],
+  p3: [{ text:"Cho điện trở $R = 10...", answer: 2 }]
+};
+
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function mulberry32(a){ return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function shuffle(arr, rng){ for(let i = arr.length - 1; i > 0; i--){ const j = Math.floor(rng() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
+function parseNum(str){ if(str === undefined || str === null) return NaN; let s = String(str).trim().replace(/\s+/g,'').replace(',', '.'); if(s.includes('/')){ const p = s.split('/'); if(p.length === 2){ const a = Number(p[0]), b = Number(p[1]); if(!isNaN(a) && !isNaN(b) && b !== 0) return a / b; } } return Number(s); }
+const fmt = x => String(Math.round(x * 1000) / 1000);
+function parseScoreInput(id) { const el = $('#' + id); if (!el) return 0; let val = String(el.value).trim().replace(',', '.'); const num = parseFloat(val); return isNaN(num) ? 0 : num; }
+function normOption(o){ return (typeof o === 'string') ? { text:o, img:null } : { text:o.text||'', img:o.img||null, imgAlt:o.imgAlt||'' }; }
+function normStatement(s){ return (typeof s === 'string') ? { text:s, img:null } : { text:s.text||'', img:s.img||null, imgAlt:s.imgAlt||'' }; }
+function imgHTML(src, alt, caption, cls){ if(!src) return ''; const clsAttr = cls ? ` class="${cls}"` : ''; const capHTML = caption ? `<div class="q-img-caption">${esc(caption)}</div>` : ''; return `<div class="q-img-wrap"><img src="${esc(src)}" alt="${esc(alt||'Hình minh hoạ')}" onerror="imgError(this)"${clsAttr}>${capHTML}</div>`; }
+function imgError(img){ const wrap = img.closest('.q-img-wrap') || img.parentElement; if(!wrap) return; wrap.innerHTML = `<span class="q-img-error">⚠ Không tải được ảnh: ${esc(img.getAttribute('src'))}</span>`; }
+
+const Q_CACHE_KEY = 'prac_questions_cache_v1';
+const Q_CACHE_TTL = 10 * 60 * 1000;
+
+async function fetchQuestionsWithCache(forceReload = false) {
+  if (!forceReload) {
+    try {
+      const raw = localStorage.getItem(Q_CACHE_KEY);
+      if (raw) {
+        const { ts, data } = JSON.parse(raw);
+        if (Date.now() - ts < Q_CACHE_TTL && Array.isArray(data) && data.length) {
+          console.log('[Cache] Dùng câu hỏi từ localStorage, age =', Math.round((Date.now() - ts) / 1000) + 's | ' + data.length + ' câu');
+          return data;
+        }
+      }
+    } catch (e) { /* cache hỏng */ }
+  }
+  if (!window.getFirebaseQuestions) throw new Error("Firebase chưa tải xong, vui lòng thử lại sau vài giây.");
+  const fresh = await window.getFirebaseQuestions(10);
+  try {
+    localStorage.setItem(Q_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: fresh }));
+    console.log('[Cache] Đã lưu ' + (fresh?.length || 0) + ' câu vào localStorage');
+  } catch (e) { console.warn('[Cache] Không lưu được:', e.message); }
+  return fresh;
+}
+
+function clearQuestionsCache() { localStorage.removeItem(Q_CACHE_KEY); console.log('[Cache] Đã xóa cache'); }
+
+let exam = null; let parsedOriginal = null; let answers = {}; let submitted = false; let missingAnswers = [];
+let allFirebaseQuestions = [];
+let availableLessons = new Set();
+
+function buildDefaultExam(){
+  return {
+    p1: BANK.p1.map((q,i) => ({ uid:'p1-'+i, text:q.text, img:null, imgAlt:'', options: q.options.map(normOption), correct:q.correct, level:null })),
+    p2: BANK.p2.map((q,i) => ({ uid:'p2-'+i, text:q.text, img:null, imgAlt:'', statements: q.statements.map(normStatement), answers:[...q.answers], level:null })),
+    p3: BANK.p3.map((q,i) => ({ uid:'p3-'+i, text:q.text, img:null, imgAlt:'', answer:q.answer, level:null }))
+  };
+}
+
+function normLevelToken(t){ t = String(t||'').toLowerCase().trim(); if(t==='easy'||t==='de'||t==='dễ') return 'easy'; if(t==='medium'||t==='vua'||t==='vừa'||t==='tb') return 'medium'; if(t==='hard'||t==='kho'||t==='khó') return 'hard'; if(t==='very_hard'||t==='veryhard'||t==='rat_kho'||t==='rất khó'||t==='rấtkhó') return 'very_hard'; return null; }
+function normLevel(s){ s = String(s||'').toLowerCase().trim(); if(!s) return null; if(s==='easy'||s==='e'||s==='de'||s==='dễ'||s==='1') return 'easy'; if(s==='medium'||s==='m'||s==='vua'||s==='vừa'||s==='tb'||s==='2') return 'medium'; if(s==='hard'||s==='h'||s==='kho'||s==='khó'||s==='3') return 'hard'; if(s==='very_hard'||s==='vh'||s==='rất khó'||s==='rấtkhó'||s==='4') return 'very_hard'; return normLevelToken(s); }
+function getNormalizedLevel(q) { const lvl = normLevel(q.level); if (['easy', 'medium', 'hard', 'very_hard'].includes(lvl)) return lvl; return 'wild'; }
+
+function renderExam(){
+  let html = '';
+  if (missingAnswers.length > 0) { html += `<div class="warn-banner">⚠️ <b>Cảnh báo:</b> Các câu sau chưa có đáp án: ${missingAnswers.join(', ')} (sẽ tính là SAI).</div>`; }
+  let n1 = 0; html += `<div class="part-title">${CONFIG.p1.title}</div><p class="note">${CONFIG.p1.note}</p>`;
+  exam.p1.forEach(q => {
+    n1++; const sel = answers[q.uid]; html += `<div class="q"><div class="q-text"><span class="q-no">Câu ${n1}.</span>${q.text}</div>${imgHTML(q.img, q.imgAlt)}<div class="options">`;
+    q.options.forEach((o,j) => {
+      const letter = 'ABCD'[j]; let cls = 'opt'; if(sel === j) cls += ' selected';
+      const optImg = o.img ? `<img class="opt-img" src="${o.img}" alt="${o.imgAlt||''}" onerror="imgError(this)">` : '';
+      html += `<label class="${cls}"><input type="radio" name="p1-${q.uid}" value="${j}" data-uid="${q.uid}" ${sel===j?'checked':''}><b>${letter}.</b><span class="opt-body">${o.text}${optImg}</span></label>`;
+    });
+    html += `</div></div>`;
+  });
+
+  let n2 = 0; html += `<div class="part-title">${CONFIG.p2.title}</div><p class="note">${CONFIG.p2.note}</p>`;
+  exam.p2.forEach(q => {
+    n2++; const userAns = answers[q.uid] || []; html += `<div class="q"><div class="q-text"><span class="q-no">Câu ${n2}.</span>${q.text}</div>${imgHTML(q.img, q.imgAlt)}<div class="statements">`;
+    q.statements.forEach((st,k) => {
+      const letter = 'abcd'[k]; const sel = userAns[k]; let stCls = 'st-row';
+      const stImg = st.img ? `<img class="st-img" src="${st.img}" alt="${st.imgAlt||''}" onerror="imgError(this)">` : '';
+      html += `<div class="${stCls}"><div class="st-txt"><b>${letter})</b> ${st.text}${stImg}</div><div class="st-btns"><label class="st-btn ${sel==='T'?'selected':''}"><input type="radio" name="p2-${q.uid}-${k}" value="T" data-uid="${q.uid}" data-k="${k}" ${sel==='T'?'checked':''}><span>Đ</span></label><label class="st-btn ${sel==='F'?'selected':''}"><input type="radio" name="p2-${q.uid}-${k}" value="F" data-uid="${q.uid}" data-k="${k}" ${sel==='F'?'checked':''}><span>S</span></label></div></div>`;
+    });
+    html += `</div></div>`;
+  });
+
+  let n3 = 0; html += `<div class="part-title">${CONFIG.p3.title}</div><p class="note">${CONFIG.p3.note}</p>`;
+  exam.p3.forEach(q => {
+    n3++; const val = answers[q.uid] || '';
+    html += `<div class="q"><div class="q-text"><span class="q-no">Câu ${n3}.</span>${q.text}</div>${imgHTML(q.img, q.imgAlt)}<div class="short-wrap"><input type="text" class="short-input" data-uid="${q.uid}" value="${esc(val)}" placeholder="Nhập kết quả…" autocomplete="off" ${submitted?'readonly':''}></div></div>`;
+  });
+
+  $('#examBody').innerHTML = html;
+  renderMathLazy($('#examBody'));
+  updateAnsweredCount();
+  $('#btnSubmit').classList.remove('hidden');
+}
+
+function calculateScore(){
+  let mcScore = 0, maxMcScore = 0;
+  exam.p1.forEach(q => { maxMcScore += CONFIG.p1.point; const chosen = answers[q.uid]; if((q.correct !== null) && chosen === q.correct) mcScore += CONFIG.p1.point; });
+  exam.p2.forEach(q => { const userAns = answers[q.uid] || []; let correctCount = 0; q.answers.forEach((a,k) => { const sel = userAns[k]; if((a !== null) && ((a && sel==='T') || (!a && sel==='F'))) correctCount++; }); mcScore += P2_RULE[correctCount]; });
+  maxMcScore += exam.p2.length * P2_RULE[4];
+  exam.p3.forEach(q => { maxMcScore += CONFIG.p3.point; const val = parseNum(answers[q.uid] || ''); if((q.answer !== null) && !isNaN(val) && Math.abs(val - q.answer) < 1e-6) mcScore += CONFIG.p3.point; });
+  return { mcScore, maxMcScore };
+}
+
+function renderTab3(){
+  const { mcScore, maxMcScore } = calculateScore();
+  let html = `<div class="result"><h2 style="color:var(--brown-d); margin-bottom: 15px;">KẾT QUẢ BÀI LÀM</h2><div class="score-big">${fmt(mcScore)} <span class="unit">/ ${fmt(maxMcScore)} điểm</span></div><div class="result-meta">Tương đương hệ 10: <b>${fmt(maxMcScore ? (mcScore/maxMcScore)*10 : 0)}</b> điểm</div></div>`;
+  $('#resultBody').innerHTML = html;
+}
+function clearResultTab(){ $('#resultBody').innerHTML = '<p class="note" style="margin-top:30px; text-align:center;">Chưa có kết quả. Hãy làm bài rồi nhấn <b>Nộp bài</b>.</p>'; }
+
+function countAnswered(){ let c = 0; exam.p1.forEach(q => { if(answers[q.uid] !== undefined) c++; }); exam.p2.forEach(q => { const a = answers[q.uid] || []; if(a.length === 4 && a.every(x => x)) c++; }); exam.p3.forEach(q => { if(answers[q.uid] && String(answers[q.uid]).trim()) c++; }); return c; }
+function updateAnsweredCount(){ if(!exam) return; const c = countAnswered(); const total = exam.p1.length + exam.p2.length + exam.p3.length; $('#answeredCount').textContent = c; $('#totalCount').textContent = total; }
+function syncButtons(){ $('#btnSubmit').classList.toggle('hidden', submitted || !exam); $('#btnRedo').classList.toggle('hidden', !submitted); }
+
+function readLevelCounts(){
+  const read = id => {
+      const el = $('#'+id);
+      if(!el) return 0;
+      const raw = String(el.value).trim();
+      if(raw === '') { const ph = String(el.placeholder || '0').trim(); const v = parseInt(ph, 10); return isNaN(v) ? 0 : Math.max(0, v); }
+      const v = parseInt(raw, 10); return isNaN(v) ? 0 : Math.max(0, v);
+  };
+  const has = ids => ids.some(id=>String($('#'+id).value).trim()!=='');
+  return {
+    p1:{easy:read('lv1_easy'),medium:read('lv1_medium'),hard:read('lv1_hard'),very_hard:read('lv1_very_hard'),wild:read('lv1_wild'),has:has(['lv1_easy','lv1_medium','lv1_hard','lv1_very_hard','lv1_wild'])},
+    p2:{easy:read('lv2_easy'),medium:read('lv2_medium'),hard:read('lv2_hard'),very_hard:read('lv2_very_hard'),wild:read('lv2_wild'),has:has(['lv2_easy','lv2_medium','lv2_hard','lv2_very_hard','lv2_wild'])},
+    p3:{easy:read('lv3_easy'),medium:read('lv3_medium'),hard:read('lv3_hard'),very_hard:read('lv3_very_hard'),wild:read('lv3_wild'),has:has(['lv3_easy','lv3_medium','lv3_hard','lv3_very_hard','lv3_wild'])}
+  };
+}
+function readScValue(part, len){ const id = 'sc' + ({p1:1,p2:2,p3:3}[part]); const raw = String($('#'+id).value).trim(); if(raw==='') return null; const v = parseInt(raw,10); if(isNaN(v)) return null; return Math.max(0, Math.min(v, len)); }
+
+function pickIndices(pool, lc, rng){
+  const groups = {easy:[],medium:[],hard:[],very_hard:[],wild:[]};
+  pool.forEach((q,i)=>{ groups[getNormalizedLevel(q)].push(i); });
+  if(rng){ for(const k in groups) shuffle(groups[k], rng); }
+  const picked = []; let deficit = 0;
+  ['easy','medium','hard','very_hard'].forEach(L=>{ let need = lc[L]||0; const g = groups[L]; const take = Math.min(need, g.length); for(let i=0;i<take;i++) picked.push(g[i]); deficit += (need - take); });
+  let needWild = (lc.wild || 0) + deficit;
+  if (needWild > 0) {
+      const pickedSet = new Set(picked); let remaining = [];
+      pool.forEach((q, i) => { if (!pickedSet.has(i)) remaining.push(i); });
+      if(rng) shuffle(remaining, rng); const take = Math.min(needWild, remaining.length);
+      for(let i=0;i<take;i++) picked.push(remaining[i]);
+  }
+  return picked;
+}
+
+function simulateCount(pool, lc){
+  if(!pool) return 0;
+  let cnt = {easy:0, medium:0, hard:0, very_hard:0, wild:0};
+  pool.forEach(q => { cnt[getNormalizedLevel(q)]++; });
+  let total = 0; let deficit = 0;
+  ['easy','medium','hard','very_hard'].forEach(L=>{ let need = lc[L]||0; const take = Math.min(need, cnt[L]); total += take; deficit += (need - take); });
+  let needWild = (lc.wild || 0) + deficit; let remainingTotal = pool.length - total;
+  total += Math.min(needWild, remainingTotal);
+  return total;
+}
+
+function getSelectedLessons() { const allCheckboxes = document.querySelectorAll('.lesson-checkbox input'); if (allCheckboxes.length === 0) return null; const checked = document.querySelectorAll('.lesson-checkbox input:checked'); return Array.from(checked).map(cb => cb.value); }
+function toggleAllLessons(isChecked) { const checkboxes = document.querySelectorAll('.lesson-checkbox input'); checkboxes.forEach(cb => cb.checked = isChecked); updateCreateBtn(); }
+
+function selectPool(pool, part, rng){
+  if(!pool || !pool.length) return [];
+  const selectedLessons = getSelectedLessons();
+  let filteredPool = pool;
+  if (selectedLessons !== null) { if (selectedLessons.length === 0) return []; filteredPool = pool.filter(q => selectedLessons.includes(String(q.lesson))); }
+  if (filteredPool.length === 0) return [];
+  const lc = readLevelCounts()[part];
+  if(lc.has){ let idx = pickIndices(filteredPool, lc, rng); idx.sort((a,b)=>a-b); return idx.map(i=>filteredPool[i]); }
+  const sc = readScValue(part, filteredPool.length);
+  if(sc!==null){ let idx = filteredPool.map((_,i)=>i); if(rng){ shuffle(idx, rng); } idx = idx.slice(0,sc); idx.sort((a,b)=>a-b); return idx.map(i=>filteredPool[i]); }
+  return rng ? shuffle(filteredPool.slice(), rng) : filteredPool.slice();
+}
+
+function buildExamFromSelection(rng){
+  const src = parsedOriginal || buildDefaultExam();
+  return { p1: selectPool(src.p1,'p1',rng), p2: selectPool(src.p2,'p2',rng), p3: selectPool(src.p3,'p3',rng) };
+}
+
+function updateSubsetPlaceholders(){
+  if(!parsedOriginal) return;
+  [['p1',1],['p2',2],['p3',3]].forEach(pair=>{
+    const p = pair[0], n = pair[1]; const selectedLessons = getSelectedLessons(); let pool = parsedOriginal[p];
+    if (selectedLessons !== null) { if (selectedLessons.length === 0) pool = []; else pool = pool.filter(q => selectedLessons.includes(String(q.lesson))); }
+    $('#sc'+n).placeholder = pool.length;
+    const cnt = {easy:0,medium:0,hard:0,very_hard:0,wild:0};
+    pool.forEach(q=>{ cnt[getNormalizedLevel(q)]++; });
+    $('#lv'+n+'_easy').placeholder = String(cnt.easy); $('#lv'+n+'_medium').placeholder = String(cnt.medium);
+    $('#lv'+n+'_hard').placeholder = String(cnt.hard); $('#lv'+n+'_very_hard').placeholder = String(cnt.very_hard);
+    const wEl = $('#lv'+n+'_wild'); if(wEl) wEl.placeholder = String(cnt.wild); 
+  });
+}
+
+function updateLevelWarnings() {
+  const warningEl = document.getElementById('levelWarning'); if (!warningEl) return;
+  if (!parsedOriginal) { warningEl.classList.add('hidden'); return; }
+  let warnings = [];
+  [['p1',1],['p2',2],['p3',3]].forEach(pair => {
+      const p = pair[0], n = pair[1]; const selectedLessons = getSelectedLessons(); let pool = parsedOriginal[p];
+      if (selectedLessons !== null) { if (selectedLessons.length === 0) pool = []; else pool = pool.filter(q => selectedLessons.includes(String(q.lesson))); }
+      const req = readLevelCounts()[p];
+      if (req.has) {
+          const totalReq = req.easy + req.medium + req.hard + req.very_hard + req.wild;
+          if (totalReq > pool.length) { warnings.push(`P.${n}: Yêu cầu ${totalReq} câu, NH chỉ có ${pool.length} câu.`); } 
+          else {
+              const cnt = {easy:0, medium:0, hard:0, very_hard:0};
+              pool.forEach(q => { const lvl = getNormalizedLevel(q); if(cnt[lvl] !== undefined) cnt[lvl]++; });
+              if (req.easy > cnt.easy) warnings.push(`P.${n} Dễ: Yêu cầu ${req.easy}, chỉ có ${cnt.easy}.`);
+              if (req.medium > cnt.medium) warnings.push(`P.${n} Vừa: Yêu cầu ${req.medium}, chỉ có ${cnt.medium}.`);
+              if (req.hard > cnt.hard) warnings.push(`P.${n} Khó: Yêu cầu ${req.hard}, chỉ có ${cnt.hard}.`);
+              if (req.very_hard > cnt.very_hard) warnings.push(`P.${n} Rất Khó: Yêu cầu ${req.very_hard}, chỉ có ${cnt.very_hard}.`);
+          }
+      }
+  });
+  if (warnings.length > 0) { warningEl.innerHTML = '⚠️ <b>Cảnh báo:</b> ' + warnings.join(' | '); warningEl.classList.remove('hidden'); } else { warningEl.classList.add('hidden'); }
+}
+
+function updateCreateBtn(){
+  const btn = $('#btnCreateQuiz'); updateSubsetPlaceholders(); updateLevelWarnings();
+  const pt1 = parseScoreInput('pt1'); const p2_1 = parseScoreInput('p2_1'); const p2_2 = parseScoreInput('p2_2'); const p2_3 = parseScoreInput('p2_3'); const p2_4 = parseScoreInput('p2_4'); const pt3 = parseScoreInput('pt3');
+  let total = 0;
+  if (parsedOriginal) {
+      try {
+          const lcs = readLevelCounts();
+          const cntPart = p => {
+              const selectedLessons = getSelectedLessons(); let pool = parsedOriginal[p];
+              if (selectedLessons !== null) { if (selectedLessons.length === 0) pool = []; else pool = pool.filter(q => selectedLessons.includes(String(q.lesson))); }
+              if(lcs[p].has) return simulateCount(pool, lcs[p]);
+              const sc = readScValue(p, pool.length); return sc!==null ? sc : pool.length;
+          };
+          total = cntPart('p1')*pt1 + cntPart('p2')*p2_4 + cntPart('p3')*pt3;
+      } catch(e) { console.error(e); }
+  }
+  if (total > 0) {
+      $('#ptTotalLabel').style.display = 'block'; $('#ptTotal').textContent = fmt(total);
+      const isAnyStructureInput = () => { return ['sc1','sc2','sc3','lv1_easy','lv1_medium','lv1_hard','lv1_very_hard','lv1_wild','lv2_easy','lv2_medium','lv2_hard','lv2_very_hard','lv2_wild','lv3_easy','lv3_medium','lv3_hard','lv3_very_hard','lv3_wild'].some(id => String($('#'+id).value).trim() !== ''); };
+      if (!isAnyStructureInput()) { $('#ptTotalLabelText').textContent = 'Tổng điểm tối đa (lấy toàn bộ đề):'; } else { $('#ptTotalLabelText').textContent = 'Tổng điểm (tạm tính):'; }
+  } else { $('#ptTotalLabel').style.display = 'none'; }
+  const validScore = pt1 > 0 || p2_4 > 0 || pt3 > 0;
+  btn.disabled = !(parsedOriginal && validScore && total > 0);
+}
+
+['pt1','p2_1','p2_2','p2_3','p2_4','pt3','sc1','sc2','sc3',
+ 'lv1_easy','lv1_medium','lv1_hard','lv1_very_hard','lv1_wild',
+ 'lv2_easy','lv2_medium','lv2_hard','lv2_very_hard','lv2_wild',
+ 'lv3_easy','lv3_medium','lv3_hard','lv3_very_hard','lv3_wild'].forEach(id => $('#'+id).addEventListener('input', updateCreateBtn));
+
+function saveStructureToStorage() {
+    const data = {
+        pt1: $('#pt1').value, p2_1: $('#p2_1').value, p2_2: $('#p2_2').value, p2_3: $('#p2_3').value, p2_4: $('#p2_4').value, pt3: $('#pt3').value,
+        sc1: $('#sc1').value, sc2: $('#sc2').value, sc3: $('#sc3').value
+    };
+    ['easy','medium','hard','very_hard','wild'].forEach(L => {
+        data['lv1_'+L] = $('#lv1_'+L).value; data['lv2_'+L] = $('#lv2_'+L).value; data['lv3_'+L] = $('#lv3_'+L).value;
+    });
+    localStorage.setItem('prac_structure', JSON.stringify(data));
+}
+
+function loadStructureFromStorage() {
+    const saved = localStorage.getItem('prac_structure'); if (!saved) return false;
+    try { const data = JSON.parse(saved); Object.keys(data).forEach(id => { const el = $('#' + id); if (el) el.value = data[id]; }); return true; } catch(e) { return false; }
+}
+
+function saveConfigToStorage() {
+    localStorage.setItem('prac_config', JSON.stringify({ CONFIG, P2_RULE }));
+}
+
+function loadConfigFromStorage() {
+    const saved = localStorage.getItem('prac_config'); if (!saved) return;
+    try { const data = JSON.parse(saved); if (data.CONFIG) CONFIG = data.CONFIG; if (data.P2_RULE) P2_RULE = data.P2_RULE; } catch (e) {}
+}
+
+function saveCurrentExamToStorage() { if(exam) localStorage.setItem('prac_current_exam', JSON.stringify(exam)); }
+
+function shuffleExamObject(examObj, rng) {
+    const p1 = shuffle(examObj.p1.map(q => { 
+        if (q.correct === null || q.correct === undefined) return { ...q, options: shuffle(q.options.map(o => ({...o})), rng) };
+        const correctOpt = q.options[q.correct]; const correctKey = correctOpt.img || correctOpt.text; 
+        const opts = shuffle(q.options.map(o => ({...o})), rng); const newCorrect = opts.findIndex(o => (o.img||o.text) === correctKey); 
+        return { ...q, options: opts, correct: newCorrect !== -1 ? newCorrect : q.correct }; 
+    }), rng);
+    const p2 = shuffle(examObj.p2.map(q => ({...q})), rng); const p3 = shuffle(examObj.p3.map(q => ({...q})), rng);
+    return { ...examObj, p1, p2, p3 };
+}
+
+$('#btnResetStructure').addEventListener('click', () => {
+    const ids = ['sc1','sc2','sc3','lv1_easy','lv1_medium','lv1_hard','lv1_very_hard','lv1_wild','lv2_easy','lv2_medium','lv2_hard','lv2_very_hard','lv2_wild','lv3_easy','lv3_medium','lv3_hard','lv3_very_hard','lv3_wild'];
+    ids.forEach(id => { $('#' + id).value = ''; });
+    localStorage.removeItem('prac_structure');
+    updateCreateBtn();
+});
+
+$('#btnClearCache').addEventListener('click', () => {
+    if (confirm("Xóa cache câu hỏi?\n\nDùng khi bạn thấy đề cũ / câu hỏi lỗi thời.\nSau khi xóa, trang sẽ tải lại dữ liệu mới từ máy chủ.")) {
+        clearQuestionsCache(); parsedOriginal = null; allFirebaseQuestions = []; availableLessons.clear();
+        alert("✅ Đã xóa cache. Tải lại trang (F5) để lấy dữ liệu mới.");
+    }
+});
+
+$('#btnPickNew').addEventListener('click', () => {
+    if(!parsedOriginal) return; saveStructureToStorage();
+    const seed = Math.floor(Math.random() * 4294967296); const rng = mulberry32(seed);
+    exam = JSON.parse(JSON.stringify(buildExamFromSelection(rng)));
+    saveConfigToStorage(); saveCurrentExamToStorage();
+    submitted = false; answers = {};
+    renderExam(); clearResultTab(); syncButtons(); closeLoadMenu(); window.scrollTo({top:0, behavior:'smooth'});
+});
+
+/* 🟢 CHỈ TẢI CÂU HỎI KHI BẤM NÚT ⚙️, KHÔNG TỰ ĐỘNG LOAD LÚC MỚI MỞ TRANG */
+async function autoLoadExam(forceReload = false) {
+  if (parsedOriginal && !forceReload) {
+      updateSubsetPlaceholders(); updateLevelWarnings(); updateCreateBtn(); return; 
+  }
+  const errorBanner = document.getElementById('errorBanner'); if (errorBanner) errorBanner.classList.add('hidden'); 
+  try {
+    const allQuestions = await fetchQuestionsWithCache(forceReload);
+    if (!allQuestions || allQuestions.length === 0) throw new Error("Database trống hoặc chưa có câu hỏi.");
+    const normalizedQuestions = allQuestions.map((q, index) => {
+        if (!q.uid) { const prefix = q.part === 1 ? 'p1' : (q.part === 2 ? 'p2' : 'p3'); q.uid = `${prefix}-auto_${index}_${Math.random().toString(36).substring(2, 8)}`; }
+        if (q.part === 1 && q.options) { q.options = q.options.map(normOption); if (typeof q.correct === 'string') { const idx = 'ABCD'.indexOf(q.correct.trim().toUpperCase()); if (idx !== -1) q.correct = idx; } } 
+        else if (q.part === 2 && q.statements) { q.statements = q.statements.map(normStatement); if (Array.isArray(q.answers)) { q.answers = q.answers.map(a => a === true || a === 'T' || a === 'Đ' || a === 'true' || a === 1); } } 
+        else if (q.part === 3) { if (typeof q.answer === 'string') { const num = parseNum(q.answer); if (!isNaN(num)) q.answer = num; } }
+        return q;
+    });
+    allFirebaseQuestions = normalizedQuestions;
+    const p1 = allFirebaseQuestions.filter(q => q.part === 1); const p2 = allFirebaseQuestions.filter(q => q.part === 2); const p3 = allFirebaseQuestions.filter(q => q.part === 3);
+    parsedOriginal = { p1: p1, p2: p2, p3: p3 };
+    missingAnswers = [];
+    loadStructureFromStorage();
+    availableLessons.clear(); allFirebaseQuestions.forEach(q => { if (q.lesson) availableLessons.add(String(q.lesson)); });
+    const sortedLessons = Array.from(availableLessons).sort((a,b) => Number(a) - Number(b));
+    const lessonContainer = document.getElementById('lessonCheckboxes');
+    if (sortedLessons.length > 0) {
+        let html = ''; sortedLessons.forEach(l => { html += `<label class="lesson-checkbox"><input type="checkbox" value="${l}" checked onchange="updateCreateBtn()"><span class="lesson-chip">Bài ${l}</span></label>`; });
+        lessonContainer.innerHTML = html;
+    } else { lessonContainer.innerHTML = '<div style="width: 100%; text-align: center; color: red;">Không tìm thấy thông tin Bài học.</div>'; }
+    updateSubsetPlaceholders(); updateLevelWarnings(); updateCreateBtn();
+  } catch (err) {
+    console.error("Lỗi nạp đề:", err.message);
+    if (errorBanner) { errorBanner.innerHTML = `⚠️ <b>Lỗi nạp dữ liệu:</b> ${err.message}`; errorBanner.classList.remove('hidden'); }
+  }
+}
+
+$('#btnLoadMenu').addEventListener('click', async () => {
+  openLoadMenu();
+  if (!parsedOriginal) {
+      const originalText = $('#btnLoadMenu').innerHTML; $('#btnLoadMenu').innerHTML = '⏳';
+      document.getElementById('lessonCheckboxes').innerHTML = '<div style="width: 100%; text-align: center; color: var(--brown-d);">⏳ Đang tải dữ liệu...</div>';
+      await autoLoadExam();
+      $('#btnLoadMenu').innerHTML = originalText;
+  }
+  updateCreateBtn();
+});
+
+$('#btnCloseLoad').addEventListener('click', () => { closeLoadMenu(); });
+
+$('#btnCreateQuiz').addEventListener('click', () => {
+  if(!parsedOriginal) return; saveStructureToStorage();
+  const pt1 = parseScoreInput('pt1'); const p2_1 = parseScoreInput('p2_1'); const p2_2 = parseScoreInput('p2_2'); const p2_3 = parseScoreInput('p2_3'); const p2_4 = parseScoreInput('p2_4'); const pt3 = parseScoreInput('pt3');
+  CONFIG.p1.point = pt1; CONFIG.p2.point = p2_4; CONFIG.p3.point = pt3; P2_RULE = [0, p2_1, p2_2, p2_3, p2_4];
+  const seed = Math.floor(Math.random() * 4294967296); const rng = mulberry32(seed);
+  const sel = buildExamFromSelection(rng); exam = JSON.parse(JSON.stringify(sel));
+  saveConfigToStorage(); saveCurrentExamToStorage();
+  submitted = false; answers = {};
+  renderExam(); clearResultTab(); syncButtons(); closeLoadMenu(); window.scrollTo({top:0, behavior:'smooth'});
+});
+
+function submitExam(){
+  submitted = true; renderExam(); renderTab3(); syncButtons();
+  $$('nav.tabs button').forEach(b => b.classList.remove('active')); $$('section.tab').forEach(s => s.classList.remove('active'));
+  document.querySelector('nav.tabs button[data-tab="tab3"]').classList.add('active'); $('#tab3').classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+$('#btnSubmit').addEventListener('click', submitExam);
+
+$('#btnRedo').addEventListener('click', () => {
+  if(confirm("Bạn có chắc muốn làm lại từ đầu? (Đảo thứ tự câu hỏi và đáp án của đề hiện tại)")) {
+    const seed = Math.floor(Math.random() * 4294967296); const rng = mulberry32(seed);
+    exam = shuffleExamObject(exam, rng); saveCurrentExamToStorage();
+    submitted = false; answers = {};
+    renderExam(); clearResultTab(); syncButtons();
+    $$('nav.tabs button').forEach(b => b.classList.remove('active')); $$('section.tab').forEach(s => s.classList.remove('active'));
+    document.querySelector('nav.tabs button[data-tab="tab1"]').classList.add('active'); $('#tab1').classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+});
+
+$('#examBody').addEventListener('change', e => {
+  if(submitted) return; const t = e.target; if(t.type !== 'radio') return; const uid = t.dataset.uid; if(!uid) return;
+  if(t.name.startsWith('p1-')) answers[uid] = Number(t.value);
+  else if(t.name.startsWith('p2-')){ const k = Number(t.dataset.k); if(!answers[uid]) answers[uid] = []; answers[uid][k] = t.value; }
+  document.querySelectorAll(`input[name="${t.name}"]`).forEach(inp => { inp.closest('label').classList.toggle('selected', inp.checked); });
+  updateAnsweredCount();
+});
+$('#examBody').addEventListener('input', e => {
+  if(submitted) return; const t = e.target; if(!t.classList.contains('short-input')) return;
+  answers[t.dataset.uid] = t.value; updateAnsweredCount();
+});
+
+$$('nav.tabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    $$('nav.tabs button').forEach(b => b.classList.remove('active')); $$('section.tab').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active'); $('#' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+let fs = localStorage.getItem('prac_fs') ? parseInt(localStorage.getItem('prac_fs')) : 18;
+document.documentElement.style.setProperty('--fs', fs + 'px');
+$('#fsUp').addEventListener('click', () => { fs = Math.min(40, fs + 2); document.documentElement.style.setProperty('--fs', fs + 'px'); localStorage.setItem('prac_fs', fs); });
+$('#fsDown').addEventListener('click', () => { fs = Math.max(13, fs - 2); document.documentElement.style.setProperty('--fs', fs + 'px'); localStorage.setItem('prac_fs', fs); });
+
+let tRemain = 25 * 60, tTimer = null, tRunning = false;
+function tShow(){ const m = Math.floor(tRemain / 60), s = tRemain % 60; $('#tDisp').textContent = String(m).padStart(2,'0') + "'" + String(s).padStart(2,'0'); }
+$('#tBtn').addEventListener('click', () => {
+  if(tRunning){ clearInterval(tTimer); tRunning = false; $('#tBtn').innerHTML = '<span class="hide-mobile">Tiếp tục</span><span class="show-mobile">▶</span>'; }
+  else {
+    if(tRemain <= 0) tRemain = Number($('#tMin').value) * 60;
+    tRunning = true; $('#tBtn').innerHTML = '<span class="hide-mobile">Tạm dừng</span><span class="show-mobile">⏸</span>';
+    tTimer = setInterval(() => { tRemain--; if(tRemain <= 0){ tRemain = 0; clearInterval(tTimer); tRunning = false; $('#tBtn').innerHTML = '<span class="hide-mobile">Hết giờ</span><span class="show-mobile">⏹</span>'; submitExam(); } tShow(); }, 1000);
+  }
+});
+$('#tMin').addEventListener('change', e => { clearInterval(tTimer); tRunning = false; $('#tBtn').innerHTML = '<span class="hide-mobile">Bắt đầu</span><span class="show-mobile">▶</span>'; tRemain = Number(e.target.value) * 60; tShow(); });
+
+/* 🟢 HÀM KHÔI PHỤC ĐỀ CŨ HOẶC HIỆN MÀN HÌNH CHÀO MỪNG */
+function restoreSavedExamOrShowWelcome() {
+    const savedExamStr = localStorage.getItem('prac_current_exam');
+    if (savedExamStr) {
+        try {
+            exam = JSON.parse(savedExamStr);
+            loadConfigFromStorage(); // Khôi phục thang điểm
+            submitted = false; answers = {};
+            renderExam(); clearResultTab(); syncButtons();
+            return;
+        } catch(e) { console.warn("Đề cũ lỗi, bỏ qua", e); localStorage.removeItem('prac_current_exam'); }
+    }
+    
+    // Nếu không có đề cũ
+    exam = null;
+    $('#examBody').innerHTML = `
+        <div style="text-align:center; padding: 60px 20px; color: #555;">
+            <div style="font-size: 4em; margin-bottom: 20px;">📚</div>
+            <h2 style="color: var(--brown-d); font-size: 1.5em; margin-bottom: 15px;">Chào mừng bạn đến với Luyện tập!</h2>
+            <p style="font-size: 1.1em; margin-bottom: 25px;">Bạn chưa có đề nào đang làm.<br>Hãy bấm nút <b style="color:var(--blue-d); font-size:1.2em;">⚙️ Chọn</b> ở góc trên để bắt đầu.</p>
+            <p style="font-size: 0.9em; color: #888; font-style: italic;">(Hệ thống chỉ tải câu hỏi khi bạn mở Menu chọn bài. Giúp trang tải nhanh hơn!)</p>
+        </div>
+    `;
+    $('#answeredCount').textContent = "0";
+    $('#totalCount').textContent = "0";
+    $('#btnSubmit').classList.add('hidden');
+    $('#btnRedo').classList.add('hidden');
+}
+
+window.addEventListener('load', () => {
+    tShow();
+    
+    window.initAnonymousAuth((isLoggedIn) => {
+        if (isLoggedIn) {
+            document.getElementById('loadingScreen').style.display = 'none';
+            document.getElementById('appContent').classList.remove('hidden');
+            // 🟢 THAY ĐỔI: Không tự động load tất cả câu hỏi
+            restoreSavedExamOrShowWelcome();
+        } else {
+            document.getElementById('loadingScreen').innerHTML = '<div style="color: red; text-align: center;">❌ Không thể kết nối đến máy chủ.<br>Vui lòng kiểm tra mạng và tải lại trang!</div>';
+        }
+    });
+});
+</script>
+<style>
+    .p2-mode-btn { cursor: pointer; color: var(--blue-d); margin-left: 12px; font-size: 13px; font-weight: normal; user-select: none; transition: 0.2s; }
+    .p2-mode-btn:hover { text-decoration: underline; }
+    .p2-mode-btn.active { font-weight: 800; text-decoration: underline; }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+      const btnDefault = document.getElementById('btnP2Default');
+      const btnEven = document.getElementById('btnP2Even');
+      const p21 = document.getElementById('p2_1'); const p22 = document.getElementById('p2_2'); const p23 = document.getElementById('p2_3'); const p24 = document.getElementById('p2_4');
+      const inputs = [p21, p22, p23, p24];
+
+      function triggerUpdate() { p21.dispatchEvent(new Event('input', { bubbles: true })); }
+      function setEven() { p21.value = '0.25'; p22.value = '0.5'; p23.value = '0.75'; p24.value = '1.0'; triggerUpdate(); btnEven.classList.add('active'); btnDefault.classList.remove('active'); }
+      function setDefault() { p21.value = '0.1'; p22.value = '0.25'; p23.value = '0.5'; p24.value = '1.0'; triggerUpdate(); btnDefault.classList.add('active'); btnEven.classList.remove('active'); }
+
+      if (btnDefault && btnEven && p21) {
+          btnDefault.addEventListener('click', setDefault);
+          btnEven.addEventListener('click', setEven);
+          inputs.forEach(inp => { inp.addEventListener('input', () => { btnDefault.classList.remove('active'); btnEven.classList.remove('active'); }); });
+          setEven();
+      }
+
+      document.querySelector('.load-card-body').addEventListener('focusin', function(e) {
+          if (e.target.tagName === 'INPUT') { setTimeout(() => { if (document.activeElement === e.target) { e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }); } }, 300); }
+      });
+  });
+</script>
+</body>
+</html>
