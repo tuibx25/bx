@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hệ Thống Thi Trực Tuyến</title>
 
-<!-- 🟢 TỐI ƯU TỐC ĐỘ: KHÔNG TẢI MATHJAX Ở DASHBOARD -->
 <script type="module" src="/bx/firebase-init.js"></script>
 
 <style>
@@ -44,20 +43,20 @@
     .score-badge.pending { background: var(--bg); color: #888888; border-color: var(--border); font-style: italic; font-weight: normal; opacity: 0.7; }
     
     /* Nút bấm */
-    .btn { background: var(--primary); color: var(--white); border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 14px;}
+    .btn { background: var(--primary); color: var(--white); border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 14px; text-decoration: none; display: inline-block;}
     .btn:hover:not(:disabled) { background: var(--primary-light); }
     .btn:disabled { background: var(--border); color: #888; cursor: not-allowed; }
     .btn-submit { background: var(--brown-d); color: var(--white); padding: 8px 15px; font-size: 14px; border-radius: 6px; font-weight: bold;}
     .btn-submit:hover { background: var(--brown); }
+    .btn-outline { background: transparent; border: 1.5px solid var(--primary); color: var(--primary); }
 
     /* 🟢 HEADER TỐI ƯU CHO LÀM BÀI */
     #quizHeader { 
         display: flex; justify-content: space-between; align-items: center; 
         margin-bottom: 20px; position: sticky; top: 0; background: var(--white); 
         z-index: 10; padding: 10px 0; border-bottom: 1px solid var(--border); 
-        gap: 10px; flex-wrap: nowrap; overflow-x: auto;
+        gap: 8px; flex-wrap: nowrap;
     }
-    #quizTitle { border: none; margin: 0; text-align: left; font-size: 18px; color: var(--primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     #timerDisplay { font-size: 20px; font-weight: bold; color: var(--brown-d); background: var(--beige); padding: 5px 12px; border-radius: 5px; border: 1px solid var(--wheat); white-space: nowrap; }
     .stat-badge { background: var(--white); border: 1.5px solid var(--border); padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 13px; white-space: nowrap; color: var(--ink); }
     .stat-badge b { color: var(--primary); font-size: 15px; }
@@ -87,15 +86,16 @@
     @media (max-width: 768px) {
         body { padding: 10px; }
         .container { padding: 15px; }
-        .student-info-bar { flex-direction: column; align-items: flex-start; gap: 5px; }
+        .student-info-bar { flex-direction: column; align-items: flex-start; gap: 10px; }
+        
         .exam-card { flex-direction: column; align-items: stretch; gap: 15px; }
         .exam-card .btn { width: 100%; padding: 12px; font-size: 16px; }
         
-        /* Header làm bài 1 hàng */
-        #quizHeader { padding: 8px 5px; }
-        #quizTitle { display: none; } /* Ẩn tên đề để nhường chỗ */
-        #timerDisplay { font-size: 16px; padding: 4px 8px; }
-        .stat-badge { font-size: 12px; padding: 3px 6px; }
+        /* Header làm bài: Nút Home, Đếm câu, Đồng hồ, Nộp bài trên 1 hàng */
+        #quizHeader { padding: 8px 0; gap: 6px; }
+        #timerDisplay { font-size: 15px; padding: 4px 8px; margin-left: auto; } /* Đẩy đồng hồ sang phải */
+        .stat-badge { font-size: 11px; padding: 3px 6px; }
+        .btn-submit { padding: 6px 10px; font-size: 12px; }
         
         /* Câu hỏi Đúng/Sai full chiều ngang */
         .st-row { flex-direction: column; align-items: flex-start; gap: 10px; }
@@ -112,25 +112,36 @@
     <h2>🔄 Đang kết nối máy chủ dữ liệu...</h2>
 </div>
 
+<!-- MÀN HÌNH DANH SÁCH ĐỀ -->
 <div id="dashboardScreen" class="container hidden">
     <div class="student-info-bar">
-        <div>👤 Học sinh: <span id="displayName">Đang tải...</span></div>
-        <div>🏫 Lớp: <span id="displayClass">...</span></div>
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div>👤 Học sinh: <span id="displayName">Đang tải...</span></div>
+            <div>🏫 Lớp: <span id="displayClass">...</span></div>
+        </div>
+        <!-- NÚT TRANG CHỦ -->
+        <a href="https://tuibx25.github.io/bx/bt/" class="btn btn-outline">🏠 Trang Chủ</a>
     </div>
     <h2>📝 Danh Sách Đề</h2>
     <div id="examList">Đang tải danh sách...</div>
 </div>
 
+<!-- MÀN HÌNH LÀM BÀI -->
 <div id="quizScreen" class="container hidden">
     <div id="quizHeader">
+        <!-- NÚT QUAY LẠI DANH SÁCH -->
+        <button class="btn" onclick="backToDashboard()" style="padding: 6px 10px; font-size: 16px;" title="Quay lại danh sách">🏠</button>
+        
         <span class="stat-badge">Đã làm: <b id="answeredCount">0</b>/<span id="totalCount">0</span></span>
-        <button class="btn-submit" id="btnSubmitQuiz" onclick="submitExam()">Nộp Bài</button>
-        <span class="spacer"></span>
+        
         <div id="timerDisplay">15:00</div>
+        
+        <button class="btn-submit" id="btnSubmitQuiz" onclick="submitExam()">Nộp Bài</button>
     </div>
     <div id="quizBody" autocomplete="off"></div>
 </div>
 
+<!-- MÀN HÌNH HOÀN TẤT -->
 <div id="doneScreen" class="container hidden" style="text-align: center;">
     <h2 style="color: var(--primary); border:none;">✅ Đã Nộp Bài Thành Công!</h2>
     <p style="font-size: 16px; color: var(--ink);">Vui lòng chờ Giáo viên chấm điểm và công bố kết quả.</p>
@@ -157,7 +168,6 @@
         return array;
     }
 
-    // 🟢 TẢI MATHJAX ĐỘNG (CHỈ TẢI KHI VÀO LÀM BÀI)
     function loadMathJax() {
         return new Promise((resolve) => {
             if (isMathJaxLoaded || window.MathJax) return resolve();
@@ -196,7 +206,6 @@
         });
     });
 
-    // Tải danh sách đề (Tối ưu Promise.all)
     async function loadDashboard() {
         try {
             const { auth, db } = await import('/bx/firebase-init.js');
@@ -213,11 +222,10 @@
             }
 
             if (!userClass) {
-                document.getElementById('examList').innerHTML = "<p style='color:red'>Lỗi: Tài khoản của bạn chưa được cập nhật Lớp. Vui lòng cập nhật trong phần Hồ sơ.</p>";
+                document.getElementById('examList').innerHTML = "<p style='color:red'>Lỗi: Tài khoản chưa cập nhật Lớp.</p>";
                 return;
             }
 
-            // Tối ưu: Lấy danh sách bài nộp và đề thi song song
             const subQuery = query(collection(db, "exam_submissions"), where("studentId", "==", currentUser.uid));
             const [subSnapshot, assignSnapshot] = await Promise.all([
                 getDocs(subQuery),
@@ -309,14 +317,12 @@
         }
     }
 
-    // Bắt đầu làm bài (Tối ưu Promise.all + Fire-and-forget)
     window.startExam = async function(assignmentId, examId, duration, doShuffleQ, doShuffleO, maxAttempts) {
         document.getElementById('dashboardScreen').classList.add('hidden');
         document.getElementById('loadingScreen').classList.remove('hidden');
         document.getElementById('loadingScreen').innerHTML = "<h2>🔄 Đang tải đề thi...</h2>";
 
         try {
-            // Tải MathJax ngầm
             loadMathJax().catch(e => console.log("MathJax load error:", e));
 
             const { db } = await import('/bx/firebase-init.js');
@@ -375,7 +381,6 @@
                 return;
             }
 
-            // Xử lý bài mới
             if (doShuffleQ) {
                 let p1 = currentExamData.questions.filter(q => q.part === 1);
                 let p2 = currentExamData.questions.filter(q => q.part === 2);
@@ -395,7 +400,6 @@
             currentEndTime = Date.now() + (duration * 60 * 1000);
             userAnswers = {};
             
-            // TỐI ƯU: Tạo ID bài nộp và ghi ngầm, không cần await
             currentSubmissionId = `${assignmentId}_${currentUser.uid}_${Date.now()}`;
             setDoc(doc(db, "exam_submissions", currentSubmissionId), {
                 assignmentId: assignmentId,
@@ -410,7 +414,6 @@
                 isPublished: false
             }).catch(e => console.error("Lỗi tạo bài nộp ngầm:", e));
 
-            // Hiển thị câu hỏi ngay lập tức
             document.getElementById('loadingScreen').classList.add('hidden');
             document.getElementById('quizScreen').classList.remove('hidden');
             
@@ -562,6 +565,16 @@
             const s = time % 60;
             display.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
         }, 1000);
+    }
+
+    // 🟢 HÀM QUAY LẠI DANH SÁCH ĐỀ (TỪ MÀN HÌNH LÀM BÀI)
+    window.backToDashboard = function() {
+        if (confirm("Bạn có chắc muốn thoát ra ngoài? Tiến trình làm bài vẫn được lưu lại và bạn có thể làm tiếp sau.")) {
+            if (timerInterval) clearInterval(timerInterval);
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('dashboardScreen').classList.remove('hidden');
+            loadDashboard(); // Tải lại danh sách để cập nhật trạng thái
+        }
     }
 
     window.submitExam = async function(isAutoSubmit = false) {
