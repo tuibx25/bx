@@ -2,11 +2,29 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Hệ Thống Thi Trực Tuyến</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bài Tập Trắc Nghiệm</title>
 
-<!-- 🟢 TỐI ƯU 1: KHÔNG TẢI MATHJAX Ở ĐÂY NỮA, SẼ TẢI KHI VÀO LÀM BÀI -->
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js" crossorigin>
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" as="script">
+
 <script type="module" src="/bx/firebase-init.js"></script>
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  startup: {
+    ready: () => {
+      MathJax.startup.defaultReady();
+      if (window.__mjReadyResolve) window.__mjReadyResolve();
+    }
+  }
+};
+window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
     :root { 
@@ -25,7 +43,8 @@
         padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; font-weight: bold;
         display: flex; justify-content: space-between; align-items: center; font-size: 15px;
     }
-    .student-info-bar span { color: var(--primary); font-size: 1.1em; text-transform: uppercase; }
+    .student-info-bar span { color: var(--primary); font-size: 1.1em; }
+    #displayClass { text-transform: uppercase; }
 
     .exam-card { border: 1px solid var(--border); padding: 15px; margin-bottom: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; background: var(--white); transition: 0.2s;}
     .exam-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
@@ -40,11 +59,23 @@
     .score-badge.best { background: var(--primary); color: var(--white); border-color: var(--primary); }
     .score-badge.pending { background: var(--bg); color: #888888; border-color: var(--border); font-style: italic; font-weight: normal; opacity: 0.7; }
     
-    .btn { background: var(--primary); color: var(--white); border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 14px;}
+    .btn { background: var(--primary); color: var(--white); border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 14px; text-decoration: none; display: inline-block;}
     .btn:hover:not(:disabled) { background: var(--primary-light); }
     .btn:disabled { background: var(--border); color: #888; cursor: not-allowed; }
-    .btn-submit { background: var(--brown-d); width: 100%; padding: 12px; font-size: 16px; margin-top: 20px; color: var(--white);}
+    .btn-submit { background: var(--brown-d); color: var(--white); padding: 8px 15px; font-size: 14px; border-radius: 6px; font-weight: bold;}
     .btn-submit:hover { background: var(--brown); }
+    .btn-outline { background: transparent; border: 1.5px solid var(--primary); color: var(--primary); }
+
+    #quizHeader { 
+        display: flex; justify-content: space-between; align-items: center; 
+        margin-bottom: 20px; position: sticky; top: 0; background: var(--white); 
+        z-index: 10; padding: 10px 0; border-bottom: 1px solid var(--border); 
+        gap: 8px; flex-wrap: nowrap;
+    }
+    #timerDisplay { font-size: 20px; font-weight: bold; color: var(--brown-d); background: var(--beige); padding: 5px 12px; border-radius: 5px; border: 1px solid var(--wheat); white-space: nowrap; }
+    .stat-badge { background: var(--white); border: 1.5px solid var(--border); padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 13px; white-space: nowrap; color: var(--ink); }
+    .stat-badge b { color: var(--primary); font-size: 15px; }
+    .spacer { flex: 1 1 auto; }
 
     .part-title { font-weight: 800; font-size: 1.1em; color: var(--brown-d); margin: 25px 0 10px; padding: 10px; background: var(--beige); border-left: 5px solid var(--brown-d); border-radius: 0 5px 5px 0; }
     .question { border: 1px solid var(--border); padding: 15px; margin-bottom: 15px; border-radius: 8px; background: var(--white); }
@@ -53,27 +84,34 @@
     .option-label { padding: 10px; border: 1px solid var(--border); border-radius: 5px; cursor: pointer; display: flex; gap: 10px; transition: 0.1s; background: var(--white);}
     .option-label:hover { background: var(--bg); border-color: var(--brown);}
     .option-label input[type="radio"] { margin-top: 4px; cursor: pointer; }
+    .option-label.selected { background: var(--wheat); border-color: var(--brown-d); }
     
     .statements { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
     .st-row { display: flex; gap: 15px; align-items: center; padding: 10px; border: 1px solid var(--border); border-radius: 5px; background: var(--white);}
     .st-btns { display: flex; gap: 15px; }
     .st-btns label { cursor: pointer; display: flex; align-items: center; gap: 5px; color: var(--ink);}
+    .st-btns input[type="radio"]:checked + span { font-weight: bold; color: var(--primary); }
     .short-input { padding: 10px; border: 1px solid var(--border); border-radius: 5px; width: 300px; font-size: 16px; color: var(--ink); background: var(--white);}
     .short-input:focus { outline: none; border-color: var(--primary-light); }
     
     .hidden { display: none !important; }
 
-    /* TỐI ƯU CHO ĐIỆN THOẠI (MOBILE) */
     @media (max-width: 768px) {
         body { padding: 10px; }
         .container { padding: 15px; }
-        .student-info-bar { flex-direction: column; align-items: flex-start; gap: 5px; }
+        .student-info-bar { flex-direction: column; align-items: flex-start; gap: 10px; }
+        
         .exam-card { flex-direction: column; align-items: stretch; gap: 15px; }
         .exam-card .btn { width: 100%; padding: 12px; font-size: 16px; }
-        #quizScreen > div:first-child { flex-direction: column; align-items: flex-start !important; gap: 10px; }
-        #timerDisplay { align-self: flex-end; }
+        
+        #quizHeader { padding: 8px 0; gap: 6px; }
+        #timerDisplay { font-size: 15px; padding: 4px 8px; margin-left: auto; }
+        .stat-badge { font-size: 11px; padding: 3px 6px; }
+        .btn-submit { padding: 6px 10px; font-size: 12px; }
+        
         .st-row { flex-direction: column; align-items: flex-start; gap: 10px; }
-        .st-btns { width: 100%; justify-content: space-around; background: var(--bg); padding: 10px; border-radius: 5px; }
+        .st-btns { width: 100%; justify-content: space-around; background: var(--bg); padding: 8px; border-radius: 5px; margin-top: 5px;}
+        
         .short-input { width: 100%; box-sizing: border-box; }
     }
 </style>
@@ -86,26 +124,33 @@
 
 <div id="dashboardScreen" class="container hidden">
     <div class="student-info-bar">
-        <div>👤 Học sinh: <span id="displayName">Đang tải...</span></div>
-        <div>🏫 Lớp: <span id="displayClass">...</span></div>
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div>👤 Học sinh: <span id="displayName">Đang tải...</span></div>
+            <div>🏫 Lớp: <span id="displayClass">...</span></div>
+        </div>
+        <a href="../" class="btn btn-outline">🏠 Trang Chủ</a>
     </div>
-    <h2>📝 Danh Sách Đề</h2>
+    <h2>📝 BÀI TẬP TRẮC NGHIỆM</h2>
     <div id="examList">Đang tải danh sách...</div>
 </div>
 
 <div id="quizScreen" class="container hidden">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: sticky; top: 0; background: var(--white); z-index: 10; padding: 10px 0; border-bottom: 1px solid var(--border);">
-        <h2 id="quizTitle" style="border: none; margin: 0; text-align: left; font-size: 20px; color: var(--primary);">Đang làm bài...</h2>
-        <div style="font-size: 24px; font-weight: bold; color: var(--brown-d); background: var(--beige); padding: 5px 15px; border-radius: 5px; border: 1px solid var(--wheat);" id="timerDisplay">15:00</div>
+    <div id="quizHeader">
+        <button class="btn" onclick="backToDashboard()" style="padding: 6px 10px; font-size: 16px;" title="Quay lại danh sách">🏠</button>
+        
+        <span class="stat-badge">Đã làm: <b id="answeredCount">0</b>/<span id="totalCount">0</span></span>
+        
+        <div id="timerDisplay">15:00</div>
+        
+        <button class="btn-submit" id="btnSubmitQuiz" onclick="submitExam()">Nộp Bài</button>
     </div>
     <div id="quizBody" autocomplete="off"></div>
-    <button class="btn btn-submit" onclick="submitExam()">NỘP BÀI</button>
 </div>
 
 <div id="doneScreen" class="container hidden" style="text-align: center;">
     <h2 style="color: var(--primary); border:none;">✅ Đã Nộp Bài Thành Công!</h2>
     <p style="font-size: 16px; color: var(--ink);">Vui lòng chờ Giáo viên chấm điểm và công bố kết quả.</p>
-    <button class="btn" onclick="location.reload()" style="margin-top: 20px; width: 100%;">Quay lại Danh Sách Đề</button>
+    <button class="btn" onclick="location.reload()" style="margin-top: 20px; width: 100%;">Quay lại Danh Sách Bài Tập</button>
 </div>
 
 <script>
@@ -118,7 +163,67 @@
     let currentEndTime = null; 
     let currentSubmissionId = null; 
     let isSubmitting = false; 
-    let isMathJaxLoaded = false; // Cờ kiểm tra MathJax đã tải chưa
+
+    const examCache = new Map();           
+    const examFetchPromises = new Map();   
+    const EXAM_CACHE_TTL = 10 * 60 * 1000; 
+
+    async function getExamData(examId, forceReload = false) {
+        const now = Date.now();
+
+        if (!forceReload) {
+            const cached = examCache.get(examId);
+            if (cached && now - cached.ts < EXAM_CACHE_TTL) return cached.data;
+            if (examFetchPromises.has(examId)) return examFetchPromises.get(examId);
+        }
+
+        const promise = (async () => {
+            const [{ db }, fsMod] = await Promise.all([
+                import('/bx/firebase-init.js'),
+                import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js')
+            ]);
+            const { doc, getDoc } = fsMod;
+            const snap = await getDoc(doc(db, "exams", examId));
+            if (!snap.exists()) throw new Error("Không tìm thấy đề thi!");
+            const data = snap.data();
+            examCache.set(examId, { data, ts: Date.now() });
+            return data;
+        })();
+
+        examFetchPromises.set(examId, promise);
+        try {
+            return await promise;
+        } finally {
+            examFetchPromises.delete(examId);
+        }
+    }
+
+    let mathObserver = null;
+
+    function typesetLazy(rootEl) {
+        if (!rootEl) return;
+        window.mathJaxReady.then(() => {
+            if (!window.MathJax || !window.MathJax.typesetPromise) return;
+            if (!mathObserver) {
+                mathObserver = new IntersectionObserver((entries) => {
+                    const targets = [];
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            targets.push(entry.target);
+                            mathObserver.unobserve(entry.target);
+                        }
+                    });
+                    if (targets.length) {
+                        MathJax.typesetPromise(targets).catch(e => console.log(e));
+                    }
+                }, { rootMargin: '300px 0px' });
+            }
+            rootEl.querySelectorAll('.question').forEach(q => {
+                if (q.dataset.mathDone) return;
+                mathObserver.observe(q);
+            });
+        });
+    }
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -128,22 +233,9 @@
         return array;
     }
 
-    // 🟢 TỐI ƯU 2: HÀM TẢI MATHJAX ĐỘNG (CHỈ GỌI KHI VÀO LÀM BÀI)
-    function loadMathJax() {
-        return new Promise((resolve, reject) => {
-            if (isMathJaxLoaded || window.MathJax) return resolve();
-            
-            window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
-            const script = document.createElement('script');
-            script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js";
-            script.async = true;
-            script.onload = () => {
-                isMathJaxLoaded = true;
-                resolve();
-            };
-            script.onerror = reject;
-            document.head.appendChild(script);
-        });
+    function setLoading(text) {
+        const el = document.getElementById('loadingScreen');
+        if (el) el.innerHTML = `<h2>${text}</h2>`;
     }
 
     window.addEventListener('load', () => {
@@ -160,8 +252,11 @@
 
     async function loadDashboard() {
         try {
-            const { auth, db } = await import('/bx/firebase-init.js');
-            const { doc, getDoc, collection, getDocs, query, where } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+            const [{ auth, db }, fsMod] = await Promise.all([
+                import('/bx/firebase-init.js'),
+                import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js')
+            ]);
+            const { doc, getDoc, collection, getDocs, query, where } = fsMod;
             
             currentUser = auth.currentUser;
             const userSnap = await getDoc(doc(db, "users", currentUser.uid));
@@ -174,15 +269,20 @@
             }
 
             if (!userClass) {
-                document.getElementById('examList').innerHTML = "<p style='color:red'>Lỗi: Tài khoản của bạn chưa được cập nhật Lớp. Vui lòng cập nhật trong phần Hồ sơ.</p>";
+                document.getElementById('examList').innerHTML = "<p style='color:red'>Lỗi: Tài khoản chưa cập nhật Lớp.</p>";
                 return;
             }
 
-            // 🟢 TỐI ƯU 3: CHẠY SONG SONG 2 LỆNH QUERY FIREBASE (THAY VÌ CHỜ NHAU)
             const subQuery = query(collection(db, "exam_submissions"), where("studentId", "==", currentUser.uid));
+            
+            const assignQuery = query(
+                collection(db, "exam_assignments"),
+                where("assignedClasses", "array-contains", userClass)
+            );
+
             const [subSnapshot, assignSnapshot] = await Promise.all([
                 getDocs(subQuery),
-                getDocs(collection(db, "exam_assignments"))
+                getDocs(assignQuery)
             ]);
 
             const submissionsByAssignment = {}; 
@@ -203,14 +303,17 @@
             const listEl = document.getElementById('examList');
             let html = "";
             let count = 0;
+            const examIdsToPrefetch = []; 
 
             assignSnapshot.forEach((docSnap) => {
                 const data = docSnap.data();
                 
-                if (data.assignedClasses && data.assignedClasses.includes(userClass) && data.isOpen === true) {
+                if (data.isOpen === true) {
                     const maxAttempts = data.maxAttempts || 1;
                     const done = attemptCounts[docSnap.id] || 0;
                     const isOutOfAttempts = done >= maxAttempts;
+
+                    if (!isOutOfAttempts) examIdsToPrefetch.push(data.examId);
 
                     let scoreHtml = "";
                     if (submissionsByAssignment[docSnap.id]) {
@@ -261,8 +364,14 @@
                 }
             });
 
-            if (count === 0) listEl.innerHTML = "<p>Hiện không có đề nào đang mở cho lớp của bạn.</p>";
+            if (count === 0) listEl.innerHTML = "<p>Hiện không có bài tập nào đang mở cho lớp của bạn.</p>";
             else listEl.innerHTML = html;
+
+            if (examIdsToPrefetch.length) {
+                examIdsToPrefetch.forEach(id => {
+                    getExamData(id).catch(e => console.warn('[Prefetch] Lỗi', id, e.message));
+                });
+            }
 
         } catch (error) {
             console.error("Lỗi tải danh sách:", error);
@@ -273,20 +382,30 @@
     window.startExam = async function(assignmentId, examId, duration, doShuffleQ, doShuffleO, maxAttempts) {
         document.getElementById('dashboardScreen').classList.add('hidden');
         document.getElementById('loadingScreen').classList.remove('hidden');
-        document.getElementById('loadingScreen').innerHTML = "<h2>🔄 Đang khởi tạo bài thi...</h2>";
+        setLoading("🔄 Đang tải đề thi...");
 
         try {
-            // Bắt đầu tải MathJax ngầm ở đây
-            loadMathJax().catch(e => console.log("Lỗi tải MathJax: ", e));
-
-            const { db } = await import('/bx/firebase-init.js');
-            const { doc, getDoc, collection, query, where, getDocs, addDoc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+            const [{ db }, fsMod] = await Promise.all([
+                import('/bx/firebase-init.js'),
+                import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js')
+            ]);
+            const { doc, getDoc, collection, query, where, getDocs, setDoc, updateDoc } = fsMod;
             
             currentAssignment = { id: assignmentId, examId: examId, duration: duration };
             
-            const subQuery = query(collection(db, "exam_submissions"), where("studentId", "==", currentUser.uid), where("assignmentId", "==", assignmentId));
-            const subSnap = await getDocs(subQuery);
+            const subQuery = query(
+                collection(db, "exam_submissions"), 
+                where("studentId", "==", currentUser.uid), 
+                where("assignmentId", "==", assignmentId)
+            );
             
+            const [subSnap, examData] = await Promise.all([
+                getDocs(subQuery),
+                getExamData(examId)
+            ]);
+
+            currentExamData = JSON.parse(JSON.stringify(examData));
+
             let inProgressDoc = null;
             let completedCount = 0;
             
@@ -319,23 +438,15 @@
                 currentSubmissionId = inProgressDoc.id;
                 currentEndTime = inProgressDoc.endTime;
                 userAnswers = inProgressDoc.answers || {};
-                
-                const examSnap = await getDoc(doc(db, "exams", examId));
-                currentExamData = examSnap.data();
 
+                setLoading("⏳ Đang chuẩn bị...");
                 document.getElementById('loadingScreen').classList.add('hidden');
                 document.getElementById('quizScreen').classList.remove('hidden');
-                document.getElementById('quizTitle').textContent = currentExamData.title;
                 
                 renderQuiz();
                 startTimer(currentEndTime);
                 return;
             }
-
-            const examSnap = await getDoc(doc(db, "exams", examId));
-            if (!examSnap.exists()) throw new Error("Không tìm thấy đề thi!");
-            
-            currentExamData = examSnap.data();
 
             if (doShuffleQ) {
                 let p1 = currentExamData.questions.filter(q => q.part === 1);
@@ -356,7 +467,8 @@
             currentEndTime = Date.now() + (duration * 60 * 1000);
             userAnswers = {};
             
-            const newSubRef = await addDoc(collection(db, "exam_submissions"), {
+            currentSubmissionId = `${assignmentId}_${currentUser.uid}_${Date.now()}`;
+            setDoc(doc(db, "exam_submissions", currentSubmissionId), {
                 assignmentId: assignmentId,
                 examId: examId,
                 studentId: currentUser.uid,
@@ -367,12 +479,11 @@
                 endTime: currentEndTime,
                 score: null,
                 isPublished: false
-            });
-            currentSubmissionId = newSubRef.id;
+            }).catch(e => console.error("Lỗi tạo bài nộp ngầm:", e));
 
+            setLoading("⏳ Đang chuẩn bị...");
             document.getElementById('loadingScreen').classList.add('hidden');
             document.getElementById('quizScreen').classList.remove('hidden');
-            document.getElementById('quizTitle').textContent = currentExamData.title;
             
             renderQuiz();
             startTimer(currentEndTime);
@@ -407,7 +518,6 @@
             html += `<div class="q-text">Câu ${count++}: ${q.text}</div>`;
             
             if(q.img) {
-                // 🟢 TỐI ƯU 4: THÊM LAZY LOADING CHO ẢNH
                 html += `<div style="margin: 10px 0; text-align: center;"><img src="${q.img}" loading="lazy" style="max-width: 100%; max-height: 300px; border-radius: 5px; border: 1px solid var(--border);"></div>`;
             }
 
@@ -420,7 +530,7 @@
                     const isChecked = (userAnswers[q.uid] !== undefined && userAnswers[q.uid] == originalIndex);
 
                     html += `
-                        <label class="option-label">
+                        <label class="option-label ${isChecked ? 'selected' : ''}">
                             <input type="radio" autocomplete="off" name="ans-${q.uid}" value="${originalIndex}" ${isChecked ? 'checked' : ''} onchange="saveAnswer('${q.uid}', ${originalIndex})">
                             <span>${String.fromCharCode(65 + displayIdx)}. ${optText}</span>
                         </label>`;
@@ -435,8 +545,8 @@
                         <div class="st-row">
                             <div style="flex:1">${String.fromCharCode(97 + idx)}) ${st}</div>
                             <div class="st-btns">
-                                <label><input type="radio" autocomplete="off" name="st-${q.uid}-${idx}" value="T" ${savedVal === 'T' ? 'checked' : ''} onchange="saveStatement('${q.uid}', ${idx}, 'T')"> Đúng</label>
-                                <label><input type="radio" autocomplete="off" name="st-${q.uid}-${idx}" value="F" ${savedVal === 'F' ? 'checked' : ''} onchange="saveStatement('${q.uid}', ${idx}, 'F')"> Sai</label>
+                                <label><input type="radio" autocomplete="off" name="st-${q.uid}-${idx}" value="T" ${savedVal === 'T' ? 'checked' : ''} onchange="saveStatement('${q.uid}', ${idx}, 'T')"> <span>Đúng</span></label>
+                                <label><input type="radio" autocomplete="off" name="st-${q.uid}-${idx}" value="F" ${savedVal === 'F' ? 'checked' : ''} onchange="saveStatement('${q.uid}', ${idx}, 'F')"> <span>Sai</span></label>
                             </div>
                         </div>`;
                 });
@@ -450,11 +560,8 @@
         });
 
         body.innerHTML = html;
-        
-        // Render công thức nếu MathJax đã tải xong
-        if (window.MathJax) {
-            MathJax.typesetPromise([body]).catch(err => console.log(err));
-        }
+        updateAnsweredCount();
+        typesetLazy(body);
     }
 
     let saveTimeout = null;
@@ -463,9 +570,12 @@
         saveTimeout = setTimeout(async () => {
             if (!currentSubmissionId) return;
             try {
-                const { db } = await import('/bx/firebase-init.js');
-                const { doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
-                await updateDoc(doc(db, "exam_submissions", currentSubmissionId), { answers: userAnswers });
+                const [{ db }, fsMod] = await Promise.all([
+                    import('/bx/firebase-init.js'),
+                    import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js')
+                ]);
+                const { doc, setDoc } = fsMod;
+                await setDoc(doc(db, "exam_submissions", currentSubmissionId), { answers: userAnswers }, { merge: true });
             } catch(e) { console.log("Lỗi lưu nháp:", e); }
         }, 2000); 
     }
@@ -473,11 +583,35 @@
     window.saveAnswer = function(uid, value) {
         userAnswers[uid] = value;
         saveAnswerToDB();
+        updateAnsweredCount();
     }
     window.saveStatement = function(uid, stIndex, value) {
         if (!userAnswers[uid]) userAnswers[uid] = ["", "", "", ""];
         userAnswers[uid][stIndex] = value;
         saveAnswerToDB();
+        updateAnsweredCount();
+    }
+
+    function countAnswered() {
+        let c = 0;
+        currentExamData.questions.forEach(q => {
+            if (q.part === 1) {
+                if (userAnswers[q.uid] !== undefined) c++;
+            } else if (q.part === 2) {
+                const a = userAnswers[q.uid] || [];
+                if (a.length === 4 && a.every(x => x !== "")) c++;
+            } else if (q.part === 3) {
+                if (userAnswers[q.uid] && String(userAnswers[q.uid]).trim()) c++;
+            }
+        });
+        return c;
+    }
+
+    function updateAnsweredCount() {
+        const c = countAnswered();
+        const total = currentExamData.questions.length;
+        document.getElementById('answeredCount').textContent = c;
+        document.getElementById('totalCount').textContent = total;
     }
 
     function startTimer(endTime) {
@@ -502,6 +636,15 @@
         }, 1000);
     }
 
+    window.backToDashboard = function() {
+        if (confirm("Bạn có chắc muốn thoát ra ngoài? Tiến trình làm bài vẫn được lưu lại và bạn có thể làm tiếp sau.")) {
+            if (timerInterval) clearInterval(timerInterval);
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('dashboardScreen').classList.remove('hidden');
+            loadDashboard();
+        }
+    }
+
     window.submitExam = async function(isAutoSubmit = false) {
         if (isSubmitting) return; 
         if (timerInterval) clearInterval(timerInterval);
@@ -516,17 +659,20 @@
         isSubmitting = true;
         document.getElementById('quizScreen').classList.add('hidden');
         document.getElementById('loadingScreen').classList.remove('hidden');
-        document.getElementById('loadingScreen').innerHTML = "<h2>⏳ Đang nộp bài lên hệ thống...</h2>";
+        setLoading("⏳ Đang nộp bài lên hệ thống...");
 
         try {
-            const { db } = await import('/bx/firebase-init.js');
-            const { doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+            const [{ db }, fsMod] = await Promise.all([
+                import('/bx/firebase-init.js'),
+                import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js')
+            ]);
+            const { doc, setDoc } = fsMod;
 
-            await updateDoc(doc(db, "exam_submissions", currentSubmissionId), {
+            await setDoc(doc(db, "exam_submissions", currentSubmissionId), {
                 answers: userAnswers,
                 status: "submitted",
                 submittedAt: Date.now()
-            });
+            }, { merge: true });
 
             document.getElementById('loadingScreen').classList.add('hidden');
             document.getElementById('doneScreen').classList.remove('hidden');
