@@ -127,13 +127,15 @@ button{font-family:inherit; cursor:pointer}
 
 .score-config { background:var(--soft); border:1px solid var(--line); border-radius:8px; padding:12px; margin-bottom:12px; display:flex; flex-direction:column; gap:8px; align-items: stretch; }
 .score-config label { display:flex; justify-content:space-between; align-items:center; font-size:13px; font-weight:600; }
-.score-config input { width:65px; padding:4px 8px; border:1px solid var(--line); border-radius:4px; font-family:inherit; font-weight:700; text-align:right; font-size: 16px; /* Fix auto-zoom */ }
+.score-config input { width:65px; padding:4px 8px; border:1px solid var(--line); border-radius:4px; font-family:inherit; font-weight:700; text-align:right; font-size: 14px; /* 🟢 Đã giảm cỡ chữ trên desktop */ }
+.score-config input::placeholder { font-size: 11px; color: #888; font-weight: normal; } /* 🟢 Chỉnh placeholder nhỏ lại */
 .p2-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 2px 0 6px 0; padding: 6px; background:#fff; border-radius:6px; border:1px solid #eee; }
 .score-config .total-score { display: none; }
 .lv-grid{ display:grid; grid-template-columns:52px 1fr 1fr 1fr 1fr 1fr; gap:6px; background:#fff; border:1px solid #eee; border-radius:6px; padding:6px; align-items:center; }
 .lv-grid .lv-head{font-size:12px; font-weight:700; text-align:center; color:var(--brown-d)}
 .lv-grid .lv-row{font-size:12px; font-weight:700}
-.lv-grid input{ width:100%; padding:4px 6px; border:1px solid var(--line); border-radius:4px; font-family:inherit; font-weight:700; text-align:center; font-size: 16px; /* Fix auto-zoom */ }
+.lv-grid input{ width:100%; padding:4px 6px; border:1px solid var(--line); border-radius:4px; font-family:inherit; font-weight:700; text-align:center; font-size: 14px; }
+.lv-grid input::placeholder { font-size: 11px; color: #888; font-weight: normal; }
 .lv-grid input[id$="_wild"] { background: #fdfbf7; border-style: dashed; }
 
 /* Footer Total Score */
@@ -255,7 +257,7 @@ section.tab.active{display:block}
 
     .p2-grid { grid-template-columns: 1fr; }
     .lv-grid { grid-template-columns: 45px 1fr 1fr 1fr 1fr 1fr; gap: 4px; padding: 4px;}
-    .lv-grid input { padding: 6px 2px; font-size: 16px; } 
+    .lv-grid input { padding: 6px 2px; font-size: 16px; } /* 16px để chống auto-zoom */
     .lv-head { font-size: 10px; }
 
     .st-row { flex-direction: column; align-items: flex-start; }
@@ -796,7 +798,8 @@ function updateSubsetPlaceholders(){
         else pool = pool.filter(q => selectedLessons.includes(String(q.lesson)));
     }
     
-    $('#sc'+n).placeholder = 'max ' + pool.length;
+    // 🟢 Bỏ chữ "max" để không bị tràn ô trên desktop
+    $('#sc'+n).placeholder = pool.length;
     const cnt = {easy:0,medium:0,hard:0,very_hard:0,wild:0};
     
     pool.forEach(q=>{ cnt[getNormalizedLevel(q)]++; });
@@ -1251,24 +1254,16 @@ window.addEventListener('load', () => {
           setEven();
       }
 
-      // 🟢 TỰ ĐỘNG TẮT BÀN PHÍM KHI CHẠM RA NGOÀI Ô NHẬP LIỆU
-      document.addEventListener('pointerdown', function(e) {
-          const tag = e.target.tagName;
-          if (tag !== 'INPUT' && tag !== 'TEXTAREA' && tag !== 'SELECT') {
-              if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) {
-                  document.activeElement.blur(); 
-              }
-          }
-      });
-
-      // 🟢 TỰ ĐỘNG CUỘN Ô NHẬP LIỆU LÊN KHI BÀN PHÍM XUẤT HIỆN
+      // 🟢 ĐÃ XÓA ĐOẠN CODE TỰ ĐỘNG TẮT BÀN PHÍM KHI CHẠM RA NGOÀI (Nguyên nhân gây mất bàn phím khi vuốt)
+      // Chỉ giữ lại chức năng tự cuộn ô nhập liệu lên khi bàn phím mở
       document.querySelector('.load-card-body').addEventListener('focusin', function(e) {
           if (e.target.tagName === 'INPUT') {
               setTimeout(() => {
                   if (document.activeElement === e.target) {
+                      // Cuộn ô input lên chính giữa màn hình
                       e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
                   }
-              }, 300); // Đợi 0.3s để bàn phím bật lên
+              }, 300); // Đợi 0.3s để bàn phím bật lên hoàn toàn
           }
       });
   });
