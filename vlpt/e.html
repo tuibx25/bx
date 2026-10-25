@@ -66,14 +66,7 @@
     .search-bar input { flex: 1; padding: 8px; border: 1px solid var(--border); border-radius: 4px; color: var(--ink); }
     .search-bar input:focus { outline: none; border-color: var(--primary-light); }
 
-    /* 🟢 CSS MỚI CHO THANH HÀNH ĐỘNG GỌN GÀNG */
-    .batch-actions {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 15px;
-    }
+    .batch-actions { display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-bottom: 15px; }
     .batch-label { font-size: 13px; color: #666; }
     .btn-batch { font-size: 12px; padding: 4px 10px; border-radius: 4px; }
 
@@ -89,6 +82,9 @@
     .ans-neutral { color: var(--ink); }
 
     .hidden { display: none !important; }
+
+    .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid #fff; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 5px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -101,13 +97,12 @@
     <h2>👨‍🏫 TRANG QUẢN TRỊ GIÁO VIÊN</h2>
     
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('tabManageAssign')">📝 Quản lý Giao Đề</button>
-        <button class="tab-btn" onclick="switchTab('tabGrade')">🎯 Chấm Điểm & Chi Tiết</button>
-        <button class="tab-btn" onclick="switchTab('tabGradebook')">📊 Sổ Điểm Lớp</button>
-        <button class="tab-btn" onclick="switchTab('tabManageStudents')">👥 Quản lý Học Sinh</button>
+        <button class="tab-btn active" onclick="switchTab('tabManageAssign', this)">📝 Quản lý Giao Đề</button>
+        <button class="tab-btn" onclick="switchTab('tabGrade', this)">🎯 Chấm Điểm & Chi Tiết</button>
+        <button class="tab-btn" onclick="switchTab('tabGradebook', this)">📊 Sổ Điểm Lớp</button>
+        <button class="tab-btn" onclick="switchTab('tabManageStudents', this)">👥 Quản lý Học Sinh</button>
     </div>
 
-    <!-- TAB 1: QUẢN LÝ GIAO ĐỀ -->
     <div id="tabManageAssign" class="tab-content active">
         <div style="background: var(--bg); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border);">
             <h3 style="margin-top: 0; color: var(--primary);">Tạo Đợt Giao Bài Mới</h3>
@@ -122,7 +117,7 @@
                 </div>
                 <div class="form-group">
                     <label>Lớp được làm:</label>
-                    <input type="text" id="inputClasses" class="form-control" placeholder="VD: 10a11">
+                    <input type="text" id="inputClasses" class="form-control" placeholder="VD: 10a11, 10a12">
                 </div>
             </div>
             <div class="row">
@@ -141,7 +136,7 @@
                     </div>
                 </div>
             </div>
-            <button class="btn btn-success" onclick="assignExam()" style="width: 100%; padding: 12px; font-size: 16px;">🚀 GIAO BÀI</button>
+            <button class="btn btn-success" id="btnAssignExam" onclick="assignExam()" style="width: 100%; padding: 12px; font-size: 16px;">🚀 GIAO BÀI</button>
         </div>
 
         <h3 style="color: var(--primary);">Danh Sách Các Đợt Giao Bài</h3>
@@ -151,7 +146,6 @@
         <div class="table-wrap" id="assignmentList"></div>
     </div>
 
-    <!-- TAB 2: CHẤM ĐIỂM & XEM CHI TIẾT -->
     <div id="tabGrade" class="tab-content">
         <div class="form-group">
             <label>Chọn Đợt Thi Để Chấm:</label>
@@ -165,7 +159,6 @@
         </div>
     </div>
 
-    <!-- TAB 3: SỔ ĐIỂM LỚP -->
     <div id="tabGradebook" class="tab-content">
         <div class="row" style="align-items: flex-end;">
             <div class="form-group" style="max-width: 300px;">
@@ -185,7 +178,6 @@
         </div>
     </div>
 
-    <!-- TAB 4: QUẢN LÝ HỌC SINH -->
     <div id="tabManageStudents" class="tab-content">
         <div style="background: var(--bg); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border);">
             <h3 style="margin-top: 0; color: var(--primary);">Nạp Sổ Điểm Lớp (File Excel/CSV)</h3>
@@ -199,7 +191,7 @@
                     <input type="file" id="uploadRosterFile" class="form-control" accept=".xlsx, .xls, .csv">
                 </div>
                 <div class="form-group" style="display: flex; align-items: flex-end;">
-                    <button class="btn btn-primary" onclick="uploadRoster()">📤 Tải Lên Sổ Điểm</button>
+                    <button class="btn btn-primary" id="btnUploadRoster" onclick="uploadRoster()">📤 Tải Lên Sổ Điểm</button>
                 </div>
             </div>
         </div>
@@ -207,11 +199,11 @@
         <div class="search-bar">
             <input type="text" id="inputClassStudentTab" placeholder="Lọc theo lớp (VD: 10a11)" style="max-width: 200px;" oninput="onClassFilterChange()">
             <input type="text" id="searchStudentTab" placeholder="🔍 Tìm tên hoặc email..." oninput="renderStudentTable()">
-            <button class="btn btn-primary" onclick="loadAllUsersAndRender()">Tải lại danh sách</button>
+            <button class="btn btn-primary" id="btnReloadUsers" onclick="loadAllUsersAndRender()">Tải lại danh sách</button>
         </div>
 
-        <!-- 🟢 KHU VỰC THU GỌN 2 NÚT KHÓA HÀNG LOẠT -->
         <div class="batch-actions">
+            <span class="batch-label"><b id="batchClassLabel">...</b>:</span>
             <button class="btn btn-warning btn-batch" id="btnLockClass" onclick="toggleClassProfileLock(true)" disabled>🔒 Khóa sửa Hồ Sơ</button>
             <button class="btn btn-success btn-batch" id="btnUnlockClass" onclick="toggleClassProfileLock(false)" disabled>🔓 Mở khóa sửa Hồ Sơ</button>
         </div>
@@ -222,7 +214,6 @@
     </div>
 </div>
 
-<!-- MODAL CHI TIẾT -->
 <div id="detailModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -241,6 +232,18 @@
     let currentRoster = [];
     let allGradebookData = [];
 
+    function escapeHTML(str) {
+        if (str === null || str === undefined) return '';
+        return String(str).replace(/[&<>"']/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            if (m === '"') return '&quot;';
+            if (m === "'") return '&#39;';
+            return m;
+        });
+    }
+
     window.addEventListener('load', () => {
         window.checkAuthState((isLoggedIn) => {
             if (!isLoggedIn) return;
@@ -258,16 +261,29 @@
         });
     });
 
-    function switchTab(tabId) {
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    window.switchTab = function(tabId, btn) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-        event.target.classList.add('active');
+        if (btn) btn.classList.add('active');
         document.getElementById(tabId).classList.add('active');
     }
 
     function normalizeName(str) {
         if (!str) return "";
         return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").toLowerCase().replace(/\s+/g, ' ').trim();
+    }
+
+    function setBtnLoading(btnId, isLoading, originalText) {
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
+        if (isLoading) {
+            btn.disabled = true;
+            btn.dataset.original = originalText || btn.innerHTML;
+            btn.innerHTML = `<span class="spinner"></span> Đang xử lý...`;
+        } else {
+            btn.disabled = false;
+            btn.innerHTML = btn.dataset.original || originalText || btn.innerHTML;
+        }
     }
 
     // ==========================================
@@ -285,7 +301,7 @@
             const data = doc.data();
             allExams[doc.id] = data;
             if (data.isHidden !== true) {
-                select.innerHTML += `<option value="${doc.id}">${data.title} (Khối ${data.grade})</option>`;
+                select.innerHTML += `<option value="${doc.id}">${escapeHTML(data.title)} (Khối ${escapeHTML(data.grade)})</option>`;
             }
         });
     }
@@ -300,20 +316,29 @@
         const shuffleO = document.getElementById('chkShuffleO').checked;
 
         if (!examId || !title || !classesRaw) return alert("Vui lòng nhập đủ thông tin!");
+        if (duration < 1 || maxAttempts < 1) return alert("Thời gian và số lượt phải lớn hơn 0!");
+        
         const assignedClasses = classesRaw.split(',').map(c => c.trim().toLowerCase()).filter(c => c);
 
-        const { db } = await import('/bx/firebase-init.js');
-        const { collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
-        await addDoc(collection(db, "exam_assignments"), {
-            examId, title, assignedClasses, duration, maxAttempts,
-            shuffleQuestions: shuffleQ, shuffleOptions: shuffleO,
-            isOpen: true, createdAt: serverTimestamp()
-        });
+        setBtnLoading('btnAssignExam', true);
+        try {
+            const { db } = await import('/bx/firebase-init.js');
+            const { collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+            await addDoc(collection(db, "exam_assignments"), {
+                examId, title, assignedClasses, duration, maxAttempts,
+                shuffleQuestions: shuffleQ, shuffleOptions: shuffleO,
+                isOpen: true, createdAt: serverTimestamp()
+            });
 
-        alert("✅ Đã giao bài thành công!");
-        document.getElementById('inputTitle').value = "";
-        document.getElementById('inputClasses').value = "";
-        loadAssignmentsData();
+            alert("✅ Đã giao bài thành công!");
+            document.getElementById('inputTitle').value = "";
+            document.getElementById('inputClasses').value = "";
+            loadAssignmentsData();
+        } catch (e) {
+            alert("Lỗi giao bài: " + e.message);
+        } finally {
+            setBtnLoading('btnAssignExam', false, '🚀 GIAO BÀI');
+        }
     }
 
     async function loadAssignmentsData() {
@@ -328,7 +353,7 @@
             const data = doc.data();
             allAssignments[doc.id] = data;
             if (data.isOpen) {
-                select.innerHTML += `<option value="${doc.id}">${data.title} (Lớp: ${data.assignedClasses.join(', ')})</option>`;
+                select.innerHTML += `<option value="${doc.id}">${escapeHTML(data.title)} (Lớp: ${escapeHTML(data.assignedClasses.join(', '))})</option>`;
             }
         });
         renderAssignments();
@@ -344,7 +369,7 @@
             if (!a.title.toLowerCase().includes(keyword) && !a.assignedClasses.join(',').toLowerCase().includes(keyword)) continue;
             const status = a.isOpen ? '<span class="status-badge status-published">Đang mở</span>' : '<span class="status-badge status-pending">Đã ẩn</span>';
             html += `<tr>
-                <td class="stt-col">${stt++}</td><td><b>${a.title}</b></td><td>${a.assignedClasses.join(', ')}</td><td>${a.duration} phút</td><td>${a.maxAttempts} lần</td><td>${status}</td>
+                <td class="stt-col">${stt++}</td><td><b>${escapeHTML(a.title)}</b></td><td>${escapeHTML(a.assignedClasses.join(', '))}</td><td>${a.duration} phút</td><td>${a.maxAttempts} lần</td><td>${status}</td>
                 <td>
                     <button class="btn btn-sm ${a.isOpen ? 'btn-warning' : 'btn-success'}" onclick="toggleAssign('${id}', ${a.isOpen})">${a.isOpen ? 'Ẩn' : 'Hiện'}</button>
                     <button class="btn btn-sm btn-danger" onclick="deleteAssign('${id}')">Xóa</button>
@@ -370,7 +395,7 @@
     }
 
     window.deleteAssign = async function(id) {
-        if(!confirm("Bạn có chắc muốn xóa đợt giao bài này?")) return;
+        if(!confirm("Bạn có chắc muốn xóa đợt giao bài này?\n\nLưu ý: Dữ liệu bài nộp của học sinh vẫn sẽ còn trong hệ thống nhưng không thể truy cập qua giao diện này nữa.")) return;
         const { db } = await import('/bx/firebase-init.js');
         const { doc, deleteDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
         await deleteDoc(doc(db, "exam_assignments", id));
@@ -389,120 +414,155 @@
         const { db } = await import('/bx/firebase-init.js');
         const { collection, getDocs, query, where, doc, getDoc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
         
-        const assignment = allAssignments[assignmentId];
-        const keySnap = await getDoc(doc(db, "exam_keys", assignment.examId));
-        const answerKey = keySnap.data().answers;
-        
-        const targetClass = assignment.assignedClasses[0];
-        const rosterSnap = await getDoc(doc(db, "exam_rosters", targetClass));
-        let roster = rosterSnap.exists() ? rosterSnap.data().students : [];
+        try {
+            const assignment = allAssignments[assignmentId];
+            if (!assignment) throw new Error("Không tìm thấy thông tin đợt giao bài.");
 
-        const userSnap = await getDocs(query(collection(db, "users"), where("class", "==", targetClass)));
-        let usersInClass = [];
-        userSnap.forEach(d => usersInClass.push({id: d.id, ...d.data()}));
+            const assignedClasses = assignment.assignedClasses || [];
+            if (assignedClasses.length === 0) throw new Error("Đợt giao bài này không có lớp nào.");
 
-        const subSnap = await getDocs(query(collection(db, "exam_submissions"), where("assignmentId", "==", assignmentId)));
-        let submissions = subSnap.docs.map(d => ({id: d.id, ...d.data()}));
-        
-        if (roster.length === 0) {
-            return resultDiv.innerHTML = `<p style="color: var(--brown-d);">Lớp ${targetClass} chưa nạp sổ điểm! Không thể chấm.</p>`;
-        }
+            const keySnap = await getDoc(doc(db, "exam_keys", assignment.examId));
+            if (!keySnap.exists()) throw new Error("Không tìm thấy đáp án của đề thi này. Vui lòng kiểm tra lại!");
+            const answerKey = keySnap.data().answers;
 
-        let html = `<table><thead><tr><th class="stt-col">STT</th><th>Họ Tên</th><th>Lần làm</th><th>Trạng thái</th><th>Điểm tự động</th><th>Điểm chốt</th><th>Hành động</th></tr></thead><tbody>`;
+            let allRosters = {};
+            let allUsersInClasses = [];
+            const classQueries = assignedClasses.map(c => getDoc(doc(db, "exam_rosters", c)));
+            const userQueries = assignedClasses.map(c => getDocs(query(collection(db, "users"), where("class", "==", c))));
 
-        const renderRow = (sub, attemptIdx, isHidden, isMain, st, user, index) => {
-            let status = '';
-            let canPublish = false;
+            const [rosterSnaps, userSnaps, subSnap] = await Promise.all([
+                Promise.all(classQueries),
+                Promise.all(userQueries),
+                getDocs(query(collection(db, "exam_submissions"), where("assignmentId", "==", assignmentId)))
+            ]);
 
-            if (sub.status === 'in_progress' && Date.now() > sub.endTime) {
-                sub.status = 'submitted'; 
-                updateDoc(doc(db, "exam_submissions", sub.id), { status: 'submitted' }); 
+            rosterSnaps.forEach((snap, idx) => {
+                const cls = assignedClasses[idx];
+                allRosters[cls] = snap.exists() ? snap.data().students : [];
+            });
+
+            userSnaps.forEach((snap) => {
+                snap.forEach(d => allUsersInClasses.push({ id: d.id, ...d.data() }));
+            });
+
+            let submissions = subSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+            const combinedStudents = [];
+            assignedClasses.forEach(cls => {
+                (allRosters[cls] || []).forEach(st => {
+                    combinedStudents.push({ ...st, classOfStudent: cls });
+                });
+            });
+
+            if (combinedStudents.length === 0) {
+                return resultDiv.innerHTML = `<p style="color: var(--brown-d);">Các lớp [${escapeHTML(assignedClasses.join(', '))}] chưa nạp sổ điểm! Không thể chấm.</p>`;
             }
 
-            if (sub.status === 'in_progress') {
-                status = '<span class="status-badge status-pending">Đang làm bài (Chưa nộp)</span>';
-            } else if (sub.status === 'submitted' && !sub.isPublished) {
-                status = '<span class="status-badge status-pending">Chờ duyệt</span>';
-                canPublish = true;
-            } else if (sub.isPublished) {
-                status = '<span class="status-badge status-published">Đã công bố</span>';
-            }
+            let html = `<table><thead><tr><th class="stt-col">STT</th><th>Họ Tên</th><th>Lớp</th><th>Lần làm</th><th>Trạng thái</th><th>Điểm tự động</th><th>Điểm chốt</th><th>Hành động</th></tr></thead><tbody>`;
 
-            const autoScore = calculateScore(sub.answers || {}, answerKey);
-            const displayScore = sub.score !== null ? sub.score : autoScore;
-            
-            const rowClass = isHidden ? `sub-row hidden hidden-sub-${user.id}` : '';
-            
-            let actionHtml = `<button class="btn btn-sm btn-outline" onclick="viewDetail('${sub.id}', '${assignmentId}')">Chi tiết</button>`;
-            if (canPublish) actionHtml += ` <button class="btn btn-sm btn-success" onclick="publishScore('${sub.id}')">Công bố</button>`;
-            
-            if (isMain) {
-                const userAllSubs = submissions.filter(s => s.studentId === user.id);
-                if (userAllSubs.length > 1) {
-                    actionHtml += ` <button class="btn btn-sm btn-outline" onclick="toggleExpand('${user.id}', this)">▼ Mở rộng</button>`;
+            const renderRow = (sub, attemptIdx, isHidden, isMain, st, user, index) => {
+                let status = '';
+                let canPublish = false;
+
+                if (sub.status === 'in_progress' && Date.now() > sub.endTime) {
+                    sub.status = 'submitted';
+                    updateDoc(doc(db, "exam_submissions", sub.id), { status: 'submitted' }).catch(e => console.warn(e));
                 }
-            }
 
-            return `
-                <tr class="${rowClass}">
-                    <td class="stt-col">${isMain ? index + 1 : ''}</td>
-                    <td>${isMain ? `<b>${st.name}</b><br><small>${user.email}</small>` : '<i style="color:#888;">(Lần khác)</i>'}</td>
-                    <td>Lần ${attemptIdx + 1} ${isMain && sub.isPublished ? '<b style="color: var(--primary);">(Cao nhất)</b>' : ''}</td>
-                    <td>${status}</td>
-                    <td style="color: var(--primary); font-weight: bold;">${sub.status === 'in_progress' ? '-' : autoScore.toFixed(2)}</td>
-                    <td><input type="number" step="0.05" class="score-input" id="score-${sub.id}" value="${sub.status === 'in_progress' ? '0.00' : displayScore.toFixed(2)}" ${sub.isPublished || sub.status === 'in_progress' ? 'disabled' : ''}></td>
-                    <td>${actionHtml}</td>
-                </tr>
-            `;
-        };
+                if (sub.status === 'in_progress') {
+                    status = '<span class="status-badge status-pending">Đang làm bài (Chưa nộp)</span>';
+                } else if (sub.status === 'submitted' && !sub.isPublished) {
+                    status = '<span class="status-badge status-pending">Chờ duyệt</span>';
+                    canPublish = true;
+                } else if (sub.isPublished) {
+                    status = '<span class="status-badge status-published">Đã công bố</span>';
+                }
 
-        roster.forEach((st, index) => {
-            const normName = normalizeName(st.name);
-            const user = usersInClass.find(u => normalizeName(u.name) === normName);
-            
-            if (!user) {
-                html += `<tr style="opacity: 0.6;">
-                    <td class="stt-col">${index + 1}</td>
-                    <td><b>${st.name}</b><br><small>(Chưa ĐK tài khoản)</small></td>
-                    <td colspan="5" style="text-align: center; color: #888;">Không có dữ liệu</td>
-                </tr>`;
-            } else {
-                const userSubs = submissions.filter(s => s.studentId === user.id);
-                userSubs.sort((a, b) => (a.startTime || 0) - (b.startTime || 0));
+                const autoScore = calculateScore(sub.answers || {}, answerKey);
+                const displayScore = (sub.score != null) ? sub.score : autoScore;
+                const rowClass = isHidden ? `sub-row hidden hidden-sub-${user.id}` : '';
+                
+                let actionHtml = `<button class="btn btn-sm btn-outline" onclick="viewDetail('${sub.id}', '${assignmentId}')">Chi tiết</button>`;
+                if (canPublish) actionHtml += ` <button class="btn btn-sm btn-success" onclick="publishScore('${sub.id}')">Công bố</button>`;
+                
+                if (isMain) {
+                    const userAllSubs = submissions.filter(s => s.studentId === user.id && s.assignmentId === assignmentId);
+                    if (userAllSubs.length > 1) {
+                        actionHtml += ` <button class="btn btn-sm btn-outline" onclick="toggleExpand('${user.id}', this)">▼ Mở rộng</button>`;
+                    }
+                }
 
-                if (userSubs.length === 0) {
-                    html += `<tr style="background: var(--wheat);">
+                const scoreDisplay = (sub.status === 'in_progress') ? '-' : Number(displayScore).toFixed(2);
+
+                return `
+                    <tr class="${rowClass}">
+                        <td class="stt-col">${isMain ? index + 1 : ''}</td>
+                        <td>${isMain ? `<b>${escapeHTML(st.name)}</b><br><small>${escapeHTML(user.email)}</small>` : '<i style="color:#888;">(Lần khác)</i>'}</td>
+                        <td style="text-align:center; font-size:12px;">${escapeHTML(st.classOfStudent || '')}</td>
+                        <td>Lần ${attemptIdx + 1} ${isMain && sub.isPublished ? '<b style="color: var(--primary);">(Cao nhất)</b>' : ''}</td>
+                        <td>${status}</td>
+                        <td style="color: var(--primary); font-weight: bold;">${scoreDisplay}</td>
+                        <td><input type="number" step="0.05" class="score-input" id="score-${sub.id}" value="${sub.status === 'in_progress' ? '0.00' : Number(displayScore).toFixed(2)}" ${sub.isPublished || sub.status === 'in_progress' ? 'disabled' : ''}></td>
+                        <td>${actionHtml}</td>
+                    </tr>
+                `;
+            };
+
+            combinedStudents.forEach((st, index) => {
+                const normName = normalizeName(st.name);
+                const user = allUsersInClasses.find(u => 
+                    normalizeName(u.name) === normName && u.class === st.classOfStudent
+                );
+                
+                if (!user) {
+                    html += `<tr style="opacity: 0.6;">
                         <td class="stt-col">${index + 1}</td>
-                        <td><b>${st.name}</b><br><small>${user.email}</small></td>
-                        <td>0</td>
-                        <td style="color: var(--brown-d); font-weight: bold;">Chưa làm bài</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
+                        <td><b>${escapeHTML(st.name)}</b><br><small>(Chưa ĐK tài khoản)</small></td>
+                        <td style="text-align:center; font-size:12px;">${escapeHTML(st.classOfStudent || '')}</td>
+                        <td colspan="5" style="text-align: center; color: #888;">Không có dữ liệu</td>
                     </tr>`;
                 } else {
-                    let completedSubs = userSubs.filter(s => s.status === 'submitted' || s.isPublished);
-                    let bestSub = null;
-                    if (completedSubs.length > 0) {
-                        let published = completedSubs.filter(s => s.isPublished);
-                        if(published.length > 0) bestSub = published.reduce((p, c) => (p.score > c.score) ? p : c);
-                        else bestSub = completedSubs[completedSubs.length - 1];
+                    const userSubs = submissions.filter(s => s.studentId === user.id);
+                    userSubs.sort((a, b) => (a.startTime || 0) - (b.startTime || 0));
+
+                    if (userSubs.length === 0) {
+                        html += `<tr style="background: var(--wheat);">
+                            <td class="stt-col">${index + 1}</td>
+                            <td><b>${escapeHTML(st.name)}</b><br><small>${escapeHTML(user.email)}</small></td>
+                            <td style="text-align:center; font-size:12px;">${escapeHTML(st.classOfStudent || '')}</td>
+                            <td>0</td>
+                            <td style="color: var(--brown-d); font-weight: bold;">Chưa làm bài</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>`;
                     } else {
-                        bestSub = userSubs[userSubs.length - 1];
-                    }
-
-                    html += renderRow(bestSub, userSubs.indexOf(bestSub), false, true, st, user, index);
-
-                    userSubs.forEach((sub, idx) => {
-                        if (sub.id !== bestSub.id) {
-                            html += renderRow(sub, idx, true, false, st, user, index);
+                        let completedSubs = userSubs.filter(s => s.status === 'submitted' || s.isPublished);
+                        let bestSub = null;
+                        if (completedSubs.length > 0) {
+                            let published = completedSubs.filter(s => s.isPublished);
+                            if(published.length > 0) bestSub = published.reduce((p, c) => (p.score > c.score) ? p : c);
+                            else bestSub = completedSubs[completedSubs.length - 1];
+                        } else {
+                            bestSub = userSubs[userSubs.length - 1];
                         }
-                    });
-                }
-            }
-        });
 
-        resultDiv.innerHTML = html + `</tbody></table>`;
+                        html += renderRow(bestSub, userSubs.indexOf(bestSub), false, true, st, user, index);
+
+                        userSubs.forEach((sub, idx) => {
+                            if (sub.id !== bestSub.id) {
+                                html += renderRow(sub, idx, true, false, st, user, index);
+                            }
+                        });
+                    }
+                }
+            });
+
+            resultDiv.innerHTML = html + `</tbody></table>`;
+        } catch (err) {
+            console.error("Lỗi tải bài nộp:", err);
+            resultDiv.innerHTML = `<p style="color: var(--brown-d); font-weight: bold;">❌ Lỗi: ${escapeHTML(err.message)}</p>`;
+        }
     }
 
     window.toggleExpand = function(userId, btn) {
@@ -519,19 +579,22 @@
     }
 
     function calculateScore(answers, answerKey) {
-        if (!answers) answers = {};
+        if (!answers || !answerKey) return 0;
         let score = 0;
         for (const uid in answerKey) {
             const correct = answerKey[uid];
             const studentAns = answers[uid];
             if (studentAns === undefined || studentAns === null || studentAns === "") continue;
             if (typeof correct === 'number' && !Array.isArray(correct)) {
-                if (uid.startsWith('p3')) { if (parseFloat(studentAns) === correct) score += 0.5; } else { if (parseInt(studentAns) === correct) score += 0.25; }
+                if (uid.startsWith('p3')) { if (parseFloat(studentAns) === correct) score += 0.5; } 
+                else { if (parseInt(studentAns) === correct) score += 0.25; }
             } else if (Array.isArray(correct)) {
                 let count = 0;
                 for (let i = 0; i < 4; i++) if (studentAns[i] === correct[i]) count++;
-                if (count === 4) score += 1.0; else if (count === 3) score += 0.5;
-                else if (count === 2) score += 0.25; else if (count === 1) score += 0.1;
+                if (count === 4) score += 1.0; 
+                else if (count === 3) score += 0.5;
+                else if (count === 2) score += 0.25; 
+                else if (count === 1) score += 0.1;
             }
         }
         return score;
@@ -540,49 +603,69 @@
     window.viewDetail = async function(subId, assignmentId) {
         document.getElementById('detailModal').style.display = 'block';
         document.getElementById('modalBody').innerHTML = "<p>⏳ Đang tải chi tiết...</p>";
-        const { db } = await import('/bx/firebase-init.js');
-        const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
-        const assignment = allAssignments[assignmentId];
-        const examSnap = await getDoc(doc(db, "exams", assignment.examId));
-        const keySnap = await getDoc(doc(db, "exam_keys", assignment.examId));
-        const subSnap = await getDoc(doc(db, "exam_submissions", subId));
-        const examData = examSnap.data();
-        const answerKey = keySnap.data().answers;
-        const subData = subSnap.data();
-        const studentAnswers = subData.answers || {};
         
-        let html = `<p><b>Học sinh:</b> ${subData.studentEmail}</p>`;
-        if (subData.status === 'in_progress') {
-            html += `<p style="color: var(--brown-d); font-weight: bold;">(Học sinh chưa nộp bài. Dưới đây là các đáp án đã lưu tạm)</p>`;
-        }
+        try {
+            const { db } = await import('/bx/firebase-init.js');
+            const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+            
+            const assignment = allAssignments[assignmentId];
+            if (!assignment) throw new Error("Không tìm thấy đợt giao bài.");
 
-        examData.questions.forEach((q, idx) => {
-            const correctAns = answerKey[q.uid];
-            const studentAns = studentAnswers[q.uid];
-            html += `<div class="q-detail"><p><b>Câu ${idx + 1}:</b> ${q.text}</p>`;
-            if (q.part === 1) {
-                q.options.forEach((opt, oIdx) => {
-                    const isShuffled = typeof opt === 'object';
-                    const origIdx = isShuffled ? opt.originalIndex : oIdx;
-                    const text = isShuffled ? opt.text : opt;
-                    let cls = "ans-neutral";
-                    if (origIdx === correctAns) cls = "ans-correct";
-                    else if (origIdx === studentAns) cls = "ans-wrong";
-                    html += `<div class="${cls}">${String.fromCharCode(65 + oIdx)}. ${text} ${origIdx === studentAns ? '(Đã chọn)' : ''}</div>`;
-                });
-            } else if (q.part === 2) {
-                q.statements.forEach((st, sIdx) => {
-                    const stAns = studentAns ? studentAns[sIdx] : "";
-                    const isCorrect = stAns === correctAns[sIdx];
-                    html += `<div class="${isCorrect ? 'ans-correct' : 'ans-wrong'}">${String.fromCharCode(97 + sIdx)}) ${st} - HS chọn: ${stAns || 'Trống'} (Đáp án: ${correctAns[sIdx]})</div>`;
-                });
-            } else if (q.part === 3) {
-                const isCorrect = parseFloat(studentAns) === correctAns;
-                html += `<div class="${isCorrect ? 'ans-correct' : 'ans-wrong'}">HS trả lời: ${studentAns || 'Trống'} (Đáp án: ${correctAns})</div>`;
+            const [examSnap, keySnap, subSnap] = await Promise.all([
+                getDoc(doc(db, "exams", assignment.examId)),
+                getDoc(doc(db, "exam_keys", assignment.examId)),
+                getDoc(doc(db, "exam_submissions", subId))
+            ]);
+
+            if (!examSnap.exists()) throw new Error("Không tìm thấy đề thi.");
+            if (!keySnap.exists()) throw new Error("Không tìm thấy đáp án đề thi.");
+            if (!subSnap.exists()) throw new Error("Không tìm thấy bài nộp.");
+
+            const examData = examSnap.data();
+            const answerKey = keySnap.data().answers;
+            const subData = subSnap.data();
+            const studentAnswers = subData.answers || {};
+            
+            let html = `<p><b>Học sinh:</b> ${escapeHTML(subData.studentEmail)}</p>`;
+            if (subData.status === 'in_progress') {
+                html += `<p style="color: var(--brown-d); font-weight: bold;">(Học sinh chưa nộp bài. Dưới đây là các đáp án đã lưu tạm)</p>`;
             }
-            html += `</div>`;
-        });
-        document.getElementById('modalBody').innerHTML = html;
+
+            examData.questions.forEach((q, idx) => {
+                const correctAns = answerKey[q.uid];
+                const studentAns = studentAnswers[q.uid];
+                html += `<div class="q-detail"><p><b>Câu ${idx + 1}:</b> ${escapeHTML(q.text)}</p>`;
+                if (q.part === 1) {
+                    q.options.forEach((opt, oIdx) => {
+                        const isShuffled = typeof opt === 'object';
+                        const origIdx = isShuffled ? opt.originalIndex : oIdx;
+                        const text = isShuffled ? opt.text : opt;
+                        let cls = "ans-neutral";
+                        let marker = "";
+                        if (origIdx === correctAns) { cls = "ans-correct"; marker = " ✅ (Đáp án đúng)"; }
+                        if (origIdx === studentAns) {
+                            if (origIdx === correctAns) marker = " ✅ (Đã chọn - Đúng)";
+                            else { cls = "ans-wrong"; marker = " ❌ (Đã chọn - Sai)"; }
+                        }
+                        html += `<div class="${cls}">${String.fromCharCode(65 + oIdx)}. ${escapeHTML(text)}${marker}</div>`;
+                    });
+                } else if (q.part === 2) {
+                    q.statements.forEach((st, sIdx) => {
+                        const stAns = studentAns ? studentAns[sIdx] : "";
+                        const isCorrect = stAns === correctAns[sIdx];
+                        html += `<div class="${isCorrect ? 'ans-correct' : 'ans-wrong'}">${String.fromCharCode(97 + sIdx)}) ${escapeHTML(st)} - HS chọn: ${escapeHTML(stAns || 'Trống')} (Đáp án: ${escapeHTML(correctAns[sIdx])})</div>`;
+                    });
+                } else if (q.part === 3) {
+                    const isCorrect = parseFloat(studentAns) === correctAns;
+                    html += `<div class="${isCorrect ? 'ans-correct' : 'ans-wrong'}">HS trả lời: ${escapeHTML(studentAns || 'Trống')} (Đáp án: ${escapeHTML(correctAns)})</div>`;
+                }
+                html += `</div>`;
+            });
+            document.getElementById('modalBody').innerHTML = html;
+        } catch (err) {
+            console.error("Lỗi tải chi tiết:", err);
+            document.getElementById('modalBody').innerHTML = `<p style="color: var(--brown-d); font-weight: bold;">❌ Lỗi: ${escapeHTML(err.message)}</p>`;
+        }
     }
 
     window.closeModal = function() { document.getElementById('detailModal').style.display = 'none'; }
@@ -590,7 +673,7 @@
     window.publishScore = async function(subId) {
         const finalScore = parseFloat(document.getElementById(`score-${subId}`).value);
         if (isNaN(finalScore)) return alert("Điểm không hợp lệ!");
-        if (!confirm("Công bố điểm này cho Học sinh?")) return;
+        if (!confirm(`Công bố điểm ${finalScore} cho Học sinh?`)) return;
         const { db } = await import('/bx/firebase-init.js');
         const { doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
         await updateDoc(doc(db, "exam_submissions", subId), { score: finalScore, isPublished: true });
@@ -607,65 +690,70 @@
         const resultDiv = document.getElementById('gradebookResult');
         resultDiv.innerHTML = "<p>⏳ Đang tải sổ điểm...</p>";
 
-        const { db } = await import('/bx/firebase-init.js');
-        const { collection, getDocs, query, where, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+        try {
+            const { db } = await import('/bx/firebase-init.js');
+            const { collection, getDocs, query, where, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
 
-        const rosterSnap = await getDoc(doc(db, "exam_rosters", className));
-        if (!rosterSnap.exists()) {
-            resultDiv.innerHTML = `<p style="color: var(--brown-d); text-align: center;">Lớp này chưa được nạp sổ điểm!</p>`;
-            return;
-        }
-        currentRoster = rosterSnap.data().students;
-
-        const userSnap = await getDocs(query(collection(db, "users"), where("class", "==", className)));
-        let usersInClass = [];
-        userSnap.forEach(d => usersInClass.push({id: d.id, ...d.data()}));
-
-        const assignSnap = await getDocs(collection(db, "exam_assignments"));
-        let classAssignments = [];
-        assignSnap.forEach(d => {
-            const a = d.data();
-            if (a.assignedClasses.includes(className) && a.isOpen) {
-                classAssignments.push({ id: d.id, ...a });
+            const rosterSnap = await getDoc(doc(db, "exam_rosters", className));
+            if (!rosterSnap.exists()) {
+                resultDiv.innerHTML = `<p style="color: var(--brown-d); text-align: center;">Lớp này chưa được nạp sổ điểm!</p>`;
+                return;
             }
-        });
-        
-        classAssignments.sort((a, b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0));
+            currentRoster = rosterSnap.data().students;
 
-        let submissions = [];
-        const chunkSize = 10;
-        const assignmentIds = classAssignments.map(a => a.id);
+            const userSnap = await getDocs(query(collection(db, "users"), where("class", "==", className)));
+            let usersInClass = [];
+            userSnap.forEach(d => usersInClass.push({id: d.id, ...d.data()}));
 
-        for (let i = 0; i < assignmentIds.length; i += chunkSize) {
-            const chunk = assignmentIds.slice(i, i + chunkSize);
-            if (chunk.length > 0) {
-                const subSnap = await getDocs(query(collection(db, "exam_submissions"), where("assignmentId", "in", chunk)));
-                submissions = submissions.concat(subSnap.docs.map(d => d.data()));
-            }
-        }
-
-        let gradebookData = [];
-        currentRoster.forEach((st, index) => {
-            const normRosterName = normalizeName(st.name);
-            const matchedUser = usersInClass.find(u => normalizeName(u.name) === normRosterName);
-            
-            let row = { stt: index + 1, rosterName: st.name, email: matchedUser ? matchedUser.email : "Chưa đăng ký" };
-            
-            classAssignments.forEach(a => {
-                if (matchedUser) {
-                    const subs = submissions.filter(s => s.studentId === matchedUser.id && s.assignmentId === a.id && s.isPublished === true);
-                    const scores = subs.map(s => s.score).filter(s => s !== null && s !== undefined);
-                    const best = scores.length > 0 ? Math.max(...scores) : null;
-                    row[a.id] = best !== null ? best : "";
-                } else {
-                    row[a.id] = "";
+            const assignSnap = await getDocs(collection(db, "exam_assignments"));
+            let classAssignments = [];
+            assignSnap.forEach(d => {
+                const a = d.data();
+                if (a.assignedClasses && a.assignedClasses.includes(className) && a.isOpen) {
+                    classAssignments.push({ id: d.id, ...a });
                 }
             });
+            
+            classAssignments.sort((a, b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0));
 
-            gradebookData.push(row);
-        });
+            let submissions = [];
+            const chunkSize = 10;
+            const assignmentIds = classAssignments.map(a => a.id);
 
-        renderGradebook(gradebookData, classAssignments);
+            for (let i = 0; i < assignmentIds.length; i += chunkSize) {
+                const chunk = assignmentIds.slice(i, i + chunkSize);
+                if (chunk.length > 0) {
+                    const subSnap = await getDocs(query(collection(db, "exam_submissions"), where("assignmentId", "in", chunk)));
+                    submissions = submissions.concat(subSnap.docs.map(d => d.data()));
+                }
+            }
+
+            let gradebookData = [];
+            currentRoster.forEach((st, index) => {
+                const normRosterName = normalizeName(st.name);
+                const matchedUser = usersInClass.find(u => normalizeName(u.name) === normRosterName);
+                
+                let row = { stt: index + 1, rosterName: st.name, email: matchedUser ? matchedUser.email : "Chưa đăng ký" };
+                
+                classAssignments.forEach(a => {
+                    if (matchedUser) {
+                        const subs = submissions.filter(s => s.studentId === matchedUser.id && s.assignmentId === a.id && s.isPublished === true);
+                        const scores = subs.map(s => s.score).filter(s => s !== null && s !== undefined);
+                        const best = scores.length > 0 ? Math.max(...scores) : null;
+                        row[a.id] = best !== null ? best : "";
+                    } else {
+                        row[a.id] = "";
+                    }
+                });
+
+                gradebookData.push(row);
+            });
+
+            renderGradebook(gradebookData, classAssignments);
+        } catch (err) {
+            console.error(err);
+            resultDiv.innerHTML = `<p style="color: var(--brown-d); text-align: center;">❌ Lỗi: ${escapeHTML(err.message)}</p>`;
+        }
     }
 
     function renderGradebook(data, assignments) {
@@ -679,19 +767,19 @@
             <th>Họ Tên (Từ sổ điểm)</th><th>Email</th>`;
         
         assignments.forEach(a => {
-            html += `<th>${a.title}</th>`;
+            html += `<th>${escapeHTML(a.title)}</th>`;
         });
         html += `</tr></thead><tbody>`;
 
         data.forEach((row) => {
             html += `<tr class="data-row">
                 <td class="stt-col">${row.stt}</td>
-                <td><b>${row.rosterName}</b></td>
-                <td style="font-size: 12px; color: #555;">${row.email}</td>`;
+                <td><b>${escapeHTML(row.rosterName)}</b></td>
+                <td style="font-size: 12px; color: #555;">${escapeHTML(row.email)}</td>`;
             assignments.forEach(a => {
                 const score = row[a.id];
                 const color = score !== "" ? 'color: var(--primary); font-weight: bold;' : 'color: var(--border);';
-                html += `<td style="${color} text-align: center;">${score}</td>`;
+                html += `<td style="${color} text-align: center;">${escapeHTML(score)}</td>`;
             });
             html += `</tr>`;
         });
@@ -709,7 +797,7 @@
 
     window.exportExcel = function() {
         const table = document.getElementById("excelTable");
-        if (!table) return alert("Không có dữ liệu!");
+        if (!table) return alert("Không có dữ liệu để xuất!");
         const wb = XLSX.utils.table_to_book(table, {sheet: "Diem"});
         XLSX.writeFile(wb, "So_Diem.xlsx");
     }
@@ -725,6 +813,9 @@
         if (!classId) return alert("Vui lòng nhập tên lớp!");
         if (!fileInput.files.length) return alert("Vui lòng chọn file Excel/CSV!");
 
+        if (!confirm(`Bạn có chắc muốn nạp sổ điểm cho lớp ${classId.toUpperCase()}?\n\nLưu ý: Dữ liệu sổ điểm cũ của lớp này (nếu có) sẽ bị GHI ĐÈ!`)) return;
+
+        setBtnLoading('btnUploadRoster', true);
         div.innerHTML = "<p style='color: var(--primary);'>⏳ Đang đọc file và nạp lên Firebase...</p>";
 
         const file = fileInput.files[0];
@@ -755,7 +846,8 @@
 
                 if (students.length === 0) {
                     div.innerHTML = "<p style='color: var(--brown-d);'>Lỗi: File không có dữ liệu hợp lệ!</p>";
-                    return alert("File không có dữ liệu hợp lệ!");
+                    setBtnLoading('btnUploadRoster', false);
+                    return alert("File không có dữ liệu hợp lệ! Cần cột Họ Tên ở vị trí thứ 2 hoặc cột đầu tiên.");
                 }
 
                 const { db } = await import('/bx/firebase-init.js');
@@ -772,13 +864,14 @@
                 
             } catch (error) {
                 console.error("Lỗi nạp sổ điểm:", error);
-                div.innerHTML = `<p style='color: var(--brown-d);'>Lỗi nạp sổ điểm: ${error.message}.</p>`;
+                div.innerHTML = `<p style='color: var(--brown-d);'>Lỗi nạp sổ điểm: ${escapeHTML(error.message)}.</p>`;
+            } finally {
+                setBtnLoading('btnUploadRoster', false);
             }
         };
         reader.readAsArrayBuffer(file);
     }
 
-    // 🟢 KHI GÕ VÀO Ô LỌC LỚP -> KHÓA NÚT HÀNH ĐỘNG ĐỂ TRÁNH NHẦM LẪN
     window.onClassFilterChange = function() {
         document.getElementById('btnLockClass').disabled = true;
         document.getElementById('btnUnlockClass').disabled = true;
@@ -790,7 +883,6 @@
         const div = document.getElementById('studentListTable');
         const className = document.getElementById('inputClassStudentTab').value.trim().toLowerCase();
         
-        // Khóa nút trong lúc đang tải
         document.getElementById('btnLockClass').disabled = true;
         document.getElementById('btnUnlockClass').disabled = true;
 
@@ -800,32 +892,69 @@
             return;
         }
 
+        setBtnLoading('btnReloadUsers', true);
         div.innerHTML = "<p>⏳ Đang tải dữ liệu...</p>";
         
-        const { db } = await import('/bx/firebase-init.js');
-        const { collection, getDocs, query, where, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
-        
-        const rosterSnap = await getDoc(doc(db, "exam_rosters", className));
-        let roster = [];
-        if (rosterSnap.exists()) {
-            roster = rosterSnap.data().students;
-        }
-
-        const snap = await getDocs(query(collection(db, "users"), where("class", "==", className)));
-        allUsersList = [];
-        snap.forEach(d => {
-            const u = d.data();
-            if (u.role !== 'teacher') { 
-                allUsersList.push({ id: d.id, email: u.email || "Không có", name: u.name || "", isHidden: u.hidden || false, isVerified: u.emailVerified || false, infoLocked: u.infoLocked || false });
+        try {
+            const { db } = await import('/bx/firebase-init.js');
+            const { collection, getDocs, query, where, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+            
+            const rosterSnap = await getDoc(doc(db, "exam_rosters", className));
+            let roster = [];
+            if (rosterSnap.exists()) {
+                roster = rosterSnap.data().students;
             }
-        });
 
-        renderStudentTable(roster, allUsersList);
+            const snap = await getDocs(query(collection(db, "users"), where("class", "==", className)));
+            allUsersList = [];
+            snap.forEach(d => {
+                const u = d.data();
+                if (u.role !== 'teacher') { 
+                    allUsersList.push({ id: d.id, email: u.email || "Không có", name: u.name || "", isHidden: u.hidden || false, isVerified: u.emailVerified || false, infoLocked: u.infoLocked || false });
+                }
+            });
 
-        // Tải xong -> Mở khóa nút
-        document.getElementById('batchClassLabel').textContent = className.toUpperCase();
-        document.getElementById('btnLockClass').disabled = false;
-        document.getElementById('btnUnlockClass').disabled = false;
+            renderStudentTable(roster, allUsersList);
+
+            document.getElementById('batchClassLabel').textContent = className.toUpperCase();
+            
+            // 🟢 LOGIC CẬP NHẬT TRẠNG THÁI NÚT KHÓA/MỞ KHÓA
+            const btnLock = document.getElementById('btnLockClass');
+            const btnUnlock = document.getElementById('btnUnlockClass');
+            
+            if (allUsersList.length > 0) {
+                let lockedCount = allUsersList.filter(u => u.infoLocked).length;
+                
+                if (lockedCount === allUsersList.length) {
+                    // Tất cả đang khóa -> Disable nút Khóa
+                    btnLock.disabled = true;
+                    btnLock.innerHTML = '🔒 Đang khóa';
+                    btnUnlock.disabled = false;
+                    btnUnlock.innerHTML = '🔓 Mở khóa sửa Hồ Sơ';
+                } else if (lockedCount === 0) {
+                    // Tất cả đang mở -> Disable nút Mở khóa
+                    btnLock.disabled = false;
+                    btnLock.innerHTML = '🔒 Khóa sửa Hồ Sơ';
+                    btnUnlock.disabled = true;
+                    btnUnlock.innerHTML = '🔓 Đang mở';
+                } else {
+                    // Hỗn hợp
+                    btnLock.disabled = false;
+                    btnLock.innerHTML = '🔒 Khóa tất cả';
+                    btnUnlock.disabled = false;
+                    btnUnlock.innerHTML = '🔓 Mở tất cả';
+                }
+            } else {
+                btnLock.disabled = true;
+                btnUnlock.disabled = true;
+            }
+
+        } catch (err) {
+            console.error(err);
+            div.innerHTML = `<p style="color: var(--brown-d);">Lỗi: ${escapeHTML(err.message)}</p>`;
+        } finally {
+            setBtnLoading('btnReloadUsers', false);
+        }
     }
 
     window.renderStudentTable = function(roster, users) {
@@ -855,12 +984,9 @@
                     ? (user.isVerified ? '<span class="status-badge status-published">Đã xác thực</span>' : '<span class="status-badge status-pending">Chưa xác thực</span>')
                     : '<span class="status-badge" style="background:var(--border); color:#555;">Chưa ĐK</span>';
                 
-                // Trạng thái hồ sơ
-                let lockStatus = '';
+                let lockStatus = '-';
                 if (user) {
                     lockStatus = user.infoLocked ? '<span style="color:var(--brown-d); font-weight:bold;">Đã khóa</span>' : '<span style="color:green;">Mở</span>';
-                } else {
-                    lockStatus = '-';
                 }
 
                 const accountStatus = user 
@@ -869,8 +995,8 @@
 
                 html += `<tr>
                     <td class="stt-col">${index + 1}</td>
-                    <td><b>${st.name}</b></td>
-                    <td>${user ? user.email : '<i style="color:#888">Chưa đăng ký</i>'}</td>
+                    <td><b>${escapeHTML(st.name)}</b></td>
+                    <td>${user ? escapeHTML(user.email) : '<i style="color:#888">Chưa đăng ký</i>'}</td>
                     <td>${verifyStatus}</td>
                     <td>${lockStatus} <br><small>${accountStatus}</small></td>
                     <td>${user ? `<button class="btn btn-sm ${user.isHidden ? 'btn-success' : 'btn-warning'}" onclick="toggleUserStatus('${user.id}', ${user.isHidden})">${user.isHidden ? 'Mở khóa TK' : 'Khóa TK'}</button>` : ''}</td>
@@ -886,13 +1012,12 @@
                 if (keyword && !u.name.toLowerCase().includes(keyword) && !u.email.toLowerCase().includes(keyword)) return;
                 const verifyStatus = u.isVerified ? '<span class="status-badge status-published">Đã xác thực</span>' : '<span class="status-badge status-pending">Chưa xác thực</span>';
                 const accountStatus = u.isHidden ? '<span class="status-badge status-hidden">Đã khóa TK</span>' : '<span class="status-badge status-published">Hoạt động</span>';
-                
                 const lockStatus = u.infoLocked ? '<span style="color:var(--brown-d); font-weight:bold;">Đã khóa</span>' : '<span style="color:green;">Mở</span>';
 
                 html += `<tr style="background: var(--wheat);">
                     <td class="stt-col">-</td>
-                    <td><b>${u.name || '<Chưa đặt tên>'}</b> <span style="color:var(--brown-d); font-size:12px;">(Không khớp)</span></td>
-                    <td>${u.email}</td>
+                    <td><b>${escapeHTML(u.name || '<Chưa đặt tên>')}</b> <span style="color:var(--brown-d); font-size:12px;">(Không khớp)</span></td>
+                    <td>${escapeHTML(u.email)}</td>
                     <td>${verifyStatus}</td>
                     <td>${lockStatus} <br><small>${accountStatus}</small></td>
                     <td><button class="btn btn-sm ${u.isHidden ? 'btn-success' : 'btn-warning'}" onclick="toggleUserStatus('${u.id}', ${u.isHidden})">${u.isHidden ? 'Mở khóa TK' : 'Khóa TK'}</button></td>
@@ -912,7 +1037,6 @@
         loadAllUsersAndRender();
     }
 
-    // 🟢 HÀM KHÓA/MỞ KHÓA HỒ SƠ HÀNG LOẠT
     window.toggleClassProfileLock = async function(isLock) {
         const className = document.getElementById('inputClassStudentTab').value.trim().toLowerCase();
         if (!className) return alert("Vui lòng nhập tên lớp ở ô lọc trước khi thực hiện!");
@@ -920,19 +1044,16 @@
         const action = isLock ? "KHÓA" : "MỞ KHÓA";
         if (!confirm(`Bạn có chắc chắn muốn ${action} quyền sửa Hồ sơ (Tên/Lớp) cho TẤT CẢ học sinh lớp ${className.toUpperCase()}?`)) return;
 
-        try {
-            // Khóa nút để tránh bấm 2 lần
-            document.getElementById('btnLockClass').disabled = true;
-            document.getElementById('btnUnlockClass').disabled = true;
+        const btnId = isLock ? 'btnLockClass' : 'btnUnlockClass';
+        setBtnLoading(btnId, true);
 
+        try {
             const { db } = await import('/bx/firebase-init.js');
             const { collection, query, where, getDocs, doc, writeBatch } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
 
             const snap = await getDocs(query(collection(db, "users"), where("class", "==", className)));
             if (snap.empty) {
                 alert("Không tìm thấy học sinh nào trong lớp này!");
-                document.getElementById('btnLockClass').disabled = false;
-                document.getElementById('btnUnlockClass').disabled = false;
                 return;
             }
 
@@ -945,14 +1066,13 @@
             await batch.commit();
             alert(`✅ Đã ${action} thành công hồ sơ của ${snap.size} học sinh lớp ${className.toUpperCase()}!`);
             
-            loadAllUsersAndRender(); // Tải lại để cập nhật giao diện
+            loadAllUsersAndRender();
 
         } catch (error) {
             console.error("Lỗi khóa hàng loạt:", error);
             alert("Lỗi: " + error.message);
-            // Mở lại nút nếu lỗi
-            document.getElementById('btnLockClass').disabled = false;
-            document.getElementById('btnUnlockClass').disabled = false;
+        } finally {
+            setBtnLoading(btnId, false, isLock ? '🔒 Khóa sửa Hồ Sơ' : '🔓 Mở khóa sửa Hồ Sơ');
         }
     }
 </script>
