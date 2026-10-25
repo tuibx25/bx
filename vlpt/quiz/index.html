@@ -48,7 +48,7 @@ window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
         display: flex; justify-content: space-between; align-items: center; font-size: 15px;
     }
     
-    /* 🟢 SỬA TẠI ĐÂY: Bỏ text-transform: uppercase để giữ nguyên tên gốc */
+    /* 🟢 ĐÃ SỬA: Bỏ text-transform: uppercase để giữ nguyên tên gốc */
     .student-info-bar span { color: var(--primary); font-size: 1.1em; }
     
     /* 🟢 Chỉ in hoa tên Lớp (nếu muốn) */
@@ -182,19 +182,12 @@ window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
     async function getExamData(examId, forceReload = false) {
         const now = Date.now();
 
-        // 1. Cache còn hạn → trả ngay
         if (!forceReload) {
             const cached = examCache.get(examId);
-            if (cached && now - cached.ts < EXAM_CACHE_TTL) {
-                return cached.data;
-            }
-            // 2. Đang có request bay → dùng chung (không fetch trùng)
-            if (examFetchPromises.has(examId)) {
-                return examFetchPromises.get(examId);
-            }
+            if (cached && now - cached.ts < EXAM_CACHE_TTL) return cached.data;
+            if (examFetchPromises.has(examId)) return examFetchPromises.get(examId);
         }
 
-        // 3. Fetch mới
         const promise = (async () => {
             const [{ db }, fsMod] = await Promise.all([
                 import('/bx/firebase-init.js'),
@@ -217,7 +210,7 @@ window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
     }
 
     /* ============================================================
-       🟢 LAZY MATHJAX: chỉ typeset câu nào vào viewport
+       🟢 LAZY MATHJAX
        ============================================================ */
     let mathObserver = null;
 
@@ -275,7 +268,7 @@ window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
     });
 
     /* ============================================================
-       🟢 DASHBOARD + PREFETCH TẤT CẢ ĐỀ
+       🟢 DASHBOARD (ĐÃ SỬA LỖI QUERY & PREFETCH)
        ============================================================ */
     async function loadDashboard() {
         try {
@@ -301,9 +294,17 @@ window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
             }
 
             const subQuery = query(collection(db, "exam_submissions"), where("studentId", "==", currentUser.uid));
+            
+            // 🟢 SỬA LỖI: Chỉ lấy những đợt giao bài dành cho đúng lớp của học sinh này
+            // Bỏ điều kiện isOpen ra khỏi query để không phải tạo Composite Index, JS bên dưới sẽ tự lọc
+            const assignQuery = query(
+                collection(db, "exam_assignments"),
+                where("assignedClasses", "array-contains", userClass)
+            );
+
             const [subSnapshot, assignSnapshot] = await Promise.all([
                 getDocs(subQuery),
-                getDocs(collection(db, "exam_assignments"))
+                getDocs(assignQuery)
             ]);
 
             const submissionsByAssignment = {}; 
@@ -329,7 +330,8 @@ window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
             assignSnapshot.forEach((docSnap) => {
                 const data = docSnap.data();
                 
-                if (data.assignedClasses && data.assignedClasses.includes(userClass) && data.isOpen === true) {
+                // Kiểm tra xem đề có đang mở không
+                if (data.isOpen === true) {
                     const maxAttempts = data.maxAttempts || 1;
                     const done = attemptCounts[docSnap.id] || 0;
                     const isOutOfAttempts = done >= maxAttempts;
@@ -389,7 +391,6 @@ window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
             else listEl.innerHTML = html;
 
             if (examIdsToPrefetch.length) {
-                console.log('[Prefetch] Tải ngầm', examIdsToPrefetch.length, 'đề');
                 examIdsToPrefetch.forEach(id => {
                     getExamData(id).catch(e => console.warn('[Prefetch] Lỗi', id, e.message));
                 });
@@ -402,7 +403,7 @@ window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
     }
 
     /* ============================================================
-       🟢 BẮT ĐẦU LÀM BÀI — TỐI ƯU
+       🟢 BẮT ĐẦU LÀM BÀI
        ============================================================ */
     window.startExam = async function(assignmentId, examId, duration, doShuffleQ, doShuffleO, maxAttempts) {
         document.getElementById('dashboardScreen').classList.add('hidden');
@@ -521,7 +522,7 @@ window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
     }
 
     /* ============================================================
-       🟢 RENDER — LAZY MATHJAX
+       🟢 RENDER GIAO DIỆN LÀM BÀI
        ============================================================ */
     function renderQuiz() {
         const body = document.getElementById('quizBody');
