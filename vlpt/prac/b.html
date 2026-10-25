@@ -132,13 +132,13 @@ button{font-family:inherit; cursor:pointer}
 
 .score-config { background:var(--soft); border:1px solid var(--line); border-radius:8px; padding:12px; margin-top:8px; margin-bottom:12px; display:flex; flex-direction:column; gap:8px; align-items: stretch; }
 .score-config label { display:flex; justify-content:space-between; align-items:center; font-size:13px; font-weight:600; }
-.score-config input { width:65px; padding:4px 8px; border:1px solid var(--line); border-radius:4px; font-family:inherit; font-weight:700; text-align:right; }
+.score-config input { width:65px; padding:4px 8px; border:1px solid var(--line); border-radius:4px; font-family:inherit; font-weight:700; text-align:right; font-size: 16px; /* 🟢 FIX AUTO ZOOM */ }
 .p2-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 2px 0 6px 0; padding: 6px; background:#fff; border-radius:6px; border:1px solid #eee; }
 .score-config .total-score { text-align:right; font-size:13px; font-weight:800; color:var(--blue-d); border-top:1px dashed var(--line); padding-top:8px; margin-top:4px; }
 .lv-grid{ display:grid; grid-template-columns:52px 1fr 1fr 1fr 1fr 1fr; gap:6px; background:#fff; border:1px solid #eee; border-radius:6px; padding:6px; align-items:center; }
 .lv-grid .lv-head{font-size:12px; font-weight:700; text-align:center; color:var(--brown-d)}
 .lv-grid .lv-row{font-size:12px; font-weight:700}
-.lv-grid input{ width:100%; padding:4px 6px; border:1px solid var(--line); border-radius:4px; font-family:inherit; font-weight:700; text-align:center; }
+.lv-grid input{ width:100%; padding:4px 6px; border:1px solid var(--line); border-radius:4px; font-family:inherit; font-weight:700; text-align:center; font-size: 16px; /* 🟢 FIX AUTO ZOOM */ }
 .lv-grid input[id$="_wild"] { background: #fdfbf7; border-style: dashed; }
 
 .btn-create-row { width:100%; padding:10px; font-size:14px; }
@@ -236,7 +236,8 @@ section.tab.active{display:block}
     /* 🟢 BIẾN MENU THÀNH BOTTOM SHEET (DÍNH ĐÁY) */
     #loadOverlay {
         align-items: flex-end; /* Trượt từ dưới lên */
-        height: 100dvh; /* Tự động co lại khi bàn phím mở */
+        padding: 0;
+        height: 100%;
     }
     .load-card { 
         width: 100%; 
@@ -255,7 +256,7 @@ section.tab.active{display:block}
 
     .p2-grid { grid-template-columns: 1fr; }
     .lv-grid { grid-template-columns: 45px 1fr 1fr 1fr 1fr 1fr; gap: 4px; padding: 4px;}
-    .lv-grid input { padding: 6px 2px; font-size: 12px; }
+    .lv-grid input { padding: 6px 2px; font-size: 16px; } /* Giữ 16px để không bị auto-zoom */
     .lv-head { font-size: 10px; }
 
     .st-row { flex-direction: column; align-items: flex-start; }
@@ -487,22 +488,19 @@ if (!isMobile) {
 function handleViewportResize() {
     if (!window.visualViewport) return;
     const overlay = document.getElementById('loadOverlay');
-    const card = document.querySelector('.load-card');
     
     if (overlay && !overlay.classList.contains('hidden')) {
-        // Nếu bàn phím mở (chiều cao visualViewport giảm mạnh)
-        if (window.visualViewport.height < window.innerHeight - 100) {
-            card.style.height = `${window.visualViewport.height - 10}px`;
-            card.style.maxHeight = 'none';
-        } else {
-            // Bàn phím đóng
-            card.style.height = '';
-            card.style.maxHeight = '';
-        }
+        // Điều chỉnh chiều cao của overlay khớp chính xác với màn hình còn lại
+        overlay.style.height = `${window.visualViewport.height}px`;
+        overlay.style.top = `${window.visualViewport.offsetTop}px`;
+    } else if (overlay) {
+        overlay.style.height = '';
+        overlay.style.top = '';
     }
 }
 if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', handleViewportResize);
+    window.visualViewport.addEventListener('scroll', handleViewportResize);
 }
 
 // 🟢 CÁC HÀM ĐÓNG/MỞ MENU (Kèm theo việc khóa cuộn trang)
@@ -514,11 +512,8 @@ function openLoadMenu() {
 function closeLoadMenu() {
     document.body.classList.remove('modal-open');
     $('#loadOverlay').classList.add('hidden');
-    const card = document.querySelector('.load-card');
-    if (card) {
-        card.style.height = '';
-        card.style.maxHeight = '';
-    }
+    const overlay = document.getElementById('loadOverlay');
+    if(overlay) { overlay.style.height = ''; overlay.style.top = ''; }
 }
 
 function renderMath(el){
