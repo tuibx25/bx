@@ -112,7 +112,11 @@ button{font-family:inherit; cursor:pointer}
     border-bottom: 3px solid transparent; transition: 0.2s;
 }
 .menu-tab-btn.active { color: var(--blue-d); border-bottom-color: var(--blue-d); background: var(--white); }
-.menu-tab-content { display: none; padding: 15px 20px; }
+.menu-tab-content { 
+    display: none; 
+    padding: 15px 20px; 
+    padding-bottom: 60vh; /* 🟢 Tạo khoảng trống cực lớn phía dưới để dễ dàng cuộn ô nhập lên trên bàn phím */
+}
 .menu-tab-content.active { display: block; }
 
 .load-card-footer {
@@ -125,7 +129,7 @@ button{font-family:inherit; cursor:pointer}
 .score-config label { display:flex; justify-content:space-between; align-items:center; font-size:13px; font-weight:600; }
 .score-config input { width:65px; padding:4px 8px; border:1px solid var(--line); border-radius:4px; font-family:inherit; font-weight:700; text-align:right; font-size: 16px; /* Fix auto-zoom */ }
 .p2-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 2px 0 6px 0; padding: 6px; background:#fff; border-radius:6px; border:1px solid #eee; }
-.score-config .total-score { display: none; /* Ẩn trong tab, chuyển ra footer */ }
+.score-config .total-score { display: none; }
 .lv-grid{ display:grid; grid-template-columns:52px 1fr 1fr 1fr 1fr 1fr; gap:6px; background:#fff; border:1px solid #eee; border-radius:6px; padding:6px; align-items:center; }
 .lv-grid .lv-head{font-size:12px; font-weight:700; text-align:center; color:var(--brown-d)}
 .lv-grid .lv-row{font-size:12px; font-weight:700}
@@ -227,9 +231,8 @@ section.tab.active{display:block}
 
     main { padding: 10px; }
     
-    /* 🟢 MENU DÍNH ĐÁY */
     #loadOverlay {
-        align-items: flex-end; /* Trượt từ dưới lên */
+        align-items: flex-end; 
         padding: 0;
         height: 100%;
     }
@@ -238,12 +241,12 @@ section.tab.active{display:block}
         max-width: 100%; 
         height: 95%; 
         max-height: 95dvh;
-        border-radius: 16px 16px 0 0; /* Bo góc trên */
+        border-radius: 16px 16px 0 0; 
     }
     .load-card-header { padding: 10px 15px; }
     .load-card-body { padding: 0; }
     .menu-tabs { display: flex; }
-    .menu-tab-content { padding: 10px 15px; }
+    .menu-tab-content { padding: 10px 15px; padding-bottom: 60vh; /* Vẫn giữ khoảng trống lớn */ }
     .load-card-footer { 
         padding: 10px 15px; 
         padding-bottom: calc(10px + env(safe-area-inset-bottom)); 
@@ -252,7 +255,7 @@ section.tab.active{display:block}
 
     .p2-grid { grid-template-columns: 1fr; }
     .lv-grid { grid-template-columns: 45px 1fr 1fr 1fr 1fr 1fr; gap: 4px; padding: 4px;}
-    .lv-grid input { padding: 6px 2px; font-size: 16px; } /* Fix auto-zoom */
+    .lv-grid input { padding: 6px 2px; font-size: 16px; } 
     .lv-head { font-size: 10px; }
 
     .st-row { flex-direction: column; align-items: flex-start; }
@@ -282,7 +285,6 @@ section.tab.active{display:block}
     <header>
       <h1>⚡ LUYỆN TẬP TRẮC NGHIỆM</h1>
       
-      <!-- 🟢 PHÂN SỐ GẠCH CHÉO -->
       <span class="stat-badge"><span class="hide-mobile">Đã trả lời: </span><b id="answeredCount">0</b>/<span id="totalCount">0</span></span>
       
       <button class="btn-primary" id="btnSubmit"><span class="hide-mobile">📝 Nộp bài</span><span class="show-mobile">Nộp</span></button>
@@ -405,7 +407,6 @@ section.tab.active{display:block}
         </div>
 
         <div class="load-card-footer">
-            <!-- 🟢 HIỂN THỊ TỔNG ĐIỂM Ở FOOTER -->
             <div class="footer-total" id="ptTotalLabel">
                 <span id="ptTotalLabelText">Tổng điểm (tạm tính):</span> <span id="ptTotal">0</span> đ
             </div>
@@ -432,7 +433,6 @@ section.tab.active{display:block}
 
 <script>
 (function() {
-  // 1. CHẶN CONTEXT MENU & PHÍM TẮT
   document.addEventListener('contextmenu', e => { e.preventDefault(); return false; }, { capture: true });
 
   document.addEventListener('keydown', function(e) {
@@ -521,7 +521,7 @@ function openLoadMenu() {
     document.body.classList.add('modal-open');
     $('#loadOverlay').classList.remove('hidden');
     setTimeout(handleViewportResize, 100);
-    switchMenuTab(1); // Luôn mở ở tab 1 khi bấm nút
+    switchMenuTab(1); 
 }
 function closeLoadMenu() {
     document.body.classList.remove('modal-open');
@@ -1258,6 +1258,17 @@ window.addEventListener('load', () => {
               if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) {
                   document.activeElement.blur(); 
               }
+          }
+      });
+
+      // 🟢 TỰ ĐỘNG CUỘN Ô NHẬP LIỆU LÊN KHI BÀN PHÍM XUẤT HIỆN
+      document.querySelector('.load-card-body').addEventListener('focusin', function(e) {
+          if (e.target.tagName === 'INPUT') {
+              setTimeout(() => {
+                  if (document.activeElement === e.target) {
+                      e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }
+              }, 300); // Đợi 0.3s để bàn phím bật lên
           }
       });
   });
