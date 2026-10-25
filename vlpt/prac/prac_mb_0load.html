@@ -846,7 +846,7 @@ async function autoLoadExam(forceReload = false) {
     const sortedLessons = Array.from(availableLessons).sort((a,b) => Number(a) - Number(b));
     const lessonContainer = document.getElementById('lessonCheckboxes');
     if (sortedLessons.length > 0) {
-        let html = ''; sortedLessons.forEach(l => { html += `<label class="lesson-checkbox"><input type="checkbox" value="${l}" checked onchange="updateCreateBtn()"><span class="lesson-chip">Bài ${l}</span></label>`; });
+        let html = ''; sortedLessons.forEach(l => { html += `<label class="lesson-checkbox"><input type="checkbox" value="${l}" onchange="updateCreateBtn()"><span class="lesson-chip">Bài ${l}</span></label>`; });
         lessonContainer.innerHTML = html;
     } else { lessonContainer.innerHTML = '<div style="width: 100%; text-align: center; color: red;">Không tìm thấy thông tin Bài học.</div>'; }
     updateSubsetPlaceholders(); updateLevelWarnings(); updateCreateBtn();
