@@ -47,7 +47,12 @@ window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
         padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; font-weight: bold;
         display: flex; justify-content: space-between; align-items: center; font-size: 15px;
     }
-    .student-info-bar span { color: var(--primary); font-size: 1.1em; text-transform: uppercase; }
+    
+    /* 🟢 SỬA TẠI ĐÂY: Bỏ text-transform: uppercase để giữ nguyên tên gốc */
+    .student-info-bar span { color: var(--primary); font-size: 1.1em; }
+    
+    /* 🟢 Chỉ in hoa tên Lớp (nếu muốn) */
+    #displayClass { text-transform: uppercase; }
 
     .exam-card { border: 1px solid var(--border); padding: 15px; margin-bottom: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; background: var(--white); transition: 0.2s;}
     .exam-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
@@ -274,7 +279,6 @@ window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
        ============================================================ */
     async function loadDashboard() {
         try {
-            // 🟢 Parallel import thay vì 2 await tuần tự
             const [{ auth, db }, fsMod] = await Promise.all([
                 import('/bx/firebase-init.js'),
                 import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js')
@@ -320,7 +324,7 @@ window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
             const listEl = document.getElementById('examList');
             let html = "";
             let count = 0;
-            const examIdsToPrefetch = [];   // 🟢 danh sách đề cần tải ngầm
+            const examIdsToPrefetch = []; 
 
             assignSnapshot.forEach((docSnap) => {
                 const data = docSnap.data();
@@ -330,8 +334,6 @@ window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
                     const done = attemptCounts[docSnap.id] || 0;
                     const isOutOfAttempts = done >= maxAttempts;
 
-                    // 🟢 Thu thập examId để prefetch ngay cả khi user hết lượt
-                    // (không prefetch nếu hết lượt → tiết kiệm data)
                     if (!isOutOfAttempts) examIdsToPrefetch.push(data.examId);
 
                     let scoreHtml = "";
@@ -386,9 +388,6 @@ window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
             if (count === 0) listEl.innerHTML = "<p>Hiện không có đề nào đang mở cho lớp của bạn.</p>";
             else listEl.innerHTML = html;
 
-            /* 🟢 PREFETCH: tải ngầm toàn bộ đề đang mở (fire and forget).
-               - User đọc danh sách 3-10s → đề tải xong trước khi bấm nút
-               - Nếu bấm quá nhanh, getExamData() sẽ dùng chung Promise đang bay (dedupe) */
             if (examIdsToPrefetch.length) {
                 console.log('[Prefetch] Tải ngầm', examIdsToPrefetch.length, 'đề');
                 examIdsToPrefetch.forEach(id => {
@@ -419,7 +418,6 @@ window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
             
             currentAssignment = { id: assignmentId, examId: examId, duration: duration };
             
-            // 🟢 Song song: bài nộp cũ + đề (đề đã có trong cache → instant)
             const subQuery = query(
                 collection(db, "exam_submissions"), 
                 where("studentId", "==", currentUser.uid), 
@@ -428,10 +426,9 @@ window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
             
             const [subSnap, examData] = await Promise.all([
                 getDocs(subQuery),
-                getExamData(examId)   // ← cache hit nếu đã prefetch
+                getExamData(examId)
             ]);
 
-            // 🟢 Clone từ cache để tránh mutate cache khi shuffle
             currentExamData = JSON.parse(JSON.stringify(examData));
 
             let inProgressDoc = null;
@@ -476,7 +473,6 @@ window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
                 return;
             }
 
-            // Shuffle (chỉ trên bản clone)
             if (doShuffleQ) {
                 let p1 = currentExamData.questions.filter(q => q.part === 1);
                 let p2 = currentExamData.questions.filter(q => q.part === 2);
@@ -593,7 +589,6 @@ window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
 
         body.innerHTML = html;
         updateAnsweredCount();
-        // 🟢 Lazy typeset: chỉ render công thức câu đang thấy
         typesetLazy(body);
     }
 
