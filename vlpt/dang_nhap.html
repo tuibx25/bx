@@ -11,49 +11,139 @@
         --border: #D3D3D3; --primary: #004488; --primary-light: #0066CC;
         --brown: #8B5A2B; --brown-d: #8B4513;
         --beige: #F5F5DC; --wheat: #F5DEB3;
-        --warning-bg: #FFF3CD; --warning-border: #FFEBAA; --warning-text: #856404; --warning-d: #D35400;
     }
     body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; color: var(--ink); }
     .card { background: var(--white); width: 100%; max-width: 450px; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid var(--border); }
     h2 { text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 20px;}
     
     .tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid var(--border); }
-    .tab-btn { flex: 1; padding: 10px; background: none; border: none; font-size: 16px; font-weight: bold; cursor: pointer; color: #888; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: 0.2s;}
-    .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .tab-btn { flex: 1; padding: 10px; background: none; border: none; font-size: 16px; font-weight: bold; cursor: pointer; color: var(--brown); opacity: 0.6; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: 0.2s;}
+    .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); opacity: 1; }
 
     .form-group { margin-bottom: 15px; }
     .form-group label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
     .form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; box-sizing: border-box; font-size: 14px; color: var(--ink);}
     .form-control:focus { outline: none; border-color: var(--primary-light); }
-    .form-control:disabled { background: var(--bg); color: #888; cursor: not-allowed; }
+    .form-control:disabled { background: var(--bg); color: var(--brown); opacity: 0.6; cursor: not-allowed; }
     
     .row { display: flex; gap: 10px; }
     .row > div { flex: 1; }
 
     .btn { width: 100%; padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 16px; color: var(--white); transition: 0.2s; background: var(--primary); display: block; text-align: center; text-decoration: none; box-sizing: border-box;}
     .btn:hover { background: var(--primary-light); }
-    .btn-submit { background: var(--brown-d); }
-    .btn-submit:hover { background: var(--brown); }
-    .btn-success { background: #28a745; }
-    .btn-success:hover { background: #218838; }
+    
+    /* Nút Lưu (Nút chính - Xanh dương đậm) */
+    .btn-submit { 
+        background: var(--primary); 
+        color: var(--white);
+        border: 2px solid var(--primary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 2px 4px rgba(0, 68, 136, 0.2);
+    }
+    .btn-submit:hover { 
+        background: var(--primary-light); 
+        border-color: var(--primary-light);
+    }
+
+    /* Đã đổi nút Thành công/Gửi lại mail sang màu xanh dương */
+    .btn-success { background: var(--primary-light); border: 2px solid var(--primary-light); }
+    .btn-success:hover { background: var(--primary); border-color: var(--primary); }
     
     .msg { padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 14px; display: none; text-align: center; font-weight: bold;}
-    .msg.error { display: block; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-    .msg.success { display: block; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    /* Đã đổi màu thông báo lỗi sang tông Nâu đậm */
+    .msg.error { display: block; background: var(--wheat); color: var(--brown-d); border: 1px solid var(--brown-d); }
+    /* Đã đổi màu thông báo thành công sang tông Xanh dương */
+    .msg.success { display: block; background: var(--bg); color: var(--primary); border: 1px solid var(--primary); }
     .msg.info { display: block; background: var(--beige); color: var(--brown-d); border: 1px solid var(--wheat); }
 
     .hidden { display: none !important; }
-    .note { font-size: 13px; color: #666; text-align: center; margin-top: 15px; }
+    .note { font-size: 13px; color: var(--ink); opacity: 0.6; text-align: center; margin-top: 15px; }
     
-    .user-info { text-align: center; margin-bottom: 20px; background: var(--bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border);}
-    .user-info p { margin: 5px 0; font-size: 15px;}
+    /* CSS CHO KHUNG HỒ SƠ VÀ CÁC NÚT BẤM */
+    .user-info { 
+        text-align: center; 
+        margin-bottom: 25px; 
+        background: var(--beige); /* Nền vàng nhạt */
+        padding: 15px; 
+        border-radius: 8px; 
+        border: 1px solid var(--wheat);
+        box-shadow: 0 2px 5px rgba(139, 69, 19, 0.05); /* Bóng đổ rất nhẹ màu nâu */
+    }
+    .user-info p { margin: 5px 0; font-size: 15px; color: var(--brown-d); }
+    .user-info b { color: var(--primary); font-size: 16px;}
+
+    /* Nhóm nút chuyển trang (Nút phụ - Dạng viền Outline) */
+    .link-buttons { 
+        display: flex; 
+        gap: 10px; 
+        margin-top: 20px; 
+        margin-bottom: 20px;
+    }
+    .link-buttons .btn { 
+        font-size: 14px; 
+        padding: 10px; 
+        background: var(--white);
+        transition: all 0.2s ease;
+    }
+    /* Nút Trang Làm Bài: Viền Nâu */
+    .link-buttons .btn-brown-outline {
+        border: 2px solid var(--brown);
+        color: var(--brown-d);
+    }
+    .link-buttons .btn-brown-outline:hover {
+        background: var(--brown-d);
+        color: var(--white);
+    }
+    /* Nút Trang Luyện Tập: Viền Xanh */
+    .link-buttons .btn-blue-outline {
+        border: 2px solid var(--primary);
+        color: var(--primary);
+    }
+    .link-buttons .btn-blue-outline:hover {
+        background: var(--primary);
+        color: var(--white);
+    }
+
+    /* Nút Đăng xuất (Dạng Text nhỏ gọn) */
+    .btn-logout-text {
+        background: transparent;
+        border: none;
+        color: var(--brown-d);
+        font-size: 14px;
+        font-weight: bold;
+        text-decoration: underline;
+        cursor: pointer;
+        margin-top: 10px;
+        padding: 5px;
+        transition: color 0.2s;
+        width: 100%;
+        text-align: center;
+    }
+    .btn-logout-text:hover {
+        color: var(--brown);
+    }
+
+    /* 🟢 Thông báo khóa hồ sơ nhẹ nhàng */
+    .lock-notice {
+        font-size: 13.5px;
+        color: var(--brown-d);
+        font-style: italic;
+        text-align: center;
+        margin-top: -5px;
+        margin-bottom: 20px;
+        background: var(--bg);
+        padding: 8px 10px;
+        border-radius: 5px;
+        border: 1px dashed var(--border);
+    }
     
-    /* CSS cho hàng nút link */
-    .link-buttons { display: flex; gap: 10px; margin-top: 15px; }
-    .link-buttons .btn { font-size: 14px; padding: 10px; }
-    
-    /* CSS cho phần Preview Lớp */
     .class-preview { font-size: 16px; font-weight: bold; color: var(--brown-d); margin-left: 10px; background: var(--beige); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--wheat);}
+    
+    /* Khung cảnh báo xác thực email */
+    .verify-box { background: var(--beige); border: 1px solid var(--wheat); border-radius: 8px; padding: 15px; margin-bottom: 20px; }
+    .verify-box-title { color: var(--brown-d); font-size: 16px; margin-bottom: 10px; font-weight: bold; }
+    .verify-steps { text-align: left; font-size: 14px; color: var(--ink); margin-top: 15px; background: var(--white); padding: 10px; border-radius: 5px; border: 1px solid var(--border); }
 </style>
 </head>
 <body>
@@ -100,7 +190,7 @@
                     </select>
                     <input type="number" id="regClassNum" class="form-control" placeholder="Số lớp (VD: 11)" min="1" max="99">
                 </div>
-                <small style="color:#666; font-size: 12px; margin-top: 5px; display: block;">Ví dụ chọn Khối 10 và gõ 11 -> Lớp hiển thị phía trên</small>
+                <small style="color: var(--brown); opacity: 0.8; font-size: 12px; margin-top: 5px; display: block;">Ví dụ chọn Khối 10 và gõ 11 -> Lớp hiển thị phía trên</small>
             </div>
 
             <div class="form-group">
@@ -117,14 +207,14 @@
 
     <!-- 2. MÀN HÌNH CHỜ XÁC THỰC EMAIL -->
     <div id="verifySection" class="hidden" style="text-align: center;">
-        <h2 style="color: var(--warning-d);">⚠️ CẦN XÁC THỰC EMAIL</h2>
+        <h2 style="color: var(--brown-d);">⚠️ CẦN XÁC THỰC EMAIL</h2>
         
-        <div class="user-info" style="background: var(--warning-bg); border-color: var(--warning-border);">
-            <p style="font-size: 16px;">Tài khoản: <b id="vEmail" style="color: var(--warning-d);"></b></p>
-            <p style="color: var(--warning-text); font-weight: bold; margin-top: 10px; font-size: 15px;">
+        <div class="verify-box">
+            <p style="font-size: 16px; margin: 0;">Tài khoản: <b id="vEmail" style="color: var(--primary);"></b></p>
+            <p class="verify-box-title" style="margin-top: 10px;">
                 Bạn chưa thể làm bài vì chưa xác thực email!
             </p>
-            <div style="text-align: left; font-size: 14px; color: #333; margin-top: 15px; background: var(--white); padding: 10px; border-radius: 5px; border: 1px solid var(--warning-border);">
+            <div class="verify-steps">
                 <p style="margin-top: 0;"><b>Các bước thực hiện:</b></p>
                 <p>1. Mở hộp thư của email trên.</p>
                 <p>2. Tìm thư từ "Hệ thống thi online".</p>
@@ -137,16 +227,19 @@
 
         <button class="btn" onclick="checkVerificationStatus()" style="background: var(--primary); margin-bottom: 10px;">🔄 Tôi Đã Xác Thực (Kiểm Tra Lại)</button>
         <button class="btn btn-success" onclick="handleResendEmail()" style="margin-bottom: 15px;">📧 Gửi Lại Thư Xác Thực</button>
-        <button class="btn" style="background: #d9534f;" onclick="handleLogout()">Đăng Xuất / Đổi Tài Khoản</button>
+        <button class="btn" style="background: var(--brown-d);" onclick="handleLogout()">Đăng Xuất / Đổi Tài Khoản</button>
     </div>
 
     <!-- 3. MÀN HÌNH HỒ SƠ CÁ NHÂN -->
     <div id="profileSection" class="hidden">
         <h2>👤 HỒ SƠ CÁ NHÂN</h2>
+        
+        <!-- Khung thông tin nền Beige nổi bật -->
         <div class="user-info">
             <p>Email: <b id="pEmail"></b></p>
-            <p>Lớp: <b id="pClassDisplay" style="color: var(--primary); font-size: 18px; text-transform: uppercase;"></b></p>
+            <p>Lớp: <b id="pClassDisplay" style="text-transform: uppercase;"></b></p>
         </div>
+
         <div class="form-group">
             <label>Họ và Tên:</label>
             <input type="text" id="pName" class="form-control">
@@ -162,16 +255,21 @@
                 <input type="number" id="pClassNum" class="form-control" min="1" max="99">
             </div>
         </div>
-        <div id="lockMsg" class="msg info hidden">⚠️ Tài khoản của bạn đã bị Giáo viên khóa. Không thể thay đổi thông tin.</div>
         
-        <button class="btn btn-submit" id="btnSaveProfile" onclick="handleUpdateProfile()" style="margin-bottom: 10px;">Lưu Thay Đổi</button>
+        <!-- Dòng thông báo khóa hồ sơ nhẹ nhàng -->
+        <div id="lockMsg" class="lock-notice hidden">🔒</div>
         
-        <!-- 2 Nút Link chuyển trang -->
+        <!-- Nút Lưu - Nổi bật nhất -->
+        <button class="btn btn-submit" id="btnSaveProfile" onclick="handleUpdateProfile()" style="margin-top: 5px;">💾 Lưu Thay Đổi</button>
+        
+        <!-- 2 Nút chuyển trang dạng Outline thanh lịch -->
         <div class="link-buttons">
-            <a href="quiz/" class="btn" style="background: var(--brown);">📝 Trang Làm Bài</a>
-            <a href="prac/" class="btn" style="background: var(--primary-light);">📚 Trang Luyện Tập</a>
+            <a href="quiz/" class="btn btn-brown-outline">📝 Làm Bài</a>
+            <a href="prac/" class="btn btn-blue-outline">📚 Luyện Tập</a>
         </div>
-        <button class="btn" style="margin-top: 10px; background: #d9534f;" onclick="handleLogout()">Đăng Xuất</button>
+        
+        <!-- Nút Đăng Xuất dạng Text -->
+        <button class="btn-logout-text" onclick="handleLogout()">Đăng Xuất Tài Khoản</button>
     </div>
 </div>
 
@@ -179,7 +277,6 @@
     let currentUserDoc = null;
 
     window.addEventListener('load', () => {
-        // Gắn sự kiện để cập nhật Preview Lớp ngay khi gõ
         document.getElementById('regGrade').addEventListener('change', updateRegPreview);
         document.getElementById('regClassNum').addEventListener('input', updateRegPreview);
         document.getElementById('pGrade').addEventListener('change', updateProfilePreview);
@@ -202,7 +299,6 @@
         });
     });
 
-    // Hàm cập nhật preview lớp ở form Đăng ký
     function updateRegPreview() {
         const grade = document.getElementById('regGrade').value;
         const numRaw = document.getElementById('regClassNum').value;
@@ -220,7 +316,6 @@
         }
     }
 
-    // Hàm cập nhật preview lớp ở form Hồ sơ
     function updateProfilePreview() {
         const grade = document.getElementById('pGrade').value;
         const numRaw = document.getElementById('pClassNum').value;
@@ -261,7 +356,6 @@
         }
     }
 
-    // TÁCH KHỐI VÀ LỚP TỪ CHUỖI (VD: 10a12 -> grade: 10, num: 12)
     function parseClassString(classStr) {
         if (!classStr) return { grade: "10", num: "" };
         const match = classStr.toLowerCase().match(/^(10|11|12)a(\d+)$/);
@@ -271,7 +365,6 @@
         return { grade: "10", num: "" };
     }
 
-    // XỬ LÝ ĐĂNG KÝ
     window.handleRegister = async function() {
         const name = document.getElementById('regName').value.trim();
         const grade = document.getElementById('regGrade').value;
@@ -293,7 +386,6 @@
             return showMsg("Mật khẩu phải từ 6 ký tự trở lên!", "error");
         }
 
-        // Kiểm tra lỗi chính tả email
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             return showMsg("Định dạng email không hợp lệ!", "error");
@@ -308,7 +400,7 @@
         }
 
         try {
-            const { auth, db, createUserWithEmailAndPassword, sendEmailVerification, doc, setDoc, signOut } = await import('/bx/firebase-init.js');
+            const { auth, db, createUserWithEmailAndPassword, sendEmailVerification, doc, setDoc } = await import('/bx/firebase-init.js');
             
             showMsg("⏳ Đang tạo tài khoản...", "info");
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -341,7 +433,6 @@
         }
     }
 
-    // XỬ LÝ ĐĂNG NHẬP
     window.handleLogin = async function() {
         const email = document.getElementById('loginEmail').value.trim();
         const password = document.getElementById('loginPassword').value;
@@ -358,7 +449,6 @@
         }
     }
 
-    // HIỂN THỊ MÀN HÌNH CHỜ XÁC THỰC
     function showVerifyScreen(user) {
         document.getElementById('authSection').classList.add('hidden');
         document.getElementById('profileSection').classList.add('hidden');
@@ -367,7 +457,6 @@
         document.getElementById('verifyMsg').className = 'msg'; 
     }
 
-    // GỬI LẠI MAIL XÁC THỰC
     window.handleResendEmail = async function() {
         try {
             const { auth, sendEmailVerification } = await import('/bx/firebase-init.js');
@@ -381,14 +470,11 @@
         }
     }
 
-    // KIỂM TRA LẠI XEM ĐÃ XÁC THỰC CHƯA
     window.checkVerificationStatus = async function() {
         try {
             const { auth } = await import('/bx/firebase-init.js');
             if (auth.currentUser) {
                 showMsg("⏳ Đang kiểm tra trạng thái xác thực...", "info", "verifyMsg");
-                
-                // Tải lại thông tin user từ Firebase
                 await auth.currentUser.reload();
                 
                 if (auth.currentUser.emailVerified) {
@@ -406,7 +492,6 @@
         }
     }
 
-    // TẢI HỒ SƠ CÁ NHÂN
     async function loadUserProfile(user) {
         document.getElementById('authSection').classList.add('hidden');
         document.getElementById('verifySection').classList.add('hidden');
@@ -425,15 +510,12 @@
                 document.getElementById('pName').value = data.name || "";
                 document.getElementById('pClassDisplay').textContent = (data.class || "").toUpperCase();
                 
-                // Tách khối và số lớp để điền vào form
                 const parsed = parseClassString(data.class);
                 document.getElementById('pGrade').value = parsed.grade;
                 document.getElementById('pClassNum').value = parsed.num;
                 
-                // Cập nhật preview ngay khi load xong
                 updateProfilePreview();
 
-                // Kiểm tra khóa thông tin
                 if (data.infoLocked === true) {
                     document.getElementById('pName').disabled = true;
                     document.getElementById('pGrade').disabled = true;
@@ -453,7 +535,6 @@
         }
     }
 
-    // CẬP NHẬT HỒ SƠ
     window.handleUpdateProfile = async function() {
         const newName = document.getElementById('pName').value.trim();
         const newGrade = document.getElementById('pGrade').value;
@@ -485,7 +566,6 @@
         }
     }
 
-    // ĐĂNG XUẤT
     window.handleLogout = async function() {
         const { auth, signOut } = await import('/bx/firebase-init.js');
         await signOut(auth);

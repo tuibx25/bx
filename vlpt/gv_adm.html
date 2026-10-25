@@ -83,7 +83,6 @@
 
     .hidden { display: none !important; }
 
-    /* Spinner khi bấm nút */
     .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid #fff; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 5px; vertical-align: middle; }
     @keyframes spin { to { transform: rotate(360deg); } }
 </style>
@@ -233,7 +232,6 @@
     let currentRoster = [];
     let allGradebookData = [];
 
-    // 🟢 HÀM CHỐNG XSS
     function escapeHTML(str) {
         if (str === null || str === undefined) return '';
         return String(str).replace(/[&<>"']/g, function(m) {
@@ -263,7 +261,6 @@
         });
     });
 
-    // 🟢 SỬA: Truyền `btn` trực tiếp thay vì dùng global event
     window.switchTab = function(tabId, btn) {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -276,7 +273,6 @@
         return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").toLowerCase().replace(/\s+/g, ' ').trim();
     }
 
-    // Helper: Hiệu ứng loading cho nút
     function setBtnLoading(btnId, isLoading, originalText) {
         const btn = document.getElementById(btnId);
         if (!btn) return;
@@ -422,16 +418,13 @@
             const assignment = allAssignments[assignmentId];
             if (!assignment) throw new Error("Không tìm thấy thông tin đợt giao bài.");
 
-            // 🟢 SỬA: Lấy danh sách TẤT CẢ các lớp được giao, không chỉ lớp đầu tiên
             const assignedClasses = assignment.assignedClasses || [];
             if (assignedClasses.length === 0) throw new Error("Đợt giao bài này không có lớp nào.");
 
-            // Lấy answer key (có kiểm tra tồn tại)
             const keySnap = await getDoc(doc(db, "exam_keys", assignment.examId));
             if (!keySnap.exists()) throw new Error("Không tìm thấy đáp án của đề thi này. Vui lòng kiểm tra lại!");
             const answerKey = keySnap.data().answers;
 
-            // 🟢 Lấy submissions CỦA TẤT CẢ CÁC LỚP ĐƯỢC GIAO
             let allRosters = {};
             let allUsersInClasses = [];
             const classQueries = assignedClasses.map(c => getDoc(doc(db, "exam_rosters", c)));
@@ -448,13 +441,12 @@
                 allRosters[cls] = snap.exists() ? snap.data().students : [];
             });
 
-            userSnaps.forEach((snap, idx) => {
+            userSnaps.forEach((snap) => {
                 snap.forEach(d => allUsersInClasses.push({ id: d.id, ...d.data() }));
             });
 
             let submissions = subSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-            // 🟢 Gộp tất cả học sinh của TẤT CẢ các lớp được giao, có nhãn lớp
             const combinedStudents = [];
             assignedClasses.forEach(cls => {
                 (allRosters[cls] || []).forEach(st => {
@@ -472,7 +464,6 @@
                 let status = '';
                 let canPublish = false;
 
-                // 🟢 SỬA: await update, tránh gọi nhiều lần
                 if (sub.status === 'in_progress' && Date.now() > sub.endTime) {
                     sub.status = 'submitted';
                     updateDoc(doc(db, "exam_submissions", sub.id), { status: 'submitted' }).catch(e => console.warn(e));
@@ -488,10 +479,7 @@
                 }
 
                 const autoScore = calculateScore(sub.answers || {}, answerKey);
-                
-                // 🟢 SỬA: Dùng `!= null` để bao quát cả `null` và `undefined`
                 const displayScore = (sub.score != null) ? sub.score : autoScore;
-                
                 const rowClass = isHidden ? `sub-row hidden hidden-sub-${user.id}` : '';
                 
                 let actionHtml = `<button class="btn btn-sm btn-outline" onclick="viewDetail('${sub.id}', '${assignmentId}')">Chi tiết</button>`;
@@ -504,7 +492,6 @@
                     }
                 }
 
-                // 🟢 SỬA: `displayScore.toFixed(2)` an toàn vì đã fallback autoScore (luôn là số)
                 const scoreDisplay = (sub.status === 'in_progress') ? '-' : Number(displayScore).toFixed(2);
 
                 return `
@@ -523,7 +510,6 @@
 
             combinedStudents.forEach((st, index) => {
                 const normName = normalizeName(st.name);
-                // Match user trong phạm vi CÙNG LỚP để tránh trùng tên khác lớp
                 const user = allUsersInClasses.find(u => 
                     normalizeName(u.name) === normName && u.class === st.classOfStudent
                 );
@@ -625,7 +611,6 @@
             const assignment = allAssignments[assignmentId];
             if (!assignment) throw new Error("Không tìm thấy đợt giao bài.");
 
-            // 🟢 SỬA: Fetch song song 3 request thay vì tuần tự
             const [examSnap, keySnap, subSnap] = await Promise.all([
                 getDoc(doc(db, "exams", assignment.examId)),
                 getDoc(doc(db, "exam_keys", assignment.examId)),
@@ -649,7 +634,6 @@
             examData.questions.forEach((q, idx) => {
                 const correctAns = answerKey[q.uid];
                 const studentAns = studentAnswers[q.uid];
-                // 🟢 CHỐNG XSS: escape nội dung câu hỏi & đáp án
                 html += `<div class="q-detail"><p><b>Câu ${idx + 1}:</b> ${escapeHTML(q.text)}</p>`;
                 if (q.part === 1) {
                     q.options.forEach((opt, oIdx) => {
@@ -933,8 +917,38 @@
             renderStudentTable(roster, allUsersList);
 
             document.getElementById('batchClassLabel').textContent = className.toUpperCase();
-            document.getElementById('btnLockClass').disabled = false;
-            document.getElementById('btnUnlockClass').disabled = false;
+            
+            // 🟢 LOGIC CẬP NHẬT TRẠNG THÁI NÚT KHÓA/MỞ KHÓA
+            const btnLock = document.getElementById('btnLockClass');
+            const btnUnlock = document.getElementById('btnUnlockClass');
+            
+            if (allUsersList.length > 0) {
+                let lockedCount = allUsersList.filter(u => u.infoLocked).length;
+                
+                if (lockedCount === allUsersList.length) {
+                    // Tất cả đang khóa -> Disable nút Khóa
+                    btnLock.disabled = true;
+                    btnLock.innerHTML = '🔒 Đang khóa';
+                    btnUnlock.disabled = false;
+                    btnUnlock.innerHTML = '🔓 Mở khóa sửa Hồ Sơ';
+                } else if (lockedCount === 0) {
+                    // Tất cả đang mở -> Disable nút Mở khóa
+                    btnLock.disabled = false;
+                    btnLock.innerHTML = '🔒 Khóa sửa Hồ Sơ';
+                    btnUnlock.disabled = true;
+                    btnUnlock.innerHTML = '🔓 Đang mở';
+                } else {
+                    // Hỗn hợp
+                    btnLock.disabled = false;
+                    btnLock.innerHTML = '🔒 Khóa tất cả';
+                    btnUnlock.disabled = false;
+                    btnUnlock.innerHTML = '🔓 Mở tất cả';
+                }
+            } else {
+                btnLock.disabled = true;
+                btnUnlock.disabled = true;
+            }
+
         } catch (err) {
             console.error(err);
             div.innerHTML = `<p style="color: var(--brown-d);">Lỗi: ${escapeHTML(err.message)}</p>`;
@@ -1058,7 +1072,6 @@
             console.error("Lỗi khóa hàng loạt:", error);
             alert("Lỗi: " + error.message);
         } finally {
-            // 🟢 SỬA: Dùng finally để luôn mở khóa nút dù thành công hay thất bại
             setBtnLoading(btnId, false, isLock ? '🔒 Khóa sửa Hồ Sơ' : '🔓 Mở khóa sửa Hồ Sơ');
         }
     }
