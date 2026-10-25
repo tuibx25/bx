@@ -5,7 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hệ Thống Thi Trực Tuyến</title>
 
+<!-- 🟢 PRECONNECT + PRELOAD: bắt đầu tải tài nguyên nặng NGAY khi HTML parse -->
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js" crossorigin>
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" as="script">
+
 <script type="module" src="/bx/firebase-init.js"></script>
+
+<!-- 🟢 CẤU HÌNH MATHJAX PHẢI CHẠY TRƯỚC SCRIPT DEFER -->
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+  startup: {
+    ready: () => {
+      MathJax.startup.defaultReady();
+      if (window.__mjReadyResolve) window.__mjReadyResolve();
+    }
+  }
+};
+// Promise "MathJax đã sẵn sàng" — dùng await ở mọi nơi cần typeset
+window.mathJaxReady = new Promise(res => { window.__mjReadyResolve = res; });
+</script>
+<!-- 🟢 MathJax nạp ngay với defer — KHÔNG cần chờ đến khi bấm "Làm bài" -->
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
     :root { 
@@ -19,7 +42,6 @@
     .container { max-width: 900px; margin: 0 auto; background: var(--white); padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid var(--border); }
     h2 { color: var(--primary); text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
     
-    /* Thanh thông tin học sinh */
     .student-info-bar {
         background: var(--beige); border: 1px solid var(--wheat); color: var(--brown-d);
         padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; font-weight: bold;
@@ -27,7 +49,6 @@
     }
     .student-info-bar span { color: var(--primary); font-size: 1.1em; text-transform: uppercase; }
 
-    /* Giao diện danh sách đề */
     .exam-card { border: 1px solid var(--border); padding: 15px; margin-bottom: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; background: var(--white); transition: 0.2s;}
     .exam-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
     .exam-card h3 { margin: 0 0 5px 0; color: var(--ink); }
@@ -35,14 +56,12 @@
     
     .attempt-badge { display: inline-block; padding: 3px 8px; background: var(--beige); border: 1px solid var(--border); border-radius: 12px; font-size: 12px; font-weight: bold; margin-bottom: 8px;}
     
-    /* Giao diện nhãn điểm */
     .score-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
     .score-badge { padding: 4px 10px; border-radius: 6px; font-size: 13px; font-weight: bold; border: 1px solid var(--border); }
     .score-badge.published { background: var(--wheat); color: var(--brown-d); border-color: var(--brown); }
     .score-badge.best { background: var(--primary); color: var(--white); border-color: var(--primary); }
     .score-badge.pending { background: var(--bg); color: #888888; border-color: var(--border); font-style: italic; font-weight: normal; opacity: 0.7; }
     
-    /* Nút bấm */
     .btn { background: var(--primary); color: var(--white); border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 14px; text-decoration: none; display: inline-block;}
     .btn:hover:not(:disabled) { background: var(--primary-light); }
     .btn:disabled { background: var(--border); color: #888; cursor: not-allowed; }
@@ -50,7 +69,6 @@
     .btn-submit:hover { background: var(--brown); }
     .btn-outline { background: transparent; border: 1.5px solid var(--primary); color: var(--primary); }
 
-    /* 🟢 HEADER TỐI ƯU CHO LÀM BÀI */
     #quizHeader { 
         display: flex; justify-content: space-between; align-items: center; 
         margin-bottom: 20px; position: sticky; top: 0; background: var(--white); 
@@ -62,7 +80,6 @@
     .stat-badge b { color: var(--primary); font-size: 15px; }
     .spacer { flex: 1 1 auto; }
 
-    /* Giao diện làm bài */
     .part-title { font-weight: 800; font-size: 1.1em; color: var(--brown-d); margin: 25px 0 10px; padding: 10px; background: var(--beige); border-left: 5px solid var(--brown-d); border-radius: 0 5px 5px 0; }
     .question { border: 1px solid var(--border); padding: 15px; margin-bottom: 15px; border-radius: 8px; background: var(--white); }
     .q-text { font-weight: 600; margin-bottom: 10px; line-height: 1.5; color: var(--ink); }
@@ -82,7 +99,6 @@
     
     .hidden { display: none !important; }
 
-    /* 🟢 TỐI ƯU MOBILE */
     @media (max-width: 768px) {
         body { padding: 10px; }
         .container { padding: 15px; }
@@ -91,17 +107,14 @@
         .exam-card { flex-direction: column; align-items: stretch; gap: 15px; }
         .exam-card .btn { width: 100%; padding: 12px; font-size: 16px; }
         
-        /* Header làm bài: Nút Home, Đếm câu, Đồng hồ, Nộp bài trên 1 hàng */
         #quizHeader { padding: 8px 0; gap: 6px; }
-        #timerDisplay { font-size: 15px; padding: 4px 8px; margin-left: auto; } /* Đẩy đồng hồ sang phải */
+        #timerDisplay { font-size: 15px; padding: 4px 8px; margin-left: auto; }
         .stat-badge { font-size: 11px; padding: 3px 6px; }
         .btn-submit { padding: 6px 10px; font-size: 12px; }
         
-        /* Câu hỏi Đúng/Sai full chiều ngang */
         .st-row { flex-direction: column; align-items: flex-start; gap: 10px; }
         .st-btns { width: 100%; justify-content: space-around; background: var(--bg); padding: 8px; border-radius: 5px; margin-top: 5px;}
         
-        /* Ô nhập đáp án ngắn full chiều ngang */
         .short-input { width: 100%; box-sizing: border-box; }
     }
 </style>
@@ -112,24 +125,20 @@
     <h2>🔄 Đang kết nối máy chủ dữ liệu...</h2>
 </div>
 
-<!-- MÀN HÌNH DANH SÁCH ĐỀ -->
 <div id="dashboardScreen" class="container hidden">
     <div class="student-info-bar">
         <div style="display: flex; flex-direction: column; gap: 5px;">
             <div>👤 Học sinh: <span id="displayName">Đang tải...</span></div>
             <div>🏫 Lớp: <span id="displayClass">...</span></div>
         </div>
-        <!-- NÚT TRANG CHỦ -->
-        <a href="https://tuibx25.github.io/bx/bt/" class="btn btn-outline">🏠 Trang Chủ</a>
+        <a href="../" class="btn btn-outline">🏠 Trang Chủ</a>
     </div>
     <h2>📝 Danh Sách Đề</h2>
     <div id="examList">Đang tải danh sách...</div>
 </div>
 
-<!-- MÀN HÌNH LÀM BÀI -->
 <div id="quizScreen" class="container hidden">
     <div id="quizHeader">
-        <!-- NÚT QUAY LẠI DANH SÁCH -->
         <button class="btn" onclick="backToDashboard()" style="padding: 6px 10px; font-size: 16px;" title="Quay lại danh sách">🏠</button>
         
         <span class="stat-badge">Đã làm: <b id="answeredCount">0</b>/<span id="totalCount">0</span></span>
@@ -141,7 +150,6 @@
     <div id="quizBody" autocomplete="off"></div>
 </div>
 
-<!-- MÀN HÌNH HOÀN TẤT -->
 <div id="doneScreen" class="container hidden" style="text-align: center;">
     <h2 style="color: var(--primary); border:none;">✅ Đã Nộp Bài Thành Công!</h2>
     <p style="font-size: 16px; color: var(--ink);">Vui lòng chờ Giáo viên chấm điểm và công bố kết quả.</p>
@@ -158,7 +166,80 @@
     let currentEndTime = null; 
     let currentSubmissionId = null; 
     let isSubmitting = false; 
-    let isMathJaxLoaded = false; 
+
+    /* ============================================================
+       🟢 CACHE ĐỀ THI TRONG BỘ NHỚ + DEDUPE REQUEST
+       ============================================================ */
+    const examCache = new Map();           // examId -> { data, ts }
+    const examFetchPromises = new Map();   // examId -> Promise (đang bay)
+    const EXAM_CACHE_TTL = 10 * 60 * 1000; // 10 phút
+
+    async function getExamData(examId, forceReload = false) {
+        const now = Date.now();
+
+        // 1. Cache còn hạn → trả ngay
+        if (!forceReload) {
+            const cached = examCache.get(examId);
+            if (cached && now - cached.ts < EXAM_CACHE_TTL) {
+                return cached.data;
+            }
+            // 2. Đang có request bay → dùng chung (không fetch trùng)
+            if (examFetchPromises.has(examId)) {
+                return examFetchPromises.get(examId);
+            }
+        }
+
+        // 3. Fetch mới
+        const promise = (async () => {
+            const [{ db }, fsMod] = await Promise.all([
+                import('/bx/firebase-init.js'),
+                import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js')
+            ]);
+            const { doc, getDoc } = fsMod;
+            const snap = await getDoc(doc(db, "exams", examId));
+            if (!snap.exists()) throw new Error("Không tìm thấy đề thi!");
+            const data = snap.data();
+            examCache.set(examId, { data, ts: Date.now() });
+            return data;
+        })();
+
+        examFetchPromises.set(examId, promise);
+        try {
+            return await promise;
+        } finally {
+            examFetchPromises.delete(examId);
+        }
+    }
+
+    /* ============================================================
+       🟢 LAZY MATHJAX: chỉ typeset câu nào vào viewport
+       ============================================================ */
+    let mathObserver = null;
+
+    function typesetLazy(rootEl) {
+        if (!rootEl) return;
+        window.mathJaxReady.then(() => {
+            if (!window.MathJax || !window.MathJax.typesetPromise) return;
+            if (!mathObserver) {
+                mathObserver = new IntersectionObserver((entries) => {
+                    const targets = [];
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            targets.push(entry.target);
+                            mathObserver.unobserve(entry.target);
+                        }
+                    });
+                    if (targets.length) {
+                        MathJax.typesetPromise(targets).catch(e => console.log(e));
+                    }
+                }, { rootMargin: '300px 0px' });
+            }
+            rootEl.querySelectorAll('.question').forEach(q => {
+                if (q.dataset.mathDone) return;
+                mathObserver.observe(q);
+            });
+        });
+    }
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -168,32 +249,14 @@
         return array;
     }
 
-    function loadMathJax() {
-        return new Promise((resolve) => {
-            if (isMathJaxLoaded || window.MathJax) return resolve();
-            
-            window.MathJax = { 
-                tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-                startup: {
-                    ready: () => {
-                        MathJax.startup.defaultReady();
-                        isMathJaxLoaded = true;
-                        const quizBody = document.getElementById('quizBody');
-                        if (quizBody && !document.getElementById('quizScreen').classList.contains('hidden')) {
-                            MathJax.typesetPromise([quizBody]).catch(err => console.log(err));
-                        }
-                        resolve(); 
-                    }
-                }
-            };
-            
-            const script = document.createElement('script');
-            script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js";
-            script.async = true;
-            document.head.appendChild(script);
-        });
+    function setLoading(text) {
+        const el = document.getElementById('loadingScreen');
+        if (el) el.innerHTML = `<h2>${text}</h2>`;
     }
 
+    /* ============================================================
+       🟢 KHỞI ĐỘNG
+       ============================================================ */
     window.addEventListener('load', () => {
         window.checkAuthState((isLoggedIn) => {
             if (!isLoggedIn) {
@@ -206,10 +269,17 @@
         });
     });
 
+    /* ============================================================
+       🟢 DASHBOARD + PREFETCH TẤT CẢ ĐỀ
+       ============================================================ */
     async function loadDashboard() {
         try {
-            const { auth, db } = await import('/bx/firebase-init.js');
-            const { doc, getDoc, collection, getDocs, query, where } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+            // 🟢 Parallel import thay vì 2 await tuần tự
+            const [{ auth, db }, fsMod] = await Promise.all([
+                import('/bx/firebase-init.js'),
+                import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js')
+            ]);
+            const { doc, getDoc, collection, getDocs, query, where } = fsMod;
             
             currentUser = auth.currentUser;
             const userSnap = await getDoc(doc(db, "users", currentUser.uid));
@@ -250,6 +320,7 @@
             const listEl = document.getElementById('examList');
             let html = "";
             let count = 0;
+            const examIdsToPrefetch = [];   // 🟢 danh sách đề cần tải ngầm
 
             assignSnapshot.forEach((docSnap) => {
                 const data = docSnap.data();
@@ -258,6 +329,10 @@
                     const maxAttempts = data.maxAttempts || 1;
                     const done = attemptCounts[docSnap.id] || 0;
                     const isOutOfAttempts = done >= maxAttempts;
+
+                    // 🟢 Thu thập examId để prefetch ngay cả khi user hết lượt
+                    // (không prefetch nếu hết lượt → tiết kiệm data)
+                    if (!isOutOfAttempts) examIdsToPrefetch.push(data.examId);
 
                     let scoreHtml = "";
                     if (submissionsByAssignment[docSnap.id]) {
@@ -311,34 +386,53 @@
             if (count === 0) listEl.innerHTML = "<p>Hiện không có đề nào đang mở cho lớp của bạn.</p>";
             else listEl.innerHTML = html;
 
+            /* 🟢 PREFETCH: tải ngầm toàn bộ đề đang mở (fire and forget).
+               - User đọc danh sách 3-10s → đề tải xong trước khi bấm nút
+               - Nếu bấm quá nhanh, getExamData() sẽ dùng chung Promise đang bay (dedupe) */
+            if (examIdsToPrefetch.length) {
+                console.log('[Prefetch] Tải ngầm', examIdsToPrefetch.length, 'đề');
+                examIdsToPrefetch.forEach(id => {
+                    getExamData(id).catch(e => console.warn('[Prefetch] Lỗi', id, e.message));
+                });
+            }
+
         } catch (error) {
             console.error("Lỗi tải danh sách:", error);
             document.getElementById('examList').innerHTML = `<p style="color:red">Lỗi tải dữ liệu: ${error.message}</p>`;
         }
     }
 
+    /* ============================================================
+       🟢 BẮT ĐẦU LÀM BÀI — TỐI ƯU
+       ============================================================ */
     window.startExam = async function(assignmentId, examId, duration, doShuffleQ, doShuffleO, maxAttempts) {
         document.getElementById('dashboardScreen').classList.add('hidden');
         document.getElementById('loadingScreen').classList.remove('hidden');
-        document.getElementById('loadingScreen').innerHTML = "<h2>🔄 Đang tải đề thi...</h2>";
+        setLoading("🔄 Đang tải đề thi...");
 
         try {
-            loadMathJax().catch(e => console.log("MathJax load error:", e));
-
-            const { db } = await import('/bx/firebase-init.js');
-            const { doc, getDoc, collection, query, where, getDocs, setDoc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+            const [{ db }, fsMod] = await Promise.all([
+                import('/bx/firebase-init.js'),
+                import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js')
+            ]);
+            const { doc, getDoc, collection, query, where, getDocs, setDoc, updateDoc } = fsMod;
             
             currentAssignment = { id: assignmentId, examId: examId, duration: duration };
             
-            const subQuery = query(collection(db, "exam_submissions"), where("studentId", "==", currentUser.uid), where("assignmentId", "==", assignmentId));
+            // 🟢 Song song: bài nộp cũ + đề (đề đã có trong cache → instant)
+            const subQuery = query(
+                collection(db, "exam_submissions"), 
+                where("studentId", "==", currentUser.uid), 
+                where("assignmentId", "==", assignmentId)
+            );
             
-            const [subSnap, examSnap] = await Promise.all([
+            const [subSnap, examData] = await Promise.all([
                 getDocs(subQuery),
-                getDoc(doc(db, "exams", examId))
+                getExamData(examId)   // ← cache hit nếu đã prefetch
             ]);
 
-            if (!examSnap.exists()) throw new Error("Không tìm thấy đề thi!");
-            currentExamData = examSnap.data();
+            // 🟢 Clone từ cache để tránh mutate cache khi shuffle
+            currentExamData = JSON.parse(JSON.stringify(examData));
 
             let inProgressDoc = null;
             let completedCount = 0;
@@ -373,6 +467,7 @@
                 currentEndTime = inProgressDoc.endTime;
                 userAnswers = inProgressDoc.answers || {};
 
+                setLoading("⏳ Đang chuẩn bị...");
                 document.getElementById('loadingScreen').classList.add('hidden');
                 document.getElementById('quizScreen').classList.remove('hidden');
                 
@@ -381,6 +476,7 @@
                 return;
             }
 
+            // Shuffle (chỉ trên bản clone)
             if (doShuffleQ) {
                 let p1 = currentExamData.questions.filter(q => q.part === 1);
                 let p2 = currentExamData.questions.filter(q => q.part === 2);
@@ -414,6 +510,7 @@
                 isPublished: false
             }).catch(e => console.error("Lỗi tạo bài nộp ngầm:", e));
 
+            setLoading("⏳ Đang chuẩn bị...");
             document.getElementById('loadingScreen').classList.add('hidden');
             document.getElementById('quizScreen').classList.remove('hidden');
             
@@ -427,6 +524,9 @@
         }
     }
 
+    /* ============================================================
+       🟢 RENDER — LAZY MATHJAX
+       ============================================================ */
     function renderQuiz() {
         const body = document.getElementById('quizBody');
         body.innerHTML = ""; 
@@ -493,9 +593,8 @@
 
         body.innerHTML = html;
         updateAnsweredCount();
-        if (window.MathJax && isMathJaxLoaded) {
-            MathJax.typesetPromise([body]).catch(err => console.log(err));
-        }
+        // 🟢 Lazy typeset: chỉ render công thức câu đang thấy
+        typesetLazy(body);
     }
 
     let saveTimeout = null;
@@ -504,8 +603,11 @@
         saveTimeout = setTimeout(async () => {
             if (!currentSubmissionId) return;
             try {
-                const { db } = await import('/bx/firebase-init.js');
-                const { doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+                const [{ db }, fsMod] = await Promise.all([
+                    import('/bx/firebase-init.js'),
+                    import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js')
+                ]);
+                const { doc, setDoc } = fsMod;
                 await setDoc(doc(db, "exam_submissions", currentSubmissionId), { answers: userAnswers }, { merge: true });
             } catch(e) { console.log("Lỗi lưu nháp:", e); }
         }, 2000); 
@@ -567,13 +669,12 @@
         }, 1000);
     }
 
-    // 🟢 HÀM QUAY LẠI DANH SÁCH ĐỀ (TỪ MÀN HÌNH LÀM BÀI)
     window.backToDashboard = function() {
         if (confirm("Bạn có chắc muốn thoát ra ngoài? Tiến trình làm bài vẫn được lưu lại và bạn có thể làm tiếp sau.")) {
             if (timerInterval) clearInterval(timerInterval);
             document.getElementById('quizScreen').classList.add('hidden');
             document.getElementById('dashboardScreen').classList.remove('hidden');
-            loadDashboard(); // Tải lại danh sách để cập nhật trạng thái
+            loadDashboard();
         }
     }
 
@@ -591,11 +692,14 @@
         isSubmitting = true;
         document.getElementById('quizScreen').classList.add('hidden');
         document.getElementById('loadingScreen').classList.remove('hidden');
-        document.getElementById('loadingScreen').innerHTML = "<h2>⏳ Đang nộp bài lên hệ thống...</h2>";
+        setLoading("⏳ Đang nộp bài lên hệ thống...");
 
         try {
-            const { db } = await import('/bx/firebase-init.js');
-            const { doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+            const [{ db }, fsMod] = await Promise.all([
+                import('/bx/firebase-init.js'),
+                import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js')
+            ]);
+            const { doc, setDoc } = fsMod;
 
             await setDoc(doc(db, "exam_submissions", currentSubmissionId), {
                 answers: userAnswers,
