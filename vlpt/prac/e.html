@@ -28,16 +28,10 @@ body{
   overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
 }
-
-/* 🟢 SỬA #1: BỎ touch-action:none — chỉ cần overflow:hidden là đủ chặn scroll body.
-   touch-action:none là nguyên nhân chính khiến không pinch-out được khi menu mở. */
-body.modal-open {
-    overflow: hidden;
-}
+body.modal-open { overflow: hidden; }
 
 input, textarea { user-select: text; -webkit-user-select: text; }
 .hidden{display:none !important}
-
 .show-mobile { display: none; }
 
 #security-trap {
@@ -94,7 +88,6 @@ button{font-family:inherit; cursor:pointer}
 #tDisp{font-weight:800; font-variant-numeric:tabular-nums; min-width:42px; text-align:center; color:var(--brown-d); font-size:.9em}
 .timer .btn{padding:3px 7px; font-size:.76em}
 
-/* 🟢 SỬA #2: Cho phép pinch-zoom trên overlay để user có thể zoom-out */
 #loadOverlay { 
     position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:300; 
     display:flex; align-items:center; justify-content:center; 
@@ -103,7 +96,7 @@ button{font-family:inherit; cursor:pointer}
 .load-card { 
     background:#fff; border-radius:12px; width:450px; box-shadow:0 10px 30px rgba(0,0,0,0.25); 
     display: flex; flex-direction: column; max-height: 90vh; overflow: hidden; padding: 0;
-    touch-action: pan-y pinch-zoom; /* SỬA #2: thêm pinch-zoom */
+    touch-action: pan-y pinch-zoom;
 }
 .load-card-header {
     display: flex; justify-content: space-between; align-items: center;
@@ -116,8 +109,8 @@ button{font-family:inherit; cursor:pointer}
 }
 .load-card-body {
     padding: 0; overflow-y: auto; flex: 1; 
-    touch-action: pan-y pinch-zoom; /* SỬA #2: thêm pinch-zoom */
-    overscroll-behavior: contain;   /* SỬA #2: chặn scroll chaining ra body */
+    touch-action: pan-y pinch-zoom;
+    overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -127,10 +120,13 @@ button{font-family:inherit; cursor:pointer}
     border-bottom: 3px solid transparent; transition: 0.2s;
 }
 .menu-tab-btn.active { color: var(--blue-d); border-bottom-color: var(--blue-d); background: var(--white); }
+
+/* 🟢 SỬA: BỎ 60vh CỐ ĐỊNH — dùng 30px, padding động sẽ do JS lo khi bàn phím mở */
 .menu-tab-content { 
     display: none; 
     padding: 15px 20px; 
-    padding-bottom: 60vh;
+    padding-bottom: 30px;
+    transition: padding-bottom 0.1s ease-out;
 }
 .menu-tab-content.active { display: block; }
 
@@ -210,7 +206,6 @@ section.tab.active{display:block}
 .p2-mode-btn:hover { text-decoration: underline; }
 .p2-mode-btn.active { font-weight: 800; text-decoration: underline; }
 
-/* 🟢 TỐI ƯU HEADER & MENU CHO ĐIỆN THOẠI */
 @media (max-width: 768px) {
     .hide-mobile { display: none !important; }
     .show-mobile { display: inline !important; }
@@ -263,7 +258,10 @@ section.tab.active{display:block}
     .load-card-header { padding: 10px 15px; }
     .load-card-body { padding: 0; }
     .menu-tabs { display: flex; }
-    .menu-tab-content { padding: 10px 15px; padding-bottom: 60vh; }
+
+    /* 🟢 SỬA: 60vh → 30px. Khi bàn phím mở, JS sẽ tự bơm thêm paddingBottom */
+    .menu-tab-content { padding: 10px 15px; padding-bottom: 30px; }
+
     .load-card-footer { 
         padding: 10px 15px; 
         padding-bottom: calc(10px + env(safe-area-inset-bottom)); 
@@ -272,13 +270,11 @@ section.tab.active{display:block}
 
     .p2-grid { grid-template-columns: 1fr; }
 
-    /* 🟢 SỬA #3: cột nhãn 45px → 52px để "Phần III" không bị cắt */
     .lv-grid { grid-template-columns: 52px 1fr 1fr 1fr 1fr 1fr; gap: 4px; padding: 4px;}
-    .lv-grid input { padding: 6px 2px; font-size: 16px; } /* 16px để chống auto-zoom */
+    .lv-grid input { padding: 6px 2px; font-size: 16px; }
     .lv-head { font-size: 10px; }
-    .lv-row { font-size: 11px; } /* SỬA #3: thu nhỏ nhãn để vừa cột 52px */
+    .lv-row { font-size: 11px; }
 
-    /* 🟢 SỬA #1: CHỐNG AUTO-ZOOM iOS — font-size >= 16px cho MỌI ô nhập số */
     .score-config input { font-size: 16px; padding: 6px 8px; }
     .p2-grid input { font-size: 16px; }
 
@@ -525,7 +521,6 @@ if (!isMobile) {
     }, 500);
 }
 
-// 🟢 SỬA #5: Blur input + reset scroll khi chuyển tab (đóng bàn phím, tránh dính zoom)
 function switchMenuTab(tabNum) {
     if (document.activeElement && typeof document.activeElement.blur === 'function') {
         document.activeElement.blur();
@@ -540,11 +535,32 @@ function switchMenuTab(tabNum) {
     if (bodyEl) bodyEl.scrollTop = 0;
 }
 
-// 🟢 SỬA #4: Bỏ qua resize overlay khi đang pinch-zoom → không co giật
+// 🟢 NEW: Padding động — chỉ bơm thêm khi bàn phím ảo thực sự mở
+function updateKeyboardPadding() {
+    if (!window.visualViewport) return;
+    const overlay = document.getElementById('loadOverlay');
+    if (!overlay || overlay.classList.contains('hidden')) return;
+
+    const vv = window.visualViewport;
+    // Chiều cao bàn phím ảo (0 nếu đóng)
+    const kbHeight = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+
+    // Ngưỡng 100px: bàn phím thật luôn cao hơn 100px.
+    // Cap 60% innerHeight để không phá layout khi có biến động lớn.
+    const extraPad = kbHeight > 100
+        ? Math.min(kbHeight, window.innerHeight * 0.6)
+        : 0;
+
+    const finalPad = 30 + extraPad;
+    document.querySelectorAll('.menu-tab-content').forEach(el => {
+        el.style.paddingBottom = finalPad + 'px';
+    });
+}
+
 function handleViewportResize() {
     if (!window.visualViewport) return;
     const scale = window.visualViewport.scale || 1;
-    if (scale > 1.01) return;  /* đang pinch → không can thiệp */
+    if (scale > 1.01) return;   // đang pinch → không can thiệp
     const overlay = document.getElementById('loadOverlay');
     if (!overlay) return;
     if (!overlay.classList.contains('hidden')) {
@@ -554,6 +570,7 @@ function handleViewportResize() {
         overlay.style.height = '';
         overlay.style.top = '';
     }
+    updateKeyboardPadding();  // 🟢 NEW: cập nhật padding động
 }
 if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', handleViewportResize);
@@ -571,6 +588,10 @@ function closeLoadMenu() {
     $('#loadOverlay').classList.add('hidden');
     const overlay = document.getElementById('loadOverlay');
     if(overlay) { overlay.style.height = ''; overlay.style.top = ''; }
+    // 🟢 NEW: reset padding khi đóng menu (tránh "dính" padding lớn lần sau)
+    document.querySelectorAll('.menu-tab-content').forEach(el => {
+        el.style.paddingBottom = '';
+    });
 }
 
 function renderMath(el){
