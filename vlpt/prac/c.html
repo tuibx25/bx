@@ -2,7 +2,6 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<!-- 🟢 ĐÃ MỞ KHÓA ZOOM: Xóa maximum-scale và user-scalable=no -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trắc nghiệm – Luyện tập Online</title>
 
@@ -10,6 +9,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 
+<!-- GỌI FILE CẤU HÌNH FIREBASE DÙNG CHUNG -->
 <script type="module" src="/bx/firebase-init.js"></script>
 
 <style>
@@ -25,13 +25,18 @@ body{
   background:var(--bg); color:var(--ink);
   font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   font-size:15px; line-height:1.35;
+  /* BẢO MẬT: CHỐNG BÔI ĐEN */
   user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
-  overflow-x: hidden; /* 🟢 Chống tràn ngang khi zoom */
+  overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
 }
 input, textarea { user-select: text; -webkit-user-select: text; }
 .hidden{display:none !important}
 
+/* Ẩn hiện text tùy thiết bị */
+.show-mobile { display: none; }
+
+/* BẢO MẬT: MÀN HÌNH CHẶN DEVTOOLS */
 #security-trap {
   position: fixed; inset: 0; background: #8B4513; color: white;
   z-index: 99999; display: flex; flex-direction: column;
@@ -40,6 +45,7 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 #security-trap h2 { font-size: 2em; margin-bottom: 10px; }
 #security-trap p { font-size: 1.2em; }
 
+/* CSS CHÍNH */
 input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 input[type=number] { -moz-appearance: textfield; }
 .katex{font-size:1.02em}
@@ -50,8 +56,31 @@ input[type=number] { -moz-appearance: textfield; }
 .st-img{ display:block; max-width:100%; max-height:200px; object-fit:contain; margin-top:6px; border:1px solid var(--line); border-radius:8px; background:#fff; }
 header{ background:#FFFFFF; border-bottom:2px solid var(--brown-d); padding:6px 14px; display:flex; align-items:center; gap:8px; flex-wrap:nowrap; overflow-x:auto; position:sticky; top:0; z-index:50; box-shadow:0 1px 4px rgba(0,0,0,.06); font-size:13.5px; }
 header h1{font-size:1.1em; font-weight:800; color:var(--brown-d); letter-spacing:.2px; margin-right:8px; white-space:nowrap}
-.stat-badge{ background:#FFFFFF; border:1.5px solid var(--line); padding:3px 8px; border-radius:6px; font-weight:700; font-size:.78em; color:#333; white-space:nowrap; flex-shrink:0; }
-.stat-badge b{color:var(--blue-d); font-size:1.05em}
+
+/* 🟢 CSS CHO PHÂN SỐ DỌC */
+.stat-badge{ background:#FFFFFF; border:1.5px solid var(--line); padding:3px 8px; border-radius:6px; font-weight:700; font-size:.78em; color:#333; white-space:nowrap; flex-shrink:0; display: flex; align-items: center; gap: 5px; }
+.stacked-frac {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.1;
+    font-size: 11px;
+    color: var(--blue-d);
+    vertical-align: middle;
+}
+.stacked-frac span:first-child {
+    border-bottom: 1.5px solid var(--blue-d);
+    padding-bottom: 1px;
+    width: 100%;
+    text-align: center;
+}
+.stacked-frac span:last-child {
+    padding-top: 1px;
+    width: 100%;
+    text-align: center;
+}
+
 header .spacer{flex:1 1 auto; min-width:4px}
 button{font-family:inherit; cursor:pointer}
 .btn{ background:#FFFFFF; color:var(--ink); border:1.5px solid var(--line); padding:4px 10px; border-radius:6px; font-weight:600; font-size:.82em; transition:.15s; white-space:nowrap; flex-shrink:0; }
@@ -67,8 +96,29 @@ button{font-family:inherit; cursor:pointer}
 #tDisp{font-weight:800; font-variant-numeric:tabular-nums; min-width:42px; text-align:center; color:var(--brown-d); font-size:.9em}
 .timer .btn{padding:3px 7px; font-size:.76em}
 #loadOverlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:300; display:flex; align-items:center; justify-content:center; }
-.load-card { background:#fff; border-radius:12px; padding:20px; width:450px; box-shadow:0 10px 30px rgba(0,0,0,0.25); text-align:left; max-height:90vh; overflow-y:auto; }
-.load-card h3 { margin-bottom:16px; font-size:1.1em; color:var(--brown-d); text-align:center; }
+
+/* 🟢 TỐI ƯU MENU (LOAD OVERLAY) */
+.load-card { 
+    background:#fff; border-radius:12px; width:450px; box-shadow:0 10px 30px rgba(0,0,0,0.25); 
+    display: flex; flex-direction: column; max-height: 90vh; overflow: hidden; padding: 0;
+}
+.load-card-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 20px; border-bottom: 1px solid var(--line);
+}
+.load-card-header h3 { margin: 0; font-size: 1.1em; color: var(--brown-d); }
+.btn-close-x {
+    background: none; border: none; font-size: 26px; color: var(--brown-d); cursor: pointer; line-height: 1; padding: 0 5px;
+}
+.load-card-body {
+    padding: 15px 20px; overflow-y: auto; flex: 1; touch-action: pan-y; /* Chặn zoom khi cuộn */
+    -webkit-overflow-scrolling: touch;
+}
+.load-card-footer {
+    padding: 15px 20px; border-top: 1px solid var(--line); background: var(--white);
+    display: flex; flex-direction: column; gap: 8px;
+}
+
 .score-config { background:var(--soft); border:1px solid var(--line); border-radius:8px; padding:12px; margin-top:8px; margin-bottom:12px; display:flex; flex-direction:column; gap:8px; align-items: stretch; }
 .score-config label { display:flex; justify-content:space-between; align-items:center; font-size:13px; font-weight:600; }
 .score-config input { width:65px; padding:4px 8px; border:1px solid var(--line); border-radius:4px; font-family:inherit; font-weight:700; text-align:right; }
@@ -81,8 +131,9 @@ button{font-family:inherit; cursor:pointer}
 .lv-grid input[id$="_wild"] { background: #fdfbf7; border-style: dashed; }
 
 .btn-create-row { width:100%; padding:10px; font-size:14px; }
-.btn-close-row { width:100%; padding:8px; margin-top:8px; background:#e0e0e0; border:none; color:#333; }
+.btn-close-row { width:100%; padding:10px; background:#e0e0e0; border:none; color:#333; border-radius: 5px; font-weight: bold; font-size: 14px;}
 .btn-close-row:hover { background:#d0d0d0; }
+
 .warn-banner { background: #FFF3CD; color: #856404; padding: 10px 16px; border-left: 4px solid #FFC107; border-radius: 4px; margin-bottom: 16px; font-size: 0.95em; font-weight: 600; display: flex; align-items: center; gap: 8px; }
 nav.tabs{ display:flex; padding:0 14px; background:var(--soft); border-bottom:1px solid var(--line); overflow-x:auto; }
 nav.tabs button{ background:transparent; border:none; color:var(--ink); padding:12px 20px; font-weight:700; font-size:.95em; border-bottom:3px solid transparent; transition:.15s; }
@@ -129,43 +180,54 @@ section.tab.active{display:block}
 .lesson-checkbox:hover .lesson-chip { background: var(--soft); border-color: var(--brown); }
 .lesson-checkbox input:checked + .lesson-chip { background: var(--blue-d); color: #fff; border-color: var(--blue-d); box-shadow: 0 2px 4px rgba(0,68,136,0.2); }
 
+/* CSS CHO NÚT CHỌN NHANH BIỂU ĐIỂM PHẦN II */
 .p2-mode-btn { cursor: pointer; color: var(--blue-d); margin-left: 12px; font-size: 13px; font-weight: normal; user-select: none; transition: 0.2s; }
 .p2-mode-btn:hover { text-decoration: underline; }
 .p2-mode-btn.active { font-weight: 800; text-decoration: underline; }
 
-/* 🟢 TỐI ƯU HEADER CHO ĐIỆN THOẠI (CHIA 2 HÀNG GỌN GÀNG) */
+/* 🟢 TỐI ƯU HEADER CHO ĐIỆN THOẠI (1 HÀNG DUY NHẤT) */
 @media (max-width: 768px) {
+    .hide-mobile { display: none !important; }
+    .show-mobile { display: inline !important; }
+
     header {
-        flex-wrap: wrap;
-        padding: 8px 10px;
-        gap: 6px;
+        flex-wrap: nowrap; 
+        padding: 4px 6px; 
+        gap: 4px; 
         justify-content: space-between;
         overflow-x: hidden;
     }
     header h1, header .spacer { display: none; }
 
     .stat-badge { 
-        order: 1; flex: 1; text-align: left; border: none; background: transparent; font-size: 13px; padding: 0; white-space: nowrap;
+        border: none; background: transparent; font-size: 13px; padding: 0; white-space: nowrap; display: flex; align-items: center;
     }
-    .stat-badge b { font-size: 1.1em; }
+    .stacked-frac { font-size: 11px; color: var(--blue-d); }
     
-    #btnLoadMenu { order: 2; padding: 4px 8px; font-size: 13px; }
-    #fsDown { order: 3; padding: 4px 8px; font-size: 13px; }
-    #fsUp { order: 4; padding: 4px 8px; font-size: 13px; }
+    #btnLoadMenu, #fsDown, #fsUp, .btn, .btn-primary, .btn-brown {
+        padding: 4px 6px;
+        font-size: 12px;
+        border-radius: 4px;
+    }
+    
+    #btnSubmit, #btnRedo { 
+        padding: 4px 8px; font-size: 13px;
+    }
 
     .timer { 
-        order: 5; flex: 1; margin-top: 4px; padding: 4px 8px; justify-content: space-between; background: var(--bg);
+        padding: 2px 4px; gap: 2px;
     }
-    .timer select { font-size: 13px; }
-    #tDisp { font-size: 15px; }
-    .timer .btn { padding: 4px 8px; font-size: 13px; }
-
-    #btnSubmit, #btnRedo { 
-        order: 6; flex: 1; margin-top: 4px; padding: 8px; font-size: 14px; text-align: center;
-    }
+    .timer select { font-size: 12px; padding: 1px 2px; }
+    #tDisp { font-size: 13px; min-width: 30px; }
+    .timer .btn { padding: 4px 6px; font-size: 12px; }
 
     main { padding: 10px; }
-    .load-card { width: 95%; max-width: 95%; padding: 15px; }
+    
+    .load-card { width: 95%; max-width: 95%; }
+    .load-card-header { padding: 10px 15px; }
+    .load-card-body { padding: 10px 15px; }
+    .load-card-footer { padding: 10px 15px; gap: 6px; }
+
     .p2-grid { grid-template-columns: 1fr; }
     .lv-grid { grid-template-columns: 45px 1fr 1fr 1fr 1fr 1fr; gap: 4px; padding: 4px;}
     .lv-grid input { padding: 6px 2px; font-size: 12px; }
@@ -198,10 +260,18 @@ section.tab.active{display:block}
     <header>
       <h1>⚡ LUYỆN TẬP TRẮC NGHIỆM</h1>
       
-      <span class="stat-badge">Đã trả lời: <b id="answeredCount">0</b>/<span id="totalCount">0</span></span>
-      <button class="btn-primary" id="btnSubmit">📝 Nộp bài</button>
-      <button class="btn-brown hidden" id="btnRedo">🔄 Làm lại</button>
-      <button class="btn" id="btnLoadMenu" title="Chọn cấu trúc đề & Tạo">⚙️ Chọn</button>
+      <!-- 🟢 PHÂN SỐ DỌC -->
+      <span class="stat-badge">
+        <span class="hide-mobile">Đã trả lời: </span>
+        <span class="stacked-frac">
+            <span id="answeredCount">0</span>
+            <span id="totalCount">0</span>
+        </span>
+      </span>
+      
+      <button class="btn-primary" id="btnSubmit"><span class="hide-mobile">📝 Nộp bài</span><span class="show-mobile">Nộp</span></button>
+      <button class="btn-brown hidden" id="btnRedo"><span class="hide-mobile">🔄 Làm lại</span><span class="show-mobile">Lại</span></button>
+      <button class="btn" id="btnLoadMenu" title="Chọn cấu trúc đề & Tạo"><span class="hide-mobile">⚙️ Chọn</span><span class="show-mobile">⚙️</span></button>
       
       <span class="spacer"></span>
       <div class="timer">
@@ -211,8 +281,8 @@ section.tab.active{display:block}
           <option value="25" selected>25′</option><option value="30">30′</option>
           <option value="45">45′</option>
         </select>
-        <span id="tDisp">25:00</span>
-        <button class="btn" id="tBtn">Bắt đầu</button>
+        <span id="tDisp">25'00</span>
+        <button class="btn" id="tBtn"><span class="hide-mobile">Bắt đầu</span><span class="show-mobile">▶</span></button>
       </div>
       <button class="btn" id="fsDown">A−</button>
       <button class="btn" id="fsUp">A+</button>
@@ -220,90 +290,100 @@ section.tab.active{display:block}
 
     <div id="errorBanner" class="warn-banner hidden" style="margin: 10px 20px 0;"></div>
 
+    <!-- 🟢 MENU CẤU TRÚC ĐỀ (ĐÃ TÁCH HEADER & FOOTER CỐ ĐỊNH) -->
     <div id="loadOverlay" class="hidden">
       <div class="load-card">
-        <h3>Tạo Cấu Trúc Đề</h3>
+        <div class="load-card-header">
+            <h3>Tạo Cấu Trúc Đề</h3>
+            <button class="btn-close-x" onclick="document.getElementById('loadOverlay').classList.add('hidden')">×</button>
+        </div>
         
-        <div class="score-config">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-            <div style="font-weight:700; color:var(--blue-d)">Chọn Bài / Nhóm bài:</div>
-            <div>
-                <button class="btn" style="padding: 2px 6px; font-size: 11px;" onclick="toggleAllLessons(true)">Chọn tất cả</button>
-                <button class="btn" style="padding: 2px 6px; font-size: 11px;" onclick="toggleAllLessons(false)">Bỏ chọn</button>
+        <div class="load-card-body">
+            <div class="score-config">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <div style="font-weight:700; color:var(--blue-d)">Chọn Bài / Nhóm bài:</div>
+                <div>
+                    <button class="btn" style="padding: 2px 6px; font-size: 11px;" onclick="toggleAllLessons(true)">Chọn tất cả</button>
+                    <button class="btn" style="padding: 2px 6px; font-size: 11px;" onclick="toggleAllLessons(false)">Bỏ chọn</button>
+                </div>
+              </div>
+              <div class="lesson-grid" id="lessonCheckboxes">
+                <div style="width: 100%; text-align: center; color: #888;">Đang tải danh sách bài...</div>
+              </div>
             </div>
-          </div>
-          <div class="lesson-grid" id="lessonCheckboxes">
-            <div style="width: 100%; text-align: center; color: #888;">Đang tải danh sách bài...</div>
-          </div>
-        </div>
 
-        <div class="score-config">
-          <div style="font-weight:700; margin-bottom:4px; color:var(--blue-d)">Biểu điểm:</div>
-          <label>Phần I (mỗi câu): <input type="number" id="pt1" value="0.25" min="0" step="0.05"> đ</label>
-        <div style="margin: 6px 0 4px 0; font-size:13px; color:#000000; font-weight:600; display: flex; justify-content: space-between; align-items: center;">
-		<span>Phần II (theo số ý đúng):</span>
-		<span>
-        <span id="btnP2Default" class="p2-mode-btn">Mặc định</span>
-        <span id="btnP2Even" class="p2-mode-btn">Chia đều</span>
-		</span>
-		</div>
-          <div class="p2-grid">
-            <label>1 ý: <input type="number" id="p2_1" value="0.1" step="0.05"> đ</label>
-            <label>2 ý: <input type="number" id="p2_2" value="0.25" step="0.05"> đ</label>
-            <label>3 ý: <input type="number" id="p2_3" value="0.5" step="0.05"> đ</label>
-            <label>4 ý: <input type="number" id="p2_4" value="1.0" step="0.05"> đ</label>
-          </div>
-          <label>Phần III (mỗi câu): <input type="number" id="pt3" value="0.5" min="0" step="0.05"> đ</label>
-          <div class="total-score" id="ptTotalLabel" style="display:none;">
-            <span id="ptTotalLabelText">Tổng điểm (tạm tính):</span> <span id="ptTotal">0</span> đ
-          </div>
-        </div>
-
-        <div class="score-config">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div style="font-weight:700; color:var(--blue-d)">Cấu trúc đề:</div>
-            <div>
-                <button class="btn" id="btnPickNew" style="padding: 2px 8px; font-size: 11px; border-color: var(--blue); color: var(--blue-d); font-weight: 700;">🔀 Bốc câu mới</button>
-                <button class="btn" id="btnResetStructure" style="padding: 2px 8px; font-size: 11px; border-color: var(--brown); color: var(--brown-d); font-weight: 700;">↺ Xóa chọn</button>
+            <div class="score-config">
+              <div style="font-weight:700; margin-bottom:4px; color:var(--blue-d)">Biểu điểm:</div>
+              <label>Phần I (mỗi câu): <input type="number" inputmode="numeric" id="pt1" value="0.25" min="0" step="0.05"> đ</label>
+              
+              <div style="margin: 6px 0 4px 0; font-size:13px; color:#000000; font-weight:600; display: flex; justify-content: space-between; align-items: center;">
+                  <span>Phần II (theo số ý đúng):</span>
+                  <span>
+                      <span id="btnP2Default" class="p2-mode-btn">mặc định</span>
+                      <span id="btnP2Even" class="p2-mode-btn active">chia đều</span>
+                  </span>
+              </div>
+              
+              <div class="p2-grid">
+                <label>1 ý: <input type="number" inputmode="numeric" id="p2_1" value="0.25" step="0.05"> đ</label>
+                <label>2 ý: <input type="number" inputmode="numeric" id="p2_2" value="0.5" step="0.05"> đ</label>
+                <label>3 ý: <input type="number" inputmode="numeric" id="p2_3" value="0.75" step="0.05"> đ</label>
+                <label>4 ý: <input type="number" inputmode="numeric" id="p2_4" value="1.0" step="0.05"> đ</label>
+              </div>
+              <label>Phần III (mỗi câu): <input type="number" inputmode="numeric" id="pt3" value="0.5" min="0" step="0.05"> đ</label>
+              <div class="total-score" id="ptTotalLabel" style="display:none;">
+                <span id="ptTotalLabelText">Tổng điểm (tạm tính):</span> <span id="ptTotal">0</span> đ
+              </div>
             </div>
-          </div>
-          <div style="font-size:12px; color:#555; font-weight:600;">Tổng số câu mỗi phần (để trống = tất cả):</div>
-          <div class="p2-grid" style="grid-template-columns:1fr 1fr 1fr;">
-            <label>P.I: <input type="number" id="sc1" min="0" step="1" placeholder="tất cả"></label>
-            <label>P.II: <input type="number" id="sc2" min="0" step="1" placeholder="tất cả"></label>
-            <label>P.III: <input type="number" id="sc3" min="0" step="1" placeholder="tất cả"></label>
-          </div>
-          <div style="font-size:12px; color:#555; font-weight:600; margin-top:2px;">Hoặc chọn theo mức độ (ưu tiên hơn ô tổng):</div>
-          <div class="lv-grid">
-            <span></span>
-            <span class="lv-head">Dễ</span><span class="lv-head">Vừa</span><span class="lv-head">Khó</span><span class="lv-head">Rất Khó</span><span class="lv-head">Tự do</span>
-            
-            <span class="lv-row">Phần I</span>
-            <input type="number" id="lv1_easy" min="0" step="1">
-            <input type="number" id="lv1_medium" min="0" step="1">
-            <input type="number" id="lv1_hard" min="0" step="1">
-            <input type="number" id="lv1_very_hard" min="0" step="1">
-            <input type="number" id="lv1_wild" min="0" step="1" placeholder="0">
-            
-            <span class="lv-row">Phần II</span>
-            <input type="number" id="lv2_easy" min="0" step="1">
-            <input type="number" id="lv2_medium" min="0" step="1">
-            <input type="number" id="lv2_hard" min="0" step="1">
-            <input type="number" id="lv2_very_hard" min="0" step="1">
-            <input type="number" id="lv2_wild" min="0" step="1" placeholder="0">
-            
-            <span class="lv-row">Phần III</span>
-            <input type="number" id="lv3_easy" min="0" step="1">
-            <input type="number" id="lv3_medium" min="0" step="1">
-            <input type="number" id="lv3_hard" min="0" step="1">
-            <input type="number" id="lv3_very_hard" min="0" step="1">
-            <input type="number" id="lv3_wild" min="0" step="1" placeholder="0">
-          </div>
-          <div id="levelWarning" class="warn-banner hidden" style="margin-top: 8px; padding: 8px 12px; font-size: 12px; border-left-width: 3px;"></div>
+
+            <div class="score-config">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight:700; color:var(--blue-d)">Cấu trúc đề:</div>
+                <div>
+                    <button class="btn" id="btnPickNew" style="padding: 2px 8px; font-size: 11px; border-color: var(--blue); color: var(--blue-d); font-weight: 700;">🔀 Bốc câu mới</button>
+                    <button class="btn" id="btnResetStructure" style="padding: 2px 8px; font-size: 11px; border-color: var(--brown); color: var(--brown-d); font-weight: 700;">↺ Xóa chọn</button>
+                </div>
+              </div>
+              <div style="font-size:12px; color:#555; font-weight:600;">Tổng số câu mỗi phần (để trống = tất cả):</div>
+              <div class="p2-grid" style="grid-template-columns:1fr 1fr 1fr;">
+                <label>P.I: <input type="number" inputmode="numeric" id="sc1" min="0" step="1" placeholder="tất cả"></label>
+                <label>P.II: <input type="number" inputmode="numeric" id="sc2" min="0" step="1" placeholder="tất cả"></label>
+                <label>P.III: <input type="number" inputmode="numeric" id="sc3" min="0" step="1" placeholder="tất cả"></label>
+              </div>
+              <div style="font-size:12px; color:#555; font-weight:600; margin-top:2px;">Hoặc chọn theo mức độ (ưu tiên hơn ô tổng):</div>
+              <div class="lv-grid">
+                <span></span>
+                <span class="lv-head">Dễ</span><span class="lv-head">Vừa</span><span class="lv-head">Khó</span><span class="lv-head">Rất Khó</span><span class="lv-head">Tự do</span>
+                
+                <span class="lv-row">Phần I</span>
+                <input type="number" inputmode="numeric" id="lv1_easy" min="0" step="1">
+                <input type="number" inputmode="numeric" id="lv1_medium" min="0" step="1">
+                <input type="number" inputmode="numeric" id="lv1_hard" min="0" step="1">
+                <input type="number" inputmode="numeric" id="lv1_very_hard" min="0" step="1">
+                <input type="number" inputmode="numeric" id="lv1_wild" min="0" step="1" placeholder="0">
+                
+                <span class="lv-row">Phần II</span>
+                <input type="number" inputmode="numeric" id="lv2_easy" min="0" step="1">
+                <input type="number" inputmode="numeric" id="lv2_medium" min="0" step="1">
+                <input type="number" inputmode="numeric" id="lv2_hard" min="0" step="1">
+                <input type="number" inputmode="numeric" id="lv2_very_hard" min="0" step="1">
+                <input type="number" inputmode="numeric" id="lv2_wild" min="0" step="1" placeholder="0">
+                
+                <span class="lv-row">Phần III</span>
+                <input type="number" inputmode="numeric" id="lv3_easy" min="0" step="1">
+                <input type="number" inputmode="numeric" id="lv3_medium" min="0" step="1">
+                <input type="number" inputmode="numeric" id="lv3_hard" min="0" step="1">
+                <input type="number" inputmode="numeric" id="lv3_very_hard" min="0" step="1">
+                <input type="number" inputmode="numeric" id="lv3_wild" min="0" step="1" placeholder="0">
+              </div>
+              <div id="levelWarning" class="warn-banner hidden" style="margin-top: 8px; padding: 8px 12px; font-size: 12px; border-left-width: 3px;"></div>
+            </div>
         </div>
 
-        <button class="btn-primary btn-create-row" id="btnCreateQuiz">🚀 Tạo Trắc Nghiệm</button>
-        <button class="btn btn-close-row" id="btnCloseLoad">Đóng</button>
+        <div class="load-card-footer">
+            <button class="btn-primary btn-create-row" id="btnCreateQuiz">🚀 Tạo Trắc Nghiệm</button>
+            <button class="btn btn-close-row" id="btnCloseLoad">Đóng</button>
+        </div>
       </div>
     </div>
 
@@ -324,7 +404,7 @@ section.tab.active{display:block}
 
 <script>
 (function() {
-  // 1. CHẶN CONTEXT MENU & PHÍM TẮT (Chỉ dành cho Desktop)
+  // 1. CHẶN CONTEXT MENU & PHÍM TẮT
   document.addEventListener('contextmenu', e => { e.preventDefault(); return false; }, { capture: true });
 
   document.addEventListener('keydown', function(e) {
@@ -360,8 +440,6 @@ section.tab.active{display:block}
   }, { capture: true });
 
   document.addEventListener('drag', e => e.preventDefault(), { capture: true });
-
-  // 🟢 ĐÃ XÓA TOÀN BỘ CODE CHẶN ZOOM (gesturestart, touchmove, touchend)
 })();
 
 // 3. BẪY DEVTOOLS (CHỈ BẬT TRÊN MÁY TÍNH)
@@ -448,6 +526,7 @@ function normLevel(s){
   return normLevelToken(s);
 }
 
+// 🟢 HÀM CHUẨN HÓA MỨC ĐỘ
 function getNormalizedLevel(q) {
     const lvl = normLevel(q.level);
     if (['easy', 'medium', 'hard', 'very_hard'].includes(lvl)) return lvl;
@@ -812,14 +891,21 @@ $('#btnPickNew').addEventListener('click', () => {
     window.scrollTo({top:0, behavior:'smooth'});
 });
 
-async function autoLoadExam() {
+async function autoLoadExam(forceReload = false) {
+  if (parsedOriginal && !forceReload) {
+      updateSubsetPlaceholders();
+      updateLevelWarnings();
+      updateCreateBtn();
+      return; 
+  }
+
   const errorBanner = document.getElementById('errorBanner');
   if (errorBanner) errorBanner.classList.add('hidden'); 
   
   try {
     if (!window.getFirebaseQuestions) throw new Error("Firebase chưa tải xong, vui lòng thử lại sau vài giây.");
     
-    const allQuestions = await window.getFirebaseQuestions(10); // 🟢 Mặc định khối 10 cho prac.html
+    const allQuestions = await window.getFirebaseQuestions(10); 
     if (!allQuestions || allQuestions.length === 0) throw new Error("Database trống hoặc chưa có câu hỏi.");
 
     const normalizedQuestions = allQuestions.map((q, index) => {
@@ -913,12 +999,18 @@ async function autoLoadExam() {
 }
 
 $('#btnLoadMenu').addEventListener('click', async () => {
-  const originalText = $('#btnLoadMenu').textContent;
-  $('#btnLoadMenu').textContent = '⏳ Đang tải...';
-  await autoLoadExam();
-  $('#btnLoadMenu').textContent = originalText;
-  
   $('#loadOverlay').classList.remove('hidden');
+  
+  if (!parsedOriginal) {
+      const originalText = $('#btnLoadMenu').innerHTML;
+      $('#btnLoadMenu').innerHTML = '⏳';
+      document.getElementById('lessonCheckboxes').innerHTML = '<div style="width: 100%; text-align: center; color: var(--brown-d);">⏳ Đang tải dữ liệu...</div>';
+      
+      await autoLoadExam();
+      
+      $('#btnLoadMenu').innerHTML = originalText;
+  }
+  
   updateCreateBtn();
 });
 
@@ -986,7 +1078,6 @@ $$('nav.tabs button').forEach(btn => {
   });
 });
 
-// 🟢 LƯU CỠ CHỮ VÀO LOCALSTORAGE ĐỂ KHÔNG BỊ RESET KHI F5
 let fs = localStorage.getItem('prac_fs') ? parseInt(localStorage.getItem('prac_fs')) : 18;
 document.documentElement.style.setProperty('--fs', fs + 'px');
 
@@ -994,16 +1085,20 @@ $('#fsUp').addEventListener('click', () => { fs = Math.min(40, fs + 2); document
 $('#fsDown').addEventListener('click', () => { fs = Math.max(13, fs - 2); document.documentElement.style.setProperty('--fs', fs + 'px'); localStorage.setItem('prac_fs', fs); });
 
 let tRemain = 25 * 60, tTimer = null, tRunning = false;
-function tShow(){ const m = Math.floor(tRemain / 60), s = tRemain % 60; $('#tDisp').textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0'); }
+function tShow(){ const m = Math.floor(tRemain / 60), s = tRemain % 60; $('#tDisp').textContent = String(m).padStart(2,'0') + "'" + String(s).padStart(2,'0'); }
 $('#tBtn').addEventListener('click', () => {
-  if(tRunning){ clearInterval(tTimer); tRunning = false; $('#tBtn').textContent = 'Tiếp tục'; }
+  if(tRunning){ 
+      clearInterval(tTimer); tRunning = false; 
+      $('#tBtn').innerHTML = '<span class="hide-mobile">Tiếp tục</span><span class="show-mobile">▶</span>'; 
+  }
   else {
     if(tRemain <= 0) tRemain = Number($('#tMin').value) * 60;
-    tRunning = true; $('#tBtn').textContent = 'Tạm dừng';
-    tTimer = setInterval(() => { tRemain--; if(tRemain <= 0){ tRemain = 0; clearInterval(tTimer); tRunning = false; $('#tBtn').textContent = 'Hết giờ'; submitExam(); } tShow(); }, 1000);
+    tRunning = true; 
+    $('#tBtn').innerHTML = '<span class="hide-mobile">Tạm dừng</span><span class="show-mobile">⏸</span>';
+    tTimer = setInterval(() => { tRemain--; if(tRemain <= 0){ tRemain = 0; clearInterval(tTimer); tRunning = false; $('#tBtn').innerHTML = '<span class="hide-mobile">Hết giờ</span><span class="show-mobile">⏹</span>'; submitExam(); } tShow(); }, 1000);
   }
 });
-$('#tMin').addEventListener('change', e => { clearInterval(tTimer); tRunning = false; $('#tBtn').textContent = 'Bắt đầu'; tRemain = Number(e.target.value) * 60; tShow(); });
+$('#tMin').addEventListener('change', e => { clearInterval(tTimer); tRunning = false; $('#tBtn').innerHTML = '<span class="hide-mobile">Bắt đầu</span><span class="show-mobile">▶</span>'; tRemain = Number(e.target.value) * 60; tShow(); });
 
 window.addEventListener('load', () => {
     tShow();
@@ -1085,6 +1180,16 @@ window.addEventListener('load', () => {
 
           setEven();
       }
+
+      // 🟢 TỰ ĐỘNG TẮT BÀN PHÍM KHI CHẠM RA NGOÀI Ô NHẬP LIỆU
+      document.addEventListener('pointerdown', function(e) {
+          const tag = e.target.tagName;
+          if (tag !== 'INPUT' && tag !== 'TEXTAREA' && tag !== 'SELECT') {
+              if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) {
+                  document.activeElement.blur(); 
+              }
+          }
+      });
   });
 </script>
 </body>
