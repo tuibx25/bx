@@ -2,14 +2,13 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trắc nghiệm – Luyện tập Online</title>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 
-<!-- GỌI FILE CẤU HÌNH FIREBASE DÙNG CHUNG -->
 <script type="module" src="/bx/firebase-init.js"></script>
 
 <style>
@@ -25,13 +24,23 @@ body{
   background:var(--bg); color:var(--ink);
   font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   font-size:15px; line-height:1.35;
-  /* BẢO MẬT: CHỐNG BÔI ĐEN */
   user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
 }
+
+/* 🟢 NGĂN CHẶN CUỘN/ZOOM TOÀN TRANG KHI MỞ MENU */
+body.modal-open {
+    overflow: hidden;
+    touch-action: none; 
+}
+
 input, textarea { user-select: text; -webkit-user-select: text; }
 .hidden{display:none !important}
 
-/* BẢO MẬT: MÀN HÌNH CHẶN DEVTOOLS */
+/* Ẩn hiện text tùy thiết bị */
+.show-mobile { display: none; }
+
 #security-trap {
   position: fixed; inset: 0; background: #8B4513; color: white;
   z-index: 99999; display: flex; flex-direction: column;
@@ -50,8 +59,11 @@ input[type=number] { -moz-appearance: textfield; }
 .st-img{ display:block; max-width:100%; max-height:200px; object-fit:contain; margin-top:6px; border:1px solid var(--line); border-radius:8px; background:#fff; }
 header{ background:#FFFFFF; border-bottom:2px solid var(--brown-d); padding:6px 14px; display:flex; align-items:center; gap:8px; flex-wrap:nowrap; overflow-x:auto; position:sticky; top:0; z-index:50; box-shadow:0 1px 4px rgba(0,0,0,.06); font-size:13.5px; }
 header h1{font-size:1.1em; font-weight:800; color:var(--brown-d); letter-spacing:.2px; margin-right:8px; white-space:nowrap}
+
+/* 🟢 PHÂN SỐ DẠNG GẠCH CHÉO */
 .stat-badge{ background:#FFFFFF; border:1.5px solid var(--line); padding:3px 8px; border-radius:6px; font-weight:700; font-size:.78em; color:#333; white-space:nowrap; flex-shrink:0; }
 .stat-badge b{color:var(--blue-d); font-size:1.05em}
+
 header .spacer{flex:1 1 auto; min-width:4px}
 button{font-family:inherit; cursor:pointer}
 .btn{ background:#FFFFFF; color:var(--ink); border:1.5px solid var(--line); padding:4px 10px; border-radius:6px; font-weight:600; font-size:.82em; transition:.15s; white-space:nowrap; flex-shrink:0; }
@@ -66,24 +78,74 @@ button{font-family:inherit; cursor:pointer}
 .timer select{ background:#FFFFFF; color:var(--ink); border:1px solid var(--line); border-radius:5px; padding:2px 4px; font-family:inherit; font-size:.78em; }
 #tDisp{font-weight:800; font-variant-numeric:tabular-nums; min-width:42px; text-align:center; color:var(--brown-d); font-size:.9em}
 .timer .btn{padding:3px 7px; font-size:.76em}
-#loadOverlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:300; display:flex; align-items:center; justify-content:center; }
-.load-card { background:#fff; border-radius:12px; padding:20px; width:450px; box-shadow:0 10px 30px rgba(0,0,0,0.25); text-align:left; max-height:90vh; overflow-y:auto; }
-.load-card h3 { margin-bottom:16px; font-size:1.1em; color:var(--brown-d); text-align:center; }
-.score-config { background:var(--soft); border:1px solid var(--line); border-radius:8px; padding:12px; margin-top:8px; margin-bottom:12px; display:flex; flex-direction:column; gap:8px; align-items: stretch; }
+
+/* 🟢 MENU (LOAD OVERLAY) */
+#loadOverlay { 
+    position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:300; 
+    display:flex; align-items:center; justify-content:center; 
+    touch-action: none; /* Chặn zoom nền */
+}
+.load-card { 
+    background:#fff; border-radius:12px; width:450px; box-shadow:0 10px 30px rgba(0,0,0,0.25); 
+    display: flex; flex-direction: column; max-height: 90vh; overflow: hidden; padding: 0;
+    touch-action: pan-y; /* Chỉ cho phép cuộn dọc */
+}
+.load-card-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 20px; border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+}
+.load-card-header h3 { margin: 0; font-size: 1.1em; color: var(--brown-d); }
+.btn-close-x {
+    background: none; border: none; font-size: 26px; color: var(--brown-d); cursor: pointer; line-height: 1; padding: 0 5px;
+}
+.load-card-body {
+    padding: 0; overflow-y: auto; flex: 1; 
+    touch-action: pan-y; /* Cho phép cuộn trong menu */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* 🟢 TABS BÊN TRONG MENU */
+.menu-tabs { display: flex; border-bottom: 1px solid var(--line); background: var(--bg); position: sticky; top: 0; z-index: 10; }
+.menu-tab-btn {
+    flex: 1; padding: 12px; border: none; background: none; font-size: 14px; font-weight: bold; color: #666; cursor: pointer;
+    border-bottom: 3px solid transparent; transition: 0.2s;
+}
+.menu-tab-btn.active { color: var(--blue-d); border-bottom-color: var(--blue-d); background: var(--white); }
+.menu-tab-content { 
+    display: none; 
+    padding: 15px 20px; 
+    padding-bottom: 60vh; /* 🟢 Tạo khoảng trống cực lớn phía dưới để dễ dàng cuộn ô nhập lên trên bàn phím */
+}
+.menu-tab-content.active { display: block; }
+
+.load-card-footer {
+    padding: 15px 20px; border-top: 1px solid var(--line); background: var(--white);
+    display: flex; flex-direction: column; gap: 8px;
+    flex-shrink: 0;
+}
+
+.score-config { background:var(--soft); border:1px solid var(--line); border-radius:8px; padding:12px; margin-bottom:12px; display:flex; flex-direction:column; gap:8px; align-items: stretch; }
 .score-config label { display:flex; justify-content:space-between; align-items:center; font-size:13px; font-weight:600; }
-.score-config input { width:65px; padding:4px 8px; border:1px solid var(--line); border-radius:4px; font-family:inherit; font-weight:700; text-align:right; }
+.score-config input { width:65px; padding:4px 8px; border:1px solid var(--line); border-radius:4px; font-family:inherit; font-weight:700; text-align:right; font-size: 14px; /* 🟢 Đã giảm cỡ chữ trên desktop */ }
+.score-config input::placeholder { font-size: 11px; color: #888; font-weight: normal; } /* 🟢 Chỉnh placeholder nhỏ lại */
 .p2-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 2px 0 6px 0; padding: 6px; background:#fff; border-radius:6px; border:1px solid #eee; }
-.score-config .total-score { text-align:right; font-size:13px; font-weight:800; color:var(--blue-d); border-top:1px dashed var(--line); padding-top:8px; margin-top:4px; }
+.score-config .total-score { display: none; }
 .lv-grid{ display:grid; grid-template-columns:52px 1fr 1fr 1fr 1fr 1fr; gap:6px; background:#fff; border:1px solid #eee; border-radius:6px; padding:6px; align-items:center; }
 .lv-grid .lv-head{font-size:12px; font-weight:700; text-align:center; color:var(--brown-d)}
 .lv-grid .lv-row{font-size:12px; font-weight:700}
-.lv-grid input{ width:100%; padding:4px 6px; border:1px solid var(--line); border-radius:4px; font-family:inherit; font-weight:700; text-align:center; }
-/* CSS riêng cho ô Tự do */
+.lv-grid input{ width:100%; padding:4px 6px; border:1px solid var(--line); border-radius:4px; font-family:inherit; font-weight:700; text-align:center; font-size: 14px; }
+.lv-grid input::placeholder { font-size: 11px; color: #888; font-weight: normal; }
 .lv-grid input[id$="_wild"] { background: #fdfbf7; border-style: dashed; }
 
+/* Footer Total Score */
+.footer-total { display: none; text-align: right; font-size: 14px; font-weight: 800; color: var(--blue-d); margin-bottom: 5px; }
+.footer-total span { color: var(--brown-d); font-size: 1.1em;}
+
 .btn-create-row { width:100%; padding:10px; font-size:14px; }
-.btn-close-row { width:100%; padding:8px; margin-top:8px; background:#e0e0e0; border:none; color:#333; }
+.btn-close-row { width:100%; padding:10px; background:#e0e0e0; border:none; color:#333; border-radius: 5px; font-weight: bold; font-size: 14px;}
 .btn-close-row:hover { background:#d0d0d0; }
+
 .warn-banner { background: #FFF3CD; color: #856404; padding: 10px 16px; border-left: 4px solid #FFC107; border-radius: 4px; margin-bottom: 16px; font-size: 0.95em; font-weight: 600; display: flex; align-items: center; gap: 8px; }
 nav.tabs{ display:flex; padding:0 14px; background:var(--soft); border-bottom:1px solid var(--line); overflow-x:auto; }
 nav.tabs button{ background:transparent; border:none; color:var(--ink); padding:12px 20px; font-weight:700; font-size:.95em; border-bottom:3px solid transparent; transition:.15s; }
@@ -130,10 +192,81 @@ section.tab.active{display:block}
 .lesson-checkbox:hover .lesson-chip { background: var(--soft); border-color: var(--brown); }
 .lesson-checkbox input:checked + .lesson-chip { background: var(--blue-d); color: #fff; border-color: var(--blue-d); box-shadow: 0 2px 4px rgba(0,68,136,0.2); }
 
-/* CSS CHO NÚT CHỌN NHANH BIỂU ĐIỂM PHẦN II */
 .p2-mode-btn { cursor: pointer; color: var(--blue-d); margin-left: 12px; font-size: 13px; font-weight: normal; user-select: none; transition: 0.2s; }
 .p2-mode-btn:hover { text-decoration: underline; }
 .p2-mode-btn.active { font-weight: 800; text-decoration: underline; }
+
+/* 🟢 TỐI ƯU HEADER & MENU CHO ĐIỆN THOẠI */
+@media (max-width: 768px) {
+    .hide-mobile { display: none !important; }
+    .show-mobile { display: inline !important; }
+
+    header {
+        flex-wrap: nowrap; 
+        padding: 4px 6px; 
+        gap: 4px; 
+        justify-content: space-between;
+        overflow-x: hidden;
+    }
+    header h1, header .spacer { display: none; }
+
+    .stat-badge { 
+        border: none; background: transparent; font-size: 13px; padding: 0; white-space: nowrap; display: flex; align-items: center;
+    }
+    
+    #btnLoadMenu, #fsDown, #fsUp, .btn, .btn-primary, .btn-brown {
+        padding: 4px 6px;
+        font-size: 12px;
+        border-radius: 4px;
+    }
+    
+    #btnSubmit, #btnRedo { 
+        padding: 4px 8px; font-size: 13px;
+    }
+
+    .timer { 
+        padding: 2px 4px; gap: 2px;
+    }
+    .timer select { font-size: 12px; padding: 1px 2px; }
+    #tDisp { font-size: 13px; min-width: 30px; }
+    .timer .btn { padding: 4px 6px; font-size: 12px; }
+
+    main { padding: 10px; }
+    
+    #loadOverlay {
+        align-items: flex-end; 
+        padding: 0;
+        height: 100%;
+    }
+    .load-card { 
+        width: 100%; 
+        max-width: 100%; 
+        height: 95%; 
+        max-height: 95dvh;
+        border-radius: 16px 16px 0 0; 
+    }
+    .load-card-header { padding: 10px 15px; }
+    .load-card-body { padding: 0; }
+    .menu-tabs { display: flex; }
+    .menu-tab-content { padding: 10px 15px; padding-bottom: 60vh; /* Vẫn giữ khoảng trống lớn */ }
+    .load-card-footer { 
+        padding: 10px 15px; 
+        padding-bottom: calc(10px + env(safe-area-inset-bottom)); 
+        gap: 6px; 
+    }
+
+    .p2-grid { grid-template-columns: 1fr; }
+    .lv-grid { grid-template-columns: 45px 1fr 1fr 1fr 1fr 1fr; gap: 4px; padding: 4px;}
+    .lv-grid input { padding: 6px 2px; font-size: 16px; } /* 16px để chống auto-zoom */
+    .lv-head { font-size: 10px; }
+
+    .st-row { flex-direction: column; align-items: flex-start; }
+    .st-txt { min-width: 100%; }
+    .st-btns { width: 100%; display: flex; justify-content: space-between; margin-top: 8px; background: var(--soft); padding: 5px; border-radius: 6px; }
+    .st-btn { flex: 1; margin: 0 4px; padding: 10px 0; font-size: 15px; }
+
+    .short-input { min-width: 100%; width: 100%; padding: 12px; }
+}
 </style>
 </head>
 <body>
@@ -154,10 +287,11 @@ section.tab.active{display:block}
     <header>
       <h1>⚡ LUYỆN TẬP TRẮC NGHIỆM</h1>
       
-      <span class="stat-badge">Đã trả lời: <b id="answeredCount">0</b>/<span id="totalCount">0</span></span>
-      <button class="btn-primary" id="btnSubmit">📝 Nộp bài</button>
-      <button class="btn-brown hidden" id="btnRedo">🔄 Làm lại</button>
-      <button class="btn" id="btnLoadMenu" title="Chọn cấu trúc đề & Tạo">⚙️ Chọn</button>
+      <span class="stat-badge"><span class="hide-mobile">Đã trả lời: </span><b id="answeredCount">0</b>/<span id="totalCount">0</span></span>
+      
+      <button class="btn-primary" id="btnSubmit"><span class="hide-mobile">📝 Nộp bài</span><span class="show-mobile">Nộp</span></button>
+      <button class="btn-brown hidden" id="btnRedo"><span class="hide-mobile">🔄 Làm lại</span><span class="show-mobile">Lại</span></button>
+      <button class="btn" id="btnLoadMenu" title="Chọn cấu trúc đề & Tạo"><span class="hide-mobile">⚙️ Chọn</span><span class="show-mobile">⚙️</span></button>
       
       <span class="spacer"></span>
       <div class="timer">
@@ -167,8 +301,8 @@ section.tab.active{display:block}
           <option value="25" selected>25′</option><option value="30">30′</option>
           <option value="45">45′</option>
         </select>
-        <span id="tDisp">25:00</span>
-        <button class="btn" id="tBtn">Bắt đầu</button>
+        <span id="tDisp">25'00</span>
+        <button class="btn" id="tBtn"><span class="hide-mobile">Bắt đầu</span><span class="show-mobile">▶</span></button>
       </div>
       <button class="btn" id="fsDown">A−</button>
       <button class="btn" id="fsUp">A+</button>
@@ -178,88 +312,109 @@ section.tab.active{display:block}
 
     <div id="loadOverlay" class="hidden">
       <div class="load-card">
-        <h3>Tạo Cấu Trúc Đề</h3>
+        <div class="load-card-header">
+            <h3>Tạo Cấu Trúc Đề</h3>
+            <button class="btn-close-x" onclick="closeLoadMenu()">×</button>
+        </div>
         
-        <div class="score-config">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-            <div style="font-weight:700; color:var(--blue-d)">Chọn Bài / Nhóm bài:</div>
-            <div>
-                <button class="btn" style="padding: 2px 6px; font-size: 11px;" onclick="toggleAllLessons(true)">Chọn tất cả</button>
-                <button class="btn" style="padding: 2px 6px; font-size: 11px;" onclick="toggleAllLessons(false)">Bỏ chọn</button>
+        <div class="load-card-body">
+            <!-- 🟢 TABS MENU -->
+            <div class="menu-tabs">
+                <button class="menu-tab-btn active" onclick="switchMenuTab(1)">📝 Chọn bài & Điểm</button>
+                <button class="menu-tab-btn" onclick="switchMenuTab(2)">⚙️ Cấu trúc đề</button>
             </div>
-          </div>
-          <div class="lesson-grid" id="lessonCheckboxes">
-            <div style="width: 100%; text-align: center; color: #888;">Đang tải danh sách bài...</div>
-          </div>
-        </div>
 
-        <div class="score-config">
-          <div style="font-weight:700; margin-bottom:4px; color:var(--blue-d)">Biểu điểm:</div>
-          <label>Phần I (mỗi câu): <input type="number" id="pt1" value="0.25" min="0" step="0.05"> đ</label>
-        <div style="margin: 6px 0 4px 0; font-size:13px; color:#000000; font-weight:600; display: flex; justify-content: space-between; align-items: center;">
-		<span>Phần II (theo số ý đúng):</span>
-		<span>
-        <span id="btnP2Default" class="p2-mode-btn">Mặc định</span>
-        <span id="btnP2Even" class="p2-mode-btn">Chia đều</span>
-		</span>
-		</div>
-          <div class="p2-grid">
-            <label>1 ý: <input type="number" id="p2_1" value="0.1" step="0.05"> đ</label>
-            <label>2 ý: <input type="number" id="p2_2" value="0.25" step="0.05"> đ</label>
-            <label>3 ý: <input type="number" id="p2_3" value="0.5" step="0.05"> đ</label>
-            <label>4 ý: <input type="number" id="p2_4" value="1.0" step="0.05"> đ</label>
-          </div>
-          <label>Phần III (mỗi câu): <input type="number" id="pt3" value="0.5" min="0" step="0.05"> đ</label>
-          <div class="total-score" id="ptTotalLabel" style="display:none;">
-            <span id="ptTotalLabelText">Tổng điểm (tạm tính):</span> <span id="ptTotal">0</span> đ
-          </div>
-        </div>
+            <!-- TAB 1: CHỌN BÀI VÀ BIỂU ĐIỂM -->
+            <div id="menu-tab-1" class="menu-tab-content active">
+                <div class="score-config">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <div style="font-weight:700; color:var(--blue-d)">Chọn Bài / Nhóm bài:</div>
+                    <div>
+                        <button class="btn" style="padding: 2px 6px; font-size: 11px;" onclick="toggleAllLessons(true)">Chọn tất cả</button>
+                        <button class="btn" style="padding: 2px 6px; font-size: 11px;" onclick="toggleAllLessons(false)">Bỏ chọn</button>
+                    </div>
+                  </div>
+                  <div class="lesson-grid" id="lessonCheckboxes">
+                    <div style="width: 100%; text-align: center; color: #888;">Đang tải danh sách bài...</div>
+                  </div>
+                </div>
 
-        <div class="score-config">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div style="font-weight:700; color:var(--blue-d)">Cấu trúc đề:</div>
-            <div>
-                <button class="btn" id="btnPickNew" style="padding: 2px 8px; font-size: 11px; border-color: var(--blue); color: var(--blue-d); font-weight: 700;">🔀 Bốc câu mới</button>
-                <button class="btn" id="btnResetStructure" style="padding: 2px 8px; font-size: 11px; border-color: var(--brown); color: var(--brown-d); font-weight: 700;">↺ Xóa chọn</button>
+                <div class="score-config">
+                  <div style="font-weight:700; margin-bottom:4px; color:var(--blue-d)">Biểu điểm:</div>
+                  <label>Phần I (mỗi câu): <input type="number" inputmode="numeric" id="pt1" value="0.25" min="0" step="0.05"> đ</label>
+                  
+                  <div style="margin: 6px 0 4px 0; font-size:13px; color:#000000; font-weight:600; display: flex; justify-content: space-between; align-items: center;">
+                      <span>Phần II (theo số ý đúng):</span>
+                      <span>
+                          <span id="btnP2Default" class="p2-mode-btn">mặc định</span>
+                          <span id="btnP2Even" class="p2-mode-btn active">chia đều</span>
+                      </span>
+                  </div>
+                  
+                  <div class="p2-grid">
+                    <label>1 ý: <input type="number" inputmode="numeric" id="p2_1" value="0.25" step="0.05"> đ</label>
+                    <label>2 ý: <input type="number" inputmode="numeric" id="p2_2" value="0.5" step="0.05"> đ</label>
+                    <label>3 ý: <input type="number" inputmode="numeric" id="p2_3" value="0.75" step="0.05"> đ</label>
+                    <label>4 ý: <input type="number" inputmode="numeric" id="p2_4" value="1.0" step="0.05"> đ</label>
+                  </div>
+                  <label>Phần III (mỗi câu): <input type="number" inputmode="numeric" id="pt3" value="0.5" min="0" step="0.05"> đ</label>
+                </div>
             </div>
-          </div>
-          <div style="font-size:12px; color:#555; font-weight:600;">Tổng số câu mỗi phần (để trống = tất cả):</div>
-          <div class="p2-grid" style="grid-template-columns:1fr 1fr 1fr;">
-            <label>P.I: <input type="number" id="sc1" min="0" step="1" placeholder="tất cả"></label>
-            <label>P.II: <input type="number" id="sc2" min="0" step="1" placeholder="tất cả"></label>
-            <label>P.III: <input type="number" id="sc3" min="0" step="1" placeholder="tất cả"></label>
-          </div>
-          <div style="font-size:12px; color:#555; font-weight:600; margin-top:2px;">Hoặc chọn theo mức độ (ưu tiên hơn ô tổng):</div>
-          <div class="lv-grid">
-            <span></span>
-            <span class="lv-head">Dễ</span><span class="lv-head">Vừa</span><span class="lv-head">Khó</span><span class="lv-head">Rất Khó</span><span class="lv-head">Tự do</span>
-            
-            <span class="lv-row">Phần I</span>
-            <input type="number" id="lv1_easy" min="0" step="1">
-            <input type="number" id="lv1_medium" min="0" step="1">
-            <input type="number" id="lv1_hard" min="0" step="1">
-            <input type="number" id="lv1_very_hard" min="0" step="1">
-            <input type="number" id="lv1_wild" min="0" step="1" placeholder="0">
-            
-            <span class="lv-row">Phần II</span>
-            <input type="number" id="lv2_easy" min="0" step="1">
-            <input type="number" id="lv2_medium" min="0" step="1">
-            <input type="number" id="lv2_hard" min="0" step="1">
-            <input type="number" id="lv2_very_hard" min="0" step="1">
-            <input type="number" id="lv2_wild" min="0" step="1" placeholder="0">
-            
-            <span class="lv-row">Phần III</span>
-            <input type="number" id="lv3_easy" min="0" step="1">
-            <input type="number" id="lv3_medium" min="0" step="1">
-            <input type="number" id="lv3_hard" min="0" step="1">
-            <input type="number" id="lv3_very_hard" min="0" step="1">
-            <input type="number" id="lv3_wild" min="0" step="1" placeholder="0">
-          </div>
-          <div id="levelWarning" class="warn-banner hidden" style="margin-top: 8px; padding: 8px 12px; font-size: 12px; border-left-width: 3px;"></div>
+
+            <!-- TAB 2: CẤU TRÚC ĐỀ -->
+            <div id="menu-tab-2" class="menu-tab-content">
+                <div class="score-config">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="font-weight:700; color:var(--blue-d)">Cấu trúc đề:</div>
+                    <div>
+                        <button class="btn" id="btnPickNew" style="padding: 2px 8px; font-size: 11px; border-color: var(--blue); color: var(--blue-d); font-weight: 700;">🔀 Bốc câu mới</button>
+                        <button class="btn" id="btnResetStructure" style="padding: 2px 8px; font-size: 11px; border-color: var(--brown); color: var(--brown-d); font-weight: 700;">↺ Xóa chọn</button>
+                    </div>
+                  </div>
+                  <div style="font-size:12px; color:#555; font-weight:600;">Tổng số câu mỗi phần (để trống = tất cả):</div>
+                  <div class="p2-grid" style="grid-template-columns:1fr 1fr 1fr;">
+                    <label>P.I: <input type="number" inputmode="numeric" id="sc1" min="0" step="1" placeholder="tất cả"></label>
+                    <label>P.II: <input type="number" inputmode="numeric" id="sc2" min="0" step="1" placeholder="tất cả"></label>
+                    <label>P.III: <input type="number" inputmode="numeric" id="sc3" min="0" step="1" placeholder="tất cả"></label>
+                  </div>
+                  <div style="font-size:12px; color:#555; font-weight:600; margin-top:2px;">Hoặc chọn theo mức độ (ưu tiên hơn ô tổng):</div>
+                  <div class="lv-grid">
+                    <span></span>
+                    <span class="lv-head">Dễ</span><span class="lv-head">Vừa</span><span class="lv-head">Khó</span><span class="lv-head">Rất Khó</span><span class="lv-head">Tự do</span>
+                    
+                    <span class="lv-row">Phần I</span>
+                    <input type="number" inputmode="numeric" id="lv1_easy" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv1_medium" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv1_hard" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv1_very_hard" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv1_wild" min="0" step="1" placeholder="0">
+                    
+                    <span class="lv-row">Phần II</span>
+                    <input type="number" inputmode="numeric" id="lv2_easy" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv2_medium" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv2_hard" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv2_very_hard" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv2_wild" min="0" step="1" placeholder="0">
+                    
+                    <span class="lv-row">Phần III</span>
+                    <input type="number" inputmode="numeric" id="lv3_easy" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv3_medium" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv3_hard" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv3_very_hard" min="0" step="1">
+                    <input type="number" inputmode="numeric" id="lv3_wild" min="0" step="1" placeholder="0">
+                  </div>
+                  <div id="levelWarning" class="warn-banner hidden" style="margin-top: 8px; padding: 8px 12px; font-size: 12px; border-left-width: 3px;"></div>
+                </div>
+            </div>
         </div>
 
-        <button class="btn-primary btn-create-row" id="btnCreateQuiz">🚀 Tạo Trắc Nghiệm</button>
-        <button class="btn btn-close-row" id="btnCloseLoad">Đóng</button>
+        <div class="load-card-footer">
+            <div class="footer-total" id="ptTotalLabel">
+                <span id="ptTotalLabelText">Tổng điểm (tạm tính):</span> <span id="ptTotal">0</span> đ
+            </div>
+            <button class="btn-primary btn-create-row" id="btnCreateQuiz">🚀 Tạo Trắc Nghiệm</button>
+            <button class="btn btn-close-row" id="btnCloseLoad">Đóng</button>
+        </div>
       </div>
     </div>
 
@@ -317,18 +472,65 @@ section.tab.active{display:block}
   document.addEventListener('drag', e => e.preventDefault(), { capture: true });
 })();
 
+// 3. BẪY DEVTOOLS (CHỈ BẬT TRÊN MÁY TÍNH)
 let devtoolsOpen = false;
 const trap = document.getElementById('security-trap');
-setInterval(() => {
-    const threshold = 160;
-    const widthDiff = window.outerWidth - window.innerWidth;
-    const heightDiff = window.outerHeight - window.innerHeight;
-    if (widthDiff > threshold || heightDiff > threshold) {
-        if(!devtoolsOpen) { devtoolsOpen = true; trap.classList.remove('hidden'); }
-    } else {
-        if(devtoolsOpen) { devtoolsOpen = false; trap.classList.add('hidden'); }
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+
+if (!isMobile) {
+    setInterval(() => {
+        const threshold = 160;
+        const widthDiff = window.outerWidth - window.innerWidth;
+        const heightDiff = window.outerHeight - window.innerHeight;
+        if (widthDiff > threshold || heightDiff > threshold) {
+            if(!devtoolsOpen) { devtoolsOpen = true; trap.classList.remove('hidden'); }
+        } else {
+            if(devtoolsOpen) { devtoolsOpen = false; trap.classList.add('hidden'); }
+        }
+    }, 500);
+}
+
+// 🟢 HÀM CHUYỂN TAB MENU
+function switchMenuTab(tabNum) {
+    document.querySelectorAll('.menu-tab-btn').forEach((btn, idx) => {
+        btn.classList.toggle('active', idx === tabNum - 1);
+    });
+    document.querySelectorAll('.menu-tab-content').forEach((content, idx) => {
+        content.classList.toggle('active', idx === tabNum - 1);
+    });
+}
+
+// 🟢 HÀM XỬ LÝ BÀN PHÍM ẢO CHE KHUẤT MENU
+function handleViewportResize() {
+    if (!window.visualViewport) return;
+    const overlay = document.getElementById('loadOverlay');
+    
+    if (overlay && !overlay.classList.contains('hidden')) {
+        overlay.style.height = `${window.visualViewport.height}px`;
+        overlay.style.top = `${window.visualViewport.offsetTop}px`;
+    } else if (overlay) {
+        overlay.style.height = '';
+        overlay.style.top = '';
     }
-}, 500);
+}
+if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', handleViewportResize);
+    window.visualViewport.addEventListener('scroll', handleViewportResize);
+}
+
+// 🟢 CÁC HÀM ĐÓNG/MỞ MENU
+function openLoadMenu() {
+    document.body.classList.add('modal-open');
+    $('#loadOverlay').classList.remove('hidden');
+    setTimeout(handleViewportResize, 100);
+    switchMenuTab(1); 
+}
+function closeLoadMenu() {
+    document.body.classList.remove('modal-open');
+    $('#loadOverlay').classList.add('hidden');
+    const overlay = document.getElementById('loadOverlay');
+    if(overlay) { overlay.style.height = ''; overlay.style.top = ''; }
+}
 
 function renderMath(el){
   if(!el) return;
@@ -596,7 +798,8 @@ function updateSubsetPlaceholders(){
         else pool = pool.filter(q => selectedLessons.includes(String(q.lesson)));
     }
     
-    $('#sc'+n).placeholder = 'max ' + pool.length;
+    // 🟢 Bỏ chữ "max" để không bị tràn ô trên desktop
+    $('#sc'+n).placeholder = pool.length;
     const cnt = {easy:0,medium:0,hard:0,very_hard:0,wild:0};
     
     pool.forEach(q=>{ cnt[getNormalizedLevel(q)]++; });
@@ -692,7 +895,6 @@ function updateCreateBtn(){
  'lv2_easy','lv2_medium','lv2_hard','lv2_very_hard','lv2_wild',
  'lv3_easy','lv3_medium','lv3_hard','lv3_very_hard','lv3_wild'].forEach(id => $('#'+id).addEventListener('input', updateCreateBtn));
 
-/* 🟢 LƯU / TẢI CẤU TRÚC VÀ BỘ ĐỀ HIỆN TẠI */
 function saveStructureToStorage() {
     const data = {
         pt1: $('#pt1').value, p2_1: $('#p2_1').value, p2_2: $('#p2_2').value, p2_3: $('#p2_3').value, p2_4: $('#p2_4').value, pt3: $('#pt3').value,
@@ -723,7 +925,6 @@ function saveCurrentExamToStorage() {
     if(exam) localStorage.setItem('prac_current_exam', JSON.stringify(exam));
 }
 
-/* 🟢 HÀM ĐẢO ĐỀ VÀ ĐÁP ÁN (Dùng chung) */
 function shuffleExamObject(examObj, rng) {
     const p1 = shuffle(examObj.p1.map(q => { 
         if (q.correct === null || q.correct === undefined) return { ...q, options: shuffle(q.options.map(o => ({...o})), rng) };
@@ -738,7 +939,6 @@ function shuffleExamObject(examObj, rng) {
     return { ...examObj, p1, p2, p3 };
 }
 
-/* 🟢 NÚT XÓA CHỌN (RESET) */
 $('#btnResetStructure').addEventListener('click', () => {
     const ids = ['sc1','sc2','sc3',
         'lv1_easy','lv1_medium','lv1_hard','lv1_very_hard','lv1_wild',
@@ -749,7 +949,6 @@ $('#btnResetStructure').addEventListener('click', () => {
     updateCreateBtn();
 });
 
-/* 🟢 NÚT BỐC CÂU MỚI */
 $('#btnPickNew').addEventListener('click', () => {
     if(!parsedOriginal) return;
     saveStructureToStorage();
@@ -761,19 +960,25 @@ $('#btnPickNew').addEventListener('click', () => {
     submitted = false; answers = {};
     
     renderExam(); clearResultTab(); syncButtons();
-    $('#loadOverlay').classList.add('hidden');
+    closeLoadMenu();
     window.scrollTo({top:0, behavior:'smooth'});
 });
 
-/* 11. SỰ KIỆN TẢI ĐỀ TỪ FIREBASE */
-async function autoLoadExam() {
+async function autoLoadExam(forceReload = false) {
+  if (parsedOriginal && !forceReload) {
+      updateSubsetPlaceholders();
+      updateLevelWarnings();
+      updateCreateBtn();
+      return; 
+  }
+
   const errorBanner = document.getElementById('errorBanner');
   if (errorBanner) errorBanner.classList.add('hidden'); 
   
   try {
     if (!window.getFirebaseQuestions) throw new Error("Firebase chưa tải xong, vui lòng thử lại sau vài giây.");
     
-    const allQuestions = await window.getFirebaseQuestions();
+    const allQuestions = await window.getFirebaseQuestions(10); 
     if (!allQuestions || allQuestions.length === 0) throw new Error("Database trống hoặc chưa có câu hỏi.");
 
     const normalizedQuestions = allQuestions.map((q, index) => {
@@ -833,13 +1038,12 @@ async function autoLoadExam() {
     updateLevelWarnings();
     updateCreateBtn();
     
-    // 🟢 KIỂM TRA BỘ ĐỀ ĐÃ LƯU (F5 KHÔNG MẤT BỘ CŨ)
     const savedExamStr = localStorage.getItem('prac_current_exam');
     if (savedExamStr && !exam) {
         try {
             exam = JSON.parse(savedExamStr);
             const seed = Math.floor(Math.random() * 4294967296); const rng = mulberry32(seed);
-            exam = shuffleExamObject(exam, rng); // Chỉ đảo đề
+            exam = shuffleExamObject(exam, rng); 
             saveCurrentExamToStorage();
         } catch(e) {
             console.log("Lỗi tải đề cũ, tạo mới...");
@@ -868,17 +1072,23 @@ async function autoLoadExam() {
 }
 
 $('#btnLoadMenu').addEventListener('click', async () => {
-  const originalText = $('#btnLoadMenu').textContent;
-  $('#btnLoadMenu').textContent = '⏳ Đang tải...';
-  await autoLoadExam();
-  $('#btnLoadMenu').textContent = originalText;
+  openLoadMenu();
   
-  $('#loadOverlay').classList.remove('hidden');
+  if (!parsedOriginal) {
+      const originalText = $('#btnLoadMenu').innerHTML;
+      $('#btnLoadMenu').innerHTML = '⏳';
+      document.getElementById('lessonCheckboxes').innerHTML = '<div style="width: 100%; text-align: center; color: var(--brown-d);">⏳ Đang tải dữ liệu...</div>';
+      
+      await autoLoadExam();
+      
+      $('#btnLoadMenu').innerHTML = originalText;
+  }
+  
   updateCreateBtn();
 });
 
 $('#btnCloseLoad').addEventListener('click', () => {
-  $('#loadOverlay').classList.add('hidden');
+  closeLoadMenu();
 });
 
 $('#btnCreateQuiz').addEventListener('click', () => {
@@ -896,11 +1106,10 @@ $('#btnCreateQuiz').addEventListener('click', () => {
   
   submitted = false; answers = {};
   renderExam(); clearResultTab(); syncButtons();
-  $('#loadOverlay').classList.add('hidden');
+  closeLoadMenu();
   window.scrollTo({top:0, behavior:'smooth'});
 });
 
-/* 12. NỘP BÀI & LÀM LẠI */
 function submitExam(){
   submitted = true; renderExam(); renderTab3(); syncButtons();
   $$('nav.tabs button').forEach(b => b.classList.remove('active')); $$('section.tab').forEach(s => s.classList.remove('active'));
@@ -909,7 +1118,6 @@ function submitExam(){
 }
 $('#btnSubmit').addEventListener('click', submitExam);
 
-/* 🟢 LÀM LẠI: CHỈ ĐẢO ĐỀ CŨ */
 $('#btnRedo').addEventListener('click', () => {
   if(confirm("Bạn có chắc muốn làm lại từ đầu? (Đảo thứ tự câu hỏi và đáp án của đề hiện tại)")) {
     const seed = Math.floor(Math.random() * 4294967296); const rng = mulberry32(seed);
@@ -924,7 +1132,6 @@ $('#btnRedo').addEventListener('click', () => {
   }
 });
 
-/* 13. TÍCH ĐÁP ÁN */
 $('#examBody').addEventListener('change', e => {
   if(submitted) return; const t = e.target; if(t.type !== 'radio') return; const uid = t.dataset.uid; if(!uid) return;
   if(t.name.startsWith('p1-')) answers[uid] = Number(t.value);
@@ -937,7 +1144,6 @@ $('#examBody').addEventListener('input', e => {
   answers[t.dataset.uid] = t.value; updateAnsweredCount();
 });
 
-/* 14. TABS */
 $$('nav.tabs button').forEach(btn => {
   btn.addEventListener('click', () => {
     $$('nav.tabs button').forEach(b => b.classList.remove('active')); $$('section.tab').forEach(s => s.classList.remove('active'));
@@ -945,21 +1151,27 @@ $$('nav.tabs button').forEach(btn => {
   });
 });
 
-/* 15. ĐỒNG HỒ & FONT */
+let fs = localStorage.getItem('prac_fs') ? parseInt(localStorage.getItem('prac_fs')) : 18;
+document.documentElement.style.setProperty('--fs', fs + 'px');
+
+$('#fsUp').addEventListener('click', () => { fs = Math.min(40, fs + 2); document.documentElement.style.setProperty('--fs', fs + 'px'); localStorage.setItem('prac_fs', fs); });
+$('#fsDown').addEventListener('click', () => { fs = Math.max(13, fs - 2); document.documentElement.style.setProperty('--fs', fs + 'px'); localStorage.setItem('prac_fs', fs); });
+
 let tRemain = 25 * 60, tTimer = null, tRunning = false;
-function tShow(){ const m = Math.floor(tRemain / 60), s = tRemain % 60; $('#tDisp').textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0'); }
+function tShow(){ const m = Math.floor(tRemain / 60), s = tRemain % 60; $('#tDisp').textContent = String(m).padStart(2,'0') + "'" + String(s).padStart(2,'0'); }
 $('#tBtn').addEventListener('click', () => {
-  if(tRunning){ clearInterval(tTimer); tRunning = false; $('#tBtn').textContent = 'Tiếp tục'; }
+  if(tRunning){ 
+      clearInterval(tTimer); tRunning = false; 
+      $('#tBtn').innerHTML = '<span class="hide-mobile">Tiếp tục</span><span class="show-mobile">▶</span>'; 
+  }
   else {
     if(tRemain <= 0) tRemain = Number($('#tMin').value) * 60;
-    tRunning = true; $('#tBtn').textContent = 'Tạm dừng';
-    tTimer = setInterval(() => { tRemain--; if(tRemain <= 0){ tRemain = 0; clearInterval(tTimer); tRunning = false; $('#tBtn').textContent = 'Hết giờ'; submitExam(); } tShow(); }, 1000);
+    tRunning = true; 
+    $('#tBtn').innerHTML = '<span class="hide-mobile">Tạm dừng</span><span class="show-mobile">⏸</span>';
+    tTimer = setInterval(() => { tRemain--; if(tRemain <= 0){ tRemain = 0; clearInterval(tTimer); tRunning = false; $('#tBtn').innerHTML = '<span class="hide-mobile">Hết giờ</span><span class="show-mobile">⏹</span>'; submitExam(); } tShow(); }, 1000);
   }
 });
-$('#tMin').addEventListener('change', e => { clearInterval(tTimer); tRunning = false; $('#tBtn').textContent = 'Bắt đầu'; tRemain = Number(e.target.value) * 60; tShow(); });
-let fs = 18;
-$('#fsUp').addEventListener('click', () => { fs = Math.min(40, fs + 2); document.documentElement.style.setProperty('--fs', fs + 'px'); });
-$('#fsDown').addEventListener('click', () => { fs = Math.max(13, fs - 2); document.documentElement.style.setProperty('--fs', fs + 'px'); });
+$('#tMin').addEventListener('change', e => { clearInterval(tTimer); tRunning = false; $('#tBtn').innerHTML = '<span class="hide-mobile">Bắt đầu</span><span class="show-mobile">▶</span>'; tRemain = Number(e.target.value) * 60; tShow(); });
 
 window.addEventListener('load', () => {
     tShow();
@@ -989,7 +1201,7 @@ window.addEventListener('load', () => {
         text-decoration: underline;
     }
     .p2-mode-btn.active {
-        font-weight: 800; /* Chữ đậm lên khi được chọn */
+        font-weight: 800;
         text-decoration: underline;
     }
 </style>
@@ -1004,12 +1216,10 @@ window.addEventListener('load', () => {
       const p24 = document.getElementById('p2_4');
       const inputs = [p21, p22, p23, p24];
 
-      // Hàm kích hoạt để code gốc tự tính lại tổng điểm
       function triggerUpdate() {
           p21.dispatchEvent(new Event('input', { bubbles: true }));
       }
 
-      // Hàm xử lý khi chọn "chia đều"
       function setEven() {
           p21.value = '0.25';
           p22.value = '0.5';
@@ -1020,7 +1230,6 @@ window.addEventListener('load', () => {
           btnDefault.classList.remove('active');
       }
 
-      // Hàm xử lý khi chọn "mặc định"
       function setDefault() {
           p21.value = '0.1';
           p22.value = '0.25';
@@ -1032,11 +1241,9 @@ window.addEventListener('load', () => {
       }
 
       if (btnDefault && btnEven && p21) {
-          // Gắn sự kiện click cho 2 nút
           btnDefault.addEventListener('click', setDefault);
           btnEven.addEventListener('click', setEven);
 
-          // Nếu người dùng tự gõ số vào ô -> Xóa trạng thái đậm của cả 2 nút
           inputs.forEach(inp => {
               inp.addEventListener('input', () => {
                   btnDefault.classList.remove('active');
@@ -1044,9 +1251,21 @@ window.addEventListener('load', () => {
               });
           });
 
-          // TỰ ĐỘNG CHỌN "CHIA ĐỀU" KHI TẢI TRANG
           setEven();
       }
+
+      // 🟢 ĐÃ XÓA ĐOẠN CODE TỰ ĐỘNG TẮT BÀN PHÍM KHI CHẠM RA NGOÀI (Nguyên nhân gây mất bàn phím khi vuốt)
+      // Chỉ giữ lại chức năng tự cuộn ô nhập liệu lên khi bàn phím mở
+      document.querySelector('.load-card-body').addEventListener('focusin', function(e) {
+          if (e.target.tagName === 'INPUT') {
+              setTimeout(() => {
+                  if (document.activeElement === e.target) {
+                      // Cuộn ô input lên chính giữa màn hình
+                      e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }
+              }, 300); // Đợi 0.3s để bàn phím bật lên hoàn toàn
+          }
+      });
   });
 </script>
 </body>
