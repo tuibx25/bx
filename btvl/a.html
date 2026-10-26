@@ -16,7 +16,7 @@ h2 { text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 20
 .form-group { margin-bottom: 15px; }
 .label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
 .label-row label { font-weight: bold; font-size: 14px; margin: 0; }
-.forgot-link { font-size: 13px; color: var(--brown-d); cursor: pointer; text-decoration: none; font-weight: normal; transition: 0.2s;}
+.forgot-link { font-size: 13px; color: var(--brown-d); cursor: pointer; text-decoration: none; font-weight: normal; transition: 0.2s; text-align: right; max-width: 65%; line-height: 1.2;}
 .forgot-link:hover { text-decoration: underline; color: var(--primary); }
 .forgot-link.active { font-weight: bold; color: var(--primary); }
 .form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; box-sizing: border-box; font-size: 14px; color: var(--ink); transition: border-color 0.2s, background-color 0.2s;}
@@ -391,6 +391,12 @@ emailInput.classList.add('input-warning');
 showMsg("Định dạng email không hợp lệ!", "error");
 return;
 }
+
+const btnForgot = document.getElementById('btnForgotPwd');
+const originalText = btnForgot.textContent;
+btnForgot.textContent = "Gửi yêu cầu tạo mật khẩu mới";
+btnForgot.classList.add('active');
+
 try {
 const { auth } = await import('/bx/firebase-init.js');
 const { sendPasswordResetEmail } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js');
@@ -402,11 +408,10 @@ const pwdInput = document.getElementById('loginPassword');
 pwdInput.value = '';
 pwdInput.disabled = true;
 pwdInput.placeholder = "Đã khóa. Vui lòng kiểm tra email.";
-const btnForgot = document.getElementById('btnForgotPwd');
-btnForgot.textContent = "Tạo mật khẩu mới";
-btnForgot.classList.add('active');
 } catch (error) {
 console.error(error);
+btnForgot.textContent = originalText;
+btnForgot.classList.remove('active');
 if (error.code === 'auth/user-not-found') {
 showMsg("Email này chưa được đăng ký trong hệ thống!", "error");
 } else {
