@@ -6,7 +6,7 @@
 <title>Bài Tập Trắc Nghiệm - Đăng Nhập - Đăng Ký</title>
 <script type="module" src="/bx/firebase-init.js"></script>
 <style>
-:root { --ink: #000000; --bg: #F5F5F5; --white: #FFFFFF; --border: #D3D3D3; --primary: #004488; --primary-light: #0066CC; --brown: #8B5A2B; --brown-d: #8B4513; --beige: #F5F5DC; --wheat: #F5DEB3; --error: #d9534f; }
+:root { --ink: #000000; --bg: #F5F5F5; --white: #FFFFFF; --border: #D3D3D3; --primary: #004488; --primary-light: #0066CC; --brown: #8B5A2B; --brown-d: #8B4513; --beige: #F5F5DC; --wheat: #F5DEB3; }
 body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; color: var(--ink); }
 .card { background: var(--white); width: 100%; max-width: 450px; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid var(--border); }
 h2 { text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 20px;}
@@ -19,11 +19,10 @@ h2 { text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 20
 .forgot-link { font-size: 13px; color: var(--brown-d); cursor: pointer; text-decoration: none; font-weight: normal; transition: 0.2s;}
 .forgot-link:hover { text-decoration: underline; color: var(--primary); }
 .forgot-link.active { font-weight: bold; color: var(--primary); }
-.form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; box-sizing: border-box; font-size: 14px; color: var(--ink); transition: border-color 0.2s;}
+.form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; box-sizing: border-box; font-size: 14px; color: var(--ink); transition: border-color 0.2s, background-color 0.2s;}
 .form-control:focus { outline: none; border-color: var(--primary-light); }
-.form-control:disabled { background: var(--bg); color: #999; cursor: not-allowed; }
-.form-control.input-error { border-color: var(--error); background-color: #fdf2f2; }
-.error-text { color: var(--error); font-size: 13px; margin-top: 5px; display: none; font-weight: bold; }
+.form-control:disabled { background: var(--bg); color: #999; cursor: not-allowed; border-style: dashed; }
+.input-warning { border-color: #FFC107 !important; background-color: #FFFDF5 !important; }
 .row { display: flex; gap: 10px; }
 .row > div { flex: 1; }
 .btn { width: 100%; padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 16px; color: var(--white); transition: 0.2s; background: var(--primary); display: block; text-align: center; text-decoration: none; box-sizing: border-box;}
@@ -77,7 +76,6 @@ h2 { text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 20
 <div class="form-group">
 <label style="display:block; margin-bottom:5px; font-weight:bold; font-size:14px;">Email:</label>
 <input type="email" id="loginEmail" class="form-control" placeholder="Nhập email...">
-<div id="loginEmailError" class="error-text">Vui lòng nhập email để lấy lại mật khẩu!</div>
 </div>
 <div class="form-group">
 <div class="label-row">
@@ -210,8 +208,7 @@ document.getElementById('regClassNum').addEventListener('input', updateRegPrevie
 document.getElementById('pGrade').addEventListener('change', updateProfilePreview);
 document.getElementById('pClassNum').addEventListener('input', updateProfilePreview);
 document.getElementById('loginEmail').addEventListener('input', function() {
-this.classList.remove('input-error');
-document.getElementById('loginEmailError').style.display = 'none';
+this.classList.remove('input-warning');
 if (isResetSent) {
 isResetSent = false;
 const pwdInput = document.getElementById('loginPassword');
@@ -220,6 +217,7 @@ pwdInput.placeholder = "Nhập mật khẩu...";
 const btnForgot = document.getElementById('btnForgotPwd');
 btnForgot.textContent = "Quên mật khẩu?";
 btnForgot.classList.remove('active');
+document.getElementById('alertMsg').className = 'msg';
 }
 });
 import('/bx/firebase-init.js').then(({ auth, onAuthStateChanged }) => {
@@ -277,8 +275,7 @@ el.className = `msg ${type}`;
 function switchAuthTab(tab) {
 document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
 document.getElementById('alertMsg').className = 'msg';
-document.getElementById('loginEmail').classList.remove('input-error');
-document.getElementById('loginEmailError').style.display = 'none';
+document.getElementById('loginEmail').classList.remove('input-warning');
 if (isResetSent) {
 isResetSent = false;
 const pwdInput = document.getElementById('loginPassword');
@@ -379,23 +376,19 @@ showMsg("Email hoặc mật khẩu không chính xác!", "error");
 window.handleForgotPassword = async function() {
 const emailInput = document.getElementById('loginEmail');
 const email = emailInput.value.trim();
-const emailError = document.getElementById('loginEmailError');
-emailInput.classList.remove('input-error');
-emailError.style.display = 'none';
 document.getElementById('alertMsg').className = 'msg';
+emailInput.classList.remove('input-warning');
+
 if (!email) {
-emailInput.classList.add('input-error');
-emailError.textContent = "Vui lòng nhập email để lấy lại mật khẩu!";
-emailError.style.display = 'block';
+emailInput.classList.add('input-warning');
+emailInput.placeholder = "Hãy nhập email vào đây!";
 emailInput.focus();
 return;
 }
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 if (!emailRegex.test(email)) {
-emailInput.classList.add('input-error');
-emailError.textContent = "Định dạng email không hợp lệ!";
-emailError.style.display = 'block';
-emailInput.focus();
+emailInput.classList.add('input-warning');
+showMsg("Định dạng email không hợp lệ!", "error");
 return;
 }
 try {
@@ -408,16 +401,14 @@ isResetSent = true;
 const pwdInput = document.getElementById('loginPassword');
 pwdInput.value = '';
 pwdInput.disabled = true;
-pwdInput.placeholder = "Hãy kiểm tra email để tạo mật khẩu mới";
+pwdInput.placeholder = "Đã khóa. Vui lòng kiểm tra email.";
 const btnForgot = document.getElementById('btnForgotPwd');
 btnForgot.textContent = "Tạo mật khẩu mới";
 btnForgot.classList.add('active');
 } catch (error) {
 console.error(error);
 if (error.code === 'auth/user-not-found') {
-emailInput.classList.add('input-error');
-emailError.textContent = "Email này chưa được đăng ký trong hệ thống!";
-emailError.style.display = 'block';
+showMsg("Email này chưa được đăng ký trong hệ thống!", "error");
 } else {
 showMsg("Lỗi: " + error.message, "error");
 }
