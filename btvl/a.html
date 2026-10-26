@@ -16,11 +16,12 @@ h2 { text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 20
 .form-group { margin-bottom: 15px; }
 .label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
 .label-row label { font-weight: bold; font-size: 14px; margin: 0; }
-.forgot-link { font-size: 13px; color: var(--brown-d); cursor: pointer; text-decoration: none; font-weight: normal;}
+.forgot-link { font-size: 13px; color: var(--brown-d); cursor: pointer; text-decoration: none; font-weight: normal; transition: 0.2s;}
 .forgot-link:hover { text-decoration: underline; color: var(--primary); }
+.forgot-link.active { font-weight: bold; color: var(--primary); }
 .form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; box-sizing: border-box; font-size: 14px; color: var(--ink); transition: border-color 0.2s;}
 .form-control:focus { outline: none; border-color: var(--primary-light); }
-.form-control:disabled { background: var(--bg); color: var(--brown); opacity: 0.6; cursor: not-allowed; }
+.form-control:disabled { background: var(--bg); color: #999; cursor: not-allowed; }
 .form-control.input-error { border-color: var(--error); background-color: #fdf2f2; }
 .error-text { color: var(--error); font-size: 13px; margin-top: 5px; display: none; font-weight: bold; }
 .row { display: flex; gap: 10px; }
@@ -81,7 +82,7 @@ h2 { text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 20
 <div class="form-group">
 <div class="label-row">
 <label>Mật khẩu:</label>
-<a class="forgot-link" onclick="handleForgotPassword()">Quên mật khẩu?</a>
+<a id="btnForgotPwd" class="forgot-link" onclick="handleForgotPassword()">Quên mật khẩu?</a>
 </div>
 <input type="password" id="loginPassword" class="form-control" placeholder="Nhập mật khẩu...">
 </div>
@@ -201,14 +202,25 @@ if(devtoolsOpen) { devtoolsOpen = false; trap.classList.add('hidden'); }
 }, 500);
 }
 let currentUserDoc = null;
+let isResetSent = false;
+
 window.addEventListener('load', () => {
 document.getElementById('regGrade').addEventListener('change', updateRegPreview);
 document.getElementById('regClassNum').addEventListener('input', updateRegPreview);
 document.getElementById('pGrade').addEventListener('change', updateProfilePreview);
 document.getElementById('pClassNum').addEventListener('input', updateProfilePreview);
-document.getElementById('loginEmail').addEventListener('input', () => {
-document.getElementById('loginEmail').classList.remove('input-error');
+document.getElementById('loginEmail').addEventListener('input', function() {
+this.classList.remove('input-error');
 document.getElementById('loginEmailError').style.display = 'none';
+if (isResetSent) {
+isResetSent = false;
+const pwdInput = document.getElementById('loginPassword');
+pwdInput.disabled = false;
+pwdInput.placeholder = "Nhập mật khẩu...";
+const btnForgot = document.getElementById('btnForgotPwd');
+btnForgot.textContent = "Quên mật khẩu?";
+btnForgot.classList.remove('active');
+}
 });
 import('/bx/firebase-init.js').then(({ auth, onAuthStateChanged }) => {
 onAuthStateChanged(auth, (user) => {
@@ -267,6 +279,15 @@ document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('activ
 document.getElementById('alertMsg').className = 'msg';
 document.getElementById('loginEmail').classList.remove('input-error');
 document.getElementById('loginEmailError').style.display = 'none';
+if (isResetSent) {
+isResetSent = false;
+const pwdInput = document.getElementById('loginPassword');
+pwdInput.disabled = false;
+pwdInput.placeholder = "Nhập mật khẩu...";
+const btnForgot = document.getElementById('btnForgotPwd');
+btnForgot.textContent = "Quên mật khẩu?";
+btnForgot.classList.remove('active');
+}
 if (tab === 'login') {
 event.target.classList.add('active');
 document.getElementById('loginForm').classList.remove('hidden');
@@ -382,7 +403,15 @@ const { auth } = await import('/bx/firebase-init.js');
 const { sendPasswordResetEmail } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js');
 showMsg("⏳ Đang gửi yêu cầu khôi phục...", "info");
 await sendPasswordResetEmail(auth, email);
-showMsg("✅ Đã gửi link khôi phục mật khẩu đến email của bạn. Vui lòng kiểm tra hộp thư (hoặc Spam)!", "success");
+showMsg("✅ Đã gửi link khôi phục mật khẩu. Vui lòng kiểm tra email!", "success");
+isResetSent = true;
+const pwdInput = document.getElementById('loginPassword');
+pwdInput.value = '';
+pwdInput.disabled = true;
+pwdInput.placeholder = "Hãy kiểm tra email để tạo mật khẩu mới";
+const btnForgot = document.getElementById('btnForgotPwd');
+btnForgot.textContent = "Tạo mật khẩu mới";
+btnForgot.classList.add('active');
 } catch (error) {
 console.error(error);
 if (error.code === 'auth/user-not-found') {
