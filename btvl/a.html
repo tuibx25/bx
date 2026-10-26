@@ -6,7 +6,7 @@
 <title>Bài Tập Trắc Nghiệm - Đăng Nhập - Đăng Ký</title>
 <script type="module" src="/bx/firebase-init.js"></script>
 <style>
-:root { --ink: #000000; --bg: #F5F5F5; --white: #FFFFFF; --border: #D3D3D3; --primary: #004488; --primary-light: #0066CC; --brown: #8B5A2B; --brown-d: #8B4513; --beige: #F5F5DC; --wheat: #F5DEB3; }
+:root { --ink: #000000; --bg: #F5F5F5; --white: #FFFFFF; --border: #D3D3D3; --primary: #004488; --primary-light: #0066CC; --brown: #8B5A2B; --brown-d: #8B4513; --beige: #F5F5DC; --wheat: #F5DEB3; --error: #d9534f; }
 body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; color: var(--ink); }
 .card { background: var(--white); width: 100%; max-width: 450px; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid var(--border); }
 h2 { text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 20px;}
@@ -14,10 +14,15 @@ h2 { text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 20
 .tab-btn { flex: 1; padding: 10px; background: none; border: none; font-size: 16px; font-weight: bold; cursor: pointer; color: var(--brown); opacity: 0.6; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: 0.2s;}
 .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); opacity: 1; }
 .form-group { margin-bottom: 15px; }
-.form-group label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
-.form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; box-sizing: border-box; font-size: 14px; color: var(--ink);}
+.label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.label-row label { font-weight: bold; font-size: 14px; margin: 0; }
+.forgot-link { font-size: 13px; color: var(--brown-d); cursor: pointer; text-decoration: none; font-weight: normal;}
+.forgot-link:hover { text-decoration: underline; color: var(--primary); }
+.form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; box-sizing: border-box; font-size: 14px; color: var(--ink); transition: border-color 0.2s;}
 .form-control:focus { outline: none; border-color: var(--primary-light); }
 .form-control:disabled { background: var(--bg); color: var(--brown); opacity: 0.6; cursor: not-allowed; }
+.form-control.input-error { border-color: var(--error); background-color: #fdf2f2; }
+.error-text { color: var(--error); font-size: 13px; margin-top: 5px; display: none; font-weight: bold; }
 .row { display: flex; gap: 10px; }
 .row > div { flex: 1; }
 .btn { width: 100%; padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 16px; color: var(--white); transition: 0.2s; background: var(--primary); display: block; text-align: center; text-decoration: none; box-sizing: border-box;}
@@ -51,8 +56,6 @@ h2 { text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 20
 #security-trap { position: fixed; inset: 0; background: #8B4513; color: white; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
 #security-trap h2 { font-size: 2em; margin-bottom: 10px; color: white; border: none; }
 #security-trap p { font-size: 1.2em; }
-.forgot-link { display: block; text-align: right; font-size: 13px; color: var(--brown-d); margin-top: -5px; margin-bottom: 15px; cursor: pointer; text-decoration: none; }
-.forgot-link:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -71,13 +74,16 @@ h2 { text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 20
 <div id="alertMsg" class="msg"></div>
 <div id="loginForm">
 <div class="form-group">
-<label>Email:</label>
+<label style="display:block; margin-bottom:5px; font-weight:bold; font-size:14px;">Email:</label>
 <input type="email" id="loginEmail" class="form-control" placeholder="Nhập email...">
+<div id="loginEmailError" class="error-text">Vui lòng nhập email để lấy lại mật khẩu!</div>
 </div>
 <div class="form-group">
+<div class="label-row">
 <label>Mật khẩu:</label>
-<input type="password" id="loginPassword" class="form-control" placeholder="Nhập mật khẩu...">
 <a class="forgot-link" onclick="handleForgotPassword()">Quên mật khẩu?</a>
+</div>
+<input type="password" id="loginPassword" class="form-control" placeholder="Nhập mật khẩu...">
 </div>
 <button class="btn" onclick="handleLogin()">Đăng Nhập</button>
 <p class="note">Nếu chưa có tài khoản, vui lòng chuyển sang tab Đăng Ký.</p>
@@ -200,6 +206,10 @@ document.getElementById('regGrade').addEventListener('change', updateRegPreview)
 document.getElementById('regClassNum').addEventListener('input', updateRegPreview);
 document.getElementById('pGrade').addEventListener('change', updateProfilePreview);
 document.getElementById('pClassNum').addEventListener('input', updateProfilePreview);
+document.getElementById('loginEmail').addEventListener('input', () => {
+document.getElementById('loginEmail').classList.remove('input-error');
+document.getElementById('loginEmailError').style.display = 'none';
+});
 import('/bx/firebase-init.js').then(({ auth, onAuthStateChanged }) => {
 onAuthStateChanged(auth, (user) => {
 if (user) {
@@ -255,6 +265,8 @@ el.className = `msg ${type}`;
 function switchAuthTab(tab) {
 document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
 document.getElementById('alertMsg').className = 'msg';
+document.getElementById('loginEmail').classList.remove('input-error');
+document.getElementById('loginEmailError').style.display = 'none';
 if (tab === 'login') {
 event.target.classList.add('active');
 document.getElementById('loginForm').classList.remove('hidden');
@@ -344,24 +356,39 @@ showMsg("Email hoặc mật khẩu không chính xác!", "error");
 }
 }
 window.handleForgotPassword = async function() {
-const email = document.getElementById('loginEmail').value.trim();
+const emailInput = document.getElementById('loginEmail');
+const email = emailInput.value.trim();
+const emailError = document.getElementById('loginEmailError');
+emailInput.classList.remove('input-error');
+emailError.style.display = 'none';
+document.getElementById('alertMsg').className = 'msg';
 if (!email) {
-return showMsg("Vui lòng nhập Email của bạn vào ô đăng nhập phía trên để lấy lại mật khẩu!", "error");
+emailInput.classList.add('input-error');
+emailError.textContent = "Vui lòng nhập email để lấy lại mật khẩu!";
+emailError.style.display = 'block';
+emailInput.focus();
+return;
 }
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 if (!emailRegex.test(email)) {
-return showMsg("Định dạng email không hợp lệ!", "error");
+emailInput.classList.add('input-error');
+emailError.textContent = "Định dạng email không hợp lệ!";
+emailError.style.display = 'block';
+emailInput.focus();
+return;
 }
 try {
 const { auth } = await import('/bx/firebase-init.js');
 const { sendPasswordResetEmail } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js');
-showMsg("⏳ Đang gửi yêu cầu...", "info");
+showMsg("⏳ Đang gửi yêu cầu khôi phục...", "info");
 await sendPasswordResetEmail(auth, email);
 showMsg("✅ Đã gửi link khôi phục mật khẩu đến email của bạn. Vui lòng kiểm tra hộp thư (hoặc Spam)!", "success");
 } catch (error) {
 console.error(error);
 if (error.code === 'auth/user-not-found') {
-showMsg("Email này chưa được đăng ký trong hệ thống!", "error");
+emailInput.classList.add('input-error');
+emailError.textContent = "Email này chưa được đăng ký trong hệ thống!";
+emailError.style.display = 'block';
 } else {
 showMsg("Lỗi: " + error.message, "error");
 }
