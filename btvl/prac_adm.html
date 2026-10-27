@@ -28,7 +28,7 @@ h2 { color: var(--primary); text-align: center; border-bottom: 2px solid var(--p
 .bar-fill { height: 100%; background: var(--primary); color: white; font-size: 12px; text-align: right; padding-right: 5px; line-height: 20px; font-weight: bold; }
 .search-bar { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
 .search-bar select, .search-bar input { padding: 8px 12px; border: 1px solid var(--border); border-radius: 5px; font-size: 14px; }
-.search-bar select { min-width: 150px; }
+.search-bar select { min-width: 130px; }
 .search-bar input { flex: 1; min-width: 200px; }
 .btn { background: var(--primary); color: var(--white); border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.2s; }
 .btn:hover:not(:disabled) { background: var(--primary-light); }
@@ -128,6 +128,12 @@ input:checked + .slider:before { transform: translateX(20px); }
 <option value="very_hard">Rất khó</option>
 <option value="wild">Tự do</option>
 </select>
+<select id="sortOrder" onchange="renderTable()">
+<option value="original" selected>Thứ tự gốc (Database)</option>
+<option value="default">Sắp xếp: Bài & Phần</option>
+<option value="level_asc">Mức độ: Dễ → Khó</option>
+<option value="level_desc">Mức độ: Khó → Dễ</option>
+</select>
 <input type="text" id="searchQ" placeholder="🔍 Tìm nội dung câu hỏi..." oninput="renderTable()">
 </div>
 <div class="table-wrap">
@@ -214,7 +220,7 @@ if(devtoolsOpen) { devtoolsOpen = false; trap.classList.add('hidden'); }
 })();
 
 let allQuestions = [];
-let lessonConfigs = {}; // Lưu trạng thái ẩn/hiện của từng bài
+let lessonConfigs = {};
 let currentPage = 1;
 const itemsPerPage = 50;
 
@@ -234,6 +240,15 @@ if(lvl.includes('medium') || lvl.includes('vừa') || lvl === '2') return 'mediu
 if(lvl.includes('hard') || lvl.includes('khó') || lvl === '3') return 'hard';
 if(lvl.includes('very') || lvl.includes('rất') || lvl === '4') return 'very_hard';
 return 'wild';
+}
+
+function getLevelValue(lvl) {
+const norm = normLevel(lvl);
+if (norm === 'easy') return 1;
+if (norm === 'medium') return 2;
+if (norm === 'hard') return 3;
+if (norm === 'very_hard') return 4;
+return 5;
 }
 
 window.addEventListener('load', () => {
@@ -262,20 +277,13 @@ async function loadData() {
 try {
 const { db } = await import('/bx/firebase-init.js');
 const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
-// 1. Tải câu hỏi
 const snapQ = await getDocs(collection(db, "vl10_questions"));
+// Lưu nguyên thứ tự gốc từ Firestore (theo Document ID)
 allQuestions = snapQ.docs.map(d => ({ id: d.id, ...d.data() }));
-allQuestions.sort((a, b) => {
-const lessonA = parseInt(a.lesson) || 0;
-const lessonB = parseInt(b.lesson) || 0;
-if (lessonA !== lessonB) return lessonA - lessonB;
-return (a.part || 0) - (b.part || 0);
-});
-// 2. Tải cấu hình bài học
 const snapC = await getDocs(collection(db, "prac_lessons_config"));
 lessonConfigs = {};
 snapC.forEach(doc => {
-lessonConfigs[doc.id] = doc.data(); // doc.id dạng "lesson_1"
+lessonConfigs[doc.id] = doc.data();
 });
 renderStats();
 populateLessonFilter();
@@ -301,7 +309,6 @@ levelCount[lvl] = (levelCount[lvl] || 0) + 1;
 });
 document.getElementById('totalLessons').textContent = lessons.size;
 
-// Đếm số bài đang bị ẩn
 let hiddenCount = 0;
 lessons.forEach(l => {
 const config = lessonConfigs[`lesson_${l}`];
@@ -335,9 +342,6 @@ const sorted = Array.from(lessons).sort((a,b) => parseInt(a) - parseInt(b));
 select.innerHTML = '<option value="all">Tất cả Bài</option>' + sorted.map(l => `<option value="${l}">Bài ${l}</option>`).join('');
 }
 
-// ==========================================
-// CẤU HÌNH BÀI HỌC (ẨN / HIỆN)
-// ==========================================
 function renderConfigTable() {
 const lessons = new Set();
 const countMap = {};
@@ -385,25 +389,22 @@ isHidden: isHidden,
 updatedAt: serverTimestamp()
 }, { merge: true });
 
-// Cập nhật lại state cục bộ
 lessonConfigs[docId] = { lessonId: lessonId, isHidden: isHidden };
-// Cập nhật lại thống kê
 renderStats();
 } catch (error) {
 console.error(error);
 alert("Lỗi cập nhật: " + error.message);
-renderConfigTable(); // Revert UI
+renderConfigTable();
 }
 }
 
-// ==========================================
-// NGÂN HÀNG CÂU HỎI
-// ==========================================
 window.renderTable = function() {
 const fPart = document.getElementById('filterPart').value;
 const fLesson = document.getElementById('filterLesson').value;
 const fLevel = document.getElementById('filterLevel').value;
+const sortBy = document.getElementById('sortOrder').value;
 const keyword = document.getElementById('searchQ').value.toLowerCase().trim();
+
 let filtered = allQuestions.filter(q => {
 if (fPart !== 'all' && String(q.part) !== fPart) return false;
 if (fLesson !== 'all' && String(q.lesson) !== fLesson) return false;
@@ -411,6 +412,30 @@ if (fLevel !== 'all' && normLevel(q.level) !== fLevel) return false;
 if (keyword && !String(q.text).toLowerCase().includes(keyword)) return false;
 return true;
 });
+
+// LOGIC SẮP XẾP
+if (sortBy !== 'original') {
+filtered.sort((a, b) => {
+if (sortBy === 'level_asc') {
+const valA = getLevelValue(a.level);
+const valB = getLevelValue(b.level);
+if (valA !== valB) return valA - valB;
+} else if (sortBy === 'level_desc') {
+const valA = getLevelValue(a.level);
+const valB = getLevelValue(b.level);
+if (valA !== valB) return valB - valA;
+}
+// Mặc định hoặc sort phụ: Bài -> Phần -> ID
+const lessonA = parseInt(a.lesson) || 0;
+const lessonB = parseInt(b.lesson) || 0;
+if (lessonA !== lessonB) return lessonA - lessonB;
+const partA = a.part || 0;
+const partB = b.part || 0;
+if (partA !== partB) return partA - partB;
+return String(a.id).localeCompare(String(b.id));
+});
+}
+
 const totalPages = Math.ceil(filtered.length / itemsPerPage);
 if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
 const startIdx = (currentPage - 1) * itemsPerPage;
@@ -503,9 +528,6 @@ body.innerHTML = html;
 modal.style.display = 'block';
 }
 
-// ==========================================
-// QUÉT LỖI
-// ==========================================
 window.scanErrors = async function() {
 const btn = document.getElementById('btnScan');
 const resultDiv = document.getElementById('scanResult');
