@@ -127,11 +127,16 @@ th { background: var(--beige); color: var(--primary); font-weight: bold; positio
 <div class="table-wrap" id="assignmentList"></div>
 </div>
 <div id="tabGrade" class="tab-content">
-<div class="form-group">
+<div class="row" style="align-items: flex-end; margin-bottom: 10px;">
+<div class="form-group" style="flex: 1; margin-bottom: 0;">
 <label>Chọn Đợt Giao Bài Để Chấm:</label>
 <select id="selectAssignment" class="form-control" onchange="loadSubmissions()">
 <option value="">-- Chọn đợt giao bài (Chỉ hiện bài Đang Mở) --</option>
 </select>
+</div>
+<div class="form-group" style="flex: 0 0 auto; margin-bottom: 0;">
+<button class="btn btn-success" id="btnPublishAll" onclick="publishAllScores()" disabled style="padding: 10px 20px;">📢 Công bố cả lớp</button>
+</div>
 </div>
 <div id="gradeResult">
 <p style="text-align: center; color: var(--ink);">Vui lòng chọn một đợt giao bài để xem bài làm.</p>
@@ -201,8 +206,7 @@ th { background: var(--beige); color: var(--primary); font-weight: bold; positio
 <h3 style="margin: 0; color: var(--brown-d);">🕵️ Kết Quả Kiểm Tra Dữ Liệu</h3>
 <span class="modal-close" onclick="document.getElementById('dataCheckModal').style.display='none'">×</span>
 </div>
-<div id="dataCheckBody" style="max-height: 65vh; overflow-y: auto; padding-right: 10px;">
-</div>
+<div id="dataCheckBody" style="max-height: 65vh; overflow-y: auto; padding-right: 10px;"></div>
 <div style="text-align: right; margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px;">
 <button class="btn btn-outline" onclick="document.getElementById('dataCheckModal').style.display='none'">Đóng</button>
 </div>
@@ -215,6 +219,7 @@ let allAssignments = {};
 let allUsersList = [];
 let currentRoster = [];
 let allGradebookData = [];
+let currentSubmissionsList = []; 
 function escapeHTML(str) {
 if (str === null || str === undefined) return '';
 return String(str).replace(/[&<>"']/g, function(m) {
@@ -247,6 +252,9 @@ document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
 document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
 if (btn) btn.classList.add('active');
 document.getElementById(tabId).classList.add('active');
+if (tabId === 'tabGrade') {
+document.getElementById('btnPublishAll').disabled = true;
+}
 }
 function normalizeName(str) {
 if (!str) return "";
@@ -365,6 +373,8 @@ loadAssignmentsData();
 window.loadSubmissions = async function() {
 const assignmentId = document.getElementById('selectAssignment').value;
 const resultDiv = document.getElementById('gradeResult');
+const btnPublishAll = document.getElementById('btnPublishAll');
+btnPublishAll.disabled = true;
 if (!assignmentId) return resultDiv.innerHTML = "<p>Vui lòng chọn đợt giao bài.</p>";
 resultDiv.innerHTML = "<p>⏳ Đang tải dữ liệu lớp và bài làm...</p>";
 const { db } = await import('/bx/firebase-init.js');
@@ -394,15 +404,8 @@ userSnaps.forEach((snap) => {
 snap.forEach(d => allUsersInClasses.push({ id: d.id, ...d.data() }));
 });
 let submissions = subSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-const combinedStudents = [];
-assignedClasses.forEach(cls => {
-(allRosters[cls] || []).forEach(st => {
-combinedStudents.push({ ...st, classOfStudent: cls });
-});
-});
-if (combinedStudents.length === 0) {
-return resultDiv.innerHTML = `<p style="color: var(--brown-d);">Các lớp [${escapeHTML(assignedClasses.join(', '))}] chưa nạp sổ điểm! Không thể chấm.</p>`;
-}
+currentSubmissionsList = submissions; 
+let pendingCount = 0;
 let html = `<table><thead><tr><th class="stt-col">STT</th><th>Họ Tên</th><th>Lớp</th><th>Lần làm</th><th>Trạng thái</th><th>Điểm tự động</th><th>Điểm chốt</th><th>Hành động</th></tr></thead><tbody>`;
 const renderRow = (sub, attemptIdx, isHidden, isMain, st, user, index) => {
 let status = '';
@@ -416,6 +419,7 @@ status = '<span class="status-badge status-pending">Đang làm bài (Chưa nộp
 } else if (sub.status === 'submitted' && !sub.isPublished) {
 status = '<span class="status-badge status-pending">Chờ duyệt</span>';
 canPublish = true;
+pendingCount++; 
 } else if (sub.isPublished) {
 status = '<span class="status-badge status-published">Đã công bố</span>';
 }
@@ -444,6 +448,15 @@ return `
 </tr>
 `;
 };
+const combinedStudents = [];
+assignedClasses.forEach(cls => {
+(allRosters[cls] || []).forEach(st => {
+combinedStudents.push({ ...st, classOfStudent: cls });
+});
+});
+if (combinedStudents.length === 0) {
+return resultDiv.innerHTML = `<p style="color: var(--brown-d);">Các lớp [${escapeHTML(assignedClasses.join(', '))}] chưa nạp sổ điểm! Không thể chấm.</p>`;
+}
 combinedStudents.forEach((st, index) => {
 const normName = normalizeName(st.name);
 const user = allUsersInClasses.find(u =>
@@ -490,6 +503,13 @@ html += renderRow(sub, idx, true, false, st, user, index);
 }
 });
 resultDiv.innerHTML = html + `</tbody></table>`;
+if (pendingCount > 0) {
+btnPublishAll.disabled = false;
+btnPublishAll.innerHTML = `📢 Công bố cả lớp (${pendingCount} bài)`;
+} else {
+btnPublishAll.disabled = true;
+btnPublishAll.innerHTML = `📢 Công bố cả lớp`;
+}
 } catch (err) {
 console.error("Lỗi tải bài làm:", err);
 resultDiv.innerHTML = `<p style="color: var(--brown-d); font-weight: bold;">❌ Lỗi: ${escapeHTML(err.message)}</p>`;
@@ -595,6 +615,41 @@ const { db } = await import('/bx/firebase-init.js');
 const { doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
 await updateDoc(doc(db, "exam_submissions", subId), { score: finalScore, isPublished: true });
 loadSubmissions();
+}
+window.publishAllScores = async function() {
+if(!currentSubmissionsList || currentSubmissionsList.length === 0) return;
+const pendingSubs = currentSubmissionsList.filter(s => s.status === 'submitted' && !s.isPublished);
+if (pendingSubs.length === 0) return alert("Không có bài nào cần công bố.");
+if (!confirm(`Bạn có chắc muốn công bố điểm cho TẤT CẢ ${pendingSubs.length} bài làm đang chờ duyệt?\n\nHành động này sẽ lấy điểm trong các ô "Điểm chốt" và gửi tới học sinh.`)) return;
+setBtnLoading('btnPublishAll', true);
+try {
+const { db } = await import('/bx/firebase-init.js');
+const { doc, writeBatch } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+const batch = writeBatch(db);
+let updatedCount = 0;
+pendingSubs.forEach(sub => {
+const inputEl = document.getElementById(`score-${sub.id}`);
+if (inputEl) {
+const scoreVal = parseFloat(inputEl.value);
+if (!isNaN(scoreVal)) {
+batch.update(doc(db, "exam_submissions", sub.id), { score: scoreVal, isPublished: true });
+updatedCount++;
+}
+}
+});
+if (updatedCount > 0) {
+await batch.commit();
+alert(`✅ Đã công bố thành công ${updatedCount} điểm!`);
+loadSubmissions();
+} else {
+alert("Không có điểm hợp lệ nào để công bố.");
+}
+} catch (err) {
+console.error("Lỗi công bố hàng loạt:", err);
+alert("Lỗi: " + err.message);
+} finally {
+setBtnLoading('btnPublishAll', false);
+}
 }
 window.loadGradebook = async function() {
 const className = document.getElementById('inputClassGradebook').value.trim().toLowerCase();
