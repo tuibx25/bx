@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rà Soát Dữ Liệu Thi Online</title>
+<script type="module" src="/bx/firebase-init.js"></script>
+<style>
+:root { --ink: #000000; --bg: #F5F5F5; --white: #FFFFFF; --border: #D3D3D3; --primary: #004488; --primary-light: #0066CC; --brown: #8B5A2B; --brown-d: #8B4513; --beige: #F5F5DC; --wheat: #F5DEB3; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: var(--ink); }
+.container { max-width: 1000px; margin: 0 auto; background: var(--white); padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid var(--border); }
+h2 { color: var(--brown-d); text-align: center; border-bottom: 2px solid var(--brown-d); padding-bottom: 10px; margin-top: 0; }
+.btn { background: var(--primary); color: var(--white); border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.2s; width: 100%; max-width: 300px; display: block; margin: 0 auto 20px; }
+.btn:hover:not(:disabled) { background: var(--primary-light); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.loading { text-align: center; font-weight: bold; color: var(--primary); padding: 20px; display: none; }
+.error-item { padding: 15px; background: #FFF5F5; border-left: 5px solid var(--brown-d); margin-bottom: 12px; border-radius: 6px; font-size: 14px; }
+.error-item strong { color: var(--brown-d); font-size: 16px; }
+.error-list { margin-top: 8px; margin-left: 20px; color: #333; line-height: 1.6; }
+.success-box { padding: 20px; background: #E8F5E9; border-left: 5px solid #2E7D32; color: #1B5E20; border-radius: 6px; font-weight: bold; font-size: 16px; text-align: center; }
+#security-trap { position: fixed; inset: 0; background: #8B4513; color: white; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+</style>
+</head>
+<body>
+<div id="security-trap" class="hidden">
+<h2>⛔ CẢNH BÁO BẢO MẬT</h2>
+<p>Hệ thống phát hiện bạn đang cố gắng can thiệp hoặc xem mã nguồn.</p>
+</div>
+<div id="loadingScreen" style="text-align: center; margin-top: 50px;">
+<h2 style="color: var(--brown-d); border:none;">🔄 Đang xác thực quyền Giáo viên...</h2>
+</div>
+<div class="container hidden" id="mainContent">
+<h2>🕵️ Rà Soát Dữ Liệu Thi Online (exams & exam_keys)</h2>
+<button class="btn" id="btnScan" onclick="scanData()">🚀 Bắt đầu quét dữ liệu</button>
+<div id="loadingText" class="loading"><span class="spinner" style="border-color: var(--primary); border-top-color: transparent; width: 20px; height: 20px;"></span> Đang tải và kiểm tra dữ liệu...</div>
+<div id="resultBox"></div>
+</div>
+<script>
+(function() {
+document.addEventListener('contextmenu', e => { e.preventDefault(); return false; }, { capture: true });
+document.addEventListener('keydown', function(e) {
+const k = (e.key || '').toLowerCase();
+if (e.key === 'F12' || e.keyCode === 123) { e.preventDefault(); return false; }
+if (e.ctrlKey && e.shiftKey && (k === 'i' || k === 'j' || k === 'c' || k === 'k')) { e.preventDefault(); return false; }
+if (e.ctrlKey && !e.shiftKey && (k === 'u' || k === 's')) { e.preventDefault(); return false; }
+}, { capture: true });
+let devtoolsOpen = false;
+const trap = document.getElementById('security-trap');
+setInterval(() => {
+const threshold = 160;
+if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
+if(!devtoolsOpen) { devtoolsOpen = true; trap.classList.remove('hidden'); }
+} else {
+if(devtoolsOpen) { devtoolsOpen = false; trap.classList.add('hidden'); }
+}
+}, 500);
+})();
+function escapeHTML(str) {
+if (str === null || str === undefined) return '';
+return String(str).replace(/[&<>"']/g, function(m) {
+if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;';
+if (m === '"') return '&quot;'; if (m === "'") return '&#39;'; return m;
+});
+}
+window.addEventListener('load', () => {
+window.checkAuthState((isLoggedIn) => {
+if (!isLoggedIn) return;
+import('/bx/firebase-init.js').then(({ auth }) => {
+if (auth.currentUser.email !== 'trntui6@gmail.com') {
+document.getElementById('loadingScreen').innerHTML = "<h2 style='color:var(--brown-d);'>⛔ BẠN KHÔNG PHẢI LÀ GIÁO VIÊN!</h2>";
+return;
+}
+document.getElementById('loadingScreen').classList.add('hidden');
+document.getElementById('mainContent').classList.remove('hidden');
+});
+});
+});
+window.scanData = async function() {
+const btn = document.getElementById('btnScan');
+const resultBox = document.getElementById('resultBox');
+const loadingText = document.getElementById('loadingText');
+btn.disabled = true;
+resultBox.innerHTML = '';
+loadingText.style.display = 'block';
+try {
+const { db } = await import('/bx/firebase-init.js');
+const { collection, getDocs, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+const snap = await getDocs(collection(db, "exams"));
+let errorHtml = '';
+let totalErrors = 0;
+for (const docSnap of snap.docs) {
+const exam = docSnap.data();
+const examId = docSnap.id;
+const examTitle = exam.title || 'Không tên';
+const questions = exam.questions || [];
+let examErrors = [];
+// 1. Kiểm tra xem có exam_keys không
+let keyData = null;
+try {
+const keySnap = await getDoc(doc(db, "exam_keys", examId));
+if (!keySnap.exists()) {
+examErrors.push(`⚠️ LỖI NGHIÊM TRỌNG: Không tìm thấy document đáp án (exam_keys) cho đề này!`);
+} else {
+keyData = keySnap.data().answers || {};
+}
+} catch (e) {
+examErrors.push(`Lỗi khi đọc exam_keys: ${e.message}`);
+}
+// 2. Kiểm tra nội dung câu hỏi
+questions.forEach((q, idx) => {
+const qId = q.uid || `(Không có uid)`;
+if (!q.text || q.text.trim() === '') examErrors.push(`Câu ${idx+1} (ID: ${qId}): Bị thiếu nội dung câu hỏi.`);
+if (q.part === 1) {
+if (!q.options || !Array.isArray(q.options) || q.options.length < 2) examErrors.push(`Câu ${idx+1} (ID: ${qId}): Số lượng đáp án < 2.`);
+if (q.correct === null || q.correct === undefined) examErrors.push(`Câu ${idx+1} (ID: ${qId}): Không có đáp án đúng (correct bị null/undefined).`);
+else if (typeof q.correct !== 'number') examErrors.push(`Câu ${idx+1} (ID: ${qId}): Đáp án đúng (correct) không phải là số.`);
+else if (q.correct < 0 || (q.options && q.correct >= q.options.length)) examErrors.push(`Câu ${idx+1} (ID: ${qId}): Đáp án đúng (correct = ${q.correct}) vượt quá số lượng đáp án.`);
+} else if (q.part === 2) {
+if (!q.statements || !Array.isArray(q.statements) || q.statements.length === 0) examErrors.push(`Câu ${idx+1} (ID: ${qId}): Không có mảng ý (statements).`);
+if (!q.answers || !Array.isArray(q.answers)) examErrors.push(`Câu ${idx+1} (ID: ${qId}): Không có mảng đáp án (answers).`);
+else if (q.statements && q.answers.length !== q.statements.length) examErrors.push(`Câu ${idx+1} (ID: ${qId}): Số ý (${q.statements.length}) khác số đáp án (${q.answers.length}).`);
+} else if (q.part === 3) {
+if (q.answer === null || q.answer === undefined || q.answer === '') examErrors.push(`Câu ${idx+1} (ID: ${qId}): Không có đáp án đúng (answer bị trống).`);
+} else {
+examErrors.push(`Câu ${idx+1} (ID: ${qId}): Thuộc tính part không hợp lệ (${q.part}).`);
+}
+// Đối chiếu xem câu hỏi này có trong exam_keys không
+if (keyData && !keyData[qId]) {
+examErrors.push(`Câu ${idx+1} (ID: ${qId}): Có trong đề nhưng BỊ THIẾU trong bảng đáp án (exam_keys).`);
+}
+});
+// 3. Kiểm tra ngược lại: có đáp án nào bị thừa trong exam_keys không
+if (keyData) {
+const qIds = new Set(questions.map(q => q.uid));
+for (const keyId in keyData) {
+if (!qIds.has(keyId)) {
+examErrors.push(`⚠️ Đáp án có ID "${keyId}" nhưng KHÔNG tìm thấy câu hỏi tương ứng trong đề.`);
+}
+}
+}
+if (examErrors.length > 0) {
+totalErrors += examErrors.length;
+errorHtml += `<div class="error-item">
+<strong>📄 Đề: ${escapeHTML(examTitle)} (ID: ${examId})</strong>
+<ul class="error-list">${examErrors.map(e => `<li>${escapeHTML(e)}</li>`).join('')}</ul>
+</div>`;
+}
+}
+if (totalErrors === 0) {
+resultBox.innerHTML = `<div class="success-box">✅ Tuyệt vời! Không phát hiện lỗi nào trong ${snap.size} đề thi.</div>`;
+} else {
+resultBox.innerHTML = `<div style="margin-bottom: 15px; color: var(--brown-d); font-weight: bold; font-size: 16px;">⚠️ Phát hiện ${totalErrors} lỗi trong tổng số ${snap.size} đề thi:</div>` + errorHtml;
+}
+} catch (error) {
+console.error(error);
+resultBox.innerHTML = `<div style="color: red; padding: 20px; text-align: center;">Lỗi khi kết nối: ${escapeHTML(error.message)}</div>`;
+} finally {
+btn.disabled = false;
+loadingText.style.display = 'none';
+}
+}
+</script>
+</body>
+</html>
