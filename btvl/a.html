@@ -13,20 +13,14 @@ h2 { color: var(--brown-d); text-align: center; border-bottom: 2px solid var(--b
 .btn { background: var(--primary); color: var(--white); border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.2s; width: 100%; max-width: 300px; display: block; margin: 0 auto 20px; }
 .btn:hover:not(:disabled) { background: var(--primary-light); }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
 .loading { text-align: center; font-weight: bold; color: var(--primary); padding: 20px; display: none; }
 .error-item { padding: 15px; background: #FFF5F5; border-left: 5px solid var(--brown-d); margin-bottom: 12px; border-radius: 6px; font-size: 14px; }
 .error-item strong { color: var(--brown-d); font-size: 16px; }
 .error-list { margin-top: 8px; margin-left: 20px; color: #333; line-height: 1.6; }
 .success-box { padding: 20px; background: #E8F5E9; border-left: 5px solid #2E7D32; color: #1B5E20; border-radius: 6px; font-weight: bold; font-size: 16px; text-align: center; }
-#security-trap { position: fixed; inset: 0; background: #8B4513; color: white; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
 </style>
 </head>
 <body>
-<div id="security-trap" class="hidden">
-<h2>⛔ CẢNH BÁO BẢO MẬT</h2>
-<p>Hệ thống phát hiện bạn đang cố gắng can thiệp hoặc xem mã nguồn.</p>
-</div>
 <div id="loadingScreen" style="text-align: center; margin-top: 50px;">
 <h2 style="color: var(--brown-d); border:none;">🔄 Đang xác thực quyền Giáo viên...</h2>
 </div>
@@ -45,16 +39,6 @@ if (e.key === 'F12' || e.keyCode === 123) { e.preventDefault(); return false; }
 if (e.ctrlKey && e.shiftKey && (k === 'i' || k === 'j' || k === 'c' || k === 'k')) { e.preventDefault(); return false; }
 if (e.ctrlKey && !e.shiftKey && (k === 'u' || k === 's')) { e.preventDefault(); return false; }
 }, { capture: true });
-let devtoolsOpen = false;
-const trap = document.getElementById('security-trap');
-setInterval(() => {
-const threshold = 160;
-if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
-if(!devtoolsOpen) { devtoolsOpen = true; trap.classList.remove('hidden'); }
-} else {
-if(devtoolsOpen) { devtoolsOpen = false; trap.classList.add('hidden'); }
-}
-}, 500);
 })();
 function escapeHTML(str) {
 if (str === null || str === undefined) return '';
