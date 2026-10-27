@@ -70,6 +70,7 @@ th { background: var(--beige); color: var(--primary); font-weight: bold; positio
 .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
 input:checked + .slider { background-color: var(--success); }
 input:checked + .slider:before { transform: translateX(20px); }
+.warning-box { background: #FFF3CD; color: #856404; padding: 12px; border-left: 4px solid #FFC107; border-radius: 4px; margin-bottom: 15px; font-size: 14px; display: none; }
 </style>
 </head>
 <body>
@@ -110,6 +111,9 @@ input:checked + .slider:before { transform: translateX(20px); }
 
 <!-- TAB NGÂN HÀNG CÂU HỎI -->
 <div id="tab-bank" class="tab-content">
+<div id="orderWarning" class="warning-box">
+⚠️ <strong>Cảnh báo về thứ tự:</strong> Hệ thống phát hiện Document ID là chuỗi ngẫu nhiên (không phải số thứ tự). Do đặc điểm của Firestore, thứ tự câu hỏi có thể bị xáo trộn so với file HTML gốc. Để sửa lỗi này, hãy xem hướng dẫn sửa file <code>upload.py</code>.
+</div>
 <div class="search-bar">
 <select id="filterPart" onchange="renderTable()">
 <option value="all">Tất cả Phần</option>
@@ -278,8 +282,16 @@ try {
 const { db } = await import('/bx/firebase-init.js');
 const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
 const snapQ = await getDocs(collection(db, "vl10_questions"));
-// Lưu nguyên thứ tự gốc từ Firestore (theo Document ID)
 allQuestions = snapQ.docs.map(d => ({ id: d.id, ...d.data() }));
+
+// Kiểm tra xem ID có phải là số thứ tự không
+if (allQuestions.length > 0) {
+const sampleId = allQuestions[0].id;
+if (isNaN(parseInt(sampleId, 10))) {
+document.getElementById('orderWarning').style.display = 'block';
+}
+}
+
 const snapC = await getDocs(collection(db, "prac_lessons_config"));
 lessonConfigs = {};
 snapC.forEach(doc => {
@@ -413,7 +425,6 @@ if (keyword && !String(q.text).toLowerCase().includes(keyword)) return false;
 return true;
 });
 
-// LOGIC SẮP XẾP
 if (sortBy !== 'original') {
 filtered.sort((a, b) => {
 if (sortBy === 'level_asc') {
@@ -425,7 +436,6 @@ const valA = getLevelValue(a.level);
 const valB = getLevelValue(b.level);
 if (valA !== valB) return valB - valA;
 }
-// Mặc định hoặc sort phụ: Bài -> Phần -> ID
 const lessonA = parseInt(a.lesson) || 0;
 const lessonB = parseInt(b.lesson) || 0;
 if (lessonA !== lessonB) return lessonA - lessonB;
