@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giáo án Bài 16 - Vật lí 10</title>
+    <!-- MathJax để hiển thị công thức toán học -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Thiết lập cơ bản cho trang in A4 */
+        @page {
+            size: A4;
+            margin: 20mm 15mm;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            line-height: 1.4;
+            color: #000000; /* Chữ ưu tiên màu đen */
+            background-color: #FFFFFF; /* Nền trắng */
+            margin: 0;
+            padding: 0;
+            /* Chống chọn văn bản */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        .container {
+            width: 100%;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        /* Tiêu đề */
+        h1, h2, h3, h4 {
+            color: #004488; /* Màu xanh đậm */
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 18pt;
+            color: #8B4513; /* Màu nâu đậm */
+            border-bottom: 2px solid #8B4513;
+            padding-bottom: 5px;
+        }
+        h2 {
+            font-size: 15pt;
+            border-bottom: 1px solid #D3D3D3;
+            padding-bottom: 3px;
+            color: #8B5A2B;
+        }
+        h3 {
+            font-size: 14pt;
+            color: #0066CC; /* Màu xanh */
+        }
+        h4 {
+            font-size: 13pt;
+            color: #8B5A2B;
+        }
+        /* Bảng */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 12pt;
+        }
+        th, td {
+            border: 1px solid #D3D3D3;
+            padding: 6px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #F5F5DC; /* Màu be nhạt */
+            color: #004488;
+            font-weight: bold;
+        }
+        /* Tiến trình dạy học chia 2 cột */
+        .tien-trinh {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .tien-trinh th {
+            background-color: #F5DEB3; /* Màu lúa mì */
+            color: #004488;
+            text-align: center;
+        }
+        .tien-trinh td {
+            vertical-align: top;
+        }
+        .col-buoc {
+            width: 25%;
+            background-color: #F5F5F5; /* Màu xám rất nhạt */
+            font-weight: bold;
+            color: #8B4513;
+        }
+        .col-noidung {
+            width: 75%;
+        }
+        /* Hộp thoại, ghi chú */
+        .box {
+            background-color: #F5F5DC;
+            border-left: 5px solid #8B5A2B;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .red-text {
+            color: #CC0000; /* Màu đỏ dùng cho trường hợp đặc biệt */
+            font-weight: bold;
+        }
+        .blue-text {
+            color: #0066CC;
+        }
+        /* Phiếu học tập */
+        .pht {
+            background-color: #F5F5DC;
+            border: 2px solid #8B5A2B;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .pht h4 {
+            text-align: center;
+            color: #8B4513;
+            margin-top: 0;
+            border-bottom: 1px dashed #8B5A2B;
+            padding-bottom: 5px;
+        }
+        .pht .cau-hoi {
+            margin-bottom: 10px;
+        }
+        .pht .tra-loi {
+            background-color: #FFFFFF;
+            border: 1px solid #D3D3D3;
+            min-height: 40px;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        /* Hình ảnh */
+        .img-container {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .img-container img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #D3D3D3;
+            /* Chống kéo thả ảnh */
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+            pointer-events: none;
+        }
+        .img-small {
+            max-width: 250px;
+        }
+        .img-medium {
+            max-width: 350px;
+        }
+        .img-large {
+            max-width: 500px;
+        }
+        /* Danh sách */
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        /* Công thức */
+        .formula {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 14pt;
+        }
+        /* Ô nhập liệu thủ công */
+        .input-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            font-weight: bold;
+            color: #000000;
+            background-color: #FFFFFF;
+            border: 1px solid #D3D3D3;
+            border-radius: 3px;
+            padding: 2px 5px;
+            width: 200px;
+        }
+        .input-text:focus {
+            outline: none;
+            border-color: #8B4513;
+        }
+        /* Ký duyệt */
+        .signature {
+            margin-top: 30px;
+            display: flex;
+            justify-content: flex-end;
+            text-align: center;
+            font-weight: bold;
+        }
+        .signature-box {
+            width: 200px;
+            border-top: 2px solid #8B4513; /* Nét kẻ ngang giống tiêu đề */
+            padding-top: 10px;
+        }
+        .signature-name {
+            margin-top: 50px;
+        }
+        .signature-name input {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            font-weight: bold;
+            color: #000000;
+            background-color: #FFFFFF;
+            border: 1px solid #D3D3D3;
+            border-radius: 3px;
+            padding: 2px 5px;
+            width: 150px;
+            text-align: center;
+        }
+        .signature-name input:focus {
+            outline: none;
+            border-color: #8B4513;
+        }
+        /* Điều chỉnh khi in */
+        @media print {
+            body {
+                font-size: 12pt;
+                -webkit-user-select: auto;
+                -moz-user-select: auto;
+                -ms-user-select: auto;
+                user-select: auto;
+            }
+            .container {
+                padding: 0;
+            }
+            .no-print {
+                display: none;
+            }
+            .input-text, .signature-name input {
+                border: none;
+                background: transparent;
+                color: #000;
+                font-weight: bold;
+            }
+            .img-container img {
+                pointer-events: auto;
+            }
+            .pht {
+                border: 1px solid #D3D3D3;
+            }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" onkeydown="return disableKeys(event);" ondragstart="return false;" onselectstart="return false;">
+
+<div class="container">
+
+    <!-- Ngày soạn -->
+    <p><strong>Ngày soạn:</strong> <input type="text" class="input-text" placeholder="....../....../20......"></p>
+
+    <!-- Tiêu đề giáo án -->
+    <h1>GIÁO ÁN BÀI 16: ĐỊNH LUẬT 3 NEWTON</h1>
+    <p style="text-align: center; font-style: italic;">Môn: Vật lí 10 – Bộ sách Kết nối tri thức với cuộc sống</p>
+    <p style="text-align: center;">Số tiết: 1 (Tiết 26 theo PPCT)</p>
+
+    <!-- I. MỤC TIÊU -->
+    <h2>I. MỤC TIÊU</h2>
+
+    <h3>1. Kiến thức</h3>
+    <ul>
+        <li>Phát biểu được định luật 3 Newton và viết được biểu thức \(\vec{F}_{AB} = -\vec{F}_{BA}\).</li>
+        <li>Nêu được các đặc điểm của cặp lực và phản lực (cùng phương, ngược chiều, cùng độ lớn, điểm đặt khác nhau).</li>
+        <li>Phân biệt được cặp lực trực đối (lực và phản lực) với cặp lực cân bằng.</li>
+        <li>Tìm được các ví dụ thực tế minh họa cho sự tương tác giữa các vật.</li>
+    </ul>
+
+    <h3>2. Năng lực</h3>
+    <h4>a. Năng lực chung</h4>
+    <ul>
+        <li>Tự chủ và tự học: Chủ động tìm hiểu tài liệu, nghiên cứu SGK và các học liệu số về sự tương tác giữa các vật.</li>
+        <li>Giao tiếp và hợp tác: Hoạt động nhóm hiệu quả thông qua các nền tảng số để thảo luận và hoàn thành nhiệm vụ thí nghiệm.</li>
+    </ul>
+    <h4>b. Năng lực đặc thù môn học</h4>
+    <ul>
+        <li>Nhận biết được cặp lực và phản lực trong tương tác giữa hai vật.</li>
+        <li>Phân tích được đặc điểm của lực và phản lực.</li>
+        <li>Vận dụng được định luật 3 Newton để giải thích hiện tượng.</li>
+    </ul>
+    <h4>b. Năng lực số</h4>
+    <ul>
+        <li><strong>1.1.NC1c:</strong> Tìm và lọc 2 nguồn về Định luật 3 Newton; dùng AI gợi ý từ khóa/giải thích ban đầu, đối chiếu SGK và ghi nguồn.</li>
+        <li><strong>2.1.NC1a:</strong> Sử dụng nhiều công nghệ số để tương tác trong các hoạt động khởi động và luyện tập trực tuyến.</li>
+        <li><strong>2.4.NC1a:</strong> Đề xuất và sử dụng các công cụ cộng tác trực tuyến (như Padlet, Google Jamboard) để đồng sáng tạo kiến thức về đặc điểm lực và phản lực.</li>
+        <li><strong>3.1.NC1a:</strong> Tạo và chỉnh sửa nội dung số (infographic, video clip thí nghiệm) nhằm thể hiện hiểu biết về định luật III.</li>
+    </ul>
+    <h4>c. Năng lực AI</h4>
+    <ul>
+        <li><strong>NLa (Tư duy lấy con người làm trung tâm):</strong> Nhận thức được vai trò của con người trong việc thẩm định các kịch bản tương tác và an toàn giao thông dựa trên dữ liệu tính toán từ AI.</li>
+        <li><strong>NLb (Đạo đức AI):</strong> Thể hiện sự minh bạch và trách nhiệm; thực hiện trích dẫn nguồn học liệu số và AI minh bạch khi xây dựng nội dung báo cáo.</li>
+        <li><strong>NLc (Các kĩ thuật và ứng dụng AI):</strong> Biết cách thiết lập các câu lệnh (prompt) phù hợp để nhờ trợ lý ảo AI hỗ trợ giải thích sự khác biệt giữa cặp lực trực đối và cặp lực cân bằng hoặc lấy ví dụ thực tế.</li>
+    </ul>
+
+    <h3>3. Phẩm chất</h3>
+    <ul>
+        <li>Chăm chỉ: Tích cực tìm tòi học liệu số và chuẩn bị bài trên hệ thống LMS.</li>
+        <li>Trung thực: Khách quan trong việc báo cáo kết quả thí nghiệm lực kế.</li>
+        <li>Trách nhiệm: Có ý thức bảo vệ thiết bị số và tôn trọng bản quyền khi sử dụng tài liệu từ Internet.</li>
+    </ul>
+
+    <!-- II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU -->
+    <h2>II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU</h2>
+
+    <h3>1. Giáo viên</h3>
+    <ul>
+        <li>SGK Vật lí 10, SGV, máy chiếu, máy tính.</li>
+        <li>Bài giảng điện tử, video thí nghiệm xe lăn lò xo, nam châm và thanh sắt.</li>
+        <li>Bộ thí nghiệm: 2 lực kế, nam châm, thanh sắt, 2 xe lăn.</li>
+        <li>Link mua lực kế: <a href="https://s.shopee.vn/16IDQCacZ" target="_blank">https://s.shopee.vn/16IDQCacZ</a></li>
+        <li>Bộ từ trường của nam châm (có cả xe lăn): <a href="https://s.shopee.vn/1BIGFqOLnw" target="_blank">https://s.shopee.vn/1BIGFqOLnw</a></li>
+        <li>Các STEM gợi ý:
+            <ul>
+                <li>Thuyền phản lực gió: <a href="https://s.shopee.vn/6VJmkPvYSl" target="_blank">https://s.shopee.vn/6VJmkPvYSl</a></li>
+                <li>Thuyền phản lực nước: <a href="https://s.shopee.vn/9AKXvNfnfb" target="_blank">https://s.shopee.vn/9AKXvNfnfb</a></li>
+                <li>Thuyền chân vịt: <a href="https://s.shopee.vn/5fkfkzA3LZ" target="_blank">https://s.shopee.vn/5fkfkzA3LZ</a></li>
+            </ul>
+        </li>
+        <li>Các nền tảng số: Quizizz/Mentimeter, Padlet lớp học.</li>
+        <li>Phiếu học tập số 1, 2, 3, 4.</li>
+    </ul>
+
+    <h3>2. Học sinh</h3>
+    <ul>
+        <li>SGK, thiết bị cá nhân (Smartphone/Laptop) có kết nối mạng.</li>
+        <li>Ôn tập kiến thức về Định luật II Newton.</li>
+    </ul>
+
+    <!-- III. TIẾN TRÌNH DẠY HỌC -->
+    <h2>III. TIẾN TRÌNH DẠY HỌC</h2>
+
+    <table class="tien-trinh">
+        <thead>
+            <tr>
+                <th class="col-buoc">Bước thực hiện</th>
+                <th class="col-noidung">Nội dung các bước</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- HOẠT ĐỘNG 1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 1:<br>KHỞI ĐỘNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Tạo hứng thú, dẫn dắt học sinh vào bài mới.</p>
+                    <p><strong>Nội dung:</strong> Học sinh quan sát hình ảnh và trả lời câu hỏi.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV chiếu hình ảnh hai lực kế được móc vào nhau (Hình 01.png) hoặc video.</li>
+                        <li>GV đặt câu hỏi: "Móc hai lực kế vào nhau rồi kéo một trong hai lực kế như hình sau.
+                            <ul>
+                                <li>a) Dự đoán xem số chỉ của hai lực kế giống nhau hay khác nhau.</li>
+                                <li>b) Hãy kiểm tra kết quả và nêu kết luận.</li>
+                                <li>c) Nếu cả hai tiếp tục kéo về hai phía ngược nhau với độ lớn lực tăng lên thì số chỉ của hai lực kế sẽ thay đổi thế nào?</li>
+                            </ul>
+                        "</li>
+                        <li>HS suy nghĩ, trả lời.</li>
+                        <li>GV nhận xét, dẫn dắt vào bài: "Để trả lời câu hỏi này, chúng ta cùng tìm hiểu Bài 16: Định luật 3 Newton."</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="01.png" alt="Hình ảnh hai lực kế móc vào nhau" class="img-medium">
+                        <p><em>Hình ảnh minh họa: Hai lực kế móc vào nhau</em></p>
+                    </div>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 2 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2:<br>HÌNH THÀNH KIẾN THỨC</strong><br>
+                    (25 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Hình thành định luật 3 Newton, khái niệm lực và phản lực.</p>
+                    <p><strong>Nội dung:</strong> Tìm hiểu định luật 3 Newton, các đặc điểm của lực và phản lực.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời, kết quả thảo luận, công thức.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    
+                    <p><strong>1. Lực tương tác giữa hai vật</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc SGK mục I, quan sát Hình 16.1 và trả lời các câu hỏi trong Phiếu học tập số 1.</li>
+                        <li>HS thảo luận, trả lời: Lực hút của nam châm tác dụng lên thanh sắt và ngược lại. Khi đốt dây, cả hai xe đều chuyển động ra xa nhau.</li>
+                        <li>GV nhận xét, kết luận: Lực không tồn tại riêng lẻ. Các lực hút hoặc đẩy luôn xuất hiện thành từng cặp giữa hai vật.</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="16.1.png" alt="Hình 16.1 - Thí nghiệm về sự tương tác giữa các vật" class="img-medium">
+                        <p><em>Hình 16.1. Thí nghiệm về sự tương tác giữa các vật</em></p>
+                    </div>
+
+                    <!-- Phiếu học tập số 1 -->
+                    <div class="pht">
+                        <h4>PHIẾU HỌC TẬP SỐ 1</h4>
+                        <p>Quan sát thí nghiệm được mô tả trong Hình 16.1.</p>
+                        <div class="cau-hoi">
+                            <p><strong>Câu 1:</strong> Một thanh sắt và một thanh nam châm được treo như Hình 16.1a. Trong thí nghiệm này, lực nào làm cho thanh nam châm dịch chuyển lại gần thanh sắt?</p>
+                            <div class="tra-loi">.................................................................................................................</div>
+                        </div>
+                        <div class="cau-hoi">
+                            <p><strong>Câu 2:</strong> Xe lăn 1 có khối lượng \(m_1\) và có gắn một lò xo nhẹ. Xe lăn 2 có khối lượng \(m_2\). Ta cho hai xe áp lại gần nhau bằng cách buộc dây để nén lò xo (Hình 16.1b). Quan sát hiện tượng xảy ra khi đốt đứt sợi dây buộc.</p>
+                            <div class="tra-loi">.................................................................................................................</div>
+                        </div>
+                        <p><em>Thảo luận để làm sáng tỏ ý kiến sau: Lực không tồn tại riêng lẻ. Các lực hút hoặc đẩy luôn xuất hiện thành từng cặp giữa hai vật.</em></p>
+                    </div>
+
+                    <p><strong>2. Định luật 3 Newton</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc SGK mục I.2, phát biểu định luật 3 Newton.</li>
+                        <li>HS trả lời: "Trong mọi trường hợp, khi vật A tác dụng lên vật B một lực thì đồng thời vật B cũng tác dụng trở lại vật A một lực. Hai lực này là hai lực trực đối."</li>
+                        <li>GV viết hệ thức:
+                            <div class="formula">
+                                \[ \vec{F}_{AB} = -\vec{F}_{BA} \]
+                            </div>
+                        </li>
+                        <li>GV nhấn mạnh: Hai lực trực đối là hai lực tác dụng theo cùng một đường thẳng, ngược chiều nhau, có độ lớn bằng nhau và đặt vào hai vật khác nhau.</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="16.2.png" alt="Hình 16.2 - Cặp lực và phản lực" class="img-medium">
+                        <p><em>Hình 16.2. Cặp lực và phản lực</em></p>
+                    </div>
+
+                    <p><strong>3. Các đặc điểm của lực và phản lực</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc SGK mục II, nêu các đặc điểm của lực và phản lực.</li>
+                        <li>HS trả lời:
+                            <ul>
+                                <li>Lực và phản lực luôn xuất hiện thành từng cặp (xuất hiện hoặc mất đi đồng thời).</li>
+                                <li>Lực và phản lực cùng tác dụng theo một đường thẳng, cùng độ lớn nhưng ngược chiều (hai lực như vậy là hai lực trực đối).</li>
+                                <li>Lực và phản lực không cân bằng nhau (vì chúng đặt vào hai vật khác nhau).</li>
+                                <li>Cặp lực và phản lực là hai lực cùng loại.</li>
+                            </ul>
+                        </li>
+                        <li>GV yêu cầu HS trả lời câu hỏi 1, 2 trong SGK trang 68.</li>
+                        <li>HS trả lời:
+                            <ul>
+                                <li><strong>Câu 1:</strong> Quyển sách nằm yên trên mặt bàn: Trọng lực \(\vec{P}\) của Trái Đất tác dụng lên sách và phản lực \(\vec{N}\) của bàn tác dụng lên sách là hai lực cân bằng (cùng đặt vào sách). Lực \(\vec{N}\) và áp lực \(\vec{F}\) của sách tác dụng lên bàn là cặp lực và phản lực (đặt vào hai vật khác nhau).</li>
+                                <li><strong>Câu 2:</strong> Búa đóng đinh: Lực của búa tác dụng lên đinh và phản lực của đinh tác dụng lên búa là cặp lực và phản lực. Chúng có cùng phương, ngược chiều, cùng độ lớn, đặt vào hai vật khác nhau.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="16.3.png" alt="Hình 16.3 - Ví dụ về lực và phản lực" class="img-medium">
+                        <p><em>Hình 16.3. Ví dụ về lực và phản lực</em></p>
+                    </div>
+
+                    <!-- Phiếu học tập số 2 -->
+                    <div class="pht">
+                        <h4>PHIẾU HỌC TẬP SỐ 2</h4>
+                        <div class="cau-hoi">
+                            <p><strong>Câu 1:</strong> Cặp lực và phản lực có những đặc điểm gì?</p>
+                            <div class="tra-loi">.................................................................................................................</div>
+                            <p>Cặp lực và phản lực có phải là hai lực cân bằng hay không? Tại sao?</p>
+                            <div class="tra-loi">.................................................................................................................</div>
+                        </div>
+                        <div class="cau-hoi">
+                            <p><strong>Câu 2:</strong> Hãy chỉ rõ điểm đặt của mỗi lực trong mỗi cặp lực ở Hình 16.2 a, b.</p>
+                            <p>a) Quyển sách nằm yên trên mặt bàn (Hình 16.3a)</p>
+                            <p>b) Dùng búa đóng đinh vào gỗ (Hình 16.3b)</p>
+                            <div class="tra-loi">.................................................................................................................</div>
+                        </div>
+                        <div class="cau-hoi">
+                            <p><strong>Câu 3:</strong> Lực do búa tác dụng vào đinh và phản lực của đinh lên búa có đặc điểm gì?</p>
+                            <div class="tra-loi">.................................................................................................................</div>
+                        </div>
+                    </div>
+
+                    <p><strong>4. Ví dụ về lực và phản lực trong thực tế</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS quan sát Hình 16.4 và trả lời câu hỏi: "Một ô tô chuyển động trên mặt đường, nếu lực do ô tô tác dụng lên mặt đường có độ lớn bằng lực mà mặt đường đẩy ô tô thì tại sao chúng không 'khử nhau'?"</li>
+                        <li>HS trả lời: Vì hai lực này đặt vào hai vật khác nhau (một lực đặt vào ô tô, một lực đặt vào mặt đường), nên chúng không cân bằng nhau và không khử nhau.</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="16.4.png" alt="Hình 16.4 - Lực và phản lực khi ô tô chuyển động" class="img-medium">
+                        <p><em>Hình 16.4. Lực và phản lực khi ô tô chuyển động</em></p>
+                    </div>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 3:<br>LUYỆN TẬP</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng định luật 3 Newton để giải thích hiện tượng.</p>
+                    <p><strong>Nội dung:</strong> Giải bài tập ví dụ SGK.</p>
+                    <p><strong>Sản phẩm:</strong> Lời giải của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc và trả lời câu hỏi 1, 2, 3 trong SGK trang 68.</li>
+                        <li>HS thực hiện:
+                            <ul>
+                                <li><strong>Câu 1:</strong> Trong thí nghiệm ở phần mở đầu bài học, nếu cả hai người cùng kéo nhưng để lực kế di chuyển về phía một người (ví dụ cùng di chuyển hai lực kế sang phải) thì số chỉ của hai lực kế sẽ giống nhau. Vì theo định luật 3 Newton, hai lực kế tác dụng lên nhau những lực trực đối có độ lớn bằng nhau.</li>
+                                <li><strong>Câu 2:</strong> Ví dụ về lực và phản lực:
+                                    <ul>
+                                        <li>Lực và phản lực luôn xuất hiện thành từng cặp: Khi ta đẩy tay vào tường, tay ta tác dụng lực vào tường và tường cũng tác dụng lực trở lại tay ta.</li>
+                                        <li>Lực và phản lực cùng tác dụng theo một đường thẳng, cùng độ lớn nhưng ngược chiều: Khi búa đập vào đinh, lực của búa tác dụng lên đinh và phản lực của đinh tác dụng lên búa có cùng phương, ngược chiều, cùng độ lớn.</li>
+                                        <li>Lực và phản lực không cân bằng nhau: Vì chúng đặt vào hai vật khác nhau.</li>
+                                        <li>Cặp lực và phản lực là hai lực cùng loại: Nếu lực tác dụng là lực hấp dẫn thì phản lực cũng là lực hấp dẫn.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Câu 3:</strong> Một ô tô chuyển động trên mặt đường, nếu lực do ô tô tác dụng lên mặt đường có độ lớn bằng lực mà mặt đường đẩy ô tô thì tại sao chúng không "khử nhau"? Vì hai lực này đặt vào hai vật khác nhau (một lực đặt vào ô tô, một lực đặt vào mặt đường), nên chúng không cân bằng nhau và không khử nhau.</li>
+                            </ul>
+                        </li>
+                        <li>GV nhận xét, chính xác hóa kết quả.</li>
+                    </ul>
+
+                    <!-- Phiếu học tập số 3 -->
+                    <div class="pht">
+                        <h4>PHIẾU HỌC TẬP SỐ 3</h4>
+                        <div class="cau-hoi">
+                            <p><strong>Câu 1:</strong> Trong thí nghiệm ở phần mở đầu bài học, nếu cả hai người cùng kéo nhưng để lực kế di chuyển về phía một người (ví dụ cùng di chuyển hai lực kế sang phải) thì số chỉ của hai lực kế sẽ giống nhau hay khác nhau? Làm thí nghiệm kiểm tra dự đoán.</p>
+                            <div class="tra-loi">.................................................................................................................</div>
+                        </div>
+                        <div class="cau-hoi">
+                            <p><strong>Câu 2:</strong> Nêu thêm một số ví dụ trong thực tế và thảo luận để làm sáng tỏ các đặc điểm sau đây của lực và phản lực:</p>
+                            <ul>
+                                <li>Lực và phản lực luôn xuất hiện thành từng cặp (xuất hiện hoặc mất đi đồng thời)</li>
+                                <li>Lực và phản lực cùng tác dụng theo một đường thẳng, cùng độ lớn nhưng ngược chiều (hai lực như vậy là hai lực trực đối)</li>
+                                <li>Lực và phản lực không cân bằng nhau (vì chúng đặt vào hai vật khác nhau)</li>
+                                <li>Cặp lực và phản lực là hai lực cùng loại.</li>
+                            </ul>
+                            <div class="tra-loi">.................................................................................................................</div>
+                        </div>
+                        <div class="cau-hoi">
+                            <p><strong>Câu 3:</strong> Một ô tô chuyển động trên mặt đường (Hình 16.4), nếu lực do ô tô tác dụng lên mặt đường có độ lớn bằng lực mà mặt đường đẩy ô tô thì tại sao chúng không "khử nhau"?</p>
+                            <div class="tra-loi">.................................................................................................................</div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 4 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 4:<br>VẬN DỤNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng kiến thức vào thực tế và giao nhiệm vụ về nhà.</p>
+                    <p><strong>Nội dung:</strong> Trả lời câu hỏi vận dụng, giao nhiệm vụ năng lực số.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh, sản phẩm bảng/đồ thị.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV đặt câu hỏi: "Giải thích tại sao các vận động viên khi bơi tới mép hồ bơi và quay lại thì dùng chân đẩy mạnh vào vách hồ bơi để di chuyển nhanh hơn?"</li>
+                        <li>HS vận dụng kiến thức: Khi vận động viên đẩy mạnh vào vách hồ bơi, theo định luật 3 Newton, vách hồ bơi sẽ tác dụng một lực ngược chiều có độ lớn bằng lực đẩy, giúp vận động viên lao về phía trước nhanh hơn.</li>
+                        <li>GV giao nhiệm vụ về nhà:
+                            <ul>
+                                <li><strong>Nhiệm vụ năng lực số (1.1.NC1c):</strong> Tìm và lọc 2 nguồn về Định luật 3 Newton; dùng AI gợi ý từ khóa/giải thích ban đầu, đối chiếu SGK và ghi nguồn.</li>
+                                <li><strong>Nhiệm vụ trực tuyến:</strong> Tìm hiểu thêm trên internet về định luật 3 Newton để hoàn thiện nội dung học tập.</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <!-- Phiếu học tập số 4 -->
+                    <div class="pht">
+                        <h4>PHIẾU HỌC TẬP SỐ 4</h4>
+                        <div class="cau-hoi">
+                            <p><strong>Câu 1:</strong> Hãy chỉ ra cặp "lực và phản lực" trong các tình huống sau:</p>
+                            <p>a. Ô tô đâm vào thanh chắn đường;</p>
+                            <p>b. Thủ môn bắt bóng;</p>
+                            <p>c. Gió đập vào cánh cửa.</p>
+                            <div class="tra-loi">.................................................................................................................</div>
+                        </div>
+                        <div class="cau-hoi">
+                            <p><strong>Câu 2:</strong> Trong một tai nạn giao thông, một ô tô tải đâm vào một ô tô con đang chạy ngược chiều. Ô tô nào chịu lực lớn hơn? Ô tô nào nhận được gia tốc lớn hơn? Hãy giải thích.</p>
+                            <div class="tra-loi">.................................................................................................................</div>
+                        </div>
+                        <div class="cau-hoi">
+                            <p><strong>Câu 3:</strong> Để xách một túi đựng thức ăn, một người tác dụng vào túi một lực bằng 40 N hướng lên trên. Hãy miêu tả "phản lực" (theo định luật III) bằng cách chỉ ra:</p>
+                            <p>a. Độ lớn của phản lực.</p>
+                            <p>b. Hướng của phản lực.</p>
+                            <p>c. Phản lực tác dụng lên vật nào?</p>
+                            <p>d. Vật nào gây ra phản lực này?</p>
+                            <div class="tra-loi">.................................................................................................................</div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG -->
+    <h2>IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG (NẾU CÓ)</h2>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+
+    <!-- Ký duyệt -->
+    <div class="signature">
+        <div class="signature-box">
+            <p><strong>Duyệt TCM</strong></p>
+            <p class="signature-name"><input type="text" placeholder="Lục Tuyến"></p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Chống chuột phải
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+
+    // Chống các phím tắt sao chép, xem nguồn, nhưng CHO PHÉP Ctrl+P
+    function disableKeys(e) {
+        // Cho phép Ctrl+P (in)
+        if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) {
+            return true;
+        }
+        // Cho phép Ctrl+Shift+P (một số trình duyệt dùng để in)
+        if (e.ctrlKey && e.shiftKey && (e.key === 'p' || e.key === 'P')) {
+            return true;
+        }
+        // Chặn Ctrl+S (lưu), Ctrl+U (xem nguồn), Ctrl+C (copy), Ctrl+A (chọn tất cả), F12 (dev tools)
+        if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'a' || e.key === 'A')) {
+            e.preventDefault();
+            return false;
+        }
+        if (e.key === 'F12') {
+            e.preventDefault();
+            return false;
+        }
+        return true;
+    }
+
+    // Chống kéo thả
+    document.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+    });
+
+    // Chống chọn văn bản (ngoại trừ các ô input)
+    document.addEventListener('selectstart', function(e) {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+        }
+    });
+
+    // Cho phép chọn văn bản trong các ô input
+    document.querySelectorAll('input, textarea').forEach(function(el) {
+        el.addEventListener('selectstart', function(e) {
+            e.stopPropagation();
+        });
+        el.addEventListener('dragstart', function(e) {
+            e.stopPropagation();
+        });
+    });
+</script>
+
+</body>
+</html>

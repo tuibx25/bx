@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giáo án Bài 15 - Vật lí 10</title>
+    <!-- MathJax để hiển thị công thức toán học -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Thiết lập cơ bản cho trang in A4 */
+        @page {
+            size: A4;
+            margin: 20mm 15mm;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            line-height: 1.4;
+            color: #000000; /* Chữ ưu tiên màu đen */
+            background-color: #FFFFFF; /* Nền trắng */
+            margin: 0;
+            padding: 0;
+            /* Chống chọn văn bản */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        .container {
+            width: 100%;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        /* Tiêu đề */
+        h1, h2, h3, h4 {
+            color: #004488; /* Màu xanh đậm */
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 18pt;
+            color: #8B4513; /* Màu nâu đậm */
+            border-bottom: 2px solid #8B4513;
+            padding-bottom: 5px;
+        }
+        h2 {
+            font-size: 15pt;
+            border-bottom: 1px solid #D3D3D3;
+            padding-bottom: 3px;
+            color: #8B5A2B;
+        }
+        h3 {
+            font-size: 14pt;
+            color: #0066CC; /* Màu xanh */
+        }
+        h4 {
+            font-size: 13pt;
+            color: #8B5A2B;
+        }
+        /* Bảng */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 12pt;
+        }
+        th, td {
+            border: 1px solid #D3D3D3;
+            padding: 6px 8px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        th {
+            background-color: #F5F5DC; /* Màu be nhạt */
+            color: #004488;
+            font-weight: bold;
+        }
+        /* Bảng dữ liệu thí nghiệm */
+        .bang-du-lieu {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 12pt;
+        }
+        .bang-du-lieu th {
+            background-color: #F5DEB3; /* Màu lúa mì */
+            color: #004488;
+            text-align: center;
+            font-weight: bold;
+            padding: 8px;
+        }
+        .bang-du-lieu td {
+            border: 1px solid #D3D3D3;
+            padding: 8px;
+            text-align: center;
+        }
+        .bang-du-lieu .empty-cell {
+            background-color: #F5F5F5;
+            color: #999;
+        }
+        /* Tiến trình dạy học chia 2 cột */
+        .tien-trinh {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .tien-trinh th {
+            background-color: #F5DEB3; /* Màu lúa mì */
+            color: #004488;
+            text-align: center;
+        }
+        .tien-trinh td {
+            vertical-align: top;
+        }
+        .col-buoc {
+            width: 25%;
+            background-color: #F5F5F5; /* Màu xám rất nhạt */
+            font-weight: bold;
+            color: #8B4513;
+        }
+        .col-noidung {
+            width: 75%;
+        }
+        /* Hộp thoại, ghi chú */
+        .box {
+            background-color: #F5F5DC;
+            border-left: 5px solid #8B5A2B;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .red-text {
+            color: #CC0000; /* Màu đỏ dùng cho trường hợp đặc biệt */
+            font-weight: bold;
+        }
+        .blue-text {
+            color: #0066CC;
+        }
+        /* Hình ảnh */
+        .img-container {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .img-container img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #D3D3D3;
+            /* Chống kéo thả ảnh */
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+            pointer-events: none;
+        }
+        .img-small {
+            max-width: 250px;
+        }
+        .img-medium {
+            max-width: 350px;
+        }
+        .img-large {
+            max-width: 500px;
+        }
+        /* Danh sách */
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        /* Công thức */
+        .formula {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 14pt;
+        }
+        /* Ô nhập liệu thủ công */
+        .input-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            font-weight: bold;
+            color: #000000;
+            background-color: #FFFFFF;
+            border: 1px solid #D3D3D3;
+            border-radius: 3px;
+            padding: 2px 5px;
+            width: 200px;
+        }
+        .input-text:focus {
+            outline: none;
+            border-color: #8B4513;
+        }
+        /* Ký duyệt */
+        .signature {
+            margin-top: 30px;
+            display: flex;
+            justify-content: flex-end;
+            text-align: center;
+            font-weight: bold;
+        }
+        .signature-box {
+            width: 200px;
+            border-top: 2px solid #8B4513; /* Nét kẻ ngang giống tiêu đề */
+            padding-top: 10px;
+        }
+        .signature-name {
+            margin-top: 50px;
+        }
+        .signature-name input {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            font-weight: bold;
+            color: #000000;
+            background-color: #FFFFFF;
+            border: 1px solid #D3D3D3;
+            border-radius: 3px;
+            padding: 2px 5px;
+            width: 150px;
+            text-align: center;
+        }
+        .signature-name input:focus {
+            outline: none;
+            border-color: #8B4513;
+        }
+        /* Điều chỉnh khi in */
+        @media print {
+            body {
+                font-size: 12pt;
+                -webkit-user-select: auto;
+                -moz-user-select: auto;
+                -ms-user-select: auto;
+                user-select: auto;
+            }
+            .container {
+                padding: 0;
+            }
+            .no-print {
+                display: none;
+            }
+            .input-text, .signature-name input {
+                border: none;
+                background: transparent;
+                color: #000;
+                font-weight: bold;
+            }
+            .img-container img {
+                pointer-events: auto;
+            }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" onkeydown="return disableKeys(event);" ondragstart="return false;" onselectstart="return false;">
+
+<div class="container">
+
+    <!-- Ngày soạn -->
+    <p><strong>Ngày soạn:</strong> <input type="text" class="input-text" placeholder="....../....../20......"></p>
+
+    <!-- Tiêu đề giáo án -->
+    <h1>GIÁO ÁN BÀI 15: ĐỊNH LUẬT 2 NEWTON</h1>
+    <p style="text-align: center; font-style: italic;">Môn: Vật lí 10 – Bộ sách Kết nối tri thức với cuộc sống</p>
+    <p style="text-align: center;">Số tiết: 2 (Tiết 24, 25 theo PPCT)</p>
+
+    <!-- I. MỤC TIÊU -->
+    <h2>I. MỤC TIÊU</h2>
+
+    <h3>1. Kiến thức</h3>
+    <ul>
+        <li>Phát biểu được định luật 2 Newton, viết được hệ thức của định luật.</li>
+        <li>Nêu được mối quan hệ giữa gia tốc, lực và khối lượng.</li>
+        <li>Hiểu được khối lượng là đại lượng đặc trưng cho mức quán tính của vật.</li>
+        <li>Biết cách sử dụng thí nghiệm minh họa để kiểm chứng định luật 2 Newton.</li>
+        <li>Vận dụng được định luật 2 Newton để giải một số bài tập đơn giản và giải thích hiện tượng thực tế.</li>
+    </ul>
+
+    <h3>2. Năng lực</h3>
+    <h4>a. Năng lực chung</h4>
+    <ul>
+        <li>Tự chủ và tự học: Tìm hiểu trước nội dung bài học qua SGK và internet.</li>
+        <li>Giao tiếp và hợp tác: Thảo luận nhóm để phân tích mối quan hệ giữa lực, khối lượng và gia tốc.</li>
+        <li>Giải quyết vấn đề và sáng tạo: Vận dụng kiến thức để giải thích các tình huống thực tế.</li>
+    </ul>
+    <h4>b. Năng lực đặc thù môn học</h4>
+    <ul>
+        <li>Nhận biết được mối quan hệ giữa gia tốc, lực và khối lượng.</li>
+        <li>Phân tích được kết quả thí nghiệm minh họa định luật 2 Newton.</li>
+        <li>Vận dụng được công thức \(\vec{a} = \frac{\vec{F}}{m}\) để tính toán.</li>
+    </ul>
+    <h4>b. Năng lực số</h4>
+    <ul>
+        <li><strong>1.1.NC1b:</strong> HS áp dụng được kỹ thuật tìm kiếm để thu thập dữ liệu, thông tin và nội dung số liên quan đến Định luật II Newton; sử dụng từ khóa phù hợp để tìm kiếm thông tin phục vụ nhiệm vụ học tập.</li>
+    </ul>
+
+    <h3>3. Phẩm chất</h3>
+    <ul>
+        <li>Chăm chỉ: Tích cực tham gia thảo luận nhóm, hoàn thành các nhiệm vụ học tập được giao.</li>
+        <li>Trung thực: Báo cáo trung thực kết quả thí nghiệm, không tự ý sửa số liệu.</li>
+        <li>Trách nhiệm: Có ý thức giữ gìn, bảo quản dụng cụ thí nghiệm và thiết bị học tập.</li>
+        <li>Cẩn thận, tỉ mỉ: Quan sát hiện tượng và ghi chép số liệu chính xác trong quá trình làm thí nghiệm.</li>
+    </ul>
+
+    <!-- II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU -->
+    <h2>II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU</h2>
+
+    <h3>1. Giáo viên</h3>
+    <ul>
+        <li>SGK Vật lí 10, SGV, máy chiếu, máy tính.</li>
+        <li>Hình ảnh, video minh họa về định luật 2 Newton (xe đẩy hàng, thí nghiệm với xe trượt và quả nặng).</li>
+        <li>Bộ dụng cụ thí nghiệm minh họa định luật 2 Newton (Hình 15.2 SGK): xe trượt, máng trượt đệm khí, ròng rọc, các quả nặng, đồng hồ đo thời gian hiện số, cổng quang điện.</li>
+        <li>Phiếu học tập (mẫu Bảng 15.1 và Bảng 15.2).</li>
+    </ul>
+
+    <h3>2. Học sinh</h3>
+    <ul>
+        <li>SGK Vật lí 10, vở ghi, máy tính/điện thoại có kết nối internet (nếu có).</li>
+        <li>Ôn tập lại kiến thức về lực, khối lượng và gia tốc đã học ở bài trước.</li>
+        <li>Hoàn thành nhiệm vụ học tập trực tuyến trước khi đến lớp (tìm hiểu về định luật 2 Newton qua internet, ChatGPT).</li>
+    </ul>
+
+    <!-- III. TIẾN TRÌNH DẠY HỌC -->
+    <h2>III. TIẾN TRÌNH DẠY HỌC</h2>
+
+    <!-- TIẾT 1 -->
+    <h3>Tiết 1: Định luật 2 Newton - Khối lượng và quán tính</h3>
+
+    <table class="tien-trinh">
+        <thead>
+            <tr>
+                <th class="col-buoc">Bước thực hiện</th>
+                <th class="col-noidung">Nội dung các bước</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- HOẠT ĐỘNG 1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 1:<br>KHỞI ĐỘNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Tạo hứng thú, dẫn dắt học sinh vào bài mới.</p>
+                    <p><strong>Nội dung:</strong> Học sinh quan sát hình ảnh và trả lời câu hỏi.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV chiếu hình ảnh một người đẩy xe chở hàng (Hình 01.png) hoặc video.</li>
+                        <li>GV đặt câu hỏi: "Đẩy một xe chở hàng cho nó chuyển động và nhận xét xem gia tốc của xe tăng hay giảm, nếu:
+                            <ul>
+                                <li>a) Giữ nguyên lực đẩy nhưng khối lượng xe tăng lên.</li>
+                                <li>b) Giữ nguyên khối lượng nhưng lực đẩy tăng lên.</li>
+                            </ul>
+                        "</li>
+                        <li>HS suy nghĩ, trả lời.</li>
+                        <li>GV nhận xét, dẫn dắt vào bài: "Để trả lời câu hỏi này, chúng ta cùng tìm hiểu Bài 15: Định luật 2 Newton."</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="01.png" alt="Hình ảnh người đẩy xe chở hàng" class="img-medium">
+                        <p><em>Hình ảnh minh họa: Người đẩy xe chở hàng</em></p>
+                    </div>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 2 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2:<br>HÌNH THÀNH KIẾN THỨC</strong><br>
+                    (25 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Hình thành định luật 2 Newton, khái niệm khối lượng và quán tính.</p>
+                    <p><strong>Nội dung:</strong> Tìm hiểu định luật 2 Newton, khối lượng và quán tính.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời, kết quả thảo luận, công thức.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    
+                    <p><strong>1. Định luật 2 Newton</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc SGK mục I, phát biểu định luật 2 Newton.</li>
+                        <li>HS trả lời: "Gia tốc của một vật cùng hướng với lực tác dụng lên vật. Độ lớn của gia tốc tỉ lệ thuận với độ lớn của lực và tỉ lệ nghịch với khối lượng của vật."</li>
+                        <li>GV viết hệ thức:
+                            <div class="formula">
+                                \[ \vec{a} = \frac{\vec{F}}{m} \quad \text{hay} \quad \vec{F} = m\vec{a} \]
+                            </div>
+                        </li>
+                        <li>GV nhấn mạnh: Trong trường hợp vật chịu nhiều lực tác dụng \(\vec{F}_1, \vec{F}_2, \vec{F}_3, \dots\) thì \(\vec{F}\) là hợp lực của các lực đó:
+                            <div class="formula">
+                                \[ \vec{F} = \vec{F}_1 + \vec{F}_2 + \vec{F}_3 + \dots \]
+                            </div>
+                        </li>
+                    </ul>
+
+                    <p><strong>2. Khối lượng và quán tính</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc SGK mục II, nêu mối quan hệ giữa khối lượng và quán tính.</li>
+                        <li>HS trả lời: "Khối lượng của vật là đại lượng đặc trưng cho mức quán tính của vật."</li>
+                        <li>GV nhấn mạnh: Vật nào có khối lượng càng lớn thì càng khó thay đổi vận tốc, tức là càng có mức quán tính lớn hơn.</li>
+                        <li>GV giới thiệu đơn vị của lực: 1 N = 1 kg.m/s².</li>
+                        <li>GV yêu cầu HS trả lời câu hỏi 1, 2 trong SGK trang 65.</li>
+                        <li>HS trả lời:
+                            <ul>
+                                <li><strong>Câu 1:</strong> Ví dụ: Xe tải nặng khó dừng lại hơn xe đạp. Điều này có ý nghĩa trong thực tiễn: xe tải cần quãng đường dài hơn để dừng lại, do đó cần giảm tốc độ khi vào cua hoặc gần đèn đỏ.</li>
+                                <li><strong>Câu 2:</strong> Từ đồ thị Hình 15.1, ta thấy \(F = m \cdot a\). Khi \(F = 1\) N thì \(a = 1\) m/s², suy ra \(m = 1\) kg. Chọn A.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="15.1.png" alt="Hình 15.1 - Đồ thị biểu diễn mối liên hệ giữa lực và gia tốc" class="img-medium">
+                        <p><em>Hình 15.1. Đồ thị biểu diễn mối liên hệ giữa lực và gia tốc</em></p>
+                    </div>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 3:<br>LUYỆN TẬP</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng định luật 2 Newton để giải bài tập đơn giản.</p>
+                    <p><strong>Nội dung:</strong> Giải bài tập ví dụ SGK.</p>
+                    <p><strong>Sản phẩm:</strong> Lời giải của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc và tóm tắt Bài tập ví dụ (sgk tr.64).</li>
+                        <li>HS tóm tắt: \(m = 1\) kg, \(F = 5\) N. Tính \(a\).</li>
+                        <li>GV gọi 1 HS lên bảng giải, các HS khác làm vào vở.</li>
+                        <li>HS giải:
+                            <div class="formula">
+                                \[ a = \frac{F}{m} = \frac{5}{1} = 5 \text{ m/s}^2 \]
+                            </div>
+                        </li>
+                        <li>GV nhận xét, chính xác hóa kết quả.</li>
+                    </ul>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 4 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 4:<br>VẬN DỤNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng kiến thức vào thực tế.</p>
+                    <p><strong>Nội dung:</strong> Trả lời câu hỏi vận dụng.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV đặt câu hỏi: "Tại sao máy bay khối lượng càng lớn thì đường băng phải càng dài?"</li>
+                        <li>HS vận dụng kiến thức: Máy bay có khối lượng lớn thì quán tính lớn, khó thay đổi vận tốc. Do đó, cần một lực lớn hơn và một quãng đường dài hơn để đạt được vận tốc cất cánh.</li>
+                        <li>GV nhận xét, kết thúc tiết 1.</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- TIẾT 2 -->
+    <h3 style="margin-top: 30px;">Tiết 2: Thí nghiệm minh họa định luật 2 Newton</h3>
+
+    <table class="tien-trinh">
+        <thead>
+            <tr>
+                <th class="col-buoc">Bước thực hiện</th>
+                <th class="col-noidung">Nội dung các bước</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- HOẠT ĐỘNG 1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 1:<br>KHỞI ĐỘNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Tạo tình huống có vấn đề về thí nghiệm minh họa định luật 2 Newton.</p>
+                    <p><strong>Nội dung:</strong> Quan sát hình ảnh và dự đoán.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV chiếu Hình 15.2 (sgk) về bộ thí nghiệm minh họa định luật 2 Newton.</li>
+                        <li>GV đặt câu hỏi: "Làm thế nào để kiểm chứng mối quan hệ giữa gia tốc, lực và khối lượng bằng thí nghiệm?"</li>
+                        <li>HS quan sát, dự đoán.</li>
+                        <li>GV dẫn dắt vào bài: "Để trả lời, chúng ta cùng tìm hiểu phần III. Thí nghiệm minh họa định luật 2 Newton."</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="15.2.png" alt="Hình 15.2 - Thí nghiệm minh họa định luật 2 Newton" class="img-medium">
+                        <p><em>Hình 15.2. Thí nghiệm minh họa định luật 2 Newton</em></p>
+                    </div>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 2 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2:<br>HÌNH THÀNH KIẾN THỨC</strong><br>
+                    (25 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Hiểu được mục đích, dụng cụ và các bước tiến hành thí nghiệm minh họa định luật 2 Newton.</p>
+                    <p><strong>Nội dung:</strong> Tìm hiểu dụng cụ, tiến hành thí nghiệm, xử lý số liệu.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời, kết quả thảo luận, bảng số liệu.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+
+                    <p><strong>1. Dụng cụ thí nghiệm (Hình 15.2)</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc SGK mục III, kể tên các dụng cụ thí nghiệm.</li>
+                        <li>HS trả lời: Xe trượt, máng trượt đệm khí, ròng rọc, các quả nặng, đồng hồ đo thời gian hiện số, cổng quang điện, cân điện tử, bơm khí.</li>
+                        <li>GV giới thiệu chức năng của từng dụng cụ.</li>
+                    </ul>
+
+                    <p><strong>2. Tiến hành thí nghiệm</strong></p>
+                    <ul>
+                        <li>GV hướng dẫn các bước tiến hành thí nghiệm theo SGK mục III.</li>
+                        <li>GV lưu ý HS:
+                            <ul>
+                                <li>Bước 1: Cho lực kéo F có độ lớn tăng dần 1 N, 2 N và 3 N.</li>
+                                <li>Bước 2: Ghi vào mẫu Bảng 15.1 độ lớn lực kéo F và tổng khối lượng của hệ.</li>
+                                <li>Bước 3: Đo thời gian chuyển động t của xe.</li>
+                                <li>Bước 4: Tính gia tốc a = 2d/t².</li>
+                            </ul>
+                        </li>
+                        <li>GV chia lớp thành các nhóm, phát dụng cụ và phiếu học tập (mẫu Bảng 15.1).</li>
+                        <li>HS tiến hành thí nghiệm theo nhóm, ghi kết quả vào bảng.</li>
+                    </ul>
+
+                    <p><strong>3. Bảng số liệu thí nghiệm</strong></p>
+                    <p><strong>Bảng 15.1. Bảng ghi kết quả thí nghiệm</strong></p>
+                    <table class="bang-du-lieu">
+                        <thead>
+                            <tr>
+                                <th>Lực kéo F (N)</th>
+                                <th>1</th>
+                                <th>1</th>
+                                <th>1</th>
+                                <th>2</th>
+                                <th>3</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Khối lượng (M + m) (kg)</strong></td>
+                                <td>0,3</td>
+                                <td>0,4</td>
+                                <td>0,5</td>
+                                <td>0,5</td>
+                                <td>0,5</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Thời gian t (s)</strong></td>
+                                <td>0,55</td>
+                                <td>0,64</td>
+                                <td>0,71</td>
+                                <td>0,50</td>
+                                <td>0,42</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Gia tốc a = 2d/t² (m/s²)</strong></td>
+                                <td>3,31</td>
+                                <td>2,44</td>
+                                <td>1,99</td>
+                                <td>4,03</td>
+                                <td>5,67</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p><em>Lưu ý: d = 0,5 m là khoảng cách giữa hai cổng quang điện.</em></p>
+
+                    <p><strong>4. Xử lý số liệu và kết luận</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS dựa vào bảng số liệu đã ghi, vẽ đồ thị:
+                            <ul>
+                                <li>Đồ thị a theo F (ứng với m + M = 0,5 kg).</li>
+                                <li>Đồ thị a theo 1/(m + M) (ứng với F = 1 N).</li>
+                            </ul>
+                        </li>
+                        <li>HS thực hiện vẽ đồ thị và nhận xét:
+                            <ul>
+                                <li>Đồ thị a theo F là đường thẳng đi qua gốc tọa độ, chứng tỏ a tỉ lệ thuận với F.</li>
+                                <li>Đồ thị a theo 1/(m + M) là đường thẳng đi qua gốc tọa độ, chứng tỏ a tỉ lệ nghịch với khối lượng.</li>
+                            </ul>
+                        </li>
+                        <li>GV nhận xét, kết luận: Kết quả thí nghiệm phù hợp với định luật 2 Newton.</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="15.3.png" alt="Hình 15.3 - Đồ thị biểu diễn sự phụ thuộc của gia tốc vào lực và khối lượng" class="img-medium">
+                        <p><em>Hình 15.3. Đồ thị biểu diễn sự phụ thuộc của gia tốc vào lực và khối lượng</em></p>
+                    </div>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 3:<br>LUYỆN TẬP</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng định luật 2 Newton để giải bài tập.</p>
+                    <p><strong>Nội dung:</strong> Giải bài tập 1, 2, 3, 4 trong SGK trang 67.</p>
+                    <p><strong>Sản phẩm:</strong> Lời giải của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc và trả lời các câu hỏi 1, 2, 3, 4 trong SGK trang 67.</li>
+                        <li>HS thực hiện:
+                            <ul>
+                                <li><strong>Câu 1:</strong> Chọn C. \(\vec{F} = m\vec{a}\).</li>
+                                <li><strong>Câu 2:</strong> Quả bóng khối lượng 0,5 kg, lực 250 N, thời gian 0,02 s. Gia tốc: \(a = F/m = 250/0,5 = 500\) m/s². Vận tốc: \(v = a \cdot t = 500 \cdot 0,02 = 10\) m/s. Chọn D.</li>
+                                <li><strong>Câu 3:</strong> Hợp lực 20 N, gia tốc 0,4 m/s². Khối lượng xe: \(m = F/a = 20/0,4 = 50\) kg. Với hợp lực 50 N, gia tốc: \(a' = 50/50 = 1\) m/s².</li>
+                                <li><strong>Câu 4:</strong> Máy bay khối lượng càng lớn thì quán tính càng lớn, cần lực lớn hơn và quãng đường dài hơn để đạt vận tốc cất cánh. Do đó đường băng phải càng dài.</li>
+                            </ul>
+                        </li>
+                        <li>GV nhận xét, chính xác hóa kết quả.</li>
+                    </ul>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 4 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 4:<br>VẬN DỤNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng kiến thức vào thực tế và giao nhiệm vụ về nhà.</p>
+                    <p><strong>Nội dung:</strong> Trả lời câu hỏi vận dụng, giao nhiệm vụ năng lực số.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh, sản phẩm bảng/đồ thị.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV đặt câu hỏi: "Tại sao trong tham gia giao thông, khi ô tô chở hàng nặng khó hãm phanh hơn khi ô tô không chở hàng?"</li>
+                        <li>HS vận dụng kiến thức: Ô tô chở hàng nặng có khối lượng lớn hơn, quán tính lớn hơn, nên khó thay đổi vận tốc hơn (khó hãm phanh hơn).</li>
+                        <li>GV giao nhiệm vụ về nhà:
+                            <ul>
+                                <li><strong>Nhiệm vụ năng lực số (1.1.NC1b):</strong> HS áp dụng được kỹ thuật tìm kiếm để thu thập dữ liệu, thông tin và nội dung số liên quan đến Định luật II Newton; sử dụng từ khóa phù hợp để tìm kiếm thông tin phục vụ nhiệm vụ học tập.</li>
+                                <li><strong>Nhiệm vụ trực tuyến:</strong> Tìm hiểu thêm trên internet về định luật 2 Newton để hoàn thiện nội dung học tập.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG -->
+    <h2>IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG (NẾU CÓ)</h2>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+
+    <!-- Ký duyệt -->
+    <div class="signature">
+        <div class="signature-box">
+            <p><strong>Duyệt TCM</strong></p>
+            <p class="signature-name"><input type="text" placeholder="Lục Tuyến"></p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Chống chuột phải
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+
+    // Chống các phím tắt sao chép, xem nguồn, nhưng CHO PHÉP Ctrl+P
+    function disableKeys(e) {
+        // Cho phép Ctrl+P (in)
+        if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) {
+            return true;
+        }
+        // Cho phép Ctrl+Shift+P (một số trình duyệt dùng để in)
+        if (e.ctrlKey && e.shiftKey && (e.key === 'p' || e.key === 'P')) {
+            return true;
+        }
+        // Chặn Ctrl+S (lưu), Ctrl+U (xem nguồn), Ctrl+C (copy), Ctrl+A (chọn tất cả), F12 (dev tools)
+        if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'a' || e.key === 'A')) {
+            e.preventDefault();
+            return false;
+        }
+        if (e.key === 'F12') {
+            e.preventDefault();
+            return false;
+        }
+        return true;
+    }
+
+    // Chống kéo thả
+    document.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+    });
+
+    // Chống chọn văn bản (ngoại trừ các ô input)
+    document.addEventListener('selectstart', function(e) {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+        }
+    });
+
+    // Cho phép chọn văn bản trong các ô input
+    document.querySelectorAll('input, textarea').forEach(function(el) {
+        el.addEventListener('selectstart', function(e) {
+            e.stopPropagation();
+        });
+        el.addEventListener('dragstart', function(e) {
+            e.stopPropagation();
+        });
+    });
+</script>
+
+</body>
+</html>

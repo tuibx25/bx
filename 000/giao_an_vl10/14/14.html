@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giáo án Bài 14 - Vật lí 10</title>
+    <!-- MathJax để hiển thị công thức toán học -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Thiết lập cơ bản cho trang in A4 */
+        @page {
+            size: A4;
+            margin: 20mm 15mm;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            line-height: 1.4;
+            color: #000000; /* Chữ ưu tiên màu đen */
+            background-color: #FFFFFF; /* Nền trắng */
+            margin: 0;
+            padding: 0;
+            /* Chống chọn văn bản */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        .container {
+            width: 100%;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        /* Tiêu đề */
+        h1, h2, h3, h4 {
+            color: #004488; /* Màu xanh đậm */
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 18pt;
+            color: #8B4513; /* Màu nâu đậm */
+            border-bottom: 2px solid #8B4513;
+            padding-bottom: 5px;
+        }
+        h2 {
+            font-size: 15pt;
+            border-bottom: 1px solid #D3D3D3;
+            padding-bottom: 3px;
+            color: #8B5A2B;
+        }
+        h3 {
+            font-size: 14pt;
+            color: #0066CC; /* Màu xanh */
+        }
+        h4 {
+            font-size: 13pt;
+            color: #8B5A2B;
+        }
+        /* Bảng */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 12pt;
+        }
+        th, td {
+            border: 1px solid #D3D3D3;
+            padding: 6px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #F5F5DC; /* Màu be nhạt */
+            color: #004488;
+            font-weight: bold;
+        }
+        /* Tiến trình dạy học chia 2 cột */
+        .tien-trinh {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .tien-trinh th {
+            background-color: #F5DEB3; /* Màu lúa mì */
+            color: #004488;
+            text-align: center;
+        }
+        .tien-trinh td {
+            vertical-align: top;
+        }
+        .col-buoc {
+            width: 25%;
+            background-color: #F5F5F5; /* Màu xám rất nhạt */
+            font-weight: bold;
+            color: #8B4513;
+        }
+        .col-noidung {
+            width: 75%;
+        }
+        /* Hộp thoại, ghi chú */
+        .box {
+            background-color: #F5F5DC;
+            border-left: 5px solid #8B5A2B;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .red-text {
+            color: #CC0000; /* Màu đỏ dùng cho trường hợp đặc biệt */
+            font-weight: bold;
+        }
+        .blue-text {
+            color: #0066CC;
+        }
+        /* Hình ảnh */
+        .img-container {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .img-container img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #D3D3D3;
+            /* Chống kéo thả ảnh */
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+            pointer-events: none;
+        }
+        .img-small {
+            max-width: 250px;
+        }
+        .img-medium {
+            max-width: 350px;
+        }
+        .img-large {
+            max-width: 500px;
+        }
+        /* Danh sách */
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        /* Công thức */
+        .formula {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 14pt;
+        }
+        /* Ô nhập liệu thủ công */
+        .input-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            font-weight: bold;
+            color: #000000;
+            background-color: #FFFFFF;
+            border: 1px solid #D3D3D3;
+            border-radius: 3px;
+            padding: 2px 5px;
+            width: 200px;
+        }
+        .input-text:focus {
+            outline: none;
+            border-color: #8B4513;
+        }
+        /* Ký duyệt */
+        .signature {
+            margin-top: 30px;
+            display: flex;
+            justify-content: flex-end;
+            text-align: center;
+            font-weight: bold;
+        }
+        .signature-box {
+            width: 200px;
+            border-top: 2px solid #8B4513; /* Nét kẻ ngang giống tiêu đề */
+            padding-top: 10px;
+        }
+        .signature-name {
+            margin-top: 50px;
+        }
+        .signature-name input {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            font-weight: bold;
+            color: #000000;
+            background-color: #FFFFFF;
+            border: 1px solid #D3D3D3;
+            border-radius: 3px;
+            padding: 2px 5px;
+            width: 150px;
+            text-align: center;
+        }
+        .signature-name input:focus {
+            outline: none;
+            border-color: #8B4513;
+        }
+        /* Điều chỉnh khi in */
+        @media print {
+            body {
+                font-size: 12pt;
+                -webkit-user-select: auto;
+                -moz-user-select: auto;
+                -ms-user-select: auto;
+                user-select: auto;
+            }
+            .container {
+                padding: 0;
+            }
+            .no-print {
+                display: none;
+            }
+            .input-text, .signature-name input {
+                border: none;
+                background: transparent;
+                color: #000;
+                font-weight: bold;
+            }
+            .img-container img {
+                pointer-events: auto;
+            }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" onkeydown="return disableKeys(event);" ondragstart="return false;" onselectstart="return false;">
+
+<div class="container">
+
+    <!-- Ngày soạn -->
+    <p><strong>Ngày soạn:</strong> <input type="text" class="input-text" placeholder="....../....../20......"></p>
+
+    <!-- Tiêu đề giáo án -->
+    <h1>GIÁO ÁN BÀI 14: ĐỊNH LUẬT 1 NEWTON</h1>
+    <p style="text-align: center; font-style: italic;">Môn: Vật lí 10 – Bộ sách Kết nối tri thức với cuộc sống</p>
+    <p style="text-align: center;">Số tiết: 1 (Tiết 23 theo PPCT)</p>
+
+    <!-- I. MỤC TIÊU -->
+    <h2>I. MỤC TIÊU</h2>
+
+    <h3>1. Kiến thức</h3>
+    <ul>
+        <li>Phát biểu được định luật 1 Newton.</li>
+        <li>Nêu được khái niệm quán tính và giải thích được một số hiện tượng liên quan đến quán tính trong thực tế.</li>
+        <li>Phân biệt được các trạng thái: đứng yên, chuyển động thẳng đều, chịu tác dụng của các lực cân bằng.</li>
+        <li>Vận dụng được định luật 1 Newton để giải thích một số hiện tượng thực tế và giải bài tập đơn giản.</li>
+    </ul>
+
+    <h3>2. Năng lực</h3>
+    <h4>a. Năng lực chung</h4>
+    <ul>
+        <li>Tự chủ và tự học: Tìm hiểu trước nội dung bài học qua SGK và internet.</li>
+        <li>Giao tiếp và hợp tác: Thảo luận nhóm để phân tích các hiện tượng liên quan đến quán tính.</li>
+        <li>Giải quyết vấn đề và sáng tạo: Vận dụng kiến thức để giải thích các tình huống thực tế.</li>
+    </ul>
+    <h4>b. Năng lực đặc thù môn học</h4>
+    <ul>
+        <li>Nhận biết được trạng thái cân bằng của vật.</li>
+        <li>Phân tích được tác dụng của quán tính trong đời sống.</li>
+        <li>Vận dụng được định luật 1 Newton để giải thích hiện tượng.</li>
+    </ul>
+    <h4>b. Năng lực số</h4>
+    <ul>
+        <li><strong>1.1.NC1a:</strong> HS tìm kiếm, lựa chọn và khai thác thông tin từ các nguồn số phù hợp để đáp ứng nhu cầu tìm hiểu về Định luật I Newton và quán tính; biết lựa chọn thông tin cần thiết phục vụ nhiệm vụ học tập.</li>
+    </ul>
+
+    <h3>3. Phẩm chất</h3>
+    <ul>
+        <li><strong>Chăm chỉ:</strong> Tích cực tham gia thảo luận nhóm, hoàn thành các nhiệm vụ học tập được giao.</li>
+        <li><strong>Trung thực:</strong> Báo cáo trung thực kết quả thảo luận, không sao chép kết quả của nhóm khác.</li>
+        <li><strong>Trách nhiệm:</strong> Có ý thức giữ gìn, bảo quản dụng cụ học tập và thiết bị thí nghiệm.</li>
+        <li><strong>Cẩn thận, tỉ mỉ:</strong> Quan sát hiện tượng và phân tích chính xác.</li>
+    </ul>
+
+    <!-- II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU -->
+    <h2>II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU</h2>
+
+    <h3>1. Giáo viên</h3>
+    <ul>
+        <li>SGK Vật lí 10, SGV, máy chiếu, máy tính.</li>
+        <li>Hình ảnh, video minh họa về định luật 1 Newton và quán tính (xe đạp, ô tô, tàu Voyager,...).</li>
+        <li>Phiếu học tập.</li>
+    </ul>
+
+    <h3>2. Học sinh</h3>
+    <ul>
+        <li>SGK Vật lí 10, vở ghi, máy tính/điện thoại có kết nối internet (nếu có).</li>
+        <li>Ôn tập lại kiến thức về lực và chuyển động đã học ở cấp THCS.</li>
+        <li>Hoàn thành nhiệm vụ học tập trực tuyến trước khi đến lớp (tìm hiểu về định luật 1 Newton và quán tính qua internet, ChatGPT).</li>
+    </ul>
+
+    <!-- III. TIẾN TRÌNH DẠY HỌC -->
+    <h2>III. TIẾN TRÌNH DẠY HỌC</h2>
+
+    <table class="tien-trinh">
+        <thead>
+            <tr>
+                <th class="col-buoc">Bước thực hiện</th>
+                <th class="col-noidung">Nội dung các bước</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- HOẠT ĐỘNG 1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 1:<br>KHỞI ĐỘNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Tạo hứng thú, dẫn dắt học sinh vào bài mới.</p>
+                    <p><strong>Nội dung:</strong> Học sinh quan sát hình ảnh và trả lời câu hỏi.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV chiếu hình ảnh tàu vũ trụ Voyager (Hình 01.png) hoặc video.</li>
+                        <li>GV đặt câu hỏi: "Hình bên cho thấy một trong hai con tàu vũ trụ Voyager đang làm nhiệm vụ thăm dò các hành tinh nằm xa Trái Đất trong hệ Mặt Trời. Chúng được phóng lên từ Mũi Canaveral, Florida (Hoa Kì) vào năm 1977 và hiện nay cả hai con tàu đã ra khỏi hệ Mặt Trời, đang tiếp tục hoạt động và gửi thông tin về Trái Đất. Điều gì đã giúp cho tàu Voyager tiếp tục chuyển động rời xa Trái Đất, mặc dù thực tế không còn lực nào tác dụng lên chúng nữa?"</li>
+                        <li>HS suy nghĩ, trả lời.</li>
+                        <li>GV nhận xét, dẫn dắt vào bài: "Để trả lời câu hỏi này, chúng ta cùng tìm hiểu Bài 14: Định luật 1 Newton."</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="01.png" alt="Hình ảnh tàu vũ trụ Voyager" class="img-medium">
+                        <p><em>Hình ảnh minh họa: Tàu vũ trụ Voyager</em></p>
+                    </div>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 2 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2:<br>HÌNH THÀNH KIẾN THỨC</strong><br>
+                    (25 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Hình thành khái niệm lực và chuyển động, định luật 1 Newton, quán tính.</p>
+                    <p><strong>Nội dung:</strong> Tìm hiểu mối quan hệ giữa lực và chuyển động, định luật 1 Newton, quán tính.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời, kết quả thảo luận, công thức.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    
+                    <p><strong>1. Lực và chuyển động</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc SGK mục I, thảo luận để trả lời câu hỏi: "Lực có phải là nguyên nhân làm cho một vật chuyển động và duy trì chuyển động đó hay không?"</li>
+                        <li>HS thảo luận, trả lời theo quan điểm của Aristotle (nếu đặt mình vào thời đó).</li>
+                        <li>GV giới thiệu thí nghiệm của Galilei (Hình 14.1) và kết luận: Nếu không có ma sát và nếu máng nghiêng 2 nằm ngang thì hòn bi sẽ lăn mãi mãi với vận tốc không đổi.</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="14.1.png" alt="Hình 14.1 - Minh họa thí nghiệm của Galilei" class="img-medium">
+                        <p><em>Hình 14.1. Minh họa thí nghiệm của Galilei</em></p>
+                    </div>
+
+                    <p><strong>2. Định luật 1 Newton</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc SGK mục II, phát biểu định luật 1 Newton.</li>
+                        <li>HS trả lời: "Nếu một vật không chịu tác dụng của lực nào hoặc chịu tác dụng của các lực có hợp lực bằng không, thì vật đang đứng yên sẽ tiếp tục đứng yên, đang chuyển động sẽ tiếp tục chuyển động thẳng đều."</li>
+                        <li>GV nhấn mạnh: Định luật 1 Newton còn được gọi là định luật quán tính.</li>
+                    </ul>
+
+                    <p><strong>3. Quán tính</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc SGK mục III.1, nêu khái niệm quán tính.</li>
+                        <li>HS trả lời: "Tính chất bảo toàn trạng thái đứng yên hay chuyển động của vật, gọi là quán tính của vật."</li>
+                        <li>GV yêu cầu HS quan sát Hình 14.2 và trả lời câu hỏi:
+                            <ul>
+                                <li>Giải thích tại sao quả cầu đứng yên.</li>
+                                <li>Tại sao người trượt ván có thể giữ nguyên vận tốc của mình?</li>
+                            </ul>
+                        </li>
+                        <li>HS trả lời: Quả cầu đứng yên vì chịu tác dụng của hai lực cân bằng (trọng lực và lực căng dây). Người trượt ván giữ nguyên vận tốc vì không có lực nào tác dụng hoặc các lực tác dụng cân bằng nhau.</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="14.2.png" alt="Hình 14.2 - Ví dụ về quán tính" class="img-medium">
+                        <p><em>Hình 14.2. Ví dụ về quán tính</em></p>
+                    </div>
+
+                    <p><strong>4. Thí nghiệm minh họa quán tính</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS quan sát Hình 14.3 và mô tả thí nghiệm.</li>
+                        <li>HS mô tả: Đặt các vật nhỏ lên xe lăn. Giữ các vật và xe đứng yên trên đỉnh mặt phẳng nghiêng. Thả cho xe trượt xuống dốc, dọc theo mặt phẳng nghiêng. Quan sát hiện tượng xảy ra đối với xe và các vật trên xe.</li>
+                        <li>GV đặt câu hỏi:
+                            <ul>
+                                <li>Giải thích tại sao khi xe trượt xuống dốc và bị cản lại ở cuối dốc thì vật nhỏ bị văng về phía trước.</li>
+                                <li>Làm thế nào để giữ cho vật trên xe không bị văng đi?</li>
+                            </ul>
+                        </li>
+                        <li>HS trả lời: Do quán tính, vật nhỏ có xu hướng giữ nguyên vận tốc khi xe dừng lại đột ngột. Để giữ cho vật không bị văng, có thể buộc dây hoặc đặt vật vào hộp có thành chắn.</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="14.3.png" alt="Hình 14.3 - Thí nghiệm minh họa quán tính" class="img-medium">
+                        <p><em>Hình 14.3. Thí nghiệm minh họa quán tính</em></p>
+                    </div>
+
+                    <p><strong>5. Ứng dụng của quán tính trong đời sống</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc SGK mục III.2 và trả lời câu hỏi:
+                            <ul>
+                                <li>Khi ngồi trên ô tô, tàu lượn cao tốc hoặc máy bay, hành khách luôn được nhắc thắt dây an toàn. Giải thích điều này.</li>
+                                <li>Để tra đầu búa vào cán, nên chọn cách nào dưới đây? Giải thích tại sao.</li>
+                            </ul>
+                        </li>
+                        <li>HS trả lời:
+                            <ul>
+                                <li>Thắt dây an toàn để giảm tác hại của quán tính khi xe đột ngột dừng lại hoặc thay đổi vận tốc đột ngột.</li>
+                                <li>Để tra đầu búa vào cán, nên đập mạnh cán búa xuống đất (Hình 14.4a) vì khi cán búa dừng lại đột ngột, đầu búa do quán tính tiếp tục chuyển động xuống và lún sâu vào cán.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="14.4.png" alt="Hình 14.4 - Cách tra đầu búa vào cán" class="img-medium">
+                        <p><em>Hình 14.4. Cách tra đầu búa vào cán</em></p>
+                    </div>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 3:<br>LUYỆN TẬP</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng định luật 1 Newton và quán tính để giải thích hiện tượng.</p>
+                    <p><strong>Nội dung:</strong> Giải bài tập ví dụ SGK.</p>
+                    <p><strong>Sản phẩm:</strong> Lời giải của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc và trả lời câu hỏi 1, 2, 3 trong SGK trang 62.</li>
+                        <li>HS thực hiện:
+                            <ul>
+                                <li><strong>Câu 1:</strong> Mô tả và giải thích điều gì xảy ra đối với một hành khách ngồi trong ô tô ở các tình huống:
+                                    <ul>
+                                        <li>a) Xe đột ngột tăng tốc: Hành khách bị ngả về phía sau do quán tính.</li>
+                                        <li>b) Xe phanh gấp: Hành khách bị ngả về phía trước do quán tính.</li>
+                                        <li>c) Xe rẽ nhanh sang trái: Hành khách bị nghiêng sang phải do quán tính.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Câu 2:</strong> Một vật đang chuyển động với vận tốc 3 m/s dưới tác dụng của các lực. Nếu bỗng nhiên các lực này mất đi thì:
+                                    <ul>
+                                        <li>Chọn D. Vật tiếp tục chuyển động theo hướng cũ với vận tốc 3 m/s.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Câu 3:</strong> Một vật đang nằm yên trên mặt bàn nằm ngang. Tại sao ta có thể khẳng định rằng bàn đã tác dụng một lực lên nó?
+                                    <ul>
+                                        <li>Vì vật nằm yên chứng tỏ hợp lực tác dụng lên nó bằng 0. Trọng lực tác dụng lên vật hướng xuống, nên bàn phải tác dụng một lực hướng lên cân bằng với trọng lực.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>GV nhận xét, chính xác hóa kết quả.</li>
+                    </ul>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 4 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 4:<br>VẬN DỤNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng kiến thức vào thực tế và giao nhiệm vụ về nhà.</p>
+                    <p><strong>Nội dung:</strong> Trả lời câu hỏi vận dụng, giao nhiệm vụ năng lực số.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh, sản phẩm bảng/đồ thị.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV đặt câu hỏi: "Dùng khái niệm quán tính để giải thích hiện tượng trong Hình 14.5: Khi dùng tay kéo từ từ tờ giấy và khi giật mạnh tờ giấy."</li>
+                        <li>HS vận dụng kiến thức:
+                            <ul>
+                                <li>Khi kéo từ từ tờ giấy, cốc nước chuyển động cùng với tờ giấy do lực ma sát.</li>
+                                <li>Khi giật mạnh tờ giấy, cốc nước vẫn đứng yên do quán tính (không kịp thay đổi vận tốc).</li>
+                            </ul>
+                        </li>
+                        <li>GV giao nhiệm vụ về nhà:
+                            <ul>
+                                <li><strong>Nhiệm vụ năng lực số (1.1.NC1a):</strong> HS tìm kiếm, lựa chọn và khai thác thông tin từ các nguồn số phù hợp để đáp ứng nhu cầu tìm hiểu về Định luật I Newton và quán tính; biết lựa chọn thông tin cần thiết phục vụ nhiệm vụ học tập.</li>
+                                <li><strong>Nhiệm vụ trực tuyến:</strong> Tìm hiểu thêm trên internet về định luật 1 Newton và quán tính để hoàn thiện nội dung học tập.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="14.5.png" alt="Hình 14.5 - Thí nghiệm về quán tính" class="img-medium">
+                        <p><em>Hình 14.5. Thí nghiệm về quán tính</em></p>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG -->
+    <h2>IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG (NẾU CÓ)</h2>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+
+    <!-- Ký duyệt -->
+    <div class="signature">
+        <div class="signature-box">
+            <p><strong>Duyệt TCM</strong></p>
+            <p class="signature-name"><input type="text" placeholder="Lục Tuyến"></p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Chống chuột phải
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+
+    // Chống các phím tắt sao chép, xem nguồn, nhưng CHO PHÉP Ctrl+P
+    function disableKeys(e) {
+        // Cho phép Ctrl+P (in)
+        if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) {
+            return true;
+        }
+        // Cho phép Ctrl+Shift+P (một số trình duyệt dùng để in)
+        if (e.ctrlKey && e.shiftKey && (e.key === 'p' || e.key === 'P')) {
+            return true;
+        }
+        // Chặn Ctrl+S (lưu), Ctrl+U (xem nguồn), Ctrl+C (copy), Ctrl+A (chọn tất cả), F12 (dev tools)
+        if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'a' || e.key === 'A')) {
+            e.preventDefault();
+            return false;
+        }
+        if (e.key === 'F12') {
+            e.preventDefault();
+            return false;
+        }
+        return true;
+    }
+
+    // Chống kéo thả
+    document.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+    });
+
+    // Chống chọn văn bản (ngoại trừ các ô input)
+    document.addEventListener('selectstart', function(e) {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+        }
+    });
+
+    // Cho phép chọn văn bản trong các ô input
+    document.querySelectorAll('input, textarea').forEach(function(el) {
+        el.addEventListener('selectstart', function(e) {
+            e.stopPropagation();
+        });
+        el.addEventListener('dragstart', function(e) {
+            e.stopPropagation();
+        });
+    });
+</script>
+
+</body>
+</html>

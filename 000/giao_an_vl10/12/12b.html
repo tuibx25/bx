@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giáo án Bài 12 - Vật lí 10</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @page { size: A4; margin: 20mm 15mm; }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            line-height: 1.4;
+            color: #000000;
+            background-color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+        .container {
+            width: 100%;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        h1, h2, h3, h4 { color: #004488; margin-top: 15px; margin-bottom: 10px; }
+        h1 {
+            text-align: center;
+            font-size: 18pt;
+            color: #8B4513;
+            border-bottom: 2px solid #8B4513;
+            padding-bottom: 5px;
+        }
+        h2 {
+            font-size: 15pt;
+            border-bottom: 1px solid #D3D3D3;
+            padding-bottom: 3px;
+            color: #8B5A2B;
+        }
+        h3 { font-size: 14pt; color: #0066CC; }
+        h4 { font-size: 13pt; color: #8B5A2B; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12pt; }
+        th, td { border: 1px solid #D3D3D3; padding: 6px 8px; text-align: left; vertical-align: top; }
+        th { background-color: #F5F5DC; color: #004488; font-weight: bold; }
+        .tien-trinh { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .tien-trinh th { background-color: #F5DEB3; color: #004488; text-align: center; }
+        .tien-trinh td { vertical-align: top; }
+        .col-buoc { width: 25%; background-color: #F5F5F5; font-weight: bold; color: #8B4513; }
+        .col-noidung { width: 75%; }
+        .box { background-color: #F5F5DC; border-left: 5px solid #8B5A2B; padding: 10px; margin: 10px 0; }
+        .box-ai { background-color: #E8F4FF; border-left: 5px solid #0066CC; padding: 10px; margin: 10px 0; }
+        .box-nls { background-color: #FFF8E1; border-left: 5px solid #CC9900; padding: 10px; margin: 10px 0; }
+        .red-text { color: #CC0000; font-weight: bold; }
+        .blue-text { color: #0066CC; }
+        .img-container { text-align: center; margin: 10px 0; }
+        .img-container img {
+            max-width: 100%; height: auto;
+            border: 1px solid #D3D3D3;
+            -webkit-user-drag: none; user-drag: none; pointer-events: none;
+        }
+        .img-small { max-width: 250px; }
+        .img-medium { max-width: 350px; }
+        .img-large { max-width: 500px; }
+        ul, ol { padding-left: 20px; }
+        li { margin-bottom: 5px; }
+        .formula { text-align: center; margin: 10px 0; font-size: 14pt; }
+        .input-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt; font-weight: bold;
+            color: #000000; background-color: #FFFFFF;
+            border: 1px solid #D3D3D3; border-radius: 3px;
+            padding: 2px 5px; width: 200px;
+        }
+        .input-text:focus { outline: none; border-color: #8B4513; }
+        .signature {
+            margin-top: 30px; display: flex;
+            justify-content: flex-end; text-align: center; font-weight: bold;
+        }
+        .signature-box { width: 200px; border-top: 2px solid #8B4513; padding-top: 10px; }
+        .signature-name { margin-top: 50px; }
+        .signature-name input {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt; font-weight: bold;
+            color: #000000; background-color: #FFFFFF;
+            border: 1px solid #D3D3D3; border-radius: 3px;
+            padding: 2px 5px; width: 150px; text-align: center;
+        }
+        .phieu { border: 1.5px solid #8B4513; padding: 10px 15px; margin: 12px 0; background: #FDFDF5; }
+        .phieu h4 { text-align: center; margin: 0 0 8px 0; color: #8B4513; }
+        .rubric th { background-color: #F5DEB3; font-size: 11pt; }
+        .rubric td { font-size: 11pt; vertical-align: top; }
+        .mau { border: 1.5px dashed #8B5A2B; padding: 10px; margin: 10px 0; background: #FFFCF2; }
+        @media print {
+            body { font-size: 12pt; -webkit-user-select: auto; user-select: auto; }
+            .container { padding: 0; }
+            .no-print { display: none; }
+            .input-text, .signature-name input {
+                border: none; background: transparent; color: #000; font-weight: bold;
+            }
+            .img-container img { pointer-events: auto; }
+            .phieu, .box, .box-ai, .box-nls, .tien-trinh, .mau { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" onkeydown="return disableKeys(event);" ondragstart="return false;" onselectstart="return false;">
+
+<div class="container">
+
+    <!-- Ngày soạn -->
+    <p><strong>Ngày soạn:</strong> <input type="text" class="input-text" placeholder="....../....../20......"></p>
+
+    <!-- Tiêu đề giáo án -->
+    <h1>GIÁO ÁN BÀI 12: CHUYỂN ĐỘNG NÉM</h1>
+    <p style="text-align: center; font-style: italic;">Môn: Vật lí 10 – Bộ sách Kết nối tri thức với cuộc sống</p>
+    <p style="text-align: center;">Số tiết: 2 (Tiết 19, 20 theo PPCT)</p>
+
+    <!-- I. MỤC TIÊU -->
+    <h2>I. MỤC TIÊU</h2>
+
+    <h3>1. Kiến thức</h3>
+    <ul>
+        <li>Phát biểu được khái niệm chuyển động ném ngang, chuyển động ném xiên.</li>
+        <li>Biết cách phân tích chuyển động ném ngang và ném xiên thành hai chuyển động thành phần vuông góc với nhau trên trục Ox và Oy.</li>
+        <li>Phân tích được chuyển động ném ngang và ném xiên thành hai chuyển động thành phần: chuyển động thẳng đều theo phương ngang và chuyển động rơi tự do theo phương thẳng đứng.</li>
+        <li>Viết được công thức tính thời gian rơi, tầm xa của chuyển động ném ngang; công thức tính tầm cao, tầm xa của chuyển động ném xiên.</li>
+        <li>Viết được các phương trình của các chuyển động thành phần, công thức tính thời gian, tầm ném xa và tầm bay cao.</li>
+        <li>Thực hiện được dự án nghiên cứu tìm điều kiện ném vật để đạt độ cao hoặc tầm xa lớn nhất.</li>
+        <li>Vận dụng được các công thức của chuyển động ném để giải một số bài tập đơn giản và giải thích một số hiện tượng thực tế.</li>
+    </ul>
+
+    <h3>2. Năng lực</h3>
+    <h4>a. Năng lực chung</h4>
+    <ul>
+        <li>Tự chủ và tự học: Tìm hiểu trước nội dung bài học qua sách giáo khoa và internet.</li>
+        <li>Giao tiếp và hợp tác: Thảo luận nhóm để phân tích chuyển động ném.</li>
+        <li>Giải quyết vấn đề và sáng tạo: Vận dụng kiến thức để giải thích các tình huống thực tế.</li>
+        <li><strong>Tự chủ và tự học:</strong> Chủ động nghiên cứu tài liệu SGK và các học liệu số (video, mô phỏng) để nắm vững quy trình phân tích chuyển động.</li>
+        <li><strong>Giao tiếp và hợp tác:</strong> Hoạt động nhóm hiệu quả để thảo luận về các chuyển động thành phần và trình bày kết quả qua các nền tảng trực tuyến.</li>
+        <li><strong>Giải quyết vấn đề và sáng tạo:</strong> Đề xuất được phương án thí nghiệm kiểm chứng và thiết kế sản phẩm vận dụng (như máy bắn đá, tên lửa nước).</li>
+    </ul>
+    <h4>b. Năng lực đặc thù môn học</h4>
+    <ul>
+        <li>Nhận biết được đặc điểm của chuyển động ném ngang và ném xiên.</li>
+        <li>Phân tích được sự chuyển động của vật bị ném.</li>
+        <li>Vận dụng được công thức để tính toán.</li>
+        <li><strong>Nhận thức vật lí:</strong> Nêu được khái niệm chuyển động ném ngang, ném xiên và biết cách phân tích các chuyển động này thành hai chuyển động thành phần vuông góc với nhau trên trục Ox (nằm ngang) và trục Oy (thẳng đứng). Trình bày được đặc điểm của các chuyển động thành phần: phương ngang là chuyển động thẳng đều (a = 0, v = v₀) và phương thẳng đứng là chuyển động biến đổi với gia tốc rơi tự do (a = g).</li>
+        <li><strong>Tìm hiểu thế giới tự nhiên dưới góc độ vật lí:</strong> Thực hiện và phân tích kết quả từ các thí nghiệm định tính hoặc video thí nghiệm để rút ra nhận xét: thành phần chuyển động theo phương thẳng đứng của vật ném ngang giống hệt chuyển động rơi tự do và hai chuyển động thành phần này độc lập với nhau.</li>
+        <li><strong>Vận dụng kiến thức, kĩ năng đã học:</strong> Vận dụng thành thạo các công thức tính thời gian rơi, tầm ném xa (L) và tầm bay cao (H) để giải quyết các bài toán thực tiễn. Thực hiện được dự án học tập hoặc hoạt động trải nghiệm (như chế tạo máy bắn đá, ném bóng) nhằm tìm kiếm và chứng minh các điều kiện tối ưu để vật đạt được tầm xa lớn nhất.</li>
+    </ul>
+    <h4>c. Năng lực số</h4>
+    <div class="box-nls">
+        <ul>
+            <li><strong>3.1.NC1b:</strong> Tạo sơ đồ/đồ thị/infographic về Chuyển động ném; dùng AI gợi ý bố cục, học sinh tự chỉnh sửa và ghi nguồn.</li>
+            <li><strong>1.1.NC1b:</strong> Áp dụng kỹ thuật tìm kiếm để tra cứu các video thực tế (ném bóng rổ, nhảy xa) và học liệu khoa học về chuyển động ném trên Internet.</li>
+            <li><strong>2.1.NC1a:</strong> Sử dụng các phần mềm mô phỏng (PhET) và ứng dụng phân tích video (Tracker) để quan sát quỹ đạo và thu thập số liệu; sử dụng thiết bị cá nhân truy cập và gửi phản hồi nhanh qua các nền tảng tương tác số.</li>
+            <li><strong>2.2.NC1a:</strong> Trao đổi ý kiến nhóm và phản hồi kết quả dự đoán qua các bảng tương tác (Padlet, Zalo).</li>
+            <li><strong>5.3.NC1a:</strong> Áp dụng phần mềm bảng tính (Excel/Google Sheets) để thiết lập công thức tính toán và tự động hóa việc vẽ đồ thị quỹ đạo đường Parabol.</li>
+            <li><strong>3.1.NC1a:</strong> Áp dụng các cách tạo nội dung số để thiết kế báo cáo dự án, Infographic mô tả các điều kiện tối ưu dưới dạng slide trình chiếu (Canva/PowerPoint).</li>
+            <li><strong>3.3.NC1a & 4.2.NC1a:</strong> Ý thức thực thi bản quyền học liệu và bảo vệ dữ liệu cá nhân khi tương tác trong môi trường số.</li>
+        </ul>
+    </div>
+
+    <h4>d. Năng lực trí tuệ nhân tạo (AI)</h4>
+    <div class="box-ai">
+        <ul>
+            <li><strong>NLa (Tư duy lấy con người làm trung tâm):</strong> Nhận thức được rằng AI hay phần mềm mô phỏng chỉ cung cấp ý tưởng lí thuyết, con người phải trực tiếp chế tạo, thử nghiệm và tính đến sức cản không khí thực tế để đưa ra kết luận. AI chỉ cung cấp mô hình toán học lí thuyết (ví dụ góc 45 độ), nhưng trong thực tế cơ thể con người không thể giậm nhảy đúng góc đó mà không mất đà, từ đó thấy được sự linh hoạt của con người so với máy móc.</li>
+            <li><strong>NLb (Đạo đức AI):</strong> Thể hiện sự trung thực học thuật, minh bạch khai báo khi sử dụng AI (ChatGPT/Gemini) hỗ trợ tìm ý tưởng dự án.</li>
+            <li><strong>NLc (Các kĩ thuật và ứng dụng AI):</strong> Biết cách thiết lập câu lệnh (prompt) đóng vai trò chuyên gia để nhờ trợ lý ảo tư vấn cách tối ưu hóa góc ném và lực căng; làm chuyên gia phân tích thể thao, giải thích các yếu tố vật lí quyết định thành tích nhảy xa.</li>
+        </ul>
+    </div>
+
+    <h3>3. Phẩm chất</h3>
+    <ul>
+        <li>Chăm chỉ: Tích cực tham gia các hoạt động học tập.</li>
+        <li>Trung thực: Báo cáo kết quả thí nghiệm chính xác.</li>
+        <li>Trách nhiệm: Hoàn thành nhiệm vụ được giao.</li>
+        <li><strong>Chăm chỉ:</strong> Tích cực tìm tòi kiến thức trên các phương tiện truyền thông số và SGK.</li>
+        <li><strong>Trung thực:</strong> Khách quan trong việc báo cáo dữ liệu thực nghiệm và kết quả khảo sát dự án.</li>
+        <li><strong>Trách nhiệm:</strong> Có ý thức sử dụng Internet an toàn, tôn trọng bản quyền học liệu và có trách nhiệm trong hoạt động nhóm.</li>
+    </ul>
+
+    <!-- II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU -->
+    <h2>II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU</h2>
+
+    <h3>1. Giáo viên</h3>
+    <ul>
+        <li>SGK Vật lí 10, SGV, máy chiếu, máy tính.</li>
+        <li>Hình ảnh, video minh họa về chuyển động ném (ném bóng, nhảy xa, máy bay thả hàng cứu trợ).</li>
+        <li>Các video về chuyển động ném ngang: <em>https://www.youtube.com/watch?v=hgnqK5I1y-A</em></li>
+        <li>Bài giảng PowerPoint, máy tính, máy chiếu.</li>
+        <li>Các ứng dụng tương tác (Quizizz, Padlet).</li>
+        <li>Phiếu học tập.</li>
+        <li>Phiếu học tập số 1 và Rubric đánh giá dự án.</li>
+        <li>Gợi ý STEM máy ném đá:
+            <ul>
+                <li>Size to: <em>https://s.shopee.vn/4LFGzud1Fq</em></li>
+                <li>Size nhỏ: <em>https://s.shopee.vn/5AoNzUqe9C</em></li>
+            </ul>
+        </li>
+    </ul>
+
+    <!-- Phiếu học tập số 1 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 1</h4>
+        <p><strong>Câu 1.</strong> Chọn từ/cụm từ thích hợp trong bảng dưới đây để điền vào chỗ trống:</p>
+        <table>
+            <tr>
+                <td>rơi tự do</td><td>parabol</td><td>thẳng đứng</td><td>ngang</td>
+            </tr>
+            <tr>
+                <td>bằng nhau</td><td>độ</td><td>vận tốc</td><td>khác nhau</td>
+            </tr>
+            <tr>
+                <td>ném thẳng đứng</td><td>thẳng đều</td><td>đường thẳng</td><td>nằm ngang</td>
+            </tr>
+        </table>
+        <p><em>+ Đối với vật chuyển động ném ngang:</em> Chuyển động của vật trên phương ngang là chuyển động......(1)..... sau những khoảng thời gian bằng nhau, vật đi được những đoạn đường.....(2)...... Chuyển động của vật trên phương thẳng đứng là chuyển động......(3)......, sau những khoảng thời gian bằng nhau vật đi được những đoạn đường.....(4)...... Quỹ đạo chuyển động của vật ném ngang là một nhánh của đường.....(5).....</p>
+        <p><em>+ Đối với vật chuyển động ném xiên:</em> Chuyển động của vật trên phương ngang là.....(6)..... sau những khoảng thời gian bằng nhau vật đi được những đoạn đường.....(7)...... Chuyển động của vật trên phương thẳng đứng là chuyển động......(8)........, sau những khoảng thời gian bằng nhau vật đi được những đoạn đường .....(9)...... Quỹ đạo chuyển động của vật ném xiên có dạng.....(10)......... Vật đạt độ cao cực đại khi........(11)......trên phương......(12)...... bằng không.</p>
+        <p><strong>Câu 2.</strong> Một quả bóng đặt trên mặt bàn được truyền một vận tốc theo phương nằm ngang. (Các câu hỏi tiếp nối trong các phần sau).</p>
+        <p><strong>Câu 10.</strong> Khi dùng vòi nước tưới cây để các tia nước phun ra xa người ta thường điều chỉnh sao cho hướng của vòi sen một góc nào đó với phương ngang (hình 9.2). Trong trường hợp lí tưởng (bỏ qua mọi lực cản), góc hợp giữa vòi và phương ngang phải bằng bao nhiêu độ để các tia nước phun ra xa nhất?</p>
+    </div>
+
+    <!-- Rubric đánh giá dự án -->
+    <h4>Rubric đánh giá dự án</h4>
+    <table class="rubric">
+        <thead>
+            <tr>
+                <th>Tiêu chí</th>
+                <th>Mức 1</th>
+                <th>Mức 2</th>
+                <th>Mức 3</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Đề án đề xuất phương án</strong></td>
+                <td>Phương án đề xuất không có tính khả thi cao.</td>
+                <td>Phương án đề xuất có tính khả thi nhưng chưa có cơ sở vật lí cụ thể.</td>
+                <td>Phương án đề xuất có tính khả thi cao và có cơ sở vật lí cụ thể.</td>
+            </tr>
+            <tr>
+                <td><strong>Lựa chọn dụng cụ thiết kế</strong></td>
+                <td>Dụng cụ được chọn khó kiếm, mất tiền và không thân thiện với môi trường.</td>
+                <td>Dụng cụ được chọn dễ kiếm, rẻ tiền nhưng không thân thiện với môi trường.</td>
+                <td>Dụng cụ được chọn thân thiện với môi trường, dễ kiếm, rẻ tiền.</td>
+            </tr>
+            <tr>
+                <td><strong>Trò chế tạo mô hình khảo sát</strong></td>
+                <td>Chế tạo được mô hình khảo sát dựa vào phương án đề xuất nhưng sản phẩm còn thô và các chi tiết kết nối với nhau còn lỏng lẻo, thiếu độ chắc chắn, vẫn còn một vài thông số kĩ thuật chưa đạt yêu cầu.</td>
+                <td>Chế tạo được mô hình khảo sát dựa vào phương án đề xuất, sản phẩm đã được trang trí nhưng chưa đẹp, các chi tiết kết nối với nhau còn lỏng lẻo, thiếu độ chắc chắn, vẫn còn thô, các thông số kĩ thuật đạt yêu cầu.</td>
+                <td>Chế tạo được mô hình khảo sát dựa vào phương án đề xuất, sản phẩm đã được trang trí đẹp, các chi tiết kết nối với nhau chắc chắn, các thông số kĩ thuật đạt yêu cầu.</td>
+            </tr>
+            <tr>
+                <td><strong>Tiến hành khảo sát dự án</strong></td>
+                <td>Thực hiện việc khảo sát không đúng thời hạn quy định, ghi chép nhật kí và kết quả khảo sát dự án chưa đầy đủ, chưa khoa học.</td>
+                <td>Thực hiện việc khảo sát đúng thời hạn quy định, ghi chép nhật kí và kết quả khảo sát dự án chưa đầy đủ, chưa khoa học.</td>
+                <td>Thực hiện việc khảo sát đúng thời hạn quy định, ghi chép nhật kí và kết quả khảo sát dự án đầy đủ, khoa học.</td>
+            </tr>
+            <tr>
+                <td><strong>Kết quả khảo sát dự án</strong></td>
+                <td>Kết quả khảo sát được trình bày chưa rõ ràng, chưa khoa học, chưa rút ra được kết luận về những điều kiện vật đã đạt được tầm xa cực đại.</td>
+                <td>Kết quả khảo sát được trình bày rõ ràng, khoa học, kết luận chưa đầy đủ và vẫn còn chưa chính xác về những điều kiện vật đã đạt được tầm xa cực đại.</td>
+                <td>Kết quả khảo sát được trình bày rõ ràng, khoa học, kết luận đầy đủ và chính xác về những điều kiện vật đã đạt được tầm xa cực đại.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Mẫu kế hoạch dự án -->
+    <h4>Mẫu kế hoạch dự án</h4>
+    <div class="mau">
+        <p>Lớp: .......................................................................................</p>
+        <p>Tên nhóm: .......................................................................................</p>
+        <p>Nhóm trưởng: .......................................................................................</p>
+        <table>
+            <tr><td style="width:30%;">Tên dự án</td><td></td></tr>
+            <tr><td>Lĩnh vực môn học</td><td></td></tr>
+            <tr><td>Lựa chọn phương án</td><td></td></tr>
+            <tr>
+                <td rowspan="2">Phân công nhiệm vụ</td>
+                <td>
+                    <table>
+                        <tr><th>Tên thành viên và chức vụ</th><th>Nhiệm vụ</th><th>Thời gian hoàn thành</th><th>Kết quả dự kiến</th></tr>
+                        <tr><td></td><td></td><td></td><td></td></tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Mẫu báo cáo dự án -->
+    <h4>Mẫu báo cáo dự án</h4>
+    <div class="mau">
+        <p><strong>1. Mục đích nghiên cứu</strong></p>
+        <p>...............................................................................................................................</p>
+        <p><strong>2. Cơ sở lí thuyết</strong></p>
+        <p>...............................................................................................................................</p>
+        <p><strong>3. Giả thuyết khoa học</strong></p>
+        <p>...............................................................................................................................</p>
+        <p><strong>4. Phương án thí nghiệm</strong></p>
+        <p>- Dụng cụ: .............................................................................................................</p>
+        <p>- Phác thảo mô hình thiết bị: ............................................................................</p>
+        <p><strong>5. Thực hiện thí nghiệm</strong></p>
+        <p>- Các bước tiến hành: ..........................................................................................</p>
+        <p>- Bảng số liệu: .....................................................................................................</p>
+        <p>- Xử lí số liệu: .....................................................................................................</p>
+        <p><strong>6. Đánh giá kết quả nghiên cứu</strong></p>
+        <p>...............................................................................................................................</p>
+        <p><strong>7. Kết luận</strong></p>
+        <p>...............................................................................................................................</p>
+        <p><strong>8. Tài liệu tham khảo</strong></p>
+        <p>...............................................................................................................................</p>
+    </div>
+
+    <h3>2. Học sinh</h3>
+    <ul>
+        <li>SGK Vật lí 10, vở ghi, máy tính/điện thoại có kết nối internet (nếu có).</li>
+        <li>SGK, máy tính cầm tay, điện thoại thông minh/máy tính bảng (1 máy/nhóm).</li>
+        <li>Phần mềm phân tích video (Tracker) hoặc phần mềm bảng tính đã cài sẵn.</li>
+        <li>Hoàn thành nhiệm vụ học tập trực tuyến trước khi đến lớp (tìm hiểu về sự rơi tự do và chuyển động ném qua internet, ChatGPT).</li>
+    </ul>
+
+    <!-- III. TIẾN TRÌNH DẠY HỌC -->
+    <h2>III. TIẾN TRÌNH DẠY HỌC</h2>
+
+    <!-- TIẾT 1 -->
+    <h3>Tiết 1: Chuyển động ném ngang</h3>
+
+    <table class="tien-trinh">
+        <thead>
+            <tr>
+                <th class="col-buoc">Bước thực hiện</th>
+                <th class="col-noidung">Nội dung các bước</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- HOẠT ĐỘNG 1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 1:<br>KHỞI ĐỘNG – TẠO TÌNH HUỐNG HỌC TẬP</strong><br>
+                    (7 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li><strong>Về kiến thức:</strong> Kích thích sự tò mò, hứng thú tìm hiểu về chuyển động ném (ném ngang và ném xiên) thông qua ví dụ thực tiễn về môn nhảy xa.</li>
+                        <li><strong>Về năng lực số:</strong>
+                            <ul>
+                                <li>2.1.NC1a: Sử dụng thiết bị cá nhân truy cập và gửi phản hồi nhanh qua các nền tảng tương tác số.</li>
+                                <li>2.2.NC1a: Trao đổi ý kiến nhóm và phản hồi kết quả dự đoán qua các bảng tương tác (Padlet, Zalo).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) đóng vai trò để nhờ ứng dụng AI (ChatGPT/Gemini) làm chuyên gia phân tích thể thao, giải thích các yếu tố vật lí quyết định thành tích nhảy xa.</li>
+                                <li>NLa: Nhận thức được rằng AI chỉ cung cấp mô hình toán học lí thuyết (ví dụ góc 45 độ), nhưng trong thực tế cơ thể con người không thể giậm nhảy đúng góc đó mà không mất đà, từ đó thấy được sự linh hoạt của con người so với máy móc.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>Học sinh quan sát video vẽ vận động viên nhảy xa hoặc vận động viên ném bóng rổ để nhận diện quỹ đạo chuyển động.</li>
+                        <li>Thảo luận nhóm để trả lời câu hỏi: <em>"Trong môn nhảy xa, những yếu tố nào có tính quyết định đến thành tích (tầm xa) của vận động viên?"</em>.</li>
+                        <li>Gửi kết quả dự đoán của nhóm lên không gian học tập số của lớp.</li>
+                        <li><strong>Thử thách AI:</strong> Một nhóm (Nhóm chuyên gia AI) dùng Chatbot để tra cứu cơ sở vật lí của kì lục này và đối chiếu với dự đoán của cả lớp.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong> Nhận thức vấn đề: HS xác định được nhiệm vụ cần nghiên cứu là tìm hiểu các quy luật của chuyển động ném để giải thích các yếu tố ảnh hưởng đến tầm xa và tầm cao. Sản phẩm số: Các ý kiến phản hồi, dự đoán của HS hiển thị trên trang Padlet hoặc bảng tương tác lớp.</p>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV sử dụng PowerPoint trình chiếu hình ảnh vận động viên nhảy xa (Hình 01.png) hoặc video ngắn về các vận động viên nhảy xa xác lập kỷ lục thế giới.</li>
+                        <li>GV đặt vấn đề: <em>"Nhảy xa là một ví dụ điển hình về chuyển động ném. Theo các em, yếu tố nào quyết định đến thành tích của vận động viên? Tại sao có người nhảy xa hơn dù họ có cùng sức mạnh?"</em></li>
+                        <li><strong>Tích hợp số:</strong> GV cung cấp mã QR hoặc đường link Padlet và yêu cầu: <em>"Các nhóm hãy thảo luận và gửi 3 từ khóa dự đoán về yếu tố quyết định tầm xa lên bảng điện tử. Nhóm nào gửi nhanh và có lập luận thú vị sẽ được điểm cộng."</em></li>
+                        <li><strong>Thử thách AI:</strong> <em>"Nhóm 1 hãy dùng trợ lí ảo AI, gõ prompt: 'Đóng vai một chuyên gia phân tích thể thao và nhà vật lí học, hãy giải thích ngắn gọn yếu tố động học nào quyết định tầm xa cực đại của một vận động viên nhảy xa?'"</em></li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="01.png" alt="Hình ảnh nhảy xa" class="img-medium">
+                        <p><em>Hình ảnh minh họa: Nhảy xa</em></p>
+                    </div>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS làm việc theo nhóm (4-6 HS), quan sát kĩ video và thảo luận.</li>
+                        <li>Một thành viên đại diện dùng smartphone truy cập link để đăng tải dự đoán của nhóm (ví dụ: tốc độ chạy đà, góc giậm nhảy, sức cản không khí).</li>
+                        <li>GV quan sát, hỗ trợ các nhóm gặp khó khăn về kĩ thuật kết nối.</li>
+                        <li>Nhóm 1 nhận thử thách AI thực hiện tương tác với Chatbot, đọc lướt câu trả lời để tìm ra các từ khóa vật lí cốt lõi.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>GV trình chiếu trang kết quả Padlet lên màn hình chính để cả lớp cùng quan sát.</li>
+                        <li>GV mời đại diện Nhóm 1 (Nhóm AI) báo cáo kết quả tra cứu: <em>"Thưa thầy/cô, AI phân tích rằng môn nhảy xa là một chuyển động ném xiên. Tầm xa cực đại phụ thuộc vào hai yếu tố then chốt: Vận tốc ban đầu (có được nhờ tốc độ chạy đà) và Góc giậm nhảy hợp với phương ngang. Về mặt lí thuyết toán học, góc 45 độ sẽ cho tầm xa lớn nhất".</em></li>
+                        <li>GV gợi mở tư duy (NLAI: NLa): <em>"AI bảo 45 độ là tốt nhất. Nhưng trong thực tế, các kỉ lục gia thường chỉ giậm nhảy ở góc 20 - 25 độ. Ai giải thích được?"</em> → HS tư duy và trả lời: <em>"Vì nếu cố bật cao 45 độ thì họ sẽ bị mất đà chạy tới".</em></li>
+                        <li>Yếu tố có tính quyết định đến thành tích nhảy của vận động viên: tốc độ chạy đà và góc giậm nhảy.</li>
+                        <li>HS các nhóm khác sử dụng tính năng "Thả tim" hoặc bình luận trực tiếp trên Padlet để bày tỏ sự đồng tình hoặc phản biện.</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết các dự đoán của HS: Đa số các em đều tập trung vào tốc độ và góc ném.</li>
+                        <li>GV dẫn dắt: <em>"Để biết chính xác các yếu tố này ảnh hưởng định lượng như thế nào đến tầm xa và làm sao để đạt được bước nhảy xa nhất, chúng ta sẽ cùng nghiên cứu: BÀI 12: CHUYỂN ĐỘNG NÉM"</em></li>
+                        <li>GV nhắc nhở HS về đạo đức số: Tôn trọng ý kiến của bạn trên không gian mạng và trích dẫn nguồn khi tìm kiếm hình ảnh minh họa.</li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 2 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2:<br>HÌNH THÀNH KIẾN THỨC</strong><br>
+                    (25 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Hình thành khái niệm chuyển động ném ngang, phân tích chuyển động và rút ra công thức.</p>
+                    <p><strong>Nội dung:</strong> Tìm hiểu khái niệm, thí nghiệm, phân tích chuyển động ném ngang.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời, kết quả thảo luận, công thức.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+
+                    <p><strong>2.1. Quan sát thí nghiệm về chuyển động ném ngang để rút ra nhận xét</strong></p>
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li><strong>Về kiến thức:</strong>
+                            <ul>
+                                <li>Nêu được khái niệm chuyển động ném ngang là chuyển động có vận tốc ban đầu theo phương nằm ngang và chuyển động dưới tác dụng của trọng lực.</li>
+                                <li>Rút ra được nhận xét quan trọng: Thành phần chuyển động theo phương thẳng đứng của vật ném ngang giống hệt chuyển động rơi tự do và hai chuyển động thành phần (ngang và đứng) độc lập với nhau.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực số:</strong>
+                            <ul>
+                                <li>2.1.NC1a: Sử dụng smartphone quay video Slow-motion hoặc xem mô phỏng để quan sát chi tiết quỹ đạo.</li>
+                                <li>1.2.NC1b & 3.1.NC1a: Sử dụng công cụ ghi chú trên ảnh (Markup) hoặc phần mềm phân tích để đánh giá và so sánh vị trí vật sau những khoảng thời gian bằng nhau.</li>
+                                <li>2.2.NC1a: Trao đổi, chia sẻ kết quả quan sát và nhận xét thông qua các nền tảng học tập trực tuyến.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) để nhờ ứng dụng AI (ChatGPT/Gemini) giải thích kĩ thuật "Chụp ảnh hoạt nghiệm" (Stroboscopic photography) và cách các phần mềm AI (như Tracker) tự động bắt điểm chuyển động.</li>
+                                <li>NLa: Thể hiện tư duy làm chủ công nghệ; nhận thức được rằng phần mềm AI có thể chấm các điểm tọa độ rất nhanh và chính xác, nhưng bộ não con người mới là nơi suy luận ra bản chất vật lí (sự độc lập của hai chuyển động thành phần) từ những điểm tọa độ đó.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS làm việc theo nhóm để quan sát thí nghiệm thực tế (thả bi A rơi tự do và ném bi B theo phương ngang cùng lúc) hoặc xem video thí nghiệm mô phỏng.</li>
+                        <li>Phân tích ảnh hoạt nghiệm (Hình 12.2 SGK) để so sánh sự thay đổi vị trí theo phương thẳng đứng của hai viên bi.</li>
+                        <li>Thảo luận nhóm để trả lời câu hỏi: Hai viên bi có chạm đất cùng lúc không? Quỹ đạo của bi được ném ngang có dạng gì?</li>
+                        <li><strong>Thử thách AI:</strong> Dùng AI tìm hiểu công nghệ chụp ảnh hoạt nghiệm dùng trong thể thao và vật lí.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong> Kết quả quan sát thí nghiệm và thảo luận của nhóm.</p>
+                    <div class="box">
+                        <strong>I. CHUYỂN ĐỘNG NÉM NGANG</strong>
+                        <p><strong>1. Khái niệm chuyển động ném ngang:</strong> Chuyển động ném ngang là chuyển động có vận tốc ban đầu theo phương nằm ngang và chuyển động dưới tác dụng của trọng lực.</p>
+                        <p><strong>2. Thí nghiệm:</strong></p>
+                        <p><strong>Nhận xét:</strong></p>
+                        <ul>
+                            <li>Thành phần chuyển động theo phương thẳng đứng của viên bi A giống chuyển động rơi của viên bi B.</li>
+                            <li>Hai chuyển động thành phần của chuyển động ném ngang độc lập với nhau.</li>
+                        </ul>
+                    </div>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV giới thiệu bộ dụng cụ thí nghiệm hoặc cung cấp mã QR dẫn đến video thí nghiệm ném ngang chất lượng cao.</li>
+                        <li><strong>Thử thách NLAI:</strong> <em>"Nhóm 1 dùng AI gõ prompt: 'Đóng vai chuyên gia nhiếp ảnh khoa học, hãy giải thích ảnh hoạt nghiệm là gì và phần mềm AI phân tích chuyển động (như Tracker) dựa vào đâu để tự động theo dõi vị trí của viên bi?'"</em></li>
+                        <li>GV giao nhiệm vụ: <em>"Các nhóm thực hiện (hoặc quan sát video) thí nghiệm ném bi ngang và rơi tự do cùng lúc. Sử dụng smartphone quay Slow-motion khoảnh khắc chạm đất. Sau đó, dùng công cụ vẽ trên điện thoại để gióng hàng ngang trên ảnh hoạt nghiệm Hình 12.2 nhằm so sánh vị trí hai bi."</em></li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS làm việc theo nhóm: một bạn vận hành thiết bị ném, một bạn quay video.</li>
+                        <li>Nhóm sử dụng phần mềm xem video hoặc công cụ phân tích dữ liệu số để kiểm chứng thời gian chạm đất và phân tích quỹ đạo đường cong của bi ném ngang.</li>
+                        <li>Nhóm 1 tương tác với chatbot AI, đọc lướt để hiểu khái niệm ảnh hoạt nghiệm (chụp liên tiếp nhiều khung hình trong 1 giây).</li>
+                        <li>GV theo dõi, hướng dẫn HS cách sử dụng tính năng "lưới" (grid) trên điện thoại để phân tích ảnh hoạt nghiệm chính xác hơn.</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="12.1.png" alt="Hình 12.1 - Thí nghiệm về chuyển động ném ngang" class="img-medium">
+                        <p><em>Hình 12.1. Thí nghiệm về chuyển động ném ngang</em></p>
+                    </div>
+                    <div class="img-container">
+                        <img src="12.2.png" alt="Hình 12.2 - Ảnh hoạt nghiệm" class="img-medium">
+                        <p><em>Hình 12.2. Ảnh chụp hoạt nghiệm chuyển động của hai viên bi A và B</em></p>
+                    </div>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Đại diện nhóm trình bày video quay chậm của nhóm mình qua máy chiếu hoặc gửi lên Padlet lớp.</li>
+                        <li><strong>Câu 1.</strong> Quãng đường viên bi A chuyển động dài hơn quãng đường của viên bi B nên hai viên bi không rơi xuống cùng một lúc. Viên bi B sẽ rơi xuống trước viên bi A.</li>
+                        <li><strong>Câu 2.</strong>
+                            <ul>
+                                <li>Viên bi B: khoảng cách giữa hai vị trí liên tiếp tăng dần trong suốt quá trình rơi.</li>
+                                <li>Viên bi A: quỹ đạo chuyển động có dạng đường cong với vị trí của viên bi khi chiếu lên phương thẳng đứng trùng với vị trí của viên bi B tại mỗi thời điểm ⇒ vị trí theo phương thẳng đứng của hai viên bi A và B sau những khoảng thời gian bằng nhau là không đổi.</li>
+                            </ul>
+                        </li>
+                        <li>HS giải thích nhận xét từ ảnh hoạt nghiệm: <em>"Khi chiếu lên phương thẳng đứng, vị trí của bi ném ngang trùng với bi rơi tự do tại mọi thời điểm".</em></li>
+                        <li>Nhóm AI báo cáo: <em>"AI cho biết phần mềm phân tích video tự động bắt các pixel màu sáng của viên bi qua từng khung hình để xuất ra tọa độ. Tuy máy tính chấm điểm rất nhanh, nhưng bộ não con người mới suy luận ra được sự độc lập giữa trục dọc và trục ngang"</em> (NLAI: NLa).</li>
+                        <li>Các nhóm khác sử dụng thiết bị số để phản biện hoặc đặt câu hỏi về ảnh hưởng của sức cản không khí đến kết quả thực tế.</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV chuẩn hóa kiến thức: Chuyển động ném ngang có thể phân tích thành hai thành phần độc lập.</li>
+                        <li>GV nhấn mạnh tính ưu việt của việc dùng công cụ số (Slow-motion) để giải quyết tranh cãi về thời gian rơi mà mắt thường khó nhận biết.</li>
+                        <li>Đánh giá kĩ năng thao tác kĩ thuật và tính trung thực trong việc báo cáo.</li>
+                    </ul>
+
+                    <p style="margin-top: 20px;"><strong>2.2. Tìm hiểu về các chuyển động thành phần của chuyển động ném ngang</strong></p>
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li><strong>Về kiến thức:</strong>
+                            <ul>
+                                <li>Phân tích được chuyển động ném ngang thành hai chuyển động thành phần vuông góc trên trục Ox (nằm ngang) và Oy (thẳng đứng).</li>
+                                <li>Viết được các phương trình gia tốc, vận tốc và phương trình chuyển động cho từng thành phần.</li>
+                                <li>Thiết lập được công thức tính thời gian rơi \(t = \sqrt{\frac{2h}{g}}\) và tầm ném xa \(L = v_0 t\).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực số:</strong>
+                            <ul>
+                                <li>5.3.NC1a: Thiết lập công thức tự động trên bảng tính số để tính thời gian rơi và tầm ném xa, đồng thời mô phỏng quỹ đạo chuyển động.</li>
+                                <li>1.2.NC1b: Thu thập và phân tích dữ liệu số hóa để kiểm chứng sự phụ thuộc của tầm xa vào độ cao và vận tốc ban đầu.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) đóng vai trò chuyên gia để nhờ trợ lí ảo AI (ChatGPT/Gemini) giải thích cơ sở vật lí (tính độc lập của hai chuyển động) khiến một vật ném ngang và một vật rơi tự do lại chạm đất cùng lúc.</li>
+                                <li>NLa: Thể hiện tư duy làm chủ công nghệ; nhận thức được rằng phần mềm mô phỏng (như PhET) hay công thức toán học đều tính toán dựa trên môi trường lí tưởng (đã bỏ qua sức cản không khí). Trong thực tế, con người phải tính đến lực cản này thì kết quả tầm xa mới chính xác.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS làm việc nhóm, nghiên cứu mục I.3 SGK và thảo luận để trả lời các câu hỏi về tính chất của từng chuyển động thành phần.</li>
+                        <li>Sử dụng thiết bị số cá nhân truy cập vào link bảng tính mẫu do GV cung cấp để thực hiện "thí nghiệm ảo": thay đổi các thông số v₀ và h để quan sát sự thay đổi của tầm xa L và thời gian t.</li>
+                        <li>Xây dựng hệ phương trình chuyển động trên hệ trục tọa độ Oxy.</li>
+                        <li><strong>Thử thách AI:</strong> Dùng trợ lí ảo AI để giải thích câu hỏi tư duy: <em>"Tại sao vận tốc ném ngang cực kì lớn (như ném một viên đạn) vẫn không làm vật lơ lửng lâu hơn trên không trung so với việc thả rơi tự do?"</em></li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <div class="box">
+                        <strong>3. Phân tích kết quả thí nghiệm</strong>
+                        <p>Chuyển động ném ngang được phân tích thành hai thành phần vuông góc với nhau trên trục Oy thẳng đứng và trên trục Ox nằm ngang.</p>
+                        <p>- Xét chuyển động ném ngang trong mặt phẳng như hình vẽ. Vật luôn có gia tốc bằng gia tốc rơi tự do g thẳng đứng hướng xuống và vuông góc với vận tốc ban đầu v₀. Chọn hệ trục tọa độ Oxy. Chọn gốc thời gian lúc thả vật. Bỏ qua sức cản không khí.</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Thành phần chuyển động theo phương thẳng đứng (trục Oy)</th>
+                                    <th>Thành phần chuyển động theo phương nằm ngang (trục Ox)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>Gia tốc</strong></td><td>\(a_y = g\)</td><td>\(a_x = 0\)</td></tr>
+                                <tr><td><strong>Vận tốc</strong></td><td>\(v_y = g \cdot t\)</td><td>\(v_x = v_0\)</td></tr>
+                                <tr><td><strong>Phương trình chuyển động</strong></td><td>\(y = \frac{1}{2}gt^2\)</td><td>\(x = v \cdot t\)</td></tr>
+                            </tbody>
+                        </table>
+                        <p>+ Công thức tính thời gian chuyển động: \(t = \sqrt{\frac{2h}{g}}\) với h: độ cao thả vật</p>
+                        <p>+ Công thức tính tầm ném xa: \(L = x_{max} = d_{max} = v_0 \cdot t = v_0 \cdot \sqrt{\frac{2h}{g}}\)</p>
+                        <p>+ Vận tốc của vật khi chạm đất: \(v^2 = v_x^2 + v_y^2 = v_0^2 + (g \cdot t)^2\)</p>
+                        <p><strong>Kết luận:</strong></p>
+                        <ul>
+                            <li>Nếu từ cùng một độ cao đồng thời ném ngang các vật khác nhau với các vận tốc khác nhau thì chúng đều rơi xuống đất cùng một lúc.</li>
+                            <li>Nếu từ các độ cao khác nhau ném ngang các vật với cùng vận tốc thì vật nào được ném ở độ cao lớn hơn sẽ có tầm xa lớn hơn.</li>
+                        </ul>
+                    </div>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV trình chiếu hệ thống câu hỏi thảo luận: Chuyển động thành phần theo phương thẳng đứng có tính chất gì? Phương ngang có tính chất gì?</li>
+                        <li>GV cung cấp mã QR/Link Google Sheets chứa công thức mẫu và giao nhiệm vụ: <em>"Các nhóm hãy hoàn thành các phương trình thành phần và sử dụng bảng tính để kiểm chứng tầm xa phụ thuộc thế nào vào v₀ và h".</em></li>
+                        <li><strong>Thử thách AI:</strong> <em>"Nhóm 1 hãy dùng AI gõ prompt: 'Đóng vai nhà Vật lí, hãy giải thích bằng ngôn ngữ dễ hiểu tại sao vận tốc ném ngang ban đầu v₀ dù lớn đến mấy cũng không giúp vật kéo dài thời gian lơ lửng trên không?'"</em> (NLAI: NLc).</li>
+                    </ul>
+                    <p><strong>Câu 1.</strong> Nếu bỏ qua sức cản không khí, thì chuyển động thành phần theo phương thẳng đứng có tính chất gì?</p>
+                    <p><strong>Câu 2.</strong> Hãy quan sát ảnh hoạt nghiệm ở hình 12.2 để chứng tỏ chuyển động thành phần theo phương nằm ngang là chuyển động thẳng đều với vận tốc với \(v_x\) bằng \(v_0\).</p>
+                    <p><strong>Câu 3.</strong> Xác định các phương trình của hai chuyển động thành phần.</p>
+                    <p><strong>Câu 4.</strong> Từ phương trình chuyển động của 2 thành phần chuyển động theo phương thẳng đứng và nằm ngang, hãy suy ra công thức tính thời gian chuyển động và độ dịch chuyển lớn nhất (\(d_{max} = x_{max}\)) của thành phần chuyển động theo phương nằm ngang.</p>
+                    <p><strong>Câu 5.</strong> + Từ công thức \(t = \sqrt{\frac{2h}{g}}\), em hãy cho biết thời gian của chuyển động ném ngang phụ thuộc vào những yếu tố nào?</p>
+                    <p>+ Từ công thức \(L = x_{max} = d_{max} = v_0 \cdot t = v_0 \cdot \sqrt{\frac{2h}{g}}\), tầm ném xa của vật chuyển động ném ngang phụ thuộc vào những yếu tố nào?</p>
+                    <p><strong>Câu 6:</strong></p>
+                    <ol>
+                        <li>Hãy đề xuất phương án thí nghiệm để kiểm tra những kết luận 1 và 2.</li>
+                        <li>Dùng thước kẻ giữ 3 viên bi (sắt thủy tinh và gỗ) có cùng kích thước trên một tấm thủy tinh đặt nghiêng trên mặt bàn rồi nâng thước lên như hình 12.5. Hãy dự đoán tầm xa của 3 viên bi và làm thí nghiệm kiểm tra.</li>
+                    </ol>
+                    <p><strong>Câu 7:</strong></p>
+                    <ol>
+                        <li>Nếu đồng thời ném hai quả bóng giống nhau với những vận tốc bằng nhau theo phương nằm ngang từ hai độ cao \(h_1\) và \(h_2\) khác nhau (\(h_1 < h_2\)) thì:
+                            <ul>
+                                <li>a) Quả bóng ném ở độ cao nào chạm đất trước?</li>
+                                <li>b) Quả bóng ném ở độ cao nào có tầm xa lớn hơn?</li>
+                            </ul>
+                        </li>
+                        <li>Một máy bay chở hàng đang bay ngang ở độ cao 490 m với vận tốc 100 m/s thì thả một gói hàng cứu trợ xuống một làng đang bị lũ lụt. Lấy \(g = 9,8\) m/s² và bỏ qua sức cản của không khí.
+                            <ul>
+                                <li>a) Sau bao lâu thì gói hàng chạm đất?</li>
+                                <li>b) Tầm xa của gói hàng là bao nhiêu?</li>
+                                <li>c) Xác định vận tốc của gói hàng khi chạm đất.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS làm việc theo nhóm, đọc SGK và thảo luận để xác định các đại lượng \(a, v, x, y\).</li>
+                        <li>Nhóm 1 tương tác với trợ lí ảo AI, đọc lướt và tóm tắt lập luận trọng tâm để báo cáo.</li>
+                        <li><strong>Tích hợp số:</strong> HS nhập các giá trị khác nhau của \(v_0\) và \(h\) vào bảng tính, quan sát phần mềm tự động tính ra \(L\) và vẽ lại hình dáng quỹ đạo. HS thảo luận nhóm qua các công cụ trực tuyến để thống nhất kết luận về sự độc lập của hai chuyển động.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>GV mời đại diện 1-2 nhóm trình bày kết quả phân tích và trình chiếu file bảng tính số lên màn hình.</li>
+                        <li>HS giải thích kết luận: Nếu từ cùng một độ cao ném các vật với vận tốc khác nhau thì chúng chạm đất cùng lúc nhưng tầm xa khác nhau.</li>
+                        <li><strong>Nhóm AI báo cáo:</strong> <em>"AI giải thích rằng trọng lực chỉ kéo vật xuống theo phương thẳng đứng, nó hoàn toàn 'mù' với chuyển động theo phương ngang. Vì hai phương này độc lập tuyệt đối, nên thời gian rơi chỉ do độ cao và trọng lực quyết định, v₀ không can thiệp được vào lực hút của Trái Đất".</em></li>
+                    </ul>
+                    <p><strong>ĐÁP ÁN các câu hỏi:</strong></p>
+                    <ul>
+                        <li><strong>Câu 1.</strong> Nếu bỏ qua sức cản không khí, thì chuyển động thành phần theo phương thẳng đứng là chuyển động rơi tự do với gia tốc rơi tự do g và với vận tốc ban đầu bằng 0.</li>
+                        <li><strong>Câu 2.</strong> Trên trục Ox (nằm ngang), hình chiếu vị trí của viên bi A di chuyển được những quãng đường như nhau sau những khoảng thời gian bằng nhau. Do đó trên phương này viên bi A chuyển động thẳng đều.</li>
+                        <li><strong>Câu 3.</strong>
+                            <table>
+                                <tr><th></th><th>Thành phần chuyển động theo phương thẳng đứng (trục Oy)</th><th>Thành phần chuyển động theo phương nằm ngang (trục Ox)</th></tr>
+                                <tr><td>Gia tốc</td><td>\(a_y = g\)</td><td>\(a_x = 0\)</td></tr>
+                                <tr><td>Vận tốc</td><td>\(v_y = g \cdot t\)</td><td>\(v_x = v_0\)</td></tr>
+                                <tr><td>Phương trình chuyển động</td><td>\(y = \frac{1}{2}gt^2\)</td><td>\(x = v \cdot t\)</td></tr>
+                            </table>
+                        </li>
+                        <li><strong>Câu 4.</strong> Tọa độ của vật theo phương thẳng đứng: \(y = h\) (\(h\) là độ cao thả vật). Từ đó: \(t = \sqrt{\frac{2h}{g}}\). Độ dịch chuyển lớn nhất (\(d_{max} = x_{max}\)) của thành phần chuyển động theo phương nằm ngang cũng chính là tầm ném xa của chuyển động ném: \(L = x_{max} = d_{max} = v_0 \cdot t = v_0 \cdot \sqrt{\frac{2h}{g}}\)</li>
+                        <li><strong>Câu 5.</strong> Thời gian rơi của vật bị ném ngang chỉ phụ thuộc vào độ cao \(h\) của vật khi bị ném, không phụ thuộc vận tốc ném. Tầm ném xa của vật bị ném ngang phụ thuộc vào độ cao \(h\) của vật khi bị ném và vận tốc ném. Nếu từ cùng một độ cao, đồng thời ném các vật khác nhau với vận tốc khác nhau thì vật nào có vận tốc ném lớn hơn sẽ có tầm xa lớn hơn.</li>
+                        <li><strong>Câu 6.</strong> 1. Lấy một viên bi và một quả bóng cùng ném từ một độ cao, ném viên bi với vận tốc lớn hơn khi ném quả bóng, sau khi ném xong hai vật thì ta đo khoảng cách từ chỗ đứng đến vật. 2. Tầm ném xa của 3 viên bi là như nhau.</li>
+                        <li><strong>Câu 7.</strong> 1a) quả bóng ném ở độ cao \(h_1\) chạm đất trước (vì \(h_1 < h_2\) nên \(t_1 < t_2\)). 1b) quả bóng ném ở độ cao \(h_2\) có tầm xa lớn hơn (vì \(t_1 < t_2\) nên \(L_1 < L_2\)).
+                            <br>2a) \(t = \sqrt{\frac{2h}{g}} = \sqrt{2 \cdot \frac{490}{9,8}} = 10\) s
+                            <br>2b) \(L = v_0 \cdot t = 100 \cdot 10 = 1000\) m
+                            <br>2c) \(v = \sqrt{v_0^2 + 2gh} = \sqrt{100^2 + 2 \cdot 9,8 \cdot 490} \approx 140\) m/s
+                        </li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>Các nhóm sử dụng tính năng bình luận số hoặc phản biện trực tiếp về cách thiết lập hệ trục tọa độ Oxy.</li>
+                        <li>HS các nhóm khác sử dụng tính năng bình luận số hoặc phát biểu để phản biện: <em>"Nếu có gió mạnh (lực cản không khí) thì thời gian rơi và tầm xa sẽ thay đổi thế nào?"</em></li>
+                        <li>GV chuẩn hóa hệ phương trình ném ngang và các công thức \(t, L, v\).</li>
+                        <li>GV nhấn mạnh tính độc lập của hai chuyển động và tầm quan trọng của việc dùng công cụ số để mô hình hóa quỹ đạo chính xác.</li>
+                        <li><strong>Đánh giá NLS & NLAI (NLa):</strong> GV biểu dương năng lực tạo lập bảng tính số tự động rất khoa học của các nhóm. GV nhắc nhở tư duy vật lí: <em>"Máy tính cho ra kết quả tầm xa L rất hoàn hảo, nhưng trong thực tế nếu ra sân ném một viên bi như vậy, lực cản không khí sẽ khiến L nhỏ hơn con số này. Công nghệ luôn phải được con người đối chiếu với thực tiễn".</em></li>
+                    </ul>
+
+                    <div class="img-container">
+                        <img src="12.3.png" alt="Hình 12.3 - Phân tích chuyển động ném ngang" class="img-medium">
+                        <p><em>Hình 12.3. Phân tích chuyển động ném ngang</em></p>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 3:<br>LUYỆN TẬP</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng công thức để giải bài tập đơn giản.</p>
+                    <p><strong>Nội dung:</strong> Giải bài tập ví dụ SGK.</p>
+                    <p><strong>Sản phẩm:</strong> Lời giải của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc và tóm tắt Bài tập ví dụ (sgk tr.52).</li>
+                        <li>HS tóm tắt: \(v_0 = 12\) m/s, \(H = 40\) m, \(g = 9.8\) m/s². Tính \(t\) và \(L\).</li>
+                        <li>GV gọi 1 HS lên bảng giải, các HS khác làm vào vở.</li>
+                        <li>HS giải:
+                            <div class="formula">
+                                \[ t = \sqrt{\frac{2H}{g}} = \sqrt{\frac{2 \cdot 40}{9.8}} \approx 2.86 \text{ s} \]
+                                \[ L = v_0 \cdot t = 12 \cdot 2.86 \approx 34.3 \text{ m} \]
+                            </div>
+                        </li>
+                        <li>GV nhận xét, chính xác hóa kết quả.</li>
+                    </ul>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 4 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 4:<br>VẬN DỤNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng kiến thức vào thực tế.</p>
+                    <p><strong>Nội dung:</strong> Trả lời câu hỏi vận dụng.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV đặt câu hỏi: "Tại sao khi máy bay thả hàng cứu trợ, hàng phải được thả trước khi máy bay đến vị trí cần thả?"</li>
+                        <li>HS vận dụng kiến thức về tầm xa để trả lời: Vì hàng có vận tốc ban đầu bằng vận tốc máy bay, nên nó sẽ chuyển động ném ngang và rơi xuống theo quỹ đạo parabol. Cần thả trước để hàng rơi trúng đích.</li>
+                        <li>GV nhận xét, kết thúc tiết 1.</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- TIẾT 2 -->
+    <h3 style="margin-top: 30px;">Tiết 2: Chuyển động ném xiên</h3>
+
+    <table class="tien-trinh">
+        <thead>
+            <tr>
+                <th class="col-buoc">Bước thực hiện</th>
+                <th class="col-noidung">Nội dung các bước</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- HOẠT ĐỘNG 1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 1:<br>KHỞI ĐỘNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Tạo tình huống có vấn đề về chuyển động ném xiên.</p>
+                    <p><strong>Nội dung:</strong> Quan sát hình ảnh và dự đoán.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV chiếu Hình 12.6 (sgk) về ảnh hoạt nghiệm chuyển động ném xiên.</li>
+                        <li>GV đặt câu hỏi: "Quỹ đạo của vật trong chuyển động ném xiên có dạng như thế nào? Yếu tố nào quyết định tầm bay xa của vật?"</li>
+                        <li>HS quan sát, dự đoán.</li>
+                        <li>GV dẫn dắt vào bài: "Để trả lời, chúng ta cùng tìm hiểu phần II. Chuyển động ném xiên."</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="12.6.png" alt="Hình 12.6 - Ảnh hoạt nghiệm chuyển động ném xiên" class="img-medium">
+                        <p><em>Hình 12.6. Ảnh chụp hoạt nghiệm chuyển động ném xiên</em></p>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 2.3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2.3:<br>TÌM HIỂU VỀ CHUYỂN ĐỘNG<br>NÉM XIÊN</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li><strong>Về kiến thức:</strong> Nêu được khái niệm chuyển động ném xiên; tìm và phân tích được các ví dụ về chuyển động ném xiên trong đời sống thực tế.</li>
+                        <li><strong>Về năng lực số:</strong>
+                            <ul>
+                                <li>1.1.NC1b: Tra cứu và lựa chọn các nguồn video thực tế/mô phỏng về ném xiên từ Internet.</li>
+                                <li>3.1.NC1a: Thực hiện việc chụp ảnh màn hình, cắt ghép clip minh họa để tạo sản phẩm số trình bày kết quả thảo luận.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) đóng vai trò để nhờ ứng dụng AI (ChatGPT/Gemini) làm chuyên gia phân tích dữ liệu thể thao, giải thích nguyên nhân làm sai lệch quỹ đạo thực tế so với lí thuyết.</li>
+                                <li>NLa: Nhận thức được rằng AI và các công thức sách giáo khoa thường thiết lập một mô hình lí tưởng (quỹ đạo là Parabol hoàn hảo vì bỏ qua sức cản không khí); nhưng trong thực tế con người phải nhận thức được sự tồn tại của lực cản không khí và lực gió làm quỹ đạo bị biến dạng.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS làm việc theo nhóm, nghiên cứu nội dung mục II trong SGK trang 51 để trả lời các câu hỏi gợi ý từ GV.</li>
+                        <li>Thực hiện nhiệm vụ tra cứu Internet để tìm thêm ít nhất 3 ví dụ về ném xiên trong các môn thể thao hoặc đời sống.</li>
+                        <li>Quan sát hình dáng quỹ đạo của các vật trong ví dụ để đưa ra nhận xét chung về hình dạng đường đi của vật ném xiên.</li>
+                        <li><strong>Thử thách AI:</strong> Dùng trợ lí ảo AI để trả lời câu hỏi phản biện: <em>"Tại sao quỹ đạo của một quả bóng rổ ném xa ngoài đời thực lại không phải là một đường Parabol hoàn hảo đối xứng tuyệt đối?"</em></li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <div class="box">
+                        <strong>II. CHUYỂN ĐỘNG NÉM XIÊN</strong>
+                        <p>Chuyển động ném xiên là chuyển động của vật dưới tác dụng của trọng lực và có vectơ vận tốc nghiêng một góc đối với phương ngang.</p>
+                    </div>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc SGK trang 51 và thảo luận nhóm để trả lời: Thế nào là ném xiên? Quỹ đạo của nó có gì đặc biệt?</li>
+                        <li><strong>Tích hợp số:</strong> GV giao nhiệm vụ: <em>"Mỗi nhóm sử dụng điện thoại thông minh tra cứu 3 video thực tế về các pha ghi điểm trong bóng rổ hoặc tennis. Hãy quan sát kĩ đường đi của quả bóng trong video."</em></li>
+                        <li><strong>Thử thách AI:</strong> <em>"Nhóm 1 dùng trợ lý AI gõ prompt: 'Đóng vai chuyên gia phân tích dữ liệu thể thao, hãy giải thích tại sao quỹ đạo của quả bóng gôn (golf) hoặc bóng rổ khi ném xa ngoài đời thực lại không phải là một đường Parabol hoàn hảo đối xứng như công thức vật lí?'"</em> (Mã NLc).</li>
+                    </ul>
+                    <p><strong>Câu 1.</strong> Tìm thêm ví dụ về chuyển động ném xiên trong thực tế.</p>
+                    <p><strong>Câu 2.</strong> Có nhận xét gì quỹ đạo chuyển động của vật ném xiên trong các ví dụ mà em đã tìm.</p>
+                    <p><strong>Câu 3.</strong> Trình bày khái niệm chuyển động ném xiên.</p>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS thảo luận nhóm, nghiên cứu tài liệu và thực hiện tra cứu Internet trên thiết bị số cá nhân để thu thập bằng chứng hình ảnh/video về ném xiên.</li>
+                        <li>HS cùng nhận xét về đặc điểm của vận tốc ban đầu (không nằm ngang như bài trước mà nghiêng một góc).</li>
+                        <li>Nhóm 1 tương tác với chatbot AI, đọc hiểu các từ khóa như "sức cản không khí", "hiệu ứng Magnus (bóng xoáy)" để chuẩn bị báo cáo.</li>
+                        <li>GV theo dõi, hướng dẫn HS cách sử dụng từ khóa tìm kiếm hiệu quả và chọn lọc nguồn tin đáng tin cậy.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Đại diện một nhóm trình bày khái niệm và trình chiếu các ví dụ/video ném xiên đã tìm được qua máy chiếu.</li>
+                        <li><strong>Báo cáo từ Nhóm AI:</strong> <em>"Thưa thầy/cô, AI phân tích rằng công thức Parabol trong sách là mô hình lí tưởng. Trong thực tế, sức cản của gió và sự xoáy của quả bóng (hiệu ứng Magnus) sẽ tạo ra lực nâng hoặc lực cản làm quỹ đạo thực tế bị lệch, nhánh rơi xuống thường dốc hơn nhánh bay lên".</em></li>
+                        <li><strong>Câu 1.</strong> Ví dụ về chuyển động ném xiên trong thực tế: Ném bóng rổ; Đánh bóng tennis; Đẩy tạ.</li>
+                        <li><strong>Câu 2.</strong> Quỹ đạo của vật ném xiên (bóng rổ, bóng tennis, tạ) đều có dạng đường cong (dạng parabol).</li>
+                        <li><strong>Câu 3.</strong> Chuyển động ném xiên là chuyển động của vật dưới tác dụng của trọng lực và có vectơ vận tốc nghiêng một góc đối với phương ngang.</li>
+                        <li>Nhóm báo cáo nêu nhận xét: <em>"Tất cả các vật này đều bay theo một đường cong parabol trước khi rơi xuống".</em></li>
+                        <li>Các nhóm khác sử dụng tính năng bình luận số (nếu có) hoặc phát biểu trực tiếp để bổ sung thêm các ví dụ khác như pháo hoa hoặc ném lựu đạn.</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết, chuẩn hóa khái niệm: Nhấn mạnh ném xiên khác ném ngang ở chỗ vectơ vận tốc ban đầu hợp với phương ngang một góc α.</li>
+                        <li>GV xác nhận quỹ đạo chuyển động ném xiên có dạng parabol.</li>
+                        <li><strong>Đánh giá NLAI (NLa):</strong> GV biểu dương nhóm AI và nhấn mạnh tư duy khoa học: <em>"AI đã giúp chúng ta thấy sự khác biệt giữa mô hình Vật lí lí tưởng và thực tế. Các công thức sắp học sẽ áp dụng cho môi trường bỏ qua lực cản không khí".</em></li>
+                        <li>Đánh giá kĩ năng khai thác học liệu số và sự tích cực của các nhóm trong việc tìm kiếm minh chứng thực tế.</li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 2.4 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2.4:<br>PHÂN TÍCH CHUYỂN ĐỘNG<br>THÀNH PHẦN</strong><br>
+                    (15 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li><strong>Về kiến thức:</strong>
+                            <ul>
+                                <li>Biết cách phân tích chuyển động ném xiên thành hai chuyển động thành phần vuông góc trên trục Ox và Oy.</li>
+                                <li>Xác định được các đặc điểm (gia tốc, vận tốc, phương trình) của từng chuyển động thành phần.</li>
+                                <li>Thiết lập và vận dụng được công thức tính tầm cao (H) và tầm bay xa (L) của vật ném xiên.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực số:</strong>
+                            <ul>
+                                <li>5.3.NC1a: Sử dụng phần mềm bảng tính hoặc mô phỏng (PhET) để trực quan hóa quỹ đạo Parabol và tự động hóa việc tính toán tầm cao, tầm xa.</li>
+                                <li>3.1.NC1a: Thiết kế sản phẩm học tập (Slide/Infographic) mô tả sơ đồ phân tích các thành phần vận tốc.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực AI:</strong>
+                            <ul>
+                                <li>NLa: Thể hiện tư duy làm chủ công nghệ; nhận thức được rằng phần mềm mô phỏng hay công thức toán học thường tính toán dựa trên môi trường lí tưởng (bỏ qua sức cản không khí). Trong thực tế, con người phải nhận thức được và tính đến lực cản này thì kết quả tầm xa mới chính xác.</li>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) đóng vai trò chuyên gia để nhờ trợ lí ảo AI (ChatGPT/Gemini) hỗ trợ thiết lập các hàm số lượng giác (SIN, COS) trên Excel nhằm tính toán các đại lượng động học.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS thảo luận nhóm để chọn hệ trục tọa độ Oxy phù hợp và thực hiện phân tích vectơ vận tốc ban đầu v₀ hợp với phương ngang một góc α.</li>
+                        <li>Nghiên cứu mục II.1 SGK để điền thông tin vào bảng đặc điểm các chuyển động thành phần theo phương Ox và Oy.</li>
+                        <li><strong>Tích hợp số:</strong> Sử dụng phần mềm mô phỏng để kiểm chứng giả thuyết về góc ném tối ưu cho tầm xa lớn nhất. Giải quyết bài toán định lượng về viên bi bắn góc 45° với vận tốc 4m/s bằng công cụ bảng tính số.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <div class="box">
+                        <strong>1. Phân tích chuyển động ném xiên</strong>
+                        <p>Xét chuyển động của một vật được ném xiên với vận tốc ban đầu \(v_0\) hợp với phương ngang một góc α. Bỏ qua sức cản không khí.</p>
+                        <p><strong>+ Thành phần chuyển động theo phương thẳng đứng (trên trục Oy)</strong></p>
+                        <p>Vì vectơ \(\vec{g}\) có hình chiếu lên trục Oy là \(-g\) nên thành phần chuyển động theo phương thẳng đứng chuyển động có gia tốc \(a_y = -g\). Chuyển động của thành phần chuyển động theo phương thẳng đứng là chuyển động của vật rơi tự do với vận tốc ban đầu là hình chiếu của \(v_0\) trên trục Oy: \(v_{0y}\).</p>
+                        <p><strong>+ Thành phần chuyển động theo phương nằm ngang (trên trục Ox)</strong></p>
+                        <p>Vì vectơ \(\vec{g}\) có hình chiếu trên trục Ox = 0 tức \(a_x = 0\) nên chuyển động trên trục Ox là chuyển động thẳng đều với vận tốc chính là hình chiếu của \(v_0\) lên trục Ox \(v_{0x} = v_0 \cos\alpha\).</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Thành phần chuyển động theo phương thẳng đứng (trục Oy)</th>
+                                    <th>Thành phần chuyển động theo phương nằm ngang (trục Ox)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>Gia tốc</strong></td><td>\(a_y = -g\)</td><td>\(a_x = 0\)</td></tr>
+                                <tr><td><strong>Vận tốc</strong></td><td>\(v_y = v_0 \sin\alpha - g \cdot t\)</td><td>\(v_x = v_0 \cdot \cos\alpha\)</td></tr>
+                                <tr><td><strong>Phương trình chuyển động</strong></td><td>\(y = -\frac{1}{2}gt^2 + (v_0 \cdot \sin\alpha) \cdot t\)</td><td>\(x = (v_0 \cdot \cos\alpha) \cdot t\)</td></tr>
+                            </tbody>
+                        </table>
+                        <p><strong>2. Công thức xác định tầm cao và tầm xa của chuyển động ném xiên</strong></p>
+                        <p><strong>a) Tầm cao – tầm bay cao</strong> (hay độ cao cực đại) của vật được ném từ mặt đất luôn được tính từ điều kiện: \(v_y = 0, t = \frac{v_0 \sin\alpha}{g}\)</p>
+                        <p>Tầm bay cao: \(H = h_{max} = y_{max} = \frac{v_0^2 \sin^2\alpha}{2g}\)</p>
+                        <p><strong>b) Tầm bay xa</strong> là độ dịch chuyển lớn nhất của thành phần chuyển động theo phương nằm ngang trên trục Ox luôn được tính từ điều kiện: \(y = 0\)</p>
+                        <p>\(t_{max} = \frac{2 v_0 \sin\alpha}{g}\)</p>
+                        <p>Tầm bay xa: \(L = d_{max} = x_{max} = v_0 \cos\alpha \cdot t_{max} = \frac{v_0^2 \sin 2\alpha}{g}\)</p>
+                    </div>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc SGK mục II.1 và thảo luận nhóm để trả lời các câu hỏi trong SGK.</li>
+                        <li>GV hướng dẫn HS cách chọn hệ trục tọa độ Oxy và phân tích vectơ vận tốc ban đầu \(v_0\) thành hai thành phần.</li>
+                    </ul>
+                    <p><strong>Câu 1.</strong> Chọn hệ trục tọa độ Oxy, trục Oy thẳng đứng, trục Ox nằm ngang. Gốc tọa độ O tại vị trí thả vật.</p>
+                    <p><strong>Câu 2.</strong> + Thành phần chuyển động theo phương thẳng đứng (trên trục Oy): Vì vectơ \(\vec{g}\) có hình chiếu lên trục Oy là \(-g\) nên thành phần chuyển động theo phương thẳng đứng chuyển động có gia tốc \(a_y = -g\), chuyển động của thành phần chuyển động theo phương thẳng đứng là chuyển động của vật rơi tự do với vận tốc ban đầu \(v_0\).</p>
+                    <p>+ Thành phần chuyển động theo phương nằm ngang (trên trục Ox): Vì vectơ \(\vec{g}\) có hình chiếu trên trục Ox = 0 tức \(a_x = 0\) nên chuyển động trên trục Ox là chuyển động thẳng đều với vận tốc chính là hình chiếu của \(v_0\) lên trục Ox.</p>
+                    <p><strong>Câu 3:</strong> Hoàn thành bảng đặc điểm các chuyển động thành phần.</p>
+                    <p><strong>Câu 4:</strong></p>
+                    <ol>
+                        <li>\(v_{ox} = v_0 \cdot \cos\alpha = 4 \cdot \cos 45° = 2\sqrt{2}\) m/s</li>
+                        <li>Vận tốc của viên bi theo phương ngang sau 0,1 giây và sau 0,2 giây là \(v_0 = v_{ox} = 2\sqrt{2}\) m/s. Vận tốc của viên bi theo phương thẳng đứng sau 0,1 giây: \(v_y = v_{0y} - gt = 2\sqrt{2} - 9,8 \cdot 0,1 \approx 1,85\) m/s. Sau 0,2 giây: \(v_y = 2\sqrt{2} - 9,8 \cdot 0,2 \approx 0,87\) m/s.</li>
+                        <li>\(t = \frac{v_{0y}}{g} = \frac{2\sqrt{2}}{9,8} \approx 0,29\) s; \(H = \frac{v_{0y}^2}{2g} = \frac{(2\sqrt{2})^2}{2 \cdot 9,8} \approx 0,4\) m</li>
+                        <li>\(a = g = 9,8\) m/s²</li>
+                        <li>Vận tốc của viên bi có độ lớn cực tiểu ở vị trí tầm cao \(h = 0,4\) m, \(t = 0,29\) s.</li>
+                        <li>Thời gian viên bi chạm mặt sàn là \(t = \frac{2v_{oy}}{g} = \frac{2 \cdot 2\sqrt{2}}{9,8} \approx 0,58\) s; \(v_y = \sqrt{v_{oy}^2 + 2gh} \approx 4\) m/s; \(L = \frac{v_{oy}^2 \sin^2 2\alpha}{g} \approx 0,82\) m.</li>
+                    </ol>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS thảo luận nhóm, phân tích đặc điểm hình chiếu của vectơ trọng lực \(\vec{P}\) lên các trục để xác định gia tốc.</li>
+                        <li><strong>Tích hợp số:</strong> HS thao tác trên máy tính/điện thoại, sử dụng bảng tính số để nhập các giá trị \(v_0 = 4\) m/s, \(\alpha = 45°\), \(g = 9,8\) m/s² nhằm tự động tìm kết quả H, L và vận tốc chạm đất.</li>
+                        <li><strong>Tư duy AI (NLc):</strong> Nhóm sử dụng AI gõ câu lệnh: <em>"Làm thế nào để chuyển đổi góc độ (degree) sang radian khi dùng hàm SIN, COS trong Excel để tính bài toán vật lí?"</em>. AI hỗ trợ hướng dẫn dùng hàm =RADIANS().</li>
+                        <li>GV đi tới các nhóm để hỗ trợ cách nhập hàm sin, cos (đổi sang Radian) trên phần mềm bảng tính.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>GV mời đại diện 1 nhóm trình bày bảng phân tích các đặc điểm chuyển động thành phần qua máy chiếu.</li>
+                        <li>Nhóm khác trình chiếu kết quả từ phần mềm mô phỏng PhET để minh họa cho tính chất quỹ đạo Parabol.</li>
+                        <li>HS thảo luận: <em>"Tại sao ở đỉnh cao nhất, vận tốc theo phương Oy lại bằng không?"</em></li>
+                        <li>Các nhóm sử dụng tính năng bình luận trực tuyến để phản biện kết quả bài toán định lượng.</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV chuẩn hóa hệ phương trình ném xiên và các công thức H, L.</li>
+                        <li>GV nhấn mạnh tính độc lập của hai chuyển động và tầm quan trọng của việc dùng công cụ số để mô hình hóa quỹ đạo chính xác.</li>
+                        <li>GV đánh giá năng lực tạo lập bảng tính số khoa học và thái độ trung thực của các nhóm trong xử lí dữ liệu.</li>
+                        <li><strong>Đánh giá NLS & NLAI (NLa):</strong> GV biểu dương năng lực tạo lập bảng tính số tự động rất khoa học của các nhóm. GV nhắc nhở tư duy vật lí: <em>"Máy tính và PhET cho ra kết quả tầm xa L=1,63m rất hoàn hảo, nhưng trong thực tế nếu ra sân ném một viên bi như vậy, lực cản không khí sẽ khiến L nhỏ hơn con số này. Công nghệ luôn phải được con người đối chiếu với thực tiễn".</em></li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="12.7.png" alt="Hình 12.7 - Phân tích chuyển động ném xiên" class="img-medium">
+                        <p><em>Hình 12.7. Phân tích chuyển động ném xiên</em></p>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 3:<br>LUYỆN TẬP – TRÒ CHƠI<br>"CHINH PHỤC TẦM XA"</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>Hệ thống hóa lại toàn bộ kiến thức về chuyển động ném (ném ngang và ném xiên).</li>
+                        <li>Vận dụng các công thức đã học để giải quyết các bài tập trắc nghiệm định tính và bài tập định lượng đơn giản liên quan đến tầm bay xa, tầm bay cao và thời gian rơi.</li>
+                        <li><strong>Về năng lực số:</strong>
+                            <ul>
+                                <li>2.1.NC1a: Sử dụng thiết bị cá nhân tham gia trò chơi học tập tương tác trực tuyến (Quizizz, Kahoot).</li>
+                                <li>2.5.NC1b: Áp dụng chiến lược giao tiếp số phù hợp để thảo luận nhóm nhanh và phản hồi kết quả thi đấu.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực AI:</strong>
+                            <ul>
+                                <li>NLa: Thể hiện tư duy làm chủ công nghệ: nhận thức được máy tính hay các công cụ số chỉ hỗ trợ đưa ra kết quả rất nhanh, nhưng con người mới là chủ thể tư duy vật lí để thiết lập đúng phương trình, xác định đúng góc ném α và điều kiện tối ưu (như sin2α=1).</li>
+                                <li>NLb: Tuân thủ tính liêm chính học thuật; khách quan, trung thực trong việc báo cáo kết quả thi đấu, tuyệt đối không sử dụng các công cụ AI gian lận để tra cứu đáp án có sẵn trong thời gian đếm ngược của trò chơi.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong> HS tham gia trò chơi thi đua mang tên "Chinh phục tầm xa" giữa các nhóm để giải quyết các thử thách trong Phiếu học tập số 1:</p>
+                    <ul>
+                        <li><strong>Nhiệm vụ 1:</strong> Hoàn thành bài tập điền từ để củng cố đặc điểm các chuyển động thành phần trên phương ngang và phương thẳng đứng.</li>
+                        <li><strong>Nhiệm vụ 2:</strong> Trả lời các câu hỏi trắc nghiệm khách quan về quỹ đạo, sự độc lập của các chuyển động thành phần và các yếu tố ảnh hưởng đến tầm xa.</li>
+                        <li><strong>Nhiệm vụ 3:</strong> Giải quyết bài toán định lượng về trái bóng được đá đi để tìm vận tốc ban đầu và độ cao cực đại.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong> Kiến thức được hệ thống hóa, HS hiểu sâu hơn các đặc điểm và công thức chuyển động ném. Kết quả hiển thị trên bảng xếp hạng (Leaderboard) của ứng dụng tương tác số.</p>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV hệ thống nhanh lại các công thức cốt lõi (tầm xa L, tầm cao H, thời gian t) bằng sơ đồ tư duy trên slide.</li>
+                        <li>GV cung cấp mã tham gia hoặc mã QR trò chơi tương tác (ví dụ: Quizizz) chứa nội dung Phiếu học tập số 1.</li>
+                        <li>GV nêu luật chơi: <em>"Mỗi nhóm sử dụng 1 thiết bị thông minh để thi đấu. Đòi hỏi tốc độ, sự chính xác và làm việc nhóm cực kì ăn ý. Nghiêm cấm dùng AI để tra cứu đáp án nhằm đảm bảo tính công bằng (NLAI: NLb)".</em></li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS làm việc theo nhóm, cùng thảo luận nhanh trong thời gian quy định (30-60 giây/câu) để chọn đáp án chính xác trên ứng dụng số.</li>
+                        <li>GV theo dõi tiến độ và tỉ lệ trả lời đúng của từng câu hỏi thông qua Teacher Dashboard để phát hiện những mảng kiến thức HS còn lúng túng (ví dụ: nhầm lẫn giữa tầm xa và độ cao cực đại).</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>GV trình chiếu bảng tổng kết điểm số thời gian thực (Real-time Leaderboard) lên màn hình chính.</li>
+                        <li>Đối với các câu hỏi tính toán khó (như Câu 8, 9), GV mời đại diện nhóm có kết quả tốt nhất trình bày cách lập luận qua tính năng chiếu màn hình (Screen Mirroring).</li>
+                        <li><strong>Đáp án Phiếu học tập số 1:</strong>
+                            <ul>
+                                <li><strong>Câu 1.</strong> (1) thẳng đều, (2) bằng nhau, (3) rơi tự do, (4) khác nhau, (5) parabol, (6) thẳng đều, (7) bằng nhau, (8) ném thẳng đứng, (9) khác nhau, (10) parabol, (11) vận tốc, (12) thẳng đứng.</li>
+                                <li><strong>Câu 2.</strong> B</li>
+                                <li><strong>Câu 3.</strong> D</li>
+                                <li><strong>Câu 4.</strong> C</li>
+                                <li><strong>Câu 5.</strong> A</li>
+                                <li><strong>Câu 6.</strong> A</li>
+                                <li><strong>Câu 7.</strong> B</li>
+                                <li><strong>Câu 8.</strong> \(L = \frac{v^2 \sin 2\alpha}{g} \Leftrightarrow 62,5 = \frac{v^2 \sin^2 2 \cdot 45°}{10}\)</li>
+                                <li><strong>Câu 9.</strong> B. AD công thức: \(H = \frac{v_0^2 \sin^2\alpha}{2g} = \frac{25^2 \sin^2 45°}{2 \cdot 10} = 15,625\) m ≈ 16 m</li>
+                                <li><strong>Câu 10.</strong> Nếu bỏ qua sức cản không khí, để các tia nước phun ra xa nhất thì góc giữa vòi với phương ngang bằng 45°.</li>
+                            </ul>
+                        </li>
+                        <li>HS các nhóm khác sử dụng thiết bị số để gửi nhận xét hoặc phản biện trực tuyến.</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết, chuẩn hóa đáp án và vinh danh nhóm chiến thắng.</li>
+                        <li>GV nhấn mạnh lưu ý: Trong trường hợp lí tưởng, góc ném 45° sẽ cho tầm xa lớn nhất.</li>
+                        <li><strong>Đánh giá NLAI & NLS:</strong> GV biểu dương tư duy làm chủ công nghệ của HS (NLa). GV nhấn mạnh: <em>"Máy tính điện thoại đã giúp các em khai căn số 625 rất nhanh, nhưng chính các em mới là người tư duy ra được rằng để bóng bay xa nhất (Câu 8, Câu 10), góc ném phải đạt 45° trong điều kiện lí tưởng".</em></li>
+                        <li>Đánh giá kĩ năng phối hợp nhóm và sự thành thạo khi sử dụng công cụ số của HS trong suốt quá trình luyện tập.</li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 4 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 4:<br>HOẠT ĐỘNG TRẢI NGHIỆM<br>(DỰ ÁN)</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li><strong>Về kiến thức:</strong> Giúp HS tự vận dụng các công thức về tầm ném xa (L) và tầm bay cao (H) để giải quyết đề tài nghiên cứu: Tìm điều kiện (góc ném, độ cao) để vật đạt tầm xa lớn nhất trong thực tế.</li>
+                        <li><strong>Về năng lực số:</strong>
+                            <ul>
+                                <li>1.1.NC1b: Tra cứu, lựa chọn video hướng dẫn chế tạo thiết bị ném và đánh giá độ tin cậy của các nguồn học liệu khoa học mạng.</li>
+                                <li>5.3.NC1a & 3.1.NC1a: Sử dụng phần mềm bảng tính để xử lý số liệu thực nghiệm, vẽ quỹ đạo thực tế và thiết kế báo cáo dự án (Poster điện tử/Video clip).</li>
+                                <li>4.2.NC1a & 3.3.NC1a: Ý thức bảo vệ dữ liệu cá nhân khi chia sẻ video nhóm và tôn trọng bản quyền khi trích dẫn tài liệu tham khảo trực tuyến.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) đóng vai trò chuyên gia để nhờ trợ lý ảo AI (ChatGPT/Gemini) hỗ trợ lên ý tưởng tối ưu hóa thiết kế mô hình hoặc giải thích thêm về sức cản không khí.</li>
+                                <li>NLa: Nhận thức được rằng AI và công thức chỉ cung cấp ý tưởng lí thuyết (ví dụ: góc ném lí tưởng là 45°), nhưng con người phải trực tiếp chế tạo, thử nghiệm và phân tích các yếu tố thực tiễn (sức cản không khí, cấu tạo vật ném) để đưa ra kết luận cuối cùng.</li>
+                                <li>NLb: Thể hiện sự trung thực học thuật, minh bạch khai báo mức độ sử dụng AI trong việc hỗ trợ viết báo cáo dự án.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong> HS thực hiện nhiệm vụ theo nhóm ở nhà (Dạy học dự án): Thiết kế và chế tạo một thiết bị ném đơn giản từ các vật liệu dễ kiếm, thân thiện với môi trường.</p>
+                    <ul>
+                        <li>Lập phương án thí nghiệm kiểm tra: Để ném ngang một vật đạt tầm bay xa lớn nhất thì phải chọn độ cao như thế nào? Để ném xiên đạt tầm xa lớn nhất thì góc ném α bằng bao nhiêu?</li>
+                        <li>Tiến hành khảo sát, ghi chép nhật kí dự án, xử lí số liệu bằng công cụ số và rút ra kết luận về điều kiện tối ưu.</li>
+                        <li><strong>Thử thách AI:</strong> Tương tác với AI để hỏi về cách làm giảm lực cản không khí cho vật đạn nhằm tăng tầm xa, từ đó giải thích sự sai lệch giữa thực tế và lí thuyết.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <ul>
+                        <li>Báo cáo dự án: Trình bày chi tiết theo mẫu gồm mục đích, cơ sở lí thuyết, phương án thí nghiệm, bảng số liệu và kết luận.</li>
+                        <li>Sản phẩm số: Video ghi lại quá trình vận hành thiết bị, file bảng tính số (Google Sheets) có biểu đồ so sánh giữa các lần ném và một Poster điện tử (Canva) tổng kết kết quả nghiên cứu.</li>
+                        <li>Nhật kí học tập số: Bản ghi chép các câu lệnh (prompts) đã hỏi AI và phần trích dẫn nguồn học liệu mạng minh bạch.</li>
+                    </ul>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV giới thiệu dự án "Chinh phục tầm xa", cung cấp Rubric đánh giá (về tính khả thi, dụng cụ thân thiện môi trường, độ chính xác của kết quả số).</li>
+                        <li>GV cung cấp mẫu kế hoạch dự án và nhắc nhở HS trích dẫn nguồn học liệu số khi tra cứu cách làm máy ném.</li>
+                        <li><strong>Hướng dẫn NLS & NLAI:</strong> GV gợi ý từ khóa tìm kiếm ("how to build a mini catapult"), cung cấp link tải phần mềm Tracker (Mã 1.1.NC1b). GV khuyến khích: <em>"Các em được phép dùng AI để tìm ý tưởng tối ưu thiết kế, nhưng phải minh bạch ghi rõ 'Có sự hỗ trợ của AI' trong phần Tài liệu tham khảo"</em> (NLb - Đạo đức AI).</li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS làm việc theo nhóm ở nhà: Phân công nhiệm vụ, chế tạo mô hình và quay video thực nghiệm ở nhiều góc ném khác nhau.</li>
+                        <li><strong>Thử thách AI (NLc):</strong> Nhóm HS mở Chatbot AI và gõ prompt: <em>"Đóng vai một kĩ sư cơ khí, hãy tư vấn 3 mẹo để điều chỉnh lực căng dây và góc ném của máy bắn đá mini sao cho vật bay được xa nhất trong môi trường có lực cản không khí".</em></li>
+                        <li><strong>Tích hợp số:</strong> HS sử dụng phần mềm bảng tính để tự động hóa việc tính toán sai số và vẽ quỹ đạo thực tế. GV hỗ trợ giải đáp thắc mắc qua các kênh liên lạc trực tuyến như Zalo hoặc LMS.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>HS nộp link sản phẩm số qua hệ thống dùng chung của lớp trước buổi học kế tiếp.</li>
+                        <li>Tại lớp, đại diện mỗi nhóm trình bày báo cáo. Các nhóm khác thảo luận, phản biện và thực hiện chấm chéo sản phẩm dựa trên Rubric thông qua các ứng dụng bình chọn số.</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết kết quả thực hiện dự án, chuẩn hóa kiến thức về điều kiện tầm xa cực đại (góc 45° trong lí tưởng).</li>
+                        <li>GV nhận xét, biểu dương các nhóm có kĩ năng tạo nội dung số (Video/Slide) xuất sắc (Mã 3.1.NC1a), chế tạo mô hình chắc chắn và có thái độ minh bạch khi ứng dụng AI vào dự án.</li>
+                        <li>GV nhận xét về kĩ năng vận dụng công cụ số và tinh thần sáng tạo của HS, khen thưởng nhóm có báo cáo số xuất sắc nhất.</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG -->
+    <h2>IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG (NẾU CÓ)</h2>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+
+    <!-- Ký duyệt -->
+    <div class="signature">
+        <div class="signature-box">
+            <p><strong>Duyệt TCM</strong></p>
+            <p class="signature-name"><input type="text" placeholder="Lục Tuyến"></p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    function disableKeys(e) {
+        if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) return true;
+        if (e.ctrlKey && e.shiftKey && (e.key === 'p' || e.key === 'P')) return true;
+        if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'a' || e.key === 'A')) {
+            e.preventDefault(); return false;
+        }
+        if (e.key === 'F12') { e.preventDefault(); return false; }
+        return true;
+    }
+    document.addEventListener('dragstart', function(e) { e.preventDefault(); });
+    document.addEventListener('selectstart', function(e) {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') e.preventDefault();
+    });
+    document.querySelectorAll('input, textarea').forEach(function(el) {
+        el.addEventListener('selectstart', function(e) { e.stopPropagation(); });
+        el.addEventListener('dragstart', function(e) { e.stopPropagation(); });
+    });
+</script>
+
+</body>
+</html>

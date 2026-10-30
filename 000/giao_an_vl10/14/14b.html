@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giáo án Bài 14 - Vật lí 10</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @page { size: A4; margin: 20mm 15mm; }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            line-height: 1.4;
+            color: #000000;
+            background-color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+        .container {
+            width: 100%;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        h1, h2, h3, h4 { color: #004488; margin-top: 15px; margin-bottom: 10px; }
+        h1 {
+            text-align: center;
+            font-size: 18pt;
+            color: #8B4513;
+            border-bottom: 2px solid #8B4513;
+            padding-bottom: 5px;
+        }
+        h2 {
+            font-size: 15pt;
+            border-bottom: 1px solid #D3D3D3;
+            padding-bottom: 3px;
+            color: #8B5A2B;
+        }
+        h3 { font-size: 14pt; color: #0066CC; }
+        h4 { font-size: 13pt; color: #8B5A2B; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12pt; }
+        th, td { border: 1px solid #D3D3D3; padding: 6px 8px; text-align: left; vertical-align: top; }
+        th { background-color: #F5F5DC; color: #004488; font-weight: bold; }
+        .tien-trinh { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .tien-trinh th { background-color: #F5DEB3; color: #004488; text-align: center; }
+        .tien-trinh td { vertical-align: top; }
+        .col-buoc { width: 25%; background-color: #F5F5F5; font-weight: bold; color: #8B4513; }
+        .col-noidung { width: 75%; }
+        .box { background-color: #F5F5DC; border-left: 5px solid #8B5A2B; padding: 10px; margin: 10px 0; }
+        .box-ai { background-color: #E8F4FF; border-left: 5px solid #0066CC; padding: 10px; margin: 10px 0; }
+        .box-nls { background-color: #FFF8E1; border-left: 5px solid #CC9900; padding: 10px; margin: 10px 0; }
+        .red-text { color: #CC0000; font-weight: bold; }
+        .blue-text { color: #0066CC; }
+        .img-container { text-align: center; margin: 10px 0; }
+        .img-container img {
+            max-width: 100%; height: auto;
+            border: 1px solid #D3D3D3;
+            -webkit-user-drag: none; user-drag: none; pointer-events: none;
+        }
+        .img-small { max-width: 250px; }
+        .img-medium { max-width: 350px; }
+        .img-large { max-width: 500px; }
+        ul, ol { padding-left: 20px; }
+        li { margin-bottom: 5px; }
+        .formula { text-align: center; margin: 10px 0; font-size: 14pt; }
+        .input-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt; font-weight: bold;
+            color: #000000; background-color: #FFFFFF;
+            border: 1px solid #D3D3D3; border-radius: 3px;
+            padding: 2px 5px; width: 200px;
+        }
+        .input-text:focus { outline: none; border-color: #8B4513; }
+        .signature {
+            margin-top: 30px; display: flex;
+            justify-content: flex-end; text-align: center; font-weight: bold;
+        }
+        .signature-box { width: 200px; border-top: 2px solid #8B4513; padding-top: 10px; }
+        .signature-name { margin-top: 50px; }
+        .signature-name input {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt; font-weight: bold;
+            color: #000000; background-color: #FFFFFF;
+            border: 1px solid #D3D3D3; border-radius: 3px;
+            padding: 2px 5px; width: 150px; text-align: center;
+        }
+        .phieu { border: 1.5px solid #8B4513; padding: 10px 15px; margin: 12px 0; background: #FDFDF5; }
+        .phieu h4 { text-align: center; margin: 0 0 8px 0; color: #8B4513; }
+        .note { background: #FFF9E6; border-left: 4px solid #CC9900; padding: 8px 12px; margin: 8px 0; font-size: 12pt; }
+        @media print {
+            body { font-size: 12pt; -webkit-user-select: auto; user-select: auto; }
+            .container { padding: 0; }
+            .no-print { display: none; }
+            .input-text, .signature-name input {
+                border: none; background: transparent; color: #000; font-weight: bold;
+            }
+            .img-container img { pointer-events: auto; }
+            .phieu, .box, .box-ai, .box-nls, .tien-trinh { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" onkeydown="return disableKeys(event);" ondragstart="return false;" onselectstart="return false;">
+
+<div class="container">
+
+    <!-- Ngày soạn -->
+    <p><strong>Ngày soạn:</strong> <input type="text" class="input-text" placeholder="....../....../20......"></p>
+
+    <!-- Tiêu đề giáo án -->
+    <h1>GIÁO ÁN BÀI 14: ĐỊNH LUẬT 1 NEWTON</h1>
+    <p style="text-align: center; font-style: italic;">Môn: Vật lí 10 – Bộ sách Kết nối tri thức với cuộc sống</p>
+    <p style="text-align: center;">Số tiết: 1 (Tiết 23 theo PPCT)</p>
+
+    <!-- I. MỤC TIÊU -->
+    <h2>I. MỤC TIÊU</h2>
+
+    <h3>1. Kiến thức</h3>
+    <ul>
+        <li>Phát biểu được định luật 1 Newton.</li>
+        <li>Nêu được khái niệm quán tính và giải thích được một số hiện tượng liên quan đến quán tính trong thực tế.</li>
+        <li>Phân biệt được các trạng thái: đứng yên, chuyển động thẳng đều, chịu tác dụng của các lực cân bằng.</li>
+        <li>Vận dụng được định luật 1 Newton để giải thích một số hiện tượng thực tế và giải bài tập đơn giản.</li>
+        <li>Nhận biết được lực không phải là yếu tố cần thiết để duy trì chuyển động.</li>
+        <li>Nhận biết được quán tính là tính chất của các vật (xu hướng bảo toàn vận tốc).</li>
+        <li>Nêu được ví dụ về quán tính trong thực tế (có lợi và có hại).</li>
+        <li>Trình bày được đề tài về quán tính trong tai nạn giao thông và cách phòng tránh.</li>
+    </ul>
+
+    <h3>2. Năng lực</h3>
+
+    <h4>a. Năng lực chung</h4>
+    <ul>
+        <li>Tự chủ và tự học: Tìm hiểu trước nội dung bài học qua SGK và internet.</li>
+        <li>Giao tiếp và hợp tác: Thảo luận nhóm để phân tích các hiện tượng liên quan đến quán tính.</li>
+        <li>Giải quyết vấn đề và sáng tạo: Vận dụng kiến thức để giải thích các tình huống thực tế.</li>
+        <li><strong>Năng lực tự chủ và tự học:</strong> Chủ động, tích cực thực hiện nhiệm vụ cá nhân và thảo luận nhóm thông qua nghiên cứu SGK và học liệu số.</li>
+        <li><strong>Năng lực giao tiếp và hợp tác:</strong> Xác định nhiệm vụ nhóm, sẵn sàng nhận công việc khó khăn khi thực hiện thí nghiệm kiểm chứng.</li>
+        <li><strong>Năng lực giải quyết vấn đề và sáng tạo:</strong> Đưa ra giải pháp hạn chế tai nạn giao thông liên quan đến quán tính.</li>
+    </ul>
+
+    <h4>b. Năng lực đặc thù môn học</h4>
+    <ul>
+        <li>Nhận biết được trạng thái cân bằng của vật.</li>
+        <li>Phân tích được tác dụng của quán tính trong đời sống.</li>
+        <li>Vận dụng được định luật 1 Newton để giải thích hiện tượng.</li>
+        <li><strong>Nhận thức vật lí:</strong>
+            <ul>
+                <li>Nêu đúng định luật, đồng thời nhận biết được lực không phải là yếu tố cần thiết để duy trì chuyển động mà là yếu tố làm thay đổi trạng thái chuyển động của vật.</li>
+                <li>Hiểu được quán tính là tính chất của mọi vật có xu hướng bảo toàn vận tốc cả về hướng và độ lớn. Minh họa được quán tính thông qua các ví dụ thực tế như hành khách trên xe buýt hoặc các vật trên xe lăn khi gặp vật chắn.</li>
+            </ul>
+        </li>
+        <li><strong>Tìm hiểu thế giới tự nhiên dưới góc độ vật lí:</strong>
+            <ul>
+                <li>Thực hiện được thí nghiệm hoặc khai thác các học liệu số về thí nghiệm lịch sử của Galilei để thấy được khi loại bỏ ma sát, vật sẽ chuyển động mãi mãi.</li>
+                <li>Phân tích được các lợi ích và tác hại của quán tính; tìm hiểu đề tài về quán tính trong các tai nạn giao thông thông qua việc quan sát và thu thập dữ liệu.</li>
+            </ul>
+        </li>
+        <li><strong>Vận dụng kiến thức, kĩ năng đã học:</strong>
+            <ul>
+                <li>Vận dụng khái niệm quán tính để giải thích các tình huống thực tế (xe phanh gấp, rẽ nhanh) và đề xuất được các giải pháp làm giảm tác hại của quán tính như thắt dây an toàn hoặc lắp đặt túi khí.</li>
+                <li>Biết cách hệ thống hóa kiến thức bài học và trình bày các giải pháp an toàn giao thông thông qua các phương tiện truyền thông số.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h4>c. Năng lực số</h4>
+    <div class="box-nls">
+        <ul>
+            <li><strong>1.1.NC1a:</strong> HS tìm kiếm, lựa chọn và khai thác thông tin từ các nguồn số phù hợp để đáp ứng nhu cầu tìm hiểu về Định luật I Newton và quán tính; biết lựa chọn thông tin cần thiết phục vụ nhiệm vụ học tập.</li>
+            <li><strong>1.1.NC1b:</strong> Áp dụng kĩ thuật tìm kiếm để lấy được video thí nghiệm lịch sử của Galilei và tàu vũ trụ Voyager.</li>
+            <li><strong>2.1.NC1a:</strong> Sử dụng nhiều công nghệ số (điện thoại/máy tính) để tương tác trong trò chơi khởi động.</li>
+            <li><strong>2.2.NC1a:</strong> Chia sẻ thông tin và sản phẩm học tập (video thực nghiệm) qua các công cụ số phù hợp.</li>
+            <li><strong>3.1.NC1a:</strong> Tạo và chỉnh sửa nội dung số (clip thí nghiệm, bài thuyết trình) ở các định dạng khác nhau.</li>
+            <li><strong>5.1.NC1b:</strong> Tự áp dụng giải pháp để xử lí các vấn đề kĩ thuật phát sinh khi vận hành thiết bị số trong lớp.</li>
+        </ul>
+    </div>
+
+    <h4>d. Năng lực trí tuệ nhân tạo (AI)</h4>
+    <div class="box-ai">
+        <ul>
+            <li><strong>NLc (Các kĩ thuật và ứng dụng AI):</strong> Biết cách thiết lập các câu lệnh (prompt) phù hợp để nhờ trợ lý ảo AI hỗ trợ giải thích sự khác biệt giữa quan niệm của Aristotle và Galilei hoặc tóm tắt các ứng dụng của quán tính.</li>
+            <li><strong>NLb (Đạo đức AI):</strong> Thể hiện sự minh bạch và trách nhiệm; thực hiện trích dẫn nguồn học liệu số và AI minh bạch khi xây dựng nội dung báo cáo.</li>
+            <li><strong>NLa (Tư duy lấy con người làm trung tâm):</strong> Phân tích được tầm quan trọng của việc con người kiểm soát các thiết bị an toàn (túi khí, phanh ABS) dù chúng được vận hành bằng các thuật toán thông minh.</li>
+        </ul>
+    </div>
+
+    <h3>3. Phẩm chất</h3>
+    <ul>
+        <li><strong>Chăm chỉ:</strong> Tích cực tham gia thảo luận nhóm, hoàn thành các nhiệm vụ học tập được giao; tích cực tìm tòi học liệu số về quán tính.</li>
+        <li><strong>Trung thực:</strong> Báo cáo trung thực kết quả thảo luận, không sao chép kết quả của nhóm khác; khách quan trong việc báo cáo kết quả thí nghiệm.</li>
+        <li><strong>Trách nhiệm:</strong> Có ý thức giữ gìn, bảo quản dụng cụ học tập và thiết bị thí nghiệm; có ý thức bảo vệ thiết bị số và dữ liệu học tập chung của lớp.</li>
+        <li><strong>Cẩn thận, tỉ mỉ:</strong> Quan sát hiện tượng và phân tích chính xác.</li>
+    </ul>
+
+    <!-- II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU -->
+    <h2>II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU</h2>
+
+    <h3>1. Giáo viên</h3>
+    <ul>
+        <li>SGK Vật lí 10, SGV, máy chiếu, máy tính.</li>
+        <li>Bài giảng PowerPoint, video clip tàu Voyager, video thí nghiệm máng đệm không khí.</li>
+        <li>Hình ảnh, video minh họa về định luật 1 Newton và quán tính (xe đạp, ô tô, tàu Voyager,...).</li>
+        <li>Các nền tảng tương tác: Mentimeter/Padlet hoặc Quizizz cho trò chơi khởi động và luyện tập.</li>
+        <li>Bộ thí nghiệm: 2 mặt gỗ trơn, viên bi, vật kê dốc, xe lăn, vật chắn, cốc nước, tờ giấy.</li>
+        <li>Khảo sát quán tính xe trượt dốc đơn giản: <em>https://s.shopee.vn/3qJ04hOyLE</em></li>
+        <li>Hình vẽ (hoặc video clip) vẽ con tàu vũ trụ Voyager: <em>https://www.youtube.com/watch?v=sRNeTxHa64w</em></li>
+        <li>Thiết bị để phục dựng thí nghiệm lịch sử của Galilei: 2 mặt gỗ trơn nhẵn, 1 viên bi, đồ kê tạo độ nghiêng. Có thể sử dụng clip: <em>https://www.youtube.com/watch?v=zShF_axccBk</em></li>
+        <li>Thí nghiệm với máng trượt có đệm không khí: <em>https://www.youtube.com/watch?v=xHc75OJnQg4</em> (nghiệm lại cả 3 định luật); <em>https://www.youtube.com/watch?v=VV2YgeHobzQ</em> (thí nghiệm về chuyển động thẳng đều – định luật I)</li>
+        <li>Thí nghiệm hình 14.3: 1 tấm ván dài khoảng 1m làm mặt phẳng nghiêng, xe lăn, vật nhỏ đặt trên xe lăn, vật chắn (có thể dùng quyển sách dày).</li>
+        <li>Thí nghiệm hình 14.5: 1 cốc nước nặng, tờ giấy.</li>
+        <li>Phiếu học tập số 1, 2, 3, 4, 5.</li>
+    </ul>
+
+    <!-- Phiếu học tập số 1 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 1</h4>
+        <p><strong>NHÓM CÂU HỎI 1:</strong></p>
+        <p><strong>Câu 1.1:</strong> Các lực tác dụng lên một vật gọi là cân bằng khi<br>
+        A. hợp lực của tất cả các lực tác dụng lên vật bằng không.<br>
+        B. hợp lực của tất cả các lực tác dụng lên vật là hằng số.<br>
+        C. vật chuyển động với gia tốc không đổi.<br>
+        D. vật đứng yên.</p>
+        <p><strong>Câu 1.2:</strong> Một sợi dây có khối lượng không đáng kể, một đầu được giữ cố định, đầu kia có gắn một vật nặng có khối lượng m. Vật đứng yên cân bằng. Khi đó<br>
+        A. vật chỉ chịu tác dụng của trọng lực.<br>
+        B. vật chịu tác dụng của trọng lực, lực ma sát và lực căng dây.<br>
+        C. vật chịu tác dụng của ba lực và hợp lực của chúng bằng không.<br>
+        D. vật chịu tác dụng của trọng lực và lực căng dây.</p>
+        <p><strong>Câu 1.3:</strong> Chọn phát biểu đúng:<br>
+        A. Dưới tác dụng của lực vật sẽ chuyển động thẳng đều hoặc tròn đều.<br>
+        B. Lực là nguyên nhân làm vật bị biến dạng.<br>
+        C. Lực là nguyên nhân làm vật thay đổi chuyển động.<br>
+        D. Lực là nguyên nhân làm vật thay đổi chuyển động hoặc làm vật bị biến dạng.</p>
+
+        <p><strong>NHÓM CÂU HỎI 2:</strong></p>
+        <p><strong>Câu 2.1:</strong> Hai lực trực đối cân bằng là:<br>
+        A. tác dụng vào cùng một vật<br>
+        B. không bằng nhau về độ lớn<br>
+        C. bằng nhau về độ lớn nhưng không nhất thiết phải cùng giá<br>
+        D. có cùng độ lớn, cùng phương, ngược chiều tác dụng vào hai vật khác nhau</p>
+        <p><strong>Câu 2.2:</strong> Hai lực cân bằng không thể có:<br>
+        A. cùng hướng &nbsp;&nbsp; B. cùng phương<br>
+        C. cùng giá &nbsp;&nbsp; D. cùng độ lớn</p>
+        <p><strong>Câu 2.3:</strong> Một chất điểm đứng yên dưới tác dụng của 3 lực 12 N, 20 N, 16 N. Nếu bỏ lực 20 N thì hợp lực của 2 lực còn lại có độ lớn bằng bao nhiêu?<br>
+        A. 4 N &nbsp;&nbsp; B. 20 N &nbsp;&nbsp; C. 28 N &nbsp;&nbsp; D. Chưa có cơ sở kết luận.</p>
+
+        <p><strong>NHÓM CÂU HỎI 3:</strong></p>
+        <p><strong>Câu 3.1:</strong> Có hai lực đồng qui có độ lớn bằng 9 N và 12 N. Trong số các giá trị sau đây, giá trị nào có thể là độ lớn của hợp lực?<br>
+        A. 25 N &nbsp;&nbsp; B. 15 N &nbsp;&nbsp; C. 2 N &nbsp;&nbsp; D. 1 N</p>
+        <p><strong>Câu 3.2:</strong> Cho hai lực đồng qui có cùng độ lớn 600 N. Hỏi góc giữa 2 lực bằng bao nhiêu thì hợp lực cũng có độ lớn bằng 600 N.<br>
+        A. α = 0° &nbsp;&nbsp; B. α = 90° &nbsp;&nbsp; C. α = 180° &nbsp;&nbsp; D. α = 120°</p>
+        <p><strong>Câu 3.3:</strong> Một chất chịu hai lực tác dụng có cùng độ lớn 40 N và tạo với nhau góc 120°. Tính độ lớn của hợp lực tác dụng lên chất điểm.<br>
+        A. 10 N &nbsp;&nbsp; B. 20 N &nbsp;&nbsp; C. 30 N &nbsp;&nbsp; D. 40 N</p>
+
+        <p><strong>NHÓM CÂU HỎI 4:</strong></p>
+        <p><strong>Câu 4.1:</strong> Hợp lực F của hai lực F₁ và lực F₂ có độ lớn 8√2 N; lực F tạo với hướng của lực F₁ góc 45° và F₁ = 8 N. Xác định hướng và độ lớn của lực F₂.<br>
+        A. vuông góc với lực F₁ và F₂ = 8 N<br>
+        B. vuông góc với lực F₁ và F₂ = 6 N<br>
+        C. cùng phương ngược chiều với F₁ và F₂ = 8 N<br>
+        D. cùng phương ngược chiều với F₁ và F₂ = 6 N</p>
+        <p><strong>Câu 4.2:</strong> Lực 10 N là hợp lực của cặp lực nào dưới đây? Cho biết góc giữa cặp lực đó.<br>
+        A. 3 N, 15 N; 120° &nbsp;&nbsp; B. 3 N, 6 N; 60°<br>
+        C. 3 N, 13 N; 180° &nbsp;&nbsp; D. 3 N, 5 N; 0°</p>
+        <p><strong>Câu 4.3:</strong> Một vật chịu 4 lực tác dụng. Lực F₁ = 40 N hướng về phía Đông, lực F₂ = 50 N hướng về phía Bắc, lực F₃ = 70 N hướng về phía Tây, lực F₄ = 90 N hướng về phía Nam. Độ lớn của hợp lực tác dụng lên vật là bao nhiêu?<br>
+        A. 50 N &nbsp;&nbsp; B. 120 N &nbsp;&nbsp; C. 170 N &nbsp;&nbsp; D. 250 N</p>
+
+        <p><strong>NHÓM CÂU HỎI 5:</strong></p>
+        <p><strong>Câu 5.1:</strong> Chọn phát biểu đúng. Tổng hợp lực là:<br>
+        A. Là phân tích nhiều lực tác dụng đồng thời vào một vật bằng một lực có tác dụng giống như các lực ấy.<br>
+        B. Là thay thế các lực đồng thời vào cùng một vật bằng một lực có tác dụng giống hệt các lực ấy.<br>
+        C. Là phân tích các lực tác dụng đồng thời vào cùng một vật bằng một lực có tác dụng giống hệt các lực ấy.<br>
+        D. Là thay thế các lực tác dụng đồng thời vào cùng một vật bằng các lực có tác dụng giống hệt các lực ấy.</p>
+        <p><strong>Câu 5.2:</strong> Câu nào đúng? Hợp lực của hai lực có độ lớn F và 2F có thể:<br>
+        A. nhỏ hơn F &nbsp;&nbsp; B. vuông góc với lực F<br>
+        C. lớn hơn 3F &nbsp;&nbsp; D. vuông góc với lực 2F</p>
+        <p><strong>Câu 5.3:</strong> Một chất điểm đứng yên dưới tác dụng của 3 lực 4 N, 5 N và 6 N. Nếu bỏ đi lực 6 N thì hợp lực của 2 lực còn lại bằng bao nhiêu?<br>
+        A. 9 N &nbsp;&nbsp; B. 6 N &nbsp;&nbsp; C. 1 N &nbsp;&nbsp; D. không biết vì chưa biết góc.</p>
+    </div>
+
+    <!-- Phiếu học tập số 2 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 2</h4>
+        <p><strong>Câu 1:</strong> Một quyển sách đang nằm yên trên mặt bàn. Ta phải đẩy nó thì nó mới dịch chuyển và khi ngừng đẩy thì nó dừng lại. Nếu em đặt mình vào thời nhà khoa học Hy Lạp Aristotle (384 – 322 TCN), khi mà mọi người chưa biết đến ma sát, thì em sẽ trả lời câu hỏi nêu ra như thế nào?</p>
+        <p><strong>Câu 2:</strong> Thực hiện lại thí nghiệm của Galilei bằng các dụng cụ: 2 mặt gỗ trơn nhẵn, 1 viên bi, đồ kê tạo độ nghiêng… bố trí thí nghiệm như hình. Cho 2 máng nghiêng có độ nghiêng bằng nhau. Thả hòn bi lăn xuống theo máng nghiêng 1. Quan sát chuyển động của hòn bi trên máng nghiêng 2.</p>
+        <ul>
+            <li>a. Hòn bi trên máng 2 chuyển động như thế nào? Có lên tới độ cao ban đầu không?</li>
+            <li>b. Hạ thấp độ cao của máng nghiêng 2, quan sát lại độ dịch chuyển của hòn bi trên máng nghiêng 2.</li>
+            <li>c. Cho máng 2 nằm ngang, quan sát lại độ dịch chuyển của hòn bi trên máng nghiêng 2.</li>
+        </ul>
+        <p><strong>Câu 3:</strong></p>
+        <ul>
+            <li>Ở lượt thí nghiệm đầu tiên, khi 2 máng có độ nghiêng bằng nhau, tại sao hòn bi chuyển động trên máng 2 không lên tới độ cao khi được thả ở máng 1?</li>
+            <li>Khi hòn bi chuyển động trên máng ngang trơn nhẵn, có những lực nào đã tác dụng lên hòn bi? Các lực đó có đặc điểm gì?</li>
+        </ul>
+        <p><strong>Câu 4:</strong> Em rút ra kết luận gì về chuyển động của hòn bi qua thí nghiệm đã thực hiện?</p>
+    </div>
+
+    <!-- Phiếu học tập số 3 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 3</h4>
+        <p>Quan sát các vật trong Hình 14.2.</p>
+        <p><strong>Câu 1.</strong> Giải thích tại sao quả cầu đứng yên.</p>
+        <p><strong>Câu 2.</strong> Tại sao người trượt ván có thể giữ nguyên vận tốc của mình?</p>
+        <p><strong>Câu 3.</strong> Một vật đang nằm yên trên mặt bàn nằm ngang. Tại sao ta có thể khẳng định rằng bàn đã tác dụng một lực lên nó.</p>
+
+        <p><strong>Thực hiện thí nghiệm Hình 14.3 theo nhóm.</strong></p>
+        <p><em>Thí nghiệm Hình 14.3 giúp minh họa quán tính của vật.</em></p>
+        <ul>
+            <li><strong>Chuẩn bị:</strong> Một tấm ván dài khoảng 1m làm mặt phẳng nghiêng, xe lăn, vật nhỏ đặt trên xe lăn, vật chắn (có thể dùng quyển sách dày) (Hình 14.3).</li>
+            <li><strong>Tiến hành:</strong>
+                <ul>
+                    <li>Đặt các vật nhỏ lên xe lăn. Giữ các vật và xe đứng yên trên đỉnh mặt phẳng nghiêng.</li>
+                    <li>Thả cho xe trượt xuống dốc, dọc theo mặt phẳng nghiêng.</li>
+                    <li>Quan sát hiện tượng xảy ra đối với xe và các vật trên xe.</li>
+                </ul>
+            </li>
+            <li><strong>Thảo luận:</strong>
+                <p><strong>Câu 1.</strong> Giải thích tại sao khi xe trượt xuống dốc và bị cản lại ở cuối dốc thì vật nhỏ bị văng về phía trước.</p>
+                <p><strong>Câu 2.</strong> Làm thế nào để giữ cho vật trên xe không bị văng đi?</p>
+                <p><strong>Câu 3.</strong> Mô tả và giải thích điều gì xảy ra đối với một hành khách ngồi trong ô tô ở các tình huống sau:</p>
+                <ul>
+                    <li>a) Xe đột ngột tăng tốc.</li>
+                    <li>b) Xe phanh gấp.</li>
+                    <li>c) Xe rẽ nhanh sang trái.</li>
+                </ul>
+                <p><strong>Câu 4:</strong> Các bạn HS khi đứng trên xe buýt nhưng không vịn tay nắm như thế này có nên hay không? Vì sao? Em hãy cho các bạn một số lời khuyên trong trường hợp này.</p>
+                <p><strong>Câu 5:</strong> Khi ngồi trên ô tô, tàu lượn cao tốc hoặc máy bay, hành khách luôn được nhắc thắt dây an toàn. Giải thích điều này.</p>
+                <p><strong>Câu 6:</strong> Để tra đầu búa vào cán, nên chọn cách nào dưới đây? Giải thích tại sao.</p>
+                <ul>
+                    <li>a) Đập mạnh cán búa xuống đất như Hình 14.4a.</li>
+                    <li>b) Đập mạnh đầu búa xuống đất như Hình 14.4b.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Phiếu học tập số 4 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 4</h4>
+        <p>Quan sát thí nghiệm hoặc xem video về các tình huống quán tính trong thực tế.</p>
+        <p><strong>Câu 1:</strong> Giải thích các hiện tượng liên quan đến quán tính trong giao thông: xe phanh gấp, xe rẽ nhanh, thắt dây an toàn.</p>
+        <p><strong>Câu 2:</strong> Trình bày các ứng dụng có lợi và tác hại của quán tính trong đời sống.</p>
+        <p><strong>Câu 3:</strong> Đề xuất biện pháp phòng tránh tai nạn giao thông do quán tính.</p>
+    </div>
+
+    <!-- Phiếu học tập số 5 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 5 – TRÒ CHƠI "ĐÀO VÀNG"</h4>
+        <p><strong>Câu 1:</strong> Điền vào chỗ còn trống:</p>
+        <p>Nếu một vật không chịu tác dụng của lực nào hoặc chịu tác dụng của các lực có hợp lực bằng (1)…………, thì vật đang đứng yên sẽ tiếp tục (2)………, đang chuyển động sẽ tiếp tục (3)……………………...</p>
+        <p><strong>Câu 2:</strong> Vật nào sau đây chuyển động theo quán tính?<br>
+        A. Vật chuyển động tròn đều.<br>
+        B. Vật chuyển động trên quỹ đạo thẳng.<br>
+        C. Vật chuyển động thẳng đều.<br>
+        D. Vật chuyển động rơi tự do.</p>
+        <p><strong>Câu 3:</strong> Khi đang đi xe đạp trên đường nằm ngang, nếu ta ngừng đạp, xe vẫn tự di chuyển. Đó là nhờ vào điều gì?</p>
+        <p><strong>Câu 4:</strong> Một vật đang chuyển động với vận tốc 3m/s. Nếu bỗng nhiều các lực tác dụng lên nó mất đi thì vật sẽ chuyển động như thế nào?</p>
+        <p><strong>Câu 5:</strong> Chọn câu đúng?<br>
+        A. nếu không chịu lực nào tác dụng thì mọi vật phải đứng yên.<br>
+        B. khi không còn lực nào tác dụng lên vật nữa, thì vật đang chuyển động sẽ lập tức dừng lại.<br>
+        C. vật chuyển động được là nhờ có lực tác dụng lên nó.<br>
+        D. khi thấy vận tốc của vật thay đổi thì chắc chắn đã có lực tác dụng lên vật.</p>
+    </div>
+
+    <h3>2. Học sinh</h3>
+    <ul>
+        <li>SGK Vật lí 10, vở ghi, máy tính/điện thoại có kết nối internet (nếu có).</li>
+        <li>SGK, vở ghi, thiết bị cá nhân (Smartphone/Laptop) có kết nối Internet.</li>
+        <li>Ôn tập lại kiến thức về lực và chuyển động đã học ở cấp THCS.</li>
+        <li>Chuẩn bị các thiết bị thực hành đơn giản (tờ giấy, cốc nước) theo lời dặn của GV.</li>
+        <li>Hoàn thành nhiệm vụ học tập trực tuyến trước khi đến lớp (tìm hiểu về định luật 1 Newton và quán tính qua internet, ChatGPT).</li>
+    </ul>
+
+    <!-- III. TIẾN TRÌNH DẠY HỌC -->
+    <h2>III. TIẾN TRÌNH DẠY HỌC</h2>
+
+    <table class="tien-trinh">
+        <thead>
+            <tr>
+                <th class="col-buoc">Bước thực hiện</th>
+                <th class="col-noidung">Nội dung các bước</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- HOẠT ĐỘNG 1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 1:<br>MỞ ĐẦU – TẠO TÌNH HUỐNG<br>HỌC TẬP</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>Tạo hứng thú cho học sinh vào đầu tiết học và giúp học sinh nắm bắt được vấn đề trọng tâm của bài mới: Liệu có cần lực tác động để duy trì chuyển động của vật hay không?</li>
+                        <li>Tạo hứng thú, dẫn dắt học sinh vào bài mới.</li>
+                        <li><strong>Năng lực số:</strong>
+                            <ul>
+                                <li>2.1.NC1a: Học sinh sử dụng được nhiều công nghệ số (như điện thoại, máy tính bảng) để tương tác và tham gia trò chơi khởi động.</li>
+                                <li>1.1.NC1a: Học sinh xác định được nhu cầu thông tin cần tìm hiểu thông qua các câu hỏi gợi mở trong môi trường số.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) phù hợp để nhờ trợ lý AI hỗ trợ liệt kê các đặc điểm chuyển động của các vật thể trong không gian (ví dụ: tàu vũ trụ Voyager).</li>
+                                <li>NLb: Thể hiện sự minh bạch và liêm chính học thuật; sử dụng thông tin từ AI làm tư liệu tham khảo nhưng có sự kiểm chứng và trích dẫn nguồn minh bạch.</li>
+                                <li>NLa: Nhận thức được vai trò của con người trong việc kiểm soát các phương tiện tự hành và chịu trách nhiệm về các quyết định dựa trên dữ liệu từ hệ thống thông minh.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>Học sinh tham gia trò chơi "Ai đi xa hơn?" để kiểm tra bài cũ và ôn tập kiến thức về lực thông qua Phiếu học tập số 1.</li>
+                        <li>Học sinh quan sát video clip về tàu vũ trụ Voyager đang di chuyển trong không gian để nhận diện tình huống có vấn đề.</li>
+                        <li>GV chiếu hình ảnh tàu vũ trụ Voyager (Hình 01.png) hoặc video.</li>
+                        <li>GV đặt câu hỏi: "Hình bên cho thấy một trong hai con tàu vũ trụ Voyager đang làm nhiệm vụ thăm dò các hành tinh nằm xa Trái Đất trong hệ Mặt Trời. Chúng được phóng lên từ Mũi Canaveral, Florida (Hoa Kì) vào năm 1977 và hiện nay cả hai con tàu đã ra khỏi hệ Mặt Trời, đang tiếp tục hoạt động và gửi thông tin về Trái Đất. Điều gì đã giúp cho tàu Voyager tiếp tục chuyển động rời xa Trái Đất, mặc dù thực tế không còn lực nào tác dụng lên chúng nữa?"</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong> Kết quả trả lời các nhóm câu hỏi (từ nhóm 1 đến nhóm 5) trong Phiếu học tập số 1 được hiển thị trên bảng tương tác số. HS nhận thức được vấn đề: Tại sao tàu Voyager vẫn chuyển động dù không còn lực đẩy, từ đó nảy sinh nhu cầu tìm hiểu về Định luật I Newton.</p>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổ chức trò chơi "Ai đi xa hơn?". GV chuẩn bị các mốc đánh số từ 1 đến 5 trên bàn giáo viên tương ứng với 5 bộ câu hỏi trong Phiếu học tập số 1.</li>
+                        <li>GV cung cấp mã QR hoặc đường link truy cập bộ câu hỏi trực tuyến cho 4 nhóm (2.1.NC1a).</li>
+                        <li><strong>Hướng dẫn AI (NLc):</strong> GV gợi ý một nhóm dùng prompt: <em>"Hãy liệt kê 3 đặc điểm chuyển động của tàu Voyager sau khi ra khỏi hệ Mặt Trời"</em> để đối chiếu với video.</li>
+                        <li>Đại diện nhóm đẩy hộp phấn trên bàn; hộp phấn dừng ở mốc nào, nhóm sẽ truy cập vào hệ thống để trả lời nhóm câu hỏi ở mốc đó.</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="01.png" alt="Hình ảnh tàu vũ trụ Voyager" class="img-medium">
+                        <p><em>Hình ảnh minh họa: Tàu vũ trụ Voyager</em></p>
+                    </div>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS các nhóm sử dụng thiết bị số để thảo luận và đưa ra lời giải trực tiếp trên bảng nhóm điện tử (2.4.NC1a).</li>
+                        <li>HS xác định các từ khóa và thông tin cần thiết trong câu hỏi để hoàn thành nhiệm vụ (1.1.NC1a).</li>
+                        <li>GV hỗ trợ HS nếu gặp sự cố kết nối hoặc thao tác trên ứng dụng (5.1.NC1b).</li>
+                        <li><strong>Thực hành AI:</strong> Nhóm được phân công đặt lệnh cho chatbot và thực hiện trích dẫn nguồn theo quy định đạo đức số (NLb).</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>GV trình chiếu câu hỏi và đáp án của từng nhóm lên màn hình chung để cả lớp cùng quan sát.</li>
+                        <li>HS các nhóm khác nhận xét, bổ sung và áp dụng chuẩn mực hành vi phù hợp khi tương tác trong môi trường số (2.5.NC1a).</li>
+                        <li>GV đặt câu hỏi dẫn dắt: <em>"Tại sao hộp phấn dừng lại khi ta thôi đẩy?"</em> (HS trả lời: do ma sát, do hết lực tác dụng...).</li>
+                        <li>Một nhóm báo cáo kết quả từ AI về tàu Voyager: <em>Tàu chuyển động thẳng, không có lực đẩy đáng kể, vận tốc hầu như không đổi.</em></li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV đánh giá kết quả và cho điểm các nhóm.</li>
+                        <li>GV đánh giá kĩ năng xử lí thiết bị số và sự nhạy bén trong việc khai thác thông tin từ AI của HS.</li>
+                        <li>GV trình chiếu clip về tàu vũ trụ Voyager: <em>https://www.youtube.com/watch?v=sRNeTxHa64w</em></li>
+                        <li>GV đặt vấn đề: <em>"Tàu Voyager đã ra khỏi hệ Mặt Trời, không còn lực đẩy của động cơ nhưng tại sao nó vẫn tiếp tục chuyển động và gửi thông tin về Trái Đất?"</em></li>
+                        <li>GV dẫn dắt: <em>"Vật vẫn tiếp tục chuyển động khi không có lực tác dụng dựa vào điều gì? Chúng ta sẽ tìm hiểu qua: BÀI 14. ĐỊNH LUẬT I NEWTON"</em></li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 2.1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2.1:<br>PHÂN BIỆT QUAN NIỆM CỦA<br>ARISTOTLE VÀ GALILEI</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>Học sinh nhận biết và phân biệt được hai quan niệm trái ngược nhau của Aristotle và Galilei về mối quan hệ giữa lực và chuyển động.</li>
+                        <li>Phát hiện được sự tồn tại của lực ma sát và hiểu được cách loại bỏ nó để vật có thể tiếp tục chuyển động.</li>
+                        <li><strong>Năng lực số:</strong>
+                            <ul>
+                                <li>1.1.NC1b: Áp dụng được kĩ thuật tìm kiếm để lấy được các video mô phỏng hoặc tư liệu về thí nghiệm lịch sử của Galilei trên môi trường số.</li>
+                                <li>1.3.NC1a: Thao tác, tổ chức và lưu trữ được các kết quả quan sát, dữ liệu thí nghiệm vào thư mục nhóm để dễ dàng truy xuất và báo cáo.</li>
+                                <li>2.4.NC1a: Đề xuất và sử dụng được các công cụ số (như bảng tương tác Padlet hoặc ứng dụng ghi chú nhóm) cho quá trình hợp tác và đồng sáng tạo kiến thức.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) phù hợp để nhờ trợ lý AI (ChatGPT/Gemini) hỗ trợ tóm tắt hoặc lập bảng so sánh sự khác biệt giữa hai quan niệm vật lí lịch sử.</li>
+                                <li>NLb: Thể hiện sự minh bạch và trách nhiệm bằng cách trích dẫn rõ ràng nguồn học liệu từ AI và các website khoa học, không sao chép nguyên văn mà có sự kiểm chứng.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS thực hiện nhiệm vụ theo nhóm để hoàn thành Phiếu học tập số 2 dựa trên gợi ý của giáo viên.</li>
+                        <li>Nội dung tìm hiểu bao gồm:
+                            <ul>
+                                <li>Giải thích hiện tượng theo quan niệm của Aristotle (thời kỳ chưa biết đến ma sát).</li>
+                                <li>Thực hiện (hoặc quan sát qua video số) thí nghiệm máng nghiêng của Galilei với 3 trường hợp: hai máng cùng độ nghiêng, hạ thấp độ nghiêng máng 2 và cho máng 2 nằm ngang.</li>
+                                <li>Rút ra kết luận về vai trò của lực ma sát và trạng thái chuyển động của vật khi hợp lực bằng không.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <ul>
+                        <li>Kết quả Phiếu học tập số 2:
+                            <ul>
+                                <li>Xác định quan niệm Aristotle: Lực là nguyên nhân duy trì chuyển động.</li>
+                                <li>Kết quả thí nghiệm Galilei: Hòn bi có thể chuyển động mãi mãi nếu mặt máng trơn nhẵn (không có ma sát) và các lực tác dụng lên bi cân bằng nhau.</li>
+                            </ul>
+                        </li>
+                        <li>Sản phẩm số: Các tệp ghi chép, hình ảnh hoặc clip ghi lại quá trình thảo luận và thực hiện thí nghiệm của nhóm được lưu trữ trên môi trường số.</li>
+                    </ul>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV phát Phiếu học tập số 2 và yêu cầu các nhóm nghiên cứu quan niệm của Aristotle.</li>
+                        <li>GV cung cấp từ khóa và hướng dẫn HS áp dụng kĩ thuật tìm kiếm nâng cao để xem các video tư liệu về thí nghiệm máng nghiêng của Galilei trên các nền tảng số (1.1.NC1b).</li>
+                        <li><strong>Hướng dẫn AI (NLc):</strong> GV gợi ý prompt: <em>"Hãy đóng vai nhà sử học khoa học, lập bảng so sánh quan niệm về lực và chuyển động của Aristotle và Galilei".</em></li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS thảo luận nhóm, đề xuất sử dụng các công cụ cộng tác trực tuyến để cùng ghi chép các ý tưởng giải thích hiện tượng (2.4.NC1a).</li>
+                        <li>HS quan sát video hoặc thực hiện thí nghiệm trực tiếp, ghi lại độ dịch chuyển của hòn bi trong 3 trường hợp và tổ chức lưu trữ các dữ liệu này vào thư mục học tập số của nhóm (1.3.NC1a).</li>
+                        <li><strong>Vận dụng AI (NLb):</strong> Nhóm dùng chatbot để tìm hiểu khái niệm "thí nghiệm lí tưởng" và thực hiện trích dẫn nguồn AI minh bạch trong sản phẩm báo cáo.</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="14.1.png" alt="Hình 14.1 - Minh họa thí nghiệm của Galilei" class="img-medium">
+                        <p><em>Hình 14.1. Minh họa thí nghiệm của Galilei</em></p>
+                    </div>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Đại diện một nhóm trình bày đáp án Phiếu học tập số 2 thông qua việc trình chiếu các tư liệu nhóm đã thu thập được.</li>
+                        <li><strong>Đáp án dự kiến Phiếu học tập số 2:</strong>
+                            <ul>
+                                <li><strong>Câu 1:</strong> Khi quyển sách đang nằm yên trên bàn, nó chuyển động được là có lực tác dụng vào nó. Khi thôi tác dụng lực thì quyển sách dừng lại. Nếu chưa biết đến lực ma sát thì rõ ràng là đã có 1 lực giữ quyển sách không bị trượt trên mặt bàn.</li>
+                                <li><strong>Câu 2:</strong>
+                                    <ul>
+                                        <li>a. Hòn bi trên máng 2 không lên tới độ cao như được thả ở máng 1.</li>
+                                        <li>b. Hòn bi chuyển động trên máng 2 xa hơn ở thí nghiệm đầu.</li>
+                                        <li>c. Hòn bi chuyển động trên máng 2 xa hơn nhiều 2 thí nghiệm trên và có thể chuyển động mãi.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Câu 3:</strong>
+                                    <ul>
+                                        <li>Do khi chuyển động lên máng 2, có một lực cản ngăn cho hòn bi không thể lên tới độ cao ban đầu.</li>
+                                        <li>Có lực nâng của máng và trọng lực tác dụng lên hòn bi, 2 lực này cân bằng nhau, hợp lực của chúng bằng không. Mặt máng trơn nhẵn nên có thể loại bỏ được lực ma sát tác dụng lên bi.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Câu 4:</strong> Nếu hòn bi không chịu tác dụng của lực nào, hoặc các lực tác dụng lên bi cân bằng thì hòn bi có thể chuyển động mãi được.</li>
+                            </ul>
+                        </li>
+                        <li>HS các nhóm khác sử dụng các chiến lược giao tiếp phù hợp trong môi trường số (2.5.NC1b) để nhận xét, bổ sung và thảo luận về cách Galilei đã "lí tưởng hóa" thí nghiệm để loại bỏ ma sát.</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết, đánh giá sự chủ động trong việc khai thác học liệu số của HS.</li>
+                        <li>GV đánh giá kĩ năng khai thác thông tin và tinh thần trách nhiệm trong sử dụng AI của học sinh.</li>
+                        <li>GV chốt kiến thức: Lực không phải là nguyên nhân duy trì chuyển động; khi các lực tác dụng lên vật cân bằng nhau, vật có thể chuyển động mãi mãi.</li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 2.2 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2.2:<br>PHÁT BIỂU ĐỊNH LUẬT 1 NEWTON</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>Học sinh phát biểu được nội dung của định luật I Newton.</li>
+                        <li>Vận dụng được nội dung định luật để giải thích một số trường hợp thực tế trong cuộc sống liên quan đến trạng thái cân bằng và chuyển động.</li>
+                        <li><strong>Năng lực số:</strong>
+                            <ul>
+                                <li>1.1.NC1b: Áp dụng được kĩ thuật tìm kiếm để lấy được video hoặc các mô phỏng thí nghiệm về máng trượt đệm không khí trong môi trường số.</li>
+                                <li>5.1.NC1b: Tự áp dụng được các giải pháp kĩ thuật để xử lí các vấn đề phát sinh khi vận hành thiết bị số hoặc xem video thí nghiệm trực tuyến.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) phù hợp để nhờ trợ lý AI hỗ trợ giải thích sâu về thuật ngữ "hợp lực bằng không" hoặc "chuyển động thẳng đều" trong định luật.</li>
+                                <li>NLb: Thể hiện sự minh bạch; trích dẫn rõ ràng khi sử dụng các định nghĩa hoặc ví dụ được hỗ trợ bởi AI vào phiếu học tập.</li>
+                                <li>NLa: Nhận thức được định luật I là nền tảng để con người thiết kế và kiểm soát các hệ thống vận tải tự hành an toàn trong kỉ nguyên AI.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS quan sát video thí nghiệm máng trượt có đệm không khí (để loại bỏ ma sát tối đa).</li>
+                        <li>Từ kết quả thí nghiệm lịch sử của Galilei ở hoạt động trước, học sinh khái quát hóa thành nội dung định luật.</li>
+                        <li>HS thảo luận nhóm để hoàn thành Phiếu học tập số 3 với các tình huống thực tế.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <div class="box">
+                        <strong>I. ĐỊNH LUẬT I NEWTON</strong>
+                        <p>Nếu một vật không chịu tác dụng của lực nào hoặc chịu tác dụng của các lực có hợp lực bằng không thì vật đang đứng yên sẽ tiếp tục đứng yên, đang chuyển động sẽ tiếp tục chuyển động thẳng đều.</p>
+                    </div>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS quan sát video thí nghiệm máng trượt đệm không khí (link: <em>https://www.youtube.com/watch?v=VV2YgeHobzQ</em>).</li>
+                        <li>GV yêu cầu HS tìm kiếm thêm các video mô phỏng tương tự trên nền tảng PhET hoặc YouTube nhằm củng cố quan sát (1.1.NC1b).</li>
+                        <li><strong>Hướng dẫn AI (NLc):</strong> GV gợi ý prompt: <em>"Hãy giải thích tại sao trạng thái chuyển động thẳng đều lại được coi là trạng thái tự nhiên của vật khi hợp lực bằng không theo định luật 1 Newton?"</em> để HS mở rộng tư duy.</li>
+                        <li>GV yêu cầu HS đọc SGK mục II, phát biểu định luật 1 Newton.</li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS quan sát sự chuyển động của vật trên đệm không khí khi lực cản cực nhỏ.</li>
+                        <li>HS thảo luận nhóm đôi, kết hợp kiến thức từ thí nghiệm Galilei để rút ra quy luật chung về trạng thái của vật khi hợp lực bằng không.</li>
+                        <li>Trong quá trình xem video hoặc tìm kiếm, nếu gặp lỗi trình duyệt hoặc kết nối, HS chủ động thực hiện các giải pháp xử lí sự cố (5.1.NC1b).</li>
+                        <li><strong>Thực hành AI:</strong> HS dùng Chatbot để đối chiếu ý nghĩa của "trạng thái chuyển động thẳng đều" và thực hiện trích dẫn nguồn AI minh bạch (NLb).</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>GV gọi HS phát biểu nội dung định luật dựa trên quan sát.</li>
+                        <li>GV chọn ngẫu nhiên các nhóm trình bày đáp án cho Phiếu học tập số 3.</li>
+                        <li>Các nhóm khác nhận xét, phản biện về việc xác định các lực cân bằng trong các tình huống (quả cầu, người trượt ván).</li>
+                        <li><strong>Đáp án dự kiến Phiếu học tập số 3:</strong>
+                            <ul>
+                                <li><strong>Câu 1:</strong> Quả cầu chịu tác dụng của hai lực, đó là trọng lực P và lực căng T, hai lực này có phương thẳng đứng, chiều đối nhau và độ lớn bằng nhau, nên quả cầu có hợp lực bằng 0, vì vậy quả cầu đứng yên.</li>
+                                <li><strong>Câu 2:</strong> Do ván trượt chịu tác dụng của các lực có hợp lực bằng 0, nên khi ván trượt chuyển động thì sẽ là chuyển động thẳng đều, vì vậy ván có thể giữ nguyên vận tốc của mình.</li>
+                                <li><strong>Câu 3:</strong> Vật có khối lượng để trên mặt bàn, chắc chắn rằng vật có trọng lượng, và trọng lượng luôn hướng xuống dưới, vật vẫn nằm yên nên hợp lực tác dụng lên vật phải bằng 0, suy ra vật phải chịu thêm một lực khác ngược chiều với trọng lực, và đó chính là phản lực từ bàn tác dụng lên vật.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="14.2.png" alt="Hình 14.2 - Ví dụ về quán tính" class="img-medium">
+                        <p><em>Hình 14.2. Ví dụ về quán tính</em></p>
+                    </div>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV chính xác hóa nội dung định luật và ghi bảng.</li>
+                        <li>GV tổng kết mức độ đạt được năng lực nhận thức vật lí và khả năng xử lí học liệu số của HS.</li>
+                        <li>GV lưu ý thêm: Định luật I Newton còn được gọi là định luật quán tính, sẽ được làm rõ ở phần tiếp theo.</li>
+                        <li><strong>Đánh giá NLAI (NLa):</strong> GV nhấn mạnh: Hiểu định luật I giúp con người kiểm soát các cảm biến trên xe thông minh, tránh việc xe "tự ý" duy trì vận tốc khi có chướng ngại vật.</li>
+                        <li>GV đánh giá khả năng xử lí học liệu số và sự liêm chính khi dùng AI của học sinh.</li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 2.3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2.3:<br>TÌM HIỂU VỀ KHÁI NIỆM QUÁN TÍNH<br>VÀ ỨNG DỤNG CỦA QUÁN TÍNH</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>Xây dựng được khái niệm quán tính; nhận biết quán tính là tính chất bảo toàn trạng thái đứng yên hay chuyển động của mọi vật.</li>
+                        <li>Vận dụng lí thuyết quán tính để giải thích các hiện tượng thực tế (hành khách trên xe, cách tra đầu búa, thắt dây an toàn).</li>
+                        <li><strong>Năng lực số:</strong>
+                            <ul>
+                                <li>1.3.NC1a: Thao tác, tổ chức và lưu trữ được các thông tin, dữ liệu về hiện tượng quán tính để truy xuất báo cáo dễ dàng.</li>
+                                <li>2.4.NC1a: Đề xuất và sử dụng được các công cụ số (như bảng tương tác Padlet, ứng dụng thảo luận nhóm) để đồng sáng tạo kiến thức về ứng dụng quán tính.</li>
+                                <li>3.1.NC1a: Áp dụng được các cách tạo và chỉnh sửa nội dung số (quay clip thí nghiệm, thiết kế sơ đồ giải thích) để thể hiện sự hiểu biết về quán tính.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) phù hợp để nhờ trợ lý AI giải thích cơ chế vận hành của các hệ thống an toàn thông minh (như phanh ABS, cảm biến túi khí) hỗ trợ con người chống lại quán tính.</li>
+                                <li>NLa: Phân tích và nhận thức được rằng dù AI điều khiển các hệ thống phanh tự động, con người vẫn là chủ thể quyết định việc thắt dây an toàn và chịu trách nhiệm cuối cùng về an toàn giao thông.</li>
+                                <li>NLb: Thể hiện tính minh bạch bằng cách trích dẫn nguồn rõ ràng khi sử dụng các ví dụ hoặc hình ảnh minh họa do AI cung cấp.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS quan sát hoặc thực hiện thí nghiệm mô phỏng: Đặt búp bê trên xe lăn, quan sát hiện tượng khi xe chuyển động đột ngột hoặc dừng lại đột ngột.</li>
+                        <li>HS thảo luận nhóm để hoàn thành Phiếu học tập số 4 với các tình huống: xe tăng tốc/phanh gấp, xe rẽ trái, thắt dây an toàn, tra đầu búa.</li>
+                        <li>GV yêu cầu HS đọc SGK mục III.1, nêu khái niệm quán tính.</li>
+                        <li>GV yêu cầu HS quan sát Hình 14.2 và trả lời câu hỏi: Giải thích tại sao quả cầu đứng yên; Tại sao người trượt ván có thể giữ nguyên vận tốc của mình?</li>
+                        <li>GV yêu cầu HS quan sát Hình 14.3 và mô tả thí nghiệm minh họa quán tính.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <div class="box">
+                        <strong>II. QUÁN TÍNH</strong>
+                        <p><strong>1. Quán tính:</strong> Tính chất bảo toàn trạng thái đứng yên hay chuyển động của vật, gọi là quán tính của vật.</p>
+                        <ul>
+                            <li>Do có quán tính mà mọi vật có xu hướng bảo toàn vận tốc cả về hướng và độ lớn.</li>
+                            <li>Định luật I Newton còn được gọi là định luật quán tính.</li>
+                        </ul>
+                        <p><strong>2. Ứng dụng của quán tính trong đời sống:</strong></p>
+                        <ul>
+                            <li>Khi đi trên xe buýt xe đang chạy mà dừng đột ngột sẽ làm cho hành khách lao về phía trước đó là do quán tính.</li>
+                            <li>Khi đang đi thì vấp phải hòn đá ta sẽ ngã về phía trước là do quán tính.</li>
+                            <li>Khi ngồi trên ô tô, tàu lượn cao tốc hoặc máy bay, hành khách luôn được nhắc thắt dây an toàn, vì khi các phương tiện di chuyển với tốc độ nhanh về phía trước, theo quán tính thì người ngồi trên các phương tiện sẽ lao người về phía sau. Khi các phương tiện gặp vấn đề, sẽ phanh gấp, lúc này theo quán tính, cơ thể sẽ lao về phía trước, nhờ có dây an toàn mà cơ thể vẫn giữ lại được cơ thể chúng ta, tránh hướng hợp bị ngã, nguy hiểm đến con người.</li>
+                        </ul>
+                    </div>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV thực hiện thí nghiệm búp bê trên xe lăn hoặc cho HS xem video mô phỏng.</li>
+                        <li>GV phát PHT số 4 và yêu cầu HS sử dụng công cụ thảo luận trực tuyến (như Google Jamboard/Padlet) để ghi lại dự đoán (2.4.NC1a).</li>
+                        <li><strong>Hướng dẫn AI (NLc):</strong> GV gợi ý prompt: <em>"Hãy đóng vai chuyên gia an toàn ô tô, giải thích cách hệ thống phanh ABS sử dụng cảm biến để giúp xe không bị mất lái do quán tính khi phanh gấp".</em></li>
+                        <li>GV yêu cầu HS đọc SGK mục III.2 và trả lời câu hỏi:
+                            <ul>
+                                <li>Khi ngồi trên ô tô, tàu lượn cao tốc hoặc máy bay, hành khách luôn được nhắc thắt dây an toàn. Giải thích điều này.</li>
+                                <li>Để tra đầu búa vào cán, nên chọn cách nào dưới đây? Giải thích tại sao.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS thảo luận nhóm giải thích hiện tượng dựa trên khái niệm bảo toàn vận tốc.</li>
+                        <li>HS có thể quay clip ngắn bằng điện thoại ghi lại thí nghiệm "giật tờ giấy dưới cốc nước" hoặc "tra đầu búa" để làm minh chứng (3.1.NC1a).</li>
+                        <li>HS tổ chức và lưu trữ các tư liệu này vào thư mục số của nhóm (1.3.NC1a).</li>
+                        <li><strong>Thực hành AI:</strong> HS đặt câu lệnh cho Chatbot để lấy thêm ví dụ về quán tính trong kĩ thuật hàng không và thực hiện trích dẫn nguồn AI minh bạch (NLb).</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>GV chọn ngẫu nhiên nhóm trình bày từng câu hỏi trong PHT.</li>
+                        <li>Nhóm báo cáo chiếu clip thí nghiệm hoặc sơ đồ giải thích đã thiết kế (3.1.NC1a).</li>
+                        <li>HS các nhóm khác nhận xét, bổ sung dựa trên chuẩn mực hành vi phù hợp trong môi trường số (2.5.NC1a).</li>
+                        <li><strong>Thảo luận AI (NLa):</strong> Một nhóm báo cáo về vai trò của con người: <em>"Dù AI có thể giúp xe phanh nhanh hơn, nhưng chính con người phải thắt dây an toàn để bảo vệ mình khỏi xu hướng lao về phía trước của quán tính".</em></li>
+                        <li>HS trả lời câu hỏi về cách tra đầu búa: Nên đập mạnh cán búa xuống đất (Hình 14.4a) vì khi cán búa dừng lại đột ngột, đầu búa do quán tính tiếp tục chuyển động xuống và lún sâu vào cán.</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="14.3.png" alt="Hình 14.3 - Thí nghiệm minh họa quán tính" class="img-medium">
+                        <p><em>Hình 14.3. Thí nghiệm minh họa quán tính</em></p>
+                    </div>
+                    <div class="img-container">
+                        <img src="14.4.png" alt="Hình 14.4 - Cách tra đầu búa vào cán" class="img-medium">
+                        <p><em>Hình 14.4. Cách tra đầu búa vào cán</em></p>
+                    </div>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết, chính xác hóa khái niệm: Quán tính là tính chất bảo toàn trạng thái của vật.</li>
+                        <li>GV nhấn mạnh Định luật I Newton còn được gọi là định luật quán tính.</li>
+                        <li>GV đánh giá khả năng vận dụng công cụ số để trình bày vấn đề vật lí của các nhóm.</li>
+                        <li>GV đánh giá kĩ năng sử dụng công cụ số và tư duy phản biện khi làm việc với AI của các nhóm.</li>
+                        <li>GV biểu dương các sản phẩm clip thí nghiệm sáng tạo và nhắc HS lưu trữ vào hồ sơ học tập số cá nhân (NLS 1.3.NC1a).</li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 3:<br>LUYỆN TẬP – TRÒ CHƠI<br>"ĐÀO VÀNG"</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>Hệ thống hóa các kiến thức trọng tâm về Định luật I Newton, khái niệm lực cân bằng và bản chất của quán tính.</li>
+                        <li>Rèn luyện kĩ năng giải bài tập trắc nghiệm, điền khuyết và vận dụng định luật để giải thích các tình huống chuyển động cơ bản.</li>
+                        <li>Vận dụng định luật 1 Newton và quán tính để giải thích hiện tượng.</li>
+                        <li><strong>Năng lực số:</strong>
+                            <ul>
+                                <li>2.1.NC1a: Sử dụng được nhiều công nghệ số (như smartphone, máy tính bảng) để tham gia các trò chơi học tập tương tác trực tuyến.</li>
+                                <li>3.1.NC1a: Áp dụng được các công cụ số (như Canva, MindMeister hoặc PowerPoint) để tạo sơ đồ tư duy hệ thống kiến thức.</li>
+                                <li>5.1.NC1b: Tự áp dụng được các giải pháp khác nhau để xử lí các vấn đề kĩ thuật phát sinh khi tham gia luyện tập trên môi trường số (lỗi kết nối, lỗi ứng dụng).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) phù hợp để nhờ trợ lý AI hỗ trợ giải thích các bước logic trong các câu hỏi tình huống phức tạp hoặc tóm tắt nội dung định luật.</li>
+                                <li>NLb: Thể hiện sự minh bạch và trách nhiệm; sử dụng AI để kiểm chứng kết quả nhưng phải tự thực hiện tư duy và trích dẫn nguồn học liệu từ AI minh bạch.</li>
+                                <li>NLa: Nhận thức được rằng AI cung cấp các dự báo, nhưng con người phải là chủ thể đánh giá độ tin cậy và kiểm soát kết quả cuối cùng dựa trên các quy luật vật lí.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS thực hiện các câu hỏi trong Phiếu học tập số 5 thông qua trò chơi tương tác "ĐÀO VÀNG" hoặc trên nền tảng Quizizz/Kahoot.</li>
+                        <li>Nội dung câu hỏi tập trung vào:
+                            <ul>
+                                <li>Điền từ vào nội dung định luật (hợp lực bằng không, đứng yên, chuyển động thẳng đều).</li>
+                                <li>Nhận diện vật chuyển động theo quán tính (vật chuyển động thẳng đều).</li>
+                                <li>Giải thích hiện tượng dừng đạp xe nhưng xe vẫn di chuyển, hoặc xe buýt tăng tốc đột ngột.</li>
+                            </ul>
+                        </li>
+                        <li>Hệ thống hóa kiến thức bằng sơ đồ tư duy số.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong> Đáp án Phiếu học tập số 5. Sản phẩm số: Bản sơ đồ tư duy số của nhóm được chia sẻ trên không gian học tập chung của lớp.</p>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV giới thiệu trò chơi "ĐÀO VÀNG" trên PowerPoint hoặc gửi link Quizizz bài tập luyện tập cho học sinh.</li>
+                        <li><strong>Luật chơi:</strong>
+                            <ul>
+                                <li>HS chọn cục vàng muốn đào.</li>
+                                <li>HS trả lời câu hỏi tương ứng với cục vàng đã chọn.</li>
+                                <li>Sau khi đọc câu hỏi, HS có 30s suy nghĩ và trả lời.</li>
+                                <li>Nếu HS trả lời đúng sẽ nhận được điểm tương ứng với cục vàng.</li>
+                            </ul>
+                        </li>
+                        <li>GV yêu cầu HS sử dụng thiết bị cá nhân để truy cập và thực hiện nhiệm vụ cá nhân hoặc theo cặp đôi (2.1.NC1a).</li>
+                        <li><strong>Hướng dẫn AI (NLc):</strong> GV gợi ý prompt: <em>"Hãy đóng vai trợ lý học tập, giải thích cho tôi tại sao một vật đang chuyển động với vận tốc 3m/s, nếu các lực tác dụng bỗng nhiên mất đi thì nó lại không dừng lại ngay theo định luật 1 Newton?".</em></li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS thảo luận nhanh và lựa chọn đáp án đúng cho các câu hỏi trắc nghiệm và điền khuyết trong thời gian quy định (30 giây/câu).</li>
+                        <li>Trong quá trình làm bài, nếu gặp sự cố kĩ thuật về trình duyệt hoặc kết nối, HS chủ động thực hiện các thao tác xử lí như làm mới trang hoặc chuyển đổi mạng kết nối (5.1.NC1b).</li>
+                        <li><strong>Thực hành AI (NLb):</strong> HS sử dụng chatbot để kiểm chứng lập luận bài tập điền khuyết và thực hiện trích dẫn nguồn AI minh bạch trong phần ghi chú.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Hệ thống tự động tổng hợp kết quả và hiển thị bảng xếp hạng.</li>
+                        <li>GV chọn một số câu hỏi có tỉ lệ sai cao (ví dụ câu giải thích về vật đang chuyển động bỗng nhiên mất hết các lực) để đại diện HS trình bày lập luận (2.5.NC1b).</li>
+                        <li>Các HS khác tham gia phản biện, bổ sung ý kiến trực tiếp trên môi trường số.</li>
+                        <li>Một nhóm báo cáo kết quả so sánh giữa tư duy vật lí và phản hồi của AI để lớp cùng đánh giá tính chính xác.</li>
+                        <li><strong>Đáp án dự kiến Phiếu học tập số 5:</strong>
+                            <ul>
+                                <li><strong>Câu 1:</strong> (1) Không; (2) Đứng yên; (3) Chuyển động thẳng đều.</li>
+                                <li><strong>Câu 2:</strong> C. Vật chuyển động thẳng đều tức là gia tốc a = 0, hợp lực tác dụng lên vật bằng 0. Vật chuyển động như vậy theo định luật 1 Niu-tơn thì chuyển động như vậy gọi là chuyển động theo quán tính.</li>
+                                <li><strong>Câu 3:</strong> Nhờ vào quán tính giúp cho xe có xu hướng vẫn tiếp tục chuyển động.</li>
+                                <li><strong>Câu 4:</strong> Khi một xe buýt tăng tốc đột ngột thì các hành khách sẽ bị ngã về phía sau do tác dụng của quán tính vẫn giữ nguyên vận tốc ban đầu là bằng 0.</li>
+                                <li><strong>Câu 5:</strong> Theo định luật I Niu-tơn, nếu các lực tác dụng lên vật bỗng nhiên ngừng tác dụng có nghĩa vật này có gia tốc bằng không, lúc này vật này sẽ chuyển động thẳng đều mãi mãi do quán tính nhưng trong thực tế giống như khi ngừng đạp xe, xe chuyển động thêm một đoạn đường rồi mới dừng hẳn vì do xe đạp có quán tính nên nó có xu hướng bảo toàn chuyển động thẳng đều, mặc dù ta đã ngừng đạp xe vẫn đi thêm một đoạn đường. Lúc này xe chuyển động chậm rồi dừng lại là do lực ma sát cản trở sự chuyển động.</li>
+                                <li><strong>Câu 6:</strong> Khi rũ quần áo cả quần áo và bụi dính trong đó chuyển động cùng một vận tốc, trong động tác rũ thì có thời điểm quần áo bị dừng đột ngột, do đó bụi trong quần áo bị văng ra do quán tính, do đó quần áo sạch bụi.</li>
+                                <li><strong>Câu 7:</strong> D. Theo định luật 1 Newton thì các đáp án A, B, C đều sai.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV đánh giá kết quả qua bảng xếp hạng và sự nhiệt tình tham gia của HS.</li>
+                        <li>GV chốt lại kiến thức chuẩn: <em>"Lực không phải là nguyên nhân duy trì chuyển động"</em> và <em>"Quán tính là xu hướng bảo toàn vận tốc"</em>.</li>
+                        <li>GV hướng dẫn HS lưu trữ sơ đồ tư duy vào thư mục học tập số cá nhân để ôn tập (1.3.NC1a).</li>
+                        <li><strong>Đánh giá NLAI (NLa):</strong> GV nhấn mạnh vai trò của con người trong việc thẩm định các kết quả AI cung cấp.</li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 4 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 4:<br>VẬN DỤNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>HS tự vận dụng, tìm tòi mở rộng các kiến thức về Định luật I Newton và quán tính để giải quyết các vấn đề thực tiễn và tương tác với cộng đồng.</li>
+                        <li>Đề xuất được giải pháp làm giảm tác hại của quán tính trong đời sống và phòng tránh tai nạn giao thông.</li>
+                        <li>Vận dụng kiến thức vào thực tế và giao nhiệm vụ về nhà.</li>
+                        <li><strong>Năng lực số:</strong>
+                            <ul>
+                                <li>3.1.NC1a: Áp dụng được các cách tạo và chỉnh sửa nội dung số (quay và biên tập video thí nghiệm, clip thuyết trình) ở các định dạng khác nhau.</li>
+                                <li>2.2.NC1a: Chia sẻ dữ liệu, thông tin và sản phẩm học tập thông qua nhiều công cụ số phù hợp (như Padlet, LMS, nhóm mạng xã hội của lớp).</li>
+                                <li>2.5.NC1b: Áp dụng được các chiến lược giao tiếp và chuẩn mực hành vi phù hợp khi thảo luận, phản biện trên môi trường số.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách sử dụng câu lệnh (prompt) phù hợp để nhờ trợ lý AI gợi ý các ý tưởng sáng tạo cho chiến dịch truyền thông về an toàn giao thông liên quan đến quán tính.</li>
+                                <li>NLb: Thể hiện trách nhiệm và sự minh bạch bằng cách trích dẫn rõ ràng nguồn tài liệu, hình ảnh có sự hỗ trợ của AI hoặc khai thác từ Internet.</li>
+                                <li>NLa: Phân tích được tầm quan trọng của việc con người kiểm soát và chủ động thực hiện các biện pháp an toàn (thắt dây an toàn, giữ khoảng cách) thay vì phụ thuộc hoàn toàn vào các hệ thống phanh tự động thông minh (AI) trên phương tiện.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li><strong>Nhiệm vụ 1 (Cá nhân):</strong> Thực hiện thí nghiệm "Giật tờ giấy dưới cốc nước". Học sinh so sánh hiện tượng khi kéo tờ giấy từ từ và khi giật mạnh, sau đó dùng khái niệm quán tính để giải thích.</li>
+                        <li><strong>Nhiệm vụ 2 (Nhóm):</strong> Xây dựng dự án truyền thông (video clip hoặc bài thuyết trình số) về đề tài: "Quán tính và An toàn giao thông". Nội dung tập trung vào các ví dụ về tai nạn do quán tính và các biện pháp phòng tránh (thắt dây an toàn, giữ khoảng cách, lắp túi khí...).</li>
+                        <li>GV đặt câu hỏi: "Dùng khái niệm quán tính để giải thích hiện tượng trong Hình 14.5: Khi dùng tay kéo từ từ tờ giấy và khi giật mạnh tờ giấy."</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <ul>
+                        <li>Video clip ghi lại thí nghiệm cá nhân và lời giải thích.</li>
+                        <li>Sản phẩm truyền thông số của nhóm (clip thuyết trình, Infographic hoặc Slide báo cáo).</li>
+                        <li>Các phản hồi, đánh giá và chấm chéo của học sinh trên không gian số.</li>
+                    </ul>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV giao nhiệm vụ vận dụng và mở rộng cho HS thông qua các kênh online hoặc bảng tin lớp.</li>
+                        <li>GV cung cấp các từ khóa và gợi ý kĩ thuật tìm kiếm nâng cao để HS khai thác tư liệu về an toàn giao thông trên Internet (1.1.NC1b).</li>
+                        <li><strong>Hướng dẫn AI (NLc):</strong> GV gợi ý một số prompt mẫu: <em>"Hãy đóng vai kĩ sư an toàn ô tô, gợi ý 5 tình huống quán tính gây nguy hiểm trong giao thông và các biện pháp phòng tránh"</em> hoặc <em>"Hãy tạo một hình ảnh minh họa mô tả hành khách lao về phía trước khi xe buýt phanh gấp"</em>.</li>
+                        <li>GV giao nhiệm vụ về nhà:
+                            <ul>
+                                <li><strong>Nhiệm vụ năng lực số (1.1.NC1a):</strong> HS tìm kiếm, lựa chọn và khai thác thông tin từ các nguồn số phù hợp để đáp ứng nhu cầu tìm hiểu về Định luật I Newton và quán tính; biết lựa chọn thông tin cần thiết phục vụ nhiệm vụ học tập.</li>
+                                <li><strong>Nhiệm vụ trực tuyến:</strong> Tìm hiểu thêm trên internet về định luật 1 Newton và quán tính để hoàn thiện nội dung học tập.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS thực hiện thí nghiệm tại nhà, sử dụng thiết bị số cá nhân để quay phim, biên tập video clip giải thích hiện tượng (3.1.NC1a).</li>
+                        <li>Các nhóm thảo luận trực tuyến để đồng sáng tạo sản phẩm về an toàn giao thông, kết hợp hình ảnh thực tế và kiến thức vật lí (2.4.NC1a).</li>
+                        <li>GV hỗ trợ giải đáp thắc mắc thông qua các kênh online.</li>
+                        <li><strong>Thực hành AI (NLb):</strong> HS sử dụng các công cụ AI tạo hình ảnh (như Bing Image Creator) để minh họa cho sản phẩm và thực hiện ghi chú nguồn AI minh bạch trong sản phẩm.</li>
+                        <li>HS vận dụng kiến thức: Khi kéo từ từ tờ giấy, cốc nước chuyển động cùng với tờ giấy do lực ma sát. Khi giật mạnh tờ giấy, cốc nước vẫn đứng yên do quán tính (không kịp thay đổi vận tốc).</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="14.5.png" alt="Hình 14.5 - Thí nghiệm về quán tính" class="img-medium">
+                        <p><em>Hình 14.5. Thí nghiệm về quán tính</em></p>
+                    </div>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>HS đăng tải sản phẩm lên Padlet hoặc hệ thống quản lí học tập của lớp (2.2.NC1a).</li>
+                        <li>HS xem sản phẩm của các nhóm khác, thực hiện thảo luận, nhận xét và chấm chéo dựa trên các tiêu chí về nội dung và kĩ thuật số (2.5.NC1b).</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết, đánh giá các bài báo cáo vào tiết học sau hoặc trực tiếp trên nền tảng số.</li>
+                        <li>GV biểu dương các sản phẩm số sáng tạo, có tính giáo dục cao về an toàn giao thông và chốt lại vai trò của quán tính trong thực tiễn.</li>
+                        <li><strong>Chốt kiến thức (NLa):</strong> GV nhấn mạnh: <em>"AI giúp chúng ta tối ưu hóa cảm biến va chạm, nhưng ý thức thắt dây an toàn của con người mới là yếu tố quyết định để chiến thắng lực quán tính"</em>.</li>
+                        <li>GV nhận xét, kết thúc bài học.</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG -->
+    <h2>IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG (NẾU CÓ)</h2>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+
+    <!-- Ký duyệt -->
+    <div class="signature">
+        <div class="signature-box">
+            <p><strong>Duyệt TCM</strong></p>
+            <p class="signature-name"><input type="text" placeholder="Lục Tuyến"></p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    function disableKeys(e) {
+        if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) return true;
+        if (e.ctrlKey && e.shiftKey && (e.key === 'p' || e.key === 'P')) return true;
+        if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'a' || e.key === 'A')) {
+            e.preventDefault(); return false;
+        }
+        if (e.key === 'F12') { e.preventDefault(); return false; }
+        return true;
+    }
+    document.addEventListener('dragstart', function(e) { e.preventDefault(); });
+    document.addEventListener('selectstart', function(e) {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') e.preventDefault();
+    });
+    document.querySelectorAll('input, textarea').forEach(function(el) {
+        el.addEventListener('selectstart', function(e) { e.stopPropagation(); });
+        el.addEventListener('dragstart', function(e) { e.stopPropagation(); });
+    });
+</script>
+
+</body>
+</html>

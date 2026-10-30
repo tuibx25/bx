@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giáo án Bài 13 - Vật lí 10</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @page { size: A4; margin: 20mm 15mm; }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            line-height: 1.4;
+            color: #000000;
+            background-color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+        .container {
+            width: 100%;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        h1, h2, h3, h4 { color: #004488; margin-top: 15px; margin-bottom: 10px; }
+        h1 {
+            text-align: center;
+            font-size: 18pt;
+            color: #8B4513;
+            border-bottom: 2px solid #8B4513;
+            padding-bottom: 5px;
+        }
+        h2 {
+            font-size: 15pt;
+            border-bottom: 1px solid #D3D3D3;
+            padding-bottom: 3px;
+            color: #8B5A2B;
+        }
+        h3 { font-size: 14pt; color: #0066CC; }
+        h4 { font-size: 13pt; color: #8B5A2B; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12pt; }
+        th, td { border: 1px solid #D3D3D3; padding: 6px 8px; text-align: left; vertical-align: top; }
+        th { background-color: #F5F5DC; color: #004488; font-weight: bold; }
+        .tien-trinh { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .tien-trinh th { background-color: #F5DEB3; color: #004488; text-align: center; }
+        .tien-trinh td { vertical-align: top; }
+        .col-buoc { width: 25%; background-color: #F5F5F5; font-weight: bold; color: #8B4513; }
+        .col-noidung { width: 75%; }
+        .box { background-color: #F5F5DC; border-left: 5px solid #8B5A2B; padding: 10px; margin: 10px 0; }
+        .box-ai { background-color: #E8F4FF; border-left: 5px solid #0066CC; padding: 10px; margin: 10px 0; }
+        .box-nls { background-color: #FFF8E1; border-left: 5px solid #CC9900; padding: 10px; margin: 10px 0; }
+        .red-text { color: #CC0000; font-weight: bold; }
+        .blue-text { color: #0066CC; }
+        .img-container { text-align: center; margin: 10px 0; }
+        .img-container img {
+            max-width: 100%; height: auto;
+            border: 1px solid #D3D3D3;
+            -webkit-user-drag: none; user-drag: none; pointer-events: none;
+        }
+        .img-small { max-width: 250px; }
+        .img-medium { max-width: 350px; }
+        .img-large { max-width: 500px; }
+        ul, ol { padding-left: 20px; }
+        li { margin-bottom: 5px; }
+        .formula { text-align: center; margin: 10px 0; font-size: 14pt; }
+        .input-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt; font-weight: bold;
+            color: #000000; background-color: #FFFFFF;
+            border: 1px solid #D3D3D3; border-radius: 3px;
+            padding: 2px 5px; width: 200px;
+        }
+        .input-text:focus { outline: none; border-color: #8B4513; }
+        .signature {
+            margin-top: 30px; display: flex;
+            justify-content: flex-end; text-align: center; font-weight: bold;
+        }
+        .signature-box { width: 200px; border-top: 2px solid #8B4513; padding-top: 10px; }
+        .signature-name { margin-top: 50px; }
+        .signature-name input {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt; font-weight: bold;
+            color: #000000; background-color: #FFFFFF;
+            border: 1px solid #D3D3D3; border-radius: 3px;
+            padding: 2px 5px; width: 150px; text-align: center;
+        }
+        .phieu { border: 1.5px solid #8B4513; padding: 10px 15px; margin: 12px 0; background: #FDFDF5; }
+        .phieu h4 { text-align: center; margin: 0 0 8px 0; color: #8B4513; }
+        @media print {
+            body { font-size: 12pt; -webkit-user-select: auto; user-select: auto; }
+            .container { padding: 0; }
+            .no-print { display: none; }
+            .input-text, .signature-name input {
+                border: none; background: transparent; color: #000; font-weight: bold;
+            }
+            .img-container img { pointer-events: auto; }
+            .phieu, .box, .box-ai, .box-nls, .tien-trinh { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" onkeydown="return disableKeys(event);" ondragstart="return false;" onselectstart="return false;">
+
+<div class="container">
+
+    <!-- Ngày soạn -->
+    <p><strong>Ngày soạn:</strong> <input type="text" class="input-text" placeholder="....../....../20......"></p>
+
+    <!-- Tiêu đề giáo án -->
+    <h1>GIÁO ÁN BÀI 13: TỔNG HỢP VÀ PHÂN TÍCH LỰC. CÂN BẰNG LỰC</h1>
+    <p style="text-align: center; font-style: italic;">Môn: Vật lí 10 – Bộ sách Kết nối tri thức với cuộc sống</p>
+    <p style="text-align: center;">Số tiết: 2 (Tiết 21, 22 theo PPCT)</p>
+
+    <!-- I. MỤC TIÊU -->
+    <h2>I. MỤC TIÊU</h2>
+
+    <h3>1. Kiến thức</h3>
+    <ul>
+        <li>Phát biểu được khái niệm tổng hợp lực, hợp lực, phân tích lực.</li>
+        <li>Nêu được quy tắc hình bình hành để tổng hợp hai lực đồng quy.</li>
+        <li>Nêu được điều kiện cân bằng của một vật chịu tác dụng của nhiều lực.</li>
+        <li>Biết cách phân tích một lực thành hai lực thành phần vuông góc.</li>
+        <li>Vận dụng được quy tắc hình bình hành và điều kiện cân bằng để giải một số bài tập đơn giản.</li>
+        <li>Trình bày được khái niệm hợp lực và tổng hợp lực.</li>
+        <li>Phát biểu và vận dụng được quy tắc hình bình hành để tổng hợp hai lực đồng quy.</li>
+        <li>Nêu được khái niệm và nhận biết được các lực cân bằng, không cân bằng.</li>
+        <li>Phân tích được một lực thành các lực thành phần vuông góc dựa trên quy tắc hình bình hành.</li>
+    </ul>
+
+    <h3>2. Năng lực</h3>
+    <h4>a. Năng lực chung</h4>
+    <ul>
+        <li>Tự chủ và tự học: Tìm hiểu trước nội dung bài học qua SGK và internet.</li>
+        <li>Giao tiếp và hợp tác: Thảo luận nhóm để tổng hợp và phân tích lực.</li>
+        <li>Giải quyết vấn đề và sáng tạo: Vận dụng kiến thức để giải thích các tình huống thực tế.</li>
+        <li><strong>Tự chủ và tự học:</strong> Chủ động nghiên cứu SGK và học liệu số để tìm hiểu phương pháp tổng hợp lực.</li>
+        <li><strong>Giao tiếp và hợp tác:</strong> Hoạt động nhóm hiệu quả để thiết kế phương án thí nghiệm và thảo luận kết quả qua các nền tảng số.</li>
+        <li><strong>Giải quyết vấn đề và sáng tạo:</strong> Đề xuất giải pháp giải cứu tàu Ever Given dựa trên nguyên lí tổng hợp lực.</li>
+    </ul>
+    <h4>b. Năng lực đặc thù môn học</h4>
+    <ul>
+        <li>Biểu diễn được vectơ lực và hợp lực.</li>
+        <li>Vận dụng được quy tắc hình bình hành để tìm hợp lực.</li>
+        <li>Phân tích được một lực thành hai lực thành phần vuông góc.</li>
+        <li><strong>Nhận thức vật lí:</strong> Phát biểu được khái niệm tổng hợp, hợp lực, các lực cân bằng và không cân bằng. Trình bày được nội dung quy tắc hình bình hành dùng để tổng hợp hai lực đồng quy trên một mặt phẳng. Sử dụng được các vector lực để biểu diễn việc tổng hợp các lực thành phần thành một hợp lực duy nhất, hoặc phân tích một lực thực cho trước thành hai thành phần vuông góc theo các phương xác định.</li>
+        <li><strong>Tìm hiểu thế giới tự nhiên dưới góc độ vật lí:</strong> Quan sát và chỉ ra được các trường hợp vật ở trạng thái cân bằng (hợp lực bằng 0) hoặc không cân bằng trong đời sống, chẳng hạn như quyển sách nằm yên trên bàn hoặc quả bóng đang rơi. Áp dụng kĩ thuật tìm kiếm nâng cao (1.1.NC1b) để thu thập các video thí nghiệm, mô phỏng về sự tương tác lực trong tự nhiên; đồng thời biết cách lựa chọn và khai thác các nguồn học liệu số này một cách khoa học để giải thích các hiện tượng vật lí thực tế.</li>
+        <li><strong>Vận dụng kiến thức, kĩ năng đã học:</strong> Vận dụng quy tắc hình bình hành và các công thức toán học để tính toán độ lớn, phương và chiều của hợp lực hoặc các lực thành phần trong các bài tập cụ thể (như tình huống giải cứu tàu Ever Given). Biết thiết kế và trình bày các sản phẩm học tập số (3.1.NC1a) như sơ đồ tư duy, infographic hoặc video clip ngắn để minh họa phương pháp tổng hợp và phân tích lực, qua đó thể hiện khả năng sáng tạo và vận dụng kiến thức vào môi trường số.</li>
+    </ul>
+    <h4>c. Năng lực số</h4>
+    <div class="box-nls">
+        <ul>
+            <li><strong>1.1.NC1c:</strong> Tìm và lọc 2 nguồn về Tổng hợp và phân tích lực. Cân bằng lực; dùng AI gợi ý từ khóa/giải thích ban đầu, đối chiếu SGK và ghi nguồn.</li>
+            <li><strong>1.1.NC1b:</strong> Áp dụng kĩ thuật tìm kiếm để khai thác video mô phỏng quy tắc hình bình hành và các ứng dụng thực tế của lực.</li>
+            <li><strong>1.3.NC1a:</strong> Thao tác và tổ chức dữ liệu thí nghiệm trên bảng tính điện tử để lưu trữ và truy xuất dễ dàng.</li>
+            <li><strong>2.1.NC1a:</strong> Sử dụng các công cụ tương tác số (như Mentimeter/Padlet) để tham gia khởi động và thảo luận nhóm.</li>
+            <li><strong>3.1.NC1a:</strong> Tạo sản phẩm học tập số (như sơ đồ tư duy, slide) để trình bày quy tắc tổng hợp và phân tích lực.</li>
+            <li><strong>5.2.NC1b:</strong> Sử dụng phần mềm mô phỏng (như PhET) để kiểm chứng quy tắc hình bình hành và điều kiện cân bằng lực.</li>
+        </ul>
+    </div>
+
+    <h4>d. Năng lực trí tuệ nhân tạo (AI)</h4>
+    <div class="box-ai">
+        <ul>
+            <li><strong>NLb (Đạo đức AI):</strong> Thể hiện sự minh bạch khi sử dụng AI để tổng hợp dữ liệu; thực hiện trích dẫn nguồn học liệu số và AI minh bạch khi xây dựng nội dung báo cáo.</li>
+            <li><strong>NLc (Các kĩ thuật và ứng dụng AI):</strong> Biết cách thiết lập các câu lệnh (prompt) phù hợp để nhờ trợ lý ảo AI hỗ trợ giải thích các tình huống thực tế phức tạp (như cơ chế kéo tàu Ever Given) hoặc so sánh các phương án tổng hợp lực.</li>
+            <li><strong>NLa (Tư duy lấy con người làm trung tâm):</strong> Nhận thức được rằng dù AI cung cấp các mô hình tính toán lực tối ưu, con người mới là chủ thể ra quyết định cuối cùng và chịu trách nhiệm về an toàn kĩ thuật.</li>
+        </ul>
+    </div>
+
+    <h3>3. Phẩm chất</h3>
+    <ul>
+        <li><strong>Chăm chỉ:</strong> Tích cực tham gia thảo luận nhóm, hoàn thành các nhiệm vụ học tập được giao; tích cực tìm tòi học liệu số về ứng dụng của lực trong đời sống.</li>
+        <li><strong>Trung thực:</strong> Báo cáo trung thực kết quả thảo luận, không sao chép kết quả của nhóm khác; khách quan trong việc báo cáo số liệu thí nghiệm và trích dẫn nguồn học liệu mạng.</li>
+        <li><strong>Trách nhiệm:</strong> Có ý thức giữ gìn, bảo quản dụng cụ học tập và thiết bị thí nghiệm; có ý thức bảo vệ thiết bị số và dữ liệu chung của nhóm.</li>
+        <li><strong>Cẩn thận, tỉ mỉ:</strong> Vẽ vectơ lực và hợp lực chính xác, tính toán cẩn thận.</li>
+    </ul>
+
+    <!-- II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU -->
+    <h2>II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU</h2>
+
+    <h3>1. Giáo viên</h3>
+    <ul>
+        <li>SGK Vật lí 10, SGV, máy chiếu, máy tính.</li>
+        <li>Hình ảnh, video minh họa về tổng hợp lực, phân tích lực, cân bằng lực.</li>
+        <li>Phiếu học tập.</li>
+        <li>Bài giảng điện tử, video về sự cố tàu Ever Given.</li>
+        <li>Link phần mềm mô phỏng lực (PhET), ứng dụng Quizizz cho phần luyện tập.</li>
+        <li>Link mua lực kế: <em>https://s.shopee.vn/16IDQCacZ</em></li>
+        <li>Quả cân có móc treo: <em>https://s.shopee.vn/1Vv6tOJDni</em></li>
+        <li>Phiếu học tập số 1, 2, 3, 4, 5.</li>
+        <li>Bộ thí nghiệm tổng hợp lực đồng quy.</li>
+    </ul>
+
+    <!-- Phiếu học tập số 1 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 1 – SIÊU TÀU EVER GIVEN</h4>
+        <p>Ngày 23/03/2021, siêu tàu Ever Given – một trong những tàu container lớn nhất thế giới – trên đường di chuyển từ châu Á sang châu Âu đã bị mắc cạn khi di chuyển qua kênh đào Suez. Sự cố đã làm tê liệt tuyến giao thông huyết mạch này theo cả hai hướng. Việc con tàu bị mắc cạn đang làm ách tắc 9,6 tỉ USD hàng hóa mỗi ngày giữa Châu Á và Châu Âu. Ngày 29/03/2021, sau nỗ lực thực hiện hàng loạt các biện pháp con tàu đã được giải cứu thành công. Em hãy đóng vai trò là người kĩ sư đã đưa ra một số biện pháp giải cứu thành công con tàu trên.</p>
+    </div>
+
+    <!-- Phiếu học tập số 2 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 2 – LUYỆN TẬP VỀ TỔNG HỢP HAI LỰC CÙNG PHƯƠNG</h4>
+        <p>Hãy đọc kỹ các bài toán sau để trả lời chính xác từng câu hỏi.</p>
+        <p><strong>1.</strong> Xác định lực tổng hợp tác dụng lên vật (các trường hợp trong SGK: hai lực cùng chiều, hai lực ngược chiều).</p>
+        <p><strong>2.</strong> Nêu quy tắc tổng hợp hai lực cùng phương?</p>
+    </div>
+
+    <!-- Phiếu học tập số 3 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 3 – LUYỆN TẬP VỀ TỔNG HỢP HAI LỰC ĐỒNG QUY</h4>
+        <p>Hãy đọc kỹ các bài toán sau để trả lời chính xác từng câu hỏi.</p>
+        <p><strong>1.</strong> Xác định lực tổng hợp tác dụng lên vật.</p>
+        <p><strong>2.</strong> Cho hai lực đồng quy có độ lớn F₁ = 6N và F₂ = 8N. Nếu hợp lực có độ lớn F = 10N thì góc giữa hai lực F₁, F₂ bằng bao nhiêu? Vẽ hình.</p>
+        <p><strong>2.</strong> Lực kéo của mỗi tàu ủi hến trên đều có độ lớn bằng 8000N và góc giữa hai dây cáp bằng 30°.</p>
+        <ul>
+            <li>a. Tính độ lớn hợp lực của hai lực kéo. Xác định phương, chiều của hợp lực.</li>
+            <li>b. Xác định lại hợp lực nếu góc giữa hai dây cáp bằng 90°.</li>
+        </ul>
+    </div>
+
+    <!-- Phiếu học tập số 4 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 4 – LUYỆN TẬP CÁC LỰC CÂN BẰNG VÀ KHÔNG CÂN BẰNG</h4>
+        <p><strong>1.</strong> Quyển sách đang nằm yên trên bàn.</p>
+        <ul>
+            <li>a. Có những lực nào tác dụng lên quyển sách?</li>
+            <li>b. Các lực này có cân bằng không? Vì sao?</li>
+        </ul>
+        <p><strong>2.</strong> Xe ô tô chuyển động: Một ô tô chịu một lực F₁ = 400N hướng về phía trước và một lực F₂ = 300N hướng về phía sau. Hỏi hợp lực tác dụng lên ô tô có độ lớn bằng bao nhiêu và hướng về phía nào?</p>
+        <p><strong>3.</strong> Quan sát mỗi công việc tình huống ở hình vẽ:</p>
+        <ul>
+            <li>a. Tính huống nào có hợp lực khác 0?</li>
+            <li>b. Mô tả sự thay đổi vận tốc của mỗi vật trong từng hình.</li>
+        </ul>
+    </div>
+
+    <!-- Phiếu học tập số 5 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 5 – PHÂN TÍCH MỘT LỰC THÀNH CÁC LỰC THÀNH PHẦN VUÔNG GÓC</h4>
+        <p>Hãy đọc kỹ một bài toán sau. Sử dụng số tương ứng để trả lời chính xác từng mục.</p>
+        <p><strong>1.</strong> Xác định hướng và độ lớn của lực ma sát tác dụng lên khối gỗ.</p>
+        <p><strong>2.</strong> Xác định hướng và độ lớn của lực ma sát tác dụng lên ván trượt.</p>
+        <p><strong>3.</strong> Một vật được giữ yên trên một mặt phẳng nghiêng nhẵn bởi một lò xo.</p>
+        <ul>
+            <li>a. Có những lực nào tác dụng lên vật?</li>
+            <li>b. Phân tích trọng lực tác dụng lên vật thành 2 lực thành phần và nêu rõ tác dụng của hai lực này.</li>
+        </ul>
+    </div>
+
+    <h3>2. Học sinh</h3>
+    <ul>
+        <li>SGK Vật lí 10, vở ghi, máy tính/điện thoại có kết nối internet (nếu có).</li>
+        <li>Ôn tập lại kiến thức về lực, hai lực cân bằng đã học ở cấp THCS.</li>
+        <li>SGK, thiết bị cá nhân (Smartphone/Laptop) có kết nối Internet.</li>
+        <li>Ôn tập kiến thức về véc tơ lực.</li>
+        <li>Hoàn thành nhiệm vụ học tập trực tuyến trước khi đến lớp (tìm hiểu về tổng hợp và phân tích lực qua internet, ChatGPT).</li>
+    </ul>
+
+    <!-- III. TIẾN TRÌNH DẠY HỌC -->
+    <h2>III. TIẾN TRÌNH DẠY HỌC</h2>
+
+    <!-- TIẾT 1 -->
+    <h3>Tiết 1: Tổng hợp lực - Hợp lực tác dụng</h3>
+
+    <table class="tien-trinh">
+        <thead>
+            <tr>
+                <th class="col-buoc">Bước thực hiện</th>
+                <th class="col-noidung">Nội dung các bước</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- HOẠT ĐỘNG 1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 1:<br>MỞ ĐẦU – TẠO TÌNH HUỐNG<br>HỌC TẬP</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>Kích thích sự tò mò, hứng thú của HS về việc cần thiết phải sử dụng nhiều lực để giải quyết một nhiệm vụ cơ học thực tế.</li>
+                        <li>Tạo hứng thú, dẫn dắt học sinh vào bài mới.</li>
+                        <li><strong>Năng lực số (2.1.NC1a):</strong> HS sử dụng được các công nghệ số (như điện thoại, máy tính bảng) để tương tác, gửi ý kiến phản hồi nhanh trong môi trường số.</li>
+                        <li><strong>Năng lực số (1.1.NC1a):</strong> Bước đầu xác định được nhu cầu thông tin cần tìm kiếm để đưa ra giải pháp kĩ thuật cho một sự cố thực tế.</li>
+                        <li><strong>Năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) phù hợp để nhờ trợ lý AI (ChatGPT/Gemini) hỗ trợ liệt kê các yếu tố lực tác động chính trong cứu hộ tàu biển.</li>
+                                <li>NLb: Thể hiện trách nhiệm và tính minh bạch khi sử dụng thông tin từ AI làm tư liệu tham khảo, đồng thời nhận thức được rủi ro nếu quá phụ thuộc vào kết quả máy tính.</li>
+                                <li>NLa: Nhận thức được rằng dù AI có thể hỗ trợ tính toán các kịch bản lực, con người (kĩ sư) mới là chủ thể ra quyết định cuối cùng để bảo đảm an toàn kĩ thuật.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS theo dõi tư liệu về sự cố siêu tàu Ever Given bị mắc cạn tại kênh đào Suez vào tháng 3/2021.</li>
+                        <li>HS đóng vai trò là kĩ sư để đề xuất các phương án giải cứu con tàu thông qua một ứng dụng tương tác trực tuyến (như Padlet hoặc Mentimeter).</li>
+                        <li>GV chiếu hình ảnh hai tàu kéo giống nhau dùng dây cáp để kéo một tàu chở hàng bị chết máy vào cảng bằng hai lực \(\vec{F}_1\) và \(\vec{F}_2\).</li>
+                        <li>GV đặt câu hỏi: <em>"Tàu chở hàng sẽ chuyển động theo hướng nào? Làm thế nào để tính được độ lớn của lực kéo tác dụng lên tàu chở hàng?"</em></li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong> Danh sách các giải pháp của các nhóm HS được hiển thị trên "bảng tin số" của lớp. HS nhận thức được vấn đề: Làm thế nào để phối hợp lực của nhiều tàu kéo thành một lực tổng hợp đủ mạnh để di chuyển con tàu.</p>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV trình chiếu video hoặc hình ảnh về sự cố tàu Ever Given mắc cạn: <em>"Ngày 23/03/2021, siêu tàu Ever Given – một trong những tàu container lớn nhất thế giới – trên đường di chuyển từ châu Á sang châu Âu đã bị mắc cạn khi di chuyển qua kênh đào Suez. Sự cố đã làm tê liệt tuyến giao thông huyết mạch này theo cả hai hướng. Việc con tàu bị mắc cạn đang làm ách tắc 9,6 tỉ USD hàng hóa mỗi ngày giữa Châu Á và Châu Âu. Ngày 29/03/2021, sau nỗ lực thực hiện hàng loạt các biện pháp con tàu đã được giải cứu thành công."</em></li>
+                        <li>GV nêu nhiệm vụ: <em>"Trong vai trò kĩ sư, các em hãy đề xuất phương án dùng các tàu kéo để giải cứu tàu Ever Given."</em></li>
+                        <li>GV cung cấp mã QR hoặc đường link truy cập vào bảng tương tác Padlet cho các nhóm (2.1.NC1a).</li>
+                        <li><strong>Hướng dẫn AI (NLc):</strong> GV gợi ý prompt: <em>"Hãy đóng vai chuyên gia kĩ thuật hàng hải, liệt kê các hướng lực kéo chính khi 10 tàu kéo cùng cứu một con tàu không lỗ mắc cạn theo phương chéo"</em> để các nhóm tham khảo ý tưởng.</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="01.png" alt="Hình ảnh hai tàu kéo tàu chở hàng" class="img-medium">
+                        <p><em>Hình ảnh minh họa: Hai tàu kéo tàu chở hàng</em></p>
+                    </div>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS thảo luận nhóm, xác định những thông tin cần thiết về lực kéo của tàu và vị trí đặt các lực (1.1.NC1a).</li>
+                        <li>Các nhóm sử dụng thiết bị số để nhập các đề xuất của mình (ví dụ: số lượng tàu kéo, hướng kéo) lên không gian chung của lớp (2.4.NC1a).</li>
+                        <li>GV theo dõi và hỗ trợ các nhóm thao tác trên môi trường số.</li>
+                        <li><strong>Thực hành AI (NLb):</strong> Các nhóm được khuyến khích dùng AI để đối chiếu kịch bản lực nhưng phải tự biên tập lại nội dung theo tư duy vật lí của nhóm.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>GV sử dụng kĩ thuật "phòng tranh số" (Digital Gallery Walk), hiển thị tất cả ý tưởng của các nhóm trên màn hình chính.</li>
+                        <li>Đại diện một số nhóm giải thích tại sao họ chọn hướng kéo như vậy (2.1.NC1b).</li>
+                        <li>HS các nhóm khác vào bình luận, thả tim hoặc phản biện trực tiếp trên ứng dụng số (2.5.NC1b).</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết các giải pháp, nhấn mạnh việc sử dụng nhiều tàu kéo chính là việc tác dụng nhiều lực đồng thời vào một vật.</li>
+                        <li>GV đặt vấn đề: <em>"Để biết chính xác lực tổng hợp của các tàu kéo có độ lớn và hướng như thế nào, chúng ta sẽ nghiên cứu quy tắc tổng hợp lực trong bài học hôm nay."</em></li>
+                        <li>GV nhận xét, dẫn dắt vào bài: <em>"Để trả lời câu hỏi này, chúng ta cùng tìm hiểu Bài 13: Tổng hợp và phân tích lực. Cân bằng lực."</em></li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 2.1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2.1:<br>TÌM HIỂU VỀ PHƯƠNG PHÁP<br>TỔNG HỢP LỰC TRÊN MỘT MẶT PHẲNG</strong><br>
+                    (20 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>Trình bày được khái niệm tổng hợp lực, hợp lực. Phát biểu và sử dụng được quy tắc hình bình hành.</li>
+                        <li>Dùng hình vẽ tổng hợp được các lực trên một mặt phẳng.</li>
+                        <li>Hình thành khái niệm tổng hợp lực, hợp lực, quy tắc hình bình hành.</li>
+                        <li><strong>Năng lực số:</strong>
+                            <ul>
+                                <li>1.1.NC1b: Áp dụng được kĩ thuật tìm kiếm để lấy được dữ liệu, hình ảnh hoặc video mô phỏng về quy tắc hình bình hành trong môi trường số.</li>
+                                <li>5.2.NC1b: Áp dụng được các công cụ số (như phần mềm mô phỏng PhET) để giải quyết nhu cầu tìm hiểu sự thay đổi của hợp lực theo độ lớn và góc giữa hai lực thành phần.</li>
+                                <li>1.3.NC1a: Thao tác và tổ chức dữ liệu hình ảnh, kết quả mô phỏng để lưu trữ và truy xuất phục vụ báo cáo nhóm.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập các câu lệnh (prompt) phù hợp để nhờ trợ lý ảo AI hỗ trợ giải thích logic toán học hoặc so sánh sự khác nhau giữa tổng hợp lực cùng phương và lực đồng quy.</li>
+                                <li>NLb: Thể hiện sự minh bạch và trách nhiệm; sử dụng thông tin từ AI làm tư liệu tham khảo và thực hiện trích dẫn nguồn học liệu số minh bạch khi xây dựng nội dung báo cáo.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS quan sát hình 13.1 SGK để hình thành khái niệm hợp lực.</li>
+                        <li>HS thảo luận nhóm để hoàn thành Phiếu học tập (PHT) số 2 (tổng hợp lực cùng phương) và Phiếu học tập (PHT) số 3 (quy tắc hình bình hành).</li>
+                        <li>Sử dụng thiết bị số để tìm kiếm và thực hành trên phần mềm mô phỏng về tổng hợp lực.</li>
+                        <li>Sử dụng thiết bị số cá nhân để thực hành trên phần mềm mô phỏng PhET và trao đổi với trợ lý AI nhằm kiểm chứng các quy luật vật lí.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <div class="box">
+                        <strong>I. TỔNG HỢP LỰC – HỢP LỰC TÁC DỤNG</strong>
+                        <p><strong>Tổng hợp lực</strong> là phép thay thế các lực tác dụng đồng thời vào cùng một vật bằng một lực có tác dụng giống hệt như các lực ấy. Lực thay thế này gọi là <strong>hợp lực</strong>.</p>
+                        <div class="formula">\[ \vec{F} = \vec{F}_1 + \vec{F}_2 + \vec{F}_3 + \dots \]</div>
+
+                        <p><strong>1. Tổng hợp hai lực cùng phương</strong></p>
+                        <p>Quy tắc tổng hợp hai lực cùng phương: Lực tổng hợp của hai lực \(F_1, F_2\) cùng phương là một lực \(F\):</p>
+                        <ul>
+                            <li><strong>Phương:</strong> cùng phương với hai lực thành phần.</li>
+                            <li><strong>Chiều:</strong>
+                                <ul>
+                                    <li>Nếu \(\vec{F}_1 \uparrow\uparrow \vec{F}_2\) thì \(\vec{F} \uparrow\uparrow \vec{F}_1, \vec{F}_2\).</li>
+                                    <li>Nếu \(\vec{F}_1 \uparrow\downarrow \vec{F}_2\) thì \(\vec{F}\) sẽ cùng chiều với lực có độ lớn lớn hơn.</li>
+                                </ul>
+                            </li>
+                            <li><strong>Độ lớn:</strong>
+                                <ul>
+                                    <li>Nếu \(\vec{F}_1 \uparrow\uparrow \vec{F}_2 \Rightarrow F = F_1 + F_2\).</li>
+                                    <li>Nếu \(\vec{F}_1 \uparrow\downarrow \vec{F}_2 \Rightarrow F = |F_1 - F_2|\).</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <p><strong>2. Tổng hợp hai lực đồng quy – Quy tắc hình bình hành</strong></p>
+                        <p>Tổng hợp hai lực đồng quy tuân theo quy tắc hình bình hành:</p>
+                        <ul>
+                            <li><strong>Bước 1:</strong> Vẽ hai vectơ \(\vec{F}_1\) và \(\vec{F}_2\) đồng quy tại O.</li>
+                            <li><strong>Bước 2:</strong> Vẽ một hình bình hành có hai cạnh liên kề trùng với vectơ \(\vec{F}_1\) và \(\vec{F}_2\).</li>
+                            <li><strong>Bước 3:</strong> Vẽ đường chéo hình bình hành có cùng gốc O. Vectơ hợp lực \(\vec{F}\) trùng với đường chéo này.</li>
+                        </ul>
+                        <p>Độ lớn của hợp lực được tính theo công thức:</p>
+                        <div class="formula">\[ F = \sqrt{F_1^2 + F_2^2 + 2F_1F_2\cos\alpha} \]</div>
+                        <p>Trong đó \(\alpha\) là góc giữa hai lực \(\vec{F}_1\) và \(\vec{F}_2\).</p>
+                    </div>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS quan sát hình 13.1 SGK và giải thích tại sao lực đẩy của bố có tác dụng như lực của hai anh em.</li>
+                        <li>GV yêu cầu HS sử dụng điện thoại/laptop áp dụng kĩ thuật tìm kiếm nâng cao để xem các video mô phỏng quy tắc hình bình hành (1.1.NC1b).</li>
+                        <li><strong>Hướng dẫn AI (NLc):</strong> GV gợi ý prompt: <em>"Hãy so sánh sự khác nhau về cách tính độ lớn hợp lực khi hai lực thành phần cùng chiều, ngược chiều và vuông góc bằng ngôn ngữ Vật lí 10".</em></li>
+                        <li>GV yêu cầu HS đọc SGK mục I, nêu khái niệm tổng hợp lực và hợp lực.</li>
+                        <li>GV yêu cầu HS quan sát Hình 13.2, thảo luận để trả lời: Cách xác định độ lớn và chiều của hợp lực trong trường hợp hai lực cùng phương, cùng chiều? Cùng phương, ngược chiều?</li>
+                        <li>GV yêu cầu HS quan sát Hình 13.3, nêu quy tắc hình bình hành.</li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS thảo luận nhóm đôi trả lời câu hỏi quan sát.</li>
+                        <li>HS truy cập các phần mềm mô phỏng (như PhET) để thay đổi các lực thành phần và quan sát sự thay đổi của hợp lực về độ lớn, hướng (5.2.NC1b).</li>
+                        <li>HS hoàn thành PHT số 2 và số 3, chụp ảnh kết quả mô phỏng và tổ chức vào thư mục nhóm để báo cáo (1.3.NC1a).</li>
+                        <li><strong>Ứng dụng AI (NLb):</strong> HS dùng Chatbot để kiểm chứng lại các công thức tính độ lớn hợp lực \(F = \sqrt{F_1^2 + F_2^2 + 2F_1F_2\cos\alpha}\) và trích dẫn nguồn AI trong bài làm.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Đại diện nhóm trình bày nội dung PHT và chiếu hình ảnh/video mô phỏng đã tìm được.</li>
+                        <li>HS các nhóm khác nhận xét, bổ sung và thảo luận về các bước thực hiện quy tắc hình bình hành.</li>
+                        <li>GV điều hành thảo luận, chú trọng chuẩn mực hành vi khi tương tác số (2.5.NC1a).</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết, đánh giá kết quả qua bảng nhóm và các bài luyện tập trong PHT.</li>
+                        <li>GV chốt kiến thức chuẩn về định nghĩa tổng hợp lực, công thức tổng quát và quy tắc hình bình hành.</li>
+                        <li>GV nhắc nhở HS về tính khách quan, trung thực khi báo cáo số liệu thực nghiệm và khi báo cáo số liệu từ các phần mềm mô phỏng và AI.</li>
+                    </ul>
+
+                    <div class="img-container">
+                        <img src="13.1.png" alt="Hình 13.1 - Ví dụ về tổng hợp lực" class="img-medium">
+                        <p><em>Hình 13.1. Ví dụ về tổng hợp lực</em></p>
+                    </div>
+                    <div class="img-container">
+                        <img src="13.2.png" alt="Hình 13.2 - Tổng hợp hai lực cùng phương" class="img-medium">
+                        <p><em>Hình 13.2. Tổng hợp hai lực cùng phương</em></p>
+                    </div>
+                    <div class="img-container">
+                        <img src="13.3.png" alt="Hình 13.3 - Tổng hợp lực theo quy tắc hình bình hành" class="img-medium">
+                        <p><em>Hình 13.3. Tổng hợp lực theo quy tắc hình bình hành</em></p>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 3:<br>LUYỆN TẬP</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng quy tắc hình bình hành để giải bài tập đơn giản.</p>
+                    <p><strong>Nội dung:</strong> Giải bài tập ví dụ SGK.</p>
+                    <p><strong>Sản phẩm:</strong> Lời giải của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc và tóm tắt Bài tập ví dụ (sgk tr.58).</li>
+                        <li>HS tóm tắt: \(F_1 = 8000\) N, \(F_2 = 8000\) N, góc giữa hai dây cáp là \(30^\circ\). Tính độ lớn hợp lực.</li>
+                        <li>GV gọi 1 HS lên bảng giải, các HS khác làm vào vở.</li>
+                        <li>HS giải:
+                            <div class="formula">
+                                \[ F = \sqrt{F_1^2 + F_2^2 + 2F_1F_2\cos\alpha} \]
+                                \[ F = \sqrt{8000^2 + 8000^2 + 2 \cdot 8000 \cdot 8000 \cdot \cos 30^\circ} \]
+                                \[ F \approx 15455 \text{ N} \]
+                            </div>
+                        </li>
+                        <li>GV nhận xét, chính xác hóa kết quả.</li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 4 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 4:<br>VẬN DỤNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng kiến thức vào thực tế.</p>
+                    <p><strong>Nội dung:</strong> Trả lời câu hỏi vận dụng.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV đặt câu hỏi: "Nếu góc giữa hai dây cáp bằng \(90^\circ\) thì hợp lực của hai lực kéo có phương, chiều và độ lớn như thế nào?"</li>
+                        <li>HS vận dụng kiến thức để trả lời:
+                            <div class="formula">
+                                \[ F = \sqrt{F_1^2 + F_2^2} = \sqrt{8000^2 + 8000^2} \approx 11314 \text{ N} \]
+                            </div>
+                            Hợp lực có phương xiên góc \(45^\circ\) so với mỗi dây cáp.
+                        </li>
+                        <li>GV nhận xét, kết thúc tiết 1.</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- TIẾT 2 -->
+    <h3 style="margin-top: 30px;">Tiết 2: Các lực cân bằng và không cân bằng - Phân tích lực</h3>
+
+    <table class="tien-trinh">
+        <thead>
+            <tr>
+                <th class="col-buoc">Bước thực hiện</th>
+                <th class="col-noidung">Nội dung các bước</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- HOẠT ĐỘNG 1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 1:<br>KHỞI ĐỘNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Tạo tình huống có vấn đề về các lực cân bằng và không cân bằng.</p>
+                    <p><strong>Nội dung:</strong> Quan sát hình ảnh và dự đoán.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV chiếu Hình 13.4 (sgk) về hai lực cân bằng.</li>
+                        <li>GV đặt câu hỏi: "Quan sát quyển sách đang nằm yên trên mặt bàn. Có những lực nào tác dụng lên quyển sách? Các lực này có cân bằng không? Vì sao?"</li>
+                        <li>HS quan sát, dự đoán.</li>
+                        <li>GV dẫn dắt vào bài: "Để trả lời, chúng ta cùng tìm hiểu phần II. Các lực cân bằng và không cân bằng."</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="13.4.png" alt="Hình 13.4 - Hai lực cân bằng" class="img-medium">
+                        <p><em>Hình 13.4. Hai lực cân bằng</em></p>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 2.2 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2.2:<br>TÌM HIỂU VỀ CÁC LỰC CÂN BẰNG<br>VÀ KHÔNG CÂN BẰNG</strong><br>
+                    (12 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>HS nêu được khái niệm và nhận biết được các lực cân bằng, không cân bằng trong các tình huống.</li>
+                        <li>Phân tích được trạng thái của vật (đứng yên hoặc thay đổi vận tốc) dưới tác dụng của hệ lực.</li>
+                        <li>Hình thành khái niệm các lực cân bằng, không cân bằng.</li>
+                        <li><strong>Năng lực số:</strong>
+                            <ul>
+                                <li>1.3.NC1a: HS thao tác được thông tin và dữ liệu về các ví dụ lực trong thực tế để tổ chức, lưu trữ và truy xuất dễ dàng hơn trên thiết bị số.</li>
+                                <li>3.1.NC1a: Áp dụng được các cách tạo và chỉnh sửa nội dung số (như sơ đồ tư duy hoặc bảng so sánh) để thể hiện sự phân biệt giữa lực cân bằng và không cân bằng.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách sử dụng câu lệnh (prompt) phù hợp để nhờ trợ lý AI hỗ trợ lấy thêm ví dụ thực tế hoặc giải thích nhanh các tình huống phức tạp về cân bằng lực.</li>
+                                <li>NLb: Thể hiện trách nhiệm và tính minh bạch khi trích dẫn nguồn hình ảnh hoặc thông tin được hỗ trợ bởi AI.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS nghiên cứu SGK và thảo luận nhóm đôi để hoàn thành Phiếu học tập (PHT) số 4.</li>
+                        <li>Nội dung tìm hiểu bao gồm:
+                            <ul>
+                                <li>Định nghĩa lực cân bằng: Tổng hợp lực tác dụng lên vật bằng 0 (\(\vec{F} = \vec{F}_1 + \vec{F}_2 + \dots = \vec{0}\)), vật đứng yên hoặc ở trạng thái cân bằng.</li>
+                                <li>Định nghĩa lực không cân bằng: Hợp lực của các lực khác 0, làm thay đổi vận tốc của vật.</li>
+                                <li>Phân tích các ví dụ: Quyển sách nằm yên trên bàn; dùng tay đẩy bút chì chuyển động nhanh dần; quả bóng rơi khỏi mép bàn.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <div class="box">
+                        <strong>II. Các lực cân bằng và không cân bằng</strong>
+                        <p><strong>1. Các lực cân bằng:</strong> Xét trường hợp vật đứng yên dưới tác dụng của nhiều lực. Khi đó, tổng hợp lực tác dụng lên vật bằng 0. Ta nói các lực tác dụng lên vật là các lực cân bằng và vật ở trạng thái cân bằng:</p>
+                        <div class="formula">\[ \vec{F} = \vec{F}_1 + \vec{F}_2 + \vec{F}_3 + \dots = \vec{0} \]</div>
+                        <p><strong>2. Các lực không cân bằng:</strong></p>
+                        <ul>
+                            <li>Khi hợp lực của các lực khác 0 thì các lực này không cân bằng.</li>
+                            <li>Hợp lực hay lực không cân bằng này tác dụng vào một vật có thể làm thay đổi vận tốc của vật.</li>
+                        </ul>
+                    </div>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV đặt vấn đề về trạng thái đứng yên hoặc chuyển động của vật trong thực tế và yêu cầu HS đọc SGK để tìm hiểu khái niệm.</li>
+                        <li>GV phát PHT số 4 và yêu cầu HS sử dụng thiết bị số để tìm thêm hình ảnh minh họa cho các lực này.</li>
+                        <li><strong>Hướng dẫn AI (NLc):</strong> GV gợi ý prompt mẫu: <em>"Hãy đóng vai chuyên gia vật lí, đưa ra 3 ví dụ về lực cân bằng và 3 ví dụ về lực không cân bằng trong giao thông đường bộ"</em> để HS mở rộng tư duy.</li>
+                        <li>GV yêu cầu HS quan sát Hình 13.5, 13.6, 13.7 và trả lời câu hỏi trong SGK.</li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS làm việc nhóm đôi, thảo luận các câu hỏi trong PHT số 4.</li>
+                        <li>HS sử dụng điện thoại/máy tính để thu thập hình ảnh thực tế (ví dụ: đèn chùm treo đứng yên, xe đang tăng tốc), sau đó sắp xếp vào các thư mục lưu trữ số để dễ dàng truy xuất (1.3.NC1a).</li>
+                        <li>HS thiết kế một bảng so sánh nhanh trên nền tảng số (3.1.NC1a).</li>
+                        <li><strong>Tư duy AI:</strong> Nhóm sử dụng trợ lý ảo để kiểm chứng lại các ví dụ nhóm đã chọn xem có thực sự là lực cân bằng hay không.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Đại diện nhóm trình bày đáp án PHT 4: Giải thích tại sao quyển sách nằm yên (do P và N cân bằng).</li>
+                        <li>Nhóm trình chiếu các ví dụ thực tế đã sưu tầm được từ môi trường số.</li>
+                        <li><strong>Đáp án:</strong>
+                            <ul>
+                                <li><strong>1.a.</strong> Các lực tác dụng lên quyển sách gồm: Trọng lực \(\vec{P}\), phản lực \(\vec{N}\) của bàn.</li>
+                                <li><strong>1.b.</strong> Các lực này có cân bằng vì quyển sách nằm yên.</li>
+                                <li><strong>2.</strong> Ta thấy: \(\vec{F}_1 \uparrow\downarrow \vec{F}_2 \rightarrow F = |F_1 - F_2| = 100\) N. Và \(\vec{F}\) có chiều hướng về phía trước.</li>
+                                <li><strong>3.a.</strong> Tình huống có hợp lực khác 0 là: Dùng tay đẩy để bút chì chuyển động nhanh dần; Quả bóng vừa rơi khỏi mép bàn.</li>
+                                <li><strong>3.b.</strong> Dùng tay đẩy để bút chì chuyển động nhanh dần: độ lớn vận tốc sẽ tăng dần, hướng chuyển động về phía trước. Quả bóng vừa rơi khỏi mép bàn: độ lớn vận tốc tăng dần, hướng chuyển động theo phương thẳng đứng hướng xuống.</li>
+                            </ul>
+                        </li>
+                        <li>Nhóm trình chiếu các ví dụ thực tế đã sưu tầm được từ Internet hoặc do AI gợi ý.</li>
+                        <li>Các nhóm khác thảo luận về sự thay đổi vận tốc khi có lực không cân bằng tác dụng (xe nhanh dần, bóng rơi).</li>
+                        <li><strong>NLb:</strong> HS báo cáo rõ ràng nguồn gốc của dữ liệu số và các câu trả lời lấy từ AI.</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV đánh giá hoạt động qua bảng nhóm và tính chính xác của các ví dụ.</li>
+                        <li>GV chốt kiến thức: Lực cân bằng giữ vật đứng yên hoặc chuyển động thẳng đều; lực không cân bằng làm biến đổi chuyển động.</li>
+                        <li>GV lưu ý HS về việc bảo vệ dữ liệu cá nhân khi làm việc trên môi trường số (4.2.NC1a).</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="13.5.png" alt="Hình 13.5 - Quyển sách nằm yên trên mặt bàn" class="img-medium">
+                        <p><em>Hình 13.5. Quyển sách nằm yên trên mặt bàn</em></p>
+                    </div>
+                    <div class="img-container">
+                        <img src="13.6.png" alt="Hình 13.6 - Ô tô chịu hai lực không cân bằng" class="img-medium">
+                        <p><em>Hình 13.6. Ô tô chịu hai lực không cân bằng</em></p>
+                    </div>
+                    <div class="img-container">
+                        <img src="13.7.png" alt="Hình 13.7 - Ví dụ về các lực cân bằng và không cân bằng" class="img-medium">
+                        <p><em>Hình 13.7. Ví dụ về các lực cân bằng và không cân bằng</em></p>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 2.3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2.3:<br>TÌM HIỂU VỀ PHƯƠNG PHÁP<br>PHÂN TÍCH LỰC THÀNH CÁC<br>LỰC THÀNH PHẦN VUÔNG GÓC</strong><br>
+                    (13 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>Phát biểu được định nghĩa phân tích lực và quy tắc phân tích một lực thành hai lực thành phần vuông góc.</li>
+                        <li>Dùng hình vẽ phân tích được một lực thành các lực thành phần vuông góc trong các trường hợp thực tế (như vật trên mặt phẳng nghiêng).</li>
+                        <li><strong>Năng lực số:</strong>
+                            <ul>
+                                <li>3.1.NC1a: Áp dụng được các cách tạo và chỉnh sửa nội dung số (sử dụng phần mềm đồ họa hoặc công cụ vẽ trong PowerPoint/Canva) để biểu diễn các vectơ lực thành phần.</li>
+                                <li>5.2.NC1b: Áp dụng được các công cụ số (phần mềm mô phỏng PhET hoặc các thí nghiệm ảo) để kiểm chứng tác dụng của các lực thành phần sau khi phân tích.</li>
+                                <li>1.1.NC1b: Áp dụng được kĩ thuật tìm kiếm để lấy được các hình ảnh thực tế về ứng dụng của phân tích lực (như phân tích trọng lực trên cầu, dốc) trong môi trường số.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) phù hợp để nhờ trợ lý AI (ChatGPT/Gemini) hỗ trợ giải thích ý nghĩa vật lí của việc phân tích lực theo hai phương vuông góc.</li>
+                                <li>NLb: Thể hiện sự minh bạch và trách nhiệm; sử dụng thông tin từ AI làm tư liệu tham khảo và thực hiện trích dẫn nguồn học liệu số minh bạch khi xây dựng nội dung báo cáo.</li>
+                                <li>NLa: Nhận thức được rằng AI hỗ trợ tính toán các lực thành phần khi thiết kế công trình, nhưng con người (kĩ sư) mới là chủ thể kiểm tra và chịu trách nhiệm về các yếu tố rủi ro thực tế.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS nghiên cứu mục III SGK để nắm vững định nghĩa và quy tắc phân tích lực.</li>
+                        <li>HS thảo luận nhóm đôi hoàn thành Phiếu học tập (PHT) số 5 nhằm giải quyết các tình huống: Phân tích lực kéo F của xe và trọng lực P của người trên dốc thành các thành phần vuông góc.</li>
+                        <li>Sử dụng công cụ số để vẽ sơ đồ phân tích lực và quan sát mô phỏng.</li>
+                        <li>GV yêu cầu HS đọc SGK mục III, nêu khái niệm phân tích lực.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <div class="box">
+                        <strong>III. Phân tích lực</strong>
+                        <p><strong>Phân tích lực:</strong> Là phép thay thế một lực thành hai lực thành phần có tác dụng giống hệt lực ấy.</p>
+                        <p><strong>1. Quy tắc:</strong></p>
+                        <ul>
+                            <li>Thường ta phân tích lực thành 2 lực vuông góc với nhau, để lực thành phần này không có tác dụng nào theo phương của lực thành phần kia.</li>
+                            <li>Phân tích lực là phép làm ngược lại với tổng hợp lực, nhưng chỉ áp dụng vào trường hợp 2 lực thành phần vuông góc.</li>
+                        </ul>
+                        <p><strong>2. Chú ý:</strong> Chỉ khi xác định được một lực có tác dụng theo hai phương vuông góc nào thì mới phân tích lực theo hai phương vuông góc đó.</p>
+                    </div>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV đặt vấn đề: <em>"Để tính ma sát của xe khi lên dốc, ta cần biết phân lực vuông góc, nhưng trọng lực lại hướng thẳng đứng. Vậy làm sao để xác định lực theo phương vuông góc đó?"</em></li>
+                        <li>GV yêu cầu HS tìm kiếm video minh họa việc phân tích trọng lực trên mặt phẳng nghiêng (1.1.NC1b).</li>
+                        <li><strong>Hướng dẫn AI (NLc):</strong> GV gợi ý prompt: <em>"Hãy đóng vai gia sư Vật lí, giải thích tại sao khi phân tích lực trên mặt phẳng nghiêng, người ta thường chọn một trục song song và một trục vuông góc với mặt phẳng đó".</em></li>
+                        <li>GV yêu cầu HS quan sát Hình 13.8, 13.9, 13.10 và trả lời câu hỏi trong SGK.</li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS thảo luận nhóm đôi nghiên cứu SGK và hoàn thành PHT số 5.</li>
+                        <li>HS sử dụng phần mềm mô phỏng để thay đổi góc nghiêng của dốc, quan sát sự thay đổi độ lớn của các thành phần \(P_1, P_2\) (5.2.NC1b).</li>
+                        <li>Nhóm trưởng điều phối thành viên dùng công cụ vẽ để thiết kế sơ đồ phân tích lực kĩ thuật số (3.1.NC1a).</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Đại diện một nhóm trình bày sản phẩm số (sơ đồ phân tích lực) trên màn hình chiếu.</li>
+                        <li><strong>Đáp án:</strong> 1, 2. Để xác định độ lớn của lực ma sát tác dụng lên các hệ trong Hình 13.7, ta phải xác định được độ lớn của phân lực (vuông góc với phương chuyển động). Trong khi đó, lực kéo \(\vec{F}\) của xe và trọng lực \(\vec{P}\) của hệ người lại hợp với phương chuyển động một góc xác định. Vì vậy, ta cần phải phân tích các lực này thành những thành phần vuông góc với nhau như minh họa trong Hình 13.8:
+                            <div class="formula">\[ \vec{F} = \vec{F}_x + \vec{F}_y \quad \text{hoặc} \quad \vec{P} = \vec{P}_x + \vec{P}_y \]</div>
+                            Độ lớn của các lực thành phần được xác định dựa vào các phép tính hình học.
+                        </li>
+                        <li>Thành phần \(P_1\) có tác dụng kéo vật chuyển động xuống phía dưới. Thành phần \(P_2\) có tác dụng giữ vật trên mặt phẳng nghiêng.</li>
+                        <li>HS các nhóm khác nhận xét về cách đặt các vectơ thành phần và tính chính xác của các hình chiếu vuông góc.</li>
+                        <li>GV điều phối thảo luận, yêu cầu HS giải thích tác dụng riêng biệt của từng lực thành phần.</li>
+                        <li><strong>Thảo luận AI (NLb):</strong> Nhóm báo cáo trình bày các thông tin hỗ trợ từ AI và thực hiện trích dẫn nguồn minh bạch cho các đoạn văn giải thích.</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết, đánh giá bài làm của HS trên cả bản giấy và bản số.</li>
+                        <li>GV chốt kiến thức: Chỉ phân tích lực khi xác định được tác dụng của nó theo hai phương vuông góc cụ thể.</li>
+                        <li><strong>Quản lí dữ liệu (Mã 1.3.NC1a):</strong> GV nhắc HS lưu trữ các sơ đồ số và ghi chú từ AI vào thư mục học tập của lớp trên Google Drive để phục vụ ôn tập.</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="13.8.png" alt="Hình 13.8 - Phân tích lực theo hai trục vuông góc" class="img-medium">
+                        <p><em>Hình 13.8. Phân tích lực theo hai trục vuông góc</em></p>
+                    </div>
+                    <div class="img-container">
+                        <img src="13.9.png" alt="Hình 13.9 - Phân tích trọng lực trên mặt phẳng nghiêng" class="img-medium">
+                        <p><em>Hình 13.9. Phân tích trọng lực trên mặt phẳng nghiêng</em></p>
+                    </div>
+                    <div class="img-container">
+                        <img src="13.10.png" alt="Hình 13.10 - Vật được giữ yên trên mặt phẳng nghiêng" class="img-medium">
+                        <p><em>Hình 13.10. Vật được giữ yên trên mặt phẳng nghiêng</em></p>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 3:<br>LUYỆN TẬP – TRÒ CHƠI<br>"CHINH PHỤC KIẾN THỨC"</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>Hệ thống hóa kiến thức về hợp lực, quy tắc hình bình hành, lực cân bằng và phương pháp phân tích lực thành các thành phần vuông góc.</li>
+                        <li>Vận dụng thành thạo các quy tắc hình học và công thức toán học để giải các bài tập định lượng về lực.</li>
+                        <li>Vận dụng quy tắc phân tích lực để giải bài tập.</li>
+                        <li><strong>Năng lực số:</strong>
+                            <ul>
+                                <li>3.1.NC1a: Áp dụng được các cách tạo và chỉnh sửa nội dung số (như sơ đồ tư duy số, tệp đồ họa) để thể hiện sự hiểu biết về quy tắc tổng hợp và phân tích lực.</li>
+                                <li>2.1.NC1a: Sử dụng được nhiều công nghệ số để tương tác trong quá trình thi đua giải bài tập giữa các nhóm.</li>
+                                <li>5.1.NC1b: Tự áp dụng được các giải pháp khác nhau để xử lí các vấn đề kĩ thuật phát sinh khi tham gia các trò chơi học tập trên môi trường số.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập các câu lệnh (prompt) phù hợp để nhờ trợ lý AI hỗ trợ giải thích các bước logic toán học khi tính toán độ lớn hợp lực hoặc giải thích các thuật ngữ chuyên sâu phát sinh.</li>
+                                <li>NLb: Thể hiện sự minh bạch và trách nhiệm; sử dụng AI để kiểm chứng kết quả nhưng phải tự thực hiện tính toán và trích dẫn nguồn học liệu từ AI một cách minh bạch.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS thực hiện hệ thống hóa kiến thức bài học bằng sơ đồ tư duy số (sử dụng Canva, MindMeister hoặc PowerPoint).</li>
+                        <li>Tham gia trò chơi thi đua giải bài tập (ví dụ: trò chơi "Tảng băng trôi" hoặc trên nền tảng Quizizz/Kahoot).</li>
+                        <li>Giải bài tập ví dụ SGK (như bài toán vật trên mặt phẳng nghiêng).</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <ul>
+                        <li>Sản phẩm học tập: Câu trả lời chính xác cho các bài tập trong phiếu luyện tập hoặc trên ứng dụng số.</li>
+                        <li>Sản phẩm số: Sơ đồ tư duy hệ thống kiến thức (quy tắc hình bình hành, điều kiện cân bằng lực \(\vec{F}_1 + \vec{F}_2 + \dots = \vec{0}\)) được trình bày sinh động.</li>
+                    </ul>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tóm lược lại các nội dung chính của bài học bằng một sơ đồ mẫu.</li>
+                        <li>GV yêu cầu các nhóm truy cập vào nền tảng trò chơi trực tuyến (Quizizz/Kahoot) hoặc bảng tương tác để bắt đầu phân thi đấu luyện tập (2.1.NC1a).</li>
+                        <li><strong>Hướng dẫn AI (NLc):</strong> GV gợi ý prompt: <em>"Hãy giải thích từng bước logic để tính độ lớn hợp lực của hai lực có độ lớn 20N hợp với nhau góc 60 độ bằng định lí hàm cos".</em></li>
+                        <li><strong>Câu hỏi trò chơi:</strong>
+                            <p><strong>Câu 1:</strong> Một chất điểm chịu tác dụng của một lực F có độ lớn là 20N. Nếu hai lực thành phần của lực đó vuông góc với nhau có độ lớn lần lượt là F₁ = 12N và F₂ thì F₂ bằng: A. 8N. B. 16N. C. 32N. D. 20N.</p>
+                            <p><strong>Câu 2:</strong> Hai lực khác phương F₁ và F₂ có độ lớn F₁ = F₂ = 20N, góc tạo bởi hai lực này là 60°. Hợp lực của hai lực này có độ lớn là: A. 14,1N. B. \(20\sqrt{3}\)N. C. 17,3N. D. 20N.</p>
+                            <p><strong>Câu 3:</strong> Một con nhện đang treo mình dưới một sợi tơ theo phương thẳng đứng thì bị một cơn gió thổi theo phương ngang làm dây treo lệch đi so với phương thẳng đứng một góc 30°. Biết trọng lượng của con nhện là P = 0,1N. Xác định độ lớn của lực mà gió tác dụng lên con nhện ở vị trí cân bằng trong Hình 13.2. ĐS: \(F = \frac{\sqrt{3}}{30}\) N.</p>
+                        </li>
+                        <li>GV yêu cầu HS đọc và tóm tắt Bài tập ví dụ (sgk tr.59).</li>
+                        <li>HS tóm tắt: Vật có khối lượng \(m = 5\) kg đặt trên mặt phẳng nghiêng góc \(\alpha = 30^\circ\). Tính các thành phần của trọng lực.</li>
+                        <li>GV gọi 1 HS lên bảng giải, các HS khác làm vào vở.</li>
+                        <li>HS giải:
+                            <div class="formula">
+                                \[ P_x = P \cdot \sin\alpha = m \cdot g \cdot \sin 30^\circ = 5 \cdot 9.8 \cdot 0.5 = 24.5 \text{ N} \]
+                                \[ P_y = P \cdot \cos\alpha = m \cdot g \cdot \cos 30^\circ = 5 \cdot 9.8 \cdot \frac{\sqrt{3}}{2} \approx 42.4 \text{ N} \]
+                            </div>
+                        </li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS thảo luận nhóm đôi hoặc nhóm 4 để giải các bài tập tính toán về độ lớn hợp lực và phân tích lực.</li>
+                        <li>HS thực hiện thiết kế sơ đồ tư duy số để tổng hợp quy tắc hình bình hành và các công thức liên quan (3.1.NC1a).</li>
+                        <li>GV quan sát, hỗ trợ HS xử lí các sự cố về kết nối mạng hoặc lỗi ứng dụng trong quá trình làm bài (5.1.NC1b).</li>
+                        <li>HS dùng AI để đối chiếu phương pháp giải bài toán "con nhện" nhưng phải tự trình bày lại theo tư duy của nhóm (NLb).</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Hệ thống tự động hiển thị bảng xếp hạng kết quả của các nhóm.</li>
+                        <li>Đại diện một nhóm trình bày cách giải bài tập tự luận (ví dụ câu 3 về con nhện) và chiếu sơ đồ tư duy của nhóm lên màn hình lớp.</li>
+                        <li><strong>Đáp án:</strong>
+                            <ul>
+                                <li><strong>Câu 1:</strong> B</li>
+                                <li><strong>Câu 2:</strong> B</li>
+                                <li><strong>Câu 3:</strong> Viết phương trình cân bằng lực: \(\vec{F} + \vec{P} + \vec{T} = 0\). Tổng hợp lực theo quy tắc hình bình hành. Khi con nhện và sợi tơ cân bằng như hình vẽ: Ta có: \(\tan 30° = \frac{F}{P} \Rightarrow F = P \cdot \tan 30° \approx 0,058\) N.</li>
+                            </ul>
+                        </li>
+                        <li>HS các nhóm khác thảo luận, nhận xét và bổ sung dựa trên kết quả hiển thị trên môi trường số (2.5.NC1b).</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV nhận xét, chính xác hóa kết quả bài tập ví dụ về mặt phẳng nghiêng.</li>
+                        <li>GV đánh giá kết quả dựa trên độ chính xác và tốc độ hoàn thành của các nhóm.</li>
+                        <li>GV chốt kiến thức: Chuẩn hóa các lỗi thường gặp (nhầm lẫn giữa sin/cos, vẽ sai điểm đặt vectơ) và lưu ý tầm quan trọng của việc kiểm soát kết quả từ AI (NLa).</li>
+                        <li>GV hướng dẫn HS lưu trữ các sản phẩm số vào thư mục học tập của lớp trên Google Drive để phục vụ ôn tập (Mã 1.3.NC1a).</li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 4 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 4:<br>VẬN DỤNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>HS tự vận dụng, tìm tòi mở rộng các kiến thức đã học về tổng hợp, phân tích và cân bằng lực để giải quyết hoặc giải thích các tình huống thực tiễn.</li>
+                        <li>Phát triển khả năng tương tác với cộng đồng thông qua các môi trường số.</li>
+                        <li>Vận dụng kiến thức vào thực tế và giao nhiệm vụ về nhà.</li>
+                        <li><strong>Năng lực số:</strong>
+                            <ul>
+                                <li>3.1.NC1a: Áp dụng được các cách tạo và chỉnh sửa nội dung số (video, ảnh, infographic) để giải thích các hiện tượng vật lí.</li>
+                                <li>2.2.NC1a: Chia sẻ dữ liệu và nội dung học tập thông qua nhiều công cụ số phù hợp (như Padlet, Facebook nhóm lớp, Zalo).</li>
+                                <li>5.4.NC1c: Đề xuất được các cơ hội khác nhau để phát triển bản thân thông qua việc cập nhật các giải pháp công nghệ số trong nghiên cứu kĩ thuật.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) phù hợp để nhờ AI hỗ trợ mô phỏng các kịch bản góc kéo tàu khác nhau nhằm tìm ra hợp lực tối ưu.</li>
+                                <li>NLb: Thể hiện sự minh bạch và trách nhiệm; thực hiện trích dẫn nguồn khi sử dụng hình ảnh hoặc dữ liệu do AI tạo ra để xây dựng sản phẩm vận dụng.</li>
+                                <li>NLa: Xác định được vai trò quyết định của con người trong việc kiểm soát và chịu trách nhiệm về an toàn kĩ thuật khi áp dụng các tính toán từ hệ thống AI vào thực tế.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li><strong>Nhiệm vụ 1:</strong> Hoàn thiện giải pháp kĩ thuật cho sự cố tàu Ever Given (đã nêu ở Hoạt động 1). HS sử dụng kiến thức về tổng hợp lực để vẽ sơ đồ các lực kéo của tàu cứu hộ sao cho hợp lực đạt giá trị tối ưu.</li>
+                        <li><strong>Nhiệm vụ 2:</strong> Tìm hiểu và ghi hình/chụp ảnh các ví dụ về cặp lực cân bằng hoặc không cân bằng trong thực tế địa phương (ví dụ: dây cáp treo đèn đường, lực kéo trong trò chơi kéo co, hoặc phân tích lực trên cầu dây văng).</li>
+                        <li><strong>Nhiệm vụ 3:</strong> Chuẩn bị bài mới: Tìm hiểu trước về Định luật I Newton qua các video thí nghiệm lịch sử của Galilei trên Internet.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <ul>
+                        <li><strong>Sơ đồ lực:</strong> Bản vẽ kĩ thuật (hoặc file đồ họa số) biểu diễn các vectơ lực kéo tàu Ever Given đảm bảo quy tắc hình bình hành.</li>
+                        <li><strong>Sản phẩm truyền thông số:</strong> Video clip ngắn hoặc Infographic thuyết minh về một ứng dụng của phân tích lực/cân bằng lực trong đời sống.</li>
+                        <li>Bài làm được lưu giữ trong vở ghi hoặc trên hệ thống quản lí học tập (LMS) của lớp.</li>
+                        <li><strong>Nhật kí AI:</strong> Danh sách các prompt đã dùng để tham khảo ý tưởng từ AI và các nguồn trích dẫn học liệu số.</li>
+                    </ul>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV giao nhiệm vụ thông qua phiếu học tập số 6 hoặc thông báo trên nhóm học tập trực tuyến.</li>
+                        <li>Yêu cầu: <em>"Các nhóm hãy thiết kế một sản phẩm số giải thích giải pháp kéo tàu Ever Given dựa trên kiến thức tổng hợp lực đã học".</em></li>
+                        <li>GV cung cấp các link tham khảo về kĩ thuật hàng hải để HS tự học (5.4.NC1c).</li>
+                        <li><strong>Hướng dẫn AI (NLc):</strong> GV gợi ý prompt: <em>"Đóng vai kĩ sư cơ học, hãy gợi ý cấu trúc một báo cáo phân tích lực kéo tối ưu để giải cứu tàu mắc cạn bằng quy tắc hình bình hành".</em></li>
+                        <li>GV đặt câu hỏi: "Trong thực tế, khi kéo một vật nặng trên mặt phẳng nghiêng, người ta thường đặt vật như thế nào để giảm lực kéo? Tại sao?"</li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS làm việc nhóm ngoài giờ học, thảo luận qua các nền tảng trực tuyến.</li>
+                        <li>HS sử dụng các công cụ như Canva hoặc PowerPoint để tạo nội dung số, vẽ các vectơ lực chính xác theo quy tắc hình bình hành (3.1.NC1a).</li>
+                        <li>HS thực hiện tìm hiểu thực tế, chụp ảnh các cặp lực cân bằng tại địa phương và tổ chức lưu trữ dữ liệu nhóm (1.3.NC1a).</li>
+                        <li><strong>Thực hành AI (NLb):</strong> HS dùng AI để đối chiếu kịch bản góc kéo nhưng phải tự kiểm chứng độ chính xác vật lí.</li>
+                        <li>HS vận dụng kiến thức: Đặt vật nằm theo phương song song với mặt phẳng nghiêng để giảm thành phần \(P_x\) của trọng lực, từ đó giảm lực kéo cần thiết.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Các nhóm chia sẻ link sản phẩm số hoặc video lên Padlet của lớp để các bạn cùng xem và nhận xét (2.2.NC1a).</li>
+                        <li>HS tham gia thảo luận, đặt câu hỏi phản biện về tính khả thi của các phương án tổng hợp lực kéo mà nhóm bạn đề xuất (2.5.NC1b).</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV đánh giá sản phẩm vào tiết học tiếp theo dựa trên các tiêu chí: tính chính xác vật lí, tính thẩm mỹ của sản phẩm số và khả năng vận dụng kiến thức.</li>
+                        <li>GV tổng kết lại tầm quan trọng của việc phối hợp lực trong kĩ thuật và đời sống.</li>
+                        <li>GV giao nhiệm vụ về nhà:
+                            <ul>
+                                <li><strong>Nhiệm vụ năng lực số (1.1.NC1c):</strong> Tìm và lọc 2 nguồn về Tổng hợp và phân tích lực. Cân bằng lực; dùng AI gợi ý từ khóa/giải thích ban đầu, đối chiếu SGK và ghi nguồn.</li>
+                                <li><strong>Nhiệm vụ trực tuyến:</strong> Tìm hiểu thêm trên internet về tổng hợp và phân tích lực để hoàn thiện nội dung học tập.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Chốt kiến thức (NLa):</strong> GV nhấn mạnh: AI có thể tính toán hàng nghìn kịch bản lực, nhưng kĩ sư con người phải là người lựa chọn giải pháp an toàn nhất.</li>
+                        <li>GV nhận xét, kết thúc tiết 2.</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG -->
+    <h2>IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG (NẾU CÓ)</h2>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+
+    <!-- Ký duyệt -->
+    <div class="signature">
+        <div class="signature-box">
+            <p><strong>Duyệt TCM</strong></p>
+            <p class="signature-name"><input type="text" placeholder="Lục Tuyến"></p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    function disableKeys(e) {
+        if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) return true;
+        if (e.ctrlKey && e.shiftKey && (e.key === 'p' || e.key === 'P')) return true;
+        if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'a' || e.key === 'A')) {
+            e.preventDefault(); return false;
+        }
+        if (e.key === 'F12') { e.preventDefault(); return false; }
+        return true;
+    }
+    document.addEventListener('dragstart', function(e) { e.preventDefault(); });
+    document.addEventListener('selectstart', function(e) {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') e.preventDefault();
+    });
+    document.querySelectorAll('input, textarea').forEach(function(el) {
+        el.addEventListener('selectstart', function(e) { e.stopPropagation(); });
+        el.addEventListener('dragstart', function(e) { e.stopPropagation(); });
+    });
+</script>
+
+</body>
+</html>

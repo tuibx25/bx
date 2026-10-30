@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giáo án Bài 15 - Vật lí 10</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @page { size: A4; margin: 20mm 15mm; }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            line-height: 1.4;
+            color: #000000;
+            background-color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+        .container {
+            width: 100%;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        h1, h2, h3, h4 { color: #004488; margin-top: 15px; margin-bottom: 10px; }
+        h1 {
+            text-align: center;
+            font-size: 18pt;
+            color: #8B4513;
+            border-bottom: 2px solid #8B4513;
+            padding-bottom: 5px;
+        }
+        h2 {
+            font-size: 15pt;
+            border-bottom: 1px solid #D3D3D3;
+            padding-bottom: 3px;
+            color: #8B5A2B;
+        }
+        h3 { font-size: 14pt; color: #0066CC; }
+        h4 { font-size: 13pt; color: #8B5A2B; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12pt; }
+        th, td {
+            border: 1px solid #D3D3D3;
+            padding: 6px 8px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        th { background-color: #F5F5DC; color: #004488; font-weight: bold; }
+        .bang-du-lieu { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 12pt; }
+        .bang-du-lieu th {
+            background-color: #F5DEB3; color: #004488;
+            text-align: center; font-weight: bold; padding: 8px;
+        }
+        .bang-du-lieu td { border: 1px solid #D3D3D3; padding: 8px; text-align: center; }
+        .bang-du-lieu .empty-cell { background-color: #F5F5F5; color: #999; }
+        .tien-trinh { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .tien-trinh th { background-color: #F5DEB3; color: #004488; text-align: center; }
+        .tien-trinh td { vertical-align: top; text-align: left; }
+        .col-buoc { width: 25%; background-color: #F5F5F5; font-weight: bold; color: #8B4513; }
+        .col-noidung { width: 75%; }
+        .box { background-color: #F5F5DC; border-left: 5px solid #8B5A2B; padding: 10px; margin: 10px 0; }
+        .box-ai { background-color: #E8F4FF; border-left: 5px solid #0066CC; padding: 10px; margin: 10px 0; }
+        .box-nls { background-color: #FFF8E1; border-left: 5px solid #CC9900; padding: 10px; margin: 10px 0; }
+        .red-text { color: #CC0000; font-weight: bold; }
+        .blue-text { color: #0066CC; }
+        .img-container { text-align: center; margin: 10px 0; }
+        .img-container img {
+            max-width: 100%; height: auto;
+            border: 1px solid #D3D3D3;
+            -webkit-user-drag: none; user-drag: none; pointer-events: none;
+        }
+        .img-small { max-width: 250px; }
+        .img-medium { max-width: 350px; }
+        .img-large { max-width: 500px; }
+        ul, ol { padding-left: 20px; }
+        li { margin-bottom: 5px; }
+        .formula { text-align: center; margin: 10px 0; font-size: 14pt; }
+        .input-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt; font-weight: bold;
+            color: #000000; background-color: #FFFFFF;
+            border: 1px solid #D3D3D3; border-radius: 3px;
+            padding: 2px 5px; width: 200px;
+        }
+        .input-text:focus { outline: none; border-color: #8B4513; }
+        .signature {
+            margin-top: 30px; display: flex;
+            justify-content: flex-end; text-align: center; font-weight: bold;
+        }
+        .signature-box { width: 200px; border-top: 2px solid #8B4513; padding-top: 10px; }
+        .signature-name { margin-top: 50px; }
+        .signature-name input {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt; font-weight: bold;
+            color: #000000; background-color: #FFFFFF;
+            border: 1px solid #D3D3D3; border-radius: 3px;
+            padding: 2px 5px; width: 150px; text-align: center;
+        }
+        .phieu { border: 1.5px solid #8B4513; padding: 10px 15px; margin: 12px 0; background: #FDFDF5; }
+        .phieu h4 { text-align: center; margin: 0 0 8px 0; color: #8B4513; }
+        @media print {
+            body { font-size: 12pt; -webkit-user-select: auto; user-select: auto; }
+            .container { padding: 0; }
+            .no-print { display: none; }
+            .input-text, .signature-name input {
+                border: none; background: transparent; color: #000; font-weight: bold;
+            }
+            .img-container img { pointer-events: auto; }
+            .phieu, .box, .box-ai, .box-nls, .tien-trinh { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" onkeydown="return disableKeys(event);" ondragstart="return false;" onselectstart="return false;">
+
+<div class="container">
+
+    <!-- Ngày soạn -->
+    <p><strong>Ngày soạn:</strong> <input type="text" class="input-text" placeholder="....../....../20......"></p>
+
+    <!-- Tiêu đề giáo án -->
+    <h1>GIÁO ÁN BÀI 15: ĐỊNH LUẬT 2 NEWTON</h1>
+    <p style="text-align: center; font-style: italic;">Môn: Vật lí 10 – Bộ sách Kết nối tri thức với cuộc sống</p>
+    <p style="text-align: center;">Số tiết: 2 (Tiết 24, 25 theo PPCT)</p>
+
+    <!-- I. MỤC TIÊU -->
+    <h2>I. MỤC TIÊU</h2>
+
+    <h3>1. Kiến thức</h3>
+    <ul>
+        <li>Phát biểu được định luật 2 Newton, viết được hệ thức của định luật.</li>
+        <li>Nêu được mối quan hệ giữa gia tốc, lực và khối lượng.</li>
+        <li>Hiểu được khối lượng là đại lượng đặc trưng cho mức quán tính của vật.</li>
+        <li>Biết cách sử dụng thí nghiệm minh họa để kiểm chứng định luật 2 Newton.</li>
+        <li>Vận dụng được định luật 2 Newton để giải một số bài tập đơn giản và giải thích hiện tượng thực tế.</li>
+        <li>Phát biểu và viết được công thức định luật II Newton: \(a = \frac{F}{m}\) hoặc \(F = m \cdot a\).</li>
+        <li>Mô tả được thí nghiệm về định luật II Newton.</li>
+        <li>Nêu được ý nghĩa của định luật II Newton:
+            <ul>
+                <li>Trọng lực là lực hấp dẫn của Trái Đất tác dụng vào vật: \(P = m \cdot g\).</li>
+                <li>Khối lượng là đại lượng đặc trưng cho mức quán tính của vật.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h3>2. Năng lực</h3>
+    <h4>a. Năng lực chung</h4>
+    <ul>
+        <li>Tự chủ và tự học: Tìm hiểu trước nội dung bài học qua SGK và internet.</li>
+        <li>Giao tiếp và hợp tác: Thảo luận nhóm để phân tích mối quan hệ giữa lực, khối lượng và gia tốc.</li>
+        <li>Giải quyết vấn đề và sáng tạo: Vận dụng kiến thức để giải thích các tình huống thực tế.</li>
+        <li><strong>Năng lực tự chủ và tự học:</strong> Chủ động tìm hiểu tài liệu, nghiên cứu SGK để hình thành kiến thức về mối liên hệ giữa gia tốc, lực và khối lượng.</li>
+        <li><strong>Năng lực giao tiếp và hợp tác:</strong> Hoạt động nhóm hiệu quả để thực hiện thí nghiệm, thảo luận và xử lí số liệu.</li>
+    </ul>
+    <h4>b. Năng lực đặc thù môn học</h4>
+    <ul>
+        <li>Nhận biết được mối quan hệ giữa gia tốc, lực và khối lượng.</li>
+        <li>Phân tích được kết quả thí nghiệm minh họa định luật 2 Newton.</li>
+        <li>Vận dụng được công thức \(\vec{a} = \frac{\vec{F}}{m}\) để tính toán.</li>
+        <li><strong>Nhận thức vật lí:</strong>
+            <ul>
+                <li>Phát biểu được nội dung định luật và viết được biểu thức \(a = \frac{F}{m}\) hoặc \(F = m \cdot a\). Giải thích được các đại lượng trong công thức và đơn vị đo lực (1 N = 1 kg·1 m/s²).</li>
+                <li>Nêu được khối lượng là đại lượng đặc trưng cho mức quán tính của vật; vật có khối lượng càng lớn thì càng khó thay đổi vận tốc (mức quán tính lớn).</li>
+            </ul>
+        </li>
+        <li><strong>Tìm hiểu thế giới tự nhiên dưới góc độ vật lí:</strong>
+            <ul>
+                <li>Thiết kế hoặc thực hiện được thí nghiệm (như sử dụng máng trượt đệm khí) để khảo sát sự phụ thuộc của gia tốc vào lực tác dụng (\(a \sim F\)) và vào khối lượng (\(a \sim \frac{1}{m}\)).</li>
+            </ul>
+        </li>
+        <li><strong>Vận dụng kiến thức, kĩ năng đã học:</strong>
+            <ul>
+                <li>Vận dụng định luật II Newton để giải các bài tập động lực học đơn giản (như tính tốc độ quả bóng khi bị đá hoặc gia tốc của xe đồ chơi). Giải thích được các hiện tượng thực tế như tại sao xe tải nặng khó hãm phanh hơn xe nhẹ hoặc máy bay lớn cần đường băng dài.</li>
+                <li>Biết cách hệ thống hóa dữ liệu và trình bày các giải pháp vật lí thông qua môi trường số.</li>
+            </ul>
+        </li>
+    </ul>
+    <h4>c. Năng lực số</h4>
+    <div class="box-nls">
+        <ul>
+            <li><strong>1.1.NC1b:</strong> HS áp dụng được kỹ thuật tìm kiếm để thu thập dữ liệu, thông tin và nội dung số liên quan đến Định luật II Newton; sử dụng từ khóa phù hợp để tìm kiếm thông tin phục vụ nhiệm vụ học tập.</li>
+            <li><strong>1.3.NC1a:</strong> Thao tác và tổ chức dữ liệu thí nghiệm trên các bảng tính hoặc ứng dụng số để lưu trữ và truy xuất báo cáo.</li>
+            <li><strong>2.1.NC1a:</strong> Sử dụng nhiều công nghệ số (điện thoại, máy tính bảng) để tương tác trong các hoạt động học tập.</li>
+            <li><strong>3.1.NC1a:</strong> Tạo sản phẩm học tập số (infographic, slide hoặc video thí nghiệm) để trình bày kết quả nghiên cứu.</li>
+            <li><strong>5.2.NC1b:</strong> Áp dụng các phần mềm mô phỏng (như PhET) để giải quyết nhu cầu kiểm chứng giả thuyết về mối liên hệ \(a \sim F\), \(a \sim \frac{1}{m}\).</li>
+        </ul>
+    </div>
+
+    <h4>d. Năng lực trí tuệ nhân tạo (AI)</h4>
+    <div class="box-ai">
+        <ul>
+            <li><strong>NLc (Các kĩ thuật và ứng dụng AI):</strong> Biết cách thiết lập các câu lệnh (prompt) phù hợp để nhờ trợ lý AI hỗ trợ giải thích các thuật ngữ đơn vị (Newton) hoặc tóm tắt quy trình đo gia tốc bằng cảm biến.</li>
+            <li><strong>NLb (Đạo đức AI):</strong> Thể hiện sự minh bạch và trách nhiệm; thực hiện trích dẫn nguồn học liệu mạng và AI minh bạch khi xây dựng sản phẩm vận dụng.</li>
+            <li><strong>NLa (Tư duy lấy con người làm trung tâm):</strong> Phân tích được vai trò của con người trong việc kiểm soát các hệ thống an toàn (phanh xe thông minh) vận hành dựa trên các tính toán của AI về định luật II.</li>
+        </ul>
+    </div>
+
+    <h3>3. Phẩm chất</h3>
+    <ul>
+        <li><strong>Chăm chỉ:</strong> Tích cực tham gia thảo luận nhóm, hoàn thành các nhiệm vụ học tập được giao; tích cực tìm tòi học liệu số và sáng tạo trong việc thiết kế sản phẩm vận dụng.</li>
+        <li><strong>Trung thực:</strong> Báo cáo trung thực kết quả thí nghiệm, không tự ý sửa số liệu; khách quan trong việc báo cáo và xử lí số liệu thí nghiệm.</li>
+        <li><strong>Trách nhiệm:</strong> Có ý thức giữ gìn, bảo quản dụng cụ thí nghiệm và thiết bị học tập; bảo vệ thiết bị số và dữ liệu chung khi làm việc nhóm.</li>
+        <li><strong>Cẩn thận, tỉ mỉ:</strong> Quan sát hiện tượng và ghi chép số liệu chính xác trong quá trình làm thí nghiệm.</li>
+    </ul>
+
+    <!-- II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU -->
+    <h2>II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU</h2>
+
+    <h3>1. Giáo viên</h3>
+    <ul>
+        <li>SGK Vật lí 10, SGV, máy chiếu, máy tính.</li>
+        <li>Bài giảng điện tử, phần mềm mô phỏng thí nghiệm định luật II Newton.</li>
+        <li>Các video thí nghiệm thực tế về gia tốc của xe trượt trên máng đệm khí.</li>
+        <li>Hình ảnh, video minh họa về định luật 2 Newton (xe đẩy hàng, thí nghiệm với xe trượt và quả nặng).</li>
+        <li>Bộ dụng cụ thí nghiệm minh họa định luật 2 Newton (Hình 15.2 SGK): xe trượt, máng trượt đệm khí, ròng rọc, các quả nặng, đồng hồ đo thời gian hiện số, cổng quang điện.</li>
+        <li>Phiếu học tập số 1, 2, 3, 4, 5.</li>
+        <li>Ứng dụng Quizizz/Mentimeter cho hoạt động tương tác.</li>
+    </ul>
+
+    <!-- Phiếu học tập số 1 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 1 (Nhóm 1 + 3)</h4>
+        <p><strong>Khảo sát sự phụ thuộc của gia tốc a vào lực kéo</strong></p>
+        <p>Quan sát thí nghiệm, ghi số liệu vào bảng</p>
+        <table class="bang-du-lieu">
+            <thead>
+                <tr>
+                    <th colspan="9">Chiều dài tấm cảm quang l = 25 mm</th>
+                </tr>
+                <tr>
+                    <th>Lần đo</th>
+                    <th>KL treo vào sợi dây (g)</th>
+                    <th>Lực kéo (N)</th>
+                    <th>\(t_A\) (s)</th>
+                    <th>\(t_B\) (s)</th>
+                    <th>\(t_{AB}\) (s)</th>
+                    <th>\(v_A\) (m/s)</th>
+                    <th>\(v_B\) (m/s)</th>
+                    <th>\(a\) (m/s²)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>1</td><td>50,0</td><td>0,05</td><td>0,0527</td><td>0,0392</td><td>0,6235</td><td>0,4742</td><td>0,6367</td><td>0,2606</td></tr>
+                <tr><td>2</td><td>60,0</td><td>0,06</td><td>0,0485</td><td>0,0361</td><td>0,5717</td><td>0,5149</td><td>0,6923</td><td>0,3102</td></tr>
+                <tr><td>3</td><td>70,0</td><td>0,07</td><td>0,0451</td><td>0,0335</td><td>0,5336</td><td>0,5532</td><td>0,7443</td><td>0,3580</td></tr>
+                <tr><td>4</td><td>80,0</td><td>0,08</td><td>0,0425</td><td>0,0316</td><td>0,5001</td><td>0,5879</td><td>0,7911</td><td>0,4063</td></tr>
+                <tr><td>5</td><td>90,0</td><td>0,09</td><td>0,0402</td><td>0,0299</td><td>0,4744</td><td>0,6206</td><td>0,8352</td><td>0,4523</td></tr>
+            </tbody>
+        </table>
+        <p><em>\(t_A\) là thời gian tấm cảm quang lướt qua vị trí A với chiều dài tấm cảm quang là \(l\).</em></p>
+        <p><em>\(t_B\) là thời gian tấm cảm quang lướt qua vị trí B với chiều dài tấm cảm quang là \(l\).</em></p>
+        <p><em>\(t_{AB}\) là thời gian vật đi từ vị trí A đến vị trí B.</em></p>
+        <p>Dựa vào bảng số liệu ở mỗi lần đo, các em hãy tính số liệu \(v_A\), \(v_B\) và gia tốc \(a\) của con trượt. Đối với con trượt có khối lượng nhất định không thay đổi, gia tốc của con trượt sẽ phụ thuộc vào lực F như thế nào?</p>
+    </div>
+
+    <!-- Phiếu học tập số 2 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 2 (Nhóm 2 + 4)</h4>
+        <p><strong>Khảo sát sự phụ thuộc của gia tốc a vào khối lượng</strong></p>
+        <p>Quan sát thí nghiệm, ghi số liệu vào bảng</p>
+        <table class="bang-du-lieu">
+            <thead>
+                <tr>
+                    <th colspan="9">Chiều dài tấm cảm quang l = 25 mm</th>
+                </tr>
+                <tr>
+                    <th>Lần đo</th>
+                    <th>KL thêm vào con trượt (g)</th>
+                    <th>Khối lượng con trượt (g)</th>
+                    <th>\(t_A\) (s)</th>
+                    <th>\(t_B\) (s)</th>
+                    <th>\(t_{AB}\) (s)</th>
+                    <th>\(v_A\) (m/s)</th>
+                    <th>\(v_B\) (m/s)</th>
+                    <th>\(a\) (m/s²)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>1</td><td>0</td><td>195</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>2</td><td>20</td><td>215</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>3</td><td>40</td><td>235</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>4</td><td>100</td><td>295</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>5</td><td>200</td><td>395</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            </tbody>
+        </table>
+        <p><em>\(t_A\) là thời gian tấm cảm quang lướt qua vị trí A với chiều dài tấm cảm quang là \(l\).</em></p>
+        <p><em>\(t_B\) là thời gian tấm cảm quang lướt qua vị trí B với chiều dài tấm cảm quang là \(l\).</em></p>
+        <p><em>\(t_{AB}\) là thời gian vật đi từ vị trí A đến vị trí B.</em></p>
+        <p>Dựa vào bảng số liệu ở mỗi lần đo, các em hãy tính số liệu \(v_A\), \(v_B\) và gia tốc \(a\) của con trượt. Đối với con trượt có lực không thay đổi, gia tốc của con trượt sẽ phụ thuộc vào khối lượng như thế nào?</p>
+    </div>
+
+    <!-- Phiếu học tập số 3 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 3</h4>
+        <p><strong>Câu 1.</strong> Nêu một số ví dụ cho thấy khối lượng của vật càng lớn thì mức quán tính của vật càng lớn. Điều này có ý nghĩa gì trong thực tiễn?</p>
+        <p><strong>Câu 2.</strong> Cho đồ thị biểu diễn mối liên hệ giữa các lực tác dụng lên một vật và gia tốc gây ra tương ứng (Hình 15.1). Khối lượng của vật là:</p>
+        <ul style="list-style-type: none;">
+            <li>A. 1,0 kg &nbsp;&nbsp; B. 2,0 kg &nbsp;&nbsp; C. 0,5 kg &nbsp;&nbsp; D. 1,5 kg</li>
+        </ul>
+        <div class="img-container">
+            <img src="15.1.png" alt="Hình 15.1 - Đồ thị biểu diễn mối liên hệ giữa lực và gia tốc" class="img-medium">
+            <p><em>Hình 15.1</em></p>
+        </div>
+    </div>
+
+    <!-- Phiếu học tập số 4 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 4</h4>
+        <p><strong>Thí nghiệm minh họa định luật 2 Newton</strong></p>
+        <p>Thí nghiệm được thiết lập như Hình 15.2</p>
+        <div class="img-container">
+            <img src="15.2.png" alt="Hình 15.2 - Thí nghiệm minh họa định luật 2 Newton" class="img-large">
+            <p><em>Hình 15.2. Thí nghiệm minh họa định luật 2 Newton</em></p>
+        </div>
+        <p><em>(1) Tấm chắn sáng; (2) Máng trượt đệm khí; (3) Cổng quang điện 1; (4) Cổng quang điện 2; (5) Ròng rọc; (6) Các quả nặng; (7) Đồng hồ đo thời gian hiện số; (8) Cân điện tử; (9) Bơm khí.</em></p>
+        <p>Kết quả thí nghiệm ghi trong bảng 15.1</p>
+        <table class="bang-du-lieu">
+            <thead>
+                <tr>
+                    <th>Lực kéo F (N)</th>
+                    <th>1</th>
+                    <th>1</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Khối lượng (M + m) (kg)</td>
+                    <td>0,3</td>
+                    <td>0,4</td>
+                    <td>0,5</td>
+                    <td>0,5</td>
+                    <td>0,5</td>
+                </tr>
+                <tr>
+                    <td>Thời gian t (s)</td>
+                    <td>0,55</td>
+                    <td>0,64</td>
+                    <td>0,71</td>
+                    <td>0,50</td>
+                    <td>0,42</td>
+                </tr>
+                <tr>
+                    <td>Gia tốc \(a = \frac{2s}{t^2}\) (m/s²)</td>
+                    <td>3,31</td>
+                    <td>2,44</td>
+                    <td>1,99</td>
+                    <td>4,03</td>
+                    <td>5,67</td>
+                </tr>
+            </tbody>
+        </table>
+        <p><strong>Thảo luận:</strong></p>
+        <p><strong>a.</strong> Dựa vào số liệu trong Bảng 15.1, hãy vẽ đồ thị sự phụ thuộc của gia tốc a:</p>
+        <ul>
+            <li>Vào F (ứng với m + M = 0,5 kg), (Hình 15.3a). Đồ thị có phải là đường thẳng không? Tại sao?</li>
+            <li>Vào \(\frac{1}{m+M}\) (ứng với F = 1 N), (Hình 15.3b). Đồ thị có phải là đường thẳng không? Tại sao?</li>
+        </ul>
+        <p><strong>b.</strong> Nêu kết luận về sự phụ thuộc của gia tốc vào độ lớn của lực tác dụng và khối lượng của vật.</p>
+    </div>
+
+    <!-- Phiếu học tập số 5 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 5</h4>
+        <p><strong>Câu 1.</strong> Trong các cách viết hệ thức của định luật 2 Newton sau đây, cách viết nào đúng?</p>
+        <ul style="list-style-type: none;">
+            <li>A. \(\vec{F} = m \cdot \vec{a}\) &nbsp;&nbsp; B. \(\vec{F} = -m \cdot \vec{a}\) &nbsp;&nbsp; C. \(\vec{F} = m \cdot \vec{a}\) &nbsp;&nbsp; D. \(-\vec{F} = m \cdot \vec{a}\)</li>
+        </ul>
+        <p><strong>Câu 2.</strong> Một quả bóng khối lượng 0,5 kg đang nằm trên mặt đất. Một cầu thủ đá bóng với một lực 250 N. Thời gian chân tác dụng vào bóng là 0,02 s. Quả bóng bay đi với tốc độ:</p>
+        <ul style="list-style-type: none;">
+            <li>A. 0,01 m/s &nbsp;&nbsp; B. 0,1 m/s &nbsp;&nbsp; C. 2,5 m/s &nbsp;&nbsp; D. 10 m/s</li>
+        </ul>
+        <p><strong>Câu 3.</strong> Dưới tác dụng của hợp lực 20 N, một chiếc xe đồ chơi chuyển động với gia tốc 0,4 m/s². Dưới tác dụng của hợp lực 50 N, chiếc xe sẽ chuyển động với gia tốc bao nhiêu?</p>
+        <p><strong>Câu 4.</strong> Tại sao máy bay khối lượng càng lớn thì đường băng phải càng dài?</p>
+    </div>
+
+    <h3>2. Học sinh</h3>
+    <ul>
+        <li>SGK Vật lí 10, vở ghi, máy tính/điện thoại có kết nối internet (nếu có).</li>
+        <li>SGK, thiết bị cá nhân (Smartphone/Laptop) có kết nối Internet.</li>
+        <li>Ôn tập lại kiến thức về lực, khối lượng và gia tốc đã học ở bài trước; kiến thức về Định luật I Newton và khái niệm quán tính.</li>
+        <li>Hoàn thành nhiệm vụ học tập trực tuyến trước khi đến lớp (tìm hiểu về định luật 2 Newton qua internet, ChatGPT).</li>
+    </ul>
+
+    <!-- III. TIẾN TRÌNH DẠY HỌC -->
+    <h2>III. TIẾN TRÌNH DẠY HỌC</h2>
+
+    <!-- TIẾT 1 -->
+    <h3>Tiết 1: Định luật 2 Newton - Khối lượng và quán tính</h3>
+
+    <table class="tien-trinh">
+        <thead>
+            <tr>
+                <th class="col-buoc">Bước thực hiện</th>
+                <th class="col-noidung">Nội dung các bước</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- HOẠT ĐỘNG 1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 1:<br>MỞ ĐẦU – TẠO TÌNH HUỐNG<br>HỌC TẬP</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>Thông qua những hình ảnh trực quan và câu hỏi gợi mở để kích thích nhu cầu tìm hiểu kiến thức mới của học sinh.</li>
+                        <li>Giúp HS nhận biết được tầm quan trọng về vấn đề mối liên hệ giữa lực, khối lượng và gia tốc.</li>
+                        <li>Tạo hứng thú, dẫn dắt học sinh vào bài mới.</li>
+                        <li><strong>Năng lực số (2.1.NC1a):</strong> HS sử dụng được các công nghệ số (như điện thoại thông minh, bảng tương tác) để tham gia trò chơi khởi động và tương tác với giáo viên.</li>
+                        <li><strong>Năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) phù hợp để nhờ trợ lý AI hỗ trợ liệt kê các tình huống thực tế minh họa cho sự thay đổi gia tốc theo tài trọng.</li>
+                                <li>NLa: Nhận thức được vai trò của con người trong việc xác định các kịch bản an toàn khi vận hành phương tiện dựa trên dữ liệu tính toán từ AI.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS tham gia trò chơi "Đuổi hình bắt chữ" để nhắc lại các kiến thức cũ và từ khóa quan trọng: Quán tính, Định luật I Newton, Khối lượng, Lực, Gia tốc, Newton.</li>
+                        <li>HS quan sát và phân tích hình ảnh đẩy xe chở hàng trong các trường hợp khác nhau để dự đoán sự thay đổi của gia tốc.</li>
+                        <li>GV chiếu hình ảnh một người đẩy xe chở hàng (Hình 01.png) hoặc video.</li>
+                        <li>GV đặt câu hỏi: <em>"Đẩy một xe chở hàng cho nó chuyển động và nhận xét xem gia tốc của xe tăng hay giảm, nếu: a) Giữ nguyên lực đẩy nhưng khối lượng xe tăng lên. b) Giữ nguyên khối lượng nhưng lực đẩy tăng lên."</em></li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong> Báo cáo kết quả hoạt động nhóm thông qua câu trả lời trên các nền tảng số hoặc bảng nhóm. HS xác định được vấn đề cần nghiên cứu: Gia tốc có mối liên hệ như thế nào với lực tác dụng và khối lượng của vật?</p>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li><strong>Hướng dẫn AI (NLc):</strong> GV gợi ý prompt: <em>"Hãy đóng vai chuyên gia kĩ thuật, liệt kê 3 tình huống giao thông thực tế mà gia tốc của phương tiện thay đổi rõ rệt khi tải trọng thay đổi"</em> để HS tham khảo và mở rộng tư duy.</li>
+                        <li>GV tổ chức trò chơi "Đuổi hình bắt chữ" thông qua bài giảng PowerPoint tương tác hoặc các ứng dụng như Mentimeter/Quizizz để kiểm tra kiến thức cũ.</li>
+                        <li>GV cung cấp mã truy cập để HS sử dụng thiết bị cá nhân tham gia tương tác (2.1.NC1a).</li>
+                        <li>GV trình chiếu hình ảnh đẩy xe hàng (tương ứng Hình 15.3 a, b, c trong SGK) và yêu cầu HS nhận xét về gia tốc của xe trong hai trường hợp:
+                            <ul>
+                                <li>Giữ nguyên lực đẩy nhưng khối lượng xe tăng lên.</li>
+                                <li>Giữ nguyên khối lượng nhưng lực đẩy tăng lên.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="01.png" alt="Hình ảnh người đẩy xe chở hàng" class="img-medium">
+                        <p><em>Hình ảnh minh họa: Người đẩy xe chở hàng</em></p>
+                    </div>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS thảo luận theo nhóm để giải mã các từ khóa trong trò chơi và xác định nhu cầu thông tin cần tìm hiểu cho vấn đề mới (1.1.NC1a).</li>
+                        <li>HS quan sát hình ảnh, thảo luận nhóm để đưa ra dự đoán về mối quan hệ tỉ lệ thuận/nghịch giữa gia tốc với lực và khối lượng.</li>
+                        <li>GV hỗ trợ các nhóm thao tác trên môi trường số và gợi ý hướng tư duy.</li>
+                        <li>HS sử dụng Chatbot với prompt đã gợi ý, phân tích kết quả AI cung cấp và thực hiện trích dẫn nguồn minh bạch (NLb).</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Đại diện nhóm trình bày kết quả dự đoán:
+                            <ul>
+                                <li>Khi lực đẩy không đổi, khối lượng tăng thì gia tốc giảm.</li>
+                                <li>Khi khối lượng không đổi, lực đẩy tăng thì gia tốc tăng.</li>
+                            </ul>
+                        </li>
+                        <li>Các nhóm khác sử dụng tính năng bình luận hoặc giơ tay trên nền tảng số để nhận xét, bổ sung (2.5.NC1b).</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết, đánh giá kết quả trò chơi và phần dự đoán của các nhóm.</li>
+                        <li><strong>Chốt kiến thức (NLa):</strong> Nhấn mạnh: <em>"Dù AI có thể tính toán gia tốc tức thời cho xe tự lái, nhưng chính con người phải quyết định giới hạn tải trọng an toàn."</em></li>
+                        <li>GV đặt vấn đề: <em>"Theo định luật I Newton, nếu hợp lực bằng không thì vật đứng yên hoặc chuyển động thẳng đều. Vậy nếu hợp lực khác không, vật sẽ có gia tốc. Liệu định luật nào sẽ cho chúng ta biết chính xác mối liên hệ định lượng giữa gia tốc, lực và khối lượng? Chúng ta sẽ tìm hiểu qua: BÀI 15: ĐỊNH LUẬT II NEWTON"</em></li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 2.1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2.1:<br>TÌM HIỂU VỀ ĐỊNH LUẬT II NEWTON</strong><br>
+                    (15 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>Phát biểu được định luật II Newton; viết được biểu thức \(a = \frac{F}{m}\) hoặc \(F = m \cdot a\), và nêu được đơn vị của lực (Newton).</li>
+                        <li>Sử dụng được số liệu thí nghiệm (hoặc thí nghiệm mô phỏng) để rút ra các mối liên hệ \(a \sim F\) (khi m không đổi) và \(a \sim \frac{1}{m}\) (khi F không đổi).</li>
+                        <li>Hình thành định luật 2 Newton, khái niệm khối lượng và quán tính.</li>
+                        <li><strong>Năng lực số:</strong>
+                            <ul>
+                                <li>1.1.NC1b: Áp dụng được kĩ thuật tìm kiếm để khai thác các video thực nghiệm hoặc phim thí nghiệm về định luật II trên môi trường số.</li>
+                                <li>5.2.NC1b: Áp dụng được các công cụ số như phần mềm mô phỏng (PhET) hoặc thí nghiệm ảo để khảo sát nhu cầu kiểm chứng giả thuyết về lực và gia tốc.</li>
+                                <li>1.3.NC1a: Thao tác, tổ chức dữ liệu thu thập được từ thí nghiệm vào các bảng số liệu điện tử để lưu trữ và truy xuất báo cáo.</li>
+                                <li>2.4.NC1a: Đề xuất và sử dụng các công cụ cộng tác trực tuyến (Padlet, Google Sheets) cho quá trình thảo luận nhóm và đồng sáng tạo kiến thức.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập các câu lệnh (prompt) phù hợp để nhờ trợ lý AI hỗ trợ giải thích logic của đơn vị Newton hoặc tóm tắt các bước thực hiện thí nghiệm đo gia tốc bằng cảm biến.</li>
+                                <li>NLb: Thể hiện sự minh bạch và trách nhiệm bằng cách trích dẫn rõ ràng nguồn học liệu từ mạng và thông tin do AI cung cấp khi xây dựng nội dung báo cáo.</li>
+                                <li>NLa: Xác định được vai trò của con người trong việc tùy chỉnh, vận hành và kiểm soát các hệ thống thông minh (như xe tự hành) dựa trên các quy luật của định luật II để đảm bảo an toàn.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS làm việc theo nhóm để thực hiện hoặc quan sát thí nghiệm mô phỏng về mối liên hệ giữa gia tốc \(a\) với lực \(F\) và khối lượng \(m\).</li>
+                        <li>Hoàn thành <strong>Phiếu học tập (PHT) số 1</strong> (Khảo sát a theo F) và <strong>Phiếu học tập (PHT) số 2</strong> (Khảo sát a theo m) dựa trên các video/mô phỏng được cung cấp.</li>
+                        <li>Tương tác với trợ lý AI để làm rõ các khái niệm về đơn vị lực và thực hành xác định vai trò của con người trong hệ thống AI sử dụng định luật II.</li>
+                        <li>GV yêu cầu HS đọc SGK mục I, phát biểu định luật 2 Newton.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <div class="box">
+                        <strong>A. Định luật II Newton</strong>
+                        <p>Gia tốc của một vật cùng hướng với lực tác dụng lên vật. Độ lớn của gia tốc tỉ lệ thuận với độ lớn của lực và tỉ lệ nghịch với khối lượng của vật.</p>
+                        <div class="formula">\[ \vec{a} = \frac{\vec{F}}{m} \quad \text{hay} \quad \vec{F} = m\vec{a} \]</div>
+                        <p>Trong trường hợp vật chịu nhiều lực tác dụng \(\vec{F}_1, \vec{F}_2, \dots, \vec{F}_n\) thì \(\vec{F}\) là hợp lực của các lực đó:</p>
+                        <div class="formula">\[ \vec{F} = \vec{F}_1 + \vec{F}_2 + \dots + \vec{F}_n \]</div>
+                        <p>- Dựa vào biểu thức \(\vec{F} = m\vec{a}\) ta có: \(1\text{ N} = 1\text{ kg} \cdot 1\text{ m/s}^2\).</p>
+                    </div>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV đặt vấn đề bằng cách cung cấp các đường link video hoặc QR code mô phỏng thí nghiệm máng đệm khí.</li>
+                        <li>GV yêu cầu HS sử dụng kĩ thuật tìm kiếm để thu thập thêm tư liệu về cách đo gia tốc bằng cổng quang điện (1.1.NC1b).</li>
+                        <li>GV chia nhóm và phát PHT 1, 2 cho các nhóm trưởng.
+                            <ul>
+                                <li><strong>Nhóm 1 + 3:</strong> Phiếu học tập 1 - Khảo sát sự phụ thuộc của gia tốc a vào lực kéo.</li>
+                                <li><strong>Nhóm 2 + 4:</strong> Phiếu học tập 2 - Khảo sát sự phụ thuộc của gia tốc a vào khối lượng.</li>
+                            </ul>
+                        </li>
+                        <li>GV cung cấp link video: <em>https://www.youtube.com/watch?v=4L4A4gsgNVE</em> và <em>https://www.youtube.com/watch?v=40l_WN04xqc</em></li>
+                        <li><strong>Hướng dẫn AI (NLc):</strong> GV gợi ý prompt: <em>"Hãy giải thích tại sao trong hệ SI, đơn vị Newton lại được định nghĩa thông qua các đơn vị cơ bản là kg, m và s dựa trên định luật II Newton".</em></li>
+                        <li>Cho các trường hợp chuyển động sau: So sánh các trường hợp a) và b), chuyển động trong trường hợp nào có gia tốc lớn hơn? Giải thích?
+                            <ul>
+                                <li><strong>Trường hợp 1:</strong> Hai xe (a), (b) cùng khối lượng và \(F_1 > F_2\).</li>
+                                <li><strong>Trường hợp 2:</strong> Xe (a) có khối lượng lớn hơn xe (b) và chịu cùng lực kéo.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS truy cập phần mềm mô phỏng để thay đổi lực kéo và khối lượng, quan sát sự thay đổi của gia tốc (5.2.NC1b).</li>
+                        <li>Các nhóm ghi chép số liệu vào bảng tính dùng chung (Google Sheets) để tổ chức dữ liệu khoa học (1.3.NC1a).</li>
+                        <li>HS thảo luận nhóm trên các không gian số để rút ra nhận xét về tỉ lệ giữa các đại lượng (2.4.NC1a).</li>
+                        <li><strong>Vận dụng AI (NLb):</strong> HS trao đổi với chatbot để hoàn thiện kiến thức về đơn vị và ghi chú nguồn AI minh bạch.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Đại diện nhóm trình bày kết quả báo cáo (có thể dùng biểu đồ vẽ từ dữ liệu số).</li>
+                        <li><strong>Trường hợp 1:</strong> Ta thấy gia tốc \(a_1 > a_2\) suy ra \(a \sim F\).</li>
+                        <li><strong>Trường hợp 2:</strong> Ta thấy gia tốc \(a_1 < a_2\) suy ra \(a \sim \frac{1}{m}\).</li>
+                        <li>HS các nhóm khác phản biện, nhận xét dựa trên các chuẩn mực hành vi văn hóa trên mạng (2.5.NC1a).</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết, đánh giá kĩ năng xử lí dữ liệu số và độ chính xác của các kết luận từ HS.</li>
+                        <li>GV chính xác hóa nội dung định luật và biểu thức vectơ, đơn vị lực.</li>
+                        <li>GV yêu cầu HS lưu trữ sản phẩm báo cáo vào thư mục học tập của lớp để chuẩn bị cho phần ôn tập (1.3.NC1b).</li>
+                        <li><strong>Chốt kiến thức (NLa):</strong> GV nhấn mạnh vai trò con người trong việc kiểm soát các thuật toán gia tốc của xe AI để tránh rủi ro khi tải trọng thay đổi.</li>
+                    </ul>
+
+                    <div class="img-container">
+                        <img src="15.1.png" alt="Hình 15.1 - Đồ thị biểu diễn mối liên hệ giữa lực và gia tốc" class="img-medium">
+                        <p><em>Hình 15.1. Đồ thị biểu diễn mối liên hệ giữa lực và gia tốc</em></p>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 2.2 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2.2:<br>TÌM HIỂU VỀ KHỐI LƯỢNG<br>VÀ QUÁN TÍNH</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>Nêu được ý nghĩa của khối lượng là đại lượng đặc trưng cho mức quán tính của vật.</li>
+                        <li>Giải thích được tại sao vật có khối lượng càng lớn thì càng khó thay đổi vận tốc và vận dụng để giải thích các hiện tượng thực tế (như xe tải chở hàng nặng khó hãm phanh hơn).</li>
+                        <li>Hiểu được khối lượng là đại lượng đặc trưng cho mức quán tính của vật.</li>
+                        <li><strong>Năng lực số:</strong>
+                            <ul>
+                                <li>1.3.NC1a: Học sinh thao tác được thông tin, dữ liệu về các ví dụ thực tế trên môi trường số để tổ chức, lưu trữ và truy xuất phục vụ báo cáo.</li>
+                                <li>3.1.NC1a: Học sinh áp dụng được các cách tạo và chỉnh sửa nội dung số (như thiết kế Infographic hoặc Slide ngắn) để trình bày mối liên hệ giữa khối lượng và mức quán tính.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập các câu lệnh (prompt) phù hợp để nhờ trợ lý AI hỗ trợ lấy thêm ví dụ hoặc giải thích sâu về khái niệm "mức quán tính" trong kĩ thuật.</li>
+                                <li>NLb: Thể hiện sự minh bạch; thực hiện trích dẫn nguồn học liệu mạng và AI minh bạch khi đưa vào sản phẩm học tập.</li>
+                                <li>NLa: Nhận thức được tầm quan trọng của việc con người kiểm soát tải trọng phương tiện nhằm đảm bảo an toàn giao thông, dù phương tiện có các hệ thống hỗ trợ thông minh.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS thảo luận nhóm để hoàn thành <strong>Phiếu học tập (PHT) số 3</strong>.</li>
+                        <li>Nội dung tìm hiểu:
+                            <ul>
+                                <li>Lập luận dựa trên định luật II Newton (\(a = F/m\)): Với cùng một lực \(F\), vật nào có \(m\) lớn hơn thì gia tốc nhỏ hơn, tức là khó thay đổi vận tốc hơn.</li>
+                                <li>Định nghĩa: Khối lượng là đại lượng đặc trưng cho mức quán tính của vật.</li>
+                                <li>Phân tích ví dụ: Đẩy thùng giấy vụn và thùng gạo; Xe tải và xe máy khi bắt đầu chuyển động.</li>
+                            </ul>
+                        </li>
+                        <li>GV yêu cầu HS đọc SGK mục II, nêu mối quan hệ giữa khối lượng và quán tính.</li>
+                        <li>GV yêu cầu HS trả lời câu hỏi 1, 2 trong SGK trang 65.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <div class="box">
+                        <strong>B. Khối lượng và mức quán tính</strong>
+                        <p><strong>a. Định nghĩa:</strong> Khối lượng là đại lượng đặc trưng cho mức quán tính của vật.</p>
+                        <p><strong>b. Tính chất của khối lượng:</strong></p>
+                        <ul>
+                            <li>Là đại lượng vô hướng, dương, không đổi đối với mỗi vật.</li>
+                            <li>Có tính chất cộng.</li>
+                        </ul>
+                    </div>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV lưu ý: Định luật II Newton cho cách hiểu mới về khối lượng thay vì chỉ là "lượng chất".</li>
+                        <li>GV phát PHT số 3 và yêu cầu các nhóm tìm kiếm thêm các hình ảnh/video về xe tải chở hàng nặng và xe không chở hàng để so sánh khả năng hãm phanh (1.1.NC1b).</li>
+                        <li><strong>Hướng dẫn AI (NLc):</strong> GV gợi ý prompt: <em>"Hãy đóng vai chuyên gia an toàn giao thông, giải thích tại sao xe tải chở quá tải lại cực kì nguy hiểm khi xuống dốc dựa trên mức quán tính".</em></li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS thảo luận nhóm, phân tích mối liên hệ nghịch giữa gia tốc và khối lượng (\(a \sim 1/m\)).</li>
+                        <li>HS sử dụng các công cụ thiết kế số (Canva/PowerPoint) để tạo sản phẩm nội dung số giải thích khái niệm mức quán tính (3.1.NC1a).</li>
+                        <li>HS tổ chức dữ liệu thu thập được vào thư mục chung của nhóm để dễ dàng báo cáo (1.3.NC1a).</li>
+                        <li><strong>Thực hành AI:</strong> HS trao đổi với chatbot để lấy thêm ví dụ kĩ thuật và trích dẫn nguồn AI minh bạch (NLb).</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Đại diện nhóm trình bày nội dung PHT 3 và trình chiếu sản phẩm số đã thiết kế.</li>
+                        <li><strong>Trả lời nội dung của phiếu học tập số 3:</strong>
+                            <ul>
+                                <li><strong>Câu 1:</strong>
+                                    <ul>
+                                        <li>Ví dụ: Một người sử dụng cùng một lực để đẩy một thùng giấy vụn sẽ đẩy nhanh hơn so với khi đẩy một thùng gạo, do khối lượng của thùng gạo lớn hơn khối lượng của thùng giấy vụn, làm khó thay đổi vận tốc hơn.</li>
+                                        <li>Ô tô tải rất nặng so với xe máy hay ô tô con nên có mức quán tính lớn hơn rất nhiều. Ở cùng trạng thái bắt đầu chuyển động thì ô tô tải cần nhiều thời gian hơn mới đạt vận tốc lớn.</li>
+                                        <li>⇒ Khối lượng của vật càng lớn thì mức quán tính của vật càng lớn.</li>
+                                        <li><strong>Ý nghĩa trong thực tiễn:</strong> Cho phép ta so sánh được khối lượng của những vật làm bằng các chất khác nhau. Chúng sẽ có khối lượng bằng nhau nếu như dưới tác dụng của hợp lực như nhau, chúng có gia tốc như nhau.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Câu 2:</strong> Từ đồ thị ta thấy: Khi \(F = 0,5\) N thì \(a = 1,0\) m/s² suy ra khối lượng của vật là:
+                                    <div class="formula">\[ a = \frac{F}{m} \Rightarrow m = \frac{F}{a} = \frac{0,5}{1} = 0,5 \text{ (kg)} \]</div>
+                                    <strong>⇒ Chọn C</strong>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Các nhóm khác thảo luận, nhận xét về các ví dụ (thùng giấy vs thùng gạo; ô tô tải vs xe máy) và cách giải bài tập đồ thị.</li>
+                        <li>GV điều phối thảo luận, chú trọng việc sử dụng thuật ngữ vật lí chính xác trong môi trường số (2.5.NC1a).</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết: Khối lượng càng lớn, mức quán tính càng lớn.</li>
+                        <li>GV đánh giá kết quả thực hiện nhiệm vụ, đặc biệt là khả năng vận dụng kiến thức để giải thích an toàn giao thông (xe nặng khó hãm phanh).</li>
+                        <li>GV nhắc HS lưu trữ các Infographic vào hồ sơ học tập số của lớp để chia sẻ kiến thức (2.2.NC1a).</li>
+                        <li><strong>Chốt kiến thức (NLa):</strong> GV nhấn mạnh: <em>"Dù AI hỗ trợ tính toán khoảng cách phanh, nhưng chính con người phải có ý thức không chở quá tải để kiểm soát mức quán tính của xe".</em></li>
+                        <li>GV nhận xét, kết thúc tiết 1.</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="15.1.png" alt="Hình 15.1 - Đồ thị biểu diễn mối liên hệ giữa lực và gia tốc" class="img-medium">
+                        <p><em>Hình 15.1. Đồ thị biểu diễn mối liên hệ giữa lực và gia tốc</em></p>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- TIẾT 2 -->
+    <h3 style="margin-top: 30px;">Tiết 2: Thí nghiệm minh họa định luật 2 Newton</h3>
+
+    <table class="tien-trinh">
+        <thead>
+            <tr>
+                <th class="col-buoc">Bước thực hiện</th>
+                <th class="col-noidung">Nội dung các bước</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- HOẠT ĐỘNG 1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 1:<br>KHỞI ĐỘNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Tạo tình huống có vấn đề về thí nghiệm minh họa định luật 2 Newton.</p>
+                    <p><strong>Nội dung:</strong> Quan sát hình ảnh và dự đoán.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV chiếu Hình 15.2 (sgk) về bộ thí nghiệm minh họa định luật 2 Newton.</li>
+                        <li>GV đặt câu hỏi: "Làm thế nào để kiểm chứng mối quan hệ giữa gia tốc, lực và khối lượng bằng thí nghiệm?"</li>
+                        <li>HS quan sát, dự đoán.</li>
+                        <li>GV dẫn dắt vào bài: "Để trả lời, chúng ta cùng tìm hiểu phần III. Thí nghiệm minh họa định luật 2 Newton."</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="15.2.png" alt="Hình 15.2 - Thí nghiệm minh họa định luật 2 Newton" class="img-large">
+                        <p><em>Hình 15.2. Thí nghiệm minh họa định luật 2 Newton</em></p>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 2.3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2.3:<br>THÍ NGHIỆM MINH HỌA<br>ĐỊNH LUẬT II NEWTON</strong><br>
+                    (15 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>Dựa vào số liệu thực nghiệm, học sinh vẽ được đồ thị thể hiện sự phụ thuộc của gia tốc a vào lực F và vào khối lượng m của vật, từ đó kiểm chứng lại định luật II Newton.</li>
+                        <li>Đề xuất được phương án thí nghiệm, thực hiện đo đạc, xử lí số liệu và khái quát rút ra kết luận khoa học.</li>
+                        <li>Hiểu được mục đích, dụng cụ và các bước tiến hành thí nghiệm minh họa định luật 2 Newton.</li>
+                        <li><strong>Năng lực số:</strong>
+                            <ul>
+                                <li>5.2.NC1b: Áp dụng các công cụ số (đồng hồ đo thời gian hiện số, cổng quang điện) và các giải pháp công nghệ (phần mềm mô phỏng) để giải quyết nhu cầu kiểm chứng giả thuyết.</li>
+                                <li>1.3.NC1a: Thao tác, tổ chức và lưu trữ dữ liệu thí nghiệm trên các bảng tính điện tử (Excel/Google Sheets) để tính toán và truy xuất báo cáo dễ dàng hơn.</li>
+                                <li>3.1.NC1a: Áp dụng các công cụ số để tạo và chỉnh sửa nội dung (vẽ đồ thị trên máy tính, biên tập báo cáo số) nhằm thể hiện kết quả nghiên cứu.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập các câu lệnh (prompt) phù hợp để nhờ trợ lý AI hỗ trợ giải thích nguyên lí hoạt động của các cảm biến quang học hoặc gợi ý cách xử lí sai số bằng thuật toán.</li>
+                                <li>NLb: Thể hiện sự minh bạch và liêm chính; thực hiện trích dẫn nguồn học liệu mạng và AI minh bạch khi xây dựng nội dung báo cáo kết quả thí nghiệm.</li>
+                                <li>NLa: Nhận thức được định luật II Newton là cơ sở để con người kiểm soát và ra quyết định cuối cùng đối với các hệ thống cảm biến tự động đo gia tốc trên xe thông minh.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS làm việc theo nhóm để tìm hiểu về các bước tiến hành thí nghiệm với máng trượt đệm khí và bộ đếm thời gian hiện số.</li>
+                        <li>Thực hiện đo thời gian tấm chắn sáng đi qua hai cổng quang điện và để tính gia tốc trong các trường hợp thay đổi lực kéo hoặc thay đổi khối lượng hệ vật.</li>
+                        <li>Hoàn thành <strong>Phiếu học tập (PHT) số 4</strong>.</li>
+                        <li>GV yêu cầu HS đọc SGK mục III, kể tên các dụng cụ thí nghiệm và mô tả các bước tiến hành.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong> Kết quả thực nghiệm: Bảng số liệu 15.1 hoàn chỉnh với các giá trị gia tốc được tính toán chính xác.</p>
+                    <div class="box">
+                        <strong>Bảng 15.1. Bảng ghi kết quả thí nghiệm</strong>
+                        <table class="bang-du-lieu">
+                            <thead>
+                                <tr>
+                                    <th>Lực kéo F (N)</th>
+                                    <th>1</th>
+                                    <th>1</th>
+                                    <th>1</th>
+                                    <th>2</th>
+                                    <th>3</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Khối lượng (M + m) (kg)</td>
+                                    <td>0,3</td>
+                                    <td>0,4</td>
+                                    <td>0,5</td>
+                                    <td>0,5</td>
+                                    <td>0,5</td>
+                                </tr>
+                                <tr>
+                                    <td>Thời gian t (s)</td>
+                                    <td>0,55</td>
+                                    <td>0,64</td>
+                                    <td>0,71</td>
+                                    <td>0,50</td>
+                                    <td>0,42</td>
+                                </tr>
+                                <tr>
+                                    <td>Gia tốc \(a = \frac{2s}{t^2}\) (m/s²)</td>
+                                    <td>3,31</td>
+                                    <td>2,44</td>
+                                    <td>1,99</td>
+                                    <td>4,03</td>
+                                    <td>5,67</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p><em>Lưu ý: s = 0,5 m là khoảng cách giữa hai cổng quang điện.</em></p>
+                    </div>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV giới thiệu bộ dụng cụ gồm: xe trượt (M = 200g), các quả nặng (m = 50g), máng trượt đệm khí, đồng hồ điện tử và hai cổng quang điện.</li>
+                        <li><strong>Hướng dẫn AI (NLc):</strong> GV gợi ý prompt: <em>"Hãy giải thích nguyên lí hoạt động của cổng quang điện trong việc đo thời gian chắn sáng để tính vận tốc tức thời"</em> để HS hiểu rõ công nghệ đo.</li>
+                        <li><strong>Dụng cụ:</strong>
+                            <ul>
+                                <li>Một xe trượt có khối lượng M = 200 g được buộc vào một sợi dây vắt qua rãnh của ròng rọc. Coi dây không giãn và có khối lượng không đáng kể.</li>
+                                <li>Một hộp đựng 10 quả nặng giống nhau, có cùng khối lượng m = 50 g.</li>
+                                <li>Một máng trượt đệm khí với các lỗ nhỏ thổi không khí.</li>
+                                <li>Bộ đếm thời gian gồm: một đồng hồ điện tử, hai cổng quang (đặt cách nhau 0,5 m) và tấm chắn sáng dài 10 cm.</li>
+                            </ul>
+                        </li>
+                        <li>Như vậy khối lượng của vật có thể là (M + m), (M + 2m)… còn lực kéo F là trọng lượng của các quả nặng. Cụ thể \(F_1 = mg\), \(F_2 = 2mg\)…</li>
+                        <li>GV cung cấp tài liệu hướng dẫn hoặc video mô phỏng qua mã QR để HS tìm hiểu trước thao tác kĩ thuật (1.1.NC1b).</li>
+                        <li>Chia lớp thành 4 nhóm:
+                            <ul>
+                                <li><strong>Nhóm 1 + 3:</strong> thảo luận sự phụ thuộc của gia tốc a vào lực F (ứng với m + M = 0,5 kg).</li>
+                                <li><strong>Nhóm 2 + 4:</strong> thảo luận sự phụ thuộc của gia tốc a vào khối lượng \(\frac{1}{m+M}\) (ứng với F = 1 N).</li>
+                            </ul>
+                        </li>
+                        <li>Kết thúc quá trình thảo luận, các nhóm cử đại diện báo cáo.</li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS lắp đặt thiết bị, đảm bảo máng trượt thẳng bằng.</li>
+                        <li>HS tiến hành đo thời gian \(t_A\), \(t_B\), \(t_{AB}\) bằng cổng quang điện. Khi gặp lỗi thiết bị (như cổng quang không nhận tín hiệu), HS tự thảo luận tìm giải pháp khắc phục (5.1.NC1b).</li>
+                        <li>HS nhập số liệu trực tiếp vào bảng tính điện tử để hệ thống tự động tính toán vận tốc \(v_A\), \(v_B\) và gia tốc \(a\) (1.3.NC1a).</li>
+                        <li><strong>Thực hành AI (NLb):</strong> HS sử dụng trợ lý ảo để đối chiếu các bước xử lí sai số hệ thống và thực hiện trích dẫn nguồn AI minh bạch.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Đại diện các nhóm trình bày báo cáo bằng slide, chiếu các đồ thị a(F) và a(1/m) được vẽ từ phần mềm (3.1.NC1a).</li>
+                        <li>HS phân tích độ dốc của đồ thị: tỉ số F/a và a(m+M) không đổi, chứng minh đồ thị là đường thẳng đi qua gốc tọa độ.</li>
+                        <li><strong>Trả lời nội dung của phiếu học tập số 4:</strong>
+                            <p><strong>a. Đồ thị a phụ thuộc vào F (m + M = 0,5kg):</strong></p>
+                            <div class="img-container">
+                                <img src="15.3.png" alt="Hình 15.3 - Đồ thị sự phụ thuộc của gia tốc vào lực và khối lượng" class="img-large">
+                                <p><em>Hình 15.3. Đồ thị sự phụ thuộc của gia tốc vào lực và khối lượng</em></p>
+                            </div>
+                            <p>Ta có:</p>
+                            <ul>
+                                <li>Khi F = 1 N, a = 1,99 m/s² thì: \(\frac{F}{a} = \frac{1}{1,99} \approx 0,5\)</li>
+                                <li>Khi F = 2 N, a = 4,03 m/s² thì: \(\frac{F}{a} = \frac{2}{4,03} \approx 0,5\)</li>
+                                <li>Khi F = 3 N, a = 5,67 m/s² thì: \(\frac{F}{a} = \frac{3}{5,67} \approx 0,5\)</li>
+                            </ul>
+                            <p>⇒ Tỉ số \(\frac{F}{a}\) không đổi nên đồ thị sự phụ thuộc của gia tốc a vào F là đường thẳng.</p>
+
+                            <p><strong>b. Đồ thị a phụ thuộc vào \(\frac{1}{m+M}\) (ứng với F = 1 N):</strong></p>
+                            <p>Ta có:</p>
+                            <ul>
+                                <li>Khi a = 3,31 m/s², \(\frac{1}{m+M} = \frac{10}{3}\) thì \(a \cdot (m+M) = 1\)</li>
+                                <li>Khi a = 2,44 m/s², \(\frac{1}{m+M} = 2,5\) thì \(a \cdot (m+M) = 1\)</li>
+                                <li>Khi a = 1,99 m/s², \(\frac{1}{m+M} = 2\) thì \(a \cdot (m+M) = 1\)</li>
+                            </ul>
+                            <p>⇒ Tỉ số \(\frac{a}{1/(m+M)} = a \cdot (m+M)\) không đổi nên đồ thị sự phụ thuộc của gia tốc a vào \(\frac{1}{m+M}\) là một đường thẳng.</p>
+
+                            <p><strong>Kết luận:</strong></p>
+                            <ul>
+                                <li>Khi (m + M) không đổi, F tăng thì a cũng tăng ⇒ Gia tốc a tỉ lệ thuận với lực F.</li>
+                                <li>Khi F không đổi, a giảm thì (m + M) tăng ⇒ Gia tốc a tỉ lệ nghịch với khối lượng.</li>
+                                <li>⇒ Kết luận: Gia tốc tỉ lệ thuận với lực tác dụng và tỉ lệ nghịch với khối lượng.</li>
+                            </ul>
+                        </li>
+                        <li>HS thảo luận, phản biện về các sai số gặp phải trong quá trình đo đạc trên môi trường số (2.5.NC1b).</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV đánh giá kết quả dựa trên độ chính xác của số liệu và kĩ năng sử dụng công cụ số của các nhóm.</li>
+                        <li>GV chốt kiến thức: Thí nghiệm đã kiểm chứng hoàn toàn biểu thức \(a = \frac{F}{m}\) của định luật II Newton.</li>
+                        <li>GV yêu cầu HS lưu trữ báo cáo vào không gian học tập chung của lớp (2.2.NC1a).</li>
+                        <li>GV nhận xét, kết thúc tiết 2 (hoặc chuyển sang Hoạt động 3 nếu còn thời gian).</li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 3:<br>LUYỆN TẬP – TRÒ CHƠI<br>"CHINH PHỤC KIẾN THỨC"</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>Hệ thống hóa kiến thức về biểu thức định luật II Newton, mối liên hệ giữa các đại lượng gia tốc, lực, khối lượng và ý nghĩa của mức quán tính.</li>
+                        <li>Vận dụng thành thạo công thức \(a = \frac{F}{m}\) hoặc \(F = m \cdot a\) để giải các bài tập định lượng đơn giản.</li>
+                        <li>Vận dụng định luật 2 Newton để giải bài tập.</li>
+                        <li><strong>Năng lực số:</strong>
+                            <ul>
+                                <li>2.1.NC1a: Sử dụng được nhiều công nghệ số (điện thoại thông minh, máy tính bảng) để tham gia tương tác và thi đua giải bài tập trên môi trường số.</li>
+                                <li>3.1.NC1a: Áp dụng được các cách tạo và chỉnh sửa nội dung số (thiết kế sơ đồ tư duy hệ thống kiến thức) để thể hiện sự hiểu biết về định luật II Newton.</li>
+                                <li>5.1.NC1b: Tự áp dụng được các giải pháp kĩ thuật để xử lí các vấn đề phát sinh khi tham gia các nền tảng luyện tập trực tuyến (lỗi kết nối, lỗi ứng dụng).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) phù hợp để nhờ trợ lý AI hỗ trợ giải thích các bước biến đổi công thức hoặc kiểm tra đơn vị đo trong hệ SI.</li>
+                                <li>NLb: Thể hiện sự minh bạch; sử dụng AI để đối chiếu phương pháp giải nhưng phải tự thực hiện tính toán và trích dẫn nguồn AI minh bạch.</li>
+                                <li>NLa: Nhận thức được vai trò của con người trong việc thẩm định và chịu trách nhiệm về tính chính xác của các kết quả tính toán do AI cung cấp.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS thực hiện nhiệm vụ theo cặp đôi hoặc nhóm nhỏ để hoàn thành <strong>Phiếu học tập (PHT) số 5</strong>.</li>
+                        <li>Tham gia trò chơi thi đua giải bài tập trên các nền tảng tương tác số (như Quizizz hoặc Kahoot).</li>
+                        <li>GV yêu cầu HS đọc và trả lời các câu hỏi 1, 2, 3, 4 trong SGK trang 67.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <ul>
+                        <li>Sản phẩm học tập: Đáp án chính xác của các bài tập trong PHT số 5 được học sinh trình bày vào vở hoặc trên bảng nhóm.</li>
+                        <li>Sản phẩm số: Sơ đồ tư duy hệ thống kiến thức (mối liên hệ và đơn vị Newton) hoặc bảng xếp hạng kết quả từ trò chơi trực tuyến.</li>
+                    </ul>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tóm lược lại các nội dung chính của định luật II Newton bằng sơ đồ mẫu trên màn hình chiếu.</li>
+                        <li>GV yêu cầu HS truy cập vào hệ thống Quizizz qua mã QR hoặc đường link đã gửi để bắt đầu phần thi đấu luyện tập (2.1.NC1a).</li>
+                        <li><strong>Hướng dẫn AI (NLc):</strong> GV gợi ý prompt: <em>"Hãy đóng vai gia sư Vật lí, giải thích các bước đổi đơn vị khối lượng từ gram sang kilôgam và tại sao bước này quan trọng khi áp dụng định luật II Newton".</em></li>
+                        <li>GV yêu cầu HS đọc và trả lời các câu hỏi 1, 2, 3, 4 trong SGK trang 67.</li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS thảo luận cặp đôi để giải quyết các bài toán định lượng trong PHT số 5.</li>
+                        <li>HS sử dụng thiết bị số để nhập câu trả lời; nếu gặp sự cố kĩ thuật (như mất kết nối mạng), HS chủ động thực hiện các giải pháp xử lí sự cố để tiếp tục bài làm (5.1.NC1b).</li>
+                        <li>HS thiết kế nhanh một sơ đồ tư duy số về định luật II bằng các công cụ như Canva hoặc PowerPoint (3.1.NC1a).</li>
+                        <li>HS dùng trợ lý AI để kiểm chứng cách tính vận tốc ở Câu 2 PHT số 5 và ghi chú nguồn AI (NLb).</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>GV trình chiếu bảng xếp hạng thời gian thực và các câu hỏi có tỉ lệ sai cao để cả lớp cùng phân tích.</li>
+                        <li><strong>Thảo luận AI (NLa):</strong> Một nhóm báo cáo về việc AI có thể giải nhanh bài toán, nhưng con người cần kiểm tra xem AI có dùng đúng đơn vị SI hay không.</li>
+                        <li>Đại diện một số cặp đôi giải trình cách tính gia tốc và vận tốc trong bài tập tự luận (2.5.NC1b).</li>
+                        <li><strong>Trả lời phiếu học tập số 5:</strong>
+                            <ul>
+                                <li><strong>Câu 1:</strong> Ta có: biểu thức định luật 2 Newton: \(\vec{a} = \frac{\vec{F}}{m} \Rightarrow \vec{F} = m \cdot \vec{a}\). Suy ra cách viết đúng là C.</li>
+                                <li><strong>Câu 2:</strong> Theo bài ra, ta có:
+                                    <ul>
+                                        <li>\(m = 0,5\) kg; \(v_0 = 0\) m/s</li>
+                                        <li>\(F = 250\) N</li>
+                                        <li>\(t = 0,020\) s</li>
+                                    </ul>
+                                    Áp dụng định luật 2 Newton, gia tốc của chuyển động là:
+                                    <div class="formula">\[ a = \frac{F}{m} = \frac{250}{0,5} = 500 \text{ (m/s}^2\text{)} \]</div>
+                                    Quả bóng bay đi với tốc độ là: \(v = v_0 + a \cdot t = 0 + 500 \cdot 0,020 = 10\) (m/s). <strong>Chọn D.</strong>
+                                </li>
+                                <li><strong>Câu 3:</strong> Khối lượng của chiếc xe là:
+                                    <div class="formula">\[ m = \frac{F}{a} = \frac{20}{0,4} = 50 \text{ (kg)} \]</div>
+                                    Dưới tác dụng của hợp lực 50 N, chiếc xe sẽ chuyển động với gia tốc là:
+                                    <div class="formula">\[ a = \frac{F}{m} = \frac{50}{50} = 1 \text{ m/s}^2 \]</div>
+                                    Vậy dưới tác dụng của hợp lực 50 N, chiếc xe sẽ chuyển động với gia tốc là 1 m/s².
+                                </li>
+                                <li><strong>Câu 4:</strong> Máy bay khối lượng càng lớn thì đường băng phải càng dài vì máy bay có khối lượng quá lớn, lại bay với tốc độ rất cao nên muốn hạ cánh và dừng lại máy bay cần đường băng dài, thời gian hãm trên đường băng lâu hơn.</li>
+                            </ul>
+                        </li>
+                        <li>HS các nhóm khác nhận xét, phản biện về đơn vị và chiều của các vectơ lực, gia tốc.</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết đánh giá kết quả qua hệ thống báo cáo tự động của ứng dụng số.</li>
+                        <li>GV chốt lại các lỗi thường gặp khi áp dụng công thức (như quên đổi đơn vị khối lượng sang kg) và nhấn mạnh ý nghĩa của mức quán tính.</li>
+                        <li>GV nhắc HS lưu trữ sơ đồ tư duy vào thư mục học tập của lớp (1.3.NC1a).</li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 4 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 4:<br>VẬN DỤNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li>Giúp học sinh tự vận dụng, tìm tòi mở rộng các kiến thức đã học về mối liên hệ giữa gia tốc, lực và khối lượng để giải quyết các vấn đề thực tiễn trong đời sống và kĩ thuật.</li>
+                        <li>Giải thích được tại sao trong giao thông, ô tô chở hàng nặng khó hãm phanh hơn ô tô không chở hàng; đề xuất được phương án thí nghiệm chứng tỏ gia tốc phụ thuộc vào F và m.</li>
+                        <li>Vận dụng kiến thức vào thực tế và giao nhiệm vụ về nhà.</li>
+                        <li><strong>Năng lực số:</strong>
+                            <ul>
+                                <li>3.1.NC1a: Áp dụng các cách tạo và chỉnh sửa nội dung số (video thuyết trình, infographic) để giải thích các hiện tượng vật lí.</li>
+                                <li>2.2.NC1a: Chia sẻ dữ liệu và sản phẩm học tập thông qua các công cụ số phù hợp như Padlet, LMS hoặc nhóm mạng xã hội của lớp.</li>
+                                <li>5.4.NC1c: Đề xuất được các cơ hội khác nhau để cập nhật kiến thức và phát triển bản thân thông qua việc tìm hiểu các giải pháp công nghệ an toàn giao thông mới.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách sử dụng câu lệnh (prompt) phù hợp để nhờ AI hỗ trợ thu thập tư liệu về các hệ thống phanh tự động hoặc gợi ý kịch bản cho sản phẩm truyền thông.</li>
+                                <li>NLb: Thể hiện trách nhiệm và sự minh bạch; thực hiện trích dẫn nguồn hình ảnh hoặc thông tin được hỗ trợ bởi AI một cách minh bạch.</li>
+                                <li>NLa: Nhận thức được vai trò của con người trong việc kiểm soát tài trọng phương tiện và đưa ra quyết định an toàn dù có sự hỗ trợ của các hệ thống AI thông minh.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li><strong>Nhiệm vụ 1:</strong> Học sinh về nhà hoàn thành các bài tập trong SGK và sách bài tập liên quan đến định luật II Newton.</li>
+                        <li><strong>Nhiệm vụ 2 (Dự án nhóm):</strong> Thiết kế một sản phẩm số (video clip hoặc bài trình chiếu) giải thích tình huống: <em>"Tại sao máy bay khối lượng càng lớn thì đường băng phải càng dài?"</em> hoặc <em>"Mối nguy hiểm của việc xe quá tải khi hãm phanh gấp"</em> dựa trên khái niệm mức quán tính.</li>
+                        <li><strong>Nhiệm vụ 3:</strong> Đề xuất phương án thí nghiệm tự tạo tại nhà (sử dụng xe đồ chơi, dây kéo, điện thoại quay phim chậm) để chứng minh gia tốc tỉ lệ thuận với lực tác dụng.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <ul>
+                        <li>Bài làm đầy đủ vào vở bài tập của học sinh.</li>
+                        <li>Sản phẩm số: Video, Infographic hoặc Slide báo cáo được đăng tải trên không gian học tập chung của lớp.</li>
+                        <li>Bản thiết kế phương án thí nghiệm mới của nhóm.</li>
+                    </ul>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV giao nhiệm vụ vận dụng thông qua hệ thống quản lí học tập (LMS) hoặc nhóm Zalo/Facebook của lớp.</li>
+                        <li>GV gợi ý các từ khóa và nguồn học liệu số tin cậy để HS tìm hiểu về kĩ thuật hàng không và an toàn giao thông (NLS 1.1.NC1b).</li>
+                        <li><strong>Hướng dẫn AI (NLc):</strong> GV gợi ý prompt: <em>"Hãy đóng vai kĩ sư hàng không, giải thích ngắn gọn tại sao máy bay Airbus A380 cần đường băng dài hơn máy bay ATR-72 dựa trên công thức F = ma"</em> để HS lấy tư liệu.</li>
+                        <li>GV đặt câu hỏi: "Tại sao trong tham gia giao thông, khi ô tô chở hàng nặng khó hãm phanh hơn khi ô tô không chở hàng?"</li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS thực hiện nhiệm vụ cá nhân (bài tập) và nhóm (sản phẩm số) ở nhà.</li>
+                        <li>HS sử dụng các công cụ như Canva, PowerPoint hoặc ứng dụng biên tập video để xây dựng nội dung giải thích về mức quán tính (NLS 3.1.NC1a).</li>
+                        <li><strong>Vận dụng AI (NLb):</strong> HS sử dụng chatbot để kiểm chứng các thông số kĩ thuật về lực đẩy động cơ máy bay và thực hiện trích dẫn nguồn AI minh bạch.</li>
+                        <li>HS vận dụng kiến thức để trả lời câu hỏi: Ô tô chở hàng nặng có khối lượng lớn hơn, quán tính lớn hơn, nên khó thay đổi vận tốc hơn (khó hãm phanh hơn).</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Các nhóm đăng tải link sản phẩm lên Padlet hoặc nộp qua LMS của lớp để cả lớp cùng theo dõi (NLS 2.2.NC1a).</li>
+                        <li>HS các nhóm thực hiện nhận xét, phản biện và chấm chéo sản phẩm của nhau dựa trên các chuẩn mực hành vi văn hóa mạng (NLS 2.5.NC1a).</li>
+                        <li>GV yêu cầu HS thảo luận: <em>"Dù AI giúp xe phanh tự động, tại sao ý thức của tài xế về mức quán tính (khối lượng xe) vẫn là quan trọng nhất?"</em> (NLa).</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết, đánh giá các sản phẩm xuất sắc và chỉ ra các sai sót về kiến thức vật lí (nếu có) vào tiết học tiếp theo.</li>
+                        <li>GV chốt lại ý nghĩa thực tiễn của định luật II Newton và dẫn dắt HS chuẩn bị bài mới: <strong>BÀI 16: ĐỊNH LUẬT III NEWTON.</strong></li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG -->
+    <h2>IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG (NẾU CÓ)</h2>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+
+    <!-- Ký duyệt -->
+    <div class="signature">
+        <div class="signature-box">
+            <p><strong>Duyệt TCM</strong></p>
+            <p class="signature-name"><input type="text" placeholder="Lục Tuyến"></p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    function disableKeys(e) {
+        if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) return true;
+        if (e.ctrlKey && e.shiftKey && (e.key === 'p' || e.key === 'P')) return true;
+        if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'a' || e.key === 'A')) {
+            e.preventDefault(); return false;
+        }
+        if (e.key === 'F12') { e.preventDefault(); return false; }
+        return true;
+    }
+    document.addEventListener('dragstart', function(e) { e.preventDefault(); });
+    document.addEventListener('selectstart', function(e) {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') e.preventDefault();
+    });
+    document.querySelectorAll('input, textarea').forEach(function(el) {
+        el.addEventListener('selectstart', function(e) { e.stopPropagation(); });
+        el.addEventListener('dragstart', function(e) { e.stopPropagation(); });
+    });
+</script>
+
+</body>
+</html>

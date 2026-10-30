@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giáo án Bài 11 - Vật lí 10</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @page { size: A4; margin: 20mm 15mm; }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            line-height: 1.4;
+            color: #000000;
+            background-color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+        .container {
+            width: 100%;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        h1, h2, h3, h4 { color: #004488; margin-top: 15px; margin-bottom: 10px; }
+        h1 {
+            text-align: center;
+            font-size: 18pt;
+            color: #8B4513;
+            border-bottom: 2px solid #8B4513;
+            padding-bottom: 5px;
+        }
+        h2 {
+            font-size: 15pt;
+            border-bottom: 1px solid #D3D3D3;
+            padding-bottom: 3px;
+            color: #8B5A2B;
+        }
+        h3 { font-size: 14pt; color: #0066CC; }
+        h4 { font-size: 13pt; color: #8B5A2B; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12pt; }
+        th, td {
+            border: 1px solid #D3D3D3;
+            padding: 6px 8px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        th { background-color: #F5F5DC; color: #004488; font-weight: bold; }
+        .bang-du-lieu { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 12pt; }
+        .bang-du-lieu th {
+            background-color: #F5DEB3; color: #004488;
+            text-align: center; font-weight: bold; padding: 8px;
+        }
+        .bang-du-lieu td { border: 1px solid #D3D3D3; padding: 8px; text-align: center; }
+        .bang-du-lieu .empty-cell { background-color: #F5F5F5; color: #999; }
+        .tien-trinh { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .tien-trinh th { background-color: #F5DEB3; color: #004488; text-align: center; }
+        .tien-trinh td { vertical-align: top; text-align: left; }
+        .col-buoc { width: 25%; background-color: #F5F5F5; font-weight: bold; color: #8B4513; }
+        .col-noidung { width: 75%; }
+        .box { background-color: #F5F5DC; border-left: 5px solid #8B5A2B; padding: 10px; margin: 10px 0; }
+        .box-ai { background-color: #E8F4FF; border-left: 5px solid #0066CC; padding: 10px; margin: 10px 0; }
+        .box-nls { background-color: #FFF8E1; border-left: 5px solid #CC9900; padding: 10px; margin: 10px 0; }
+        .red-text { color: #CC0000; font-weight: bold; }
+        .blue-text { color: #0066CC; }
+        .img-container { text-align: center; margin: 10px 0; }
+        .img-container img {
+            max-width: 100%; height: auto;
+            border: 1px solid #D3D3D3;
+            -webkit-user-drag: none; user-drag: none; pointer-events: none;
+        }
+        .img-small { max-width: 250px; }
+        .img-medium { max-width: 350px; }
+        .img-large { max-width: 500px; }
+        ul, ol { padding-left: 20px; }
+        li { margin-bottom: 5px; }
+        .formula { text-align: center; margin: 10px 0; font-size: 14pt; }
+        .input-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt; font-weight: bold;
+            color: #000000; background-color: #FFFFFF;
+            border: 1px solid #D3D3D3; border-radius: 3px;
+            padding: 2px 5px; width: 200px;
+        }
+        .input-text:focus { outline: none; border-color: #8B4513; }
+        .signature {
+            margin-top: 30px; display: flex;
+            justify-content: flex-end; text-align: center; font-weight: bold;
+        }
+        .signature-box { width: 200px; border-top: 2px solid #8B4513; padding-top: 10px; }
+        .signature-name { margin-top: 50px; }
+        .signature-name input {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt; font-weight: bold;
+            color: #000000; background-color: #FFFFFF;
+            border: 1px solid #D3D3D3; border-radius: 3px;
+            padding: 2px 5px; width: 150px; text-align: center;
+        }
+        .phieu { border: 1.5px solid #8B4513; padding: 10px 15px; margin: 12px 0; background: #FDFDF5; }
+        .phieu h4 { text-align: center; margin: 0 0 8px 0; color: #8B4513; }
+        .note { background: #FFF9E6; border-left: 4px solid #CC9900; padding: 8px 12px; margin: 8px 0; font-size: 12pt; }
+        @media print {
+            body { font-size: 12pt; -webkit-user-select: auto; user-select: auto; }
+            .container { padding: 0; }
+            .no-print { display: none; }
+            .input-text, .signature-name input {
+                border: none; background: transparent; color: #000; font-weight: bold;
+            }
+            .img-container img { pointer-events: auto; }
+            .phieu, .box, .box-ai, .box-nls, .tien-trinh { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" onkeydown="return disableKeys(event);" ondragstart="return false;" onselectstart="return false;">
+
+<div class="container">
+
+    <!-- Ngày soạn -->
+    <p><strong>Ngày soạn:</strong> <input type="text" class="input-text" placeholder="....../....../20......"></p>
+
+    <!-- Tiêu đề giáo án -->
+    <h1>GIÁO ÁN BÀI 11: THỰC HÀNH: ĐO GIA TỐC RƠI TỰ DO</h1>
+    <p style="text-align: center; font-style: italic;">Môn: Vật lí 10 – Bộ sách Kết nối tri thức với cuộc sống</p>
+    <p style="text-align: center;">Số tiết: 1 (Tiết 18 theo PPCT)</p>
+
+    <!-- I. MỤC TIÊU -->
+    <h2>I. MỤC TIÊU</h2>
+
+    <h3>1. Kiến thức</h3>
+    <ul>
+        <li>Củng cố kiến thức về chuyển động dưới tác dụng của trọng trường.</li>
+        <li>Nêu được khái niệm rơi tự do và biết cách sử dụng các dụng cụ thí nghiệm để xác định gia tốc rơi tự do.</li>
+        <li>Hiểu nguyên lí hoạt động của các dụng cụ đo thời gian hiện số và cổng quang điện.</li>
+        <li>Trình bày được công thức xác định gia tốc rơi tự do \(g = \frac{2s}{t^2}\) từ các đại lượng đo trực tiếp là quãng đường \(s\) và thời gian \(t\).</li>
+        <li>Biết cách xử lý số liệu thí nghiệm, tính sai số và ghi kết quả đo.</li>
+    </ul>
+
+    <h3>2. Năng lực</h3>
+
+    <h4>a. Năng lực chung</h4>
+    <ul>
+        <li><strong>Tự chủ và tự học:</strong> Chủ động nghiên cứu tài liệu SGK và các học liệu số (video hướng dẫn) để nắm vững quy trình thí nghiệm.</li>
+        <li><strong>Giao tiếp và hợp tác:</strong> Hoạt động nhóm hiệu quả để phân công nhiệm vụ đo đạc, ghi chép và thảo luận kết quả thông qua các nền tảng trực tuyến.</li>
+        <li><strong>Giải quyết vấn đề và sáng tạo:</strong> Thiết kế hoặc lựa chọn được phương án thí nghiệm tối ưu và biết cách xử lí các tình huống phát sinh trong quá trình thực hành.</li>
+    </ul>
+
+    <h4>b. Năng lực đặc thù môn học</h4>
+    <ul>
+        <li><strong>Nhận thức vật lí:</strong>
+            <ul>
+                <li>Trình bày được công thức xác định gia tốc rơi tự do \(g = \frac{2s}{t^2}\) từ các đại lượng đo trực tiếp là quãng đường \(s\) và thời gian \(t\).</li>
+                <li>Giải thích được nguyên lí hoạt động và công dụng của các dụng cụ trong bộ thí nghiệm như: đồng hồ đo thời gian hiện số (hiểu các chế độ MODE), cổng quang điện (đóng vai trò công tắc điều khiển) và nam châm điện dùng để giữ/thả vật rơi.</li>
+            </ul>
+        </li>
+        <li><strong>Tìm hiểu thế giới tự nhiên dưới góc độ vật lí:</strong>
+            <ul>
+                <li>Biết cách thiết kế hoặc lựa chọn phương án thí nghiệm tối ưu, lắp ráp thành thạo bộ dụng cụ thực hành và thực hiện đo đạc chính xác thời gian rơi của trụ thép ứng với các quãng đường khác nhau.</li>
+                <li>Biết cách ghi nhận kết quả, thu thập dữ liệu khách quan từ thực nghiệm (thực hiện lặp lại phép đo ít nhất 5 lần) và biết cách xử lí sai số để đảm bảo tính chính xác của phép đo gia tốc.</li>
+            </ul>
+        </li>
+        <li><strong>Vận dụng kiến thức, kĩ năng đã học:</strong>
+            <ul>
+                <li>Vận dụng kĩ năng toán học và xử lí dữ liệu để vẽ đồ thị mô tả mối quan hệ giữa quãng đường \(s\) và bình phương thời gian \(t^2\); từ dạng hình học của đồ thị (đường thẳng hướng lên) để rút ra kết luận về tính chất của chuyển động rơi tự do.</li>
+                <li>Biết đề xuất các phương án thí nghiệm thay thế hoặc cải tiến để đo gia tốc rơi tự do, chẳng hạn như sử dụng phần mềm phân tích video trên điện thoại thông minh hoặc phương pháp đo tốc độ tức thời qua một cổng quang điện.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h4>c. Năng lực số</h4>
+    <div class="box-nls">
+        <ul>
+            <li><strong>1.1.NC1b:</strong> Áp dụng kỹ thuật tìm kiếm để khai thác các nguồn học liệu số (video hướng dẫn thí nghiệm) trên Internet.</li>
+            <li><strong>1.2.NC1b:</strong> Thu thập, biểu diễn và tiến hành đánh giá, phân tích dữ liệu thực nghiệm bằng bảng số liệu và đồ thị trên máy tính.</li>
+            <li><strong>5.3.NC1a:</strong> Áp dụng các công cụ số (phần mềm bảng tính Excel/Google Sheets) để lập bảng số liệu, thiết lập công thức tính toán tự động và vẽ đồ thị mô tả mối quan hệ giữa \(s\) và \(t^2\).</li>
+            <li><strong>3.1.NC1a:</strong> Lập bảng/đồ thị từ số liệu mẫu về Thực hành: đo gia tốc rơi tự do; dùng AI gợi ý cách trình bày, tự kiểm tra phép tính và nộp bản in/PDF. Áp dụng các cách tạo nội dung số để thiết kế báo cáo thực hành (dạng slide, video hoặc báo cáo có biểu đồ số hóa).</li>
+            <li><strong>3.3.NC1a & 4.1.NC1a:</strong> Ý thức thực thi bản quyền (trích dẫn nguồn học liệu) và áp dụng các cách thức bảo vệ thiết bị số cá nhân trong môi trường thực hành.</li>
+        </ul>
+    </div>
+
+    <h4>d. Năng lực trí tuệ nhân tạo (AI)</h4>
+    <div class="box-ai">
+        <ul>
+            <li><strong>NLa (Tư duy lấy con người làm trung tâm):</strong> Nhận thức được công cụ tính toán/bảng tính có thể cho ra kết quả nhanh chóng, nhưng con người phải là người kiểm soát, đánh giá tính hợp lí của gia tốc \(g\) dựa trên tư duy vật lí thực tế.</li>
+            <li><strong>NLb (Đạo đức AI):</strong> Khách quan, trung thực với dữ liệu số; minh bạch, ghi rõ nguồn khi dùng Internet hoặc AI hỗ trợ tìm hiểu nguyên lí thí nghiệm.</li>
+            <li><strong>NLc (Các kĩ thuật và ứng dụng AI):</strong> Biết cách thiết lập và tùy chỉnh các câu lệnh (prompt) chính xác để hỏi trợ lý ảo AI đóng vai trò chuyên gia Vật lí hướng dẫn cách làm giảm sai số.</li>
+        </ul>
+    </div>
+
+    <h3>3. Phẩm chất</h3>
+    <ul>
+        <li><strong>Chăm chỉ:</strong> Tích cực tìm tòi kiến thức trên các phương tiện truyền thông số và thực hiện lặp lại phép đo để giảm thiểu sai số.</li>
+        <li><strong>Trung thực:</strong> Khách quan, trung thực trong việc thu thập và báo cáo dữ liệu thực nghiệm, không tự ý chỉnh sửa số liệu.</li>
+        <li><strong>Trách nhiệm:</strong> Có trách nhiệm trong hoạt động nhóm và bảo quản thiết bị thí nghiệm, thiết bị số cá nhân.</li>
+        <li><strong>Cẩn thận, tỉ mỉ:</strong> Trong quá trình thí nghiệm và xử lý số liệu.</li>
+    </ul>
+
+    <!-- II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU -->
+    <h2>II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU</h2>
+
+    <h3>1. Giáo viên</h3>
+    <ul>
+        <li>SGK Vật lí 10, SGV, máy chiếu, máy tính kết nối Internet, tivi.</li>
+        <li>Bài giảng PowerPoint tích hợp video hướng dẫn thí nghiệm.</li>
+        <li><strong>Bộ dụng cụ thí nghiệm (1 bộ/nhóm) đo gia tốc rơi tự do gồm:</strong>
+            <ul>
+                <li>Máng đứng, có dây dọi.</li>
+                <li>Vật bằng thép hình trụ.</li>
+                <li>Nam châm điện.</li>
+                <li>Cổng quang điện.</li>
+                <li>Giá đỡ 3 chân, có vít chỉnh cân bằng, trụ thép.</li>
+                <li>Đồng hồ đo thời gian hiện số.</li>
+                <li>Công tắc kép.</li>
+            </ul>
+        </li>
+        <li>Mẫu báo cáo thực hành (Bảng ghi số liệu, tính toán, vẽ đồ thị, nhận xét đánh giá kết quả).</li>
+        <li>Phiếu học tập (mẫu Bảng 11.1).</li>
+        <li>Máy tính xách tay, ti vi kết nối mạng.</li>
+    </ul>
+
+    <div class="box">
+        <strong>📺 Video hỗ trợ bài học (chia sẻ link cho HS học tập trước khi đến giờ học):</strong>
+        <ul>
+            <li>Video giới thiệu các dụng cụ và cách tiến hành thí nghiệm đo gia tốc rơi tự do: <em>https://www.youtube.com/watch?v=rQZ3u1nnvQE</em></li>
+            <li>Video hướng dẫn vẽ đồ thị từ dữ liệu thí nghiệm đo gia tốc rơi tự do bằng Excel: <em>https://www.youtube.com/watch?v=Lx1qiJ0qUn4</em></li>
+            <li>Video thí nghiệm đo gia tốc rơi tự do bằng điện thoại: <em>https://www.youtube.com/watch?v=A3uMxNu0VcU</em></li>
+        </ul>
+    </div>
+
+    <!-- Mẫu báo cáo thực hành -->
+    <div class="phieu">
+        <h4>MẪU BÁO CÁO THỰC HÀNH</h4>
+
+        <p><strong>I. MỤC ĐÍCH THÍ NGHIỆM</strong></p>
+        <p>Đo gia tốc rơi tự do.</p>
+
+        <p><strong>II. CƠ SỞ LÍ THUYẾT</strong></p>
+        <p><strong>1.</strong> Xác định gia tốc rơi tự do của trụ thép theo công thức:</p>
+        <div class="formula">\[ g = a = \frac{2s}{t^2} \]</div>
+        <p><strong>2.</strong> Để xác định gia tốc rơi tự do của trụ thép cần đo các đại lượng:</p>
+        <ul>
+            <li>Quãng đường rơi của trụ thép.</li>
+            <li>Thời gian rơi.</li>
+        </ul>
+        <p><strong>3.</strong> Để trụ thép rơi qua cổng quang điện: Cần đặt trụ thép tại vị trí tiếp xúc với nam châm điện và bị giữ lại ở đó. Nhấn nút của hộp công tắc kép để ngắt điện vào nam châm điện ⇒ trụ thép rơi xuống và chuyển động đi qua cổng quang điện.</p>
+        <p><strong>4.</strong> Khi sử dụng đồng hồ đo thời gian phải để ở vị trí: <strong>MODE A ↔ B</strong>.</p>
+
+        <p><strong>III. TIẾN HÀNH THÍ NGHIỆM</strong></p>
+        <p><strong>1. Bảng kết quả</strong></p>
+        <table class="bang-du-lieu">
+            <thead>
+                <tr>
+                    <th rowspan="2">Quãng đường</th>
+                    <th colspan="5">Lần đo thời gian</th>
+                    <th rowspan="2">Thời gian trung bình \(\bar{t}\)</th>
+                    <th rowspan="2">Gia tốc rơi tự do \(g = \frac{2s}{t^2}\)</th>
+                </tr>
+                <tr>
+                    <th>Lần 1</th>
+                    <th>Lần 2</th>
+                    <th>Lần 3</th>
+                    <th>Lần 4</th>
+                    <th>Lần 5</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>0,400</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>0,600</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>0,800</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>1,000</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>1,200</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            </tbody>
+        </table>
+
+        <p><strong>2. Nhận xét đánh giá kết quả thí nghiệm</strong></p>
+        <p><strong>Câu 1.</strong> Hãy tính giá trị trung bình và sai số tuyệt đối của phép đo gia tốc rơi tự do.</p>
+        <p>\(\bar{g} = ...\) ; \(\Delta g = ...\) ; \(g = ...\)</p>
+        <p><strong>Câu 2.</strong> Tại sao lại dùng trụ thép làm vật rơi trong thí nghiệm? Có thể dùng viên bi thép được không? Giải thích tại sao.</p>
+        <p><strong>Câu 3.</strong> Vẽ đồ thị mô tả mối quan hệ \(s\) và \(t^2\) trên hệ tọa độ \((s - t^2)\).</p>
+        <p><strong>Câu 4.</strong> Nhận xét chung về dạng của đồ thị mô tả mối quan hệ \(s\) và \(t^2\) rồi rút ra kết luận về tính chất của chuyển động rơi tự do.</p>
+        <p><strong>Câu 5.</strong> Hãy đề xuất một phương án thí nghiệm khác để đo gia tốc rơi tự do của trụ thép.</p>
+    </div>
+
+    <h3>2. Học sinh</h3>
+    <ul>
+        <li>SGK Vật lí 10, vở ghi, điện thoại thông minh (1 máy/nhóm), máy tính xách tay (nếu có).</li>
+        <li>Phần mềm bảng tính và ứng dụng phân tích video cài sẵn trên thiết bị.</li>
+        <li>Ôn tập lại kiến thức về sự rơi tự do và cách sử dụng đồng hồ đo thời gian hiện số.</li>
+        <li>Hoàn thành nhiệm vụ học tập trực tuyến trước khi đến lớp (xem video hướng dẫn, tìm hiểu qua internet, ChatGPT).</li>
+    </ul>
+
+    <!-- III. TIẾN TRÌNH DẠY HỌC -->
+    <h2>III. TIẾN TRÌNH DẠY HỌC</h2>
+
+    <table class="tien-trinh">
+        <thead>
+            <tr>
+                <th class="col-buoc">Bước thực hiện</th>
+                <th class="col-noidung">Nội dung các bước</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <!-- HOẠT ĐỘNG 1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 1:<br>MỞ ĐẦU – TẠO TÌNH HUỐNG<br>HỌC TẬP</strong><br>
+                    (7 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li><strong>Về kiến thức:</strong> Giúp HS nhận biết được các nội dung cơ bản cần đạt được của bài thực hành; tạo tâm thế tò mò và hứng thú để HS đi vào tìm hiểu bài mới.</li>
+                        <li><strong>Về năng lực số:</strong>
+                            <ul>
+                                <li>2.1.NC1a: Sử dụng thành thạo ứng dụng đồng hồ bấm giây trên thiết bị cá nhân để thực hiện phép đo sơ bộ.</li>
+                                <li>1.2.NC1b: Bước đầu nhận thức và đánh giá sự sai khác của dữ liệu khi đo đạc bằng phương pháp thủ công so với thiết bị chuyên dụng.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) đóng vai trò chuyên gia để nhờ trợ lí ảo AI (ChatGPT/Gemini) giải thích nguyên nhân sinh lý học gây ra sai số (thời gian phản xạ của con người).</li>
+                                <li>NLa: Nhận thức được giới hạn sinh học của con người (mắt nhìn, tay bấm) so với tốc độ rơi của vật; từ đó thấy được vai trò của công nghệ tự động hóa trong việc khắc phục giới hạn của con người.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS tiếp nhận vấn đề từ GV thông qua một thí nghiệm trực quan.</li>
+                        <li>GV tiến hành thả rơi một vật (ví dụ: hòn đá hoặc quả dọi).</li>
+                        <li>HS sử dụng thiết bị cá nhân để bấm giờ và ghi nhận kết quả thời gian rơi.</li>
+                        <li>Thảo luận về tính chính xác của kết quả thu được.</li>
+                        <li><strong>Thử thách AI:</strong> Nhóm chuyên gia AI dùng Chatbot tra cứu về "thời gian phản xạ trung bình của con người" và đối chiếu với thời gian rơi của vật để tìm ra nguyên nhân sai số.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong> Bảng kết quả thời gian rơi đo bằng tay của các nhóm (có sự chênh lệch lớn giữa các lần đo). HS nhận ra rằng các vật rơi tự do chuyển động rất nhanh nên rất khó xác định chính xác thời gian rơi bằng cách bấm đồng hồ thủ công, từ đó xác nhận nhu cầu cần sử dụng các thiết bị đo kĩ thuật số có độ chính xác cao.</p>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV sử dụng PowerPoint trình chiếu hình ảnh hoặc video ngắn về sự rơi.</li>
+                        <li>GV yêu cầu: <em>"Tất cả các em hãy chuẩn bị sẵn ứng dụng đồng hồ bấm giây trên điện thoại. Khi thầy thả hòn đá, các em hãy cố gắng đo chính xác thời gian từ lúc vật bắt đầu rơi đến khi chạm đất."</em></li>
+                        <li><strong>Thử thách AI:</strong> <em>"Thầy nhờ Nhóm 1 dùng công cụ AI, gõ prompt: Đóng vai một chuyên gia y sinh và vật lí, hãy cho biết thời gian phản xạ trung bình của con người từ lúc nhìn thấy sự việc đến lúc ngón tay bấm nút là bao nhiêu giây? Sai số này ảnh hưởng thế nào nếu dùng tay đo thời gian vật rơi tự do?"</em> (NLAI: NLc).</li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV thực hiện thả một hòn đá rơi tự do từ một độ cao xác định xuống đất.</li>
+                        <li>HS tập trung quan sát và thực hiện thao tác bấm dừng đồng hồ trên thiết bị số cá nhân ngay khi vật chạm đất.</li>
+                        <li>Nhóm 1 tương tác với trợ lí ảo AI, đọc lướt câu trả lời để tóm tắt các số liệu khoa học trọng tâm.</li>
+                        <li>HS ghi lại kết quả đo được của mình vào nháp hoặc gửi lên nhóm Zalo/Padlet của lớp.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>GV yêu cầu 3-5 HS báo cáo kết quả đo.</li>
+                        <li>GV đặt câu hỏi: <em>"Tại sao cùng một lần rơi mà kết quả đo của các em lại khác nhau và lẻ nhiều như vậy? Sai số này do đâu?"</em></li>
+                        <li>HS thảo luận nhóm nhanh: <em>"Do phản xạ của tay không kịp với tốc độ rơi của vật."</em></li>
+                        <li>GV mời đại diện Nhóm 1 (Nhóm AI) báo cáo: <em>"Thưa thầy, AI cung cấp thông tin rằng thời gian phản xạ trung bình của con người là 0,15 đến 0,25 giây. Trong khi vật rơi tự do rất nhanh, sự chậm trễ của não bộ và cơ tay đã tạo ra sai số không nhỏ, khiến kết quả đo tay hoàn toàn không chính xác."</em></li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết: Các vật rơi tự do chuyển động rất nhanh, sai số đo phản xạ con người là rất lớn.</li>
+                        <li><strong>Nhấn mạnh tư duy AI (NLa):</strong> <em>"Qua hoạt động này, các em thấy con người luôn có giới hạn về mặt sinh học. Để làm khoa học chính xác, chúng ta không thể dựa vào cảm tính mà phải dùng công nghệ để khắc phục nhược điểm của chính mình."</em></li>
+                        <li>GV đặt vấn đề: <em>"Làm thế nào để đo được gia tốc rơi tự do với độ chính xác đến từng phần nghìn giây? Chúng ta sẽ sử dụng bộ dụng cụ đo hiện số và cổng quang điện trong bài thực hành hôm nay."</em></li>
+                    </ul>
+
+                    <div class="img-container">
+                        <img src="11.1.png" alt="Hình 11.1 - Bộ dụng cụ thí nghiệm đo gia tốc rơi tự do" class="img-medium">
+                        <p><em>Hình 11.1. Bộ dụng cụ thí nghiệm đo gia tốc rơi tự do</em></p>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 2.1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2.1:<br>TÌM HIỂU VỀ DỤNG CỤ<br>THÍ NGHIỆM</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li><strong>Về kiến thức:</strong> Giúp HS nhận diện, gọi tên chính xác và trình bày được công dụng, nguyên lí hoạt động cơ bản của các dụng cụ trong bộ thí nghiệm đo gia tốc rơi tự do.</li>
+                        <li><strong>Về năng lực số:</strong>
+                            <ul>
+                                <li>1.1.NC1b: Tra cứu ý nghĩa các kí hiệu kĩ thuật và chế độ làm việc (MODE) trên đồng hồ hiện số từ các nguồn trực tuyến.</li>
+                                <li>2.1.NC1a: Truy cập và xem video hướng dẫn thao tác kĩ thuật, lắp đặt thiết bị số qua mã QR hoặc liên kết dùng chung.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) đóng vai trò chuyên gia kĩ thuật để nhờ trợ lí ảo AI (ChatGPT/Gemini) giải thích nguyên lí hoạt động bằng tia hồng ngoại của cổng quang điện.</li>
+                                <li>NLa: Nhận thức được máy móc (đồng hồ hiện số, cảm biến) có thể đo thời gian với độ chính xác 0,001s vượt xa khả năng của con người, nhưng con người mới là chủ thể quyết định việc lắp đặt, chọn chế độ MODE và kiểm soát sai số.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS thực hiện nhiệm vụ theo nhóm: Quan sát trực tiếp bộ dụng cụ thực tế tại bàn, đối chiếu với SGK để gọi tên và phân loại các dụng cụ.</li>
+                        <li>Sử dụng điện thoại thông minh để tìm hiểu nguyên lí hoạt động của cổng quang điện và các chế độ đo của đồng hồ hiện số (độ chính xác đến 0,001s).</li>
+                        <li>Thảo luận về ưu điểm của việc sử dụng thiết bị đo kĩ thuật số so với các phương pháp thủ công đã thực hiện ở Hoạt động 1.</li>
+                        <li><strong>Thử thách AI:</strong> Dùng AI để tìm hiểu nguyên lí "cắt tia hồng ngoại" của cổng quang điện và lí do tại sao phải dùng trụ thép thay vì viên bi.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong> Bản ghi chép hoặc phiếu học tập của nhóm nêu đúng tên và công dụng của các dụng cụ:</p>
+                    <ul>
+                        <li><strong>Máng đứng có gắn dây dọi:</strong> Giúp căn chỉnh trụ thép rơi theo phương thẳng đứng.</li>
+                        <li><strong>Vật rơi (trụ thép):</strong> Tăng xác suất chắn tia hồng ngoại chính xác hơn viên bi.</li>
+                        <li><strong>Nam châm điện:</strong> Dùng để giữ và thả vật rơi.</li>
+                        <li><strong>Cổng quang điện:</strong> Đóng vai trò như công tắc điều khiển đóng/mở đồng hồ đo.</li>
+                        <li><strong>Đồng hồ đo thời gian hiện số:</strong> Hiển thị thời gian rơi với độ chính xác cao.</li>
+                        <li><strong>Giá đỡ và công tắc kép:</strong> Giữ thiết bị và thực hiện lệnh thả vật đồng thời kích hoạt đồng hồ.</li>
+                    </ul>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV giới thiệu tổng quan bộ dụng cụ và cung cấp mã QR chứa link video giới thiệu dụng cụ.</li>
+                        <li>GV giao nhiệm vụ: <em>"Nhóm hãy nhận diện dụng cụ tại bàn, thảo luận để hoàn thành bảng công dụng và tra cứu ý nghĩa các chế độ MODE A, MODE B, MODE A ↔ B trên đồng hồ."</em></li>
+                        <li><strong>Thử thách AI:</strong> <em>"Nhóm 1 hãy dùng AI gõ prompt: 'Đóng vai kĩ sư chế tạo cổng quang điện (Photogate), giải thích nguyên lí hoạt động của cổng quang điện và tại sao trong thí nghiệm rơi tự do người ta ưu tiên dùng trụ thép thay vì viên bi tròn?'"</em> (NLAI: NLc).</li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS làm việc nhóm, quan sát thực tế và nghiên cứu SGK.</li>
+                        <li><strong>Tích hợp số:</strong> HS sử dụng smartphone truy cập Internet/mã QR để xem video thao tác mẫu; thực hiện tra cứu trực tuyến về cách cắm giắc cổng quang điện vào ô A, B sao cho đúng khe định vị.</li>
+                        <li>Nhóm 1 tương tác với trợ lí ảo AI, tóm tắt các từ khóa kĩ thuật quan trọng.</li>
+                        <li>GV theo dõi, hướng dẫn HS cách sử dụng từ khóa tìm kiếm về "Digital Timer Mode" để hiểu cách đo thời gian rơi chính xác.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Đại diện 1 nhóm trình bày tên và công dụng của các dụng cụ trên máy chiếu:
+                            <ul>
+                                <li>Máng đứng có gắn dây dọi (1): Dây dọi giúp căn cho trụ có phương thẳng đứng.</li>
+                                <li>Vật bằng thép hình trụ (2).</li>
+                                <li>Nam châm điện N, dùng giữ và thả trụ thép (3).</li>
+                                <li>Cổng quang điện E (4).</li>
+                                <li>Giá đỡ có để ba chân, có vít chỉnh cân bằng và trụ thép (5).</li>
+                                <li>Đồng hồ đo thời gian hiện số (6).</li>
+                                <li>Công tắc kép (7).</li>
+                            </ul>
+                        </li>
+                        <li>Nhóm khác báo cáo kết quả tra cứu số về các chế độ MODE (ví dụ: dùng MODE A ↔ B để đo thời gian giữa hai cổng quang).</li>
+                        <li>HS thảo luận: <em>"Tại sao nên dùng đồng hồ hiện số thay vì bấm tay?"</em></li>
+                        <li><strong>Báo cáo từ Nhóm AI:</strong> <em>"AI giải thích rằng cổng quang điện có một tia hồng ngoại chiếu ngang. Khi vật rơi qua làm đứt tia này, nó gửi tín hiệu ngắt đồng hồ. Nếu dùng viên bi tròn, quá trình xoay có thể làm mép viên bi cắt tia không dứt khoát, gây sai số. Dùng trụ thép có đáy phẳng sẽ cắt tia hồng ngoại cực kì chính xác."</em></li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết, chuẩn hóa công dụng và lưu ý kĩ thuật: Nhấn mạnh việc bảo quản cổng quang điện (tránh bụi bẩn thấu kính) và an toàn thiết bị số cá nhân trong phòng thí nghiệm.</li>
+                        <li><strong>Đánh giá Năng lực:</strong> GV biểu dương kĩ năng khai thác thông tin số qua video của các nhóm, đồng thời đánh giá cao <strong>Tư duy AI (NLa)</strong> khi HS hiểu rõ cơ chế thu thập dữ liệu của máy móc, từ đó biết cách bố trí vật liệu (trụ thép) sao cho máy móc ghi nhận kết quả chính xác nhất.</li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 2.2 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2.2:<br>THIẾT KẾ PHƯƠNG ÁN<br>THÍ NGHIỆM</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li><strong>Về kiến thức:</strong> Giúp HS định hướng được cách tiến hành thí nghiệm, xác định chính xác các đại lượng cần đo là quãng đường \(s\) và thời gian \(t\) để xác định gia tốc rơi tự do theo công thức \(g = \frac{2s}{t^2}\).</li>
+                        <li><strong>Về năng lực số:</strong>
+                            <ul>
+                                <li>1.1.NC1b: Khai thác video hướng dẫn trên Internet để lựa chọn phương án bố trí thiết bị tối ưu.</li>
+                                <li>3.1.NC1a: Sử dụng công cụ sơ đồ tư duy (Canva, MindMeister) hoặc bảng trắng trực tuyến để phác thảo quy trình thí nghiệm.</li>
+                                <li>5.3.NC1a: Thiết lập sẵn bảng số liệu số hóa trên phần mềm bảng tính với các hàm tính toán trung bình tự động.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) đóng vai trò chuyên gia kĩ thuật để nhờ ứng dụng AI (ChatGPT/Gemini) giải thích lí do vật lí đằng sau việc lựa chọn hình dáng vật rơi.</li>
+                                <li>NLa: Thể hiện tư duy làm chủ công nghệ; nhận thức được rằng máy móc chỉ đo chính xác khi con người thiết kế phương án thí nghiệm chuẩn xác (chọn đúng MODE, dùng vật rơi có đáy phẳng để cắt tia hồng ngoại gọn gàng).</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong> HS làm việc theo nhóm để thảo luận và trả lời các câu hỏi gợi ý từ GV:</p>
+                    <ol>
+                        <li>Xác định gia tốc rơi tự do của trụ thép theo công thức nào?</li>
+                        <li>Để xác định gia tốc rơi tự do của trụ thép cần đo các đại lượng nào?</li>
+                        <li>Làm thế nào để trụ thép rơi qua cổng quang điện?</li>
+                        <li>Khi sử dụng đồng hồ đo thời gian phải đặt ở chế độ (MODE) nào để đo thời gian từ lúc bắt đầu rơi đến khi qua cổng quang điện?</li>
+                    </ol>
+                    <p>Thiết kế sơ đồ quy trình thực hiện dưới dạng sản phẩm số của nhóm. <strong>Thử thách AI:</strong> Dùng AI tìm hiểu tại sao thí nghiệm này bắt buộc phải dùng vật rơi hình trụ thép mà không dùng viên bi tròn.</p>
+                    <p><strong>c. Sản phẩm:</strong> Câu trả lời của nhóm HS:</p>
+                    <div class="box">
+                        <p><strong>A. Mục đích thí nghiệm:</strong> Đo gia tốc rơi tự do.</p>
+                        <p><strong>B. Cơ sở lí thuyết:</strong></p>
+                        <ol>
+                            <li>Xác định gia tốc rơi tự do của trụ thép theo công thức: \(g = a = \frac{2s}{t^2}\)</li>
+                            <li>Để xác định gia tốc rơi tự do của trụ thép cần đo các đại lượng: quãng đường rơi của trụ thép và thời gian rơi.</li>
+                            <li>Để trụ thép rơi qua cổng quang điện: Cần đặt trụ thép tại vị trí tiếp xúc với nam châm điện và bị giữ lại ở đó. Nhấn nút của hộp công tắc kép để ngắt điện vào nam châm điện ⇒ trụ thép rơi xuống và chuyển động đi qua cổng quang điện.</li>
+                            <li>Khi sử dụng đồng hồ đo thời gian phải để ở vị trí: <strong>MODE A ↔ B</strong>.</li>
+                        </ol>
+                    </div>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV trình chiếu hệ thống 4 câu hỏi gợi ý và video giới thiệu cách tiến hành thí nghiệm qua link Youtube.</li>
+                        <li>GV yêu cầu: <em>"Các nhóm hãy thảo luận để xây dựng phương án thí nghiệm. Kết quả thảo luận và quy trình thực hiện phải được trình bày thành một sơ đồ quy trình số (Infographic) và nộp link vào nhóm lớp."</em></li>
+                        <li><strong>Thử thách AI:</strong> <em>"Một nhóm hãy dùng AI gõ prompt: 'Đóng vai chuyên gia vật lí thực nghiệm, giải thích tại sao khi dùng cổng quang điện đo thời gian rơi, ta phải dùng trụ thép có đáy phẳng thay vì viên bi tròn?'"</em></li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS thảo luận nhóm, nghiên cứu SGK và quan sát thực tế bộ dụng cụ tại bàn.</li>
+                        <li><strong>Tích hợp số:</strong> Các nhóm sử dụng thiết bị thông minh để thiết kế sơ đồ quy trình (ví dụ: mô tả thao tác bấm nút RESET, chọn MODE A ↔ B).</li>
+                        <li>HS thực hiện thiết lập bảng tính số để sẵn sàng nhập 5 lần đo cho mỗi quãng đường.</li>
+                        <li>Nhóm nhận thử thách AI tương tác với Chatbot, chất lọc thông tin về sự giao cắt tia hồng ngoại.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>GV mời đại diện 1-2 nhóm trình chiếu sơ đồ phương án thí nghiệm từ thiết bị của nhóm lên màn hình lớn.</li>
+                        <li><strong>Báo cáo từ Nhóm AI:</strong> <em>"AI cho biết viên bi tròn khi rơi có thể bị xoay, mép cong của viên bi cắt tia hồng ngoại không dứt khoát gây sai số. Trụ thép có đáy phẳng giúp cắt ngang tia hồng ngoại của cổng quang điện chính xác đến từng mili-giây, giúp máy đo chuẩn hơn."</em></li>
+                        <li>HS thảo luận: <em>"Tại sao dùng trụ thép thay vì viên bi?"</em> (Đáp án: để chắn tia hồng ngoại ở cổng quang điện chính xác hơn).</li>
+                        <li>Các nhóm phản biện về cách chọn vị trí đặt cổng quang điện để giảm sai số.</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết, chuẩn hóa phương án thí nghiệm và các bước thao tác (7 bước từ cắm giắc đến ghi số liệu).</li>
+                        <li>GV nhấn mạnh tầm quan trọng của việc chuẩn bị bảng dữ liệu số để giảm thiểu sai sót tính toán thủ công và đảm bảo tính trung thực của dữ liệu.</li>
+                        <li>GV đánh giá năng lực phối hợp và kĩ năng tạo sản phẩm số của các nhóm.</li>
+                    </ul>
+
+                    <div class="note">
+                        <strong>📋 Quy trình thao tác thí nghiệm (7 bước):</strong>
+                        <ol>
+                            <li>Cắm nam châm điện vào ô A và cổng quang điện vào ô B ở mặt sau của đồng hồ đo thời gian hiện số.</li>
+                            <li>Đặt MODE đồng hồ đo thời gian hiện số ở chế độ thích hợp (A ↔ B).</li>
+                            <li>Đặt trụ thép tại vị trí tiếp xúc với nam châm điện N và bị giữ lại ở đó.</li>
+                            <li>Nhấn nút RESET của đồng hồ MC964 để chuyển các số hiển thị về giá trị ban đầu 0,000.</li>
+                            <li>Nhấn nút của hộp công tắc kép để ngắt điện vào nam châm điện. Trụ thép rơi xuống và chuyển động đi qua cổng quang điện.</li>
+                            <li>Ghi lại các giá trị thời gian hiển thị trên đồng hồ vào bảng số liệu.</li>
+                            <li>Dịch chuyển cổng quang điện ra xa dần nam châm điện, thực hiện lại các thao tác 3, 4, 5, 6 bốn lần nữa. Ghi lại thời gian t tương ứng với quãng đường s.</li>
+                        </ol>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 3:<br>TIẾN HÀNH THÍ NGHIỆM</strong><br>
+                    (15 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li><strong>Về kiến thức và kĩ năng:</strong>
+                            <ul>
+                                <li>HS biết cách lắp ráp chính xác bộ dụng cụ thí nghiệm đo gia tốc rơi tự do gồm máng đứng, nam châm điện, cổng quang điện và đồng hồ hiện số.</li>
+                                <li>Thực hiện thành thạo thao tác đo thời gian chuyển động của trụ thép ứng với các quãng đường khác nhau.</li>
+                                <li>Ghi nhận trung thực các kết quả thí nghiệm vào bảng số liệu.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực số:</strong>
+                            <ul>
+                                <li>5.3.NC1a: Sử dụng phần mềm bảng tính để lập bảng, thiết lập các hàm (AVERAGE, ABS) tự động tính giá trị trung bình và xử lí sai số ngay khi nhập dữ liệu.</li>
+                                <li>3.3.NC1a: Thực thi đạo đức số thông qua việc tôn trọng tính trung thực của dữ liệu thu được, không tự ý chỉnh sửa số liệu thực tế.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực AI:</strong>
+                            <ul>
+                                <li>NLb (Đạo đức AI/Đạo đức số): Thể hiện tính liêm chính học thuật: khách quan, trung thực trong việc thu thập và báo cáo dữ liệu thực nghiệm; tuyệt đối không tự ý chỉnh sửa số liệu đo được sao cho "đẹp" hoặc khớp với giá trị 9,8 m/s² lí thuyết.</li>
+                                <li>NLa (Tư duy lấy con người làm trung tâm): Thể hiện tư duy làm chủ công nghệ; nhận thức được rằng phần mềm bảng tính chỉ làm nhiệm vụ tính toán và vẽ đường thẳng một cách vô thức, con người mới là chủ thể đưa ra tư duy Vật lí để nhìn vào đồ thị đó và kết luận: "s tỉ lệ thuận với t², chứng tỏ rơi tự do là chuyển động nhanh dần đều".</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS làm việc theo nhóm để lắp ráp thiết bị theo sơ đồ hướng dẫn.</li>
+                        <li>Thực hiện đo thời gian rơi của trụ thép cho 5 quãng đường khác nhau (0,400 m; 0,600 m; 0,800 m; 1,000 m; 1,200 m), mỗi quãng đường thực hiện lặp lại 5 lần để lấy giá trị trung bình.</li>
+                        <li>Nhập dữ liệu trực tiếp vào file bảng tính điện tử của nhóm để xử lí sai số và tính toán gia tốc \(g\) theo công thức \(g = \frac{2s}{t^2}\).</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <p><strong>1. Bảng kết quả</strong></p>
+                    <table class="bang-du-lieu">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Quãng đường</th>
+                                <th colspan="5">Lần đo thời gian</th>
+                                <th rowspan="2">Thời gian trung bình \(\bar{t}\)</th>
+                                <th rowspan="2">Gia tốc rơi tự do \(g = \frac{2s}{t^2}\)</th>
+                            </tr>
+                            <tr>
+                                <th>Lần 1</th>
+                                <th>Lần 2</th>
+                                <th>Lần 3</th>
+                                <th>Lần 4</th>
+                                <th>Lần 5</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>0,400</td><td>0,285</td><td>0,286</td><td>0,284</td><td>0,285</td><td>0,286</td><td></td><td></td></tr>
+                            <tr><td>0,600</td><td>0,349</td><td>0,351</td><td>0,348</td><td>0,349</td><td>0,350</td><td></td><td></td></tr>
+                            <tr><td>0,800</td><td>0,404</td><td>0,405</td><td>0,403</td><td>0,404</td><td>0,403</td><td></td><td></td></tr>
+                            <tr><td>1,000</td><td>0,451</td><td>0,452</td><td>0,452</td><td>0,451</td><td>0,450</td><td></td><td></td></tr>
+                            <tr><td>1,200</td><td>0,494</td><td>0,495</td><td>0,494</td><td>0,494</td><td>0,493</td><td></td><td></td></tr>
+                        </tbody>
+                    </table>
+
+                    <p><strong>2. Nhận xét đánh giá kết quả thí nghiệm</strong></p>
+                    <p><strong>Câu 1.</strong> Tính giá trị trung bình và sai số tuyệt đối của phép đo gia tốc rơi tự do:</p>
+                    <ul>
+                        <li><em>Với quãng đường 0,400 m:</em>
+                            <div class="formula">\[ \bar{t}_1 = \frac{t_1+t_2+t_3+t_4+t_5}{5} = 0,2852 \ (s) \]</div>
+                            \[ \Delta t_1 = |t_1-\bar{t}| = 0,0002 \ s; \ \Delta t_2 = |t_2-\bar{t}| = 0,0008 \ s; \]
+                            \[ \Delta t_3 = |t_3-\bar{t}| = 0,0012 \ s; \]
+                            \[ \Delta t_4 = |t_4-\bar{t}| = 0,0002 \ s; \ \Delta t_5 = |t_5-\bar{t}| = 0,0008 \ s; \]
+                            \[ \overline{\Delta t_1} = \frac{\Delta t_1+...+\Delta t_5}{5} = 0,0006 \ (s) \]
+                            \[ \Delta t_1 = \overline{\Delta t_1} + t_{dc} = 0,0006 + 0,0005 \approx 0,001 \ (s) \]
+                            \[ \Delta s = s_{dc} = 0,0005 \ (m) \]
+                            \[ \bar{g}_1 = \frac{2\bar{s}_1}{\bar{t}_1^2} = 9,835 \ \left(\frac{m}{s^2}\right) \]
+                            Sai số tỉ đối: \(\delta g = \delta s + 2\delta t\)
+                            \[ \frac{\Delta g_1}{\bar{g}_1} = \frac{\Delta s}{\bar{s}_1} + 2\frac{\Delta t_1}{\bar{t}_1} \Rightarrow g_1 = 0,081 \ \left(\frac{m}{s^2}\right) \]
+                        </li>
+                        <li><em>Tương tự, với quãng đường 0,600 m:</em> \(\bar{t} = 0,3494 \ (s); \ \Delta t = 0,001 \ (s); \ \bar{g}_2 = \frac{2\bar{s}}{\bar{t}^2} = 9,830 \ \left(\frac{m}{s^2}\right); \ g_2 = 0,064 \ \left(\frac{m}{s^2}\right)\)</li>
+                        <li><em>Tương tự, với quãng đường 0,800 m:</em> \(\bar{t} = 0,4038 \ (s); \ \Delta t = 0,001 \ (s); \ \bar{g}_3 = \frac{2\bar{s}}{\bar{t}^2} = 9,813 \ \left(\frac{m}{s^2}\right); \ g_3 = 0,055 \ \left(\frac{m}{s^2}\right)\)</li>
+                        <li><em>Tương tự, với quãng đường 1,000 m:</em> ...</li>
+                        <li><em>Tương tự, với quãng đường 1,200 m:</em> \(\bar{t} = 0,494 \ (s); \ \Delta t = 0,001 \ (s); \ \bar{g}_5 = \frac{2\bar{s}}{\bar{t}^2} = 9,835 \ \left(\frac{m}{s^2}\right); \ g_5 = 0,044 \ \left(\frac{m}{s^2}\right)\)</li>
+                    </ul>
+                    <p><strong>Giá trị trung bình và sai số của phép đo gia tốc rơi tự do:</strong></p>
+                    <div class="formula">
+                        \[ \bar{g} = \frac{\bar{g}_1 + \bar{g}_2 + \bar{g}_3 + \bar{g}_4 + \bar{g}_5}{5} = 9,827 \ \left(\frac{m}{s^2}\right) \]
+                        \[ \overline{\Delta g} = \frac{g_1 + g_2 + g_3 + g_4 + g_5}{5} = 0,058 \ \left(\frac{m}{s^2}\right) \]
+                    </div>
+                    <p>→ <strong>Giá trị gia tốc rơi tự do:</strong> \(g = (9,827 \pm 0,058) \ (m/s^2)\)</p>
+                    <p>→ <strong>Sai số tỉ đối:</strong> \(\delta g = \frac{\Delta g}{\bar{g}} \cdot 100\% = 0,6\%\)</p>
+
+                    <p><strong>Câu 2.</strong> Tại sao lại dùng trụ thép làm vật rơi trong thí nghiệm? Có thể dùng viên bi thép được không? Giải thích tại sao.</p>
+                    <ul>
+                        <li>Trong thí nghiệm, người ta dùng trụ thép làm vật rơi nhằm mục đích khi thả vật rơi thì xác suất phương rơi của vật chắn tia hồng ngoại ở cổng quang điện cao, giúp ta thực hiện thí nghiệm dễ dàng hơn.</li>
+                        <li>Khi thả viên bi, viên bi có chuyển động xoáy nên xác suất khi thả rơi viên bi có phương rơi không chắn được tia hồng ngoại cao hơn khi dùng trụ thép. Nếu làm thí nghiệm với viên bi, ta cần chỉnh và thả theo đúng phương của dây rọi.</li>
+                    </ul>
+
+                    <p><strong>Câu 3.</strong> Vẽ đồ thị mô tả mối quan hệ \(s\) và \(t^2\) trên hệ tọa độ \((s - t^2)\): Đồ thị có dạng đường thẳng hướng lên.</p>
+
+                    <p><strong>Câu 4.</strong> Nhận xét chung về dạng của đồ thị mô tả mối quan hệ \(s\) và \(t^2\) rồi rút ra kết luận về tính chất của chuyển động rơi tự do:</p>
+                    <ul>
+                        <li>Nhận xét về dạng đồ thị trên: có dạng một đường thẳng hướng lên, chứng tỏ \(s\) và \(t^2\) có mối quan hệ tỉ lệ thuận với nhau.</li>
+                        <li>→ <strong>Kết luận:</strong> Rơi tự do là chuyển động thẳng nhanh dần đều.</li>
+                    </ul>
+
+                    <p><strong>Câu 5.</strong> Đề xuất một phương án thí nghiệm khác để đo gia tốc rơi tự do của trụ thép:</p>
+                    <ul>
+                        <li>Ta có thể sử dụng 1 cổng quang điện để tính tốc độ tức thời bằng cách:
+                            <ul>
+                                <li>Đo kích thước hình trụ \(\Delta s\) bằng thước kẹp.</li>
+                                <li>Đo thời gian trụ thép qua cổng quang điện B là \(\Delta t\) (để chế độ MODE B).</li>
+                                <li>Tính tốc độ tức thời \(v = \frac{\Delta s}{\Delta t}\).</li>
+                                <li>Tính gia tốc rơi tự do: \(g = \frac{v^2}{2s}\) (\(s\) là quãng đường từ nam châm đến cổng quang điện B).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Dụng cụ:</strong> Nam châm điện, trụ thép.</li>
+                        <li><strong>Tiến hành:</strong>
+                            <ul>
+                                <li>Bước 1: Lắp cổng quang điện B cách nam châm điện một đoạn \(s\), đặt đồng hồ chế độ MODE B. Đặt trụ thép dính vào phía dưới nam châm. Nhấn công tắc cho trụ thép rơi.</li>
+                                <li>Bước 2: Đọc số chỉ thời gian rơi trên đồng hồ, thực hiện phép đo ít nhất 3 lần.</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV nhắc lại các lưu ý kĩ thuật: cắm giắc cổng quang điện đúng khe định vị, tránh rung lắc chân cắm.</li>
+                        <li>GV cung cấp link mẫu bảng tính trực tuyến đã thiết lập sẵn khung bảng 11.1.</li>
+                        <li>Giao nhiệm vụ: <em>"Các nhóm tiến hành đo và nhập liệu trực tiếp vào file để phần mềm tự động tính toán sai số."</em></li>
+                        <li><strong>Yêu cầu Đạo đức số & AI (NLb):</strong> <em>"Các nhóm tiến hành đo và nhập liệu trực tiếp vào file số. Yêu cầu tôn trọng tuyệt đối dữ liệu thô, không tự ý sửa số liệu cho giống sách giáo khoa để tạo thói quen trung thực khoa học."</em></li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS làm việc theo nhóm: lắp ráp thiết bị, căn chỉnh dây dọi đảm bảo máng thẳng đứng.</li>
+                        <li>Thực hiện thả trụ thép, ghi lại thời gian hiển thị trên đồng hồ hiện số (chế độ MODE A ↔ B).</li>
+                        <li><strong>Tích hợp số:</strong> Một thành viên trong nhóm sử dụng máy tính bảng/laptop để nhập số liệu vào Google Sheets. HS quan sát sự thay đổi của giá trị gia tốc trung bình ngay khi dữ liệu được nhập vào.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>GV lựa chọn một nhóm có kết quả xử lí dữ liệu tiêu biểu để trình bày file bảng tính trên máy chiếu.</li>
+                        <li>Nhóm đại diện giải thích các lệnh hàm đã dùng để tính trung bình và giải thích nguyên nhân gây ra sai số (do phản xạ tay bấm công tắc kép, do trụ bị nghiêng, do sức cản không khí) (<strong>Tư duy AI - NLa</strong>).</li>
+                        <li>HS giải thích cách nhóm đã thiết lập công thức để tính sai số tuyệt đối và sai số tỉ đối.</li>
+                        <li><strong>Thảo luận số:</strong> So sánh tính tiện lợi, độ chính xác khi dùng phần mềm bảng tính so với tính toán thủ công bằng máy tính cầm tay.</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV nhận xét về thao tác kĩ thuật thực hành và thái độ trung thực trong báo cáo dữ liệu của các nhóm.</li>
+                        <li>GV chuẩn hóa cách ghi kết quả phép đo kèm sai số: \(g = \bar{g} \pm \Delta g\).</li>
+                        <li>Nhắc HS tắt nguồn điện, tháo dụng cụ, sắp xếp ngăn nắp và lưu trữ sản phẩm số của nhóm vào thư mục chung của lớp.</li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 4 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 4:<br>VẬN DỤNG</strong><br>
+                    (3 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li><strong>Về kiến thức:</strong> Giúp HS tự vận dụng kiến thức về thực hành đo gia tốc rơi tự do và kĩ năng xử lí sai số để giải quyết các bài toán thực tiễn hoặc khám phá các phương pháp đo lường hiện đại.</li>
+                        <li><strong>Về năng lực số:</strong>
+                            <ul>
+                                <li>5.3.NC1a & 3.1.NC1a: Sử dụng thành thạo phần mềm bảng tính để vẽ đồ thị tự động từ dữ liệu thực tế và thiết kế báo cáo vận dụng (Infographic, Poster số).</li>
+                                <li>2.1.NC1a: Sử dụng các ứng dụng cảm biến hoặc phần mềm phân tích video (Tracker) trên điện thoại để thu thập dữ liệu chuyển động tại nhà.</li>
+                                <li>3.3.NC1a & 4.2.NC1a: Ý thức trích dẫn nguồn học liệu và áp dụng các biện pháp bảo vệ dữ liệu cá nhân khi tương tác, chia sẻ video thí nghiệm trên không gian mạng.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) đóng vai trò chuyên gia để nhờ trợ lý ảo AI (ChatGPT/Gemini) hỗ trợ lên ý tưởng tối ưu hóa thiết kế mô hình hoặc giải thích thêm về sức cản không khí.</li>
+                                <li>NLa: Nhận thức được rằng AI chỉ cung cấp ý tưởng lí thuyết, nhưng con người phải trực tiếp chế tạo, thử nghiệm và phân tích các yếu tố thực tế (sức gió, lực cản, ma sát) để đưa ra kết luận cuối cùng.</li>
+                                <li>NLb: Thể hiện sự trung thực học thuật, minh bạch khai báo mức độ sử dụng AI trong việc hỗ trợ viết báo cáo dự án.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong> HS lựa chọn thực hiện một trong các nhiệm vụ sau tại nhà (theo nhóm hoặc cá nhân):</p>
+                    <ol>
+                        <li><strong>Dự án "Đồ thị số":</strong> Sử dụng số liệu thực nghiệm thu được từ tiết thực hành, dùng phần mềm Excel để vẽ đồ thị mối quan hệ giữa quãng đường \(s\) và bình phương thời gian \(t^2\). Viết nhận xét về dạng đồ thị và xác định gia tốc rơi tự do từ độ dốc của đồ thị đó.</li>
+                        <li><strong>Thử thách "Nhà khoa học nhí":</strong> Sử dụng camera điện thoại thông minh quay video một vật rơi tự do tại nhà. Sử dụng phần mềm phân tích video (như Tracker) hoặc các ứng dụng đo gia tốc để xác định giá trị \(g\) tại địa điểm em đang ở và so sánh với kết quả trong phòng thí nghiệm.</li>
+                        <li><strong>Khám phá mở rộng:</strong> Tra cứu Internet để tìm hiểu phương pháp đo gia tốc rơi tự do bằng con lắc đơn và so sánh ưu nhược điểm với phương pháp dùng cổng quang điện.</li>
+                    </ol>
+                    <p><strong>Thử thách AI:</strong> Tương tác với AI để hỏi về cách làm giảm lực cản không khí cho vật chuyển động nhằm tăng tầm xa.</p>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <ul>
+                        <li>Bài giải và nhận xét chi tiết vào vở ghi cá nhân.</li>
+                        <li>Sản phẩm số: File bảng tính Excel có biểu đồ, Poster số (thiết kế trên Canva) hoặc link video thực hiện thí nghiệm tại nhà nộp qua link Google Drive hoặc nhóm Zalo lớp.</li>
+                        <li>Nhật kí học tập số: Bản ghi chép các câu lệnh (prompts) đã hỏi AI và phần trích dẫn nguồn học liệu mạng minh bạch.</li>
+                    </ul>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV giao nhiệm vụ cụ thể qua slide cuối tiết học và gửi lại hướng dẫn (kèm link các video kĩ thuật mẫu) vào nhóm lớp trực tuyến.
+                            <ul>
+                                <li>Video hướng dẫn vẽ đồ thị từ dữ liệu thí nghiệm đo gia tốc rơi tự do bằng Excel: <em>https://www.youtube.com/watch?v=Lx1qiJ0qUn4</em></li>
+                            </ul>
+                        </li>
+                        <li>GV hướng dẫn tiêu chí đánh giá sản phẩm số: tính chính xác vật lí, tính sáng tạo công nghệ và cách trích dẫn nguồn học liệu số.</li>
+                        <li><strong>Hướng dẫn NLS & NLAI:</strong> GV gợi ý từ khóa tìm kiếm, cung cấp link tải phần mềm Tracker (1.1.NC1b). GV khuyến khích: <em>"Các em được phép dùng AI để tìm ý tưởng tối ưu thiết kế, nhưng phải ghi rõ 'Có sử dụng AI để lên ý tưởng' trong phần Tài liệu tham khảo"</em> (NLb - Đạo đức AI).</li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS thực hiện tại nhà theo nhóm hoặc cá nhân.</li>
+                        <li>HS khai thác các học liệu số và công cụ công nghệ để hoàn thành sản phẩm.</li>
+                        <li><strong>Thử thách AI (NLc):</strong> Nhóm HS mở Chatbot AI và gõ prompt: <em>"Đóng vai một kĩ sư cơ khí, hãy tư vấn cho học sinh lớp 10 3 mẹo để điều chỉnh góc quay và độ cao thả vật sao cho video phân tích bằng Tracker đạt độ chính xác cao nhất."</em></li>
+                        <li>Sử dụng camera điện thoại thông minh và phần mềm phân tích video tiến hành thí nghiệm và ghi lại số liệu: <em>https://www.youtube.com/watch?v=A3uMxNu0VcU</em></li>
+                        <li>GV đóng vai trò cố vấn, hỗ trợ giải đáp thắc mắc cho HS thông qua các kênh online (Zalo/Messenger/LMS).</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Các nhóm/cá nhân nộp sản phẩm số qua link dùng chung trước buổi học kế tiếp.</li>
+                        <li>Vào đầu tiết học sau, GV chọn 2-3 sản phẩm xuất sắc (ví dụ: video phân tích chính xác hoặc biểu đồ Excel trình bày đẹp) để trình chiếu trước lớp.</li>
+                        <li>HS giải thích sự khác biệt giữa lí thuyết và thực tế (Thể hiện tư duy NLa: Con người kiểm chứng lại mô hình toán học và AI bằng thực tế).</li>
+                        <li>HS các nhóm khác nhận xét, phản biện và chấm chéo sản phẩm dựa trên tiêu chí nội dung vật lí và kĩ năng số.</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả, thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV tổng kết, nhận xét về mức độ vận dụng kiến thức thực hành và kĩ năng ứng dụng công cụ số của HS.</li>
+                        <li>GV nhận xét, biểu dương các nhóm có kĩ năng vận dụng công cụ số (Tracker/Excel) xuất sắc, chế tạo mô hình chắc chắn và có thái độ minh bạch khi ứng dụng AI vào dự án.</li>
+                        <li>GV khen thưởng các sản phẩm sáng tạo và chốt lại tầm quan trọng của việc đo đạc chính xác trong nghiên cứu khoa học.</li>
+                        <li>Nhắc nhở HS chuẩn bị bài mới: <strong>"BÀI 12: CHUYỂN ĐỘNG NÉM"</strong>.</li>
+                    </ul>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <!-- IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG -->
+    <h2>IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG (NẾU CÓ)</h2>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+
+    <!-- Ký duyệt -->
+    <div class="signature">
+        <div class="signature-box">
+            <p><strong>Duyệt TCM</strong></p>
+            <p class="signature-name"><input type="text" placeholder="Lục Tuyến"></p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    function disableKeys(e) {
+        if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) return true;
+        if (e.ctrlKey && e.shiftKey && (e.key === 'p' || e.key === 'P')) return true;
+        if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'a' || e.key === 'A')) {
+            e.preventDefault(); return false;
+        }
+        if (e.key === 'F12') { e.preventDefault(); return false; }
+        return true;
+    }
+    document.addEventListener('dragstart', function(e) { e.preventDefault(); });
+    document.addEventListener('selectstart', function(e) {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') e.preventDefault();
+    });
+    document.querySelectorAll('input, textarea').forEach(function(el) {
+        el.addEventListener('selectstart', function(e) { e.stopPropagation(); });
+        el.addEventListener('dragstart', function(e) { e.stopPropagation(); });
+    });
+</script>
+
+</body>
+</html>

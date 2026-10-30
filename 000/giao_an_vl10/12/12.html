@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giáo án Bài 12 - Vật lí 10</title>
+    <!-- MathJax để hiển thị công thức toán học -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Thiết lập cơ bản cho trang in A4 */
+        @page {
+            size: A4;
+            margin: 20mm 15mm;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            line-height: 1.4;
+            color: #000000;
+            background-color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+            /* Chống chọn văn bản */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        .container {
+            width: 100%;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        /* Tiêu đề */
+        h1, h2, h3, h4 {
+            color: #004488;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 18pt;
+            color: #8B4513;
+            border-bottom: 2px solid #8B4513;
+            padding-bottom: 5px;
+        }
+        h2 {
+            font-size: 15pt;
+            border-bottom: 1px solid #D3D3D3;
+            padding-bottom: 3px;
+            color: #8B5A2B;
+        }
+        h3 {
+            font-size: 14pt;
+            color: #0066CC;
+        }
+        h4 {
+            font-size: 13pt;
+            color: #8B5A2B;
+        }
+        /* Bảng */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 12pt;
+        }
+        th, td {
+            border: 1px solid #D3D3D3;
+            padding: 6px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #F5F5DC;
+            color: #004488;
+            font-weight: bold;
+        }
+        /* Tiến trình dạy học chia 2 cột */
+        .tien-trinh {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .tien-trinh th {
+            background-color: #F5DEB3;
+            color: #004488;
+            text-align: center;
+        }
+        .tien-trinh td {
+            vertical-align: top;
+        }
+        .col-buoc {
+            width: 25%;
+            background-color: #F5F5F5;
+            font-weight: bold;
+            color: #8B4513;
+        }
+        .col-noidung {
+            width: 75%;
+        }
+        /* Hộp thoại, ghi chú */
+        .box {
+            background-color: #F5F5DC;
+            border-left: 5px solid #8B5A2B;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .red-text {
+            color: #CC0000;
+            font-weight: bold;
+        }
+        .blue-text {
+            color: #0066CC;
+        }
+        /* Hình ảnh */
+        .img-container {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .img-container img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #D3D3D3;
+            /* Chống kéo thả ảnh */
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+            pointer-events: none;
+        }
+        .img-small {
+            max-width: 250px;
+        }
+        .img-medium {
+            max-width: 350px;
+        }
+        .img-large {
+            max-width: 500px;
+        }
+        /* Danh sách */
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        /* Công thức */
+        .formula {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 14pt;
+        }
+        /* Ô nhập liệu thủ công */
+        .input-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            font-weight: bold;
+            color: #000000;
+            background-color: #FFFFFF;
+            border: 1px solid #D3D3D3;
+            border-radius: 3px;
+            padding: 2px 5px;
+            width: 200px;
+        }
+        .input-text:focus {
+            outline: none;
+            border-color: #8B4513;
+        }
+        /* Ký duyệt */
+        .signature {
+            margin-top: 30px;
+            display: flex;
+            justify-content: flex-end;
+            text-align: center;
+            font-weight: bold;
+        }
+        .signature-box {
+            width: 200px;
+            border-top: 2px solid #8B4513;
+            padding-top: 10px;
+        }
+        .signature-name {
+            margin-top: 50px;
+        }
+        .signature-name input {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            font-weight: bold;
+            color: #000000;
+            background-color: #FFFFFF;
+            border: 1px solid #D3D3D3;
+            border-radius: 3px;
+            padding: 2px 5px;
+            width: 150px;
+            text-align: center;
+        }
+        .signature-name input:focus {
+            outline: none;
+            border-color: #8B4513;
+        }
+        /* Điều chỉnh khi in */
+        @media print {
+            body {
+                font-size: 12pt;
+                -webkit-user-select: auto;
+                -moz-user-select: auto;
+                -ms-user-select: auto;
+                user-select: auto;
+            }
+            .container {
+                padding: 0;
+            }
+            .no-print {
+                display: none;
+            }
+            .input-text, .signature-name input {
+                border: none;
+                background: transparent;
+                color: #000;
+                font-weight: bold;
+            }
+            .img-container img {
+                pointer-events: auto;
+            }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" onkeydown="return disableKeys(event);" ondragstart="return false;" onselectstart="return false;">
+
+<div class="container">
+
+    <!-- Ngày soạn -->
+    <p><strong>Ngày soạn:</strong> <input type="text" class="input-text" placeholder="....../....../20......"></p>
+
+    <!-- Tiêu đề giáo án -->
+    <h1>GIÁO ÁN BÀI 12: CHUYỂN ĐỘNG NÉM</h1>
+    <p style="text-align: center; font-style: italic;">Môn: Vật lí 10 – Bộ sách Kết nối tri thức với cuộc sống</p>
+    <p style="text-align: center;">Số tiết: 2 (Tiết 19, 20 theo PPCT)</p>
+
+    <!-- I. MỤC TIÊU -->
+    <h2>I. MỤC TIÊU</h2>
+
+    <h3>1. Kiến thức</h3>
+    <ul>
+        <li>Phát biểu được khái niệm chuyển động ném ngang, chuyển động ném xiên.</li>
+        <li>Phân tích được chuyển động ném ngang và ném xiên thành hai chuyển động thành phần: chuyển động thẳng đều theo phương ngang và chuyển động rơi tự do theo phương thẳng đứng.</li>
+        <li>Viết được công thức tính thời gian rơi, tầm xa của chuyển động ném ngang; công thức tính tầm cao, tầm xa của chuyển động ném xiên.</li>
+        <li>Vận dụng được các công thức của chuyển động ném để giải một số bài tập đơn giản và giải thích một số hiện tượng thực tế.</li>
+    </ul>
+
+    <h3>2. Năng lực</h3>
+    <h4>a. Năng lực chung</h4>
+    <ul>
+        <li>Tự chủ và tự học: Tìm hiểu trước nội dung bài học qua sách giáo khoa và internet.</li>
+        <li>Giao tiếp và hợp tác: Thảo luận nhóm để phân tích chuyển động ném.</li>
+        <li>Giải quyết vấn đề và sáng tạo: Vận dụng kiến thức để giải thích các tình huống thực tế.</li>
+    </ul>
+    <h4>b. Năng lực đặc thù môn học</h4>
+    <ul>
+        <li>Nhận biết được đặc điểm của chuyển động ném ngang và ném xiên.</li>
+        <li>Phân tích được sự chuyển động của vật bị ném.</li>
+        <li>Vận dụng được công thức để tính toán.</li>
+    </ul>
+    <h4>b. Năng lực số</h4>
+    <ul>
+        <li><strong>3.1.NC1b:</strong> Tạo sơ đồ/đồ thị/infographic về Chuyển động ném; dùng AI gợi ý bố cục, học sinh tự chỉnh sửa và ghi nguồn.</li>
+    </ul>
+
+    <h3>3. Phẩm chất</h3>
+    <ul>
+        <li>Chăm chỉ: Tích cực tham gia các hoạt động học tập.</li>
+        <li>Trung thực: Báo cáo kết quả thí nghiệm chính xác.</li>
+        <li>Trách nhiệm: Hoàn thành nhiệm vụ được giao.</li>
+    </ul>
+
+    <!-- II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU -->
+    <h2>II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU</h2>
+
+    <h3>1. Giáo viên</h3>
+    <ul>
+        <li>SGK Vật lí 10, SGV, máy chiếu, máy tính.</li>
+        <li>Hình ảnh, video minh họa về chuyển động ném (ném bóng, nhảy xa, máy bay thả hàng cứu trợ).</li>
+        <li>Phiếu học tập.</li>
+    </ul>
+
+    <h3>2. Học sinh</h3>
+    <ul>
+        <li>SGK Vật lí 10, vở ghi, máy tính/điện thoại có kết nối internet (nếu có).</li>
+        <li>Hoàn thành nhiệm vụ học tập trực tuyến trước khi đến lớp (tìm hiểu về sự rơi tự do và chuyển động ném qua internet, ChatGPT).</li>
+    </ul>
+
+    <!-- III. TIẾN TRÌNH DẠY HỌC -->
+    <h2>III. TIẾN TRÌNH DẠY HỌC</h2>
+
+    <!-- TIẾT 1 -->
+    <h3>Tiết 1: Chuyển động ném ngang</h3>
+
+    <table class="tien-trinh">
+        <thead>
+            <tr>
+                <th class="col-buoc">Bước thực hiện</th>
+                <th class="col-noidung">Nội dung các bước</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- HOẠT ĐỘNG 1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 1:<br>KHỞI ĐỘNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Tạo hứng thú, dẫn dắt học sinh vào bài mới.</p>
+                    <p><strong>Nội dung:</strong> Học sinh quan sát hình ảnh và trả lời câu hỏi.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV chiếu hình ảnh vận động viên nhảy xa (Hình 01.png) hoặc video.</li>
+                        <li>GV đặt câu hỏi: "Nhảy xa là một ví dụ về chuyển động ném. Theo em, trong việc nhảy xa thì những yếu tố nào có tính quyết định đến thành tích nhảy của vận động viên?"</li>
+                        <li>HS suy nghĩ, trả lời.</li>
+                        <li>GV nhận xét, dẫn dắt vào bài: "Để trả lời câu hỏi này, chúng ta cùng tìm hiểu Bài 12: Chuyển động ném."</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="01.png" alt="Hình ảnh nhảy xa" class="img-medium">
+                        <p><em>Hình ảnh minh họa: Nhảy xa</em></p>
+                    </div>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 2 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2:<br>HÌNH THÀNH KIẾN THỨC</strong><br>
+                    (25 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Hình thành khái niệm chuyển động ném ngang, phân tích chuyển động và rút ra công thức.</p>
+                    <p><strong>Nội dung:</strong> Tìm hiểu khái niệm, thí nghiệm, phân tích chuyển động ném ngang.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời, kết quả thảo luận, công thức.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    
+                    <p><strong>1. Khái niệm chuyển động ném ngang</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc SGK mục I.1, nêu khái niệm chuyển động ném ngang.</li>
+                        <li>HS trả lời: Chuyển động ném ngang là chuyển động có vận tốc ban đầu theo phương nằm ngang và chuyển động dưới tác dụng của trọng lực.</li>
+                    </ul>
+
+                    <p><strong>2. Thí nghiệm</strong></p>
+                    <ul>
+                        <li>GV mô tả thí nghiệm Hình 12.1 (sgk) hoặc cho HS xem video.</li>
+                        <li>GV đặt câu hỏi: "Hai viên bi có chạm đất cùng một lúc không?"</li>
+                        <li>HS dự đoán.</li>
+                        <li>GV giới thiệu Hình 12.2 (ảnh hoạt nghiệm) và yêu cầu HS nhận xét về sự thay đổi vị trí theo phương thẳng đứng của hai viên bi.</li>
+                        <li>HS nhận xét: Hai viên bi luôn nằm trên cùng một đường thẳng ngang, chứng tỏ chúng rơi cùng lúc.</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="12.1.png" alt="Hình 12.1 - Thí nghiệm về chuyển động ném ngang" class="img-medium">
+                        <p><em>Hình 12.1. Thí nghiệm về chuyển động ném ngang</em></p>
+                    </div>
+                    <div class="img-container">
+                        <img src="12.2.png" alt="Hình 12.2 - Ảnh hoạt nghiệm" class="img-medium">
+                        <p><em>Hình 12.2. Ảnh chụp hoạt nghiệm chuyển động của hai viên bi A và B</em></p>
+                    </div>
+
+                    <p><strong>3. Phân tích kết quả thí nghiệm</strong></p>
+                    <ul>
+                        <li>GV hướng dẫn HS phân tích chuyển động ném ngang thành hai thành phần:</li>
+                        <ul>
+                            <li><strong>Thành phần theo phương thẳng đứng:</strong> Là chuyển động rơi tự do.</li>
+                            <li><strong>Thành phần theo phương nằm ngang:</strong> Là chuyển động thẳng đều.</li>
+                        </ul>
+                        <li>GV yêu cầu HS viết công thức tính thời gian rơi và tầm xa.</li>
+                        <li>HS thực hiện:
+                            <div class="formula">
+                                \[ t = \sqrt{\frac{2H}{g}} \]
+                                \[ L = v_0 \cdot t = v_0 \sqrt{\frac{2H}{g}} \]
+                            </div>
+                        </li>
+                        <li>GV nhấn mạnh: Thời gian rơi chỉ phụ thuộc vào độ cao H, không phụ thuộc vận tốc ném.</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="12.3.png" alt="Hình 12.3 - Phân tích chuyển động ném ngang" class="img-medium">
+                        <p><em>Hình 12.3. Phân tích chuyển động ném ngang</em></p>
+                    </div>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 3:<br>LUYỆN TẬP</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng công thức để giải bài tập đơn giản.</p>
+                    <p><strong>Nội dung:</strong> Giải bài tập ví dụ SGK.</p>
+                    <p><strong>Sản phẩm:</strong> Lời giải của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc và tóm tắt Bài tập ví dụ (sgk tr.52).</li>
+                        <li>HS tóm tắt: \(v_0 = 12\) m/s, \(H = 40\) m, \(g = 9.8\) m/s². Tính \(t\) và \(L\).</li>
+                        <li>GV gọi 1 HS lên bảng giải, các HS khác làm vào vở.</li>
+                        <li>HS giải:
+                            <div class="formula">
+                                \[ t = \sqrt{\frac{2H}{g}} = \sqrt{\frac{2 \cdot 40}{9.8}} \approx 2.86 \text{ s} \]
+                                \[ L = v_0 \cdot t = 12 \cdot 2.86 \approx 34.3 \text{ m} \]
+                            </div>
+                        </li>
+                        <li>GV nhận xét, chính xác hóa kết quả.</li>
+                    </ul>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 4 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 4:<br>VẬN DỤNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng kiến thức vào thực tế.</p>
+                    <p><strong>Nội dung:</strong> Trả lời câu hỏi vận dụng.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV đặt câu hỏi: "Tại sao khi máy bay thả hàng cứu trợ, hàng phải được thả trước khi máy bay đến vị trí cần thả?"</li>
+                        <li>HS vận dụng kiến thức về tầm xa để trả lời: Vì hàng có vận tốc ban đầu bằng vận tốc máy bay, nên nó sẽ chuyển động ném ngang và rơi xuống theo quỹ đạo parabol. Cần thả trước để hàng rơi trúng đích.</li>
+                        <li>GV nhận xét, kết thúc tiết 1.</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- TIẾT 2 -->
+    <h3 style="margin-top: 30px;">Tiết 2: Chuyển động ném xiên</h3>
+
+    <table class="tien-trinh">
+        <thead>
+            <tr>
+                <th class="col-buoc">Bước thực hiện</th>
+                <th class="col-noidung">Nội dung các bước</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- HOẠT ĐỘNG 1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 1:<br>KHỞI ĐỘNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Tạo tình huống có vấn đề về chuyển động ném xiên.</p>
+                    <p><strong>Nội dung:</strong> Quan sát hình ảnh và dự đoán.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV chiếu Hình 12.6 (sgk) về ảnh hoạt nghiệm chuyển động ném xiên.</li>
+                        <li>GV đặt câu hỏi: "Quỹ đạo của vật trong chuyển động ném xiên có dạng như thế nào? Yếu tố nào quyết định tầm bay xa của vật?"</li>
+                        <li>HS quan sát, dự đoán.</li>
+                        <li>GV dẫn dắt vào bài: "Để trả lời, chúng ta cùng tìm hiểu phần II. Chuyển động ném xiên."</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="12.6.png" alt="Hình 12.6 - Ảnh hoạt nghiệm chuyển động ném xiên" class="img-medium">
+                        <p><em>Hình 12.6. Ảnh chụp hoạt nghiệm chuyển động ném xiên</em></p>
+                    </div>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 2 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2:<br>HÌNH THÀNH KIẾN THỨC</strong><br>
+                    (25 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Hình thành khái niệm chuyển động ném xiên, phân tích và rút ra công thức tính tầm cao, tầm xa.</p>
+                    <p><strong>Nội dung:</strong> Tìm hiểu chuyển động ném xiên, phân tích thành hai thành phần.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời, kết quả thảo luận, công thức.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+
+                    <p><strong>1. Khái niệm chuyển động ném xiên</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc SGK mục II, nêu khái niệm.</li>
+                        <li>HS trả lời: Chuyển động ném xiên là chuyển động của vật được ném lên với vận tốc ban đầu hợp với phương ngang một góc α.</li>
+                    </ul>
+
+                    <p><strong>2. Phân tích chuyển động ném xiên</strong></p>
+                    <ul>
+                        <li>GV hướng dẫn HS phân tích chuyển động ném xiên thành hai thành phần (Hình 12.7):
+                            <ul>
+                                <li><strong>Theo phương thẳng đứng:</strong> Chuyển động biến đổi đều với gia tốc \(a = -g\).</li>
+                                <li><strong>Theo phương nằm ngang:</strong> Chuyển động thẳng đều với vận tốc \(v_x = v_0 \cos\alpha\).</li>
+                            </ul>
+                        </li>
+                        <li>GV yêu cầu HS viết công thức tính tầm cao H và tầm xa L.</li>
+                        <li>HS thực hiện:
+                            <div class="formula">
+                                \[ H = \frac{v_0^2 \sin^2\alpha}{2g} \]
+                                \[ L = \frac{v_0^2 \sin 2\alpha}{g} \]
+                            </div>
+                        </li>
+                        <li>GV nhấn mạnh: Tầm xa lớn nhất khi \(\alpha = 45^\circ\).</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="12.7.png" alt="Hình 12.7 - Phân tích chuyển động ném xiên" class="img-medium">
+                        <p><em>Hình 12.7. Phân tích chuyển động ném xiên</em></p>
+                    </div>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 3:<br>LUYỆN TẬP</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng công thức để giải bài tập.</p>
+                    <p><strong>Nội dung:</strong> Giải bài tập ví dụ SGK.</p>
+                    <p><strong>Sản phẩm:</strong> Lời giải của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc và tóm tắt Bài tập ví dụ (sgk tr.53).</li>
+                        <li>HS tóm tắt: \(v_0 = 7.5\) m/s, \(\alpha = 30^\circ\), \(g = 9.8\) m/s². Tính \(v_{0x}, v_{0y}, H, t, L\).</li>
+                        <li>GV gọi 2 HS lên bảng giải, mỗi HS giải một phần.</li>
+                        <li>HS giải:
+                            <div class="formula">
+                                \[ v_{0x} = v_0 \cos\alpha = 7.5 \cos 30^\circ \approx 6.5 \text{ m/s} \]
+                                \[ v_{0y} = v_0 \sin\alpha = 7.5 \sin 30^\circ = 3.75 \text{ m/s} \]
+                                \[ H = \frac{v_{0y}^2}{2g} = \frac{3.75^2}{2 \cdot 9.8} \approx 0.72 \text{ m} \]
+                                \[ t_{lên} = \frac{v_{0y}}{g} = \frac{3.75}{9.8} \approx 0.38 \text{ s} \]
+                                \[ t_{bay} = 2 t_{lên} \approx 0.76 \text{ s} \]
+                                \[ L = v_{0x} \cdot t_{bay} = 6.5 \cdot 0.76 \approx 4.94 \text{ m} \]
+                            </div>
+                        </li>
+                        <li>GV nhận xét, chính xác hóa kết quả.</li>
+                    </ul>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 4 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 4:<br>VẬN DỤNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng kiến thức vào thực tế và giao nhiệm vụ về nhà.</p>
+                    <p><strong>Nội dung:</strong> Trả lời câu hỏi vận dụng, giao nhiệm vụ năng lực số.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh, sản phẩm infographic.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV đặt câu hỏi: "Trong môn nhảy xa, vận động viên cần nhảy với góc bao nhiêu để đạt thành tích cao nhất? Tại sao?"</li>
+                        <li>HS vận dụng kiến thức: Góc nhảy lý tưởng là khoảng \(45^\circ\) (trong điều kiện lý tưởng) để tầm xa lớn nhất. Tuy nhiên, trong thực tế còn phụ thuộc vào tốc độ chạy đà và kỹ thuật.</li>
+                        <li>GV giao nhiệm vụ về nhà:
+                            <ul>
+                                <li><strong>Nhiệm vụ năng lực số (3.1.NC1b):</strong> Tạo một sơ đồ/đồ thị/infographic về Chuyển động ném. Sử dụng AI (ChatGPT, Gemini,...) để gợi ý bố cục, sau đó học sinh tự chỉnh sửa và ghi nguồn tham khảo.</li>
+                                <li><strong>Nhiệm vụ trực tuyến:</strong> Tìm hiểu thêm trên internet về sự rơi tự do và chuyển động ném để hoàn thiện nội dung học tập.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG -->
+    <h2>IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG (NẾU CÓ)</h2>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+
+    <!-- Ký duyệt -->
+    <div class="signature">
+        <div class="signature-box">
+            <p><strong>Duyệt TCM</strong></p>
+            <p class="signature-name"><input type="text" placeholder="Lục Tuyến"></p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Chống chuột phải
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+
+    // Chống các phím tắt sao chép, xem nguồn, nhưng CHO PHÉP Ctrl+P
+    function disableKeys(e) {
+        // Cho phép Ctrl+P (in)
+        if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) {
+            return true;
+        }
+        // Cho phép Ctrl+Shift+P (một số trình duyệt dùng để in)
+        if (e.ctrlKey && e.shiftKey && (e.key === 'p' || e.key === 'P')) {
+            return true;
+        }
+        // Chặn Ctrl+S (lưu), Ctrl+U (xem nguồn), Ctrl+C (copy), Ctrl+A (chọn tất cả), F12 (dev tools)
+        if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'a' || e.key === 'A')) {
+            e.preventDefault();
+            return false;
+        }
+        if (e.key === 'F12') {
+            e.preventDefault();
+            return false;
+        }
+        return true;
+    }
+
+    // Chống kéo thả
+    document.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+    });
+
+    // Chống chọn văn bản (ngoại trừ các ô input)
+    document.addEventListener('selectstart', function(e) {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+        }
+    });
+
+    // Cho phép chọn văn bản trong các ô input
+    document.querySelectorAll('input, textarea').forEach(function(el) {
+        el.addEventListener('selectstart', function(e) {
+            e.stopPropagation();
+        });
+        el.addEventListener('dragstart', function(e) {
+            e.stopPropagation();
+        });
+    });
+</script>
+
+</body>
+</html>

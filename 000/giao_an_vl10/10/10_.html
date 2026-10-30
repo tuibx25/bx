@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giáo án Bài 10 - Vật lí 10</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @page { size: A4; margin: 20mm 15mm; }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            line-height: 1.4;
+            color: #000000;
+            background-color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+        .container {
+            width: 100%;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        h1, h2, h3, h4 { color: #004488; margin-top: 15px; margin-bottom: 10px; }
+        h1 {
+            text-align: center;
+            font-size: 18pt;
+            color: #8B4513;
+            border-bottom: 2px solid #8B4513;
+            padding-bottom: 5px;
+        }
+        h2 {
+            font-size: 15pt;
+            border-bottom: 1px solid #D3D3D3;
+            padding-bottom: 3px;
+            color: #8B5A2B;
+        }
+        h3 { font-size: 14pt; color: #0066CC; }
+        h4 { font-size: 13pt; color: #8B5A2B; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12pt; }
+        th, td { border: 1px solid #D3D3D3; padding: 6px 8px; text-align: left; vertical-align: top; }
+        th { background-color: #F5F5DC; color: #004488; font-weight: bold; }
+        .tien-trinh { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .tien-trinh th { background-color: #F5DEB3; color: #004488; text-align: center; }
+        .tien-trinh td { vertical-align: top; }
+        .col-buoc { width: 25%; background-color: #F5F5F5; font-weight: bold; color: #8B4513; }
+        .col-noidung { width: 75%; }
+        .box { background-color: #F5F5DC; border-left: 5px solid #8B5A2B; padding: 10px; margin: 10px 0; }
+        .box-ai { background-color: #E8F4FF; border-left: 5px solid #0066CC; padding: 10px; margin: 10px 0; }
+        .box-nls { background-color: #FFF8E1; border-left: 5px solid #CC9900; padding: 10px; margin: 10px 0; }
+        .red-text { color: #CC0000; font-weight: bold; }
+        .blue-text { color: #0066CC; }
+        .img-container { text-align: center; margin: 10px 0; }
+        .img-container img {
+            max-width: 100%; height: auto;
+            border: 1px solid #D3D3D3;
+            -webkit-user-drag: none; user-drag: none; pointer-events: none;
+        }
+        .img-small { max-width: 250px; }
+        .img-medium { max-width: 350px; }
+        .img-large { max-width: 500px; }
+        ul, ol { padding-left: 20px; }
+        li { margin-bottom: 5px; }
+        .formula { text-align: center; margin: 10px 0; font-size: 14pt; }
+        .input-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt; font-weight: bold;
+            color: #000000; background-color: #FFFFFF;
+            border: 1px solid #D3D3D3; border-radius: 3px;
+            padding: 2px 5px; width: 200px;
+        }
+        .input-text:focus { outline: none; border-color: #8B4513; }
+        .signature {
+            margin-top: 30px; display: flex;
+            justify-content: flex-end; text-align: center; font-weight: bold;
+        }
+        .signature-box { width: 200px; border-top: 2px solid #8B4513; padding-top: 10px; }
+        .signature-name { margin-top: 50px; }
+        .signature-name input {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt; font-weight: bold;
+            color: #000000; background-color: #FFFFFF;
+            border: 1px solid #D3D3D3; border-radius: 3px;
+            padding: 2px 5px; width: 150px; text-align: center;
+        }
+        .phieu { border: 1.5px solid #8B4513; padding: 10px 15px; margin: 12px 0; background: #FDFDF5; }
+        .phieu h4 { text-align: center; margin: 0 0 8px 0; color: #8B4513; }
+        @media print {
+            body { font-size: 12pt; -webkit-user-select: auto; user-select: auto; }
+            .container { padding: 0; }
+            .no-print { display: none; }
+            .input-text, .signature-name input {
+                border: none; background: transparent; color: #000; font-weight: bold;
+            }
+            .img-container img { pointer-events: auto; }
+            .phieu, .box, .box-ai, .box-nls, .tien-trinh { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" onkeydown="return disableKeys(event);" ondragstart="return false;" onselectstart="return false;">
+
+<div class="container">
+
+    <!-- Ngày soạn -->
+    <p><strong>Ngày soạn:</strong> <input type="text" class="input-text" placeholder="....../....../20......"></p>
+
+    <!-- Tiêu đề giáo án -->
+    <h1>GIÁO ÁN BÀI 10: SỰ RƠI TỰ DO</h1>
+    <p style="text-align: center; font-style: italic;">Môn: Vật lí 10 – Bộ sách Kết nối tri thức với cuộc sống</p>
+    <p style="text-align: center;">Số tiết: 1 (Tiết 17 theo PPCT)</p>
+
+    <!-- I. MỤC TIÊU -->
+    <h2>I. MỤC TIÊU</h2>
+
+    <h3>1. Kiến thức</h3>
+    <ul>
+        <li>Thực hiện được một số thí nghiệm định tính để rút ra yếu tố ảnh hưởng đến sự rơi của vật.</li>
+        <li>Phát biểu được định nghĩa sự rơi tự do và nêu được các đặc điểm của chuyển động rơi tự do.</li>
+        <li>Nêu được đặc điểm của gia tốc rơi tự do (tại một nơi nhất định, mọi vật rơi tự do với cùng một gia tốc \(g\)).</li>
+        <li>Viết đúng các công thức tính vận tốc tức thời, quãng đường, độ dịch chuyển trong sự rơi tự do: \(v = gt\); \(s = d = \frac{1}{2}gt^2 = \frac{v^2}{2g}\).</li>
+        <li>Vận dụng được các công thức của chuyển động rơi tự do để giải quyết các bài tập và tình huống thực tế.</li>
+    </ul>
+
+    <h3>2. Năng lực</h3>
+
+    <h4>a. Năng lực chung</h4>
+    <ul>
+        <li><strong>Tự chủ và tự học:</strong> Chủ động tìm hiểu tài liệu SGK và các học liệu số để nghiên cứu về đặc điểm sự rơi.</li>
+        <li><strong>Giao tiếp và hợp tác:</strong> Hoạt động nhóm hiệu quả để thực hiện thí nghiệm và thảo luận kết quả thông qua các nền tảng trực tuyến.</li>
+        <li><strong>Giải quyết vấn đề và sáng tạo:</strong> Phân tích được các tình huống thực tế (như thí nghiệm của David Scott trên Mặt Trăng) để rút ra kết luận khoa học.</li>
+    </ul>
+
+    <h4>b. Năng lực đặc thù môn học</h4>
+    <ul>
+        <li><strong>Nhận thức vật lí:</strong>
+            <ul>
+                <li>Phát biểu được định nghĩa sự rơi tự do là sự rơi chỉ dưới tác dụng của trọng lực.</li>
+                <li>Trình bày được các đặc điểm về phương (thẳng đứng), chiều (từ trên xuống dưới) và tính chất (chuyển động thẳng nhanh dần đều) của sự rơi tự do.</li>
+                <li>Nêu được đặc điểm của gia tốc rơi tự do và viết đúng các công thức \(v = gt\); \(s = d = \frac{1}{2}gt^2\).</li>
+            </ul>
+        </li>
+        <li><strong>Tìm hiểu thế giới tự nhiên dưới góc độ vật lí:</strong>
+            <ul>
+                <li>Thực hiện và phân tích được kết quả các thí nghiệm định tính để rút ra kết luận: sự rơi nhanh hay chậm của vật trong không khí không phụ thuộc vào khối lượng mà phụ thuộc vào độ lớn của lực cản không khí so với trọng lực tác dụng lên vật.</li>
+                <li>Biết cách xác định phương thẳng đứng bằng dây dọi và phương nằm ngang bằng thước eke để kiểm tra tính chuẩn xác của các vật thể trong môi trường xung quanh.</li>
+            </ul>
+        </li>
+        <li><strong>Vận dụng kiến thức, kĩ năng đã học:</strong>
+            <ul>
+                <li>Vận dụng thành thạo hệ thống công thức rơi tự do để giải các bài toán định lượng liên quan đến thời gian rơi, vận tốc chạm đất và quãng đường vật rơi được.</li>
+                <li>Ứng dụng thực tiễn: đề xuất phương án và tính toán gần đúng độ sâu của một cái giếng cạn hoặc chiều cao của một tòa tháp bằng cách đo thời gian rơi của một vật.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h4>c. Năng lực số</h4>
+    <div class="box-nls">
+        <ul>
+            <li><strong>1.1.NC1c:</strong> Chỉ cho các thành viên khác trong nhóm cách tìm kiếm, truy cập và điều hướng trên các trang web/nền tảng mô phỏng thí nghiệm (như PhET, YouTube) để xem các video thực nghiệm sự rơi của các vật trong không khí và trong chân không.</li>
+            <li><strong>1.1.NC1b:</strong> Áp dụng kỹ thuật tìm kiếm để xem các video mô phỏng thí nghiệm rơi tự do trong chân không hoặc trên Mặt Trăng.</li>
+            <li><strong>1.2.NC1b:</strong> Tiến hành đánh giá, thu thập dữ liệu từ video hoạt nghiệm để kiểm chứng tính chất chuyển động nhanh dần đều.</li>
+            <li><strong>2.1.NC1a:</strong> Sử dụng thiết bị cá nhân để tương tác tham gia các hoạt động trực tuyến qua mã QR hoặc đường link (Padlet, Quizizz, Kahoot).</li>
+            <li><strong>3.1.NC1a:</strong> Áp dụng cách tạo nội dung số để thiết kế báo cáo thí nghiệm dưới dạng slide trình chiếu hoặc poster số.</li>
+            <li><strong>3.3.NC1a:</strong> Thực thi đạo đức số thông qua thái độ trung thực khi báo cáo số liệu và trích dẫn đúng nguồn học liệu số đã sử dụng.</li>
+            <li><strong>5.3.NC1a:</strong> Áp dụng các công cụ số (ứng dụng máy tính, phần mềm bảng tính Excel/Google Sheets) để tính toán gia tốc từ bảng số liệu thực nghiệm.</li>
+        </ul>
+    </div>
+
+    <h4>d. Năng lực trí tuệ nhân tạo (AI)</h4>
+    <div class="box-ai">
+        <ul>
+            <li><strong>NLa (Tư duy lấy con người làm trung tâm):</strong> Nhận thức được công cụ tính toán/AI có thể cho ra kết quả nhanh chóng, nhưng con người phải đánh giá tính hợp lí của gia tốc g dựa trên tư duy vật lí thực tế.</li>
+            <li><strong>NLb (Đạo đức AI):</strong> Khách quan, trung thực trong việc trích xuất và báo cáo dữ liệu từ video; minh bạch, ghi rõ nguồn khi dùng AI để tìm kiếm thông tin thiết kế báo cáo.</li>
+            <li><strong>NLc (Các kĩ thuật và ứng dụng AI):</strong> Biết cách đặt câu lệnh (prompt) phù hợp với mục tiêu cụ thể để nhờ ứng dụng AI (ChatGPT/Gemini) đóng vai trò gia sư giải thích hiện tượng rơi trên Mặt Trăng hoặc giải thích nguyên lí khí động học và lực cản không khí.</li>
+        </ul>
+    </div>
+
+    <h3>3. Phẩm chất</h3>
+    <ul>
+        <li><strong>Chăm chỉ:</strong> Tích cực thực hiện các phép đo lặp lại để giảm thiểu sai số.</li>
+        <li><strong>Trung thực:</strong> Khách quan trong việc ghi chép và báo cáo dữ liệu thực nghiệm.</li>
+        <li><strong>Trách nhiệm:</strong> Có ý thức bảo quản thiết bị thí nghiệm và sử dụng Internet an toàn, tôn trọng bản quyền học liệu.</li>
+    </ul>
+
+    <!-- II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU -->
+    <h2>II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU</h2>
+
+    <h3>1. Giáo viên</h3>
+    <ul>
+        <li>SGK Vật lí 10, SGV, máy chiếu, máy tính.</li>
+        <li>Bài giảng PowerPoint tích hợp video thí nghiệm của David Scott (thả búa và lông chim trên Mặt Trăng).</li>
+        <li>Bộ thí nghiệm Ống Newton (Link tham khảo: https://s.shopee.vn/3B3JbS2bLA).</li>
+        <li>Phiếu học tập số 1, 2, 3.</li>
+    </ul>
+
+    <!-- Phiếu học tập số 1 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 1</h4>
+        <p>Căn cứ vào bảng số liệu sau để:</p>
+        <ul>
+            <li>Chứng tỏ chuyển động rơi tự do là nhanh dần đều.</li>
+            <li>Tính gia tốc của chuyển động rơi tự do.</li>
+        </ul>
+        <table>
+            <thead>
+                <tr><th>Thời gian rơi (s)</th><th>Quãng đường rơi (m)</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>0,1</td><td>0,049</td></tr>
+                <tr><td>0,2</td><td>0,197</td></tr>
+                <tr><td>0,3</td><td>0,441</td></tr>
+                <tr><td>0,4</td><td>0,785</td></tr>
+                <tr><td>0,5</td><td>1,227</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Phiếu học tập số 2 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 2</h4>
+        <p>Một người thả một hòn bi từ trên cao xuống đất và đo được thời gian rơi là \(3,1\) s. Bỏ qua sức cản không khí, lấy \(g = 9,8\) m/s².</p>
+        <p><strong>a)</strong> Tính độ cao của nơi thả hòn bi so với mặt đất và vận tốc của hòn bi ngay trước khi chạm đất.</p>
+        <p><strong>b)</strong> Tính quãng đường vật rơi được trong \(0,5\) s cuối cùng trước khi chạm đất.</p>
+    </div>
+
+    <!-- Phiếu học tập số 3 -->
+    <div class="phieu">
+        <h4>PHIẾU HỌC TẬP SỐ 3</h4>
+        <p><strong>Câu 1:</strong> Trường hợp nào dưới đây được coi là sự rơi tự do?</p>
+        <ul style="list-style-type: none;">
+            <li>A. Ném một hòn sỏi lên cao.</li>
+            <li>B. Thả một hòn sỏi rơi xuống.</li>
+            <li>C. Ném một hòn sỏi theo phương xiên góc.</li>
+            <li>D. Thả một chiếc lá rơi.</li>
+        </ul>
+        <p><strong>Câu 2:</strong> Một vật rơi tự do thì chuyển động của vật:</p>
+        <ul style="list-style-type: none;">
+            <li>A. là chuyển động thẳng đều.</li>
+            <li>B. là chuyển động thẳng nhanh dần đều.</li>
+            <li>C. là chuyển động thẳng chậm dần đều.</li>
+            <li>D. là chuyển động thẳng có gia tốc thay đổi theo thời gian.</li>
+        </ul>
+        <p><strong>Câu 3:</strong> Điều nào sau đây là không đúng khi nói về chuyển động rơi tự do?</p>
+        <ul style="list-style-type: none;">
+            <li>A. Sự rơi tự do là sự rơi của một vật chỉ dưới tác dụng của trọng lực.</li>
+            <li>B. Các vật rơi tự do ở cùng một nơi trên Trái Đất và ở gần mặt đất đều có cùng một gia tốc.</li>
+            <li>C. Trong quá trình rơi tự do, gia tốc của vật không đổi cả về hướng và độ lớn.</li>
+            <li>D. Trong quá trình rơi tự do, vận tốc của vật giảm dần.</li>
+        </ul>
+        <p><strong>Câu 4:</strong> Một vật được thả rơi tự do từ đỉnh tháp, nó chạm đất trong thời gian 4 s. Lấy \(g = 10\) m/s². Chiều cao của tháp là:</p>
+        <ul style="list-style-type: none;">
+            <li>A. 80 m &nbsp;&nbsp; B. 40 m &nbsp;&nbsp; C. 20 m &nbsp;&nbsp; D. 160 m</li>
+        </ul>
+        <p><strong>Câu 5:</strong> Một vật rơi tự do từ độ cao 20 m xuống đất. Lấy \(g = 10\) m/s². Thời gian để vật chạm đất là:</p>
+        <ul style="list-style-type: none;">
+            <li>A. \(1\) s &nbsp;&nbsp; B. \(\sqrt{2}\) s &nbsp;&nbsp; C. \(2\) s &nbsp;&nbsp; D. \(4\) s</li>
+        </ul>
+        <p><strong>Câu 6:</strong> Tại cùng một địa điểm, hai vật được thả rơi tự do từ hai độ cao khác nhau \(h_1\) và \(h_2\). Khoảng thời gian rơi của vật thứ nhất lớn gấp đôi khoảng thời gian rơi của vật thứ hai. Tỉ số \(h_1 : h_2\) bằng:</p>
+        <ul style="list-style-type: none;">
+            <li>A. 0,5 &nbsp;&nbsp; B. 2 &nbsp;&nbsp; C. 4 &nbsp;&nbsp; D. 0,25</li>
+        </ul>
+        <p><strong>Câu 7:</strong> Tại cùng một địa điểm, hai vật được thả rơi tự do từ độ cao \(h_1\) và \(h_2\) so với đất. Biết \(h_1 = 2h_2\). Tỉ số vận tốc \(v_1 : v_2\) của hai vật ngay trước khi chạm đất là:</p>
+        <ul style="list-style-type: none;">
+            <li>A. 0,5 &nbsp;&nbsp; B. 2 &nbsp;&nbsp; C. 4 &nbsp;&nbsp; D. \(\sqrt{2}\)</li>
+        </ul>
+        <p><strong>Câu 8:</strong> Mất 1 s để một vật rơi tự do từ độ cao \(h\) xuống đất. Nếu vật rơi từ độ cao \(9h\) thì thời gian rơi của vật là:</p>
+        <ul style="list-style-type: none;">
+            <li>A. 1 s &nbsp;&nbsp; B. 2 s &nbsp;&nbsp; C. 3 s &nbsp;&nbsp; D. 4 s</li>
+        </ul>
+        <p><strong>Câu 9:</strong> Một vật rơi tự do từ độ cao \(h\) xuống đất ở nơi có gia tốc trọng trường \(g\). Vận tốc của vật khi đi được nửa quãng đường là:</p>
+        <ul style="list-style-type: none;">
+            <li>A. \(2gh\) &nbsp;&nbsp; B. \(\sqrt{2gh}\) &nbsp;&nbsp; C. \(\sqrt{gh}\) &nbsp;&nbsp; D. \(gh\)</li>
+        </ul>
+        <p><strong>Câu 10:</strong> Khi một vật rơi tự do thì độ tăng vận tốc trong 1 s có độ lớn bằng:</p>
+        <ul style="list-style-type: none;">
+            <li>A. \(g\) &nbsp;&nbsp; B. \(2g\) &nbsp;&nbsp; C. \(g/2\) &nbsp;&nbsp; D. \(g^2\)</li>
+        </ul>
+    </div>
+
+    <h3>2. Học sinh</h3>
+    <ul>
+        <li>SGK, vở ghi, máy tính cầm tay.</li>
+        <li>Mỗi nhóm: 1 viên bi sắt, 1 viên bi thủy tinh, 2 tờ giấy A4, 1 chiếc lá.</li>
+        <li>Điện thoại thông minh (1 máy/nhóm) để truy cập học liệu số và quay video thí nghiệm.</li>
+    </ul>
+
+    <!-- III. TIẾN TRÌNH DẠY HỌC -->
+    <h2>III. TIẾN TRÌNH DẠY HỌC</h2>
+
+    <table class="tien-trinh">
+        <thead>
+            <tr>
+                <th class="col-buoc">Bước thực hiện</th>
+                <th class="col-noidung">Nội dung các bước</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- HOẠT ĐỘNG 1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 1:<br>MỞ ĐẦU – TẠO TÌNH HUỐNG<br>HỌC TẬP</strong><br>
+                    (7 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li><strong>Về kiến thức:</strong> Ôn tập sơ bộ về chuyển động biến đổi và kích thích sự tò mò, hứng thú tìm hiểu về hiện tượng các vật rơi trong thực tế thông qua câu chuyện lịch sử.</li>
+                        <li><strong>Về năng lực số:</strong>
+                            <ul>
+                                <li>2.1.NC1a: Sử dụng thiết bị cá nhân để tương tác tham gia các hoạt động trực tuyến qua mã QR hoặc đường link.</li>
+                                <li>1.1.NC1b: Khai thác thông tin số thông qua việc quan sát và phân tích video thí nghiệm khoa học lịch sử trên Internet.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực AI:</strong>
+                            <ul>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) đóng vai để nhờ AI (ChatGPT/Gemini) giải thích nguyên nhân của một hiện tượng vật lí bất thường.</li>
+                                <li>NLa: Nhận thức được rằng AI cung cấp thông tin, nhưng HS phải là người đối chiếu câu trả lời đó với hình ảnh video quan sát được và kiến thức thực tế để khẳng định tính logic.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS tham gia trò chơi tương tác (Quizizz/Kahoot) hoặc quan sát video thực tế về thí nghiệm của nhà du hành vũ trụ David Scott trên Mặt Trăng năm 1971.</li>
+                        <li>Thảo luận nhóm về hiện tượng: <em>Tại sao trên Mặt Trăng chiếc búa và lông chim rơi xuống như nhau, trong khi trên Trái Đất chúng lại rơi khác nhau?</em></li>
+                        <li>Thử thách AI: Một nhóm HS được giao nhiệm vụ dùng trợ lý ảo AI để "giải mã" hiện tượng kỳ lạ này và báo cáo trước lớp.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong> Kết quả phản hồi của HS trên ứng dụng tương tác số hoặc phiếu ghi chép nhanh. HS nhận thức được vấn đề cần nghiên cứu: <em>Yếu tố nào ảnh hưởng đến sự rơi nhanh hay chậm của các vật?</em></p>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV sử dụng PowerPoint trình chiếu video lịch sử: Nhà du hành vũ trụ David Scott đồng thời thả rơi một chiếc búa và một chiếc lông chim trên Mặt Trăng.</li>
+                        <li><strong>Thử thách AI:</strong> GV yêu cầu Nhóm 1 mở AI và gõ câu lệnh (prompt): <em>"Đóng vai một nhà khoa học vật lí, hãy giải thích ngắn gọn bằng ngôn ngữ dễ hiểu: Tại sao trên Mặt Trăng, chiếc búa nặng và chiếc lông chim nhẹ lại rơi chạm đất cùng một lúc?"</em> (NLAI: NLc).</li>
+                        <li>GV cung cấp mã QR link Padlet hoặc Quizizz và giao nhiệm vụ: <em>"Hãy quan sát kĩ video và đưa ra dự đoán/nhận xét của em về tốc độ rơi của hai vật này. Tại sao kết quả lại khác với kinh nghiệm thực tế của các em trên Trái Đất?"</em></li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="01.png" alt="Hình ảnh phi hành gia thả lông chim và búa" class="img-medium">
+                        <p><em>Hình ảnh minh họa: Phi hành gia David Scott thả lông chim và búa trên Mặt Trăng (1971)</em></p>
+                    </div>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS làm việc theo nhóm (4-6 HS), sử dụng điện thoại thông minh/máy tính bảng để quan sát lại đoạn video (nếu cần) và thảo luận.</li>
+                        <li>HS truy cập nền tảng số để gửi câu trả lời hoặc dự đoán của nhóm mình.</li>
+                        <li>Nhóm 1 nhận thử thách AI tương tác với Chatbot, đọc lướt câu trả lời để tìm từ khóa trọng tâm.</li>
+                        <li>GV theo dõi, hỗ trợ các nhóm gặp khó khăn về kết nối mạng hoặc thao tác trên thiết bị.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả</strong></p>
+                    <ul>
+                        <li>GV trình chiếu bảng tổng hợp các ý kiến trên màn hình chính (ví dụ giao diện Padlet).</li>
+                        <li>GV mời đại diện 1-2 nhóm có dự đoán thú vị nhất trình bày lí do.</li>
+                        <li>Các nhóm khác sử dụng tính năng bình luận trực tuyến hoặc phát biểu trực tiếp để bổ sung, phản biện.</li>
+                        <li>GV mời đại diện Nhóm 1 (nhóm dùng AI) đọc kết quả tra cứu. <em>(Ví dụ AI trả lời: "Trên Trái Đất, chiếc lông chim bị lực cản không khí cản lại nên rơi chậm hơn chiếc búa. Nhưng trên Mặt Trăng là môi trường chân không, không có không khí và không có lực cản. Cả búa và lông chim chỉ chịu tác dụng duy nhất của lực hấp dẫn, do đó chúng rơi nhanh như nhau và chạm đất cùng lúc").</em></li>
+                        <li>Lớp cùng thảo luận, đối chiếu câu trả lời của AI với quan sát từ video để xác nhận tính logic (NLAI: NLa).</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả</strong></p>
+                    <ul>
+                        <li>GV tổng kết, nhận xét về tính tích cực và kĩ năng khai thác học liệu số của các nhóm.</li>
+                        <li>GV chốt vấn đề và dẫn dắt vào bài: <em>"Như vậy, nhờ AI và video lịch sử, chúng ta thấy rằng trong môi trường không khí trên Trái Đất, các vật rơi nhanh chậm khác nhau do lực cản. Nhưng trong môi trường chân không (như Mặt Trăng), khi không có lực cản, mọi vật rơi như nhau dưới tác dụng duy nhất của trọng lực. Chuyển động tuyệt đẹp đó gọi là Sự rơi tự do. Vậy sự rơi tự do có những đặc điểm và quy luật nào? Chúng ta sẽ cùng tìm hiểu qua BÀI 10: SỰ RƠI TỰ DO."</em></li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 2.1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2.1:<br>TÌM HIỂU VỀ SỰ RƠI<br>TRONG KHÔNG KHÍ</strong><br>
+                    (15 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li><strong>Về kiến thức:</strong>
+                            <ul>
+                                <li>Mô tả được sự rơi của các vật khác nhau trong không khí và nhận ra rằng trong môi trường này các vật rơi nhanh chậm khác nhau.</li>
+                                <li>Nêu được yếu tố ảnh hưởng đến sự rơi nhanh hay chậm của vật trong không khí là độ lớn của lực cản không khí so với trọng lực tác dụng lên vật.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực số:</strong>
+                            <ul>
+                                <li>2.1.NC1a: Sử dụng thành thạo điện thoại thông minh để quay video hoạt nghiệm (chế độ Slow-motion) nhằm quan sát chi tiết chuyển động.</li>
+                                <li>1.2.NC1b: Tiến hành đánh giá và phân tích hình ảnh/video đã ghi hình để so sánh chính xác thời điểm chạm đất của các vật.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực AI:</strong> NLc (đặt prompt phù hợp để nhờ AI giải thích nguyên lí khí động học và lực cản không khí); NLa (thể hiện tư duy làm chủ công nghệ, dùng tư duy vật lí để tổng hợp và rút ra kết luận).</li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong> HS làm việc theo nhóm để tiến hành 3 thí nghiệm định tính:</p>
+                    <ul>
+                        <li><strong>TN 1:</strong> Thả rơi một quả bóng và một chiếc lá.</li>
+                        <li><strong>TN 2:</strong> Thả rơi hai tờ giấy giống nhau, một tờ vo tròn và một tờ để nguyên.</li>
+                        <li><strong>TN 3:</strong> Thả rơi hai viên bi có cùng kích thước, một bằng sắt và một bằng thủy tinh.</li>
+                    </ul>
+                    <p>Sử dụng thiết bị số để ghi lại quá trình rơi và thảo luận nhóm về nguyên nhân dẫn đến sự khác biệt. <strong>Thử thách AI:</strong> Một nhóm dùng AI để tìm hiểu tại sao tờ giấy vo tròn lại rơi nhanh hơn tờ giấy phẳng dù khối lượng bằng nhau.</p>
+                    <p><strong>c. Sản phẩm:</strong> Kết luận về sự rơi trong không khí:</p>
+                    <div class="box">
+                        <strong>I. Sự rơi trong không khí</strong>
+                        <ul>
+                            <li>Sự rơi là chuyển động thường gặp.</li>
+                            <li>Sự rơi không chỉ phụ thuộc khối lượng của vật mà còn phụ thuộc vào lực cản của không khí.</li>
+                            <li>Lực cản càng nhỏ so với trọng lực tác dụng lên vật thì vật sẽ rơi càng nhanh và ngược lại.</li>
+                        </ul>
+                    </div>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV đặt vấn đề: <em>"Ta thường thấy viên bi rơi nhanh hơn chiếc lá. Liệu có phải cứ vật nặng hơn thì sẽ rơi nhanh hơn không?"</em></li>
+                        <li>GV chia nhóm và giao bộ dụng cụ: quả bóng, lá cây, giấy A4, bi sắt, bi thủy tinh.</li>
+                        <li>GV yêu cầu: <em>"Các nhóm tiến hành 3 TN theo hướng dẫn. Sử dụng điện thoại quay video Slow-motion khoảnh khắc các vật chạm đất để làm bằng chứng thảo luận"</em> (Tích hợp năng lực số).</li>
+                        <li><strong>Thử thách NLAI:</strong> <em>"Nhóm 1 hãy dùng AI gõ prompt: Đóng vai chuyên gia vật lí, giải thích tại sao 2 tờ giấy nặng bằng nhau nhưng tờ vo tròn lại rơi chạm đất trước tờ để phẳng?"</em> (NLAI: NLc).</li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS các nhóm lần lượt thực hiện TN1, TN2, TN3.</li>
+                        <li>Một thành viên phụ trách thả vật cùng độ cao, một thành viên dùng thiết bị số ghi hình.</li>
+                        <li>Nhóm thảo luận, xem lại video để so sánh thời gian rơi và phân tích đặc điểm bề mặt của các vật.</li>
+                        <li>Nhóm 1 tương tác với trợ lí ảo AI, đọc hiểu và rút ra từ khóa "lực cản không khí".</li>
+                        <li>GV theo dõi, hỗ trợ HS các kĩ thuật quay video hoạt nghiệm và đảm bảo an toàn thiết bị số.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Đại diện nhóm trình bày kết quả (có thể trình chiếu đoạn video slow-motion ngắn vừa quay):
+                            <ul>
+                                <li><strong>TN1:</strong> Sự rơi của các vật có liên quan tới kích thước và khối lượng của vật.</li>
+                                <li><strong>TN2:</strong> Sự rơi của vật có liên quan tới diện tích bề mặt vật tiếp xúc với không khí.</li>
+                                <li><strong>TN3:</strong> Sự rơi của các vật có liên quan tới khối lượng của vật.</li>
+                            </ul>
+                        </li>
+                        <li>⇒ <strong>Kết luận:</strong> Các thí nghiệm trên cho thấy sự rơi nhanh hay chậm của vật phụ thuộc vào độ lớn của lực cản không khí tác dụng lên vật. Lực cản càng nhỏ so với trọng lực tác dụng lên vật thì vật sẽ rơi càng nhanh và ngược lại.</li>
+                        <li><em>Tại sao TN1 quả bóng rơi nhanh hơn chiếc lá?</em> → HS: Vì chiếc lá có diện tích bề mặt lớn hơn nên bị lực cản không khí nhiều hơn, rơi chậm hơn.</li>
+                        <li><em>Trong TN2, tại sao hai tờ giấy giống nhau, nhưng tờ bị vo lại rơi nhanh hơn?</em> → HS: Vì tờ giấy vo tròn đã thu hẹp được diện tích bề mặt tiếp xúc với không khí, nghĩa là lực cản không khí tác dụng lên nó nhỏ hơn nên rơi nhanh hơn.</li>
+                        <li><em>Trong TN3, tại sao hai viên bi rơi nhanh như nhau trong khi khối lượng hai viên bi khác nhau?</em> → HS: Vì bề mặt tiếp xúc của bi thủy tinh và bi sắt là như nhau nên chịu lực cản của không khí là như nhau, nên hai viên bi rơi nhanh như nhau.</li>
+                        <li>Đại diện Nhóm 1 báo cáo kết quả từ AI cho TN2: <em>"Thưa thầy/cô, AI giải thích rằng tờ giấy vo tròn rơi nhanh hơn do nó đã thu hẹp diện tích bề mặt tiếp xúc với không khí, nghĩa là lực cản không khí tác dụng lên nó nhỏ hơn rất nhiều so với tờ giấy phẳng."</em></li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả</strong></p>
+                    <ul>
+                        <li>GV tổng kết: Nguyên nhân các vật rơi nhanh chậm khác nhau trong không khí là do lực cản không khí.</li>
+                        <li><strong>Đánh giá NLS & NLAI:</strong> GV biểu dương kĩ năng sử dụng tính năng quay chậm của thiết bị số rất sáng tạo của HS để bắt trọn những khoảnh khắc vật lí diễn ra trong tích tắc. Đồng thời khen ngợi khả năng khai thác AI để tìm ra lời giải thích sắc bén về mặt khí động học.</li>
+                        <li>GV nhấn mạnh: <em>Không phải khối lượng mà chính là tỉ lệ giữa lực cản và trọng lực mới quyết định tốc độ rơi trong không khí.</em></li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 2.2 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2.2:<br>TÌM HIỂU VỀ SỰ RƠI TỰ DO</strong><br>
+                    (15 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li><strong>Về kiến thức:</strong>
+                            <ul>
+                                <li>Phát biểu được định nghĩa sự rơi tự do là sự rơi chỉ dưới tác dụng của trọng lực.</li>
+                                <li>Trình bày được các đặc điểm của chuyển động rơi tự do về phương (thẳng đứng), chiều (từ trên xuống) và tính chất (nhanh dần đều).</li>
+                                <li>Nêu được đặc điểm gia tốc rơi tự do \(g\) và viết đúng các công thức tính vận tốc (\(v = gt\)), quãng đường (\(s = \frac{1}{2}gt^2\)).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực số:</strong>
+                            <ul>
+                                <li>5.3.NC1a: Sử dụng phần mềm bảng tính để thiết lập công thức tính toán tự động gia tốc từ các giá trị \(s\) và \(t\) nhằm chứng minh tính chất chuyển động.</li>
+                                <li>3.3.NC1a: Thực thi đạo đức số thông qua thái độ trung thực khi báo cáo số liệu và trích dẫn đúng nguồn học liệu số đã sử dụng.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực AI:</strong>
+                            <ul>
+                                <li>NLa: Nhận thức được rằng phần mềm tính toán có thể tự động cho ra kết quả con số rất nhanh, nhưng con người phải là chủ thể đánh giá tính hợp lí và dùng tư duy vật lí để kết luận đó là chuyển động nhanh dần đều.</li>
+                                <li>NLc: Biết cách đặt câu lệnh (prompt) phù hợp để nhờ chatbot AI đóng vai trò chuyên gia Vật lí giải thích hiện tượng gia tốc trọng trường g thay đổi theo vĩ độ trên Trái Đất.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong></p>
+                    <ul>
+                        <li>HS thảo luận nhóm để phân tích khái niệm sự rơi tự do từ tình huống thực tế (vật rơi trong không khí khi lực cản không đáng kể).</li>
+                        <li>Sử dụng thiết bị số cá nhân truy cập bảng dữ liệu số hóa (Bảng 10.1 SGK) để tính toán gia tốc rơi tự do tại các thời điểm khác nhau.</li>
+                        <li>Xây dựng hệ thống công thức của sự rơi tự do dựa trên nền tảng của chuyển động thẳng biến đổi đều.</li>
+                        <li><strong>Thử thách AI:</strong> Dùng công cụ AI để tìm hiểu tại sao gia tốc g lại không giống nhau ở mọi nơi trên Trái Đất.</li>
+                    </ul>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <div class="box">
+                        <strong>II. Sự rơi tự do</strong>
+                        <p><strong>1. Sự rơi tự do:</strong> là sự rơi chỉ dưới tác dụng của trọng lực.</p>
+                        <p><strong>2. Đặc điểm của chuyển động rơi tự do:</strong></p>
+                        <ul>
+                            <li><strong>a) Phương và chiều:</strong> Phương thẳng đứng (trùng phương của trọng lực); chiều từ trên xuống.</li>
+                            <li><strong>b) Tính chất:</strong> Là chuyển động thẳng nhanh dần đều.</li>
+                            <li><strong>c) Gia tốc rơi tự do:</strong> Tại một nơi nhất định trên Trái Đất, mọi vật rơi tự do với cùng một gia tốc \(g\). Gia tốc rơi tự do ở các nơi khác nhau trên Trái Đất thì khác nhau.</li>
+                        </ul>
+                        <p><strong>3. Công thức rơi tự do:</strong> (chuyển động nhanh dần đều không vận tốc đầu)</p>
+                        <ul>
+                            <li>Gia tốc: \(a = g = \text{hằng số}\).</li>
+                            <li>Vận tốc tức thời: \(v = gt\).</li>
+                            <li>Độ dịch chuyển, quãng đường đi được tại thời điểm \(t\):</li>
+                        </ul>
+                        <div class="formula">
+                            \[ d = s = \frac{1}{2}gt^2 = \frac{v^2}{2g} \]
+                        </div>
+                    </div>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV nêu định nghĩa: <em>"Sự rơi tự do là sự rơi chỉ dưới tác dụng của trọng lực".</em></li>
+                        <li>GV đặt vấn đề: <em>"Nếu vật rơi trong không khí nhưng lực cản rất nhỏ so với trọng lượng, ta có thể coi là rơi tự do không? Ví dụ quả tạ rơi?"</em></li>
+                        <li>GV gửi link Google Sheets chứa dữ liệu quãng đường và thời gian (Bảng 10.1) và yêu cầu: <em>"Các nhóm hãy tính gia tốc a tại mỗi thời điểm bằng phần mềm bảng tính"</em> (Tích hợp năng lực số).</li>
+                        <li><strong>Thử thách AI:</strong> <em>"Một nhóm hãy dùng Chatbot AI gõ prompt: Đóng vai nhà Địa vật lí, hãy giải thích ngắn gọn tại sao gia tốc trọng trường g ở vùng xích đạo lại nhỏ hơn ở hai cực của Trái Đất?"</em> (NLAI: NLc).</li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS thảo luận nhóm, xác định các trường hợp được coi là rơi tự do.</li>
+                        <li><strong>Tích hợp số:</strong> HS nhập công thức =2*B2/(A2^2) (với B là quãng đường, A là thời gian) vào bảng tính để tìm gia tốc a.</li>
+                        <li><strong>Tư duy AI (NLa):</strong> HS quan sát kết quả bảng tính nhả ra các con số xấp xỉ 9,8 m/s²; 9,85 m/s²... HS phải dùng tư duy vật lí để lập luận: Mặc dù quãng đường rơi sau mỗi 0,1s ngày càng tăng, nhưng gia tốc tính được luôn xấp xỉ một hằng số. Từ đó khẳng định đây là chuyển động nhanh dần đều.</li>
+                        <li>GV hướng dẫn HS cách sử dụng dây dọi để kiểm tra phương thẳng đứng của sự rơi:
+                            <ol>
+                                <li>Yêu cầu HS thực hiện thí nghiệm 10.2 để kiểm tra.</li>
+                                <li>Dựa vào đặc điểm về hướng của sự rơi tự do, hãy tìm cách kiểm tra bức tường trong lớp có phải thẳng đứng hay không.</li>
+                                <li>Sử dụng eke và dây dọi để kiểm tra xem nền lớp học có phẳng hay không.</li>
+                            </ol>
+                        </li>
+                        <li>GV trình bày về việc chứng minh sự rơi tự do là chuyển động nhanh dần đều bằng phương pháp chụp ảnh hoạt nghiệm: chụp liên tiếp vật chuyển động sau những khoảng thời gian bằng nhau để đo được quãng đường đi được trong thời gian đó.</li>
+                        <li>Yêu cầu HS dựa vào bảng số liệu 10.1 để chứng tỏ chuyển động rơi tự do là nhanh dần đều và tính gia tốc của chuyển động rơi tự do đó.
+                            <ul>
+                                <li><strong>a)</strong> Từ giây thứ 0,1 đến 0,2, vật rơi được: \(0,197 - 0,049 = 0,148\) m<br>
+                                Từ giây thứ 0,2 đến 0,3, vật rơi được: \(0,441 - 0,197 = 0,244\) m<br>
+                                Từ giây thứ 0,3 đến 0,4, vật rơi được: \(0,785 - 0,441 = 0,344\) m<br>
+                                <em>Như vậy, sau cùng 1 khoảng là 0,1 giây như nhau nhưng vật rơi được những khoảng khác nhau, càng về sau thì rơi càng nhanh hơn.</em></li>
+                                <li><strong>b)</strong> Gia tốc của sự rơi tự do. Ta dựa vào công thức: \(s = \frac{1}{2}at^2 \Rightarrow a = \frac{2s}{t^2}\). Như vậy:
+                                    <ul>
+                                        <li>Gia tốc tại 0,1 giây là: \(a = \frac{2 \cdot 0,049}{0,1^2} = 9,8\) (m/s²)</li>
+                                        <li>Gia tốc tại 0,2 giây là: \(a = \frac{2 \cdot 0,197}{0,2^2} = 9,85\) (m/s²)</li>
+                                        <li>Gia tốc tại 0,3 giây là: \(a = \frac{2 \cdot 0,441}{0,3^2} = 9,8\) (m/s²)</li>
+                                        <li>Gia tốc tại 0,4 giây là: \(a = \frac{2 \cdot 0,785}{0,4^2} = 9,8125\) (m/s²)</li>
+                                        <li>Gia tốc tại 0,5 giây là: \(a = \frac{2 \cdot 1,227}{0,5^2} = 9,824\) (m/s²)</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>GV dẫn dắt đến đặc điểm của gia tốc rơi tự do: ở cùng một nơi trên Trái Đất mọi vật có gia tốc rơi tự do giống nhau.</li>
+                        <li>Yêu cầu HS trả lời các câu hỏi: <em>Tại sao độ dịch chuyển và quãng đường đi được trong sự rơi tự do có cùng độ lớn? Hãy nêu cách đo gần đúng độ sâu của một cái giếng mỏ cạn. Coi vận tốc truyền âm trong không khí là không đổi và đã biết?</em></li>
+                        <li>HS trả lời: Vì sự rơi tự do là chuyển động thẳng, không đổi chiều và vật rơi luôn hướng về mặt đất. Thả một hòn đá xuống giếng và đo thời gian từ lúc thả đến khi nghe thấy tiếng rơi bõm của hòn đá. Khi đó ta tính được độ sâu của giếng là: \(d = \frac{1}{2}at^2\) với \(g = 9,8\) m/s².</li>
+                        <li>GV yêu cầu HS thảo luận nhóm và hoàn thiện phiếu học tập số 2.</li>
+                        <li>HS thảo luận và báo cáo kết quả: đại diện 1 nhóm trình bày, học sinh các nhóm khác thảo luận, nhận xét, bổ sung và sửa lỗi về câu trả lời của nhóm đại diện.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Đại diện nhóm trình bày file bảng tính đã xử lí, chứng minh tính chất nhanh dần đều và gia tốc không đổi.</li>
+                        <li>HS thảo luận: <em>"Tại sao độ dịch chuyển d và quãng đường s trong rơi tự do lại có cùng độ lớn?"</em> (Đáp án: Do chuyển động thẳng, không đổi chiều).</li>
+                        <li><strong>Báo cáo Thử thách AI:</strong> Đại diện nhóm đọc kết quả: <em>"AI giải thích do Trái Đất phình ra ở xích đạo và dẹt ở hai cực, cộng thêm lực li tâm do sự tự quay, nên vật ở xích đạo chịu gia tốc trọng trường nhỏ hơn ở hai cực."</em></li>
+                        <li>Các nhóm chia sẻ kết quả và phản biện qua các công cụ trực tuyến hoặc phát biểu trực tiếp.</li>
+                    </ul>
+                    <p><strong>ĐÁP PHIẾU HỌC TẬP SỐ 2</strong></p>
+                    <ul>
+                        <li><strong>a)</strong> Độ cao của nơi thả hòn bi so với mặt đất là:
+                            <div class="formula">
+                                \[ h = \frac{1}{2}at^2 = \frac{1}{2} \cdot 9,8 \cdot 3,1^2 = 47,089 \text{ m} \]
+                            </div>
+                            Vận tốc vật lúc chạm đất là: \(v = g \cdot t = 9,8 \cdot 3,1 = 30,38\) m/s.
+                        </li>
+                        <li><strong>b)</strong> Quãng đường vật rơi được trong 0,5 s cuối trước khi chạm đất = cả quãng đường − quãng đường vật rơi trong 2,6 giây đầu:
+                            <ul>
+                                <li>Quãng đường vật rơi trong 2,6 giây đầu là: \(h_1 = \frac{1}{2} \cdot 9,8 \cdot 2,6^2 = 33,124\) m</li>
+                                <li>Quãng đường vật rơi trong 0,5 giây là: \(h_2 = h - h_1 = 47,089 - 33,124 = 13,965\) m</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả</strong></p>
+                    <ul>
+                        <li>GV chuẩn hóa kiến thức: Rơi tự do là chuyển động thẳng nhanh dần đều.</li>
+                        <li>GV nhấn mạnh: Gia tốc \(g\) tại một nơi nhất định là như nhau cho mọi vật, nhưng sẽ thay đổi theo vĩ độ trên Trái Đất.</li>
+                        <li>GV đánh giá năng lực xử lí số liệu chính xác và thái độ nghiêm túc của HS khi sử dụng thiết bị số.</li>
+                        <li><strong>Đánh giá NLS & NLAI:</strong> GV biểu dương kĩ năng xử lí số liệu chính xác trên bảng tính điện tử của HS, đồng thời khéo ngoại tư duy làm chủ công nghệ khi các em không chỉ đọc kết quả của máy tính mà biết phân tích ý nghĩa vật lí cốt lõi (Gia tốc không đổi → Chuyển động biến đổi đều) (NLAI: NLa).</li>
+                    </ul>
+
+                    <!-- HÌNH ẢNH 10.1, 10.2, 10.3 ĐƯỢC KHÔI PHỤC -->
+                    <div class="img-container">
+                        <img src="10.1.png" alt="Hình 10.1 - Thí nghiệm về sự rơi tự do" class="img-medium">
+                        <p><em>Hình 10.1. Thí nghiệm về sự rơi tự do</em></p>
+                    </div>
+                    <div class="img-container">
+                        <img src="10.2.png" alt="Hình 10.2 - Thí nghiệm kiểm tra phương và chiều của sự rơi tự do" class="img-medium">
+                        <p><em>Hình 10.2. Thí nghiệm kiểm tra phương và chiều của sự rơi tự do</em></p>
+                    </div>
+                    <div class="img-container">
+                        <img src="10.3.png" alt="Hình 10.3 - Eke tam giác vuông cân" class="img-small">
+                        <p><em>Hình 10.3. Eke tam giác vuông cân</em></p>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 3:<br>LUYỆN TẬP – TRÒ CHƠI<br>"THỬ THÁCH RƠI TỰ DO"</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li><strong>Về kiến thức:</strong> Hệ thống hóa và củng cố các đặc điểm của sự rơi tự do (phương thẳng đứng, chiều từ trên xuống, là chuyển động thẳng nhanh dần đều) và các công thức liên quan (\(v = gt\); \(s = d = \frac{1}{2}gt^2\)).</li>
+                        <li><strong>Về năng lực số:</strong>
+                            <ul>
+                                <li>2.1.NC1a: Sử dụng thiết bị cá nhân để tham gia các trò chơi học tập tương tác trực tuyến (Quizizz, Kahoot).</li>
+                                <li>2.2.NC1a & 2.5.NC1b: Trao đổi nhanh trong nhóm và phản hồi kết quả thông qua các nền tảng trực tuyến một cách phù hợp.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực AI:</strong>
+                            <ul>
+                                <li>NLa: Thể hiện tư duy làm chủ: nhận thức được máy tính hay công cụ số chỉ hỗ trợ tính toán nhanh, con người mới là chủ thể tư duy vật lí để thiết lập đúng hệ phương trình tỉ lệ (ví dụ hiểu \(h\) tỉ lệ thuận với bình phương thời gian \(t^2\)).</li>
+                                <li>NLb (Đạo đức AI): Tuân thủ tính liêm chính học thuật; khách quan, trung thực trong việc báo cáo kết quả thi đấu, không sử dụng các công cụ gian lận hay tra cứu đáp án có sẵn trên mạng trong thời gian đếm ngược của trò chơi.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về phẩm chất:</strong> Rèn luyện tính trung thực và khách quan trong việc báo cáo kết quả bài làm.</li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong> HS tham gia trò chơi tương tác số mang tên "Thử thách rơi tự do" trên nền tảng Quizizz hoặc Kahoot để ôn tập lí thuyết; thực hiện nhiệm vụ nhóm hoàn thành Phiếu học tập số 3 (10 câu hỏi trắc nghiệm khách quan).</p>
+                    <p><strong>c. Sản phẩm:</strong> Kiến thức được hệ thống và hiểu sâu hơn các định nghĩa:</p>
+                    <ul>
+                        <li>Chuyển động rơi chỉ chịu tác dụng của trọng lực gọi là rơi tự do.</li>
+                        <li>Chuyển động rơi tự do là chuyển động thẳng nhanh dần đều theo phương thẳng đứng, chiều hướng xuống dưới.</li>
+                        <li>Tại một nơi nhất định trên Trái Đất, mọi vật rơi tự do với cùng một gia tốc \(g\). Gia tốc rơi tự do ở các nơi khác nhau trên Trái Đất thì khác nhau.</li>
+                        <li>Gia tốc \(a = g = \text{hằng số}\). Vận tốc tức thời: \(v = gt\). Độ dịch chuyển, quãng đường đi được tại thời điểm \(t\): \(d = s = \frac{1}{2}gt^2 = \frac{v^2}{2g}\).</li>
+                    </ul>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV sử dụng PowerPoint hệ thống nhanh các công thức cốt lõi của bài: \(v = gt\); \(s = \frac{1}{2}gt^2\).</li>
+                        <li>GV cung cấp mã PIN/mã QR để các nhóm truy cập vào trò chơi trực tuyến chứa các câu hỏi từ Phiếu học tập số 3.</li>
+                        <li>GV nêu luật chơi: <em>"Mỗi nhóm sử dụng 1 thiết bị số để thực hiện thử thách tính toán nhanh trong 10 câu hỏi. Đòi hỏi tốc độ và sự chính xác. Nghiêm cấm tra cứu đáp án bằng AI hoặc Google trong lúc thi đấu để đảm bảo sự công bằng"</em> (NLAI: NLb).</li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS làm việc theo nhóm, cùng thảo luận nhanh để chọn đáp án đúng trên ứng dụng số (thời gian 45-60 giây cho mỗi câu).</li>
+                        <li>HS sử dụng máy tính khoa học trên điện thoại hoặc phần mềm bảng tính để giải quyết các câu hỏi tính toán độ cao tháp (Câu 4) hoặc tỉ số vận tốc (Câu 7).</li>
+                        <li>GV theo dõi tiến độ và tỉ lệ trả lời đúng của cả lớp qua màn hình điều khiển (Teacher Dashboard) để nhận diện các kiến thức HS còn lúng túng.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>GV trình chiếu bảng tổng kết điểm số của các nhóm lên màn hình chính.</li>
+                        <li>GV mời đại diện nhóm có kết quả tốt nhất giải thích cách lập luận cho các câu hỏi khó (ví dụ: Câu 6 về tỉ số độ cao dựa trên thời gian rơi).</li>
+                        <li>Các nhóm khác sử dụng thiết bị số để gửi nhận xét hoặc đặt câu hỏi phản biện cho nhóm bạn thông qua phần bình luận trực tuyến.</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả</strong></p>
+                    <ul>
+                        <li>GV tổng kết, chuẩn hóa toàn bộ đáp án của Phiếu học tập số 3.</li>
+                        <li><strong>Đánh giá NLAI:</strong> GV khen ngợi tư duy làm chủ toán học của HS (NLa): <em>"Công cụ số bấm ra kết quả là 4 hay 3 rất nhanh, nhưng bộ não của các em mới là nơi thiết lập đúng tỉ lệ thuận nghịch của các đại lượng vật lí."</em></li>
+                        <li>Nhấn mạnh lưu ý: Gia tốc rơi tự do \(g\) không đổi về hướng và độ lớn tại một nơi nhất định, là đặc điểm quan trọng nhất của chuyển động này.</li>
+                    </ul>
+                </td>
+            </tr>
+
+            <!-- HOẠT ĐỘNG 4 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 4:<br>VẬN DỤNG</strong><br>
+                    (3 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>a. Mục tiêu:</strong></p>
+                    <ul>
+                        <li><strong>Về kiến thức:</strong> Giúp HS tự vận dụng kiến thức về sự rơi tự do vào các tình huống thực tế đơn giản như tính toán thời gian rơi, vận tốc chạm đất hoặc đo đạc độ cao. Biết cách xác định phương thẳng đứng và phương nằm ngang trong đời sống bằng các dụng cụ tự chế.</li>
+                        <li><strong>Về năng lực số:</strong>
+                            <ul>
+                                <li>1.1.NC1b: Tra cứu dữ liệu số về gia tốc trọng trường tại các địa điểm khác nhau trên Trái Đất hoặc các thiên thể qua website khoa học.</li>
+                                <li>3.1.NC1a: Thiết kế sản phẩm học tập số (infographic, video clip ngắn) mô tả quá trình thực hiện nhiệm vụ đo đạc thực tế.</li>
+                                <li>5.3.NC1a: Áp dụng các phần mềm/ứng dụng phân tích video chuyển động trên điện thoại để thu thập số liệu.</li>
+                                <li>3.3.NC1a & 4.2.NC1a: Ý thức thực thi bản quyền học liệu số và bảo vệ dữ liệu cá nhân khi tương tác, chia sẻ kết quả trên không gian mạng.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Về năng lực AI (NLAI):</strong>
+                            <ul>
+                                <li>NLa: Nhận thức được rằng phần mềm hoặc AI có thể tính ra gia tốc \(g = 9,6\) m/s², nhưng con người phải phân tích được nguyên nhân gây ra sai số (do lực cản không khí tác dụng lên vật ném) để kết luận tính hợp lí của kết quả.</li>
+                                <li>NLb: Thể hiện tính liêm chính học thuật, khách quan và trung thực khi báo cáo số liệu; tự giác khai báo minh bạch nếu có sử dụng công cụ AI (ChatGPT/Gemini) hỗ trợ lên ý tưởng hoặc viết kịch bản báo cáo.</li>
+                                <li>NLc: Biết cách thiết lập câu lệnh (prompt) đóng vai trò để nhờ AI hướng dẫn cách giảm thiểu sai số khi đo thời gian rơi tự do bằng điện thoại.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>b. Nội dung:</strong> HS thực hiện các nhiệm vụ sau tại nhà (theo nhóm hoặc cá nhân):</p>
+                    <ol>
+                        <li><strong>Thử thách "Kiến trúc sư đo đạc":</strong> Hãy đề xuất phương án và tiến hành đo gần đúng độ sâu của một cái giếng cạn hoặc độ cao của một ban công bằng cách sử dụng một viên đá và ứng dụng đồng hồ bấm giây trên điện thoại.</li>
+                        <li><strong>Khám phá số:</strong> Tra cứu Internet để giải thích tại sao gia tốc rơi tự do lại thay đổi theo vĩ độ. Sưu tầm hình ảnh/video về các vật rơi trong môi trường không trọng lực (trạm ISS).</li>
+                        <li><strong>Chuẩn bị bài mới:</strong> Tìm hiểu và cài đặt thử các phần mềm/ứng dụng phân tích video chuyển động (như Tracker hoặc các app đo gia tốc rơi) để chuẩn bị cho "Bài 11: Thực hành đo gia tốc rơi tự do".</li>
+                    </ol>
+                    <p><strong>c. Sản phẩm:</strong></p>
+                    <ul>
+                        <li>Bài làm chi tiết trong vở ghi cá nhân.</li>
+                        <li>Sản phẩm số: File trình chiếu (PowerPoint/Canva), Poster điện tử hoặc link video thực hiện thí nghiệm đo độ cao nộp qua link Google Drive hoặc nhóm Zalo lớp.</li>
+                        <li>Nhật ký Đạo đức số & AI: Khung trích dẫn ở cuối sản phẩm ghi rõ nguồn tài liệu tham khảo và dòng chữ: <em>"Báo cáo có sự hỗ trợ của AI trong việc lên ý tưởng cấu trúc"</em> (nếu có sử dụng).</li>
+                    </ul>
+                    <p><strong>d. Tổ chức thực hiện:</strong></p>
+                    <p><strong>Bước 1: GV chuyển giao nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>GV chuyển giao nhiệm vụ qua slide cuối tiết học và gửi tệp hướng dẫn chi tiết (kèm link các nguồn học liệu số uy tín) vào nhóm lớp trực tuyến.</li>
+                        <li>GV nhắc nhở HS về các tiêu chí đánh giá sản phẩm số và yêu cầu trích dẫn nguồn hình ảnh, tài liệu tra cứu.</li>
+                        <li><strong>Quy định Đạo đức số & AI (Mã 3.3.NC1a, NLAI: NLb):</strong> GV dặn dò: <em>"Khi quay video tại nhà, các em chú ý không để lộ thông tin nhạy cảm (như địa chỉ nhà chi tiết) để bảo vệ dữ liệu cá nhân. Các em được phép dùng AI để hỏi cách xử lí sai số, nhưng phải tóm tắt lại bằng ý hiểu của mình và ghi chú rõ ràng trên sản phẩm."</em></li>
+                    </ul>
+                    <p><strong>Bước 2: HS thực hiện nhiệm vụ học tập</strong></p>
+                    <ul>
+                        <li>HS thực hiện nhiệm vụ theo cá nhân hoặc nhóm bạn cùng khu phố ở nhà.</li>
+                        <li>Nhóm chọn Dự án 2 có thể tương tác với AI (NLAI: NLc) bằng prompt: <em>"Đóng vai một kĩ sư phòng thí nghiệm vật lí, hãy hướng dẫn tôi 3 mẹo để quay video vật rơi tự do bằng điện thoại sao cho phần mềm Tracker có thể phân tích chính xác nhất (ví dụ: về ánh sáng, góc quay, độ tương phản của vật)."</em></li>
+                        <li>HS khai thác các học liệu số và sử dụng smartphone để thu thập số liệu.</li>
+                        <li>GV đóng vai trò cố vấn, hỗ trợ giải đáp thắc mắc cho HS thông qua các kênh online như Zalo, Facebook nhóm lớp.</li>
+                    </ul>
+                    <p><strong>Bước 3: Báo cáo kết quả hoạt động và thảo luận</strong></p>
+                    <ul>
+                        <li>Các nhóm nộp sản phẩm số qua link tổng hợp trước buổi học kế tiếp.</li>
+                        <li>Vào đầu tiết học sau, GV chọn 2-3 sản phẩm xuất sắc nhất (ví dụ: video đo độ cao chính xác hoặc infographic giải thích về g sáng tạo) để giới thiệu trước lớp.</li>
+                        <li>HS các nhóm khác nhận xét, phản biện và chấm chéo sản phẩm dựa trên tiêu chí nội dung vật lí và tính sáng tạo số.</li>
+                        <li>Các nhóm khác truy cập vào không gian số của lớp để xem, bình duyệt chéo (Peer-review) và phản biện: <em>"Tại sao gia tốc nhóm bạn tính ra chỉ có 9,4 m/s²?"</em> → HS vận dụng tư duy vật lí (NLAI: NLa) để giải thích sự ảnh hưởng của lực cản không khí thực tế.</li>
+                    </ul>
+                    <p><strong>Bước 4: Đánh giá kết quả</strong></p>
+                    <ul>
+                        <li>GV tổng kết, nhận xét về mức độ vận dụng kiến thức sự rơi tự do và kĩ năng ứng dụng công nghệ số của HS.</li>
+                        <li>GV chuẩn hóa lại cách xác định phương thẳng đứng và phương nằm ngang trong thực tế.</li>
+                        <li>Nhắc nhở HS chuẩn bị đầy đủ thiết bị số cho bài thực hành ở tiết tiếp theo.</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG -->
+    <h2>IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG (NẾU CÓ)</h2>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+
+    <!-- Ký duyệt -->
+    <div class="signature">
+        <div class="signature-box">
+            <p><strong>Duyệt TCM</strong></p>
+            <p class="signature-name"><input type="text" placeholder="Lục Tuyến"></p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    function disableKeys(e) {
+        if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) return true;
+        if (e.ctrlKey && e.shiftKey && (e.key === 'p' || e.key === 'P')) return true;
+        if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'a' || e.key === 'A')) {
+            e.preventDefault(); return false;
+        }
+        if (e.key === 'F12') { e.preventDefault(); return false; }
+        return true;
+    }
+    document.addEventListener('dragstart', function(e) { e.preventDefault(); });
+    document.addEventListener('selectstart', function(e) {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') e.preventDefault();
+    });
+    document.querySelectorAll('input, textarea').forEach(function(el) {
+        el.addEventListener('selectstart', function(e) { e.stopPropagation(); });
+        el.addEventListener('dragstart', function(e) { e.stopPropagation(); });
+    });
+</script>
+
+</body>
+</html>

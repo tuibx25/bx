@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giáo án Bài 13 - Vật lí 10</title>
+    <!-- MathJax để hiển thị công thức toán học -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Thiết lập cơ bản cho trang in A4 */
+        @page {
+            size: A4;
+            margin: 20mm 15mm;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            line-height: 1.4;
+            color: #000000; /* Chữ ưu tiên màu đen */
+            background-color: #FFFFFF; /* Nền trắng */
+            margin: 0;
+            padding: 0;
+            /* Chống chọn văn bản */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        .container {
+            width: 100%;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        /* Tiêu đề */
+        h1, h2, h3, h4 {
+            color: #004488; /* Màu xanh đậm */
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 18pt;
+            color: #8B4513; /* Màu nâu đậm */
+            border-bottom: 2px solid #8B4513;
+            padding-bottom: 5px;
+        }
+        h2 {
+            font-size: 15pt;
+            border-bottom: 1px solid #D3D3D3;
+            padding-bottom: 3px;
+            color: #8B5A2B;
+        }
+        h3 {
+            font-size: 14pt;
+            color: #0066CC; /* Màu xanh */
+        }
+        h4 {
+            font-size: 13pt;
+            color: #8B5A2B;
+        }
+        /* Bảng */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 12pt;
+        }
+        th, td {
+            border: 1px solid #D3D3D3;
+            padding: 6px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #F5F5DC; /* Màu be nhạt */
+            color: #004488;
+            font-weight: bold;
+        }
+        /* Tiến trình dạy học chia 2 cột */
+        .tien-trinh {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .tien-trinh th {
+            background-color: #F5DEB3; /* Màu lúa mì */
+            color: #004488;
+            text-align: center;
+        }
+        .tien-trinh td {
+            vertical-align: top;
+        }
+        .col-buoc {
+            width: 25%;
+            background-color: #F5F5F5; /* Màu xám rất nhạt */
+            font-weight: bold;
+            color: #8B4513;
+        }
+        .col-noidung {
+            width: 75%;
+        }
+        /* Hộp thoại, ghi chú */
+        .box {
+            background-color: #F5F5DC;
+            border-left: 5px solid #8B5A2B;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .red-text {
+            color: #CC0000; /* Màu đỏ dùng cho trường hợp đặc biệt */
+            font-weight: bold;
+        }
+        .blue-text {
+            color: #0066CC;
+        }
+        /* Hình ảnh */
+        .img-container {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .img-container img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #D3D3D3;
+            /* Chống kéo thả ảnh */
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+            pointer-events: none;
+        }
+        .img-small {
+            max-width: 250px;
+        }
+        .img-medium {
+            max-width: 350px;
+        }
+        .img-large {
+            max-width: 500px;
+        }
+        /* Danh sách */
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        /* Công thức */
+        .formula {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 14pt;
+        }
+        /* Ô nhập liệu thủ công */
+        .input-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            font-weight: bold;
+            color: #000000;
+            background-color: #FFFFFF;
+            border: 1px solid #D3D3D3;
+            border-radius: 3px;
+            padding: 2px 5px;
+            width: 200px;
+        }
+        .input-text:focus {
+            outline: none;
+            border-color: #8B4513;
+        }
+        /* Ký duyệt */
+        .signature {
+            margin-top: 30px;
+            display: flex;
+            justify-content: flex-end;
+            text-align: center;
+            font-weight: bold;
+        }
+        .signature-box {
+            width: 200px;
+            border-top: 2px solid #8B4513; /* Nét kẻ ngang giống tiêu đề */
+            padding-top: 10px;
+        }
+        .signature-name {
+            margin-top: 50px;
+        }
+        .signature-name input {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            font-weight: bold;
+            color: #000000;
+            background-color: #FFFFFF;
+            border: 1px solid #D3D3D3;
+            border-radius: 3px;
+            padding: 2px 5px;
+            width: 150px;
+            text-align: center;
+        }
+        .signature-name input:focus {
+            outline: none;
+            border-color: #8B4513;
+        }
+        /* Điều chỉnh khi in */
+        @media print {
+            body {
+                font-size: 12pt;
+                -webkit-user-select: auto;
+                -moz-user-select: auto;
+                -ms-user-select: auto;
+                user-select: auto;
+            }
+            .container {
+                padding: 0;
+            }
+            .no-print {
+                display: none;
+            }
+            .input-text, .signature-name input {
+                border: none;
+                background: transparent;
+                color: #000;
+                font-weight: bold;
+            }
+            .img-container img {
+                pointer-events: auto;
+            }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" onkeydown="return disableKeys(event);" ondragstart="return false;" onselectstart="return false;">
+
+<div class="container">
+
+    <!-- Ngày soạn -->
+    <p><strong>Ngày soạn:</strong> <input type="text" class="input-text" placeholder="....../....../20......"></p>
+
+    <!-- Tiêu đề giáo án -->
+    <h1>GIÁO ÁN BÀI 13: TỔNG HỢP VÀ PHÂN TÍCH LỰC. CÂN BẰNG LỰC</h1>
+    <p style="text-align: center; font-style: italic;">Môn: Vật lí 10 – Bộ sách Kết nối tri thức với cuộc sống</p>
+    <p style="text-align: center;">Số tiết: 2 (Tiết 21, 22 theo PPCT)</p>
+
+    <!-- I. MỤC TIÊU -->
+    <h2>I. MỤC TIÊU</h2>
+
+    <h3>1. Kiến thức</h3>
+    <ul>
+        <li>Phát biểu được khái niệm tổng hợp lực, hợp lực, phân tích lực.</li>
+        <li>Nêu được quy tắc hình bình hành để tổng hợp hai lực đồng quy.</li>
+        <li>Nêu được điều kiện cân bằng của một vật chịu tác dụng của nhiều lực.</li>
+        <li>Biết cách phân tích một lực thành hai lực thành phần vuông góc.</li>
+        <li>Vận dụng được quy tắc hình bình hành và điều kiện cân bằng để giải một số bài tập đơn giản.</li>
+    </ul>
+
+    <h3>2. Năng lực</h3>
+    <h4>a. Năng lực chung</h4>
+    <ul>
+        <li>Tự chủ và tự học: Tìm hiểu trước nội dung bài học qua SGK và internet.</li>
+        <li>Giao tiếp và hợp tác: Thảo luận nhóm để tổng hợp và phân tích lực.</li>
+        <li>Giải quyết vấn đề và sáng tạo: Vận dụng kiến thức để giải thích các tình huống thực tế.</li>
+    </ul>
+    <h4>b. Năng lực đặc thù môn học</h4>
+    <ul>
+        <li>Biểu diễn được vectơ lực và hợp lực.</li>
+        <li>Vận dụng được quy tắc hình bình hành để tìm hợp lực.</li>
+        <li>Phân tích được một lực thành hai lực thành phần vuông góc.</li>
+    </ul>
+    <h4>b. Năng lực số</h4>
+    <ul>
+        <li><strong>1.1.NC1c:</strong> Tìm và lọc 2 nguồn về Tổng hợp và phân tích lực. Cân bằng lực; dùng AI gợi ý từ khóa/giải thích ban đầu, đối chiếu SGK và ghi nguồn.</li>
+    </ul>
+
+    <h3>3. Phẩm chất</h3>
+    <ul>
+        <li><strong>Chăm chỉ:</strong> Tích cực tham gia thảo luận nhóm, hoàn thành các nhiệm vụ học tập được giao.</li>
+        <li><strong>Trung thực:</strong> Báo cáo trung thực kết quả thảo luận, không sao chép kết quả của nhóm khác.</li>
+        <li><strong>Trách nhiệm:</strong> Có ý thức giữ gìn, bảo quản dụng cụ học tập và thiết bị thí nghiệm.</li>
+        <li><strong>Cẩn thận, tỉ mỉ:</strong> Vẽ vectơ lực và hợp lực chính xác, tính toán cẩn thận.</li>
+    </ul>
+
+    <!-- II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU -->
+    <h2>II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU</h2>
+
+    <h3>1. Giáo viên</h3>
+    <ul>
+        <li>SGK Vật lí 10, SGV, máy chiếu, máy tính.</li>
+        <li>Hình ảnh, video minh họa về tổng hợp lực, phân tích lực, cân bằng lực.</li>
+        <li>Phiếu học tập.</li>
+    </ul>
+
+    <h3>2. Học sinh</h3>
+    <ul>
+        <li>SGK Vật lí 10, vở ghi, máy tính/điện thoại có kết nối internet (nếu có).</li>
+        <li>Ôn tập lại kiến thức về lực, hai lực cân bằng đã học ở cấp THCS.</li>
+        <li>Hoàn thành nhiệm vụ học tập trực tuyến trước khi đến lớp (tìm hiểu về tổng hợp và phân tích lực qua internet, ChatGPT).</li>
+    </ul>
+
+    <!-- III. TIẾN TRÌNH DẠY HỌC -->
+    <h2>III. TIẾN TRÌNH DẠY HỌC</h2>
+
+    <!-- TIẾT 1 -->
+    <h3>Tiết 1: Tổng hợp lực - Hợp lực tác dụng</h3>
+
+    <table class="tien-trinh">
+        <thead>
+            <tr>
+                <th class="col-buoc">Bước thực hiện</th>
+                <th class="col-noidung">Nội dung các bước</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- HOẠT ĐỘNG 1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 1:<br>KHỞI ĐỘNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Tạo hứng thú, dẫn dắt học sinh vào bài mới.</p>
+                    <p><strong>Nội dung:</strong> Học sinh quan sát hình ảnh và trả lời câu hỏi.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV chiếu hình ảnh hai tàu kéo giống nhau dùng dây cáp để kéo một tàu chở hàng bị chết máy vào cảng bằng hai lực \(\vec{F}_1\) và \(\vec{F}_2\) (Hình 01.png).</li>
+                        <li>GV đặt câu hỏi: "Tàu chở hàng sẽ chuyển động theo hướng nào? Làm thế nào để tính được độ lớn của lực kéo tác dụng lên tàu chở hàng?"</li>
+                        <li>HS suy nghĩ, trả lời.</li>
+                        <li>GV nhận xét, dẫn dắt vào bài: "Để trả lời câu hỏi này, chúng ta cùng tìm hiểu Bài 13: Tổng hợp và phân tích lực. Cân bằng lực."</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="01.png" alt="Hình ảnh hai tàu kéo tàu chở hàng" class="img-medium">
+                        <p><em>Hình ảnh minh họa: Hai tàu kéo tàu chở hàng</em></p>
+                    </div>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 2 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2:<br>HÌNH THÀNH KIẾN THỨC</strong><br>
+                    (25 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Hình thành khái niệm tổng hợp lực, hợp lực, quy tắc hình bình hành.</p>
+                    <p><strong>Nội dung:</strong> Tìm hiểu khái niệm tổng hợp lực, hợp lực, quy tắc hình bình hành.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời, kết quả thảo luận, công thức.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    
+                    <p><strong>1. Tổng hợp lực - Hợp lực tác dụng</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc SGK mục I, nêu khái niệm tổng hợp lực và hợp lực.</li>
+                        <li>HS trả lời:
+                            <ul>
+                                <li><strong>Tổng hợp lực:</strong> là phép thay thế các lực tác dụng đồng thời vào cùng một vật bằng một lực có tác dụng giống hệt như các lực ấy.</li>
+                                <li><strong>Hợp lực:</strong> là lực thay thế này.</li>
+                            </ul>
+                        </li>
+                        <li>GV nhấn mạnh: Về mặt toán học, ta có thể tìm hợp lực bằng phép cộng vectơ:
+                            <div class="formula">
+                                \[ \vec{F} = \vec{F}_1 + \vec{F}_2 + \vec{F}_3 + \dots \]
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="13.1.png" alt="Hình 13.1 - Ví dụ về tổng hợp lực" class="img-medium">
+                        <p><em>Hình 13.1. Ví dụ về tổng hợp lực</em></p>
+                    </div>
+
+                    <p><strong>2. Tổng hợp hai lực cùng phương</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS quan sát Hình 13.2, thảo luận để trả lời:
+                            <ul>
+                                <li>Cách xác định độ lớn và chiều của hợp lực trong trường hợp hai lực cùng phương, cùng chiều?</li>
+                                <li>Cách xác định độ lớn và chiều của hợp lực trong trường hợp hai lực cùng phương, ngược chiều?</li>
+                                <li>Nêu quy tắc tổng hợp hai lực cùng phương.</li>
+                            </ul>
+                        </li>
+                        <li>HS thảo luận, trả lời:
+                            <ul>
+                                <li>Cùng chiều: \(F = F_1 + F_2\), hợp lực cùng chiều với hai lực.</li>
+                                <li>Ngược chiều: \(F = |F_1 - F_2|\), hợp lực cùng chiều với lực lớn hơn.</li>
+                            </ul>
+                        </li>
+                        <li>GV nhận xét, kết luận.</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="13.2.png" alt="Hình 13.2 - Tổng hợp hai lực cùng phương" class="img-medium">
+                        <p><em>Hình 13.2. Tổng hợp hai lực cùng phương</em></p>
+                    </div>
+
+                    <p><strong>3. Tổng hợp hai lực đồng quy - Quy tắc hình bình hành</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS quan sát Hình 13.3, nêu quy tắc hình bình hành.</li>
+                        <li>HS trả lời: Quy tắc hình bình hành được thực hiện qua 3 bước:
+                            <ul>
+                                <li><strong>Bước 1:</strong> Vẽ hai vectơ \(\vec{F}_1\) và \(\vec{F}_2\) đồng quy tại O.</li>
+                                <li><strong>Bước 2:</strong> Vẽ một hình bình hành có hai cạnh liên kề trùng với hai vectơ \(\vec{F}_1\) và \(\vec{F}_2\).</li>
+                                <li><strong>Bước 3:</strong> Vẽ đường chéo hình bình hành có cùng gốc O. Vectơ hợp lực \(\vec{F}\) trùng với đường chéo này.</li>
+                            </ul>
+                        </li>
+                        <li>GV nhấn mạnh: Độ lớn của hợp lực được tính theo công thức:
+                            <div class="formula">
+                                \[ F = \sqrt{F_1^2 + F_2^2 + 2F_1F_2\cos\alpha} \]
+                            </div>
+                            Trong đó \(\alpha\) là góc giữa hai lực \(\vec{F}_1\) và \(\vec{F}_2\).
+                        </li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="13.3.png" alt="Hình 13.3 - Tổng hợp lực theo quy tắc hình bình hành" class="img-medium">
+                        <p><em>Hình 13.3. Tổng hợp lực theo quy tắc hình bình hành</em></p>
+                    </div>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 3:<br>LUYỆN TẬP</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng quy tắc hình bình hành để giải bài tập đơn giản.</p>
+                    <p><strong>Nội dung:</strong> Giải bài tập ví dụ SGK.</p>
+                    <p><strong>Sản phẩm:</strong> Lời giải của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc và tóm tắt Bài tập ví dụ (sgk tr.58).</li>
+                        <li>HS tóm tắt: \(F_1 = 8000\) N, \(F_2 = 8000\) N, góc giữa hai dây cáp là \(30^\circ\). Tính độ lớn hợp lực.</li>
+                        <li>GV gọi 1 HS lên bảng giải, các HS khác làm vào vở.</li>
+                        <li>HS giải:
+                            <div class="formula">
+                                \[ F = \sqrt{F_1^2 + F_2^2 + 2F_1F_2\cos\alpha} \]
+                                \[ F = \sqrt{8000^2 + 8000^2 + 2 \cdot 8000 \cdot 8000 \cdot \cos 30^\circ} \]
+                                \[ F \approx 15455 \text{ N} \]
+                            </div>
+                        </li>
+                        <li>GV nhận xét, chính xác hóa kết quả.</li>
+                    </ul>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 4 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 4:<br>VẬN DỤNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng kiến thức vào thực tế.</p>
+                    <p><strong>Nội dung:</strong> Trả lời câu hỏi vận dụng.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV đặt câu hỏi: "Nếu góc giữa hai dây cáp bằng \(90^\circ\) thì hợp lực của hai lực kéo có phương, chiều và độ lớn như thế nào?"</li>
+                        <li>HS vận dụng kiến thức để trả lời:
+                            <div class="formula">
+                                \[ F = \sqrt{F_1^2 + F_2^2} = \sqrt{8000^2 + 8000^2} \approx 11314 \text{ N} \]
+                            </div>
+                            Hợp lực có phương xiên góc \(45^\circ\) so với mỗi dây cáp.
+                        </li>
+                        <li>GV nhận xét, kết thúc tiết 1.</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- TIẾT 2 -->
+    <h3 style="margin-top: 30px;">Tiết 2: Các lực cân bằng và không cân bằng - Phân tích lực</h3>
+
+    <table class="tien-trinh">
+        <thead>
+            <tr>
+                <th class="col-buoc">Bước thực hiện</th>
+                <th class="col-noidung">Nội dung các bước</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- HOẠT ĐỘNG 1 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 1:<br>KHỞI ĐỘNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Tạo tình huống có vấn đề về các lực cân bằng và không cân bằng.</p>
+                    <p><strong>Nội dung:</strong> Quan sát hình ảnh và dự đoán.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV chiếu Hình 13.4 (sgk) về hai lực cân bằng.</li>
+                        <li>GV đặt câu hỏi: "Quan sát quyển sách đang nằm yên trên mặt bàn. Có những lực nào tác dụng lên quyển sách? Các lực này có cân bằng không? Vì sao?"</li>
+                        <li>HS quan sát, dự đoán.</li>
+                        <li>GV dẫn dắt vào bài: "Để trả lời, chúng ta cùng tìm hiểu phần II. Các lực cân bằng và không cân bằng."</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="13.4.png" alt="Hình 13.4 - Hai lực cân bằng" class="img-medium">
+                        <p><em>Hình 13.4. Hai lực cân bằng</em></p>
+                    </div>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 2 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 2:<br>HÌNH THÀNH KIẾN THỨC</strong><br>
+                    (25 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Hình thành khái niệm các lực cân bằng, không cân bằng và phân tích lực.</p>
+                    <p><strong>Nội dung:</strong> Tìm hiểu các lực cân bằng, không cân bằng và quy tắc phân tích lực.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời, kết quả thảo luận, công thức.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+
+                    <p><strong>1. Các lực cân bằng</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc SGK mục II.1, nêu khái niệm các lực cân bằng.</li>
+                        <li>HS trả lời: Khi vật đứng yên dưới tác dụng của nhiều lực, tổng hợp các lực tác dụng lên vật bằng 0. Ta nói các lực tác dụng lên vật là các lực cân bằng và vật ở trạng thái cân bằng.
+                            <div class="formula">
+                                \[ \vec{F} = \vec{F}_1 + \vec{F}_2 + \vec{F}_3 + \dots = \vec{0} \]
+                            </div>
+                        </li>
+                        <li>GV yêu cầu HS quan sát Hình 13.5 và trả lời câu hỏi trong SGK.</li>
+                        <li>HS trả lời: Quyển sách chịu tác dụng của trọng lực \(\vec{P}\) và phản lực \(\vec{N}\) của mặt bàn. Hai lực này cân bằng nhau vì cùng phương, ngược chiều, cùng độ lớn.</li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="13.5.png" alt="Hình 13.5 - Quyển sách nằm yên trên mặt bàn" class="img-medium">
+                        <p><em>Hình 13.5. Quyển sách nằm yên trên mặt bàn</em></p>
+                    </div>
+
+                    <p><strong>2. Các lực không cân bằng</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc SGK mục II.2, nêu khái niệm các lực không cân bằng.</li>
+                        <li>HS trả lời: Khi hợp lực của các lực khác 0 thì các lực này không cân bằng. Hợp lực hay các lực không cân bằng này tác dụng vào một vật có thể làm thay đổi vận tốc của vật.</li>
+                        <li>GV yêu cầu HS quan sát Hình 13.6 và 13.7, thảo luận để trả lời câu hỏi trong SGK.</li>
+                        <li>HS trả lời:
+                            <ul>
+                                <li>Hình 13.6: Ô tô chịu lực \(F_1 = 400\) N hướng về phía trước và lực \(F_2 = 300\) N hướng về phía sau. Hợp lực có độ lớn 100 N, hướng về phía trước.</li>
+                                <li>Hình 13.7: Bút chì nằm yên trên bàn (cân bằng), khi dùng tay đẩy thì bút chì chuyển động nhanh dần (không cân bằng). Quả bóng nằm yên ở gần mép bàn (cân bằng), khi vừa rơi khỏi mép bàn thì chuyển động nhanh dần (không cân bằng).</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="13.6.png" alt="Hình 13.6 - Ô tô chịu hai lực không cân bằng" class="img-medium">
+                        <p><em>Hình 13.6. Ô tô chịu hai lực không cân bằng</em></p>
+                    </div>
+                    <div class="img-container">
+                        <img src="13.7.png" alt="Hình 13.7 - Ví dụ về các lực cân bằng và không cân bằng" class="img-medium">
+                        <p><em>Hình 13.7. Ví dụ về các lực cân bằng và không cân bằng</em></p>
+                    </div>
+
+                    <p><strong>3. Phân tích lực</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc SGK mục III, nêu khái niệm phân tích lực.</li>
+                        <li>HS trả lời: Phân tích lực là phép thay thế một lực bằng hai lực thành phần có tác dụng giống hệt lực đó. Phân tích lực là phép làm ngược lại với tổng hợp lực.</li>
+                        <li>GV nhấn mạnh: Chỉ khi xác định được một lực có tác dụng theo hai phương vuông góc nào thì mới phân tích lực theo hai phương vuông góc đó.</li>
+                        <li>GV yêu cầu HS quan sát Hình 13.8, 13.9, 13.10 và trả lời câu hỏi trong SGK.</li>
+                        <li>HS trả lời:
+                            <ul>
+                                <li>Hình 13.8: Phân tích lực \(\vec{F}\) theo hai trục vuông góc.</li>
+                                <li>Hình 13.9: Phân tích trọng lực \(\vec{P}\) thành hai thành phần: \(\vec{P}_x\) song song với mặt phẳng nghiêng, \(\vec{P}_y\) vuông góc với mặt phẳng nghiêng.</li>
+                                <li>Hình 13.10: Vật được giữ yên trên mặt phẳng nghiêng nhẵn bởi một lò xo. Các lực tác dụng lên vật gồm: trọng lực \(\vec{P}\), lực đàn hồi \(\vec{F}_{dh}\), phản lực \(\vec{N}\).</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="img-container">
+                        <img src="13.8.png" alt="Hình 13.8 - Phân tích lực theo hai trục vuông góc" class="img-medium">
+                        <p><em>Hình 13.8. Phân tích lực theo hai trục vuông góc</em></p>
+                    </div>
+                    <div class="img-container">
+                        <img src="13.9.png" alt="Hình 13.9 - Phân tích trọng lực trên mặt phẳng nghiêng" class="img-medium">
+                        <p><em>Hình 13.9. Phân tích trọng lực trên mặt phẳng nghiêng</em></p>
+                    </div>
+                    <div class="img-container">
+                        <img src="13.10.png" alt="Hình 13.10 - Vật được giữ yên trên mặt phẳng nghiêng" class="img-medium">
+                        <p><em>Hình 13.10. Vật được giữ yên trên mặt phẳng nghiêng</em></p>
+                    </div>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 3 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 3:<br>LUYỆN TẬP</strong><br>
+                    (10 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng quy tắc phân tích lực để giải bài tập.</p>
+                    <p><strong>Nội dung:</strong> Giải bài tập ví dụ SGK.</p>
+                    <p><strong>Sản phẩm:</strong> Lời giải của học sinh.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV yêu cầu HS đọc và tóm tắt Bài tập ví dụ (sgk tr.59).</li>
+                        <li>HS tóm tắt: Vật có khối lượng \(m = 5\) kg đặt trên mặt phẳng nghiêng góc \(\alpha = 30^\circ\). Tính các thành phần của trọng lực.</li>
+                        <li>GV gọi 1 HS lên bảng giải, các HS khác làm vào vở.</li>
+                        <li>HS giải:
+                            <div class="formula">
+                                \[ P_x = P \cdot \sin\alpha = m \cdot g \cdot \sin 30^\circ = 5 \cdot 9.8 \cdot 0.5 = 24.5 \text{ N} \]
+                                \[ P_y = P \cdot \cos\alpha = m \cdot g \cdot \cos 30^\circ = 5 \cdot 9.8 \cdot \frac{\sqrt{3}}{2} \approx 42.4 \text{ N} \]
+                            </div>
+                        </li>
+                        <li>GV nhận xét, chính xác hóa kết quả.</li>
+                    </ul>
+                </td>
+            </tr>
+            <!-- HOẠT ĐỘNG 4 -->
+            <tr>
+                <td class="col-buoc">
+                    <strong>HOẠT ĐỘNG 4:<br>VẬN DỤNG</strong><br>
+                    (5 phút)
+                </td>
+                <td class="col-noidung">
+                    <p><strong>Mục tiêu:</strong> Vận dụng kiến thức vào thực tế và giao nhiệm vụ về nhà.</p>
+                    <p><strong>Nội dung:</strong> Trả lời câu hỏi vận dụng, giao nhiệm vụ năng lực số.</p>
+                    <p><strong>Sản phẩm:</strong> Câu trả lời của học sinh, sản phẩm bảng/đồ thị.</p>
+                    <p><strong>Tổ chức thực hiện:</strong></p>
+                    <ul>
+                        <li>GV đặt câu hỏi: "Trong thực tế, khi kéo một vật nặng trên mặt phẳng nghiêng, người ta thường đặt vật như thế nào để giảm lực kéo? Tại sao?"</li>
+                        <li>HS vận dụng kiến thức: Đặt vật nằm theo phương song song với mặt phẳng nghiêng để giảm thành phần \(P_x\) của trọng lực, từ đó giảm lực kéo cần thiết.</li>
+                        <li>GV giao nhiệm vụ về nhà:
+                            <ul>
+                                <li><strong>Nhiệm vụ năng lực số (1.1.NC1c):</strong> Tìm và lọc 2 nguồn về Tổng hợp và phân tích lực. Cân bằng lực; dùng AI gợi ý từ khóa/giải thích ban đầu, đối chiếu SGK và ghi nguồn.</li>
+                                <li><strong>Nhiệm vụ trực tuyến:</strong> Tìm hiểu thêm trên internet về tổng hợp và phân tích lực để hoàn thiện nội dung học tập.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG -->
+    <h2>IV. ĐIỀU CHỈNH, THAY ĐỔI, BỔ SUNG (NẾU CÓ)</h2>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+    <p>.................................................................................................................</p>
+
+    <!-- Ký duyệt -->
+    <div class="signature">
+        <div class="signature-box">
+            <p><strong>Duyệt TCM</strong></p>
+            <p class="signature-name"><input type="text" placeholder="Lục Tuyến"></p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Chống chuột phải
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+
+    // Chống các phím tắt sao chép, xem nguồn, nhưng CHO PHÉP Ctrl+P
+    function disableKeys(e) {
+        // Cho phép Ctrl+P (in)
+        if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) {
+            return true;
+        }
+        // Cho phép Ctrl+Shift+P (một số trình duyệt dùng để in)
+        if (e.ctrlKey && e.shiftKey && (e.key === 'p' || e.key === 'P')) {
+            return true;
+        }
+        // Chặn Ctrl+S (lưu), Ctrl+U (xem nguồn), Ctrl+C (copy), Ctrl+A (chọn tất cả), F12 (dev tools)
+        if (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'a' || e.key === 'A')) {
+            e.preventDefault();
+            return false;
+        }
+        if (e.key === 'F12') {
+            e.preventDefault();
+            return false;
+        }
+        return true;
+    }
+
+    // Chống kéo thả
+    document.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+    });
+
+    // Chống chọn văn bản (ngoại trừ các ô input)
+    document.addEventListener('selectstart', function(e) {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+        }
+    });
+
+    // Cho phép chọn văn bản trong các ô input
+    document.querySelectorAll('input, textarea').forEach(function(el) {
+        el.addEventListener('selectstart', function(e) {
+            e.stopPropagation();
+        });
+        el.addEventListener('dragstart', function(e) {
+            e.stopPropagation();
+        });
+    });
+</script>
+
+</body>
+</html>
