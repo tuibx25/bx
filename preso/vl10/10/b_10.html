@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bài 10: Sự rơi tự do - Vật lí 10</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Segoe UI',Roboto,Arial,sans-serif;
+    background:#f7fafc;color:#222;line-height:var(--lh,1.32);
+    position:relative;
+  }
+  .app{width:80%;margin:0 auto;padding:20px 0 90px;font-size:19px}
+
+  #nav-left, #nav-right{
+    position:fixed;top:50%;transform:translateY(-50%);
+    display:flex;flex-direction:column;gap:2px;z-index:60;opacity:.8;
+  }
+  #nav-left{left:0}
+  #nav-right{right:0}
+  #nav-left:hover, #nav-right:hover{opacity:1}
+  #nav-left a, #nav-left button, #nav-right button{
+    width:20px;height:16px;padding:0;margin:0;
+    display:flex;align-items:center;justify-content:center;
+    font-size:9px;font-weight:700;line-height:1;font-family:inherit;
+    color:#8494a6;background:rgba(255,255,255,.9);
+    border:1px solid #ccd6e0;cursor:pointer;text-decoration:none;transition:.15s;
+  }
+  #nav-left a, #nav-left button{border-left:none;border-radius:0 5px 5px 0}
+  #nav-right button{border-right:none;border-radius:5px 0 0 5px}
+  #nav-left a:hover, #nav-left button:hover, #nav-right button:hover{
+    background:#0066CC;color:#fff;border-color:#0066CC;
+  }
+  #nav-left .ico{font-size:11px}
+  #nav-right .play-ico{width:9px;height:9px;display:block}
+
+  .lesson-title{text-align:center;margin:.1em 0 .5em}
+  .lesson-title h1{font-size:1.7em;color:#0b5ed7;letter-spacing:.5px;font-weight:800}
+  .part-head{
+    display:inline-block;font-size:1.2em;font-weight:800;color:#0b5ed7;
+    border-bottom:2px solid #0b5ed7;padding-bottom:2px;margin:.1em 0 .4em;
+  }
+  h2.muc{font-size:1.12em;font-weight:700;color:#222;margin:.35em 0 .25em}
+  section.card h3{margin:.6em 0 .25em;color:#333;font-size:1.05em}
+
+  section.card{
+    --padx:1.2em;
+    background:#fff;border:1px solid #e3eaf2;border-radius:12px;
+    padding:.9em 1.2em 1.1em;margin-bottom:1em;
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
+  }
+  section.card p{margin:.25em 0;font-size:1.02em}
+  ul,ol{margin:.3em 0 .3em 1.4em}
+  li{margin:.12em 0;font-size:1.02em}
+
+  .tn-box{background:#eef4ff;border-left:5px solid #7fb3e8;border-radius:8px;padding:.45em .8em;margin:.35em 0;font-size:1.02em}
+  .conclude{background:#fff8e6;border-left:5px solid #eec273;border-radius:8px;padding:.45em .8em;margin:.4em 0;font-size:1.02em}
+  .question{background:#e8f7ee;border-left:5px solid #7cc79a;border-radius:8px;padding:.45em .8em;margin:.4em 0;font-style:italic;font-size:1.02em}
+  .steps{counter-reset:st;list-style:none;margin-left:0}
+  .steps li{counter-increment:st;position:relative;padding-left:1.7em;margin:.3em 0}
+  .steps li::before{
+    content:counter(st);position:absolute;left:0;top:.08em;
+    width:1.25em;height:1.25em;border-radius:50%;background:#0066CC;color:#fff;
+    font-weight:700;font-size:.8em;display:flex;align-items:center;justify-content:center;
+  }
+
+  .fig-box{margin:.5em auto;max-width:13em;text-align:center;cursor:zoom-in}
+  body.present .fig-box{max-width:12em}
+  .fig-box .fig-img{width:100%;height:auto;display:block;background:#fff;border:1px solid #e3eaf2;border-radius:10px;padding:.3em}
+  .fig-box .fig-img.missing{display:none}
+  .fig-box .fig-fallback{display:none;width:100%;height:auto;background:#fff;border:1px solid #e3eaf2;border-radius:10px;padding:.3em}
+  .fig-box .fig-img.missing + .fig-fallback{display:block}
+  .fig-box figcaption{font-size:.72em;color:#6b7a8c;margin-top:.25em;font-style:italic}
+  #zoom-box{position:fixed;inset:0;z-index:9997;background:rgba(10,25,45,.55);backdrop-filter:blur(2px);
+    display:flex;align-items:center;justify-content:center;cursor:zoom-out}
+  #zoom-box.hidden{display:none}
+  #zoom-box img{
+    max-width:92vw;max-height:86vh;width:auto;height:auto;
+    background:#fff;border-radius:12px;padding:10px;box-shadow:0 20px 60px rgba(0,0,0,.4);
+  }
+  #zoom-box svg{width:min(92vw,860px);height:auto;background:#fff;border-radius:12px;padding:10px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+
+  table{width:100%;border-collapse:collapse;margin:.5em 0;font-size:1.02em}
+  th,td{border:1px solid #c9d5e2;padding:.35em .6em;text-align:center}
+  th{background:#4a90d9;color:#fff}
+  tr:nth-child(even){background:#f4f8fc}
+
+  .frac{display:inline-block;vertical-align:middle;text-align:center;margin:0 .12em;line-height:1.05}
+  .frac .num{display:block;padding:0 .25em .06em;border-bottom:2px solid currentColor}
+  .frac .den{display:block;padding:.06em .25em 0}
+  .sqrt{display:inline-flex;align-items:stretch;vertical-align:middle;white-space:nowrap}
+  .sqrt .radsvg{flex:0 0 auto;width:.62em;align-self:stretch;margin-right:-.03em}
+  .sqrt .radicand{display:inline-block;border-top:.09em solid currentColor;padding:.1em .22em 0 .12em}
+
+  .formula-box{
+    background:#f5f9ff;color:#143a66;width:max-content;max-width:100%;
+    margin:.6em auto;padding:.6em 2em;border:1.5px solid #c9ddf5;border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,60,140,.08);text-align:center;font-size:1.3em;letter-spacing:.3px;
+  }
+  .formula-box .f{display:block;margin:.3em 0;font-family:'Cambria Math','Times New Roman',serif;font-weight:600}
+
+  /* ===== Nút phát video NHỎ GỌN (chỉ là nút mở popup) ===== */
+  .video-box{margin:.5em 0;text-align:center}
+  .video-launch{
+    display:inline-flex;align-items:center;gap:.55em;
+    border:none;cursor:pointer;border-radius:999px;
+    background:linear-gradient(135deg,#12325c,#0e1626);color:#fff;
+    font-family:inherit;font-size:.85em;font-weight:600;letter-spacing:.2px;
+    padding:.4em 1.1em;box-shadow:0 3px 10px rgba(10,30,60,.35);transition:.2s;
+  }
+  .video-launch:hover{transform:translateY(-1px);box-shadow:0 5px 14px rgba(10,30,60,.5)}
+  .video-launch .play-ic{
+    flex:0 0 auto;width:1.7em;height:1.7em;border-radius:50%;background:#c62828;
+    display:flex;align-items:center;justify-content:center;font-size:.75em;
+    box-shadow:0 2px 8px rgba(198,40,40,.5);
+  }
+  .video-note{font-size:.78em;color:#6b7a8c;margin-top:.3em}
+  .video-note a{color:#0066CC}
+
+  /* ===== Cửa sổ video THÔNG MINH: tự fit cửa sổ, lớn nhất có thể ===== */
+  #video-modal{
+    position:fixed;inset:0;z-index:9999;
+    background:rgba(8,15,30,.6);backdrop-filter:blur(2px);
+    display:flex;align-items:center;justify-content:center;
+  }
+  #video-modal.hidden{display:none}
+  #video-modal iframe{
+    border:0;border-radius:12px;background:#000;
+    box-shadow:0 24px 70px rgba(0,0,0,.5);
+  }
+  #vm-close{
+    position:absolute;top:10px;right:12px;z-index:2;
+    width:30px;height:30px;border-radius:50%;border:none;cursor:pointer;
+    background:rgba(255,255,255,.92);color:#c62828;font-weight:700;font-size:14px;line-height:1;
+    box-shadow:0 3px 10px rgba(0,0,0,.3);
+  }
+  #vm-close:hover{background:#c62828;color:#fff}
+
+  details{background:#f0f6ff;border:1px solid #d5e5f7;border-radius:10px;padding:.45em .9em;margin:.4em 0;font-size:1.02em}
+  summary{cursor:pointer;font-weight:700;color:#0066CC;padding:.12em 0}
+  details[open] summary{margin-bottom:.25em}
+
+  body.present{overflow:hidden;background:linear-gradient(135deg,#eaf3ff,#f7fafc 45%,#eafaf0)}
+  body.present::before, body.present::after{
+    content:'';position:fixed;border-radius:50%;z-index:0;pointer-events:none;
+    animation:floatBlob 14s ease-in-out infinite alternate;
+  }
+  body.present::before{width:46vmin;height:46vmin;left:-10vmin;top:-12vmin;background:radial-gradient(circle at 35% 35%,rgba(61,138,224,.20),rgba(61,138,224,0) 70%)}
+  body.present::after{width:52vmin;height:52vmin;right:-14vmin;bottom:-16vmin;background:radial-gradient(circle at 60% 60%,rgba(124,199,154,.22),rgba(124,199,154,0) 70%);animation-delay:-7s}
+  @keyframes floatBlob{from{transform:translate(0,0) scale(1)}to{transform:translate(5vw,-4vh) scale(1.18)}}
+
+  body.present .app{padding:0;width:auto}
+  body.present .slide{
+    --padx:1.5em;
+    display:none;position:fixed;inset:3.5vh 5vw 8vh;z-index:10;overflow:auto;
+    margin:0;border-radius:18px;border:1px solid #e3eaf2;
+    background:rgba(255,255,255,.95);box-shadow:0 12px 44px rgba(20,50,110,.18);
+    padding:1em 1.5em;font-size:1.45em;
+  }
+  body.present .slide.active{display:block;animation:slideIn .45s cubic-bezier(.2,.7,.3,1)}
+  body.present .slide.active > *{opacity:0;animation:riseIn .5s cubic-bezier(.2,.7,.3,1) forwards}
+  body.present .slide.active > *:nth-child(1){animation-delay:.05s}
+  body.present .slide.active > *:nth-child(2){animation-delay:.13s}
+  body.present .slide.active > *:nth-child(3){animation-delay:.21s}
+  body.present .slide.active > *:nth-child(4){animation-delay:.29s}
+  body.present .slide.active > *:nth-child(5){animation-delay:.37s}
+  body.present .slide.active > *:nth-child(6){animation-delay:.45s}
+  body.present .slide.active > *:nth-child(7){animation-delay:.53s}
+  body.present .slide.active > *:nth-child(8){animation-delay:.61s}
+  body.present .slide.active > *:nth-child(n+9){animation-delay:.69s}
+  @keyframes slideIn{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:none}}
+  @keyframes riseIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+  #p-progress{position:fixed;top:0;left:0;height:4px;width:0;z-index:9995;display:none;background:linear-gradient(90deg,#3d8ae0,#0066CC);transition:width .3s}
+  body.present #p-progress{display:block}
+  #present-bar{position:fixed;left:50%;bottom:8px;transform:translateX(-50%);z-index:9995;display:none;align-items:center;gap:4px;background:rgba(255,255,255,.92);border:1px solid #9db8d8;border-radius:999px;padding:2px 8px;box-shadow:0 3px 12px rgba(0,60,140,.2)}
+  body.present #present-bar{display:flex}
+  #present-bar button{cursor:pointer;border:1px solid #7fa8d4;background:rgba(255,255,255,.9);color:#0066CC;border-radius:999px;padding:0 7px;font-size:11px;font-weight:700;line-height:16px;transition:.15s}
+  #present-bar button:hover{background:#0066CC;color:#fff}
+  #p-count{font-weight:700;color:#143a66;font-size:11px;line-height:16px;min-width:40px;text-align:center;cursor:pointer;border:1px dashed #9db8d8;border-radius:999px;padding:0 6px}
+  #p-count:hover{background:#eaf3ff}
+
+  #slide-map{position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;background:rgba(15,43,70,.45);backdrop-filter:blur(3px)}
+  #slide-map.hidden{display:none}
+  .map-box{background:#fff;border-radius:16px;width:min(900px,92vw);max-height:82vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:hidden}
+  .map-head{display:flex;justify-content:space-between;align-items:center;padding:10px 18px;background:#0066CC;color:#fff;font-weight:700}
+  .map-head button{border:none;background:rgba(255,255,255,.2);color:#fff;border-radius:8px;padding:2px 12px;cursor:pointer;font-size:14px}
+  .map-head button:hover{background:rgba(255,255,255,.35)}
+  #map-grid{overflow:auto;padding:16px;display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+  .map-item{cursor:pointer;text-align:left;border:1.5px solid #d5e0ec;background:#f8fbff;border-radius:10px;padding:8px 10px;display:flex;gap:8px;align-items:center;transition:.15s;font-size:13px;color:#334455}
+  .map-item:hover{border-color:#0066CC;background:#eaf3ff}
+  .map-item.cur{border-color:#0066CC;background:#0066CC;color:#fff}
+  .map-num{flex:0 0 auto;min-width:26px;height:26px;border-radius:50%;background:#0066CC;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:12px}
+  .map-item.cur .map-num{background:#fff;color:#0066CC}
+  .map-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  #sketch-layer{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9990;touch-action:none}
+  body.sketch-mode{user-select:none;-webkit-user-select:none}
+  body.sketch-mode #sketch-layer{pointer-events:auto;cursor:crosshair}
+  body.sketch-mode.eraser-on #sketch-layer{cursor:none}
+  #eraser-cursor{position:fixed;width:28px;height:28px;border-radius:50%;border:2px solid rgba(0,0,0,.55);background:rgba(255,255,255,.55);transform:translate(-50%,-50%);pointer-events:none;z-index:9999;display:none}
+  #sketch-fab{position:fixed;right:12px;bottom:12px;z-index:10000;width:30px;height:30px;border-radius:50%;border:1px solid #0b5ed7;background:#fff;color:#0066CC;font-size:16px;font-weight:700;line-height:1;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.2);display:none}
+  #sketch-fab.show{display:block}
+  body.present #sketch-fab{bottom:34px}
+  #sketch-toolbar{position:fixed;right:12px;bottom:12px;z-index:10000;width:236px;background:rgba(255,255,255,.97);border:2px solid #0066CC;border-radius:12px;box-shadow:0 8px 22px rgba(0,0,0,.2);padding:10px;font-size:.82rem}
+  body.present #sketch-toolbar{bottom:34px}
+  #sketch-toolbar.hidden{display:none}
+  #sketch-toolbar .st-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  #sketch-toolbar .st-title{font-weight:700;color:#0066CC;font-size:.85rem}
+  #sketch-toolbar button{cursor:pointer;border:1px solid #0066CC;background:#fff;color:#0066CC;border-radius:7px;padding:3px 7px;font-size:.76rem;margin:2px 2px 2px 0;transition:.15s}
+  #sketch-toolbar button:hover{background:#e6f0ff}
+  #sketch-toolbar button:disabled{opacity:.4;cursor:not-allowed}
+  #btn-toggle{width:100%;margin:4px 0;font-weight:700}
+  #btn-toggle.active{background:#0066CC;color:#fff}
+  .st-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:5px 0}
+  .swatch{width:16px;height:16px;border-radius:4px;border:1px solid #999;display:inline-block}
+  #st-help{border-top:1px dashed #aaa;margin-top:7px;padding-top:7px;line-height:1.6;font-size:.74rem;color:#445}
+  #st-help kbd{background:#eee;border:1px solid #ccc;border-bottom-width:2px;border-radius:4px;padding:0 4px;font-size:.72rem;font-family:inherit}
+</style>
+</head>
+<body>
+
+<!-- ===== Mép TRÁI ===== -->
+<div id="nav-left">
+  <button id="btn-home" class="ico" title="Về đầu trang">⌂</button>
+  <a class="nav-jump" href="#part1" title="I. Sự rơi trong không khí">I</a>
+  <a class="nav-jump" href="#part2" title="II. Sự rơi tự do">II</a>
+  <a class="nav-jump ico" href="#star-bt" title="Bài tập">📝</a>
+  <a class="nav-jump ico" href="#heart-tk" title="Tổng kết">🎓</a>
+</div>
+
+<!-- ===== Mép PHẢI ===== -->
+<div id="nav-right">
+  <button id="fs-plus" title="Tăng cỡ chữ">A+</button>
+  <button id="fs-reset" title="Về cỡ chữ mặc định">0</button>
+  <button id="fs-minus" title="Giảm cỡ chữ">A-</button>
+  <button id="btn-present" title="Trình chiếu (P)">
+    <svg class="play-ico" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1 L9 5 L2 9 Z" fill="currentColor"/></svg>
+  </button>
+</div>
+
+<div class="app" id="app">
+
+  <!-- ============ SLIDE 1: KIỂM TRA BÀI CŨ ============ -->
+  <section class="card slide" id="ktbc">
+    <h2 class="muc">Kiểm tra bài cũ</h2>
+    <p>Viết công thức vận tốc và công thức quãng đường đi của chuyển động thẳng biến đổi đều.
+       Trường hợp vận tốc ban đầu bằng 0 thì các công thức đó trở thành gì?</p>
+    <details>
+      <summary>Xem đáp án</summary>
+      <p><b>Công thức vận tốc:</b> v = v₀ + a·t (v₀: vận tốc đầu, a: gia tốc, t: thời gian).</p>
+      <p><b>Công thức quãng đường:</b> s = v₀·t +
+         <span class="frac"><span class="num">1</span><span class="den">2</span></span>·a·t².</p>
+      <p><b>Khi vận tốc ban đầu v₀ = 0</b> (chuyển động nhanh dần đều không vận tốc đầu):</p>
+      <ul>
+        <li>v = a·t</li>
+        <li>s = <span class="frac"><span class="num">1</span><span class="den">2</span></span>·a·t²</li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- ============ SLIDE 2: TÊN BÀI + I + I.1 ============ -->
+  <section class="card slide" id="part1" data-part="I. Sự rơi trong không khí">
+    <div class="lesson-title"><h1>BÀI 10: SỰ RƠI TỰ DO</h1></div>
+    <h2 class="part-head">I. Sự rơi trong không khí</h2>
+    <h2 class="muc">1. Các thí nghiệm về sự rơi</h2>
+    <p>Ai cũng thấy hòn đá rơi nhanh hơn lá cây, viên phấn rơi nhanh hơn chiếc lông chim.
+       Nhiều người dự đoán rằng rơi nhanh hay chậm là do vật nặng hay nhẹ.
+       Các thí nghiệm sau sẽ giúp chúng ta kiểm tra dự đoán đó:</p>
+    <div class="tn-box">🧪 <b>TN 1:</b> Thả rơi một viên bi và một chiếc lá.</div>
+    <div class="tn-box">🧪 <b>TN 2:</b> Thả hai tờ giấy giống nhau, một tờ vo tròn, một tờ để nguyên.</div>
+    <div class="tn-box">🧪 <b>TN 3:</b> Thả hai viên bi cùng kích thước, một bằng sắt và một bằng thủy tinh.</div>
+  </section>
+
+  <section class="card slide" data-part="I. Sự rơi trong không khí">
+    <h2 class="muc">2. Nhận xét và kết luận</h2>
+    <div class="conclude">
+      📌 Sự rơi nhanh hay chậm của vật phụ thuộc vào độ lớn của <b>lực cản không khí</b> tác dụng lên vật.
+      Lực cản càng nhỏ so với trọng lực thì vật rơi càng nhanh và ngược lại.
+    </div>
+    <div class="question">❓ Theo em, nếu loại bỏ được sức cản của không khí, các vật sẽ rơi như thế nào?</div>
+  </section>
+
+  <section class="card slide" data-part="I. Sự rơi trong không khí">
+    <h2 class="muc">3. Thí nghiệm ống hút chân không của Newton</h2>
+    <p>Nhà bác học Newton đã trả lời câu hỏi trên bằng thí nghiệm với ống hút chân không (Hình 10.1):
+       thả một viên bi chì và một chiếc lông chim trong ống chân không.</p>
+    <figure class="fig-box">
+      <img class="fig-img" src="10.1.png" alt="Hình 10.1 – Thí nghiệm ống hút chân không của Newton" title="Bấm để phóng to">
+      <svg class="fig-fallback" viewBox="0 0 460 300" role="img" aria-label="Hình 10.1: Thí nghiệm ống hút chân không">
+        <rect x="70" y="20" width="90" height="230" rx="45" fill="#eaf4ff" stroke="#7fb3e8" stroke-width="3"/>
+        <path d="M115 40 v18 m0 0 l-6 -10 m6 10 l6 -10" fill="none" stroke="#7fb3e8" stroke-width="2.5" stroke-linecap="round"/>
+        <g transform="translate(115,105) rotate(18)">
+          <ellipse cx="0" cy="0" rx="9" ry="21" fill="#cdeed2" stroke="#57a06b" stroke-width="2"/>
+          <line x1="0" y1="-21" x2="0" y2="26" stroke="#57a06b" stroke-width="2"/>
+        </g>
+        <circle cx="115" cy="222" r="14" fill="#5b6470"/><circle cx="110" cy="217" r="4" fill="#8b96a5"/>
+        <text x="115" y="280" text-anchor="middle" font-size="15" fill="#33445">Ống có không khí</text>
+        <rect x="300" y="20" width="90" height="230" rx="45" fill="#f4fbf4" stroke="#7cc79a" stroke-width="3"/>
+        <path d="M325 40 v18 m0 0 l-6 -10 m6 10 l6 -10" fill="none" stroke="#7cc79a" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M370 40 v18 m0 0 l-6 -10 m6 10 l6 -10" fill="none" stroke="#7cc79a" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="325" cy="205" r="14" fill="#5b6470"/><circle cx="320" cy="200" r="4" fill="#8b96a5"/>
+        <g transform="translate(368,200) rotate(-14)">
+          <ellipse cx="0" cy="0" rx="9" ry="21" fill="#cdeed2" stroke="#57a06b" stroke-width="2"/>
+          <line x1="0" y1="-21" x2="0" y2="26" stroke="#57a06b" stroke-width="2"/>
+        </g>
+        <text x="345" y="280" text-anchor="middle" font-size="15" fill="#33445">Ống chân không</text>
+      </svg>
+      <figcaption>Hình 10.1 – Thí nghiệm ống hút chân không của Newton (bấm vào hình để phóng to).</figcaption>
+    </figure>
+    <div class="conclude">✅ Kết quả: trong chân không, mọi vật rơi <b>nhanh như nhau</b>.</div>
+    <p>🎬 Video minh họa thực tế: thí nghiệm được thực hiện bởi nhà vật lý Brian Cox tại
+       Cơ sở Năng lượng Vũ trụ của NASA (buồng chân không lớn nhất thế giới).</p>
+    <div class="video-box">
+      <button class="video-launch" id="btn-video" title="Mở cửa sổ video vừa khít màn hình (từ 2:46)">
+        <span class="play-ic">▶</span>
+        <span>Phát video thí nghiệm (từ 2:46)</span>
+      </button>
+      <div class="video-note">
+        Nguồn: BBC Human Universe – Brian Cox tại buồng chân không lớn nhất thế giới (NASA).
+        <a href="https://www.youtube.com/watch?v=E43-CfukEgs&t=166" target="_blank" rel="noopener">Mở trực tiếp trên YouTube (từ 2:46)</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 5: II + II.1 ============ -->
+  <section class="card slide" id="part2" data-part="II. Sự rơi tự do">
+    <h2 class="part-head">II. Sự rơi tự do</h2>
+    <h2 class="muc">1. Sự rơi tự do là gì?</h2>
+    <p><b>Sự rơi tự do</b> là sự rơi chỉ dưới tác dụng của trọng lực.
+       Nếu vật rơi trong không khí mà lực cản không khí không đáng kể so với trọng lượng
+       thì cũng được coi là rơi tự do.</p>
+    <div class="question">
+      ❓ Trong các chuyển động sau, chuyển động nào được coi là rơi tự do? Tại sao?<br>
+      A. Chiếc lá đang rơi.<br>
+      B. Hạt bụi chuyển động trong không khí.<br>
+      C. Quả tạ rơi trong không khí.<br>
+      D. Vận động viên đang nhảy dù.
+    </div>
+  </section>
+
+  <section class="card slide" data-part="II. Sự rơi tự do">
+    <h2 class="muc">2a) Phương và chiều</h2>
+    <p>Trọng lực có phương thẳng đứng, chiều từ trên xuống, nên sự rơi tự do cũng có
+       <b>phương thẳng đứng, chiều từ trên xuống</b>.</p>
+    <p>Hãy thực hiện thí nghiệm (Hình 10.2) để kiểm tra dự đoán về phương và chiều của sự rơi tự do.</p>
+    <figure class="fig-box">
+      <img class="fig-img" src="10.2.png" alt="Hình 10.2 – Kiểm tra phương và chiều của sự rơi tự do" title="Bấm để phóng to">
+      <svg class="fig-fallback" viewBox="0 0 330 250" role="img" aria-label="Hình 10.2: Dây dọi kiểm tra phương thẳng đứng">
+        <rect x="50" y="18" width="180" height="10" rx="4" fill="#a5825f"/>
+        <line x1="140" y1="28" x2="140" y2="150" stroke="#55606e" stroke-width="2.5"/>
+        <path d="M140 150 L128 174 A13 13 0 0 0 152 174 Z" fill="#5b6470"/>
+        <line x1="140" y1="187" x2="140" y2="215" stroke="#9aa5b1" stroke-width="2" stroke-dasharray="4 5"/>
+        <line x1="255" y1="35" x2="255" y2="195" stroke="#c62828" stroke-width="3"/>
+        <path d="M255 200 l-8 -14 m8 14 l8 -14" fill="none" stroke="#c62828" stroke-width="3" stroke-linecap="round"/>
+        <text x="265" y="105" font-size="14" fill="#c62828" transform="rotate(90 265 105)">phương thẳng đứng,</text>
+        <text x="283" y="105" font-size="14" fill="#c62828" transform="rotate(90 283 105)">chiều từ trên xuống</text>
+        <line x1="40" y1="228" x2="300" y2="228" stroke="#c3cfdb" stroke-width="3"/>
+      </svg>
+      <figcaption>Hình 10.2 – Dây dọi: phương thẳng đứng, chiều từ trên xuống (bấm vào hình để phóng to).</figcaption>
+    </figure>
+    <div class="question">
+      💡 Hãy tìm cách kiểm tra bức tường trong lớp có phải mặt phẳng thẳng đứng không;
+      dùng êke tam giác vuông cân và dây dọi để kiểm tra sàn lớp có phẳng hay không.
+    </div>
+  </section>
+
+  <section class="card slide" data-part="II. Sự rơi tự do">
+    <h2 class="muc">2b) Tính chất của chuyển động rơi tự do</h2>
+    <p>Quan sát sự rơi tự do ta thấy đó là chuyển động thẳng nhanh dần. Để biết có
+       <b>nhanh dần đều</b> hay không, xét ảnh hoạt nghiệm của hòn bi thép rơi sau những
+       khoảng thời gian bằng nhau (0,1 s) – Bảng 10.1:</p>
+    <table>
+      <thead><tr><th>Thời gian rơi t (s)</th><th>Quãng đường rơi s (m)</th><th>Tỉ số s/t²</th></tr></thead>
+      <tbody>
+        <tr><td>0,1</td><td>0,049</td><td>4,9</td></tr>
+        <tr><td>0,2</td><td>0,197</td><td>4,925 ≈ 4,9</td></tr>
+        <tr><td>0,3</td><td>0,441</td><td>4,9</td></tr>
+        <tr><td>0,4</td><td>0,785</td><td>4,906 ≈ 4,9</td></tr>
+        <tr><td>0,5</td><td>1,227</td><td>4,908 ≈ 4,9</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card slide" data-part="II. Sự rơi tự do">
+    <h2 class="muc">2b) Giải thích chi tiết</h2>
+    <ol class="steps">
+      <li>Chuyển động nhanh dần đều không vận tốc đầu: s =
+          <span class="frac"><span class="num">1</span><span class="den">2</span></span>·a·t².</li>
+      <li>Suy ra tỉ số:
+          <span class="frac"><span class="num">s</span><span class="den">t²</span></span> =
+          <span class="frac"><span class="num">a</span><span class="den">2</span></span> = hằng số.</li>
+      <li>Bảng 10.1: các giá trị s/t² xấp xỉ nhau và cùng bằng 4,9 ⇒ s tỉ lệ thuận với t².</li>
+    </ol>
+    <div class="conclude">
+      📌 Kết luận: chuyển động rơi tự do là <b>chuyển động thẳng nhanh dần đều</b>, với gia tốc
+      a = 2 × 4,9 = 9,8 m/s².
+    </div>
+  </section>
+
+  <section class="card slide" data-part="II. Sự rơi tự do">
+    <h2 class="muc">2c) Gia tốc rơi tự do</h2>
+    <p>Ở cùng một nơi trên Trái Đất, mọi vật rơi tự do với cùng một gia tốc.</p>
+    <p>Gia tốc rơi tự do kí hiệu là <b>g</b>, phụ thuộc vào vĩ độ địa lí và độ cao.
+       Ở gần bề mặt Trái Đất thường lấy g ≈ 9,8 m/s².</p>
+  </section>
+
+  <section class="card slide" data-part="II. Sự rơi tự do">
+    <h2 class="muc">3. Công thức rơi tự do</h2>
+    <p>Chọn thời điểm ban đầu t₀ = 0, rơi tự do có các công thức của chuyển động nhanh dần đều không vận tốc đầu:</p>
+    <div class="formula-box">
+      <span class="f">d = s =
+        <span class="frac"><span class="num">1</span><span class="den">2</span></span>·g·t²
+        = <span class="frac"><span class="num">g·t²</span><span class="den">2</span></span></span>
+      <span class="f">v<sub>t</sub> = g·t</span>
+      <span class="f">v<sub>t</sub>² = 2·g·s</span>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 11: 📝 BÀI TẬP ============ -->
+  <section class="card slide" id="star-bt" data-part="📝 Bài tập">
+    <h2 class="part-head">📝 Bài tập</h2>
+    <p><b>Bài 1.</b> Một người thả hòn bi từ trên cao xuống đất, đo được thời gian rơi t = 3,1 s.
+       Bỏ qua sức cản không khí, lấy g = 9,8 m/s².</p>
+    <ol type="a">
+      <li>Tính độ cao nơi thả hòn bi so với mặt đất và vận tốc lúc chạm đất.</li>
+      <li>Tính quãng đường rơi được trong 0,5 s cuối trước khi chạm đất.</li>
+    </ol>
+    <details>
+      <summary>Xem lời giải bài 1</summary>
+      <p>a) s = <span class="frac"><span class="num">1</span><span class="den">2</span></span>·g·t² =
+         <span class="frac"><span class="num">1</span><span class="den">2</span></span>·9,8·(3,1)² ≈ 47,1 m;
+         v = g·t = 9,8·3,1 ≈ 30,38 m/s.</p>
+      <p>b) s₂,₆ = <span class="frac"><span class="num">1</span><span class="den">2</span></span>·9,8·(2,6)² ≈ 33,1 m;
+         Δs = 47,1 − 33,1 = 14 m.</p>
+    </details>
+    <p><b>Bài 2.</b> Một vật được thả rơi tự do không vận tốc đầu từ độ cao h = 80 m.
+       Bỏ qua sức cản không khí, lấy g = 10 m/s².</p>
+    <ol type="a">
+      <li>Tính thời gian vật rơi cho đến khi chạm đất.</li>
+      <li>Tính vận tốc của vật ngay trước khi chạm đất.</li>
+      <li>Tính quãng đường vật đi được trong giây thứ 2.</li>
+    </ol>
+    <details>
+      <summary>Xem lời giải bài 2</summary>
+      <p>a) h = <span class="frac"><span class="num">1</span><span class="den">2</span></span>·g·t² ⇒ t =
+         <span class="sqrt"><svg class="radsvg" viewBox="0 0 10 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0.5 24 L3 31 L7.2 0.8 L10 0.8" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="radicand"><span class="frac"><span class="num">2h</span><span class="den">g</span></span></span></span> =
+         <span class="sqrt"><svg class="radsvg" viewBox="0 0 10 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0.5 24 L3 31 L7.2 0.8 L10 0.8" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="radicand"><span class="frac"><span class="num">2·80</span><span class="den">10</span></span></span></span> =
+         <span class="sqrt"><svg class="radsvg" viewBox="0 0 10 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0.5 24 L3 31 L7.2 0.8 L10 0.8" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="radicand">16</span></span> = 4 s.</p>
+      <p>b) v = g·t = 10·4 = 40 m/s.</p>
+      <p>c) s₁ = <span class="frac"><span class="num">1</span><span class="den">2</span></span>·10·1² = 5 m;
+         s₂ = <span class="frac"><span class="num">1</span><span class="den">2</span></span>·10·2² = 20 m;
+         Δs = 20 − 5 = 15 m.</p>
+    </details>
+  </section>
+
+  <!-- ============ SLIDE 12: 🎓 TỔNG KẾT ============ -->
+  <section class="card slide" id="heart-tk" data-part="🎓 Tổng kết">
+    <h2 class="part-head">🎓 Tổng kết</h2>
+    <h3>Em đã học</h3>
+    <ul>
+      <li>Chuyển động rơi chỉ chịu tác dụng của trọng lực gọi là rơi tự do.</li>
+      <li>Chuyển động rơi tự do là chuyển động thẳng nhanh dần đều theo phương thẳng đứng, chiều từ trên xuống.</li>
+      <li>Tại một nơi nhất định trên Trái Đất và ở gần mặt đất, mọi vật đều rơi tự do với cùng gia tốc g.</li>
+    </ul>
+    <div class="formula-box">
+      <span class="f">a = g;&nbsp;&nbsp; v<sub>t</sub> = g·t</span>
+      <span class="f">d = s =
+        <span class="frac"><span class="num">1</span><span class="den">2</span></span>·g·t² =
+        <span class="frac"><span class="num">v<sub>t</sub>²</span><span class="den">2g</span></span></span>
+    </div>
+    <h3>Em có thể</h3>
+    <ul>
+      <li>Vận dụng được những kiến thức về sự rơi tự do vào một số tình huống thực tế đơn giản.</li>
+      <li>Biết cách xác định phương thẳng đứng và phương nằm ngang.</li>
+    </ul>
+  </section>
+
+  <!-- ============ BÀI TẬP VỀ NHÀ ============ -->
+  <section class="card slide" id="btvn">
+    <h2 class="muc">Bài tập về nhà</h2>
+    <ol>
+      <li>Một vật được thả rơi tự do từ độ cao 45 m so với mặt đất (lấy g = 9,8 m/s²).
+          Tính thời gian rơi và vận tốc của vật khi chạm đất.</li>
+      <li>Một hòn sỏi thả rơi tự do chạm đất sau 2,5 s (lấy g = 9,8 m/s²).
+          Tính độ cao nơi thả và quãng đường sỏi đi được trong giây cuối cùng trước khi chạm đất.</li>
+      <li>Thả hai vật rơi tự do cùng lúc từ hai độ cao h₁ và h₂. Vật thứ nhất chạm đất sau 3 s,
+          vật thứ hai chạm đất sau 4 s (lấy g = 9,8 m/s²). Tính tỉ số h₁/h₂.</li>
+    </ol>
+    <details>
+      <summary>Xem đáp án</summary>
+      <p>1) t =
+         <span class="sqrt"><svg class="radsvg" viewBox="0 0 10 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0.5 24 L3 31 L7.2 0.8 L10 0.8" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="radicand"><span class="frac"><span class="num">2·45</span><span class="den">9,8</span></span></span></span>
+         ≈ 3,03 s; v = g·t ≈ 29,7 m/s.</p>
+      <p>2) h = <span class="frac"><span class="num">1</span><span class="den">2</span></span>·9,8·(2,5)² ≈ 30,6 m;
+         quãng đường 1,5 s đầu ≈ 11,0 m ⇒ giây cuối ≈ 19,6 m.</p>
+      <p>3) h = <span class="frac"><span class="num">1</span><span class="den">2</span></span>·g·t² ⇒
+         h₁/h₂ = 3²/4² = 9/16.</p>
+    </details>
+  </section>
+</div>
+
+<!-- ==================== TRÌNH CHIẾU & VẼ NHÁP ==================== -->
+<div id="p-progress"></div>
+<div id="present-bar">
+  <button id="p-prev" title="Slide trước (←)">◀</button>
+  <span id="p-count" title="Mở mục lục slide (G)">1 / 1</span>
+  <button id="p-next" title="Slide sau (→)">▶</button>
+  <button id="p-map" title="Mục lục slide (G)">▦</button>
+  <button id="p-full" title="Toàn màn hình (F)">⛶</button>
+  <button id="p-exit" title="Thoát trình chiếu (Esc)">✕</button>
+</div>
+
+<div id="slide-map" class="hidden">
+  <div class="map-box">
+    <div class="map-head"><span>📑 Mục lục slide – bấm để nhảy tới slide</span>
+      <button id="map-close" title="Đóng (Esc)">✕</button></div>
+    <div id="map-grid"></div>
+  </div>
+</div>
+
+<div id="zoom-box" class="hidden"><div id="zoom-inner"></div></div>
+
+<!-- ===== Cửa sổ video thông minh ===== -->
+<div id="video-modal" class="hidden">
+  <button id="vm-close" title="Đóng video (Esc)">✕</button>
+  <iframe id="video-frame" title="Thí nghiệm rơi trong chân không - NASA (Brian Cox)"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+</div>
+
+<svg id="sketch-layer" xmlns="http://www.w3.org/2000/svg"></svg>
+<div id="eraser-cursor"></div>
+<button id="sketch-fab" class="show" title="Công cụ vẽ nháp">…</button>
+
+<div id="sketch-toolbar" class="hidden">
+  <div class="st-head"><span class="st-title">✏️ Vẽ nháp</span>
+    <button id="st-collapse" title="Thu gọn">✕</button></div>
+  <button id="btn-toggle">Bật vẽ (V)</button>
+  <div class="st-row"><span class="swatch" id="st-swatch"></span><span>Màu: <b id="st-color">#8B4513</b></span></div>
+  <div class="st-row"><span>Dày: <b id="st-width">2px</b></span><span id="st-tool">🖊 Bút tự do</span></div>
+  <div class="st-row">
+    <button id="btn-undo">↩ Undo</button><button id="btn-redo">↪ Redo</button><button id="btn-clear">🗑 Xóa hết</button>
+  </div>
+  <div id="st-help">
+    <kbd>V</kbd> bật/tắt vẽ • <kbd>K</kbd> tự do • <kbd>L</kbd> đoạn • <kbd>I</kbd> mũi tên • <kbd>O</kbd> tròn<br>
+    <kbd>1</kbd> đỏ • <kbd>0</kbd> xanh • <kbd>N</kbd> nâu • <kbd>D</kbd> đen<br>
+    <kbd>B</kbd>/<kbd>M</kbd> tăng/giảm dày • <kbd>2</kbd> dày mặc định • <kbd>3</kbd> tẩy • <kbd>X</kbd> xóa hết<br>
+    <kbd>Ctrl+Z</kbd> hoàn tác • <kbd>Ctrl+Y</kbd> làm lại • <kbd>P</kbd> trình chiếu • <kbd>G</kbd> mục lục<br>
+    ℹ️ Bấm vào hình minh họa để phóng to. Nét vẽ bám nội dung &amp; từng slide.
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const svg = document.getElementById('sketch-layer');
+  const app = document.getElementById('app');
+  const eraserCursor = document.getElementById('eraser-cursor');
+  const btnToggle = document.getElementById('btn-toggle');
+  const btnUndo = document.getElementById('btn-undo');
+  const btnRedo = document.getElementById('btn-redo');
+  const btnClear = document.getElementById('btn-clear');
+  const stSwatch = document.getElementById('st-swatch');
+  const stColor = document.getElementById('st-color');
+  const stWidth = document.getElementById('st-width');
+  const stTool = document.getElementById('st-tool');
+  const toolbar = document.getElementById('sketch-toolbar');
+  const fab = document.getElementById('sketch-fab');
+  const zoomBox = document.getElementById('zoom-box');
+  const zoomInner = document.getElementById('zoom-inner');
+  const videoModal = document.getElementById('video-modal');
+  const vmClose = document.getElementById('vm-close');
+  const videoFrame = document.getElementById('video-frame');
+
+  const DEFAULT_COLOR = '#8B4513', DEFAULT_WIDTH = 2, MIN_WIDTH = 1, MAX_WIDTH = 40;
+  const DEFAULT_FS = 19, FS_MIN = 14, FS_MAX = 34;
+
+  let drawingOn = false, eraser = false;
+  let color = DEFAULT_COLOR, width = DEFAULT_WIDTH;
+  let tool = 'free';
+  let stroke = null;
+  let eraseAction = null;
+
+  const history = [], redoStack = [];
+  const allStrokes = new Set();
+  const TOOL_LABEL = { free:'🖊 Bút tự do', line:'➖ Đoạn thẳng', arrow:'➤ Mũi tên', circle:'⭕ Tròn' };
+
+  /* ---------- Ảnh: thiếu PNG thì hiện SVG ---------- */
+  document.querySelectorAll('figure .fig-img').forEach(im => {
+    const mark = () => { if(!im.complete || im.naturalWidth === 0) im.classList.add('missing'); };
+    im.addEventListener('error', mark);
+    if(im.complete) mark();
+  });
+
+  /* ---------- Zoom hình ---------- */
+  let zoomFit = null;
+  function fitZoomImg(img){
+    const nw = img.naturalWidth || 1000, nh = img.naturalHeight || 700;
+    const maxW = window.innerWidth * 0.92, maxH = window.innerHeight * 0.86;
+    const s = Math.min(maxW / nw, maxH / nh);
+    img.style.width = Math.round(nw * s) + 'px';
+    img.style.height = Math.round(nh * s) + 'px';
+  }
+  document.querySelectorAll('figure.fig-box').forEach(fig => {
+    fig.addEventListener('click', () => {
+      const src = fig.querySelector('img.fig-img:not(.missing)') || fig.querySelector('svg.fig-fallback');
+      if(!src) return;
+      zoomInner.innerHTML = '';
+      const clone = src.cloneNode(true);
+      clone.removeAttribute('title');
+      zoomInner.appendChild(clone);
+      zoomBox.classList.remove('hidden');
+      zoomFit = null;
+      if(clone.tagName === 'IMG'){
+        zoomFit = () => fitZoomImg(clone);
+        if(clone.complete && clone.naturalWidth) zoomFit();
+        else clone.addEventListener('load', zoomFit, { once:true });
+      }
+    });
+  });
+  zoomBox.addEventListener('click', () => zoomBox.classList.add('hidden'));
+
+  /* ---------- VIDEO: nút nhỏ trong slide → popup thông minh fit cửa sổ ---------- */
+  const videoOpen = () => !videoModal.classList.contains('hidden');
+  function fitVideo(){
+    const availW = window.innerWidth - 24;
+    const availH = window.innerHeight - 56;
+    let w = availW, h = w * 9 / 16;
+    if(h > availH){ h = availH; w = h * 16 / 9; }
+    videoFrame.style.width = Math.round(w) + 'px';
+    videoFrame.style.height = Math.round(h) + 'px';
+  }
+  document.getElementById('btn-video').addEventListener('click', () => {
+    videoFrame.src = 'https://www.youtube.com/embed/E43-CfukEgs?start=166&autoplay=1&rel=0';
+    videoModal.classList.remove('hidden');
+    fitVideo();
+  });
+  function closeVideo(){
+    videoModal.classList.add('hidden');
+    videoFrame.src = '';
+  }
+  vmClose.addEventListener('click', closeVideo);
+  videoModal.addEventListener('click', e => { if(e.target === videoModal) closeVideo(); });
+
+  window.addEventListener('resize', () => {
+    if(zoomFit && !zoomBox.classList.contains('hidden')) zoomFit();
+    if(videoOpen()) fitVideo();
+  });
+
+  function contentHeight(){
+    const prev = svg.style.height; svg.style.height = '0px';
+    const h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight, window.innerHeight);
+    svg.style.height = prev; return h;
+  }
+  function resize(){ const h = contentHeight(); svg.style.height = h + 'px'; svg.setAttribute('height', h); }
+
+  /* ---------- Hình học ---------- */
+  function pathD(pts){ return 'M ' + pts.map(p => p[0] + ' ' + p[1]).join(' L '); }
+  function arrowHeadD(x1,y1,x2,y2,w){
+    const ang = Math.atan2(y2-y1, x2-x1), hl = Math.max(10, w*3.5);
+    const a1 = ang + Math.PI*0.82, a2 = ang - Math.PI*0.82;
+    return `M ${(x2+hl*Math.cos(a1)).toFixed(1)} ${(y2+hl*Math.sin(a1)).toFixed(1)} L ${x2} ${y2} L ${(x2+hl*Math.cos(a2)).toFixed(1)} ${(y2+hl*Math.sin(a2)).toFixed(1)}`;
+  }
+  function shapeD(shape, x1,y1,x2,y2, r, w){
+    if(shape === 'line')  return `M ${x1} ${y1} L ${x2} ${y2}`;
+    if(shape === 'arrow') return `M ${x1} ${y1} L ${x2} ${y2} ` + arrowHeadD(x1,y1,x2,y2,w);
+    if(shape === 'circle')return `M ${x1+r} ${y1} A ${r} ${r} 0 1 0 ${x1-r} ${y1} A ${r} ${r} 0 1 0 ${x1+r} ${y1}`;
+    return '';
+  }
+  function shapeSamples(shape, x1,y1,x2,y2, r){
+    const pts = [], N = 48;
+    if(shape === 'circle'){ for(let i=0;i<N;i++){ const a=2*Math.PI*i/N; pts.push([x1+r*Math.cos(a), y1+r*Math.sin(a)]); } }
+    else { for(let i=0;i<=N;i++){ pts.push([x1+(x2-x1)*i/N, y1+(y2-y1)*i/N]); } }
+    return pts;
+  }
+
+  /* ---------- NEO nét vẽ ---------- */
+  function isOverlay(e){
+    return e === svg || e.tagName === 'path' || e.tagName === 'svg' ||
+           !!(e.closest && (e.closest('#sketch-toolbar') || e.closest('#sketch-fab') ||
+                            e.closest('#present-bar') || e.closest('#slide-map') ||
+                            e.closest('#nav-left') || e.closest('#nav-right') ||
+                            e.closest('#zoom-box') || e.closest('#video-modal') ||
+                            e.closest('figure svg') || e.id === 'eraser-cursor'));
+  }
+  function isContainer(a){
+    return a === document.body || a === document.documentElement || a.id === 'app' || a.tagName === 'SECTION';
+  }
+  function lastEndedAbove(root, yPage){
+    let best = null, bb = -1e9;
+    root.querySelectorAll('*').forEach(c => {
+      const r = c.getBoundingClientRect();
+      if(!r.width || !r.height) return;
+      const b = r.top + window.scrollY + r.height;
+      if(b <= yPage + 2 && b > bb){ bb = b; best = c; }
+    });
+    return best;
+  }
+  function pickAnchor(xPage, yPage){
+    const vy = yPage - window.scrollY;
+    let list = document.elementsFromPoint(xPage, vy) || [];
+    let el = list.find(e => !isOverlay(e));
+    if(!el){
+      const r = app.getBoundingClientRect();
+      const cx = Math.min(Math.max(xPage, r.left + 10), r.right - 10);
+      list = document.elementsFromPoint(cx, vy) || [];
+      el = list.find(e => !isOverlay(e));
+    }
+    el = el || document.body;
+    let m = 'top';
+    const r0 = el.getBoundingClientRect();
+    if(isContainer(el) || r0.height > 150){ const ref = lastEndedAbove(el, yPage); if(ref){ el = ref; m = 'bottom'; } }
+    return { el, mode: m };
+  }
+  function anchorBase(el, m){
+    const r = el.getBoundingClientRect();
+    return { x: r.left + window.scrollX, y: (m === 'bottom' ? r.bottom : r.top) + window.scrollY };
+  }
+  function bindAnchor(el, points){
+    const first = points[0];
+    const pick = pickAnchor(first[0], first[1]);
+    const base = anchorBase(pick.el, pick.mode);
+    el.__anchor = pick.el; el.__mode = pick.mode; el.__anchorBase = base;
+    el.__off = [first[0] - base.x, first[1] - base.y];
+    el.__rel = points.map(p => [p[0] - first[0], p[1] - first[1]]);
+  }
+  function syncStrokes(){
+    allStrokes.forEach(el => {
+      const a = el.__anchor;
+      if(!a || !el.__rel) return;
+      const r = a.getBoundingClientRect();
+      if(r.width === 0 && r.height === 0){ el.style.display = 'none'; el.__parked = true; return; }
+      if(el.__parked){ el.style.display = ''; el.__parked = false; if(!el.isConnected) svg.appendChild(el); }
+      const base = { x: r.left + window.scrollX, y: (el.__mode === 'bottom' ? r.bottom : r.top) + window.scrollY };
+      const fx = base.x + el.__off[0], fy = base.y + el.__off[1];
+      if(el.__shape && el.__shape !== 'free'){
+        const r2 = el.__rel2 || [0,0], rr = el.__r || 0;
+        el.setAttribute('d', shapeD(el.__shape, fx, fy, fx+r2[0], fy+r2[1], rr, el.__width || 2));
+        el.__points = (el.__relPts || []).map(q => [fx+q[0], fy+q[1]]);
+      } else {
+        const pts = el.__rel.map(q => [fx+q[0], fy+q[1]]);
+        el.__points = pts; el.setAttribute('d', pathD(pts));
+      }
+      el.__anchorBase = base;
+    });
+  }
+  function relayout(){ syncStrokes(); resize(); }
+
+  document.querySelectorAll('details').forEach(d => d.addEventListener('toggle', relayout));
+  document.addEventListener('click', e => {
+    if(e.target.closest && e.target.closest('summary')) requestAnimationFrame(relayout);
+  });
+  let rafId = 0;
+  window.addEventListener('resize', () => { cancelAnimationFrame(rafId); rafId = requestAnimationFrame(relayout); });
+  if (window.ResizeObserver) new ResizeObserver(resize).observe(document.body);
+  window.addEventListener('load', relayout);
+  resize();
+
+  function eraserRadius(){ return 12 + width; }
+  function getPos(e){ const r = svg.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+
+  /* ---------- Cỡ chữ ---------- */
+  let fs = DEFAULT_FS;
+  function applyFs(){
+    app.style.fontSize = fs + 'px';
+    const lh = Math.max(1.18, 1.32 - (fs - DEFAULT_FS) * 0.008);
+    document.documentElement.style.setProperty('--lh', lh.toFixed(3));
+    relayout();
+  }
+  document.getElementById('fs-plus').addEventListener('click', () => { fs = Math.min(FS_MAX, fs + 2); applyFs(); });
+  document.getElementById('fs-minus').addEventListener('click', () => { fs = Math.max(FS_MIN, fs - 2); applyFs(); });
+  document.getElementById('fs-reset').addEventListener('click', () => { fs = DEFAULT_FS; applyFs(); });
+
+  /* ---------- XÓA # ---------- */
+  function clearHash(){
+    if(!window.location.hash) return;
+    try{ history.replaceState(null, '', window.location.pathname + window.location.search); }
+    catch(err){ try{ window.location.hash=''; history.replaceState(null,'',window.location.pathname+window.location.search); }catch(e2){} }
+  }
+
+  /* ---------- TRÌNH CHIẾU ---------- */
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const pPrev = document.getElementById('p-prev'), pNext = document.getElementById('p-next');
+  const pExit = document.getElementById('p-exit'), pFull = document.getElementById('p-full');
+  const pMapBtn = document.getElementById('p-map'), pCount = document.getElementById('p-count');
+  const pProg = document.getElementById('p-progress');
+  const slideMap = document.getElementById('slide-map'), mapGrid = document.getElementById('map-grid');
+  let cur = 0;
+  const inPresent = () => document.body.classList.contains('present');
+  const mapOpen = () => !slideMap.classList.contains('hidden');
+  const zoomOpen = () => !zoomBox.classList.contains('hidden');
+
+  function goSlide(i){
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => s.classList.toggle('active', k === cur));
+    pCount.textContent = (cur + 1) + ' / ' + slides.length;
+    pProg.style.width = ((cur + 1) / slides.length * 100) + '%';
+    slides[cur].scrollTop = 0; relayout();
+  }
+  function enterPresent(){
+    let best = 0, bestD = 1e9;
+    slides.forEach((s, k) => { const d = Math.abs(s.getBoundingClientRect().top); if(d < bestD){ bestD = d; best = k; } });
+    document.body.classList.add('present'); goSlide(best);
+  }
+  function exitPresent(){
+    closeMap();
+    document.body.classList.remove('present');
+    slides.forEach(s => s.classList.remove('active'));
+    slides[cur].scrollIntoView({ block: 'start' }); relayout();
+  }
+  function togglePresent(){ inPresent() ? exitPresent() : enterPresent(); }
+  function toggleFullscreen(){
+    if(document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen().catch(() => {});
+  }
+
+  slides.forEach((s, i) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'map-item';
+    const h1 = s.querySelector('h1');
+    const ph = s.querySelector('.part-head');
+    const mc = s.querySelector('.muc');
+    let t;
+    if(h1) t = h1.textContent;
+    else if(ph && mc) t = ph.textContent + ' · ' + mc.textContent;
+    else if(ph) t = ph.textContent;
+    else if(mc) t = mc.textContent;
+    else t = 'Slide ' + (i + 1);
+    t = t.replace(/\s+/g,' ').trim();
+    b.innerHTML = '<span class="map-num">' + (i + 1) + '</span><span class="map-title"></span>';
+    b.querySelector('.map-title').textContent = t;
+    b.addEventListener('click', () => { goSlide(i); closeMap(); });
+    mapGrid.appendChild(b);
+  });
+  function openMap(){
+    mapGrid.querySelectorAll('.map-item').forEach((el, i) => el.classList.toggle('cur', i === cur));
+    slideMap.classList.remove('hidden');
+  }
+  function closeMap(){ slideMap.classList.add('hidden'); }
+  pMapBtn.addEventListener('click', openMap);
+  pCount.addEventListener('click', openMap);
+  document.getElementById('map-close').addEventListener('click', closeMap);
+  slideMap.addEventListener('click', e => { if(e.target === slideMap) closeMap(); });
+  pPrev.addEventListener('click', () => goSlide(cur - 1));
+  pNext.addEventListener('click', () => goSlide(cur + 1));
+  pExit.addEventListener('click', exitPresent);
+  pFull.addEventListener('click', toggleFullscreen);
+
+  /* ---------- Nút mép màn hình ---------- */
+  document.getElementById('btn-home').addEventListener('click', () => {
+    if(inPresent()){ goSlide(0); return; }
+    clearHash(); window.scrollTo({ top: 0, behavior: 'smooth' }); relayout();
+  });
+  document.querySelectorAll('#nav-left a.nav-jump').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      let target = document.querySelector(a.getAttribute('href'));
+      if(!target) return;
+      const sl = target.closest('.slide');
+      if(inPresent()) goSlide(sl ? slides.indexOf(sl) : slides.indexOf(target));
+      else target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  document.getElementById('btn-present').addEventListener('click', togglePresent);
+
+  let swX = null, swY = null;
+  window.addEventListener('pointerdown', e => {
+    if(!inPresent() || drawingOn) return;
+    if(e.target.closest('#present-bar,#sketch-toolbar,#sketch-fab,#slide-map,#nav-left,#nav-right,#zoom-box,#video-modal')) return;
+    swX = e.clientX; swY = e.clientY;
+  });
+  window.addEventListener('pointerup', e => {
+    if(swX === null) return;
+    const dx = e.clientX - swX, dy = e.clientY - swY; swX = null;
+    if(Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.5){ dx < 0 ? goSlide(cur + 1) : goSlide(cur - 1); }
+  });
+
+  /* ---------- ENGINE VẼ ---------- */
+  function newStrokePath(){
+    const p = document.createElementNS(SVG_NS, 'path');
+    p.setAttribute('fill','none');
+    p.setAttribute('stroke', color);
+    p.setAttribute('stroke-width', width);
+    p.setAttribute('stroke-linecap','round');
+    p.setAttribute('stroke-linejoin','round');
+    svg.appendChild(p);
+    return p;
+  }
+  function paintStroke(){
+    if(!stroke) return;
+    if(stroke.tool === 'free'){
+      stroke.path.setAttribute('d', pathD(stroke.points));
+    } else {
+      const c = stroke.cur;
+      const r = stroke.tool === 'circle' ? Math.hypot(c.x - stroke.start.x, c.y - stroke.start.y) : 0;
+      stroke.path.setAttribute('d', shapeD(stroke.tool, stroke.start.x, stroke.start.y, c.x, c.y, r, width));
+    }
+  }
+  function commitStroke(){
+    const s = stroke; stroke = null;
+    if(!s) return;
+    if(s.tool === 'free'){
+      const first = s.points[0], last = s.points[s.points.length - 1];
+      if(s.points.length < 2 || Math.hypot(last[0]-first[0], last[1]-first[1]) < 1){ s.path.remove(); return; }
+      s.path.__shape = 'free';
+      s.path.__points = s.points;
+      s.path.__width = width;
+      bindAnchor(s.path, s.points);
+    } else {
+      const d = Math.hypot(s.cur.x - s.start.x, s.cur.y - s.start.y);
+      if(d < 3){ s.path.remove(); return; }
+      const rr = s.tool === 'circle' ? d : 0;
+      s.path.setAttribute('d', shapeD(s.tool, s.start.x, s.start.y, s.cur.x, s.cur.y, rr, width));
+      s.path.__shape = s.tool;
+      s.path.__rel2 = [s.cur.x - s.start.x, s.cur.y - s.start.y];
+      s.path.__r = rr;
+      const samples = shapeSamples(s.tool, s.start.x, s.start.y, s.cur.x, s.cur.y, rr);
+      s.path.__relPts = samples.map(q => [q[0] - s.start.x, q[1] - s.start.y]);
+      s.path.__points = samples;
+      s.path.__width = width;
+      bindAnchor(s.path, [[s.start.x, s.start.y]]);
+    }
+    allStrokes.add(s.path);
+    history.push({ type:'draw', el: s.path });
+    redoStack.length = 0;
+    updateButtons();
+  }
+  function eraseAt(pos){
+    const r = eraserRadius();
+    const items = eraseAction.items;
+    svg.querySelectorAll('path').forEach(p => {
+      if(!p.__points || p.__parked || items.includes(p)) return;
+      const hitR = r + (p.__width || 2) / 2;
+      const hit = p.__points.some(pt => {
+        const dx = pt[0] - pos.x, dy = pt[1] - pos.y;
+        return dx*dx + dy*dy <= hitR*hitR;
+      });
+      if(hit){ p.remove(); items.push(p); }
+    });
+  }
+
+  svg.addEventListener('pointerdown', e => {
+    if(!drawingOn) return;
+    if(e.pointerType === 'mouse' && e.button !== 0) return;
+    e.preventDefault();
+    svg.setPointerCapture(e.pointerId);
+    const p = getPos(e);
+    if(eraser){
+      eraseAction = { type:'erase', items: [] };
+      eraseAt(p);
+      return;
+    }
+    stroke = { tool: tool, start: p, cur: p, points: [[p.x, p.y]], path: newStrokePath() };
+    paintStroke();
+  });
+  svg.addEventListener('pointermove', e => {
+    if(!drawingOn) return;
+    const p = getPos(e);
+    if(eraser){ if(eraseAction) eraseAt(p); return; }
+    if(!stroke) return;
+    stroke.cur = p;
+    if(stroke.tool === 'free') stroke.points.push([p.x, p.y]);
+    paintStroke();
+  });
+  function finish(){
+    if(eraser){
+      if(eraseAction && eraseAction.items.length){
+        history.push(eraseAction); redoStack.length = 0;
+      }
+      eraseAction = null;
+      updateButtons();
+      return;
+    }
+    if(stroke) commitStroke();
+  }
+  svg.addEventListener('pointerup', finish);
+  svg.addEventListener('pointercancel', finish);
+
+  document.addEventListener('pointermove', e => {
+    if(drawingOn && eraser){
+      const d = eraserRadius() * 2;
+      eraserCursor.style.width = d + 'px'; eraserCursor.style.height = d + 'px';
+      eraserCursor.style.left = e.clientX + 'px'; eraserCursor.style.top = e.clientY + 'px';
+      eraserCursor.style.display = 'block';
+    } else eraserCursor.style.display = 'none';
+  });
+
+  /* ---------- Undo / Redo / Xóa ---------- */
+  function undo(){
+    const a = history.pop(); if(!a) return;
+    if(a.type === 'draw') a.el.remove(); else a.items.forEach(el => svg.appendChild(el));
+    redoStack.push(a); updateButtons();
+  }
+  function redo(){
+    const a = redoStack.pop(); if(!a) return;
+    if(a.type === 'draw') svg.appendChild(a.el); else a.items.forEach(el => el.remove());
+    history.push(a); updateButtons();
+  }
+  function clearAll(){
+    const items = Array.from(svg.querySelectorAll('path'));
+    if(!items.length) return;
+    items.forEach(p => p.remove());
+    history.push({type:'clear', items}); redoStack.length = 0; updateButtons();
+  }
+
+  /* ---------- Trạng thái ---------- */
+  function setSketch(on){ drawingOn = on; document.body.classList.toggle('sketch-mode', on); updateToolbar(); }
+  function setColor(c){ color = c; eraser = false; if(!drawingOn) setSketch(true); updateToolbar(); }
+  function setTool(t){ tool = t; eraser = false; if(!drawingOn) setSketch(true); updateToolbar(); }
+  function changeWidth(d){ width = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, width + d)); updateToolbar(); }
+  function setWidth(w){ width = w; updateToolbar(); }
+  function toggleEraser(){ eraser = !eraser; if(eraser && !drawingOn) setSketch(true); updateToolbar(); }
+  function updateToolbar(){
+    stSwatch.style.background = eraser ? '#fff' : color;
+    stColor.textContent = eraser ? 'Tẩy' : color;
+    stWidth.textContent = width + 'px';
+    stTool.textContent = eraser ? '🧽 Tẩy' : TOOL_LABEL[tool];
+    btnToggle.textContent = drawingOn ? 'Tắt vẽ (V)' : 'Bật vẽ (V)';
+    btnToggle.classList.toggle('active', drawingOn);
+    document.body.classList.toggle('eraser-on', drawingOn && eraser);
+  }
+  function updateButtons(){ btnUndo.disabled = history.length === 0; btnRedo.disabled = redoStack.length === 0; }
+  btnToggle.addEventListener('click', () => setSketch(!drawingOn));
+  btnUndo.addEventListener('click', undo);
+  btnRedo.addEventListener('click', redo);
+  btnClear.addEventListener('click', clearAll);
+  fab.addEventListener('click', () => { toolbar.classList.remove('hidden'); fab.classList.remove('show'); });
+  document.getElementById('st-collapse').addEventListener('click', () => { toolbar.classList.add('hidden'); fab.classList.add('show'); });
+
+  /* ---------- Phím tắt ---------- */
+  document.addEventListener('keydown', e => {
+    const t = e.target;
+    if(t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if(e.ctrlKey || e.metaKey){
+      const k = e.key.toLowerCase();
+      if(k === 'z'){ e.preventDefault(); e.shiftKey ? redo() : undo(); }
+      else if(k === 'y'){ e.preventDefault(); redo(); }
+      return;
+    }
+    if(videoOpen()){ if(e.key === 'Escape'){ e.preventDefault(); closeVideo(); } return; }
+    if(zoomOpen()){ if(e.key === 'Escape'){ e.preventDefault(); zoomBox.classList.add('hidden'); } return; }
+    if(inPresent()){
+      if(mapOpen()){ if(e.key === 'Escape'){ e.preventDefault(); closeMap(); } return; }
+      switch(e.key){
+        case 'ArrowRight': case 'PageDown': case ' ': case 'Enter': e.preventDefault(); goSlide(cur + 1); return;
+        case 'ArrowLeft': case 'PageUp': case 'Backspace': e.preventDefault(); goSlide(cur - 1); return;
+        case 'Home': e.preventDefault(); goSlide(0); return;
+        case 'End': e.preventDefault(); goSlide(slides.length - 1); return;
+        case 'Escape': if(!document.fullscreenElement) exitPresent(); return;
+        case 'f': case 'F': toggleFullscreen(); return;
+        case 'g': case 'G': openMap(); return;
+      }
+    }
+    if(e.altKey) return;
+    switch(e.key.toLowerCase()){
+      case 'p': togglePresent(); break;
+      case 'v': setSketch(!drawingOn); break;
+      case 'k': setTool('free'); break;
+      case 'l': setTool('line'); break;
+      case 'i': setTool('arrow'); break;
+      case 'o': setTool('circle'); break;
+      case '1': setColor('#ff0000'); break;
+      case '0': setColor('#0066CC'); break;
+      case 'n': setColor(DEFAULT_COLOR); break;
+      case 'd': setColor('#000000'); break;
+      case 'b': changeWidth(1); break;
+      case 'm': changeWidth(-1); break;
+      case '2': setWidth(DEFAULT_WIDTH); break;
+      case '3': toggleEraser(); break;
+      case 'x': clearAll(); break;
+    }
+  });
+
+  updateToolbar();
+  updateButtons();
+})();
+</script>
+</body>
+</html>

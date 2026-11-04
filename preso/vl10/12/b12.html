@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bài 12: Chuyển động ném – Vật lí 10</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+<script>
+  function imgFallback(img){
+    var d = document.createElement('div');
+    d.className = 'img-fallback';
+    d.textContent = img.alt || 'Hình minh hoạ';
+    if (img.parentNode) img.parentNode.replaceChild(d, img);
+  }
+</script>
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    svg: { fontCache: 'global' }
+  };
+  function loadMathJaxCDN(){
+    if (window.__mjxCDNLoaded) return;
+    window.__mjxCDNLoaded = true;
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';
+    s.async = true;
+    document.head.appendChild(s);
+  }
+</script>
+<script src="/bx/mathjax/tex-svg.js" onerror="loadMathJaxCDN()"></script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+
+:root{
+  --font-scale: 1;
+  --navy:      #1A365D;
+  --gold:      #B8860B;
+  --brown-a:   #8B5A2B;
+  --brown-b:   #8B4513;
+  --white:     #FFFFFF;
+  --gray-bg:   #F5F5F5;
+  --beige:     #F5F5DC;
+  --wheat:     #F5DEB3;
+  --lightgray: #D3D3D3;
+  --blue:      #0066CC;
+  --darkblue:  #004488;
+  --page-bg:   #F8F7F4;
+}
+
+html{
+  font-size: calc(16px * var(--font-scale));
+  scroll-behavior: smooth;
+}
+
+body{
+  margin: 0;
+  font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--page-bg);
+  color: #1a1a1a;
+  line-height: 1.45;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ================= CONTAINER ================= */
+.container{
+  width: 80%;
+  max-width: 1100px;
+  margin: 24px auto 90px;
+  background: var(--gray-bg);
+  border-radius: 14px;
+  padding: 36px 46px 52px;
+  box-shadow: 0 8px 30px rgba(26, 54, 93, .13),
+              0 2px 6px rgba(26, 54, 93, .06);
+}
+@media (max-width: 900px){
+  .container{ width: 92%; padding: 24px 18px 36px; }
+}
+
+/* ================= KIỂU CHỮ ================= */
+h1{
+  font-size: 1.9rem;
+  line-height: 1.25;
+  color: var(--navy);
+  text-align: center;
+  margin: .25em 0 .15em;
+  letter-spacing: .3px;
+}
+h2{
+  font-size: 1.35rem;
+  color: var(--navy);
+  margin: 1.2em 0 .4em;
+  padding-bottom: .25em;
+  border-bottom: 2px solid var(--wheat);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+h3{
+  font-size: 1.1rem;
+  color: var(--brown-b);
+  margin: .8em 0 .3em;
+}
+h4{
+  font-size: 1rem;
+  color: var(--brown-a);
+  margin: .6em 0 .2em;
+}
+p{ margin: .35em 0; }
+ul, ol{ margin: .3em 0; padding-left: 1.5em; }
+li{ margin: .15em 0; }
+
+.quiz-mark{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35em;
+  height: 1.35em;
+  border: 1.8px solid currentColor;
+  border-radius: 50%;
+  font-size: .72em;
+  font-weight: 700;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+
+.lesson-header{
+  text-align: center;
+  padding-bottom: 6px;
+  border-bottom: 3px double var(--wheat);
+  margin-bottom: 20px;
+}
+.lesson-header .subtitle{
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--brown-a);
+  margin: 0 0 .2em;
+}
+
+.lesson-section{ scroll-margin-top: 20px; }
+
+.note-box{
+  background: var(--beige);
+  border-left: 4px solid var(--gold);
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin: 10px 0;
+}
+.note-box p{ margin: .2em 0; }
+
+.result-line{
+  background: var(--wheat);
+  border-left: 4px solid var(--brown-a);
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin: 10px 0;
+}
+.result-line strong{ color: var(--brown-b); }
+
+.highlight-info{
+  background: var(--beige);
+  border-left: 4px solid var(--gold);
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin: 10px 0;
+}
+.highlight-info p{ margin: .2em 0; }
+
+/* Banner chia Tiết */
+.period-banner {
+  background: var(--navy);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 30px 0 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 12px rgba(26, 54, 93, 0.2);
+}
+.period-banner:first-of-type { margin-top: 0; }
+
+/* ================= CÔNG THỨC TOÁN (MathJax) ================= */
+mjx-container[jax="SVG"]{
+  font-size: 1.2em !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+}
+mjx-container[jax="SVG"] svg path{
+  stroke: currentColor;
+  stroke-width: 1.2px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  paint-order: stroke fill;
+}
+
+.formula-block{
+  text-align: center;
+  margin: .4em 0;
+}
+.formula-block mjx-container[jax="SVG"][display="true"]{
+  display: inline-block !important;
+  background: var(--beige);
+  border-left: 4px solid var(--gold);
+  border-radius: 8px;
+  padding: 6px 18px;
+  margin: 0 !important;
+  text-align: center;
+}
+
+.formula-line{
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+  margin: .3em 0 .3em .4em;
+}
+.formula-line .formula-label{
+  min-width: 165px;
+  font-weight: 600;
+  color: var(--brown-a);
+}
+.formula-math mjx-container[jax="SVG"]{
+  background: var(--beige);
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+
+/* ================= ẢNH MINH HOẠ ================= */
+.img-container{
+  text-align: center;
+  margin: 12px 0;
+}
+.img-container img{
+  max-width: 100%;
+  max-height: 480px;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(26, 54, 93, .16);
+  cursor: zoom-in;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.img-container img:hover{
+  transform: scale(1.01);
+  box-shadow: 0 8px 24px rgba(26, 54, 93, .24);
+}
+.img-caption{
+  font-size: .85rem;
+  font-style: italic;
+  color: #555;
+  margin-top: 4px;
+}
+.img-fallback{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  background: linear-gradient(135deg, #e8eef7, #f5f0e1);
+  border: 2px dashed var(--lightgray);
+  border-radius: 10px;
+  color: var(--navy);
+  font-weight: 600;
+  padding: 20px;
+}
+
+/* ================= LỜI GIẢI ================= */
+.solution{ margin: 8px 0 4px; }
+.toggle-btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 14px;
+  font-size: .9rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+.toggle-btn:hover{ background: var(--darkblue); }
+.toggle-btn .arrow{ font-size: .8rem; }
+
+.solution-body{
+  display: none;
+  margin-top: 8px;
+  padding: 10px 14px;
+  background: #fff;
+  border-left: 4px solid var(--blue);
+  border-radius: 8px;
+}
+.solution-body.open{ display: block; }
+
+.exercise{
+  margin: 12px 0;
+  padding: 10px 14px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid var(--lightgray);
+}
+.exercise .ex-q{ margin-top: 0; }
+.exercise .ex-q strong{ color: var(--navy); }
+
+/* ================= WIDGET CỐ ĐỊNH ================= */
+.widget{
+  position: fixed;
+  z-index: 10000;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .55);
+  opacity: .35;
+  transition: opacity .3s ease;
+}
+.widget:hover{ opacity: 1; }
+
+.widget button{
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: #9AA3AF;
+  font-size: 12px;
+  font-family: inherit;
+  line-height: 1;
+  padding: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .15s ease, color .15s ease;
+}
+.widget button:hover{
+  background: #E2E8F0;
+  color: var(--navy);
+}
+
+.widget-nav{
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  flex-direction: column;
+}
+
+/* CSS cho các nhóm điều hướng (Tiết 1, Tiết 2) */
+.nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.nav-group + .nav-group {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed #9AA3AF;
+}
+
+.widget-font{
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  flex-direction: column;
+}
+.widget-menu{
+  bottom: 10px;
+  right: 10px;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* ================= MENU VẼ (...) ================= */
+.menu-panel{
+  position: absolute;
+  bottom: 32px;
+  right: 0;
+  display: none;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 8px 26px rgba(26, 54, 93, .22);
+  width: 250px;
+}
+.menu-panel.open{ display: flex; }
+
+.tb-row{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+.tb-row + .tb-row{
+  border-top: 1px solid #EEF2F7;
+  padding-top: 6px;
+  margin-top: 6px;
+}
+
+.tb-row button{
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  color: #6B7280;
+  font-size: 14px;
+  font-family: inherit;
+  line-height: 1;
+  padding: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .15s ease, color .15s ease;
+  flex-shrink: 0;
+}
+.tb-row button:hover{ background: #E2E8F0; }
+.tb-row button.active{ background: #DBEAFE; color: #1A365D; }
+
+.tb-colors button{
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  padding: 4px;
+}
+.color-swatch{
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: block;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+}
+.tb-colors button.active{
+  background: transparent;
+  box-shadow: 0 0 0 2px var(--dot-color, #1A365D);
+}
+
+.tb-width .width-value{
+  min-width: 22px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1A365D;
+}
+
+.tb-status .status-btn{
+  width: 100%;
+  height: 32px;
+  padding: 0 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1A365D;
+  background: #EFF6FF;
+  border-radius: 8px;
+}
+.tb-status .status-btn:hover{ background: #DBEAFE; }
+
+/* ================= CANVAS (ĐÃ NÂNG Z-INDEX LÊN CAO NHẤT) ================= */
+#drawCanvasBg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20001; /* Nằm trên modal ảnh */
+  pointer-events: none;
+  touch-action: none;
+}
+#drawCanvasFg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20002; /* Nằm trên modal ảnh */
+  pointer-events: none;
+  touch-action: none;
+}
+#drawCanvasFg.active {
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+/* ================= MODAL ================= */
+.modal{
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.modal.open{ display: flex; }
+
+.modal-backdrop{
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 15, 28, .88);
+}
+
+.video-box{
+  position: relative;
+  z-index: 1;
+  width: min(95vw, calc(90vh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .6);
+}
+.video-frame-wrap{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.video-frame-wrap iframe{
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.modal-close{
+  position: absolute;
+  z-index: 20005; /* Luôn nổi trên Canvas để có thể bấm đóng */
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .45);
+  background: rgba(0, 0, 0, .6);
+  color: #fff;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-close:hover{ background: rgba(0, 0, 0, .85); }
+
+#videoModal .modal-close{ top: 8px; right: 8px; }
+#imgModal .modal-close{ position: fixed; top: 16px; right: 16px; }
+
+#imgModal img{
+  position: relative;
+  z-index: 1;
+  display: block;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .6);
+  cursor: default;
+}
+
+/* ================= IN ẤN ================= */
+@media print{
+  .widget, #drawCanvasBg, #drawCanvasFg, .video-wrapper, .modal, .toggle-btn{ display: none !important; }
+  .solution-body{ display: block !important; }
+  body{ background: #fff; line-height: 1.3; }
+  .container{ width: 100%; max-width: none; margin: 0; padding: 0; background: #fff; box-shadow: none; border-radius: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- 2 LỚP CANVAS ĐỆM KÉP -->
+<canvas id="drawCanvasBg" aria-hidden="true"></canvas>
+<canvas id="drawCanvasFg" aria-hidden="true"></canvas>
+
+<!-- WIDGET ĐIỀU HƯỚNG -->
+<div class="widget widget-nav" role="navigation" aria-label="Điều hướng nhanh giữa các mục">
+  <button type="button" data-scroll="top" aria-label="Về đầu trang" title="Về đầu trang">0</button>
+  
+  <!-- Nhóm Tiết 19 -->
+  <div class="nav-group">
+    <button type="button" data-scroll="sec-i" aria-label="Mục I" title="Mục I">I</button>
+    <button type="button" data-scroll="sec-bt-1" aria-label="BT vận dụng Tiết 1" title="Bài tập vận dụng (Tiết 19)">✎</button>
+    <button type="button" data-scroll="sec-btn-1" aria-label="BT về nhà Tiết 1" title="Bài tập về nhà (Tiết 19)">▤</button>
+  </div>
+
+  <!-- Nhóm Tiết 20 -->
+  <div class="nav-group">
+    <button type="button" data-scroll="sec-ii" aria-label="Mục II" title="Mục II">II</button>
+    <button type="button" data-scroll="sec-bt-2" aria-label="BT vận dụng Tiết 2" title="Bài tập vận dụng (Tiết 20)">✎</button>
+    <button type="button" data-scroll="sec-tk" aria-label="Tổng kết" title="Tổng kết">☆</button>
+    <button type="button" data-scroll="sec-btn" aria-label="BT về nhà Tiết 2" title="Bài tập về nhà (Tiết 20)">▤</button>
+  </div>
+</div>
+
+<!-- WIDGET ĐỔI CỠ CHỮ -->
+<div class="widget widget-font" role="group" aria-label="Điều chỉnh cỡ chữ">
+  <button type="button" id="fontPlus"  aria-label="Tăng cỡ chữ"     title="Tăng cỡ chữ">A+</button>
+  <button type="button" id="fontMinus" aria-label="Giảm cỡ chữ"     title="Giảm cỡ chữ">A−</button>
+  <button type="button" id="fontReset" aria-label="Cỡ chữ mặc định" title="Cỡ chữ mặc định">A</button>
+</div>
+
+<!-- WIDGET MENU VẼ (...) -->
+<div class="widget widget-menu">
+  <div class="menu-panel" id="menuPanel">
+    <div class="tb-row tb-tools">
+      <button type="button" data-tool="pen"    title="Bút (K)"         aria-label="Bút">✎</button>
+      <button type="button" data-tool="line"   title="Đường thẳng (L)" aria-label="Đường thẳng">╱</button>
+      <button type="button" data-tool="arrow"  title="Mũi tên (I)"     aria-label="Mũi tên">▶</button>
+      <button type="button" data-tool="circle" title="Hình tròn (O)"   aria-label="Hình tròn">○</button>
+      <button type="button" data-tool="dot"    title="Chấm ( . )"      aria-label="Chấm">●</button>
+      <button type="button" data-tool="eraser" title="Tẩy kéo (3)"     aria-label="Tẩy kéo">⌫</button>
+      <button type="button" data-tool="eraser-stroke" title="Tẩy nét (4)" aria-label="Tẩy nét">✖</button>
+    </div>
+    <div class="tb-row tb-colors">
+      <button type="button" data-color="#8B4513" style="--dot-color:#8B4513" title="Màu nâu (N)" aria-label="Màu nâu"><span class="color-swatch" style="background:#8B4513"></span></button>
+      <button type="button" data-color="#e11d48" style="--dot-color:#e11d48" title="Màu đỏ (1)"  aria-label="Màu đỏ"><span class="color-swatch" style="background:#e11d48"></span></button>
+      <button type="button" data-color="#0066CC" style="--dot-color:#0066CC" title="Màu xanh (0)" aria-label="Màu xanh"><span class="color-swatch" style="background:#0066CC"></span></button>
+      <button type="button" data-color="#111111" style="--dot-color:#111111" title="Màu đen (D)"  aria-label="Màu đen"><span class="color-swatch" style="background:#111111"></span></button>
+    </div>
+    <div class="tb-row tb-width">
+      <button type="button" id="btnWidthMinus" title="Giảm độ dày (M)" aria-label="Giảm độ dày">−</button>
+      <span class="width-value" id="widthDisplay">3</span>
+      <button type="button" id="btnWidthPlus"  title="Tăng độ dày (B)" aria-label="Tăng độ dày">+</button>
+    </div>
+    <div class="tb-row tb-actions">
+      <button type="button" id="btnUndo"  title="Hoàn tác (Ctrl+Z)" aria-label="Hoàn tác">↶</button>
+      <button type="button" id="btnRedo"  title="Làm lại (Ctrl+Y)"  aria-label="Làm lại">↷</button>
+      <button type="button" id="btnClear" title="Xoá hết (X)"       aria-label="Xoá hết">🗑</button>
+    </div>
+    <div class="tb-row tb-status">
+      <button type="button" id="btnExitDraw" class="status-btn" title="Bật / Tắt chế độ vẽ (V)">Bật vẽ (V)</button>
+    </div>
+  </div>
+  <button type="button" id="menuBtn" aria-label="Mở menu công cụ" aria-expanded="false" title="Menu">...</button>
+</div>
+
+<!-- ================= NỘI DUNG BÀI GIẢNG ================= -->
+<main class="container" id="top">
+
+  <header class="lesson-header">
+    <h1>Bài 12: CHUYỂN ĐỘNG NÉM</h1>
+    <p class="subtitle">Chuyển động ném ngang và chuyển động ném xiên</p>
+  </header>
+
+  <section class="lesson-section" id="sec-intro">
+    <p>Nhảy xa là một ví dụ về chuyển động ném. Theo em, trong việc nhảy xa thì những yếu tố nào có tính quyết định đến thành tích nhảy của vận động viên?</p>
+    <div class="img-container">
+      <img src="12.0.png" alt="Mô tả động tác nhảy xa" class="zoomable-img" onerror="imgFallback(this)">
+      <p class="img-caption">Hình 12.0. Chuyển động nhảy xa của vận động viên.</p>
+    </div>
+  </section>
+
+  <!-- ================= TIẾT 19 ================= -->
+  <div class="period-banner">TIẾT 19: CHUYỂN ĐỘNG NÉM NGANG</div>
+
+  <section class="lesson-section" id="sec-check-1">
+    <h2><span class="quiz-mark">?</span> Kiểm tra bài cũ</h2>
+    <p>1. Viết công thức tính quãng đường và vận tốc của chuyển động thẳng đều.</p>
+    <p>2. Viết công thức tính quãng đường và vận tốc của sự rơi tự do (vận tốc ban đầu bằng 0).</p>
+    <div class="solution">
+      <button type="button" class="toggle-btn" aria-expanded="false">
+        <span class="arrow">▷</span><span class="label">Xem đáp án</span>
+      </button>
+      <div class="solution-body">
+        <p><strong>1. Chuyển động thẳng đều:</strong></p>
+        <ul>
+          <li>Quãng đường: \(s = v.t\)</li>
+          <li>Vận tốc: \(v = \text{hằng số}\)</li>
+        </ul>
+        <p><strong>2. Sự rơi tự do:</strong></p>
+        <ul>
+          <li>Quãng đường: \(s = \frac{1}{2}gt^2\)</li>
+          <li>Vận tốc: \(v = gt\)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="lesson-section" id="sec-i">
+    <h2>I. CHUYỂN ĐỘNG NÉM NGANG</h2>
+
+    <h3>1. Khái niệm chuyển động ném ngang</h3>
+    <p>Chuyển động ném ngang là chuyển động có vận tốc ban đầu theo phương nằm ngang và chuyển động dưới tác dụng của trọng lực.</p>
+
+    <h3>2. Thí nghiệm</h3>
+    <p>Thí nghiệm mô tả ở Hình 12.1 dùng để tìm hiểu chuyển động của vật bị ném theo phương nằm ngang. Dùng búa đập nhẹ vào thanh thép giữ bi B, thanh thép chuyển động thả bi B rơi tự do đồng thời đẩy bi A theo phương nằm ngang khỏi giá đỡ với vận tốc \(v_0\).</p>
+    
+    <div class="img-container">
+      <img src="12.1.png" alt="Thí nghiệm về chuyển động ném ngang" class="zoomable-img" onerror="imgFallback(this)">
+      <p class="img-caption">Hình 12.1. Thí nghiệm về chuyển động ném ngang.</p>
+    </div>
+
+    <p><strong>Hai viên bi có chạm đất cùng một lúc không?</strong></p>
+    
+    <div class="img-container">
+      <img src="12.2.png" alt="Ảnh chụp hoạt nghiệm chuyển động của hai viên bi A và B" class="zoomable-img" onerror="imgFallback(this)">
+      <p class="img-caption">Hình 12.2. Ảnh chụp hoạt nghiệm chuyển động của hai viên bi A và B.</p>
+    </div>
+
+    <p>Việc phân tích ảnh chụp hoạt nghiệm thí nghiệm trên (Hình 12.2) giúp ta so sánh chuyển động rơi tự do của bi B (với vận tốc ban đầu \(v_{0y}=0\)) với sự thay đổi vị trí theo phương thẳng đứng của viên bi A bị ném ngang với vận tốc ban đầu \(v_{0x} = v_0\).</p>
+    <p>Kết quả cho thấy: Sau những khoảng thời gian bằng nhau, độ dịch chuyển theo phương thẳng đứng của hai viên bi là như nhau.</p>
+
+    <h3>3. Phân tích kết quả thí nghiệm</h3>
+    <p>Đối với chuyển động ném ngang, người ta quan tâm tới thời gian từ khi vật được ném tới khi vật rơi chạm đất và tầm bay xa của vật theo phương nằm ngang. Để xác định các đại lượng này, người ta phân tích chuyển động của vật bị ném ngang thành hai chuyển động thành phần: chuyển động thành phần theo phương thẳng đứng và chuyển động thành phần theo phương nằm ngang.</p>
+    <p>Thí nghiệm trên cho thấy thành phần chuyển động theo phương thẳng đứng của viên bi A giống chuyển động rơi của viên bi B. Điều đó chứng tỏ thành phần chuyển động theo phương nằm ngang của viên bi A không ảnh hưởng đến thành phần chuyển động theo phương thẳng đứng của nó: <strong>Hai chuyển động thành phần này độc lập với nhau.</strong></p>
+
+    <h4>a) Thành phần chuyển động theo phương thẳng đứng</h4>
+    <p>Nếu bỏ qua sức cản của không khí thì chuyển động thành phần theo phương thẳng đứng của vật là chuyển động rơi tự do với vận tốc ban đầu bằng 0.</p>
+    <p>Nếu chọn chiều dương là chiều từ trên xuống và gọi H là độ cao của vật khi bị ném ngang thì:</p>
+    <div class="formula-block">$$H = \frac{1}{2}gt^2 \Rightarrow t = \sqrt{\frac{2H}{g}} \quad (12.1)$$</div>
+    <p>Công thức (12.1) cho thấy:</p>
+    <ul>
+      <li>Thời gian rơi của vật bị ném ngang chỉ phụ thuộc độ cao H của vật khi bị ném, không phụ thuộc vận tốc ném.</li>
+      <li>Nếu từ cùng một độ cao, đồng thời ném ngang các vật khác nhau với các vận tốc khác nhau thì chúng đều rơi xuống đất cùng một lúc.</li>
+    </ul>
+
+    <h4>b) Thành phần chuyển động theo phương nằm ngang</h4>
+    <p>Nếu chọn chiều dương là chiều ném viên bi thì độ dịch chuyển trong chuyển động thành phần nằm ngang là:</p>
+    <div class="formula-block">$$d_x = v_x t = v_0 t$$</div>
+    
+    <div class="img-container">
+      <img src="12.3.png" alt="Phân tích chuyển động ném ngang" class="zoomable-img" onerror="imgFallback(this)">
+      <p class="img-caption">Hình 12.3. Phân tích chuyển động ném ngang.</p>
+    </div>
+
+    <p>Giá trị cực đại của độ dịch chuyển trong chuyển động thành phần nằm ngang được gọi là <strong>tầm xa L</strong> của chuyển động ném ngang (Hình 12.4).</p>
+    <div class="formula-block">$$L = d_{xmax} = v_0 t_{max}$$</div>
+    <p>với \(t_{max}\) là thời gian rơi của vật. Do đó:</p>
+    <div class="formula-block">$$L = v_0 \sqrt{\frac{2H}{g}} \quad (12.2)$$</div>
+    <p>Công thức (12.2) cho thấy:</p>
+    <ul>
+      <li>Tầm xa của vật bị ném ngang phụ thuộc vào độ cao H của vật khi bị ném và vận tốc ném. Nếu từ cùng một độ cao đồng thời ném các vật khác nhau với vận tốc khác nhau thì vật nào có vận tốc ném lớn hơn sẽ có tầm xa lớn hơn.</li>
+      <li>Nếu từ các độ cao khác nhau ném ngang các vật với cùng vận tốc thì vật nào được ném ở độ cao lớn hơn sẽ có tầm xa lớn hơn.</li>
+    </ul>
+    
+    <div class="img-container">
+      <img src="12.4.png" alt="Mô tả tầm bay xa L của vật ném ngang" class="zoomable-img" onerror="imgFallback(this)">
+      <p class="img-caption">Hình 12.4. Mô tả tầm bay xa L của vật ném ngang.</p>
+    </div>
+
+    <div class="img-container">
+      <img src="12.5.png" alt="Dự đoán tầm xa của ba viên bi" class="zoomable-img" onerror="imgFallback(this)">
+      <p class="img-caption">Hình 12.5. Thí nghiệm kiểm tra tầm xa.</p>
+    </div>
+  </section>
+
+  <!-- BÀI TẬP VẬN DỤNG TIẾT 1 -->
+  <section class="lesson-section" id="sec-bt-1">
+    <h2>✎ Bài tập vận dụng (Tiết 19)</h2>
+    <div class="exercise">
+      <p class="ex-q"><strong>Bài tập ví dụ:</strong> Một người đứng từ một đài quan sát ven biển, ném một hòn đá theo phương nằm ngang hướng ra biển với vận tốc 12 m/s. Biết độ cao từ vị trí ném so với mặt biển là 40 m. Bỏ qua sức cản của không khí, lấy \(g = 9,8\ \mathrm{m/s^2}\).</p>
+      <p>a) Sau bao lâu thì hòn đá chạm mặt biển?</p>
+      <p>b) Tầm xa L của hòn đá là bao nhiêu mét?</p>
+      <div class="solution">
+        <button type="button" class="toggle-btn" aria-expanded="false">
+          <span class="arrow">▷</span><span class="label">Xem lời giải</span>
+        </button>
+        <div class="solution-body">
+          <p><strong>Tóm tắt:</strong> \(v_{0x} = v = 12\ \mathrm{m/s}\); \(H = 40\ \mathrm{m}\); \(g = 9,8\ \mathrm{m/s^2}\).</p>
+          <p><strong>a)</strong> Thời gian hòn đá rơi chạm mặt biển là:</p>
+          <div class="formula-block">$$t = \sqrt{\frac{2H}{g}} = \sqrt{\frac{2 \cdot 40}{9,8}} \approx 2,86\ \mathrm{s}$$</div>
+          <p><strong>b)</strong> Tầm xa L của hòn đá là:</p>
+          <div class="formula-block">$$L = v_0 t = 12 \cdot 2,86 \approx 34,3\ \mathrm{m}$$</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BÀI TẬP VỀ NHÀ TIẾT 1 -->
+  <section class="lesson-section" id="sec-btn-1">
+    <h2>▤ Bài tập về nhà (Tiết 19)</h2>
+    <ol>
+      <li>Nêu sự khác biệt giữa chuyển động rơi tự do và chuyển động ném ngang.</li>
+      <li>Một máy bay chở hàng bay ngang ở độ cao 490 m với vận tốc 100 m/s thì thả một gói hàng cứu trợ xuống một làng đang bị lũ lụt. Lấy \(g = 9,8\ \mathrm{m/s^2}\) và bỏ qua sức cản của không khí.
+        <br>a) Sau bao lâu thì gói hàng chạm đất?
+        <br>b) Tầm xa của gói hàng là bao nhiêu?
+        <div class="solution">
+          <button type="button" class="toggle-btn" aria-expanded="false">
+            <span class="arrow">▷</span><span class="label">Xem hướng dẫn</span>
+          </button>
+          <div class="solution-body">
+            <p>a) Thời gian rơi: \(t = \sqrt{\frac{2H}{g}} = \sqrt{\frac{2 \cdot 490}{9,8}} = 10\ \mathrm{s}\).</p>
+            <p>b) Tầm xa: \(L = v_0 \cdot t = 100 \cdot 10 = 1000\ \mathrm{m}\) (1 km).</p>
+          </div>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ================= TIẾT 20 ================= -->
+  <div class="period-banner">TIẾT 20: CHUYỂN ĐỘNG NÉM XIÊN</div>
+
+  <section class="lesson-section" id="sec-check-2">
+    <h2><span class="quiz-mark">?</span> Kiểm tra bài cũ</h2>
+    <p>Nêu công thức tính tầm xa của chuyển động ném ngang. Tầm xa phụ thuộc vào những yếu tố nào?</p>
+    <div class="solution">
+      <button type="button" class="toggle-btn" aria-expanded="false">
+        <span class="arrow">▷</span><span class="label">Xem đáp án</span>
+      </button>
+      <div class="solution-body">
+        <p>Công thức tính tầm xa của chuyển động ném ngang:</p>
+        <div class="formula-block">$$L = v_0\sqrt{\frac{2H}{g}}$$</div>
+        <p>Tầm xa phụ thuộc vào:
+        <ul>
+          <li>Vận tốc ném ban đầu \(v_0\) (tỉ lệ thuận).</li>
+          <li>Độ cao H khi ném (tỉ lệ thuận với \(\sqrt{H}\)).</li>
+          <li>Gia tốc rơi tự do \(g\) (tỉ lệ nghịch với \(\sqrt{g}\)).</li>
+        </ul>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="lesson-section" id="sec-ii">
+    <h2>II. CHUYỂN ĐỘNG NÉM XIÊN</h2>
+
+    <p>Khi đánh một quả bóng tennis lên cao theo phương xiên góc với phương nằm ngang, người ta thấy quả bóng bay lên rồi rơi xuống theo một quỹ đạo có dạng hình parabol (Hình 12.6). Chuyển động của quả bóng trong trường hợp này gọi là chuyển động của vật bị ném xiên, gọi tắt là chuyển động ném xiên.</p>
+
+    <div class="img-container">
+      <img src="12.6.png" alt="Ảnh chụp hoạt nghiệm chuyển động ném xiên" class="zoomable-img" onerror="imgFallback(this)">
+      <p class="img-caption">Hình 12.6. Ảnh chụp hoạt nghiệm chuyển động ném xiên.</p>
+    </div>
+
+    <h3>1. Phân tích chuyển động ném xiên</h3>
+    <p>Đối với chuyển động ném xiên, người ta cũng quan tâm đến thời gian từ khi vật được ném lên tới khi vật rơi chạm đất và tầm xa của vật theo phương nằm ngang. Để xác định các đại lượng này người ta cũng thực hiện như đã làm với chuyển động ném ngang, phân tích chuyển động ném xiên thành hai chuyển động thành phần: chuyển động thành phần theo phương thẳng đứng và chuyển động thành phần theo phương nằm ngang (Hình 12.7).</p>
+
+    <div class="img-container">
+      <img src="12.7.png" alt="Phân tích chuyển động ném xiên" class="zoomable-img" onerror="imgFallback(this)">
+      <p class="img-caption">Hình 12.7. Phân tích chuyển động ném xiên.</p>
+    </div>
+
+    <h3>2. Công thức xác định tầm cao và tầm xa của chuyển động ném xiên</h3>
+    <p>Bằng cách làm tương tự như cách làm đối với chuyển động ném ngang. Bỏ qua sức cản của không khí, có thể thiết lập được công thức xác định tầm cao và tầm xa của chuyển động ném xiên:</p>
+    <div class="formula-line">
+      <span class="formula-label">Tầm cao:</span>
+      <span class="formula-math">$H = d_{y \max} = \frac{v_0^2 \sin^2 \alpha}{2g}$</span>
+    </div>
+    <div class="formula-line">
+      <span class="formula-label">Tầm xa:</span>
+      <span class="formula-math">$L = d_{x \max} = \frac{v_0^2 \sin 2\alpha}{g}$</span>
+    </div>
+    <p><em>Trong đó: \(v_0\) là vận tốc ban đầu, \(\alpha\) là góc ném so với phương nằm ngang, \(g\) là gia tốc trọng trường.</em></p>
+    
+    <div class="img-container">
+      <img src="12.8.png" alt="Mô tả quỹ đạo và tầm cao, tầm xa" class="zoomable-img" onerror="imgFallback(this)">
+      <p class="img-caption">Hình 12.8. Mô tả quỹ đạo chuyển động ném xiên.</p>
+    </div>
+  </section>
+
+  <!-- BÀI TẬP VẬN DỤNG TIẾT 2 -->
+  <section class="lesson-section" id="sec-bt-2">
+    <h2>✎ Bài tập vận dụng (Tiết 20)</h2>
+    <div class="exercise">
+      <p class="ex-q"><strong>Bài tập ví dụ:</strong> Một người nhảy xa với vận tốc ban đầu 7,5 m/s theo phương xiên \(30^\circ\) với phương nằm ngang. Biết vị trí giậm nhảy ngang với hố nhảy. Bỏ qua sức cản của không khí và lấy \(g = 9,8\ \mathrm{m/s^2}\). Tính:</p>
+      <p>a) Vận tốc ban đầu của người nhảy theo phương thẳng đứng và theo phương nằm ngang.</p>
+      <p>b) Tầm cao H.</p>
+      <p>c) Thời gian từ khi bắt đầu nhảy tới khi đạt tầm cao.</p>
+      <p>d) Thời gian từ lúc bắt đầu nhảy lên tới lúc rơi xuống hố nhảy.</p>
+      <p>e) Tầm xa L.</p>
+      <div class="solution">
+        <button type="button" class="toggle-btn" aria-expanded="false">
+          <span class="arrow">▷</span><span class="label">Xem lời giải</span>
+        </button>
+        <div class="solution-body">
+          <p><strong>a) Vận tốc ban đầu:</strong></p>
+          <ul>
+            <li>Theo phương thẳng đứng: \(v_{0y} = v_0 \sin 30^\circ = 7,5 \cdot 0,5 = 3,75\ \mathrm{m/s}\) (hướng lên).</li>
+            <li>Theo phương nằm ngang: \(v_{0x} = v_0 \cos 30^\circ = 7,5 \cdot \frac{\sqrt{3}}{2} \approx 6,50\ \mathrm{m/s}\) (hướng sang phải).</li>
+          </ul>
+
+          <p><strong>b) Tầm cao H:</strong></p>
+          <p>Khi đạt tầm cao H thì vận tốc theo phương thẳng đứng bằng 0 (\(v_y = 0\)). Ta có:</p>
+          <div class="formula-block">$$H = \frac{v_{0y}^2}{2g} = \frac{(3,75)^2}{2 \cdot 9,8} \approx 0,717\ \mathrm{m}$$</div>
+
+          <p><strong>c) Thời gian từ lúc bắt đầu nhảy tới khi đạt tầm cao:</strong></p>
+          <p>Áp dụng công thức vận tốc: \(v_y = v_{0y} - gt = 0 \Rightarrow t = \frac{v_{0y}}{g} = \frac{3,75}{9,8} \approx 0,383\ \mathrm{s}\).</p>
+
+          <p><strong>d) Thời gian từ lúc bắt đầu nhảy lên tới lúc rơi xuống hố nhảy:</strong></p>
+          <p>Do quỹ đạo đối xứng, thời gian bay toàn phần bằng 2 lần thời gian lên tầm cao:</p>
+          <div class="formula-block">$$t' = 2t = 2 \cdot 0,383 = 0,766\ \mathrm{s}$$</div>
+
+          <p><strong>e) Tầm xa L:</strong></p>
+          <div class="formula-block">$$L = v_{0x} \cdot t' = 6,50 \cdot 0,766 \approx 4,98\ \mathrm{m}$$</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TỔNG KẾT -->
+  <section class="lesson-section" id="sec-tk">
+    <h2>☆ Tổng kết</h2>
+    <ul>
+      <li>Chuyển động ném có thể phân tích thành hai chuyển động thành phần vuông góc với nhau: chuyển động với gia tốc theo phương thẳng đứng, chuyển động thẳng đều theo phương nằm ngang.</li>
+      <li><strong>Ném ngang:</strong>
+        <div class="formula-line">
+          <span class="formula-label">Thời gian rơi:</span>
+          <span class="formula-math">\(t = \sqrt{\frac{2H}{g}}\)</span>
+        </div>
+        <div class="formula-line">
+          <span class="formula-label">Tầm xa:</span>
+          <span class="formula-math">\(L = v_0 t = v_0\sqrt{\frac{2H}{g}}\)</span>
+        </div>
+      </li>
+      <li><strong>Ném xiên:</strong>
+        <div class="formula-line">
+          <span class="formula-label">Tầm cao:</span>
+          <span class="formula-math">\(H = \frac{v_0^2 \sin^2\alpha}{2g}\)</span>
+        </div>
+        <div class="formula-line">
+          <span class="formula-label">Tầm xa:</span>
+          <span class="formula-math">\(L = \frac{v_0^2 \sin 2\alpha}{g}\)</span>
+        </div>
+      </li>
+      <li><em>Chú ý: Các công thức trên chỉ đúng khi lực cản của không khí không đáng kể.</em></li>
+    </ul>
+  </section>
+
+  <!-- BÀI TẬP VỀ NHÀ TIẾT 2 -->
+  <section class="lesson-section" id="sec-btn">
+    <h2>▤ Bài tập về nhà (Tiết 20)</h2>
+    <ol>
+      <li>Người ta bắn một viên bi với vận tốc ban đầu 4 m/s hướng lên theo phương xiên \(45^\circ\) so với phương nằm ngang. Coi sức cản của không khí là không đáng kể, lấy \(g = 9,8\ \mathrm{m/s^2}\).
+        <br>a) Tính vận tốc của viên bi theo phương nằm ngang và phương thẳng đứng tại thời điểm bắt đầu bắn.
+        <br>b) Viên bi đạt tầm cao H vào lúc nào? Tính tầm cao H.
+        <br>c) Xác định tầm xa L của viên bi.
+        <div class="solution">
+          <button type="button" class="toggle-btn" aria-expanded="false">
+            <span class="arrow">▷</span><span class="label">Xem hướng dẫn</span>
+          </button>
+          <div class="solution-body">
+            <p>a) \(v_{0x} = v_0 \cos 45^\circ \approx 2,83\ \mathrm{m/s}\); \(v_{0y} = v_0 \sin 45^\circ \approx 2,83\ \mathrm{m/s}\).</p>
+            <p>b) Thời gian đạt tầm cao: \(t = \frac{v_{0y}}{g} \approx 0,29\ \mathrm{s}\). Tầm cao: \(H = \frac{v_{0y}^2}{2g} \approx 0,41\ \mathrm{m}\).</p>
+            <p>c) Tầm xa: \(L = \frac{v_0^2 \sin 2\alpha}{g} = \frac{4^2 \sin 90^\circ}{9,8} \approx 1,63\ \mathrm{m}\).</p>
+          </div>
+        </div>
+      </li>
+      <li>Sưu tầm hình ảnh và giải thích một số tình huống chuyển động ném trong thực tế (ví dụ: kĩ thuật ném lao, đá phạt bóng, bắn pháo hoa).</li>
+    </ol>
+  </section>
+
+</main>
+
+<!-- MODAL VIDEO -->
+<div class="modal" id="videoModal" role="dialog" aria-modal="true" aria-label="Video thí nghiệm">
+  <div class="modal-backdrop" data-close="video"></div>
+  <div class="video-box">
+    <button type="button" class="modal-close" data-close="video" aria-label="Đóng video">✕</button>
+    <div class="video-frame-wrap" id="videoFrameWrap"></div>
+  </div>
+</div>
+
+<!-- MODAL PHÓNG TO ẢNH -->
+<div class="modal" id="imgModal" role="dialog" aria-modal="true" aria-label="Phóng to hình ảnh">
+  <div class="modal-backdrop" data-close="img"></div>
+  <button type="button" class="modal-close" data-close="img" aria-label="Đóng ảnh">✕</button>
+  <img id="zoomImg" src="" alt="">
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ========== 1. ĐỔI CỠ CHỮ ========== */
+  var rootEl     = document.documentElement;
+  var MIN_SCALE  = 0.8;
+  var MAX_SCALE  = 1.9;
+  var STEP       = 0.1;
+  var LS_KEY     = 'vl10-font-scale';
+
+  var scale = parseFloat(localStorage.getItem(LS_KEY));
+  if (isNaN(scale) || scale < MIN_SCALE || scale > MAX_SCALE) scale = 1;
+
+  function applyScale() {
+    scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale));
+    scale = Math.round(scale * 100) / 100;
+    rootEl.style.setProperty('--font-scale', scale.toFixed(2));
+    try { localStorage.setItem(LS_KEY, scale.toFixed(2)); } catch (e) {}
+    setTimeout(resizeCanvas, 50);
+  }
+  applyScale();
+
+  document.getElementById('fontPlus').addEventListener('click', function () {
+    scale = Math.round((scale + STEP) * 100) / 100;
+    applyScale();
+  });
+  document.getElementById('fontMinus').addEventListener('click', function () {
+    scale = Math.round((scale - STEP) * 100) / 100;
+    applyScale();
+  });
+  document.getElementById('fontReset').addEventListener('click', function () {
+    scale = 1;
+    applyScale();
+  });
+
+  /* ========== 2. ĐIỀU HƯỚNG NHANH ========== */
+  document.querySelectorAll('[data-scroll]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var el = document.getElementById(btn.getAttribute('data-scroll'));
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  /* ========== 3. NÚT ẨN/HIỆN LỜI GIẢI ========== */
+  document.querySelectorAll('.toggle-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var body = btn.nextElementSibling;
+      if (!body) return;
+      var isOpen = body.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      var arrow = btn.querySelector('.arrow');
+      var label = btn.querySelector('.label');
+      if (arrow) arrow.textContent = isOpen ? '▼' : '▷';
+      if (label) label.textContent = isOpen ? 'Ẩn đáp án' : 'Xem đáp án';
+      setTimeout(resizeCanvas, 50);
+    });
+  });
+
+  /* ========== 4. MODAL VIDEO ========== */
+  var videoModal     = document.getElementById('videoModal');
+  var videoFrameWrap = document.getElementById('videoFrameWrap');
+  var imgModal       = document.getElementById('imgModal');
+  var zoomImg        = document.getElementById('zoomImg');
+
+  var VIDEO_SRC = 'https://www.youtube.com/embed/E43-CfukEgs?autoplay=1&rel=0';
+
+  function openVideo() {
+    videoFrameWrap.innerHTML =
+      '<iframe src="' + VIDEO_SRC + '" ' +
+      'title="Video thí nghiệm" ' +
+      'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+      'allowfullscreen></iframe>';
+    videoModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeVideo() {
+    videoModal.classList.remove('open');
+    videoFrameWrap.innerHTML = '';
+    if (!imgModal.classList.contains('open')) {
+      document.body.style.overflow = '';
+    }
+  }
+
+  var videoThumb = document.getElementById('videoThumb');
+  if (videoThumb) {
+    videoThumb.addEventListener('click', openVideo);
+    videoThumb.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        openVideo();
+      }
+    });
+  }
+
+  videoModal.addEventListener('click', function (e) {
+    if (e.target.closest('[data-close="video"]')) { closeVideo(); return; }
+    if (!e.target.closest('.video-box')) { closeVideo(); }
+  });
+
+  /* ========== 5. MODAL PHÓNG TO ẢNH ========== */
+  function applyZoomSize(naturalW, naturalH) {
+    if (!naturalW || !naturalH) return;
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    var maxW = vw * 0.95;
+    var maxH = vh * 0.90;
+    var ratio = naturalW / naturalH;
+    var w = maxW;
+    var h = w / ratio;
+    if (h > maxH) {
+      h = maxH;
+      w = h * ratio;
+    }
+    zoomImg.style.width  = Math.round(w) + 'px';
+    zoomImg.style.height = Math.round(h) + 'px';
+  }
+
+  function openImage(src, alt) {
+    var probe = new Image();
+    probe.onload = function () {
+      applyZoomSize(probe.naturalWidth, probe.naturalHeight);
+      zoomImg.src = src;
+      zoomImg.alt = alt || '';
+      imgModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+    probe.onerror = function () {
+      zoomImg.style.width  = 'auto';
+      zoomImg.style.height = 'auto';
+      zoomImg.src = src;
+      zoomImg.alt = alt || '';
+      imgModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+    probe.src = src;
+  }
+
+  function closeImage() {
+    imgModal.classList.remove('open');
+    zoomImg.src = '';
+    zoomImg.style.width  = '';
+    zoomImg.style.height = '';
+    if (!videoModal.classList.contains('open')) {
+      document.body.style.overflow = '';
+    }
+  }
+
+  document.querySelectorAll('.zoomable-img').forEach(function (img) {
+    img.addEventListener('click', function (e) {
+      e.stopPropagation();
+      openImage(img.src, img.alt);
+    });
+  });
+
+  window.addEventListener('resize', function () {
+    if (imgModal.classList.contains('open') && zoomImg.naturalWidth) {
+      applyZoomSize(zoomImg.naturalWidth, zoomImg.naturalHeight);
+    }
+  });
+
+  imgModal.addEventListener('click', function (e) {
+    if (e.target === zoomImg) { e.stopPropagation(); return; }
+    closeImage();
+  });
+
+  /* ========== 6. MENU (...) VÀ CÁC CÔNG CỤ VẼ ========== */
+  var menuBtn   = document.getElementById('menuBtn');
+  var menuPanel = document.getElementById('menuPanel');
+
+  function closeMenu() {
+    menuPanel.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+  }
+
+  menuBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var isOpen = menuPanel.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+
+  document.addEventListener('click', function (e) {
+    if (menuPanel.classList.contains('open') && !e.target.closest('.widget-menu')) {
+      closeMenu();
+    }
+  });
+
+  // ==========================================
+  // LOGIC VẼ ĐỆM KÉP (DOUBLE BUFFERING)
+  // ==========================================
+  var canvasBg = document.getElementById('drawCanvasBg');
+  var ctxBg    = canvasBg.getContext('2d');
+  var canvasFg = document.getElementById('drawCanvasFg');
+  var ctxFg    = canvasFg.getContext('2d');
+
+  var dpr        = 1;
+  var cssWidth   = 0;
+  var cssHeight  = 0;
+  
+  var shapes     = [];
+  var history    = [];
+  var historyIndex = -1;
+  
+  var curShape   = null;
+  var drawMode   = false;
+  var isDown     = false;
+
+  var tool        = 'pen';
+  var strokeColor = '#8B4513';
+  var strokeWidth = 3;
+
+  // --- QUẢN LÝ LỊCH SỬ (UNDO / REDO) ---
+  function saveHistory() {
+    if (historyIndex < history.length - 1) {
+      history = history.slice(0, historyIndex + 1);
+    }
+    history.push(JSON.parse(JSON.stringify(shapes)));
+    historyIndex++;
+  }
+
+  function undo() { 
+    if (historyIndex > 0) {
+      historyIndex--;
+      shapes = JSON.parse(JSON.stringify(history[historyIndex]));
+      curShape = null;
+      redrawBg();
+      redrawFg();
+    }
+  }
+  
+  function redo() { 
+    if (historyIndex < history.length - 1) {
+      historyIndex++;
+      shapes = JSON.parse(JSON.stringify(history[historyIndex]));
+      curShape = null;
+      redrawBg();
+      redrawFg();
+    }
+  }
+
+  function clearAll() { 
+    if (shapes.length === 0) return;
+    shapes = []; 
+    saveHistory();
+    curShape = null;
+    redrawBg();
+    redrawFg(); 
+  }
+
+  // --- TOÁN HỌC HỖ TRỢ TẨY NÉT ---
+  function distToSegmentSq(p, p1, p2) {
+    var l2 = (p2.x - p1.x)**2 + (p2.y - p1.y)**2;
+    if (l2 === 0) return (p.x - p1.x)**2 + (p.y - p1.y)**2;
+    var t = ((p.x - p1.x) * (p2.x - p1.x) + (p.y - p1.y) * (p2.y - p1.y)) / l2;
+    t = Math.max(0, Math.min(1, t));
+    var projX = p1.x + t * (p2.x - p1.x);
+    var projY = p1.y + t * (p2.y - p1.y);
+    return (p.x - projX)**2 + (p.y - projY)**2;
+  }
+
+  function hitTest(shape, x, y) {
+    var pt = {x: x, y: y};
+    var threshold = Math.max(15, shape.width * 2);
+    var thresholdSq = threshold * threshold;
+
+    if (shape.tool === 'pen') {
+      var pts = shape.points;
+      for (var i = 0; i < pts.length - 1; i++) {
+        if (distToSegmentSq(pt, pts[i], pts[i+1]) < thresholdSq) return true;
+      }
+      if (pts.length === 1) {
+        var dx = pt.x - pts[0].x;
+        var dy = pt.y - pts[0].y;
+        if (dx*dx + dy*dy < thresholdSq) return true;
+      }
+    } else if (shape.tool === 'line' || shape.tool === 'arrow') {
+      if (distToSegmentSq(pt, shape.start, shape.end) < thresholdSq) return true;
+    } else if (shape.tool === 'circle') {
+      var r = Math.hypot(shape.end.x - shape.start.x, shape.end.y - shape.start.y);
+      var d = Math.hypot(pt.x - shape.start.x, pt.y - shape.start.y);
+      if (Math.abs(d - r) < threshold) return true;
+    } else if (shape.tool === 'dot') {
+      var r = Math.max(2, shape.width * 1.8);
+      var d = Math.hypot(pt.x - shape.start.x, pt.y - shape.start.y);
+      if (d < r + threshold) return true;
+    }
+    return false;
+  }
+
+  // --- KHỞI TẠO VÀ VẼ ĐỆM KÉP ---
+  function resizeCanvas() {
+    if (isDown) return; // Không resize khi đang vẽ để tránh giật
+
+    var newWidth = Math.max(document.documentElement.clientWidth, window.innerWidth);
+    var newHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight, window.innerHeight);
+    var newDpr = window.devicePixelRatio || 1;
+
+    if (newWidth === cssWidth && newHeight === cssHeight && newDpr === dpr) return;
+
+    cssWidth = newWidth;
+    cssHeight = newHeight;
+    dpr = newDpr;
+
+    [canvasBg, canvasFg].forEach(function(canvas) {
+      canvas.width  = Math.round(cssWidth * dpr);
+      canvas.height = Math.round(cssHeight * dpr);
+      canvas.style.width  = cssWidth + 'px';
+      canvas.style.height = cssHeight + 'px';
+    });
+
+    ctxBg.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctxFg.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    redrawBg();
+    redrawFg();
+  }
+
+  function redrawBg() {
+    ctxBg.save();
+    ctxBg.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctxBg.clearRect(0, 0, cssWidth, cssHeight);
+    for (var i = 0; i < shapes.length; i++) drawShape(shapes[i], false, ctxBg);
+    ctxBg.restore();
+  }
+
+  var rafId = null;
+  function redrawFg() {
+    if (rafId) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+    ctxFg.save();
+    ctxFg.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctxFg.clearRect(0, 0, cssWidth, cssHeight);
+    if (curShape) drawShape(curShape, true, ctxFg);
+    ctxFg.restore();
+  }
+
+  function scheduleFgRedraw() {
+    if (!rafId) {
+      rafId = requestAnimationFrame(function() {
+        redrawFg();
+        rafId = null;
+      });
+    }
+  }
+
+  function getPointerPos(e) {
+    var rect = canvasFg.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+  }
+
+  function drawShape(s, isFg, ctx) {
+    ctx.save();
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    
+    if (s.tool === 'eraser') {
+      if (isFg) {
+        // Hiển thị màu xám nhạt khi đang tẩy trên lớp FG
+        ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+        ctx.fillStyle = 'rgba(0,0,0,0.15)';
+      } else {
+        // Xóa thực sự trên lớp BG
+        ctx.globalCompositeOperation = 'destination-out';
+      }
+      ctx.lineWidth = s.width * 3;
+    } else {
+      ctx.strokeStyle = s.color;
+      ctx.fillStyle = s.color;
+      ctx.lineWidth = s.width;
+    }
+
+    if (s.tool === 'pen' || s.tool === 'eraser') {
+      var pts = s.points;
+      if (pts.length === 1) {
+        ctx.beginPath();
+        ctx.arc(pts[0].x, pts[0].y, Math.max(0.5, ctx.lineWidth / 2), 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.beginPath();
+        ctx.moveTo(pts[0].x, pts[0].y);
+        for (var i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+        ctx.stroke();
+      }
+    } else if (s.tool === 'line') {
+      ctx.beginPath();
+      ctx.moveTo(s.start.x, s.start.y);
+      ctx.lineTo(s.end.x, s.end.y);
+      ctx.stroke();
+    } else if (s.tool === 'arrow') {
+      var ang = Math.atan2(s.end.y - s.start.y, s.end.x - s.start.x);
+      ctx.beginPath();
+      ctx.moveTo(s.start.x, s.start.y);
+      ctx.lineTo(s.end.x, s.end.y);
+      ctx.stroke();
+      var head = Math.max(10, s.width * 4);
+      ctx.beginPath();
+      ctx.moveTo(s.end.x, s.end.y);
+      ctx.lineTo(s.end.x - head * Math.cos(ang - Math.PI / 7),
+                 s.end.y - head * Math.sin(ang - Math.PI / 7));
+      ctx.lineTo(s.end.x - head * Math.cos(ang + Math.PI / 7),
+                 s.end.y - head * Math.sin(ang + Math.PI / 7));
+      ctx.closePath();
+      ctx.fill();
+    } else if (s.tool === 'circle') {
+      var r = Math.hypot(s.end.x - s.start.x, s.end.y - s.start.y);
+      ctx.beginPath();
+      ctx.arc(s.start.x, s.start.y, Math.max(1, r), 0, Math.PI * 2);
+      ctx.stroke();
+    } else if (s.tool === 'dot') {
+      ctx.beginPath();
+      ctx.arc(s.start.x, s.start.y, Math.max(2, s.width * 1.8), 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function setDrawMode(on) {
+    drawMode = on;
+    canvasFg.classList.toggle('active', on);
+    document.body.style.userSelect = on ? 'none' : '';
+    document.body.style.webkitUserSelect = on ? 'none' : '';
+  }
+
+  function setTool(t) {
+    tool = t;
+    menuPanel.querySelectorAll('[data-tool]').forEach(function (b) {
+      b.classList.toggle('active', b.getAttribute('data-tool') === t);
+    });
+  }
+
+  function setColor(c) {
+    strokeColor = c;
+    menuPanel.querySelectorAll('[data-color]').forEach(function (b) {
+      b.classList.toggle('active', b.getAttribute('data-color') === c);
+    });
+  }
+
+  function setWidth(w) {
+    strokeWidth = Math.min(30, Math.max(1, w));
+    document.getElementById('widthDisplay').textContent = strokeWidth;
+  }
+
+  // --- SỰ KIỆN VẼ TRÊN LỚP FOREGROUND ---
+  canvasFg.addEventListener('pointerdown', function (e) {
+    if (!drawMode) return;
+    e.preventDefault();
+
+    var p = getPointerPos(e);
+
+    // Chế độ Tẩy Nét (Object Eraser)
+    if (tool === 'eraser-stroke') {
+      for (var i = shapes.length - 1; i >= 0; i--) {
+        if (shapes[i].tool === 'eraser') continue;
+        if (hitTest(shapes[i], p.x, p.y)) {
+          shapes.splice(i, 1);
+          saveHistory();
+          redrawBg(); // Cập nhật ngay lên nền
+          break;
+        }
+      }
+      return; 
+    }
+
+    isDown = true;
+    try { canvasFg.setPointerCapture(e.pointerId); } catch (err) {}
+    
+    if (tool === 'pen' || tool === 'eraser') {
+      curShape = { tool: tool, color: strokeColor, width: strokeWidth, points: [p] };
+    } else {
+      curShape = { tool: tool, color: strokeColor, width: strokeWidth, start: p, end: p };
+    }
+    scheduleFgRedraw();
+  });
+
+  canvasFg.addEventListener('pointermove', function (e) {
+    if (!isDown || !curShape) return;
+    e.preventDefault();
+    var p = getPointerPos(e);
+    if (curShape.points) curShape.points.push(p);
+    else curShape.end = p;
+    scheduleFgRedraw();
+  });
+
+  function endStroke() {
+    if (!isDown) return;
+    isDown = false;
+    if (curShape) {
+      shapes.push(curShape);
+      curShape = null;
+      saveHistory();
+      redrawBg(); // Vẽ nét hoàn chỉnh lên BG
+      redrawFg(); // Xóa FG để chuẩn bị nét mới
+    }
+  }
+  canvasFg.addEventListener('pointerup', endStroke);
+  canvasFg.addEventListener('pointercancel', endStroke);
+  window.addEventListener('pointerup', endStroke);
+
+  // Gắn sự kiện menu vẽ
+  menuPanel.querySelectorAll('[data-tool]').forEach(function (b) {
+    b.addEventListener('click', function () { 
+      setTool(b.getAttribute('data-tool')); 
+      setDrawMode(true);
+      document.getElementById('btnExitDraw').textContent = 'Đang vẽ (V)';
+      closeMenu(); 
+    });
+  });
+  
+  menuPanel.querySelectorAll('[data-color]').forEach(function (b) {
+    b.addEventListener('click', function () { 
+      setColor(b.getAttribute('data-color')); 
+    });
+  });
+
+  document.getElementById('btnWidthMinus').addEventListener('click', function () { setWidth(strokeWidth - 1); });
+  document.getElementById('btnWidthPlus').addEventListener('click',  function () { setWidth(strokeWidth + 1); });
+  document.getElementById('btnUndo').addEventListener('click', undo);
+  document.getElementById('btnRedo').addEventListener('click', redo);
+  document.getElementById('btnClear').addEventListener('click', clearAll);
+  
+  document.getElementById('btnExitDraw').addEventListener('click', function () { 
+    setDrawMode(!drawMode);
+    this.textContent = drawMode ? 'Đang vẽ (V)' : 'Bật vẽ (V)';
+  });
+
+  /* PHÍM TẮT TOÀN CỤC */
+  document.addEventListener('keydown', function (e) {
+    var t = e.target;
+    var tag = (t.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select' || t.isContentEditable) return;
+
+    var key = e.key;
+    var k = key.toLowerCase();
+
+    if (e.ctrlKey || e.metaKey) {
+      if (k === 'z') { e.preventDefault(); undo(); }
+      else if (k === 'y') { e.preventDefault(); redo(); }
+      return;
+    }
+
+    if (key === 'Escape') {
+      closeVideo();
+      closeImage();
+      closeMenu();
+      return;
+    }
+
+    switch (k) {
+      case 'v': 
+        e.preventDefault(); 
+        setDrawMode(!drawMode); 
+        document.getElementById('btnExitDraw').textContent = drawMode ? 'Đang vẽ (V)' : 'Bật vẽ (V)';
+        break;
+      case 'k': setTool('pen'); setDrawMode(true); document.getElementById('btnExitDraw').textContent = 'Đang vẽ (V)'; closeMenu(); break;
+      case 'l': setTool('line'); setDrawMode(true); document.getElementById('btnExitDraw').textContent = 'Đang vẽ (V)'; closeMenu(); break;
+      case 'i': setTool('arrow'); setDrawMode(true); document.getElementById('btnExitDraw').textContent = 'Đang vẽ (V)'; closeMenu(); break;
+      case 'o': setTool('circle'); setDrawMode(true); document.getElementById('btnExitDraw').textContent = 'Đang vẽ (V)'; closeMenu(); break;
+      case '.': case 'p': setTool('dot'); setDrawMode(true); document.getElementById('btnExitDraw').textContent = 'Đang vẽ (V)'; closeMenu(); break;
+      case '3': setTool('eraser'); setDrawMode(true); document.getElementById('btnExitDraw').textContent = 'Đang vẽ (V)'; closeMenu(); break;
+      case '4': setTool('eraser-stroke'); setDrawMode(true); document.getElementById('btnExitDraw').textContent = 'Đang vẽ (V)'; closeMenu(); break;
+      case '1': setColor('#e11d48'); break;
+      case '0': setColor('#0066CC'); break;
+      case 'd': setColor('#111111'); break;
+      case 'n': setColor('#8B4513'); break;
+      case 'b': setWidth(strokeWidth + 1); break;
+      case 'm': setWidth(strokeWidth - 1); break;
+      case '2': setWidth(3); break;
+      case 'x': 
+        if (drawMode) clearAll(); 
+        break;
+    }
+  });
+
+  /* Khởi động */
+  setTool('pen');
+  setColor('#8B4513');
+  setWidth(3);
+  document.getElementById('btnExitDraw').textContent = 'Bật vẽ (V)';
+  
+  shapes = [];
+  saveHistory();
+
+  resizeCanvas();
+
+  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener('orientationchange', resizeCanvas);
+  window.addEventListener('load', resizeCanvas);
+  
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(function() {
+      clearTimeout(window._roTimer);
+      window._roTimer = setTimeout(resizeCanvas, 100);
+    });
+    ro.observe(document.body);
+  }
+
+})();
+</script>
+
+</body>
+</html>

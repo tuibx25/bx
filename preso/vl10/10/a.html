@@ -1,0 +1,1990 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>Bài 10: Sự rơi tự do – Vật lí 10</title>
+
+<!-- ================= GOOGLE FONT ================= -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- ================= CẤU HÌNH MATHJAX 3 ================= -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      tags: 'none'
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0'
+    },
+    startup: { typeset: true }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- Áp dụng cỡ chữ đã lưu TRƯỚC khi render để tránh nhấp nháy -->
+<script>
+  (function () {
+    try {
+      var s = parseFloat(localStorage.getItem('bai10-font-scale'));
+      if (!isNaN(s) && s > 0) document.documentElement.style.setProperty('--font-scale', s);
+    } catch (e) { /* localStorage bị chặn thì bỏ qua */ }
+  })();
+</script>
+
+<style>
+/* =========================================================
+   0. BIẾN & THIẾT LẬP CHUNG
+   ========================================================= */
+:root{
+  --font-scale: 1;              /* Biến điều khiển cỡ chữ toàn trang */
+  --navy: #1A365D;
+  --navy-soft: #2C5A92;
+  --gold: #B8860B;
+  --gold-soft: #E3C77A;
+  --cream: #F8F7F4;
+  --ink: #1F2937;
+  --muted: #6B7280;
+  --line: #E6ECF4;
+  --widget-gray: #94A3B8;       /* Màu xám nhạt của widget */
+  --widget-hover: #E2E8F0;      /* Nền khi hover nút widget */
+}
+
+*{ box-sizing: border-box; }
+
+html{
+  font-size: calc(16px * var(--font-scale));   /* Toàn trang co giãn theo --font-scale */
+  scroll-behavior: smooth;
+}
+
+body{
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 1rem;
+  line-height: 1.68;
+  -webkit-font-smoothing: antialiased;
+  text-align: left;
+}
+
+p{ margin: .6em 0; }
+ul, ol{ margin: .6em 0; padding-left: 1.5em; }
+li{ margin: .35em 0; }
+strong{ color: #12233b; }
+
+/* =========================================================
+   1. KHUNG TRANG
+   ========================================================= */
+.page{
+  width: 80%;
+  max-width: 1150px;
+  margin: 2.5rem auto 7rem;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(26, 54, 93, .10), 0 2px 8px rgba(26, 54, 93, .06);
+  padding: 2.4rem 3rem 3rem;
+  text-align: left;
+}
+
+/* =========================================================
+   2. HEADER BÀI HỌC
+   ========================================================= */
+.lesson-header{
+  border-bottom: 2px solid #EDE7D9;
+  padding-bottom: 1.4rem;
+  margin-bottom: 1.6rem;
+}
+.chip{
+  display: inline-block;
+  background: #F3EEDF;
+  color: #8A6408;
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: .38em 1em;
+  border-radius: 999px;
+}
+.lesson-header h1{
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--navy);
+  letter-spacing: -.015em;
+  margin: .55em 0 .25em;
+  line-height: 1.25;
+}
+.subtitle{
+  margin: 0;
+  color: var(--muted);
+  font-size: .98rem;
+}
+
+/* =========================================================
+   3. SECTION & TIÊU ĐỀ
+   ========================================================= */
+.section{
+  margin: 2.4rem 0;
+  scroll-margin-top: 2rem;
+}
+.section-title{
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--navy);
+  border-left: 6px solid var(--gold);
+  padding-left: .7rem;
+  margin: 0 0 1rem;
+  line-height: 1.35;
+}
+.sub-title{
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--navy-soft);
+  margin: 1.5rem 0 .5rem;
+}
+
+/* =========================================================
+   4. CÁC KHỐI NỘI DUNG ĐẶC BIỆT
+   ========================================================= */
+
+/* --- Khối câu hỏi SGK --- */
+.sgk-question{
+  background: #F1F6FC;
+  border-left: 4px solid var(--navy);
+  border-radius: 0 12px 12px 0;
+  padding: .9em 1.15em;
+  margin: 1.1em 0;
+  font-size: .97em;
+}
+.sgk-question p:first-child{ margin-top: 0; }
+.sgk-question p:last-child{ margin-bottom: 0; }
+
+/* --- Khối ghi chú --- */
+.note-box{
+  background: #FFF9E8;
+  border: 1px dashed var(--gold-soft);
+  border-radius: 12px;
+  padding: .9em 1.15em;
+  margin: 1.1em 0;
+}
+.note-box p:first-child{ margin-top: 0; }
+.note-box p:last-child{ margin-bottom: 0; }
+
+/* --- Khối kết quả nổi bật (in đậm + highlight) --- */
+.result-highlight{
+  background: #FFF4D6;
+  border-left: 4px solid var(--gold);
+  border-radius: 0 10px 10px 0;
+  padding: .75em 1.1em;
+  margin: 1em 0;
+  font-size: .98em;
+}
+.result-highlight strong{ color: #7A5300; }
+
+/* --- Khối công thức nổi bật --- */
+.formula-box{
+  background: linear-gradient(135deg, #FDF9EE 0%, #F6EDD6 100%);
+  border: 1px solid #EADFB8;
+  border-left: 6px solid var(--gold);
+  border-radius: 12px;
+  padding: 1em 1.4em;
+  margin: 1.2em 0;
+  text-align: center;
+}
+.formula-box > p{ text-align: center; }
+.formula-caption{
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0 0 .3em;
+  font-size: .98em;
+}
+.formula-note{
+  font-size: .9em;
+  color: #5A6472;
+  margin: .5em 0 0;
+}
+.formula-box ul{ text-align: left; }
+
+/* --- Danh sách đặc điểm --- */
+.feature-list{
+  list-style: none;
+  padding-left: 0;
+  margin: .9em 0;
+}
+.feature-list li{
+  position: relative;
+  padding-left: 1.7em;
+  margin: .5em 0;
+}
+.feature-list li::before{
+  content: "▸";
+  position: absolute;
+  left: .35em;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+/* --- Khối ảnh minh hoạ (Hình 10.1) --- */
+.img-container{
+  margin: 1.2rem 0;
+  text-align: center;
+}
+.img-container svg,
+.img-container img{
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+  cursor: zoom-in;
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.img-container svg:hover,
+.img-container img:hover{
+  box-shadow: 0 10px 26px rgba(26, 54, 93, .16);
+  transform: translateY(-2px);
+}
+.fig-caption{
+  font-size: .86rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-top: .55rem;
+}
+
+/* --- Khối thông tin nổi bật (mô tả video NASA) --- */
+.highlight-info{
+  background: #F1F6FC;
+  border-left: 4px solid var(--navy);
+  border-radius: 0 12px 12px 0;
+  padding: .85em 1.15em;
+  margin: 1em 0 .8em;
+  font-size: .95em;
+}
+.highlight-info p{ margin: .3em 0; }
+
+/* --- Khung video thumbnail --- */
+.video-wrapper{
+  display: flex;
+  justify-content: center;
+  margin: .8rem 0 1.6rem;
+}
+.video-thumb{
+  width: 100%;
+  max-width: 600px;            /* Thumbnail nhỏ, không chiếm hết trang */
+  aspect-ratio: 16 / 9;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: inherit;
+  color: #fff;
+  background: linear-gradient(135deg, #1A365D 0%, #2C5A92 55%, #B8860B 130%);
+  box-shadow: 0 10px 26px rgba(26, 54, 93, .22);
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.video-thumb::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 45%, rgba(255,255,255,.16), transparent 62%);
+  pointer-events: none;
+}
+.video-thumb:hover{ transform: translateY(-3px); box-shadow: 0 16px 36px rgba(26, 54, 93, .30); }
+.video-thumb:focus-visible{ outline: 3px solid var(--gold); outline-offset: 3px; }
+
+.play-btn{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .94);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .3);
+  transition: transform .2s ease;
+}
+.play-btn::after{
+  content: "";
+  width: 0; height: 0;
+  border-left: 17px solid var(--navy);
+  border-top: 11px solid transparent;
+  border-bottom: 11px solid transparent;
+  margin-left: 5px;
+}
+.video-thumb:hover .play-btn{ transform: scale(1.09); }
+
+.thumb-text{ text-align: center; line-height: 1.4; }
+.thumb-text strong{ display: block; font-size: .98rem; color: #fff; }
+.thumb-text small{ font-size: .8rem; color: rgba(255,255,255,.85); }
+
+/* --- Bài tập --- */
+.exercise{
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--navy-soft);
+  border-radius: 12px;
+  padding: 1em 1.25em;
+  margin: 1.3em 0;
+  background: #FCFDFF;
+}
+.exercise-title{
+  display: inline-block;
+  font-weight: 700;
+  color: var(--navy);
+  background: #EAF1FA;
+  border-radius: 999px;
+  padding: .1em .8em;
+  margin: 0 0 .5em;
+  font-size: .92em;
+}
+.exercise p:last-of-type{ margin-bottom: .4em; }
+
+/* =========================================================
+   5. NÚT ẨN / HIỆN LỜI GIẢI
+   ========================================================= */
+.toggle-btn{
+  display: inline-flex;
+  align-items: center;
+  gap: .5em;
+  font-family: inherit;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--navy);
+  background: #ffffff;
+  border: 1.6px solid var(--navy);
+  border-radius: 999px;
+  padding: .42em 1.1em;
+  cursor: pointer;
+  margin: .5em 0 .3em;
+  transition: background .18s ease, color .18s ease, box-shadow .18s ease;
+}
+.toggle-btn:hover,
+.toggle-btn:focus-visible{
+  background: var(--navy);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(26, 54, 93, .22);
+  outline: none;
+}
+.toggle-btn .arrow{
+  font-size: .8em;
+  line-height: 1;
+  display: inline-block;
+  width: 1em;
+  text-align: center;
+}
+
+/* --- Khối lời giải --- */
+.solution{
+  display: none;
+  background: #FAFBFD;
+  border: 1px solid #E3E9F2;
+  border-radius: 12px;
+  padding: 1em 1.3em;
+  margin: .5em 0 1em;
+  animation: fadeSlide .28s ease;
+}
+.solution.is-open{ display: block; }
+.solution p:first-child{ margin-top: 0; }
+.solution p:last-child{ margin-bottom: 0; }
+
+@keyframes fadeSlide{
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================================
+   6. XỬ LÝ MATHJAX
+   ========================================================= */
+mjx-container[display="true"]{
+  /* Bắt buộc inline-block để nền highlight ôm sát công thức,
+     tránh lỗi vạch kẻ dọc của MathJax */
+  display: inline-block !important;
+  margin: .12em 0 !important;
+  text-align: center;
+}
+mjx-container{ font-size: 1.02em; }
+
+/* Khối ghép công thức + chú thích tiếng Việt (Flexbox) */
+.math-block{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: .35em 1.2em;
+  margin: .7em 0;
+  text-align: center;
+  line-height: 1.45;
+}
+.math-block .mj{ display: inline-block; }
+.math-block .mj-note{
+  font-size: .92em;
+  color: #4A5568;
+  text-align: left;
+}
+
+/* Công thức khối đứng riêng, canh giữa */
+.math-center{
+  text-align: center;
+  margin: .7em 0;
+}
+.math-center mjx-container[display="true"]{ margin: .1em 0 !important; }
+
+/* =========================================================
+   7. HỆ THỐNG WIDGET (NHỎ – SÁT MÉP – MỜ)
+   ========================================================= */
+.widget-col{
+  position: fixed;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 8px;
+  opacity: .35;
+  transition: opacity .3s ease;
+}
+.widget-col:hover,
+.widget-col:focus-within{ opacity: 1; }
+
+/* Nút chuẩn bên trong widget: 24x24, không viền, nền trong suốt, xám nhạt */
+.widget-btn{
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: var(--widget-gray);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0;
+  border-radius: 5px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  text-decoration: none;
+  transition: background .15s ease, color .15s ease;
+}
+.widget-btn:hover,
+.widget-btn:focus-visible{
+  background: var(--widget-hover);
+  color: var(--navy);
+  outline: none;
+}
+.widget-btn.active{
+  background: var(--widget-hover);
+  color: var(--navy);
+}
+
+/* --- Cột điều hướng (bên trái) --- */
+.side-nav{
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.side-nav .widget-btn.home-btn{ font-size: 8px; letter-spacing: -.02em; }
+
+/* --- Cột đổi cỡ chữ (bên phải) --- */
+.font-widget{
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* --- Nút "..." mở bảng vẽ (góc dưới phải) --- */
+.draw-toggle{
+  position: fixed;
+  z-index: 10000;
+  bottom: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: var(--widget-gray);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  border-radius: 5px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  opacity: .35;
+  transition: opacity .3s ease, background .15s ease, color .15s ease;
+}
+.draw-toggle:hover,
+.draw-toggle:focus-visible{
+  opacity: 1;
+  background: var(--widget-hover);
+  color: var(--navy);
+  outline: none;
+}
+.draw-toggle[aria-expanded="true"]{
+  opacity: 1;
+  background: var(--widget-hover);
+  color: var(--gold);
+}
+
+/* --- Thanh công cụ vẽ --- */
+.draw-toolbar{
+  position: fixed;
+  z-index: 10000;
+  bottom: 40px;
+  right: 10px;
+  display: none;
+  flex-direction: column;
+  gap: 3px;
+  padding: 4px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .85);
+  box-shadow: 0 6px 20px rgba(26, 54, 93, .18);
+  opacity: .35;
+  transition: opacity .3s ease;
+}
+.draw-toolbar.show{ display: flex; }
+.draw-toolbar:hover,
+.draw-toolbar:focus-within{ opacity: 1; }
+
+.dt-group{
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  justify-content: center;
+}
+.dt-group + .dt-group{
+  border-top: 1px solid #EEF2F8;
+  padding-top: 3px;
+}
+
+.dt-color{
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+  background: var(--c);
+  cursor: pointer;
+  padding: 0;
+  box-shadow: 0 0 0 1px #CBD5E1;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.dt-color:hover{ transform: scale(1.12); }
+.dt-color.active{
+  box-shadow: 0 0 0 2px var(--navy);
+  transform: scale(1.12);
+}
+
+.dt-width{
+  min-width: 14px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+/* =========================================================
+   8. BẢNG VẼ NHÁP (ANNOTATION CANVAS)
+   ========================================================= */
+.draw-canvas{
+  position: fixed;
+  inset: 0;
+  z-index: 8000;               /* Dưới widget, trên nội dung trang */
+  display: none;
+  cursor: crosshair;
+  touch-action: none;          /* Chặn cuộn/zoom khi đang vẽ trên cảm ứng */
+}
+.draw-canvas.active{ display: block; }
+
+/* =========================================================
+   9. MODAL DÙNG CHUNG
+   ========================================================= */
+.modal{
+  position: fixed;
+  inset: 0;
+  z-index: 12000;              /* Trên cả widget */
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(12, 20, 34, .84);
+  padding: 20px;
+}
+.modal.show{ display: flex; }
+
+/* --- Popup video: tự co giãn vừa khít màn hình --- */
+.video-modal-inner{
+  position: relative;
+  width: min(95vw, calc(90vh * 16 / 9));
+  aspect-ratio: 16 / 9;
+}
+/* Lớp bọc iframe: position absolute + 100% để phủ kín popup */
+.video-frame{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .55);
+}
+.video-frame iframe{
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.modal-close{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, .94);
+  color: var(--navy);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .35);
+  transition: background .18s ease, transform .18s ease;
+}
+.modal-close:hover{ background: var(--gold); color: #fff; transform: scale(1.06); }
+
+/* --- Modal phóng to ảnh --- */
+.img-modal-body{
+  position: relative;
+  max-width: 92vw;
+  max-height: 88vh;
+  background: #fff;
+  border-radius: 14px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .55);
+}
+.img-modal-body img,
+.img-modal-body svg{
+  display: block;
+  max-width: 100%;
+  max-height: 84vh;
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+}
+.img-modal-x{
+  position: fixed;
+  top: 18px;
+  right: 18px;
+}
+
+/* =========================================================
+   10. RESPONSIVE
+   ========================================================= */
+@media (max-width: 1100px){
+  .page{ width: 86%; }
+}
+@media (max-width: 820px){
+  .page{ width: 93%; padding: 1.8rem 1.4rem 2.2rem; border-radius: 16px; }
+  .lesson-header h1{ font-size: 1.6rem; }
+  .side-nav{ display: none; }   /* Màn hình nhỏ: ẩn cột điều hướng cho gọn */
+}
+@media (max-width: 520px){
+  .page{ width: 96%; padding: 1.4rem 1rem 2rem; }
+  .section-title{ font-size: 1.2rem; }
+  .formula-box{ padding: .8em .9em; }
+}
+
+/* =========================================================
+   11. IN ẤN
+   ========================================================= */
+@media print{
+  :root{ --font-scale: 1 !important; }
+
+  html, body{
+    background: #ffffff !important;
+    font-size: 11.5pt !important;
+  }
+  .page{
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  /* Ẩn toàn bộ widget / canvas / video / nút tương tác */
+  .widget-col,
+  .draw-toggle,
+  .draw-toolbar,
+  .draw-canvas,
+  .video-wrapper,
+  .modal,
+  .toggle-btn{
+    display: none !important;
+  }
+
+  /* Tự động mở tất cả lời giải */
+  .solution{ display: block !important; }
+
+  .exercise,
+  .sgk-question,
+  .formula-box,
+  .note-box,
+  .highlight-info,
+  .result-highlight{
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .section-title{ break-after: avoid; page-break-after: avoid; }
+
+  a[href]::after{ content: none !important; }
+}
+</style>
+</head>
+
+<body id="top">
+
+<!-- =========================================================
+     CỘT ĐIỀU HƯỚNG NHANH (BÊN TRÁI)
+     ========================================================= -->
+<nav class="widget-col side-nav" aria-label="Điều hướng nhanh trong bài học">
+  <a href="#top"   class="widget-btn home-btn" aria-label="Về đầu trang" title="Về đầu trang (Home)">Home</a>
+  <a href="#sec-1" class="widget-btn" aria-label="Đi tới mục I: Sự rơi trong không khí" title="I. Sự rơi trong không khí">I</a>
+  <a href="#sec-2" class="widget-btn" aria-label="Đi tới mục II: Sự rơi tự do" title="II. Sự rơi tự do">II</a>
+  <a href="#sec-3" class="widget-btn" aria-label="Đi tới mục III: Bài tập vận dụng" title="III. Bài tập vận dụng">III</a>
+  <a href="#sec-4" class="widget-btn" aria-label="Đi tới mục IV: Tổng kết" title="IV. Tổng kết">IV</a>
+  <a href="#sec-5" class="widget-btn" aria-label="Đi tới mục V: Bài tập về nhà" title="V. Bài tập về nhà">V</a>
+</nav>
+
+<!-- =========================================================
+     CỘT ĐỔI CỠ CHỮ (BÊN PHẢI)
+     ========================================================= -->
+<div class="widget-col font-widget" role="group" aria-label="Điều chỉnh cỡ chữ của trang">
+  <button type="button" class="widget-btn" id="fontUp"    aria-label="Tăng cỡ chữ"            title="Tăng cỡ chữ">A+</button>
+  <button type="button" class="widget-btn" id="fontDown"  aria-label="Giảm cỡ chữ"            title="Giảm cỡ chữ">A−</button>
+  <button type="button" class="widget-btn" id="fontReset" aria-label="Đặt lại cỡ chữ mặc định" title="Đặt lại cỡ chữ">↺</button>
+</div>
+
+<!-- =========================================================
+     NỘI DUNG BÀI HỌC
+     ========================================================= -->
+<main class="page">
+
+  <!-- ---------- HEADER ---------- -->
+  <header class="lesson-header">
+    <span class="chip">Vật lí 10 · Chương II: Động học</span>
+    <h1>Bài 10: SỰ RƠI TỰ DO</h1>
+    <p class="subtitle">Sự rơi trong không khí · Sự rơi tự do · Công thức và bài tập vận dụng</p>
+  </header>
+
+  <!-- =========================================================
+       KIỂM TRA BÀI CŨ
+       ========================================================= -->
+  <section class="section" id="sec-check" aria-labelledby="h-check">
+    <h2 class="section-title" id="h-check">Kiểm tra bài cũ</h2>
+
+    <div class="sgk-question">
+      <p><strong>Câu 1.</strong> Viết các công thức của chuyển động thẳng biến đổi đều (công thức vận tốc, công thức quãng đường và hệ thức liên hệ giữa vận tốc, gia tốc và quãng đường).</p>
+      <p><strong>Câu 2.</strong> Một ô tô đang chuyển động với vận tốc $10\ \text{m/s}$ thì tăng tốc đều với gia tốc $2\ \text{m/s}^2$. Tính vận tốc của ô tô sau $5\ \text{s}$ kể từ lúc tăng tốc.</p>
+    </div>
+
+    <button type="button" class="toggle-btn"
+            aria-expanded="false"
+            aria-controls="sol-check"
+            data-closed-label="Xem lời giải"
+            data-open-label="Ẩn lời giải">
+      <span class="arrow" aria-hidden="true">▷</span><span class="label">Xem lời giải</span>
+    </button>
+
+    <div class="solution" id="sol-check">
+      <p><strong>Câu 1.</strong> Ba công thức cần nhớ của chuyển động thẳng biến đổi đều:</p>
+      <div class="math-block">
+        <span class="mj">$$v = v_0 + at$$</span>
+        <span class="mj">$$s = v_0t + \frac{1}{2}at^2$$</span>
+        <span class="mj">$$v^2 - v_0^2 = 2as$$</span>
+      </div>
+
+      <p><strong>Câu 2.</strong> Áp dụng công thức vận tốc với $v_0 = 10\ \text{m/s}$, $a = 2\ \text{m/s}^2$, $t = 5\ \text{s}$:</p>
+      <div class="math-block">
+        <span class="mj">$$v = v_0 + at = 10 + 2 \cdot 5 = 20\ \text{m/s}$$</span>
+      </div>
+      <p>Vậy sau $5\ \text{s}$, ô tô đạt vận tốc $20\ \text{m/s}$.</p>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       I. SỰ RƠI TRONG KHÔNG KHÍ
+       ========================================================= -->
+  <section class="section" id="sec-1" aria-labelledby="h-1">
+    <h2 class="section-title" id="h-1">I. Sự rơi trong không khí</h2>
+
+    <!-- 1. Thí nghiệm thả vật trong không khí -->
+    <h3 class="sub-title">1. Thí nghiệm thả vật trong không khí</h3>
+    <p>Ta thả đồng thời hai vật từ cùng một độ cao: một <strong>tờ giấy phẳng</strong> và một <strong>viên bi</strong> (hoặc hòn sỏi).</p>
+    <ul>
+      <li>Kết quả: viên bi rơi xuống trước, tờ giấy phẳng rơi chậm hơn rất nhiều.</li>
+      <li>Nếu ta <strong>vo tròn</strong> tờ giấy lại rồi thả cùng lúc với viên bi thì hai vật gần như <strong>chạm đất cùng lúc</strong>.</li>
+    </ul>
+
+    <!-- 2. Nhận xét -->
+    <h3 class="sub-title">2. Nhận xét</h3>
+    <p>Nguyên nhân làm cho các vật rơi nhanh, chậm khác nhau <strong>không phải do khối lượng</strong> mà do <strong>sức cản của không khí</strong>.</p>
+    <p>Lực cản của không khí phụ thuộc vào <strong>hình dạng</strong>, <strong>kích thước</strong>, <strong>khối lượng</strong> và <strong>vận tốc</strong> của vật. Vật có bề mặt tiếp xúc với không khí càng lớn thì lực cản càng lớn và vật rơi càng chậm.</p>
+
+    <div class="note-box">
+      <p>➜ Muốn kiểm chứng vai trò của không khí, ta phải loại bỏ không khí ra khỏi môi trường rơi — đó chính là thí nghiệm ống hút chân không dưới đây.</p>
+    </div>
+
+    <!-- 3. Thí nghiệm ống hút chân không -->
+    <h3 class="sub-title">3. Thí nghiệm ống hút chân không</h3>
+
+    <p>Newton đã dùng một ống thuỷ tinh kín, bên trong đặt một chiếc lông chim và một viên bi (hoặc một đồng xu). Ông hút hết không khí trong ống để tạo môi trường chân không rồi lật ngược ống lại, quan sát chuyển động rơi của hai vật.</p>
+
+    <p class="result-highlight"><strong>Kết quả:</strong> trong ống đã hút chân không, chiếc lông chim và viên bi <strong>chạm đáy ống cùng một lúc</strong>, dù trọng lượng của chúng khác nhau rất nhiều.</p>
+
+    <!-- Hình 10.1 -->
+    <div class="img-container">
+      <svg class="zoomable-img" viewBox="0 0 560 330"
+           xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="Hình 10.1: Ống Newton đã hút chân không, lông chim và viên bi rơi như nhau">
+        <defs>
+          <linearGradient id="glassGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%"   stop-color="#DCEAFA"/>
+            <stop offset="50%"  stop-color="#F8FBFF"/>
+            <stop offset="100%" stop-color="#CFE0F2"/>
+          </linearGradient>
+        </defs>
+
+        <rect width="560" height="330" fill="#FFFFFF"/>
+
+        <!-- Đế đỡ -->
+        <rect x="185" y="292" width="190" height="14" rx="7" fill="#1A365D" opacity="0.85"/>
+
+        <!-- Ống thuỷ tinh -->
+        <rect x="215" y="40" width="130" height="252" rx="18"
+              fill="url(#glassGrad)" stroke="#1A365D" stroke-width="3"/>
+
+        <!-- Nắp ống -->
+        <rect x="205" y="26" width="150" height="20" rx="10" fill="#1A365D"/>
+
+        <!-- Lông chim -->
+        <path d="M244 72 q30 -20 58 0 q-16 30 -58 26 q-10 -14 0 -26 z" fill="#B8860B"/>
+
+        <!-- Viên bi -->
+        <circle cx="318" cy="84" r="15" fill="#1A365D"/>
+        <circle cx="313" cy="78" r="5" fill="#7BA3D6"/>
+
+        <!-- Mũi tên chỉ chiều rơi -->
+        <line x1="280" y1="134" x2="280" y2="226" stroke="#B8860B" stroke-width="4"
+              stroke-dasharray="10 8" stroke-linecap="round"/>
+        <polygon points="280,256 269,232 291,232" fill="#B8860B"/>
+
+        <!-- Nhãn -->
+        <text x="372" y="100" font-family="Be Vietnam Pro, sans-serif" font-size="17" font-weight="600" fill="#1A365D">Lông chim</text>
+        <text x="372" y="126" font-family="Be Vietnam Pro, sans-serif" font-size="17" font-weight="600" fill="#1A365D">và viên bi</text>
+        <text x="372" y="160" font-family="Be Vietnam Pro, sans-serif" font-size="17" font-weight="700" fill="#B8860B">rơi như nhau</text>
+        <text x="24"  y="120" font-family="Be Vietnam Pro, sans-serif" font-size="15" fill="#5A6472">Ống thuỷ tinh</text>
+        <text x="24"  y="142" font-family="Be Vietnam Pro, sans-serif" font-size="15" fill="#5A6472">đã hút chân không</text>
+      </svg>
+      <p class="fig-caption">Hình 10.1. Trong ống đã hút chân không, lông chim và viên bi chạm đáy ống cùng một lúc.</p>
+    </div>
+
+    <!-- Khối thông tin: mô tả video minh hoạ của NASA -->
+    <div class="highlight-info">
+      <p>🎬 <strong>Video minh hoạ:</strong> NASA đã quay thí nghiệm thả chiếc lông chim và viên bi trong buồng chân không. Khi không còn không khí, cả hai vật rơi hoàn toàn giống nhau và chạm đáy cùng lúc — minh chứng trực quan cho kết luận của Newton.</p>
+    </div>
+
+    <!-- Khung video thumbnail nhỏ -->
+    <div class="video-wrapper">
+      <button type="button" class="video-thumb" id="videoThumb"
+              aria-label="Phát video thí nghiệm ống hút chân không của NASA">
+        <span class="play-btn" aria-hidden="true"></span>
+        <span class="thumb-text">
+          <strong>Phát video thí nghiệm</strong>
+          <small>Thí nghiệm ống chân không · NASA</small>
+        </span>
+      </button>
+    </div>
+
+    <!-- Kết luận -->
+    <div class="formula-box">
+      <p class="formula-caption">Kết luận</p>
+      <p>Khi loại bỏ được ảnh hưởng của không khí thì <strong>mọi vật sẽ rơi nhanh như nhau</strong>.</p>
+    </div>
+
+    <div class="sgk-question">
+      <p><strong>❓ Câu hỏi vận dụng:</strong> Trong không khí, tại sao hòn sỏi rơi nhanh hơn chiếc lá? Nếu thí nghiệm được thực hiện trong môi trường không có không khí thì kết quả sẽ thay đổi như thế nào?</p>
+    </div>
+
+    <button type="button" class="toggle-btn"
+            aria-expanded="false"
+            aria-controls="sol-1"
+            data-closed-label="Xem trả lời"
+            data-open-label="Ẩn trả lời">
+      <span class="arrow" aria-hidden="true">▷</span><span class="label">Xem trả lời</span>
+    </button>
+
+    <div class="solution" id="sol-1">
+      <p><strong>Trong không khí:</strong> hòn sỏi rơi nhanh hơn chiếc lá vì lực cản của không khí tác dụng lên chiếc lá rất lớn (diện tích tiếp xúc lớn, khối lượng nhỏ) so với trọng lượng của nó, còn lực cản tác dụng lên hòn sỏi là không đáng kể.</p>
+      <p><strong>Trong môi trường không có không khí:</strong> không còn lực cản, cả hòn sỏi và chiếc lá đều chỉ chịu tác dụng của trọng lực nên chúng sẽ <strong>rơi như nhau</strong> và chạm đất cùng lúc.</p>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       II. SỰ RƠI TỰ DO
+       ========================================================= -->
+  <section class="section" id="sec-2" aria-labelledby="h-2">
+    <h2 class="section-title" id="h-2">II. Sự rơi tự do</h2>
+
+    <h3 class="sub-title">1. Định nghĩa</h3>
+    <div class="formula-box">
+      <p><strong>Sự rơi tự do</strong> là sự rơi chỉ dưới tác dụng của trọng lực.</p>
+    </div>
+
+    <h3 class="sub-title">2. Đặc điểm của sự rơi tự do</h3>
+    <ul class="feature-list">
+      <li><strong>Phương:</strong> thẳng đứng.</li>
+      <li><strong>Chiều:</strong> từ trên xuống dưới.</li>
+      <li><strong>Tính chất chuyển động:</strong> chuyển động thẳng và nhanh dần đều.</li>
+      <li><strong>Gia tốc:</strong> tại một nơi nhất định trên Trái Đất và ở gần mặt đất, mọi vật đều rơi với cùng một gia tốc, gọi là <strong>gia tốc rơi tự do</strong>, kí hiệu $g$.</li>
+    </ul>
+
+    <div class="note-box">
+      <p><strong>Giá trị của $g$:</strong> thường lấy $g \approx 9{,}8\ \text{m/s}^2$; khi không cần độ chính xác cao có thể lấy $g \approx 10\ \text{m/s}^2$. Gia tốc $g$ phụ thuộc vào <strong>vĩ độ địa lí</strong> và <strong>độ cao</strong> so với mặt đất: $g$ lớn nhất ở địa cực và nhỏ nhất ở xích đạo.</p>
+    </div>
+
+    <h3 class="sub-title">3. Các công thức của sự rơi tự do</h3>
+    <p>Chọn chiều dương là chiều rơi, gốc thời gian là lúc vật bắt đầu rơi, gốc toạ độ tại điểm thả vật, khi đó $v_0 = 0$ và $a = g$.</p>
+
+    <div class="formula-box">
+      <p class="formula-caption">Công thức của sự rơi tự do</p>
+      <div class="math-block">
+        <span class="mj">$$v = gt$$</span>
+        <span class="mj-note">vận tốc ở thời điểm $t$</span>
+      </div>
+      <div class="math-block">
+        <span class="mj">$$s = \frac{1}{2}gt^2$$</span>
+        <span class="mj-note">quãng đường rơi được sau thời gian $t$</span>
+      </div>
+      <div class="math-block">
+        <span class="mj">$$v^2 = 2gs$$</span>
+        <span class="mj-note">hệ thức liên hệ giữa vận tốc và quãng đường</span>
+      </div>
+    </div>
+
+    <p>Nếu vật rơi từ độ cao $h$ xuống mặt đất thì thời gian rơi và vận tốc khi chạm đất là:</p>
+    <div class="math-block">
+      <span class="mj">$$t = \sqrt{\frac{2h}{g}}$$</span>
+      <span class="mj">$$v = \sqrt{2gh}$$</span>
+    </div>
+
+    <div class="note-box">
+      <p><strong>Mở rộng:</strong> quãng đường vật rơi tự do rơi được trong <strong>giây thứ $n$</strong> là</p>
+      <div class="math-center">
+        <span class="mj">$$\Delta s_n = s_n - s_{n-1} = \frac{1}{2}g\left(2n - 1\right)$$</span>
+      </div>
+      <p>Như vậy, trong các khoảng thời gian bằng nhau liên tiếp, quãng đường rơi được tỉ lệ với $1 : 3 : 5 : 7 : \dots$</p>
+    </div>
+
+    <div class="img-container">
+      <svg class="zoomable-img" viewBox="0 0 560 360"
+           xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="Hình 10.2: Vị trí của vật rơi tự do sau mỗi giây, quãng đường tỉ lệ với bình phương thời gian">
+        <rect width="560" height="360" fill="#FFFFFF"/>
+
+        <!-- Trục thời gian (nét đứt) -->
+        <line x1="300" y1="24" x2="300" y2="320" stroke="#DCE3EC" stroke-width="2" stroke-dasharray="6 6"/>
+
+        <!-- Vị trí vật theo từng giây (s ~ t²) -->
+        <circle cx="300" cy="40"  r="11" fill="#B8860B"/>
+        <circle cx="300" cy="65"  r="11" fill="#C99A2E"/>
+        <circle cx="300" cy="140" r="11" fill="#D9AE4A"/>
+        <circle cx="300" cy="265" r="11" fill="#E8C573"/>
+
+        <!-- Nhãn thời gian -->
+        <text x="330" y="46"  font-family="Be Vietnam Pro, sans-serif" font-size="16" font-weight="600" fill="#1A365D">t = 0 s</text>
+        <text x="330" y="71"  font-family="Be Vietnam Pro, sans-serif" font-size="16" font-weight="600" fill="#1A365D">t = 1 s</text>
+        <text x="330" y="146" font-family="Be Vietnam Pro, sans-serif" font-size="16" font-weight="600" fill="#1A365D">t = 2 s</text>
+        <text x="330" y="271" font-family="Be Vietnam Pro, sans-serif" font-size="16" font-weight="600" fill="#1A365D">t = 3 s</text>
+
+        <!-- Ghi chú -->
+        <text x="30" y="60"  font-family="Be Vietnam Pro, sans-serif" font-size="15" fill="#5A6472">Vật bắt đầu rơi</text>
+        <text x="30" y="316" font-family="Be Vietnam Pro, sans-serif" font-size="15" font-weight="600" fill="#B8860B">Quãng đường tỉ lệ với t²</text>
+      </svg>
+      <p class="fig-caption">Hình 10.2. Càng xuống thấp, khoảng cách giữa hai vị trí liên tiếp càng lớn – vật rơi nhanh dần đều.</p>
+    </div>
+
+    <div class="sgk-question">
+      <p><strong>❓ Câu hỏi:</strong> Một vật được thả rơi tự do từ độ cao $h$. Nếu thời gian rơi tăng gấp đôi thì quãng đường rơi tăng bao nhiêu lần? Vận tốc khi chạm đất tăng bao nhiêu lần?</p>
+    </div>
+
+    <button type="button" class="toggle-btn"
+            aria-expanded="false"
+            aria-controls="sol-2"
+            data-closed-label="Xem trả lời"
+            data-open-label="Ẩn trả lời">
+      <span class="arrow" aria-hidden="true">▷</span><span class="label">Xem trả lời</span>
+    </button>
+
+    <div class="solution" id="sol-2">
+      <p>Từ công thức $s = \frac{1}{2}gt^2$, ta thấy $s$ tỉ lệ với bình phương thời gian. Do đó nếu $t$ tăng gấp đôi thì $s$ tăng <strong>4 lần</strong>.</p>
+      <p>Từ công thức $v = gt$, vận tốc tỉ lệ bậc nhất với thời gian, nên khi $t$ tăng gấp đôi thì $v$ cũng tăng <strong>2 lần</strong>.</p>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       III. BÀI TẬP VẬN DỤNG
+       ========================================================= -->
+  <section class="section" id="sec-3" aria-labelledby="h-3">
+    <h2 class="section-title" id="h-3">III. Bài tập vận dụng</h2>
+
+    <!-- Bài 1 -->
+    <div class="exercise">
+      <p class="exercise-title">Bài 1</p>
+      <p>Một vật được thả rơi tự do từ độ cao $h = 45\ \text{m}$ so với mặt đất. Lấy $g = 10\ \text{m/s}^2$ và bỏ qua sức cản của không khí.</p>
+      <p>a) Tính thời gian vật rơi cho đến khi chạm đất.</p>
+      <p>b) Tính vận tốc của vật khi vừa chạm đất.</p>
+      <p>c) Tính quãng đường vật rơi được trong 2 giây đầu và trong giây thứ 2.</p>
+
+      <button type="button" class="toggle-btn"
+              aria-expanded="false"
+              aria-controls="sol-b1"
+              data-closed-label="Xem lời giải"
+              data-open-label="Ẩn lời giải">
+        <span class="arrow" aria-hidden="true">▷</span><span class="label">Xem lời giải</span>
+      </button>
+
+      <div class="solution" id="sol-b1">
+        <p><strong>a)</strong> Thời gian rơi của vật:</p>
+        <div class="math-block">
+          <span class="mj">$$t = \sqrt{\frac{2h}{g}} = \sqrt{\frac{2 \cdot 45}{10}} = \sqrt{9} = 3\ \text{s}$$</span>
+        </div>
+
+        <p><strong>b)</strong> Vận tốc của vật khi chạm đất:</p>
+        <div class="math-block">
+          <span class="mj">$$v = gt = 10 \cdot 3 = 30\ \text{m/s}$$</span>
+        </div>
+
+        <p><strong>c)</strong> Quãng đường rơi trong 2 giây đầu:</p>
+        <div class="math-block">
+          <span class="mj">$$s_2 = \frac{1}{2}gt^2 = \frac{1}{2} \cdot 10 \cdot 2^2 = 20\ \text{m}$$</span>
+        </div>
+        <p>Quãng đường rơi trong giây thứ nhất là $s_1 = \frac{1}{2} \cdot 10 \cdot 1^2 = 5\ \text{m}$.</p>
+        <p>Vậy quãng đường rơi trong giây thứ 2:</p>
+        <div class="math-block">
+          <span class="mj">$$\Delta s_2 = s_2 - s_1 = 20 - 5 = 15\ \text{m}$$</span>
+        </div>
+        <p><em>(Có thể kiểm tra nhanh bằng công thức $\Delta s_n = \frac{1}{2}g(2n-1) = 5 \cdot 3 = 15\ \text{m}$.)</em></p>
+      </div>
+    </div>
+
+    <!-- Bài 2 -->
+    <div class="exercise">
+      <p class="exercise-title">Bài 2</p>
+      <p>Một vật rơi tự do tại nơi có $g = 9{,}8\ \text{m/s}^2$. Biết rằng trong giây cuối cùng trước khi chạm đất, vật rơi được quãng đường $24{,}5\ \text{m}$. Tính thời gian rơi và độ cao nơi thả vật.</p>
+
+      <button type="button" class="toggle-btn"
+              aria-expanded="false"
+              aria-controls="sol-b2"
+              data-closed-label="Xem lời giải"
+              data-open-label="Ẩn lời giải">
+        <span class="arrow" aria-hidden="true">▷</span><span class="label">Xem lời giải</span>
+      </button>
+
+      <div class="solution" id="sol-b2">
+        <p>Gọi $t$ (giây) là thời gian rơi của vật. Quãng đường rơi trong giây cuối cùng là:</p>
+        <div class="math-block">
+          <span class="mj">$$\Delta s = \frac{1}{2}gt^2 - \frac{1}{2}g\left(t-1\right)^2 = \frac{1}{2}g\left(2t - 1\right)$$</span>
+        </div>
+        <p>Thay số:</p>
+        <div class="math-block">
+          <span class="mj">$$4{,}9\left(2t - 1\right) = 24{,}5 \;\Rightarrow\; 2t - 1 = 5 \;\Rightarrow\; t = 3\ \text{s}$$</span>
+        </div>
+        <p>Độ cao nơi thả vật:</p>
+        <div class="math-block">
+          <span class="mj">$$h = \frac{1}{2}gt^2 = \frac{1}{2} \cdot 9{,}8 \cdot 3^2 = 44{,}1\ \text{m}$$</span>
+        </div>
+        <p><strong>Đáp số:</strong> $t = 3\ \text{s}$; $h = 44{,}1\ \text{m}$.</p>
+      </div>
+    </div>
+
+    <!-- Bài 3 -->
+    <div class="exercise">
+      <p class="exercise-title">Bài 3</p>
+      <p>Hai viên bi được thả rơi tự do từ cùng một độ cao. Viên bi A được thả sau viên bi B một khoảng thời gian $0{,}5\ \text{s}$. Lấy $g = 10\ \text{m/s}^2$. Tính khoảng cách giữa hai viên bi sau khi viên bi B đã rơi được $2\ \text{s}$.</p>
+
+      <button type="button" class="toggle-btn"
+              aria-expanded="false"
+              aria-controls="sol-b3"
+              data-closed-label="Xem lời giải"
+              data-open-label="Ẩn lời giải">
+        <span class="arrow" aria-hidden="true">▷</span><span class="label">Xem lời giải</span>
+      </button>
+
+      <div class="solution" id="sol-b3">
+        <p>Quãng đường viên bi B rơi được sau $2\ \text{s}$:</p>
+        <div class="math-block">
+          <span class="mj">$$s_B = \frac{1}{2}gt_B^2 = \frac{1}{2} \cdot 10 \cdot 2^2 = 20\ \text{m}$$</span>
+        </div>
+        <p>Viên bi A rơi sau B $0{,}5\ \text{s}$ nên tại thời điểm đó A mới rơi được $1{,}5\ \text{s}$:</p>
+        <div class="math-block">
+          <span class="mj">$$s_A = \frac{1}{2}gt_A^2 = \frac{1}{2} \cdot 10 \cdot 1{,}5^2 = 11{,}25\ \text{m}$$</span>
+        </div>
+        <p>Khoảng cách giữa hai viên bi:</p>
+        <div class="math-block">
+          <span class="mj">$$\Delta s = s_B - s_A = 20 - 11{,}25 = 8{,}75\ \text{m}$$</span>
+        </div>
+        <p><strong>Đáp số:</strong> $8{,}75\ \text{m}$.</p>
+      </div>
+    </div>
+
+    <!-- Bài 4: Trắc nghiệm -->
+    <div class="exercise">
+      <p class="exercise-title">Bài 4 – Trắc nghiệm nhanh</p>
+      <p><strong>Câu 1.</strong> Sự rơi tự do là sự rơi chỉ dưới tác dụng của</p>
+      <p>A. trọng lực. &nbsp;&nbsp; B. lực cản của không khí. &nbsp;&nbsp; C. lực đàn hồi. &nbsp;&nbsp; D. lực ma sát.</p>
+
+      <p><strong>Câu 2.</strong> Trong sự rơi tự do, quãng đường vật rơi được trong các khoảng thời gian liên tiếp bằng nhau thì tỉ lệ với</p>
+      <p>A. $1 : 2 : 3 : 4$ &nbsp;&nbsp; B. $1 : 3 : 5 : 7$ &nbsp;&nbsp; C. $1 : 4 : 9 : 16$ &nbsp;&nbsp; D. $1 : 1 : 1 : 1$</p>
+
+      <p><strong>Câu 3.</strong> Gia tốc rơi tự do $g$ tại một nơi trên Trái Đất</p>
+      <p>A. phụ thuộc vào khối lượng của vật rơi.</p>
+      <p>B. như nhau đối với mọi vật và phụ thuộc vĩ độ địa lí, độ cao.</p>
+      <p>C. tỉ lệ nghịch với khối lượng của vật.</p>
+      <p>D. luôn bằng $10\ \text{m/s}^2$ ở mọi nơi.</p>
+
+      <button type="button" class="toggle-btn"
+              aria-expanded="false"
+              aria-controls="sol-b4"
+              data-closed-label="Xem đáp án"
+              data-open-label="Ẩn đáp án">
+        <span class="arrow" aria-hidden="true">▷</span><span class="label">Xem đáp án</span>
+      </button>
+
+      <div class="solution" id="sol-b4">
+        <p><strong>Câu 1 – A.</strong> Sự rơi tự do chỉ chịu tác dụng của trọng lực.</p>
+        <p><strong>Câu 2 – B.</strong> Vì $\Delta s_n = \frac{1}{2}g(2n-1)$, quãng đường trong các khoảng thời gian bằng nhau liên tiếp tỉ lệ với $1 : 3 : 5 : 7 : \dots$</p>
+        <p><strong>Câu 3 – B.</strong> Tại một nơi nhất định, mọi vật rơi cùng gia tốc $g$; giá trị $g$ phụ thuộc vĩ độ địa lí và độ cao.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       IV. TỔNG KẾT
+       ========================================================= -->
+  <section class="section" id="sec-4" aria-labelledby="h-4">
+    <h2 class="section-title" id="h-4">IV. Tổng kết</h2>
+
+    <div class="formula-box">
+      <p class="formula-caption">Ghi nhớ nhanh</p>
+      <ul class="feature-list" style="text-align:left;">
+        <li><strong>Sự rơi tự do</strong> là sự rơi chỉ dưới tác dụng của trọng lực.</li>
+        <li>Chuyển động rơi tự do là chuyển động <strong>thẳng, nhanh dần đều</strong>, theo phương thẳng đứng, chiều từ trên xuống.</li>
+        <li>Mọi vật rơi tự do tại cùng một nơi đều có cùng gia tốc $g$ ($g \approx 9{,}8\ \text{m/s}^2$ hoặc $g \approx 10\ \text{m/s}^2$).</li>
+      </ul>
+    </div>
+
+    <p><strong>Ba công thức cốt lõi:</strong></p>
+    <div class="math-block">
+      <span class="mj">$$v = gt$$</span>
+      <span class="mj">$$s = \frac{1}{2}gt^2$$</span>
+      <span class="mj">$$v^2 = 2gs$$</span>
+    </div>
+
+    <p><strong>Hai hệ quả hay dùng:</strong></p>
+    <div class="math-block">
+      <span class="mj">$$t = \sqrt{\frac{2h}{g}}$$</span>
+      <span class="mj">$$v = \sqrt{2gh}$$</span>
+    </div>
+
+    <div class="note-box">
+      <p><strong>Lưu ý khi giải bài tập:</strong></p>
+      <ul>
+        <li>Chọn chiều dương là chiều rơi, gốc thời gian lúc thả vật thì $v_0 = 0$.</li>
+        <li>Đọc kĩ cụm từ “trong giây cuối”, “trong giây thứ $n$”, “trong $n$ giây đầu” để chọn công thức phù hợp.</li>
+        <li>Chỉ bỏ qua sức cản của không khí khi đề bài cho phép.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       V. BÀI TẬP VỀ NHÀ
+       ========================================================= -->
+  <section class="section" id="sec-5" aria-labelledby="h-5">
+    <h2 class="section-title" id="h-5">V. Bài tập về nhà</h2>
+
+    <!-- BT 1 -->
+    <div class="exercise">
+      <p class="exercise-title">Bài 1</p>
+      <p>Một vật rơi tự do từ độ cao $80\ \text{m}$ xuống mặt đất. Lấy $g = 10\ \text{m/s}^2$. Tính thời gian rơi, vận tốc khi chạm đất và quãng đường vật rơi được trong giây thứ 3.</p>
+
+      <button type="button" class="toggle-btn"
+              aria-expanded="false"
+              aria-controls="sol-hw1"
+              data-closed-label="Xem đáp án"
+              data-open-label="Ẩn đáp án">
+        <span class="arrow" aria-hidden="true">▷</span><span class="label">Xem đáp án</span>
+      </button>
+
+      <div class="solution" id="sol-hw1">
+        <div class="math-block">
+          <span class="mj">$$t = \sqrt{\frac{2h}{g}} = \sqrt{\frac{2 \cdot 80}{10}} = 4\ \text{s}$$</span>
+          <span class="mj">$$v = gt = 40\ \text{m/s}$$</span>
+        </div>
+        <p>Quãng đường rơi trong giây thứ 3:</p>
+        <div class="math-block">
+          <span class="mj">$$\Delta s_3 = \frac{1}{2}g\left(2 \cdot 3 - 1\right) = 5 \cdot 5 = 25\ \text{m}$$</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BT 2 -->
+    <div class="exercise">
+      <p class="exercise-title">Bài 2</p>
+      <p>Một hòn đá được thả rơi tự do từ miệng một cái giếng sâu $20\ \text{m}$. Sau bao lâu kể từ lúc thả thì nghe được tiếng đá chạm đáy giếng? Biết vận tốc truyền âm trong không khí là $340\ \text{m/s}$ và $g = 10\ \text{m/s}^2$.</p>
+
+      <button type="button" class="toggle-btn"
+              aria-expanded="false"
+              aria-controls="sol-hw2"
+              data-closed-label="Xem đáp án"
+              data-open-label="Ẩn đáp án">
+        <span class="arrow" aria-hidden="true">▷</span><span class="label">Xem đáp án</span>
+      </button>
+
+      <div class="solution" id="sol-hw2">
+        <p>Thời gian đá rơi xuống đáy giếng:</p>
+        <div class="math-block">
+          <span class="mj">$$t_1 = \sqrt{\frac{2h}{g}} = \sqrt{\frac{2 \cdot 20}{10}} = 2\ \text{s}$$</span>
+        </div>
+        <p>Thời gian âm truyền từ đáy giếng lên tai người (với $v = 340\ \text{m/s}$ là vận tốc truyền âm):</p>
+        <div class="math-block">
+          <span class="mj">$$t_2 = \frac{h}{v} = \frac{20}{340} \approx 0{,}059\ \text{s}$$</span>
+        </div>
+        <p>Tổng thời gian:</p>
+        <div class="math-block">
+          <span class="mj">$$t = t_1 + t_2 \approx 2 + 0{,}059 = 2{,}059\ \text{s}$$</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BT 3 -->
+    <div class="exercise">
+      <p class="exercise-title">Bài 3</p>
+      <p>Tính quãng đường một vật rơi tự do rơi được trong giây thứ 5. Lấy $g = 9{,}8\ \text{m/s}^2$.</p>
+
+      <button type="button" class="toggle-btn"
+              aria-expanded="false"
+              aria-controls="sol-hw3"
+              data-closed-label="Xem đáp án"
+              data-open-label="Ẩn đáp án">
+        <span class="arrow" aria-hidden="true">▷</span><span class="label">Xem đáp án</span>
+      </button>
+
+      <div class="solution" id="sol-hw3">
+        <div class="math-block">
+          <span class="mj">$$\Delta s_5 = \frac{1}{2}g\left(2 \cdot 5 - 1\right) = \frac{1}{2} \cdot 9{,}8 \cdot 9 = 44{,}1\ \text{m}$$</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BT 4 -->
+    <div class="exercise">
+      <p class="exercise-title">Bài 4</p>
+      <p>Một vật rơi tự do, trong 2 giây cuối cùng trước khi chạm đất vật rơi được $60\ \text{m}$. Lấy $g = 10\ \text{m/s}^2$. Tính thời gian rơi và độ cao nơi thả vật.</p>
+
+      <button type="button" class="toggle-btn"
+              aria-expanded="false"
+              aria-controls="sol-hw4"
+              data-closed-label="Xem đáp án"
+              data-open-label="Ẩn đáp án">
+        <span class="arrow" aria-hidden="true">▷</span><span class="label">Xem đáp án</span>
+      </button>
+
+      <div class="solution" id="sol-hw4">
+        <p>Gọi $t$ là tổng thời gian rơi. Quãng đường rơi trong 2 giây cuối:</p>
+        <div class="math-block">
+          <span class="mj">$$\frac{1}{2}gt^2 - \frac{1}{2}g\left(t-2\right)^2 = 60$$</span>
+        </div>
+        <div class="math-block">
+          <span class="mj">$$5\left(t^2 - \left(t-2\right)^2\right) = 60 \;\Rightarrow\; 5\left(4t - 4\right) = 60 \;\Rightarrow\; t = 4\ \text{s}$$</span>
+        </div>
+        <p>Độ cao nơi thả vật:</p>
+        <div class="math-block">
+          <span class="mj">$$h = \frac{1}{2}gt^2 = \frac{1}{2} \cdot 10 \cdot 4^2 = 80\ \text{m}$$</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- =========================================================
+     NÚT "..." BẬT / TẮT BẢNG VẼ NHÁP
+     ========================================================= -->
+<button type="button" class="draw-toggle" id="drawToggle"
+        aria-expanded="false" aria-label="Bật chế độ vẽ nháp" title="Bật/tắt bảng vẽ nháp (phím V)">
+  ⋯
+</button>
+
+<!-- Canvas phủ toàn trang -->
+<canvas id="drawCanvas" class="draw-canvas" aria-hidden="true"></canvas>
+
+<!-- Thanh công cụ vẽ -->
+<div class="draw-toolbar" id="drawToolbar" role="toolbar" aria-label="Công cụ vẽ nháp">
+
+  <!-- Nhóm công cụ -->
+  <div class="dt-group" role="group" aria-label="Chọn công cụ">
+    <button type="button" class="widget-btn dt-btn" data-tool="pen"    title="Bút (K)"         aria-label="Bút – phím K">✎</button>
+    <button type="button" class="widget-btn dt-btn" data-tool="line"   title="Đường thẳng (L)" aria-label="Đường thẳng – phím L">╱</button>
+    <button type="button" class="widget-btn dt-btn" data-tool="arrow"  title="Mũi tên (I)"     aria-label="Mũi tên – phím I">➤</button>
+    <button type="button" class="widget-btn dt-btn" data-tool="circle" title="Hình tròn (O)"   aria-label="Hình tròn – phím O">◯</button>
+    <button type="button" class="widget-btn dt-btn" data-tool="dot"    title="Chấm (P)"        aria-label="Chấm – phím P">•</button>
+    <button type="button" class="widget-btn dt-btn" data-tool="eraser" title="Tẩy (3)"         aria-label="Tẩy – phím 3">⌫</button>
+  </div>
+
+  <!-- Nhóm màu sắc -->
+  <div class="dt-group" role="group" aria-label="Chọn màu">
+    <button type="button" class="dt-color" data-color="#8B4513" style="--c:#8B4513" title="Nâu (N)"        aria-label="Màu nâu – phím N"></button>
+    <button type="button" class="dt-color" data-color="#E11D48" style="--c:#E11D48" title="Đỏ (1)"         aria-label="Màu đỏ – phím 1"></button>
+    <button type="button" class="dt-color" data-color="#1D4ED8" style="--c:#1D4ED8" title="Xanh dương (0)" aria-label="Màu xanh dương – phím 0"></button>
+    <button type="button" class="dt-color" data-color="#111827" style="--c:#111827" title="Đen (D)"        aria-label="Màu đen – phím D"></button>
+  </div>
+
+  <!-- Nhóm độ dày -->
+  <div class="dt-group" role="group" aria-label="Độ dày nét vẽ">
+    <button type="button" class="widget-btn dt-btn" data-act="width-down" title="Giảm độ dày (M)" aria-label="Giảm độ dày – phím M">−</button>
+    <span class="dt-width" id="dtWidthLabel" aria-live="polite">3</span>
+    <button type="button" class="widget-btn dt-btn" data-act="width-up"   title="Tăng độ dày (B)" aria-label="Tăng độ dày – phím B">+</button>
+  </div>
+
+  <!-- Nhóm hành động -->
+  <div class="dt-group" role="group" aria-label="Hành động">
+    <button type="button" class="widget-btn dt-btn" data-act="undo"  title="Hoàn tác (Ctrl+Z)" aria-label="Hoàn tác – Ctrl Z">↶</button>
+    <button type="button" class="widget-btn dt-btn" data-act="redo"  title="Làm lại (Ctrl+Y)"  aria-label="Làm lại – Ctrl Y">↷</button>
+    <button type="button" class="widget-btn dt-btn" data-act="clear" title="Xoá hết (X)"       aria-label="Xoá toàn bộ nét vẽ – phím X">🗑</button>
+  </div>
+</div>
+
+<!-- =========================================================
+     POPUP VIDEO
+     ========================================================= -->
+<div class="modal video-modal" id="videoModal" role="dialog" aria-modal="true"
+     aria-label="Video thí nghiệm ống hút chân không" aria-hidden="true">
+  <div class="video-modal-inner">
+    <button type="button" class="modal-close" id="videoClose" aria-label="Đóng video">✕</button>
+    <!-- Lớp bọc iframe: position absolute + width/height 100% để phủ kín popup -->
+    <div class="video-frame" id="videoFrame"></div>
+  </div>
+</div>
+
+<!-- =========================================================
+     MODAL PHÓNG TO ẢNH
+     ========================================================= -->
+<div class="modal img-modal" id="imgModal" role="dialog" aria-modal="true"
+     aria-label="Xem ảnh phóng to" aria-hidden="true">
+  <button type="button" class="modal-close img-modal-x" id="imgClose" aria-label="Đóng ảnh">✕</button>
+  <div class="img-modal-body" id="imgModalBody"></div>
+</div>
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+<script>
+(function () {
+  'use strict';
+
+  /* =======================================================
+     TIỆN ÍCH CHUNG
+     ======================================================= */
+  var $  = function (sel, root) { return (root || document).querySelector(sel); };
+  var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+
+  /* Khoá cuộn trang dùng chung cho video / ảnh / canvas */
+  var scrollLock = { video: false, image: false, draw: false };
+  function syncScrollLock() {
+    document.body.style.overflow =
+      (scrollLock.video || scrollLock.image || scrollLock.draw) ? 'hidden' : '';
+  }
+
+  /* =======================================================
+     1) CỘT ĐỔI CỠ CHỮ (lưu localStorage)
+     ======================================================= */
+  var FONT_KEY = 'bai10-font-scale';
+  var FONT = { min: 0.8, max: 1.5, step: 0.1, def: 1 };
+
+  function currentScale() {
+    var v = parseFloat(document.documentElement.style.getPropertyValue('--font-scale'));
+    return isNaN(v) ? FONT.def : v;
+  }
+  function applyScale(value) {
+    var s = Math.min(FONT.max, Math.max(FONT.min, Math.round(value * 100) / 100));
+    document.documentElement.style.setProperty('--font-scale', s);
+    try { localStorage.setItem(FONT_KEY, String(s)); } catch (e) { /* localStorage bị chặn thì bỏ qua */ }
+  }
+
+  var fontUp = $('#fontUp'), fontDown = $('#fontDown'), fontReset = $('#fontReset');
+  if (fontUp)    fontUp.addEventListener('click',    function () { applyScale(currentScale() + FONT.step); });
+  if (fontDown)  fontDown.addEventListener('click',  function () { applyScale(currentScale() - FONT.step); });
+  if (fontReset) fontReset.addEventListener('click', function () { applyScale(FONT.def); });
+
+  /* =======================================================
+     2) NÚT ẨN / HIỆN LỜI GIẢI
+     ======================================================= */
+  $$('.toggle-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var panelId = btn.getAttribute('aria-controls');
+      var panel = panelId ? document.getElementById(panelId) : null;
+      if (!panel) return;
+
+      var isOpen = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!isOpen));
+      panel.classList.toggle('is-open', !isOpen);
+
+      var arrow = btn.querySelector('.arrow');
+      var label = btn.querySelector('.label');
+      if (arrow) arrow.textContent = !isOpen ? '▼' : '▷';
+      if (label) {
+        label.textContent = !isOpen
+          ? (btn.dataset.openLabel   || 'Ẩn lời giải')
+          : (btn.dataset.closedLabel || 'Xem lời giải');
+      }
+    });
+  });
+
+  /* =======================================================
+     3) POPUP VIDEO THÔNG MINH
+     ======================================================= */
+  /* ⚠️ Thay VIDEO_ID bằng mã video YouTube thí nghiệm NASA của bạn */
+  var VIDEO_EMBED = 'https://www.youtube.com/embed/VIDEO_ID?autoplay=1&rel=0';
+
+  var videoModal = $('#videoModal');
+  var videoFrame = $('#videoFrame');
+  var videoThumb = $('#videoThumb');
+  var videoClose = $('#videoClose');
+
+  function openVideo() {
+    if (!videoModal || !videoFrame) return;
+
+    /* Tạo iframe khi mở */
+    var iframe = document.createElement('iframe');
+    iframe.src = VIDEO_EMBED;
+    iframe.title = 'Video thí nghiệm ống hút chân không';
+    iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+    iframe.setAttribute('allowfullscreen', '');
+    videoFrame.innerHTML = '';
+    videoFrame.appendChild(iframe);
+
+    videoModal.classList.add('show');
+    videoModal.setAttribute('aria-hidden', 'false');
+    scrollLock.video = true;
+    syncScrollLock();
+    if (videoClose) videoClose.focus();
+  }
+
+  function closeVideo() {
+    if (!videoModal) return;
+    /* Xoá iframe để dừng hẳn video */
+    if (videoFrame) videoFrame.innerHTML = '';
+    videoModal.classList.remove('show');
+    videoModal.setAttribute('aria-hidden', 'true');
+    scrollLock.video = false;
+    syncScrollLock();
+    if (videoThumb) videoThumb.focus();
+  }
+
+  if (videoThumb) videoThumb.addEventListener('click', openVideo);
+  if (videoClose) videoClose.addEventListener('click', closeVideo);
+  if (videoModal) {
+    videoModal.addEventListener('click', function (e) {
+      if (e.target === videoModal) closeVideo();   /* Bấm ra ngoài thì đóng */
+    });
+  }
+
+  /* =======================================================
+     4) PHÓNG TO ẢNH (MODAL)
+     ======================================================= */
+  var imgModal = $('#imgModal');
+  var imgModalBody = $('#imgModalBody');
+  var imgClose = $('#imgClose');
+
+  function openImageModal(el) {
+    if (!imgModal || !imgModalBody) return;
+    imgModalBody.innerHTML = '';
+
+    if (el.tagName.toLowerCase() === 'img') {
+      var im = new Image();
+      im.src = el.src;
+      im.alt = el.alt || '';
+      imgModalBody.appendChild(im);
+    } else {
+      /* Với SVG inline: sao chép lại để phóng to */
+      imgModalBody.innerHTML = el.outerHTML;
+      var svg = imgModalBody.querySelector('svg');
+      if (svg) {
+        svg.removeAttribute('class');
+        svg.style.width = '100%';
+        svg.style.height = 'auto';
+        svg.style.maxHeight = '84vh';
+      }
+    }
+
+    imgModal.classList.add('show');
+    imgModal.setAttribute('aria-hidden', 'false');
+    scrollLock.image = true;
+    syncScrollLock();
+    if (imgClose) imgClose.focus();
+  }
+
+  function closeImageModal() {
+    if (!imgModal) return;
+    imgModalBody.innerHTML = '';
+    imgModal.classList.remove('show');
+    imgModal.setAttribute('aria-hidden', 'true');
+    scrollLock.image = false;
+    syncScrollLock();
+  }
+
+  $$('.zoomable-img').forEach(function (el) {
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();       /* không cho sự kiện lan ra ngoài */
+      openImageModal(el);
+    });
+  });
+
+  if (imgClose) imgClose.addEventListener('click', closeImageModal);
+  if (imgModal) {
+    imgModal.addEventListener('click', function (e) {
+      if (e.target === imgModal) closeImageModal();   /* Bấm ra ngoài thì đóng */
+    });
+  }
+  if (imgModalBody) {
+    imgModalBody.addEventListener('click', function (e) { e.stopPropagation(); });
+  }
+
+  /* =======================================================
+     5) BẢNG VẼ NHÁP (ANNOTATION CANVAS)
+     ======================================================= */
+  var canvas     = $('#drawCanvas');
+  var ctx        = canvas ? canvas.getContext('2d') : null;
+  var toolbar    = $('#drawToolbar');
+  var drawToggle = $('#drawToggle');
+  var widthLabel = $('#dtWidthLabel');
+
+  var DEFAULT_COLOR = '#8B4513';   /* Nâu */
+  var DEFAULT_WIDTH = 3;
+  var MIN_WIDTH = 1;
+  var MAX_WIDTH = 24;
+
+  var state = {
+    active:  false,
+    tool:    'pen',
+    color:   DEFAULT_COLOR,
+    width:   DEFAULT_WIDTH,
+    strokes: [],   /* các nét đã vẽ */
+    history: [],   /* stack undo */
+    future:  [],   /* stack redo */
+    drawing: false,
+    current: null  /* nét đang vẽ */
+  };
+
+  /* ---------- 5.1 Cấu hình canvas theo devicePixelRatio ---------- */
+  function fitCanvas() {
+    if (!canvas || !ctx) return;
+    var dpr = window.devicePixelRatio || 1;
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+
+    canvas.width  = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    canvas.style.width  = w + 'px';
+    canvas.style.height = h + 'px';
+
+    /* Vẽ theo đơn vị CSS pixel để nét không bị lệch */
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    render();
+  }
+
+  /* ---------- 5.2 Vẽ lại toàn bộ ---------- */
+  function render() {
+    if (!ctx) return;
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
+
+    for (var i = 0; i < state.strokes.length; i++) paint(state.strokes[i]);
+    if (state.current) paint(state.current);
+  }
+
+  /* ---------- 5.3 Vẽ một nét ---------- */
+  function paint(s) {
+    if (!ctx) return;
+    ctx.save();
+    ctx.strokeStyle = s.color;
+    ctx.fillStyle   = s.color;
+    ctx.lineWidth   = s.width;
+    ctx.lineCap     = 'round';
+    ctx.lineJoin    = 'round';
+
+    if (s.tool === 'pen') {
+      if (!s.points || s.points.length === 0) { ctx.restore(); return; }
+      if (s.points.length === 1) {
+        ctx.beginPath();
+        ctx.arc(s.points[0].x, s.points[0].y, Math.max(s.width / 2, 1), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        return;
+      }
+      ctx.beginPath();
+      ctx.moveTo(s.points[0].x, s.points[0].y);
+      for (var i = 1; i < s.points.length; i++) {
+        ctx.lineTo(s.points[i].x, s.points[i].y);
+      }
+      ctx.stroke();
+
+    } else if (s.tool === 'line') {
+      ctx.beginPath();
+      ctx.moveTo(s.x0, s.y0);
+      ctx.lineTo(s.x1, s.y1);
+      ctx.stroke();
+
+    } else if (s.tool === 'arrow') {
+      drawArrow(s.x0, s.y0, s.x1, s.y1, s.width);
+
+    } else if (s.tool === 'circle') {
+      var r = Math.hypot(s.x1 - s.x0, s.y1 - s.y0);
+      ctx.beginPath();
+      ctx.arc(s.x0, s.y0, Math.max(r, 1), 0, Math.PI * 2);
+      ctx.stroke();
+
+    } else if (s.tool === 'dot') {
+      ctx.beginPath();
+      ctx.arc(s.x0, s.y0, Math.max(s.width * 1.6, 5), 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.restore();
+  }
+
+  function drawArrow(x0, y0, x1, y1, w) {
+    var angle = Math.atan2(y1 - y0, x1 - x0);
+    var head  = Math.max(12, w * 4.5);
+
+    ctx.beginPath();
+    ctx.moveTo(x0, y0);
+    ctx.lineTo(x1, y1);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x1 - head * Math.cos(angle - Math.PI / 7), y1 - head * Math.sin(angle - Math.PI / 7));
+    ctx.lineTo(x1 - head * Math.cos(angle + Math.PI / 7), y1 - head * Math.sin(angle + Math.PI / 7));
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  /* ---------- 5.4 Lịch sử (Undo / Redo) ---------- */
+  function pushHistory() {
+    state.history.push(state.strokes.slice());
+    if (state.history.length > 80) state.history.shift();
+    state.future.length = 0;
+  }
+  function undo() {
+    if (!state.history.length) return;
+    state.future.push(state.strokes.slice());
+    state.strokes = state.history.pop();
+    render();
+  }
+  function redo() {
+    if (!state.future.length) return;
+    state.history.push(state.strokes.slice());
+    state.strokes = state.future.pop();
+    render();
+  }
+  function clearAll() {
+    if (!state.strokes.length) return;
+    pushHistory();
+    state.strokes = [];
+    render();
+  }
+
+  /* ---------- 5.5 Tương tác chuột / cảm ứng (Pointer Events) ---------- */
+  function getPos(e) {
+    var rect = canvas.getBoundingClientRect();
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  }
+
+  function onPointerDown(e) {
+    if (!state.active || !canvas) return;
+    e.preventDefault();
+    if (canvas.setPointerCapture) {
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* bỏ qua */ }
+    }
+
+    var p = getPos(e);
+    pushHistory();
+    state.drawing = true;
+
+    if (state.tool === 'eraser') {
+      eraseAt(p);
+      return;
+    }
+
+    if (state.tool === 'pen') {
+      state.current = { tool: 'pen', color: state.color, width: state.width, points: [p] };
+    } else {
+      state.current = {
+        tool: state.tool, color: state.color, width: state.width,
+        x0: p.x, y0: p.y, x1: p.x, y1: p.y
+      };
+    }
+    render();
+  }
+
+  function onPointerMove(e) {
+    if (!state.active || !state.drawing) return;
+    e.preventDefault();
+    var p = getPos(e);
+
+    if (state.tool === 'eraser') { eraseAt(p); return; }
+    if (!state.current) return;
+
+    if (state.current.tool === 'pen') {
+      state.current.points.push(p);
+    } else {
+      state.current.x1 = p.x;
+      state.current.y1 = p.y;
+    }
+    render();
+  }
+
+  function onPointerUp() {
+    if (!state.drawing) return;
+    state.drawing = false;
+    if (state.current) {
+      state.strokes.push(state.current);
+      state.current = null;
+    }
+    render();
+  }
+
+  if (canvas) {
+    canvas.addEventListener('pointerdown', onPointerDown);
+    canvas.addEventListener('pointermove', onPointerMove);
+    canvas.addEventListener('pointerup', onPointerUp);
+    canvas.addEventListener('pointercancel', onPointerUp);
+  }
+
+  /* ---------- 5.6 Tẩy: xoá các nét chạm vào điểm tẩy ---------- */
+  function distToSegment(p, a, b) {
+    var dx = b.x - a.x, dy = b.y - a.y;
+    var len2 = dx * dx + dy * dy;
+    if (len2 === 0) return Math.hypot(p.x - a.x, p.y - a.y);
+    var t = ((p.x - a.x) * dx + (p.y - a.y) * dy) / len2;
+    t = Math.max(0, Math.min(1, t));
+    return Math.hypot(p.x - (a.x + t * dx), p.y - (a.y + t * dy));
+  }
+
+  function segmentsOf(s) {
+    var segs = [], i;
+    if (s.tool === 'pen') {
+      if (s.points.length === 1) return [[s.points[0], s.points[0]]];
+      for (i = 1; i < s.points.length; i++) segs.push([s.points[i - 1], s.points[i]]);
+      return segs;
+    }
+    if (s.tool === 'dot') return [[{ x: s.x0, y: s.y0 }, { x: s.x0, y: s.y0 }]];
+    if (s.tool === 'circle') {
+      var r = Math.hypot(s.x1 - s.x0, s.y1 - s.y0), N = 32;
+      for (i = 0; i < N; i++) {
+        var a1 = (i / N) * Math.PI * 2;
+        var a2 = ((i + 1) / N) * Math.PI * 2;
+        segs.push([
+          { x: s.x0 + r * Math.cos(a1), y: s.y0 + r * Math.sin(a1) },
+          { x: s.x0 + r * Math.cos(a2), y: s.y0 + r * Math.sin(a2) }
+        ]);
+      }
+      return segs;
+    }
+    return [[{ x: s.x0, y: s.y0 }, { x: s.x1, y: s.y1 }]];
+  }
+
+  function hitStroke(s, p, tol) {
+    var t = tol + s.width / 2;
+    var segs = segmentsOf(s);
+    for (var i = 0; i < segs.length; i++) {
+      if (distToSegment(p, segs[i][0], segs[i][1]) <= t) return true;
+    }
+    return false;
+  }
+
+  function eraseAt(p) {
+    var before = state.strokes.length;
+    state.strokes = state.strokes.filter(function (s) { return !hitStroke(s, p, 10); });
+    if (state.strokes.length !== before) render();
+  }
+
+  /* ---------- 5.7 Đồng bộ giao diện thanh công cụ ---------- */
+  function syncUI() {
+    $$('.dt-btn[data-tool]').forEach(function (b) {
+      var on = b.dataset.tool === state.tool;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', String(on));
+    });
+    $$('.dt-color').forEach(function (b) {
+      var on = (b.dataset.color || '').toLowerCase() === state.color.toLowerCase();
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', String(on));
+    });
+    if (widthLabel) widthLabel.textContent = state.width;
+  }
+
+  function setTool(t)  { state.tool = t; if (canvas) canvas.style.cursor = (t === 'eraser') ? 'cell' : 'crosshair'; syncUI(); }
+  function setColor(c) { state.color = c; if (state.tool === 'eraser') state.tool = 'pen'; syncUI(); }
+  function setWidth(w) { state.width = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, w)); syncUI(); }
+
+  /* ---------- 5.8 Bật / tắt chế độ vẽ ---------- */
+  function setActive(on) {
+    if (!canvas || !toolbar || !drawToggle) return;
+    state.active = on;
+
+    canvas.classList.toggle('active', on);
+    toolbar.classList.toggle('show', on);
+    drawToggle.setAttribute('aria-expanded', String(on));
+    drawToggle.setAttribute('aria-label', on ? 'Tắt chế độ vẽ nháp' : 'Bật chế độ vẽ nháp');
+
+    scrollLock.draw = on;
+    syncScrollLock();
+
+    if (on) {
+      fitCanvas();
+      syncUI();
+      canvas.style.cursor = (state.tool === 'eraser') ? 'cell' : 'crosshair';
+    }
+  }
+
+  function toggleDrawing() { setActive(!state.active); }
+
+  if (drawToggle) drawToggle.addEventListener('click', toggleDrawing);
+
+  /* ---------- 5.9 Sự kiện thanh công cụ ---------- */
+  if (toolbar) {
+    toolbar.addEventListener('click', function (e) {
+      var btn = e.target.closest('button');
+      if (!btn) return;
+
+      if (btn.dataset.tool)  { setTool(btn.dataset.tool);  return; }
+      if (btn.dataset.color) { setColor(btn.dataset.color); return; }
+
+      switch (btn.dataset.act) {
+        case 'width-up':   setWidth(state.width + 1); break;
+        case 'width-down': setWidth(state.width - 1); break;
+        case 'undo':       undo(); break;
+        case 'redo':       redo(); break;
+        case 'clear':      clearAll(); break;
+      }
+    });
+  }
+
+  /* ---------- 5.10 Cập nhật canvas khi đổi kích thước ---------- */
+  window.addEventListener('resize', function () {
+    if (state.active) fitCanvas();
+  });
+  window.addEventListener('orientationchange', function () {
+    if (state.active) setTimeout(fitCanvas, 250);
+  });
+
+  /* =======================================================
+     6) PHÍM TẮT BÀN PHÍM (BẮT BUỘC)
+     ======================================================= */
+  document.addEventListener('keydown', function (e) {
+    /* Bỏ qua khi đang gõ trong ô nhập liệu */
+    var tag = (e.target && e.target.tagName ? e.target.tagName : '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable) return;
+
+    /* --- ESC: đóng các modal --- */
+    if (e.key === 'Escape') {
+      if (videoModal && videoModal.classList.contains('show')) closeVideo();
+      if (imgModal && imgModal.classList.contains('show')) closeImageModal();
+      return;
+    }
+
+    var key   = e.key;
+    var lower = key.toLowerCase();
+
+    /* --- Ctrl/Cmd + Z : Undo ; Ctrl/Cmd + Y : Redo --- */
+    if (e.ctrlKey || e.metaKey) {
+      if (lower === 'z') { e.preventDefault(); if (state.active) undo(); return; }
+      if (lower === 'y') { e.preventDefault(); if (state.active) redo(); return; }
+      return;
+    }
+
+    /* --- V : Bật / tắt chế độ vẽ (luôn hoạt động) --- */
+    if (lower === 'v') {
+      e.preventDefault();
+      toggleDrawing();
+      return;
+    }
+
+    /* Các phím còn lại chỉ dùng khi đang bật chế độ vẽ */
+    if (!state.active) return;
+
+    switch (lower) {
+      /* Công cụ */
+      case 'k':            setTool('pen');    break;
+      case 'l':            setTool('line');   break;
+      case 'i':            setTool('arrow');  break;
+      case 'o':            setTool('circle'); break;
+      case 'p': case '.':  setTool('dot');    break;
+      case '3':            setTool('eraser'); break;
+
+      /* Màu sắc */
+      case '1': setColor('#E11D48'); break;   /* Đỏ */
+      case '0': setColor('#1D4ED8'); break;   /* Xanh dương */
+      case 'd': setColor('#111827'); break;   /* Đen */
+      case 'n': setColor('#8B4513'); break;   /* Nâu (mặc định) */
+
+      /* Độ dày */
+      case 'b': setWidth(state.width + 1); break;
+      case 'm': setWidth(state.width - 1); break;
+      case '2': setWidth(DEFAULT_WIDTH);   break;
+
+      /* Xoá hết */
+      case 'x': clearAll(); break;
+
+      default: return;
+    }
+    e.preventDefault();
+  });
+
+  /* Khởi tạo trạng thái giao diện ban đầu */
+  syncUI();
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bài 10: Sự rơi tự do – Vật lí 10</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+<script>
+  function imgFallback(img){
+    var d = document.createElement('div');
+    d.className = 'img-fallback';
+    d.textContent = img.alt || 'Hình minh hoạ';
+    if (img.parentNode) img.parentNode.replaceChild(d, img);
+  }
+</script>
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    svg: { fontCache: 'global' }
+  };
+  function loadMathJaxCDN(){
+    if (window.__mjxCDNLoaded) return;
+    window.__mjxCDNLoaded = true;
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';
+    s.async = true;
+    document.head.appendChild(s);
+  }
+</script>
+<script src="/bx/mathjax/tex-svg.js" onerror="loadMathJaxCDN()"></script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+
+:root{
+  --font-scale: 1;
+  --navy:      #1A365D;
+  --gold:      #B8860B;
+  --brown-a:   #8B5A2B;
+  --brown-b:   #8B4513;
+  --white:     #FFFFFF;
+  --gray-bg:   #F5F5F5;
+  --beige:     #F5F5DC;
+  --wheat:     #F5DEB3;
+  --lightgray: #D3D3D3;
+  --blue:      #0066CC;
+  --darkblue:  #004488;
+  --page-bg:   #F8F7F4;
+}
+
+html{
+  font-size: calc(16px * var(--font-scale));
+  scroll-behavior: smooth;
+}
+
+body{
+  margin: 0;
+  font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--page-bg);
+  color: #1a1a1a;
+  line-height: 1.45;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ================= CONTAINER ================= */
+.container{
+  width: 80%;
+  max-width: 1100px;
+  margin: 24px auto 90px;
+  background: var(--gray-bg);
+  border-radius: 14px;
+  padding: 36px 46px 52px;
+  box-shadow: 0 8px 30px rgba(26, 54, 93, .13),
+              0 2px 6px rgba(26, 54, 93, .06);
+}
+@media (max-width: 900px){
+  .container{ width: 92%; padding: 24px 18px 36px; }
+}
+
+/* ================= KIỂU CHỮ ================= */
+h1{
+  font-size: 1.9rem;
+  line-height: 1.25;
+  color: var(--navy);
+  text-align: center;
+  margin: .25em 0 .15em;
+  letter-spacing: .3px;
+}
+h2{
+  font-size: 1.35rem;
+  color: var(--navy);
+  margin: 1.2em 0 .4em;
+  padding-bottom: .25em;
+  border-bottom: 2px solid var(--wheat);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+h3{
+  font-size: 1.1rem;
+  color: var(--brown-b);
+  margin: .8em 0 .3em;
+}
+h4{
+  font-size: 1rem;
+  color: var(--brown-a);
+  margin: .6em 0 .2em;
+}
+p{ margin: .35em 0; }
+ul, ol{ margin: .3em 0; padding-left: 1.5em; }
+li{ margin: .15em 0; }
+
+.quiz-mark{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35em;
+  height: 1.35em;
+  border: 1.8px solid currentColor;
+  border-radius: 50%;
+  font-size: .72em;
+  font-weight: 700;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+
+.lesson-header{
+  text-align: center;
+  padding-bottom: 6px;
+  border-bottom: 3px double var(--wheat);
+  margin-bottom: 8px;
+}
+.lesson-header .subtitle{
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--brown-a);
+  margin: 0 0 .2em;
+}
+
+.lesson-section{ scroll-margin-top: 20px; }
+
+.note-box{
+  background: var(--beige);
+  border-left: 4px solid var(--gold);
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin: 10px 0;
+}
+.note-box p{ margin: .2em 0; }
+
+.result-line{
+  background: var(--wheat);
+  border-left: 4px solid var(--brown-a);
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin: 10px 0;
+}
+.result-line strong{ color: var(--brown-b); }
+
+.highlight-info{
+  background: var(--beige);
+  border-left: 4px solid var(--gold);
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin: 10px 0;
+}
+.highlight-info p{ margin: .2em 0; }
+
+/* ================= CÔNG THỨC TOÁN (MathJax) ================= */
+mjx-container[jax="SVG"]{
+  font-size: 1.2em !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+}
+mjx-container[jax="SVG"] svg path{
+  stroke: currentColor;
+  stroke-width: 1.2px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  paint-order: stroke fill;
+}
+
+.formula-block{
+  text-align: center;
+  margin: .4em 0;
+}
+.formula-block mjx-container[jax="SVG"][display="true"]{
+  display: inline-block !important;
+  background: var(--beige);
+  border-left: 4px solid var(--gold);
+  border-radius: 8px;
+  padding: 6px 18px;
+  margin: 0 !important;
+  text-align: center;
+}
+
+.formula-line{
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+  margin: .3em 0 .3em .4em;
+}
+.formula-line .formula-label{
+  min-width: 165px;
+  font-weight: 600;
+  color: var(--brown-a);
+}
+.formula-math mjx-container[jax="SVG"]{
+  background: var(--beige);
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+
+/* ================= ẢNH MINH HOẠ ================= */
+.img-container{
+  text-align: center;
+  margin: 12px 0;
+}
+.img-container img{
+  max-width: 100%;
+  max-height: 480px;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(26, 54, 93, .16);
+  cursor: zoom-in;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.img-container img:hover{
+  transform: scale(1.01);
+  box-shadow: 0 8px 24px rgba(26, 54, 93, .24);
+}
+.img-caption{
+  font-size: .85rem;
+  font-style: italic;
+  color: #555;
+  margin-top: 4px;
+}
+.img-fallback{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  background: linear-gradient(135deg, #e8eef7, #f5f0e1);
+  border: 2px dashed var(--lightgray);
+  border-radius: 10px;
+  color: var(--navy);
+  font-weight: 600;
+  padding: 20px;
+}
+
+/* Bảng số liệu */
+.data-table{
+  width: 100%;
+  max-width: 520px;
+  margin: 10px auto;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(26,54,93,.08);
+}
+.data-table th,
+.data-table td{
+  padding: 6px 14px;
+  text-align: center;
+  border-bottom: 1px solid var(--lightgray);
+}
+.data-table th{
+  background: var(--navy);
+  color: #fff;
+  font-weight: 600;
+}
+.data-table tr:last-child td{ border-bottom: none; }
+.data-table tr:nth-child(even) td{ background: #f9f9f9; }
+
+/* ================= VIDEO ================= */
+.video-wrapper{
+  position: relative;
+  max-width: 600px;
+  aspect-ratio: 16 / 9;
+  margin: 12px auto;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #0f1d33;
+  box-shadow: 0 6px 20px rgba(26, 54, 93, .25);
+}
+.video-thumb{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .85;
+}
+.video-overlay{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(10, 20, 40, .35);
+  color: #fff;
+  transition: background .2s ease;
+}
+.video-wrapper:hover .video-overlay{ background: rgba(10, 20, 40, .55); }
+.play-btn{
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #fff;
+  padding-left: 5px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .45);
+}
+.video-label{
+  font-size: .95rem;
+  font-weight: 600;
+  letter-spacing: .3px;
+}
+
+/* ================= LỜI GIẢI ================= */
+.solution{ margin: 8px 0 4px; }
+.toggle-btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 14px;
+  font-size: .9rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+.toggle-btn:hover{ background: var(--darkblue); }
+.toggle-btn .arrow{ font-size: .8rem; }
+
+.solution-body{
+  display: none;
+  margin-top: 8px;
+  padding: 10px 14px;
+  background: #fff;
+  border-left: 4px solid var(--blue);
+  border-radius: 8px;
+}
+.solution-body.open{ display: block; }
+
+.exercise{
+  margin: 12px 0;
+  padding: 10px 14px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid var(--lightgray);
+}
+.exercise .ex-q{ margin-top: 0; }
+.exercise .ex-q strong{ color: var(--navy); }
+
+/* ================= WIDGET CỐ ĐỊNH ================= */
+.widget{
+  position: fixed;
+  z-index: 10000;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .55);
+  opacity: .35;
+  transition: opacity .3s ease;
+}
+.widget:hover{ opacity: 1; }
+
+.widget button{
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: #9AA3AF;
+  font-size: 12px;
+  font-family: inherit;
+  line-height: 1;
+  padding: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .15s ease, color .15s ease;
+}
+.widget button:hover{
+  background: #E2E8F0;
+  color: var(--navy);
+}
+
+.widget-nav{
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  flex-direction: column;
+}
+.widget-font{
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  flex-direction: column;
+}
+.widget-menu{
+  bottom: 10px;
+  right: 10px;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* ================= MENU VẼ (...) ================= */
+.menu-panel{
+  position: absolute;
+  bottom: 32px;
+  right: 0;
+  display: none;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 8px 26px rgba(26, 54, 93, .22);
+  width: 250px; /* Tăng nhẹ chiều rộng để chứa đủ 7 nút */
+}
+.menu-panel.open{ display: flex; }
+
+.tb-row{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+.tb-row + .tb-row{
+  border-top: 1px solid #EEF2F7;
+  padding-top: 6px;
+  margin-top: 6px;
+}
+
+.tb-row button{
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  color: #6B7280;
+  font-size: 14px;
+  font-family: inherit;
+  line-height: 1;
+  padding: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .15s ease, color .15s ease;
+  flex-shrink: 0;
+}
+.tb-row button:hover{ background: #E2E8F0; }
+.tb-row button.active{ background: #DBEAFE; color: #1A365D; }
+
+.tb-colors button{
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  padding: 4px;
+}
+.color-swatch{
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: block;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+}
+.tb-colors button.active{
+  background: transparent;
+  box-shadow: 0 0 0 2px var(--dot-color, #1A365D);
+}
+
+.tb-width .width-value{
+  min-width: 22px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1A365D;
+}
+
+.tb-status .status-btn{
+  width: 100%;
+  height: 32px;
+  padding: 0 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1A365D;
+  background: #EFF6FF;
+  border-radius: 8px;
+}
+.tb-status .status-btn:hover{ background: #DBEAFE; }
+
+/* ================= CANVAS ================= */
+#drawCanvas{
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9998;
+  pointer-events: none;
+  touch-action: none;
+}
+#drawCanvas.active{
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+/* ================= MODAL ================= */
+.modal{
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.modal.open{ display: flex; }
+
+.modal-backdrop{
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 15, 28, .88);
+}
+
+.video-box{
+  position: relative;
+  z-index: 1;
+  width: min(95vw, calc(90vh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .6);
+}
+.video-frame-wrap{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.video-frame-wrap iframe{
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.modal-close{
+  position: absolute;
+  z-index: 5;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .45);
+  background: rgba(0, 0, 0, .6);
+  color: #fff;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-close:hover{ background: rgba(0, 0, 0, .85); }
+
+#videoModal .modal-close{ top: 8px; right: 8px; }
+#imgModal .modal-close{ position: fixed; top: 16px; right: 16px; }
+
+#imgModal img{
+  position: relative;
+  z-index: 1;
+  display: block;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .6);
+  cursor: default;
+}
+
+/* ================= IN ẤN ================= */
+@media print{
+  .widget, #drawCanvas, .video-wrapper, .modal, .toggle-btn{ display: none !important; }
+  .solution-body{ display: block !important; }
+  body{ background: #fff; line-height: 1.3; }
+  .container{ width: 100%; max-width: none; margin: 0; padding: 0; background: #fff; box-shadow: none; border-radius: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="drawCanvas" aria-hidden="true"></canvas>
+
+<!-- WIDGET ĐIỀU HƯỚNG -->
+<div class="widget widget-nav" role="navigation" aria-label="Điều hướng nhanh giữa các mục">
+  <button type="button" data-scroll="top"     aria-label="Về đầu trang"                  title="Về đầu trang">0</button>
+  <button type="button" data-scroll="sec-i"   aria-label="Mục I: Sự rơi trong không khí"  title="Mục I">I</button>
+  <button type="button" data-scroll="sec-ii"  aria-label="Mục II: Sự rơi tự do"           title="Mục II">II</button>
+  <button type="button" data-scroll="sec-bt"  aria-label="Bài tập vận dụng"               title="Bài tập vận dụng">✎</button>
+  <button type="button" data-scroll="sec-tk"  aria-label="Tổng kết"                       title="Tổng kết">☆</button>
+  <button type="button" data-scroll="sec-btn" aria-label="Bài tập về nhà"                 title="Bài tập về nhà">▤</button>
+</div>
+
+<!-- WIDGET ĐỔI CỠ CHỮ -->
+<div class="widget widget-font" role="group" aria-label="Điều chỉnh cỡ chữ">
+  <button type="button" id="fontPlus"  aria-label="Tăng cỡ chữ"     title="Tăng cỡ chữ">A+</button>
+  <button type="button" id="fontMinus" aria-label="Giảm cỡ chữ"     title="Giảm cỡ chữ">A−</button>
+  <button type="button" id="fontReset" aria-label="Cỡ chữ mặc định" title="Cỡ chữ mặc định">A</button>
+</div>
+
+<!-- WIDGET MENU VẼ (...) -->
+<div class="widget widget-menu">
+  <div class="menu-panel" id="menuPanel">
+    <div class="tb-row tb-tools">
+      <button type="button" data-tool="pen"    title="Bút (K)"         aria-label="Bút">✎</button>
+      <button type="button" data-tool="line"   title="Đường thẳng (L)" aria-label="Đường thẳng">╱</button>
+      <button type="button" data-tool="arrow"  title="Mũi tên (I)"     aria-label="Mũi tên">▶</button>
+      <button type="button" data-tool="circle" title="Hình tròn (O)"   aria-label="Hình tròn">○</button>
+      <button type="button" data-tool="dot"    title="Chấm ( . )"      aria-label="Chấm">●</button>
+      <button type="button" data-tool="eraser" title="Tẩy kéo (3)"     aria-label="Tẩy kéo">⌫</button>
+      <button type="button" data-tool="eraser-stroke" title="Tẩy nét (4)" aria-label="Tẩy nét">✖</button>
+    </div>
+    <div class="tb-row tb-colors">
+      <button type="button" data-color="#8B4513" style="--dot-color:#8B4513" title="Màu nâu (N)" aria-label="Màu nâu"><span class="color-swatch" style="background:#8B4513"></span></button>
+      <button type="button" data-color="#e11d48" style="--dot-color:#e11d48" title="Màu đỏ (1)"  aria-label="Màu đỏ"><span class="color-swatch" style="background:#e11d48"></span></button>
+      <button type="button" data-color="#0066CC" style="--dot-color:#0066CC" title="Màu xanh (0)" aria-label="Màu xanh"><span class="color-swatch" style="background:#0066CC"></span></button>
+      <button type="button" data-color="#111111" style="--dot-color:#111111" title="Màu đen (D)"  aria-label="Màu đen"><span class="color-swatch" style="background:#111111"></span></button>
+    </div>
+    <div class="tb-row tb-width">
+      <button type="button" id="btnWidthMinus" title="Giảm độ dày (M)" aria-label="Giảm độ dày">−</button>
+      <span class="width-value" id="widthDisplay">3</span>
+      <button type="button" id="btnWidthPlus"  title="Tăng độ dày (B)" aria-label="Tăng độ dày">+</button>
+    </div>
+    <div class="tb-row tb-actions">
+      <button type="button" id="btnUndo"  title="Hoàn tác (Ctrl+Z)" aria-label="Hoàn tác">↶</button>
+      <button type="button" id="btnRedo"  title="Làm lại (Ctrl+Y)"  aria-label="Làm lại">↷</button>
+      <button type="button" id="btnClear" title="Xoá hết (X)"       aria-label="Xoá hết">🗑</button>
+    </div>
+    <div class="tb-row tb-status">
+      <button type="button" id="btnExitDraw" class="status-btn" title="Bật / Tắt chế độ vẽ (V)">Bật vẽ (V)</button>
+    </div>
+  </div>
+  <button type="button" id="menuBtn" aria-label="Mở menu công cụ" aria-expanded="false" title="Menu">...</button>
+</div>
+
+<!-- ================= NỘI DUNG BÀI GIẢNG ================= -->
+<main class="container" id="top">
+
+  <section class="lesson-section" id="sec-check">
+    <h2><span class="quiz-mark">?</span> Kiểm tra bài cũ</h2>
+    <p>Viết công thức vận tốc và quãng đường đi của chuyển động thẳng biến đổi đều. Trường hợp vận tốc đầu bằng 0?</p>
+    <div class="solution">
+      <button type="button" class="toggle-btn" aria-expanded="false">
+        <span class="arrow">▷</span><span class="label">Xem đáp án</span>
+      </button>
+      <div class="solution-body">
+        <p>Chuyển động thẳng biến đổi đều có:</p>
+        <div class="formula-block">$$v = v_0 + at$$</div>
+        <div class="formula-block">$$s = v_0 t + \frac{1}{2} a t^{2}$$</div>
+        <p>Trường hợp vận tốc đầu bằng 0 ($v_0 = 0$):</p>
+        <div class="formula-block">$$v = at \qquad\qquad s = \frac{1}{2} a t^{2}$$</div>
+      </div>
+    </div>
+  </section>
+
+  <header class="lesson-header">
+    <h1>Bài 10: SỰ RƠI TỰ DO</h1>
+    <p class="subtitle">Sự rơi của các vật trong không khí và trong chân không</p>
+  </header>
+
+  <section class="lesson-section" id="sec-intro">
+    <p>Năm 1971, nhà du hành vũ trụ người Mỹ David Scott đã đồng thời thả rơi trên Mặt Trăng một chiếc lông chim và một chiếc búa ở cùng một độ cao và nhận thấy cả hai đều rơi xuống như nhau. Em có suy nghĩ gì về hiện tượng này?</p>
+
+    <div class="img-container">
+      <img src="10.0.png"
+           alt="David Scott thả lông chim và búa trên Mặt Trăng (1971)"
+           class="zoomable-img"
+           onerror="imgFallback(this)">
+      <p class="img-caption">Hình 10.0. Nhà du hành David Scott thực hiện thí nghiệm thả lông chim và búa trên Mặt Trăng (1971).</p>
+    </div>
+
+    <div class="highlight-info">
+      <p><strong>Gợi ý:</strong> Trên Mặt Trăng không có không khí nên không có lực cản. Vì vậy, mọi vật đều rơi với cùng một gia tốc, bất kể khối lượng khác nhau. Đây chính là minh chứng cho sự rơi tự do.</p>
+    </div>
+  </section>
+
+  <section class="lesson-section" id="sec-i">
+    <h2>I. Sự rơi trong không khí</h2>
+
+    <p>Trong không khí, ai cũng thấy hòn đá rơi nhanh hơn lá cây, viên phấn rơi nhanh hơn chiếc lông chim. Nhiều người dự đoán rằng, rơi nhanh hay chậm là do vật nặng hay nhẹ. Em có đồng ý với dự đoán đó không? Các thí nghiệm sau sẽ giúp kiểm tra dự đoán.</p>
+
+    <h3>1. Thí nghiệm</h3>
+    <ul>
+      <li><strong>TN 1:</strong> Thả rơi một viên bi và một chiếc lá.</li>
+      <li><strong>TN 2:</strong> Thả hai tờ giấy giống nhau, nhưng một tờ được vo tròn, một tờ để nguyên.</li>
+      <li><strong>TN 3:</strong> Thả rơi hai viên bi có cùng kích thước, một bằng sắt và một bằng thuỷ tinh.</li>
+    </ul>
+
+    <h3>2. Nhận xét</h3>
+    <p>Từ các thí nghiệm trên, ta thấy:</p>
+    <ul>
+      <li>Không thể dựa vào khối lượng để kết luận vật nào rơi nhanh hơn (TN 1 và TN 3).</li>
+      <li>Hai tờ giấy giống nhau, nặng như nhau nhưng tờ vo tròn rơi nhanh hơn tờ để nguyên (TN 2).</li>
+      <li>Nguyên nhân làm cho các vật rơi nhanh chậm khác nhau trong không khí là <strong>lực cản của không khí</strong>. Lực cản càng nhỏ so với trọng lực tác dụng lên vật thì vật rơi càng nhanh và ngược lại.</li>
+    </ul>
+
+    <div class="note-box">
+      <p><strong>Câu hỏi:</strong> Theo em, nếu loại bỏ được sức cản của không khí, các vật sẽ rơi như thế nào?</p>
+    </div>
+
+    <h3>3. Thí nghiệm ống hút chân không</h3>
+    <p>Câu hỏi trên đã được nhà bác học Newton trả lời bằng kết quả thí nghiệm với các ống hút chân không (Hình 10.1). Trong ống, hai vật rơi là viên bi chì và chiếc lông chim. Kết quả cho thấy trong chân không, mọi vật rơi nhanh như nhau.</p>
+
+    <div class="img-container">
+      <img src="10.1.png"
+           alt="Hình 10.1: Thí nghiệm về sự rơi tự do trong ống chân không"
+           class="zoomable-img"
+           onerror="imgFallback(this)">
+      <p class="img-caption">Hình 10.1. Thí nghiệm về sự rơi tự do (a) trong ống có không khí, (b) trong ống không có không khí.</p>
+    </div>
+
+    <div class="highlight-info">
+      <p><strong>Video minh hoạ:</strong> Cơ quan Hàng không và Vũ trụ Hoa Kỳ (NASA) đã thực hiện thí nghiệm thả đồng thời một chiếc lông chim và một quả bóng bowling trong buồng chân không. Kết quả là cả hai vật chạm đáy cùng một lúc — một minh chứng trực quan cho kết luận của Newton.</p>
+    </div>
+
+    <div class="video-wrapper" id="videoThumb" role="button" tabindex="0"
+         aria-label="Phát video thí nghiệm ống hút chân không">
+      <img class="video-thumb"
+           src="https://img.youtube.com/vi/E43-CfukEgs/hqdefault.jpg"
+           alt="Ảnh thu nhỏ video thí nghiệm"
+           loading="lazy"
+           onerror="this.style.display='none'">
+      <div class="video-overlay">
+        <span class="play-btn" aria-hidden="true">▶</span>
+        <span class="video-label">Phát video thí nghiệm</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="lesson-section" id="sec-ii">
+    <h2>II. Sự rơi tự do</h2>
+
+    <h3>1. Định nghĩa</h3>
+    <p><strong>Sự rơi tự do</strong> là sự rơi chỉ dưới tác dụng của trọng lực.</p>
+    <p>Nếu vật rơi trong không khí mà độ lớn của lực cản không khí không đáng kể so với trọng lượng của vật thì cũng được coi là rơi tự do.</p>
+
+    <h3>2. Đặc điểm của chuyển động rơi tự do</h3>
+    <h4>a) Phương và chiều</h4>
+    <p>Vì trọng lực có phương thẳng đứng, chiều từ trên xuống, nên sự rơi tự do có <strong>phương thẳng đứng</strong> (phương của dây dọi) và <strong>chiều từ trên xuống dưới</strong>.</p>
+    <p>Ta có thể kiểm tra bằng thí nghiệm với quả nặng và dây dọi (Hình 10.2).</p>
+
+    <div class="img-container">
+      <img src="10.2.png"
+           alt="Hình 10.2: Thí nghiệm kiểm tra phương và chiều của sự rơi tự do"
+           class="zoomable-img"
+           onerror="imgFallback(this)">
+      <p class="img-caption">Hình 10.2. Thí nghiệm kiểm tra phương, chiều của sự rơi tự do.</p>
+    </div>
+
+    <p>Dựa vào đặc điểm phương thẳng đứng, ta có thể kiểm tra bề mặt tường, sàn nhà có phẳng và thẳng đứng hay không bằng êke tam giác vuông cân (Hình 10.3) và dây dọi.</p>
+    <div class="img-container">
+      <img src="10.3.png"
+           alt="Hình 10.3: Êke tam giác vuông cân"
+           class="zoomable-img"
+           onerror="imgFallback(this)">
+      <p class="img-caption">Hình 10.3. Êke tam giác vuông cân dùng để kiểm tra phương thẳng đứng và phương nằm ngang.</p>
+    </div>
+
+    <h4>b) Tính chất của chuyển động rơi tự do</h4>
+    <p>Quan sát cho thấy sự rơi tự do là chuyển động thẳng nhanh dần. Để kiểm tra xem có phải là nhanh dần đều hay không, người ta dùng phương pháp chụp ảnh hoạt nghiệm (chụp liên tiếp vật chuyển động sau những khoảng thời gian bằng nhau).</p>
+    <p>Bảng 10.1 ghi kết quả chụp ảnh hoạt nghiệm về sự rơi của một hòn bi thép sau những khoảng thời gian 0,1 s.</p>
+
+    <table class="data-table">
+      <thead>
+        <tr><th>Thời gian rơi \(t\) (s)</th><th>Quãng đường rơi \(s\) (m)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>0,1</td><td>0,049</td></tr>
+        <tr><td>0,2</td><td>0,197</td></tr>
+        <tr><td>0,3</td><td>0,441</td></tr>
+        <tr><td>0,4</td><td>0,785</td></tr>
+        <tr><td>0,5</td><td>1,227</td></tr>
+      </tbody>
+    </table>
+
+    <p>Từ bảng số liệu, ta thấy quãng đường \(s\) tỉ lệ với bình phương thời gian \(t\) (\(s \sim t^2\)). Điều này chứng tỏ chuyển động rơi tự do là <strong>chuyển động thẳng nhanh dần đều</strong>.</p>
+    <p>Gia tốc của chuyển động rơi tự do được tính từ công thức \(s = \frac{1}{2}gt^2\). Lấy trung bình các giá trị, ta được \(g \approx 9,8\ \mathrm{m/s^2}\) (tại một số nơi, có thể lấy \(g \approx 10\ \mathrm{m/s^2}\)).</p>
+
+    <div class="note-box">
+      <p><strong>Trắc nghiệm nhanh:</strong> Trong các chuyển động sau, chuyển động nào được coi là rơi tự do? Tại sao?</p>
+      <p>A. Chiếc lá đang rơi. &nbsp; B. Hạt bụi chuyển động trong không khí. &nbsp; C. Quả tạ rơi trong không khí. &nbsp; D. Vận động viên đang nhảy dù.</p>
+      <p><em>Trả lời:</em> Chỉ có <strong>C</strong> (quả tạ rơi trong không khí) là gần đúng với rơi tự do, vì lực cản không khí tác dụng lên quả tạ không đáng kể so với trọng lượng của nó. Các trường hợp còn lại đều chịu lực cản đáng kể.</p>
+    </div>
+
+    <h3>3. Công thức của chuyển động rơi tự do</h3>
+    <p>Chọn thời điểm ban đầu \(t_0 = 0\) (lúc thả vật). Độ dịch chuyển và quãng đường đi được có độ lớn bằng nhau:</p>
+    <div class="formula-block">$$d = s = \frac{1}{2}g t^{2}$$</div>
+    <p>Vận tốc tức thời tại thời điểm \(t\):</p>
+    <div class="formula-block">$$v = g t$$</div>
+    <p>Liên hệ giữa vận tốc và quãng đường đi được:</p>
+    <div class="formula-block">$$v^{2} = 2 g s$$</div>
+  </section>
+
+  <section class="lesson-section" id="sec-bt">
+    <h2>✎ Bài tập vận dụng</h2>
+
+    <div class="exercise">
+      <p class="ex-q"><strong>Bài tập (SGK):</strong> Một người thả một hòn bi từ trên cao xuống đất và đo được thời gian rơi là \(3,1\ \mathrm{s}\). Bỏ qua sức cản không khí. Lấy \(g = 9,8\ \mathrm{m/s^2}\).</p>
+      <p>a) Tính độ cao của nơi thả hòn bi so với mặt đất và vận tốc lúc chạm đất.</p>
+      <p>b) Tính quãng đường rơi được trong \(0,5\ \mathrm{s}\) cuối trước khi chạm đất.</p>
+      <div class="solution">
+        <button type="button" class="toggle-btn" aria-expanded="false">
+          <span class="arrow">▷</span><span class="label">Xem lời giải</span>
+        </button>
+        <div class="solution-body">
+          <p><strong>a)</strong> Độ cao nơi thả:</p>
+          <div class="formula-block">$$h = s = \frac{1}{2}gt^2 = \frac{1}{2} \cdot 9,8 \cdot (3,1)^2 \approx 47,1\ \mathrm{m}$$</div>
+          <p>Vận tốc lúc chạm đất:</p>
+          <div class="formula-block">$$v = gt = 9,8 \cdot 3,1 \approx 30,4\ \mathrm{m/s}$$</div>
+          <p><strong>b)</strong> Quãng đường rơi trong \(3,1\ \mathrm{s}\): \(s_{3,1} \approx 47,1\ \mathrm{m}\).</p>
+          <p>Quãng đường rơi trong \(3,1 - 0,5 = 2,6\ \mathrm{s}\) đầu:</p>
+          <div class="formula-block">$$s_{2,6} = \frac{1}{2} \cdot 9,8 \cdot (2,6)^2 \approx 33,1\ \mathrm{m}$$</div>
+          <p>Quãng đường rơi trong \(0,5\ \mathrm{s}\) cuối:</p>
+          <div class="formula-block">$$\Delta s = s_{3,1} - s_{2,6} \approx 47,1 - 33,1 = 14,0\ \mathrm{m}$$</div>
+          <p>Vậy quãng đường rơi trong 0,5 s cuối là khoảng \(14,0\ \mathrm{m}\).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lesson-section" id="sec-tk">
+    <h2>☆ Tổng kết</h2>
+    <ul>
+      <li>Chuyển động rơi chỉ chịu tác dụng của trọng lực gọi là <strong>rơi tự do</strong>.</li>
+      <li>Chuyển động rơi tự do là chuyển động <strong>thẳng nhanh dần đều</strong> theo phương thẳng đứng, chiều từ trên xuống.</li>
+      <li>Tại một nơi nhất định trên Trái Đất và ở gần mặt đất, mọi vật đều rơi tự do với cùng một gia tốc \(g\). Gia tốc rơi tự do ở các nơi khác nhau trên Trái Đất thì khác nhau.</li>
+      <li>Các công thức của sự rơi tự do (với \(v_0 = 0\)):
+        <div class="formula-line">
+          <span class="formula-label">Vận tốc:</span>
+          <span class="formula-math">\(v = gt\)</span>
+        </div>
+        <div class="formula-line">
+          <span class="formula-label">Quãng đường:</span>
+          <span class="formula-math">\(s = \frac{1}{2}gt^2 = \frac{v^2}{2g}\)</span>
+        </div>
+        <div class="formula-line">
+          <span class="formula-label">Liên hệ:</span>
+          <span class="formula-math">\(v^2 = 2gs\)</span>
+        </div>
+      </li>
+      <li>Gia tốc rơi tự do \(g \approx 9,8\ \mathrm{m/s^2}\) (thường lấy \(g \approx 10\ \mathrm{m/s^2}\) trong bài tập).</li>
+    </ul>
+  </section>
+
+  <section class="lesson-section" id="sec-btn">
+    <h2>▤ Bài tập về nhà</h2>
+    <ol>
+      <li>Học thuộc định nghĩa sự rơi tự do và các đặc điểm của chuyển động rơi tự do.</li>
+      <li>Làm các bài tập 1, 2, 3 trong sách giáo khoa và sách bài tập.</li>
+      <li><strong>Bài tập nâng cao:</strong> Một vật rơi tự do từ độ cao \(h\). Biết rằng trong giây cuối cùng vật rơi được \(25\ \mathrm{m}\). Lấy \(g = 10\ \mathrm{m/s^2}\). Tính độ cao \(h\) và thời gian rơi của vật.
+        <div class="solution">
+          <button type="button" class="toggle-btn" aria-expanded="false">
+            <span class="arrow">▷</span><span class="label">Xem hướng dẫn</span>
+          </button>
+          <div class="solution-body">
+            <p>Gọi \(t\) là thời gian rơi của vật. Quãng đường vật rơi trong giây cuối cùng là:</p>
+            <div class="formula-block">$$\Delta s = \frac{1}{2}gt^2 - \frac{1}{2}g(t-1)^2 = \frac{g}{2}(2t-1)$$</div>
+            <p>Thay \(\Delta s = 25\ \mathrm{m}\) và \(g = 10\ \mathrm{m/s^2}\):</p>
+            <div class="formula-block">$$25 = 5(2t-1) \;\Rightarrow\; 2t-1 = 5 \;\Rightarrow\; t = 3\ \mathrm{s}$$</div>
+            <p>Độ cao rơi:</p>
+            <div class="formula-block">$$h = \frac{1}{2} \cdot 10 \cdot 3^2 = 45\ \mathrm{m}$$</div>
+            <p>Vậy vật rơi từ độ cao 45 m trong thời gian 3 s.</p>
+          </div>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+</main>
+
+<!-- MODAL VIDEO -->
+<div class="modal" id="videoModal" role="dialog" aria-modal="true" aria-label="Video thí nghiệm">
+  <div class="modal-backdrop" data-close="video"></div>
+  <div class="video-box">
+    <button type="button" class="modal-close" data-close="video" aria-label="Đóng video">✕</button>
+    <div class="video-frame-wrap" id="videoFrameWrap"></div>
+  </div>
+</div>
+
+<!-- MODAL PHÓNG TO ẢNH -->
+<div class="modal" id="imgModal" role="dialog" aria-modal="true" aria-label="Phóng to hình ảnh">
+  <div class="modal-backdrop" data-close="img"></div>
+  <button type="button" class="modal-close" data-close="img" aria-label="Đóng ảnh">✕</button>
+  <img id="zoomImg" src="" alt="">
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ========== 1. ĐỔI CỠ CHỮ ========== */
+  var rootEl     = document.documentElement;
+  var MIN_SCALE  = 0.8;
+  var MAX_SCALE  = 1.9;
+  var STEP       = 0.1;
+  var LS_KEY     = 'vl10-font-scale';
+
+  var scale = parseFloat(localStorage.getItem(LS_KEY));
+  if (isNaN(scale) || scale < MIN_SCALE || scale > MAX_SCALE) scale = 1;
+
+  function applyScale() {
+    scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale));
+    scale = Math.round(scale * 100) / 100;
+    rootEl.style.setProperty('--font-scale', scale.toFixed(2));
+    try { localStorage.setItem(LS_KEY, scale.toFixed(2)); } catch (e) {}
+    setTimeout(resizeCanvas, 50);
+  }
+  applyScale();
+
+  document.getElementById('fontPlus').addEventListener('click', function () {
+    scale = Math.round((scale + STEP) * 100) / 100;
+    applyScale();
+  });
+  document.getElementById('fontMinus').addEventListener('click', function () {
+    scale = Math.round((scale - STEP) * 100) / 100;
+    applyScale();
+  });
+  document.getElementById('fontReset').addEventListener('click', function () {
+    scale = 1;
+    applyScale();
+  });
+
+  /* ========== 2. ĐIỀU HƯỚNG NHANH ========== */
+  document.querySelectorAll('[data-scroll]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var el = document.getElementById(btn.getAttribute('data-scroll'));
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  /* ========== 3. NÚT ẨN/HIỆN LỜI GIẢI ========== */
+  document.querySelectorAll('.toggle-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var body = btn.nextElementSibling;
+      if (!body) return;
+      var isOpen = body.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      var arrow = btn.querySelector('.arrow');
+      var label = btn.querySelector('.label');
+      if (arrow) arrow.textContent = isOpen ? '▼' : '▷';
+      if (label) label.textContent = isOpen ? 'Ẩn đáp án' : 'Xem đáp án';
+      setTimeout(resizeCanvas, 50);
+    });
+  });
+
+  /* ========== 4. MODAL VIDEO ========== */
+  var videoModal     = document.getElementById('videoModal');
+  var videoFrameWrap = document.getElementById('videoFrameWrap');
+  var imgModal       = document.getElementById('imgModal');
+  var zoomImg        = document.getElementById('zoomImg');
+
+  var VIDEO_SRC = 'https://www.youtube.com/embed/E43-CfukEgs'
+                + '?autoplay=1&start=166&rel=0&modestbranding=1';
+
+  function openVideo() {
+    videoFrameWrap.innerHTML =
+      '<iframe src="' + VIDEO_SRC + '" ' +
+      'title="Video thí nghiệm ống hút chân không" ' +
+      'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+      'allowfullscreen></iframe>';
+    videoModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeVideo() {
+    videoModal.classList.remove('open');
+    videoFrameWrap.innerHTML = '';
+    if (!imgModal.classList.contains('open')) {
+      document.body.style.overflow = '';
+    }
+  }
+
+  var videoThumb = document.getElementById('videoThumb');
+  videoThumb.addEventListener('click', openVideo);
+  videoThumb.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+      e.preventDefault();
+      openVideo();
+    }
+  });
+
+  videoModal.addEventListener('click', function (e) {
+    if (e.target.closest('[data-close="video"]')) { closeVideo(); return; }
+    if (!e.target.closest('.video-box')) { closeVideo(); }
+  });
+
+  /* ========== 5. MODAL PHÓNG TO ẢNH ========== */
+  function applyZoomSize(naturalW, naturalH) {
+    if (!naturalW || !naturalH) return;
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    var maxW = vw * 0.95;
+    var maxH = vh * 0.90;
+    var ratio = naturalW / naturalH;
+    var w = maxW;
+    var h = w / ratio;
+    if (h > maxH) {
+      h = maxH;
+      w = h * ratio;
+    }
+    zoomImg.style.width  = Math.round(w) + 'px';
+    zoomImg.style.height = Math.round(h) + 'px';
+  }
+
+  function openImage(src, alt) {
+    var probe = new Image();
+    probe.onload = function () {
+      applyZoomSize(probe.naturalWidth, probe.naturalHeight);
+      zoomImg.src = src;
+      zoomImg.alt = alt || '';
+      imgModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+    probe.onerror = function () {
+      zoomImg.style.width  = 'auto';
+      zoomImg.style.height = 'auto';
+      zoomImg.src = src;
+      zoomImg.alt = alt || '';
+      imgModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+    probe.src = src;
+  }
+
+  function closeImage() {
+    imgModal.classList.remove('open');
+    zoomImg.src = '';
+    zoomImg.style.width  = '';
+    zoomImg.style.height = '';
+    if (!videoModal.classList.contains('open')) {
+      document.body.style.overflow = '';
+    }
+  }
+
+  document.querySelectorAll('.zoomable-img').forEach(function (img) {
+    img.addEventListener('click', function (e) {
+      e.stopPropagation();
+      openImage(img.src, img.alt);
+    });
+  });
+
+  window.addEventListener('resize', function () {
+    if (imgModal.classList.contains('open') && zoomImg.naturalWidth) {
+      applyZoomSize(zoomImg.naturalWidth, zoomImg.naturalHeight);
+    }
+  });
+
+  imgModal.addEventListener('click', function (e) {
+    if (e.target === zoomImg) { e.stopPropagation(); return; }
+    closeImage();
+  });
+
+  /* ========== 6. MENU (...) VÀ CÁC CÔNG CỤ VẼ ========== */
+  var menuBtn   = document.getElementById('menuBtn');
+  var menuPanel = document.getElementById('menuPanel');
+
+  function closeMenu() {
+    menuPanel.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+  }
+
+  menuBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var isOpen = menuPanel.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+
+  document.addEventListener('click', function (e) {
+    if (menuPanel.classList.contains('open') && !e.target.closest('.widget-menu')) {
+      closeMenu();
+    }
+  });
+
+  // LOGIC VẼ VÀ LỊCH SỬ (CANVAS)
+  var canvas  = document.getElementById('drawCanvas');
+  var ctx     = canvas.getContext('2d');
+
+  var dpr        = 1;
+  var cssWidth   = 0;
+  var cssHeight  = 0;
+  
+  var shapes     = [];
+  var history    = [];
+  var historyIndex = -1;
+  
+  var curShape   = null;
+  var drawMode   = false;
+  var isDown     = false;
+
+  var tool        = 'pen';
+  var strokeColor = '#8B4513';
+  var strokeWidth = 3;
+
+  // --- QUẢN LÝ LỊCH SỬ (UNDO / REDO) ---
+  function saveHistory() {
+    if (historyIndex < history.length - 1) {
+      history = history.slice(0, historyIndex + 1);
+    }
+    history.push(JSON.parse(JSON.stringify(shapes)));
+    historyIndex++;
+  }
+
+  function undo() { 
+    if (historyIndex > 0) {
+      historyIndex--;
+      shapes = JSON.parse(JSON.stringify(history[historyIndex]));
+      curShape = null;
+      redraw();
+    }
+  }
+  
+  function redo() { 
+    if (historyIndex < history.length - 1) {
+      historyIndex++;
+      shapes = JSON.parse(JSON.stringify(history[historyIndex]));
+      curShape = null;
+      redraw();
+    }
+  }
+
+  function clearAll() { 
+    if (shapes.length === 0) return;
+    shapes = []; 
+    saveHistory();
+    curShape = null;
+    redraw(); 
+  }
+
+  // --- TOÁN HỌC HỖ TRỢ TẨY NÉT ---
+  function distToSegmentSq(p, p1, p2) {
+    var l2 = (p2.x - p1.x)**2 + (p2.y - p1.y)**2;
+    if (l2 === 0) return (p.x - p1.x)**2 + (p.y - p1.y)**2;
+    var t = ((p.x - p1.x) * (p2.x - p1.x) + (p.y - p1.y) * (p2.y - p1.y)) / l2;
+    t = Math.max(0, Math.min(1, t));
+    var projX = p1.x + t * (p2.x - p1.x);
+    var projY = p1.y + t * (p2.y - p1.y);
+    return (p.x - projX)**2 + (p.y - projY)**2;
+  }
+
+  function hitTest(shape, x, y) {
+    var pt = {x: x, y: y};
+    var threshold = Math.max(15, shape.width * 2);
+    var thresholdSq = threshold * threshold;
+
+    if (shape.tool === 'pen') {
+      var pts = shape.points;
+      for (var i = 0; i < pts.length - 1; i++) {
+        if (distToSegmentSq(pt, pts[i], pts[i+1]) < thresholdSq) return true;
+      }
+      if (pts.length === 1) {
+        var dx = pt.x - pts[0].x;
+        var dy = pt.y - pts[0].y;
+        if (dx*dx + dy*dy < thresholdSq) return true;
+      }
+    } else if (shape.tool === 'line' || shape.tool === 'arrow') {
+      if (distToSegmentSq(pt, shape.start, shape.end) < thresholdSq) return true;
+    } else if (shape.tool === 'circle') {
+      var r = Math.hypot(shape.end.x - shape.start.x, shape.end.y - shape.start.y);
+      var d = Math.hypot(pt.x - shape.start.x, pt.y - shape.start.y);
+      if (Math.abs(d - r) < threshold) return true;
+    } else if (shape.tool === 'dot') {
+      var r = Math.max(2, shape.width * 1.8);
+      var d = Math.hypot(pt.x - shape.start.x, pt.y - shape.start.y);
+      if (d < r + threshold) return true;
+    }
+    return false;
+  }
+
+  // --- KHỞI TẠO VÀ VẼ ---
+  function resizeCanvas() {
+    var newWidth = Math.max(document.documentElement.clientWidth, window.innerWidth);
+    var newHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight, window.innerHeight);
+    var newDpr = window.devicePixelRatio || 1;
+
+    if (newWidth === cssWidth && newHeight === cssHeight && newDpr === dpr) return;
+
+    cssWidth = newWidth;
+    cssHeight = newHeight;
+    dpr = newDpr;
+
+    canvas.width  = Math.round(cssWidth * dpr);
+    canvas.height = Math.round(cssHeight * dpr);
+    canvas.style.width  = cssWidth + 'px';
+    canvas.style.height = cssHeight + 'px';
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    redraw();
+  }
+
+  function redraw() {
+    ctx.save();
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssWidth, cssHeight);
+    
+    for (var i = 0; i < shapes.length; i++) drawShape(shapes[i]);
+    if (curShape) drawShape(curShape);
+    ctx.restore();
+  }
+
+  function getPointerPos(e) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+  }
+
+  function drawShape(s) {
+    ctx.save();
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = s.color;
+    ctx.fillStyle = s.color;
+    ctx.lineWidth = s.width;
+
+    if (s.tool === 'eraser') {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.lineWidth = s.width * 3;
+    }
+
+    if (s.tool === 'pen' || s.tool === 'eraser') {
+      var pts = s.points;
+      if (pts.length === 1) {
+        ctx.beginPath();
+        ctx.arc(pts[0].x, pts[0].y, Math.max(0.5, ctx.lineWidth / 2), 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.beginPath();
+        ctx.moveTo(pts[0].x, pts[0].y);
+        for (var i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+        ctx.stroke();
+      }
+    } else if (s.tool === 'line') {
+      ctx.beginPath();
+      ctx.moveTo(s.start.x, s.start.y);
+      ctx.lineTo(s.end.x, s.end.y);
+      ctx.stroke();
+    } else if (s.tool === 'arrow') {
+      var ang = Math.atan2(s.end.y - s.start.y, s.end.x - s.start.x);
+      ctx.beginPath();
+      ctx.moveTo(s.start.x, s.start.y);
+      ctx.lineTo(s.end.x, s.end.y);
+      ctx.stroke();
+      var head = Math.max(10, s.width * 4);
+      ctx.beginPath();
+      ctx.moveTo(s.end.x, s.end.y);
+      ctx.lineTo(s.end.x - head * Math.cos(ang - Math.PI / 7),
+                 s.end.y - head * Math.sin(ang - Math.PI / 7));
+      ctx.lineTo(s.end.x - head * Math.cos(ang + Math.PI / 7),
+                 s.end.y - head * Math.sin(ang + Math.PI / 7));
+      ctx.closePath();
+      ctx.fill();
+    } else if (s.tool === 'circle') {
+      var r = Math.hypot(s.end.x - s.start.x, s.end.y - s.start.y);
+      ctx.beginPath();
+      ctx.arc(s.start.x, s.start.y, Math.max(1, r), 0, Math.PI * 2);
+      ctx.stroke();
+    } else if (s.tool === 'dot') {
+      ctx.beginPath();
+      ctx.arc(s.start.x, s.start.y, Math.max(2, s.width * 1.8), 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function setDrawMode(on) {
+    drawMode = on;
+    canvas.classList.toggle('active', on);
+    document.body.style.userSelect = on ? 'none' : '';
+    document.body.style.webkitUserSelect = on ? 'none' : '';
+  }
+
+  function setTool(t) {
+    tool = t;
+    menuPanel.querySelectorAll('[data-tool]').forEach(function (b) {
+      b.classList.toggle('active', b.getAttribute('data-tool') === t);
+    });
+  }
+
+  function setColor(c) {
+    strokeColor = c;
+    menuPanel.querySelectorAll('[data-color]').forEach(function (b) {
+      b.classList.toggle('active', b.getAttribute('data-color') === c);
+    });
+  }
+
+  function setWidth(w) {
+    strokeWidth = Math.min(30, Math.max(1, w));
+    document.getElementById('widthDisplay').textContent = strokeWidth;
+  }
+
+  // --- SỰ KIỆN VẼ TRÊN CANVAS ---
+  canvas.addEventListener('pointerdown', function (e) {
+    if (!drawMode) return;
+    e.preventDefault();
+
+    var p = getPointerPos(e);
+
+    // Chế độ Tẩy Nét (Object Eraser)
+    if (tool === 'eraser-stroke') {
+      for (var i = shapes.length - 1; i >= 0; i--) {
+        if (shapes[i].tool === 'eraser') continue; // Bỏ qua nét tẩy kéo
+        if (hitTest(shapes[i], p.x, p.y)) {
+          shapes.splice(i, 1);
+          saveHistory();
+          redraw();
+          break;
+        }
+      }
+      return; 
+    }
+
+    isDown = true;
+    try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+    
+    if (tool === 'pen' || tool === 'eraser') {
+      curShape = { tool: tool, color: strokeColor, width: strokeWidth, points: [p] };
+    } else {
+      curShape = { tool: tool, color: strokeColor, width: strokeWidth, start: p, end: p };
+    }
+    redraw();
+  });
+
+  canvas.addEventListener('pointermove', function (e) {
+    if (!isDown || !curShape) return;
+    e.preventDefault();
+    var p = getPointerPos(e);
+    if (curShape.points) curShape.points.push(p);
+    else curShape.end = p;
+    redraw();
+  });
+
+  function endStroke() {
+    if (!isDown) return;
+    isDown = false;
+    if (curShape) {
+      shapes.push(curShape);
+      curShape = null;
+      saveHistory();
+      redraw();
+    }
+  }
+  canvas.addEventListener('pointerup', endStroke);
+  canvas.addEventListener('pointercancel', endStroke);
+  window.addEventListener('pointerup', endStroke);
+
+  // Gắn sự kiện menu vẽ
+  menuPanel.querySelectorAll('[data-tool]').forEach(function (b) {
+    b.addEventListener('click', function () { 
+      setTool(b.getAttribute('data-tool')); 
+      setDrawMode(true);
+      document.getElementById('btnExitDraw').textContent = 'Đang vẽ (V)';
+      closeMenu(); 
+    });
+  });
+  
+  menuPanel.querySelectorAll('[data-color]').forEach(function (b) {
+    b.addEventListener('click', function () { 
+      setColor(b.getAttribute('data-color')); 
+    });
+  });
+
+  document.getElementById('btnWidthMinus').addEventListener('click', function () { setWidth(strokeWidth - 1); });
+  document.getElementById('btnWidthPlus').addEventListener('click',  function () { setWidth(strokeWidth + 1); });
+  document.getElementById('btnUndo').addEventListener('click', undo);
+  document.getElementById('btnRedo').addEventListener('click', redo);
+  document.getElementById('btnClear').addEventListener('click', clearAll);
+  
+  document.getElementById('btnExitDraw').addEventListener('click', function () { 
+    setDrawMode(!drawMode);
+    this.textContent = drawMode ? 'Đang vẽ (V)' : 'Bật vẽ (V)';
+  });
+
+  /* PHÍM TẮT TOÀN CỤC */
+  document.addEventListener('keydown', function (e) {
+    var t = e.target;
+    var tag = (t.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select' || t.isContentEditable) return;
+
+    var key = e.key;
+    var k = key.toLowerCase();
+
+    if (e.ctrlKey || e.metaKey) {
+      if (k === 'z') { e.preventDefault(); undo(); }
+      else if (k === 'y') { e.preventDefault(); redo(); }
+      return;
+    }
+
+    if (key === 'Escape') {
+      closeVideo();
+      closeImage();
+      closeMenu();
+      return;
+    }
+
+    switch (k) {
+      case 'v': 
+        e.preventDefault(); 
+        setDrawMode(!drawMode); 
+        document.getElementById('btnExitDraw').textContent = drawMode ? 'Đang vẽ (V)' : 'Bật vẽ (V)';
+        break;
+      case 'k': setTool('pen'); setDrawMode(true); document.getElementById('btnExitDraw').textContent = 'Đang vẽ (V)'; closeMenu(); break;
+      case 'l': setTool('line'); setDrawMode(true); document.getElementById('btnExitDraw').textContent = 'Đang vẽ (V)'; closeMenu(); break;
+      case 'i': setTool('arrow'); setDrawMode(true); document.getElementById('btnExitDraw').textContent = 'Đang vẽ (V)'; closeMenu(); break;
+      case 'o': setTool('circle'); setDrawMode(true); document.getElementById('btnExitDraw').textContent = 'Đang vẽ (V)'; closeMenu(); break;
+      case '.': case 'p': setTool('dot'); setDrawMode(true); document.getElementById('btnExitDraw').textContent = 'Đang vẽ (V)'; closeMenu(); break;
+      case '3': setTool('eraser'); setDrawMode(true); document.getElementById('btnExitDraw').textContent = 'Đang vẽ (V)'; closeMenu(); break;
+      case '4': setTool('eraser-stroke'); setDrawMode(true); document.getElementById('btnExitDraw').textContent = 'Đang vẽ (V)'; closeMenu(); break;
+      case '1': setColor('#e11d48'); break;
+      case '0': setColor('#0066CC'); break;
+      case 'd': setColor('#111111'); break;
+      case 'n': setColor('#8B4513'); break;
+      case 'b': setWidth(strokeWidth + 1); break;
+      case 'm': setWidth(strokeWidth - 1); break;
+      case '2': setWidth(3); break;
+      case 'x': 
+        if (drawMode) clearAll(); 
+        break;
+    }
+  });
+
+  /* Khởi động */
+  setTool('pen');
+  setColor('#8B4513');
+  setWidth(3);
+  document.getElementById('btnExitDraw').textContent = 'Bật vẽ (V)';
+  
+  shapes = [];
+  saveHistory(); // Lưu trạng thái rỗng ban đầu
+
+  resizeCanvas();
+
+  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener('orientationchange', resizeCanvas);
+  window.addEventListener('load', resizeCanvas);
+  
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(function() {
+      clearTimeout(window._roTimer);
+      window._roTimer = setTimeout(resizeCanvas, 100);
+    });
+    ro.observe(document.body);
+  }
+
+})();
+</script>
+
+</body>
+</html>
