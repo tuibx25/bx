@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔀 Ghép đề 3 phần + đáp án</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔀</text></svg>">
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--p:#8B5A2B;--pd:#8B4513;--pl:#F5DEB3;--a:#0066CC;--d:#c0392b;--s:#2E7D32;--w:#D4A017;--bg:#F5F5F5;--bd:#D3D3D3}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Tahoma,sans-serif;background:var(--bg);color:#000;line-height:1.6;min-height:100vh}
+header{background:linear-gradient(135deg,var(--p),var(--pd));color:#FFF;padding:16px 24px;box-shadow:0 2px 8px rgba(0,0,0,.1);position:sticky;top:0;z-index:100}
+header h1{font-size:18px;font-weight:600}
+header .sub{font-size:13px;opacity:.9;margin-top:2px}
+.container{max-width:1200px;margin:0 auto;padding:20px 16px}
+.step{background:#FFF;border:1px solid var(--bd);border-radius:12px;padding:18px;margin-bottom:16px;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.step h2{font-size:16px;color:var(--pd);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--pl);display:flex;align-items:center;gap:8px}
+.step h2 .num{background:var(--p);color:#FFF;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.form-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border:none;border-radius:6px;font-size:14px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .15s;white-space:nowrap;min-height:40px;text-decoration:none}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-primary{background:var(--p);color:#FFF}
+.btn-primary:hover:not(:disabled){background:var(--pd)}
+.btn-secondary{background:var(--a);color:#FFF}
+.btn-success{background:var(--s);color:#FFF}
+.btn-light{background:var(--pl);color:#000;border:1px solid var(--bd)}
+.btn-light:hover:not(:disabled){background:#FFF}
+.btn-sm{padding:7px 12px;font-size:13px;min-height:34px}
+input[type=file]{display:none}
+input[type=text],input[type=number],select{padding:9px 12px;border:1px solid var(--bd);border-radius:6px;font-size:14px;font-family:inherit;background:#FFF}
+textarea{width:100%;padding:12px 14px;border:1px solid var(--bd);border-radius:6px;font-family:monospace;font-size:12px;line-height:1.5;resize:vertical;min-height:180px;background:#FAFAFA}
+.file-info{background:#E8F5E9;color:#1B5E20;padding:6px 12px;border-radius:6px;font-size:13px;display:inline-flex;align-items:center;gap:6px}
+.alert{padding:12px 16px;border-radius:6px;margin-bottom:14px;font-size:14px;border-left:4px solid transparent}
+.alert-info{background:#F5F5DC;border-color:var(--a);color:#004488}
+.alert-warn{background:#FFF9E6;border-color:var(--w);color:#8B4513}
+.alert-error{background:#FFEBEE;border-color:var(--d);color:var(--d)}
+.alert-success{background:#E8F5E9;border-color:var(--s);color:#1B5E20}
+.tabs{display:flex;gap:6px;margin-bottom:14px;border-bottom:2px solid var(--bd);flex-wrap:wrap}
+.tab-btn{padding:9px 16px;background:var(--pl);border:none;border-bottom:3px solid transparent;cursor:pointer;font-size:13px;font-weight:600;color:var(--pd);border-radius:8px 8px 0 0;font-family:inherit}
+.tab-btn:hover{background:#FFF}
+.tab-btn.active{background:#FFF;border-bottom-color:var(--p)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.preview-table{width:100%;border-collapse:collapse;font-size:13px;background:#FFF;border-radius:8px;overflow:hidden;margin-bottom:8px}
+.preview-table th{background:linear-gradient(135deg,var(--p),var(--pd));color:#FFF;padding:10px 8px;text-align:left;font-weight:600}
+.preview-table td{padding:8px;border-bottom:1px solid #EEE;vertical-align:top}
+.preview-table tr:hover{background:#FFFBF5}
+.preview-table .num{width:50px;text-align:center;font-weight:700;color:var(--p)}
+.preview-table .ans{width:60px;text-align:center;font-weight:700;background:#E8F5E9;color:var(--s)}
+.preview-table .ans.missing{background:#FFEBEE;color:var(--d)}
+.preview-table .opt{font-size:12px;color:#333;padding:5px 8px}
+.preview-table .opt.correct{background:#E8F5E9;color:var(--s);font-weight:700}
+.preview-table td img{max-width:100px;max-height:60px;vertical-align:middle;border-radius:3px;margin:2px 0}
+.preview-table .q-text{font-size:13px;line-height:1.6;font-weight:500}
+.stats{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin-bottom:12px;padding:10px 14px;background:#FFF9E6;border-radius:6px;border-left:4px solid var(--w)}
+.stats span strong{color:var(--p)}
+.code-box{width:100%;min-height:400px;padding:14px;border:1px solid var(--bd);border-radius:8px;font-family:'Courier New',monospace;font-size:12px;line-height:1.6;background:#FAFAFA;color:#000}
+#toast{position:fixed;bottom:24px;right:24px;background:var(--pd);color:#FFF;padding:12px 20px;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:9999;opacity:0;transform:translateY(20px);transition:opacity .3s,transform .3s;font-size:14px;max-width:360px;pointer-events:none}
+#toast.show{opacity:1;transform:translateY(0)}
+.hidden{display:none!important}
+.part-badge{display:inline-block;background:var(--p);color:#FFF;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:700;margin-left:6px}
+.config-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.config-box{background:#FAFAFA;border:1px solid var(--bd);border-radius:8px;padding:12px}
+.config-box .title{font-weight:700;color:var(--pd);margin-bottom:8px;font-size:14px}
+.config-box label{font-size:13px;color:#333;display:block;margin-bottom:4px}
+.total-score-box{margin-top:16px;padding:16px 20px;background:linear-gradient(135deg,#8B5A2B,#8B4513);color:#FFF;border-radius:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;box-shadow:0 3px 10px rgba(139,69,19,0.3)}
+.total-score-box .label{font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px}
+.total-score-box .value{font-size:32px;font-weight:700;line-height:1}
+.total-score-box .value small{font-size:16px;font-weight:500;opacity:0.9;margin-left:4px}
+.total-score-box .breakdown{font-size:13px;opacity:0.85;margin-top:4px}
+@media(max-width:640px){
+  .form-row{flex-direction:column;align-items:stretch}
+  .preview-table .opt{font-size:11px;padding:4px}
+  .total-score-box{flex-direction:column;align-items:flex-start;text-align:left}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🔀 Ghép đề 3 phần + đáp án</h1>
+  <div class="sub">Trắc nghiệm A/B/C/D + Đúng/Sai + Trả lời ngắn</div>
+</header>
+
+<div class="container">
+
+  <!-- BƯỚC 1 -->
+  <div class="step">
+    <h2><span class="num">1</span> Chọn 2 file (đề + đáp án)</h2>
+    <div class="alert alert-info">
+      💡 Hỗ trợ đề có <strong>3 phần</strong>: Trắc nghiệm A/B/C/D → Đúng/Sai → Trả lời ngắn.
+      Tool tự nhận diện <code>&lt;h2&gt;PHẦN I/II/III&lt;/h2&gt;</code> để tách phần.
+    </div>
+    <div class="form-row">
+      <button class="btn btn-primary" onclick="document.getElementById('qFile').click()">
+        📁 Chọn file ĐỀ (.html)
+      </button>
+      <input type="file" id="qFile" accept=".html,.htm" />
+      <span id="qFileInfo" class="file-info hidden"></span>
+    </div>
+    <div class="form-row">
+      <button class="btn btn-primary" onclick="document.getElementById('aFile').click()">
+        📁 Chọn file ĐÁP ÁN (.html)
+      </button>
+      <input type="file" id="aFile" accept=".html,.htm" />
+      <span id="aFileInfo" class="file-info hidden"></span>
+    </div>
+  </div>
+
+  <!-- BƯỚC 2 -->
+  <div class="step hidden" id="configStep">
+    <h2><span class="num">2</span> Cấu hình điểm</h2>
+    <div class="config-grid">
+      <div class="config-box">
+        <div class="title">📘 Phần I — Trắc nghiệm</div>
+        <label>Số câu: <strong id="cfgQ1Count">0</strong></label>
+        <label style="margin-top:6px;">Điểm mỗi câu:</label>
+        <input type="number" id="cfgP1" value="0.25" min="0.25" step="0.25" style="width:120px" />
+        <div style="margin-top:8px; font-size:13px; color:#666;">
+          Tổng phần: <strong id="cfgSum1" style="color:#8B4513;">0</strong> điểm
+        </div>
+      </div>
+      <div class="config-box">
+        <div class="title">📗 Phần II — Đúng/Sai</div>
+        <label>Số câu: <strong id="cfgQ2Count">0</strong></label>
+        <label style="margin-top:6px;">Điểm mỗi câu:</label>
+        <input type="number" id="cfgP2" value="1" min="0.25" step="0.25" style="width:120px" />
+        <div style="margin-top:8px; font-size:13px; color:#666;">
+          Tổng phần: <strong id="cfgSum2" style="color:#8B4513;">0</strong> điểm
+        </div>
+      </div>
+      <div class="config-box">
+        <div class="title">📙 Phần III — Trả lời ngắn</div>
+        <label>Số câu: <strong id="cfgQ3Count">0</strong></label>
+        <label style="margin-top:6px;">Điểm mỗi câu:</label>
+        <input type="number" id="cfgP3" value="1" min="0.25" step="0.25" style="width:120px" />
+        <div style="margin-top:8px; font-size:13px; color:#666;">
+          Tổng phần: <strong id="cfgSum3" style="color:#8B4513;">0</strong> điểm
+        </div>
+      </div>
+    </div>
+
+    <!-- ⭐ Ô TỔNG ĐIỂM CẢ ĐỀ -->
+    <div class="total-score-box">
+      <div>
+        <div class="label">💯 TỔNG ĐIỂM CẢ ĐỀ</div>
+        <div class="breakdown" id="cfgBreakdown">
+          P.I: 0 · P.II: 0 · P.III: 0
+        </div>
+      </div>
+      <div class="value">
+        <span id="cfgTotalScore">0</span><small>điểm</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- BƯỚC 3 -->
+  <div class="step hidden" id="previewStep">
+    <h2><span class="num">3</span> Kiểm tra & ghép</h2>
+    <div id="resultAlerts"></div>
+    <div id="resultStats" class="stats"></div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-ptab="1">📘 Phần I — Trắc nghiệm</button>
+      <button class="tab-btn" data-ptab="2">📗 Phần II — Đúng/Sai</button>
+      <button class="tab-btn" data-ptab="3">📙 Phần III — Trả lời ngắn</button>
+    </div>
+    <div id="ptab-1" class="tab-content active"></div>
+    <div id="ptab-2" class="tab-content"></div>
+    <div id="ptab-3" class="tab-content"></div>
+  </div>
+
+  <!-- BƯỚC 4 -->
+  <div class="step hidden" id="outputStep">
+    <h2><span class="num">4</span> Mã HTML để dán vào web chính</h2>
+    <div class="alert alert-info">
+      💡 Copy mã dưới đây → dán vào ô <strong>"Dán HTML câu hỏi"</strong> trong form <strong>Thêm Đề Bài Tập</strong>.
+    </div>
+    <textarea id="codeOutput" class="code-box" readonly></textarea>
+    <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;">
+      <button class="btn btn-success" id="copyBtn">📋 Copy mã HTML</button>
+      <button class="btn btn-secondary" id="downloadBtn">💾 Tải file .html</button>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+var $ = function(id){ return document.getElementById(id); };
+var toastT;
+function toast(msg, type){
+  var t = $('toast'); if(!t) return;
+  t.textContent = msg;
+  t.style.background = type==='error' ? '#c0392b' : type==='success' ? '#0066CC' : '#8B4513';
+  t.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(function(){ t.classList.remove('show'); }, 3000);
+}
+function esc(s){
+  return String(s==null?'':s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+function typesetMath(el){
+  if(!el) return;
+  function tryRender(){
+    if(window.MathJax && window.MathJax.typesetPromise){
+      if(window.MathJax.startup && window.MathJax.startup.promise){
+        window.MathJax.startup.promise.then(function(){ return window.MathJax.typesetPromise([el]); }).catch(function(){});
+      } else {
+        window.MathJax.typesetPromise([el]).catch(function(){});
+      }
+      return true;
+    }
+    return false;
+  }
+  if(tryRender()) return;
+  var n = 0;
+  var timer = setInterval(function(){ n++; if(tryRender() || n > 30) clearInterval(timer); }, 200);
+}
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+var state = {
+  qHtml: '',
+  aHtml: '',
+  questions: { 1: [], 2: [], 3: [] }
+};
+
+// ══════════════════════════════════════════════
+// ĐỌC FILE
+// ══════════════════════════════════════════════
+function readFileToState(input, infoEl, key){
+  input.addEventListener('change', function(e){
+    var f = e.target.files[0];
+    if(!f) return;
+    if(f.size > 5*1024*1024){ toast('File quá lớn (>5MB)','error'); return; }
+    var r = new FileReader();
+    r.onload = function(ev){
+      state[key] = ev.target.result;
+      infoEl.classList.remove('hidden');
+      infoEl.innerHTML = '📄 ' + esc(f.name) + ' (' + Math.round(f.size/1024) + 'KB)';
+      toast('✅ Đã đọc: ' + f.name, 'success');
+      if(state.qHtml && state.aHtml) runMerge();
+    };
+    r.onerror = function(){ toast('Không đọc được file','error'); };
+    r.readAsText(f, 'UTF-8');
+    e.target.value = '';
+  });
+}
+
+// ══════════════════════════════════════════════
+// TÁCH 3 PHẦN bằng <h2>PHẦN I/II/III</h2>
+// ══════════════════════════════════════════════
+function splitSections(html){
+  var h2Regex = /<h2[^>]*>([\s\S]*?)<\/h2>/gi;
+  var matches = [];
+  var m;
+  while((m = h2Regex.exec(html)) !== null){
+    var txt = m[1].replace(/<[^>]+>/g, '');
+    var partMatch = txt.match(/PHẦN\s+(I{1,3})\b/i);
+    if(partMatch){
+      var num = { 'I': 1, 'II': 2, 'III': 3 }[partMatch[1].toUpperCase()];
+      if(num) matches.push({ index: m.index, end: h2Regex.lastIndex, part: num });
+    }
+  }
+
+  var sections = { 1: '', 2: '', 3: '' };
+  if(matches.length === 0){
+    sections[1] = html;
+    return sections;
+  }
+
+  for(var i = 0; i < matches.length; i++){
+    var start = matches[i].end;
+    var end = i + 1 < matches.length ? matches[i+1].index : html.length;
+    sections[matches[i].part] = html.slice(start, end);
+  }
+  return sections;
+}
+
+// ══════════════════════════════════════════════
+// PARSE CÂU HỎI
+// ══════════════════════════════════════════════
+function stripQuestionPrefix(html){
+  return html
+    .replace(/^\s*<p>\s*<strong>\s*Câu\s*\d+\s*[:.]?\s*<\/strong>\s*/i, '<p>')
+    .replace(/^\s*<p>\s*<strong>\s*Câu\s*\d+\s*[:.]?\s*/i, '<p>')
+    .replace(/^\s*<p>\s*Câu\s*\d+\s*[:.]?\s*/i, '<p>')
+    .replace(/^\s*<strong>\s*Câu\s*\d+\s*[:.]?\s*<\/strong>\s*/i, '')
+    .replace(/^\s*Câu\s*\d+\s*[:.]?\s*/i, '')
+    .replace(/^\s*<p>\s*<\/p>\s*/i, '')
+    .trim();
+}
+
+function parseQuestionSection(sectionHtml, partNum){
+  var div = document.createElement('div');
+  div.innerHTML = sectionHtml;
+  var qDivs = div.querySelectorAll('.question');
+  var questions = [];
+
+  qDivs.forEach(function(qDiv){
+    var kids = Array.from(qDiv.children);
+    var textHtml = '';
+    var options = [];
+
+    kids.forEach(function(kid){
+      var tag = kid.tagName.toUpperCase();
+      if(tag === 'P' && kid.classList.contains('note')) return;
+
+      if(tag === 'UL'){
+        kid.querySelectorAll(':scope > li').forEach(function(li){
+          var inner = li.innerHTML.trim();
+          if(partNum === 1){
+            var mm = inner.match(/^\s*([A-D])\s*[.):\-]\s*(.*)$/i);
+            if(mm) options.push({ label: mm[1].toUpperCase(), html: mm[2].trim() });
+            else options.push({ label: '', html: inner });
+          } else if(partNum === 2){
+            var mt = inner.match(/^\s*([a-d])\s*[.):\-]\s*(.*)$/);
+            if(mt) options.push({ label: mt[1].toLowerCase(), html: mt[2].trim() });
+            else options.push({ label: '', html: inner });
+          }
+        });
+        return;
+      }
+      textHtml += kid.outerHTML;
+    });
+
+    textHtml = stripQuestionPrefix(textHtml);
+
+    questions.push({
+      textHtml: textHtml,
+      options: options,
+      answer: null
+    });
+  });
+
+  return questions;
+}
+
+// ══════════════════════════════════════════════
+// TÁCH ĐÁP ÁN theo "Câu N:"
+// ══════════════════════════════════════════════
+function splitAnswerByCau(html){
+  var regex = /<strong>\s*Câu\s*(\d+)\s*[:.]?\s*<\/strong>/gi;
+  var matches = [];
+  var m;
+  while((m = regex.exec(html)) !== null){
+    matches.push({ index: m.index, num: parseInt(m[1]) });
+  }
+  if(matches.length === 0) return [];
+  var blocks = [];
+  for(var i = 0; i < matches.length; i++){
+    var start = matches[i].index;
+    var end = i + 1 < matches.length ? matches[i+1].index : html.length;
+    blocks.push({ num: matches[i].num, html: html.slice(start, end) });
+  }
+  return blocks;
+}
+
+function parseAnswerSection(sectionHtml, partNum){
+  var blocks = splitAnswerByCau(sectionHtml);
+  var answers = [];
+
+  blocks.forEach(function(block){
+    if(partNum === 1){
+      var m = block.html.match(/<strong>\s*Câu\s*\d+\s*[:.]?\s*<\/strong>\s*([A-D])\b/i);
+      answers.push(m ? m[1].toUpperCase() : null);
+    } else if(partNum === 2){
+      var tf = {};
+      ['a','b','c','d'].forEach(function(ch, i){
+        var re = new RegExp('(?:^|>)\\s*' + ch + '\\)\\s*<strong>\\s*(Đúng|Sai)\\s*</strong>', 'i');
+        var mm = block.html.match(re);
+        if(mm){
+          tf[i+1] = mm[1].toLowerCase().indexOf('đúng') >= 0;
+        } else {
+          var re2 = new RegExp(ch + '\\)[^<]*?(Đúng|Sai)', 'i');
+          var mm2 = block.html.match(re2);
+          tf[i+1] = mm2 ? (mm2[1].toLowerCase().indexOf('đúng') >= 0) : null;
+        }
+      });
+      answers.push(tf);
+    } else {
+      var m3 = block.html.match(/<strong>\s*Câu\s*\d+\s*[:.]?\s*<\/strong>\s*([^<\n]+)/i);
+      var val = m3 ? m3[1].trim() : '';
+      val = val.replace(/[.\s]+$/, '');
+      answers.push(val || null);
+    }
+  });
+
+  return answers;
+}
+
+// ══════════════════════════════════════════════
+// GHÉP CHÍNH
+// ══════════════════════════════════════════════
+function runMerge(){
+  if(!state.qHtml || !state.aHtml){
+    toast('Vui lòng chọn đủ 2 file', 'error');
+    return;
+  }
+  toast('⏳ Đang phân tích...', 'info');
+
+  var qSections = splitSections(state.qHtml);
+  var aSections = splitSections(state.aHtml);
+
+  var stats = { qTotal: 0, aTotal: 0, missing: 0 };
+
+  [1, 2, 3].forEach(function(part){
+    var qs = parseQuestionSection(qSections[part] || '', part);
+    var ans = parseAnswerSection(aSections[part] || '', part);
+    stats.qTotal += qs.length;
+    stats.aTotal += ans.length;
+
+    qs.forEach(function(q, i){
+      if(i < ans.length && ans[i] !== null && ans[i] !== undefined){
+        q.answer = ans[i];
+      } else {
+        stats.missing++;
+      }
+    });
+    state.questions[part] = qs;
+  });
+
+  $('cfgQ1Count').textContent = state.questions[1].length;
+  $('cfgQ2Count').textContent = state.questions[2].length;
+  $('cfgQ3Count').textContent = state.questions[3].length;
+
+  renderPreview(stats);
+
+  $('configStep').classList.remove('hidden');
+  $('previewStep').classList.remove('hidden');
+  $('outputStep').classList.remove('hidden');
+
+  ['cfgP1','cfgP2','cfgP3'].forEach(function(id){
+    var el = $(id);
+    if(el && !el.dataset.bound){
+      el.dataset.bound = '1';
+      el.addEventListener('input', updateOutput);
+    }
+  });
+
+  updateOutput();
+
+  var msg = '✅ Ghép xong: ' + stats.qTotal + ' câu';
+  if(stats.missing > 0) msg += ' — ⚠️ ' + stats.missing + ' câu thiếu đáp án';
+  toast(msg, stats.missing === 0 ? 'success' : 'error');
+
+  $('previewStep').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ══════════════════════════════════════════════
+// PREVIEW
+// ══════════════════════════════════════════════
+function renderPreview(stats){
+  var alerts = '';
+  var qTotal = state.questions[1].length + state.questions[2].length + state.questions[3].length;
+
+  if(stats.missing > 0){
+    alerts += '<div class="alert alert-error">❌ <strong>' + stats.missing + ' câu thiếu đáp án</strong> — kiểm tra lại file đáp án.</div>';
+  }
+  if(qTotal === 0){
+    alerts += '<div class="alert alert-error">❌ Không tìm thấy câu hỏi nào. Kiểm tra file đề.</div>';
+  } else if(stats.missing === 0){
+    alerts += '<div class="alert alert-success">✅ Ghép thành công ' + qTotal + ' câu — đầy đủ đáp án!</div>';
+  }
+  $('resultAlerts').innerHTML = alerts;
+
+  var p1Count = state.questions[1].length;
+  var p2Count = state.questions[2].length;
+  var p3Count = state.questions[3].length;
+  $('resultStats').innerHTML =
+    '<span>📘 Phần I: <strong>' + p1Count + '</strong> câu TN</span>' +
+    '<span>📗 Phần II: <strong>' + p2Count + '</strong> câu Đ/S</span>' +
+    '<span>📙 Phần III: <strong>' + p3Count + '</strong> câu ngắn</span>' +
+    '<span>📝 Tổng: <strong>' + qTotal + '</strong> câu</span>';
+
+  // Phần I
+  var html1 = '<table class="preview-table"><thead><tr>' +
+    '<th class="num">Câu</th><th>Nội dung</th>' +
+    '<th>A</th><th>B</th><th>C</th><th>D</th><th class="ans">ĐA</th></tr></thead><tbody>';
+  state.questions[1].forEach(function(q, i){
+    var optByLabel = {};
+    q.options.forEach(function(o){ if(o.label) optByLabel[o.label] = o; });
+    html1 += '<tr>';
+    html1 += '<td class="num">' + (i+1) + '</td>';
+    html1 += '<td class="q-text">' + q.textHtml + '</td>';
+    ['A','B','C','D'].forEach(function(l){
+      var opt = optByLabel[l];
+      var isAns = q.answer === l;
+      html1 += '<td class="opt ' + (isAns ? 'correct' : '') + '">' + (opt ? opt.html : '<span style="color:#999">—</span>') + '</td>';
+    });
+    html1 += '<td class="ans ' + (q.answer ? '' : 'missing') + '">' + (q.answer || '?') + '</td>';
+    html1 += '</tr>';
+  });
+  html1 += '</tbody></table>';
+  if(state.questions[1].length === 0) html1 = '<div class="alert alert-warn">Phần I chưa có câu hỏi nào.</div>';
+  $('ptab-1').innerHTML = html1;
+
+  // Phần II
+  var html2 = '<table class="preview-table"><thead><tr>' +
+    '<th class="num">Câu</th><th>Nội dung</th>' +
+    '<th>a</th><th>b</th><th>c</th><th>d</th></tr></thead><tbody>';
+  state.questions[2].forEach(function(q, i){
+    html2 += '<tr>';
+    html2 += '<td class="num">' + (i+1) + '</td>';
+    html2 += '<td class="q-text">' + q.textHtml + '</td>';
+    var ans = q.answer || {};
+    [1, 2, 3, 4].forEach(function(n){
+      var opt = q.options[n-1];
+      var correct = ans[n];
+      var badge = '';
+      if(correct === true) badge = ' <strong style="color:#2E7D32">[Đ]</strong>';
+      else if(correct === false) badge = ' <strong style="color:#c0392b">[S]</strong>';
+      else badge = ' <strong style="color:#c0392b">[?]</strong>';
+      html2 += '<td class="opt">' + (opt ? opt.html : '—') + badge + '</td>';
+    });
+    html2 += '</tr>';
+  });
+  html2 += '</tbody></table>';
+  if(state.questions[2].length === 0) html2 = '<div class="alert alert-warn">Phần II chưa có câu hỏi nào.</div>';
+  $('ptab-2').innerHTML = html2;
+
+  // Phần III
+  var html3 = '<table class="preview-table"><thead><tr>' +
+    '<th class="num">Câu</th><th>Nội dung</th><th class="ans">Đáp án</th></tr></thead><tbody>';
+  state.questions[3].forEach(function(q, i){
+    html3 += '<tr>';
+    html3 += '<td class="num">' + (i+1) + '</td>';
+    html3 += '<td class="q-text">' + q.textHtml + '</td>';
+    html3 += '<td class="ans ' + (q.answer ? '' : 'missing') + '">' + esc(q.answer || '?') + '</td>';
+    html3 += '</tr>';
+  });
+  html3 += '</tbody></table>';
+  if(state.questions[3].length === 0) html3 = '<div class="alert alert-warn">Phần III chưa có câu hỏi nào.</div>';
+  $('ptab-3').innerHTML = html3;
+
+  typesetMath($('previewStep'));
+}
+
+// ══════════════════════════════════════════════
+// SINH HTML
+// ══════════════════════════════════════════════
+function generateHtml(){
+  var p1 = Number($('cfgP1').value) || 0.25;
+  var p2 = Number($('cfgP2').value) || 1;
+  var p3 = Number($('cfgP3').value) || 1;
+
+  var qid = 1;
+  var out = [];
+
+  state.questions[1].forEach(function(q){
+    var id = 'q' + qid;
+    var answer = q.answer || '';
+    var html = '<div class="question" data-id="' + id + '" data-type="choice" data-answer="' + esc(answer) + '" data-points="' + p1 + '">\n';
+    html += '  <div class="q-text">' + q.textHtml + '</div>\n';
+    q.options.forEach(function(o){
+      var label = o.label || '?';
+      html += '  <label class="opt"><input type="radio" name="' + id + '" value="' + esc(label) + '">' + esc(label) + '. ' + o.html + '</label>\n';
+    });
+    html += '</div>';
+    out.push(html);
+    qid++;
+  });
+
+  state.questions[2].forEach(function(q){
+    var id = 'q' + qid;
+    var html = '<div class="question" data-id="' + id + '" data-type="truefalse" data-points="' + p2 + '">\n';
+    html += '  <div class="q-text">' + q.textHtml + '</div>\n';
+    q.options.forEach(function(o, i){
+      var stmt = i + 1;
+      var ans = q.answer && q.answer[stmt];
+      var ansStr = ans === true ? 'true' : ans === false ? 'false' : 'false';
+      html += '  <div class="tf-item" data-statement="' + stmt + '" data-answer="' + ansStr + '">\n';
+      html += '    <span class="tf-stmt">' + String.fromCharCode(97 + i) + ') ' + o.html + '</span>\n';
+      html += '  </div>\n';
+    });
+    html += '</div>';
+    out.push(html);
+    qid++;
+  });
+
+  state.questions[3].forEach(function(q){
+    var id = 'q' + qid;
+    var answer = q.answer || '';
+    var html = '<div class="question" data-id="' + id + '" data-type="short" data-answer="' + esc(answer) + '" data-points="' + p3 + '">\n';
+    html += '  <div class="q-text">' + q.textHtml + '</div>\n';
+    html += '</div>';
+    out.push(html);
+    qid++;
+  });
+
+  return out.join('\n\n');
+}
+
+// ══════════════════════════════════════════════
+// CẬP NHẬT TỔNG ĐIỂM
+// ══════════════════════════════════════════════
+function updateOutput(){
+  var code = generateHtml();
+  $('codeOutput').value = code;
+  updateTotalScores();
+}
+
+function updateTotalScores(){
+  var p1 = Number($('cfgP1').value) || 0;
+  var p2 = Number($('cfgP2').value) || 0;
+  var p3 = Number($('cfgP3').value) || 0;
+
+  var n1 = state.questions[1].length;
+  var n2 = state.questions[2].length;
+  var n3 = state.questions[3].length;
+
+  var s1 = Math.round(n1 * p1 * 100) / 100;
+  var s2 = Math.round(n2 * p2 * 100) / 100;
+  var s3 = Math.round(n3 * p3 * 100) / 100;
+
+  var el1 = $('cfgSum1'); if(el1) el1.textContent = s1;
+  var el2 = $('cfgSum2'); if(el2) el2.textContent = s2;
+  var el3 = $('cfgSum3'); if(el3) el3.textContent = s3;
+
+  var total = Math.round((s1 + s2 + s3) * 100) / 100;
+  var totEl = $('cfgTotalScore');
+  if(totEl) totEl.textContent = total;
+
+  var breakdown = $('cfgBreakdown');
+  if(breakdown){
+    breakdown.textContent = 'P.I: ' + s1 + ' · P.II: ' + s2 + ' · P.III: ' + s3;
+  }
+}
+
+// ══════════════════════════════════════════════
+// TABS PREVIEW
+// ══════════════════════════════════════════════
+document.querySelectorAll('[data-ptab]').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('[data-ptab]').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('#previewStep .tab-content').forEach(function(c){ c.classList.remove('active'); });
+    btn.classList.add('active');
+    var el = $('ptab-' + btn.dataset.ptab);
+    if(el) el.classList.add('active');
+    typesetMath(el);
+  });
+});
+
+// ══════════════════════════════════════════════
+// COPY / DOWNLOAD
+// ══════════════════════════════════════════════
+$('copyBtn').addEventListener('click', function(){
+  var out = $('codeOutput');
+  if(!out.value){ toast('Chưa có mã','error'); return; }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(out.value).then(function(){
+      toast('✅ Đã copy! Dán vào ô "Dán HTML câu hỏi"', 'success');
+    }).catch(function(){ fallbackCopy(out); });
+  } else { fallbackCopy(out); }
+});
+
+function fallbackCopy(el){
+  el.select();
+  document.execCommand('copy');
+  toast('✅ Đã copy mã HTML', 'success');
+}
+
+$('downloadBtn').addEventListener('click', function(){
+  var out = $('codeOutput');
+  if(!out.value){ toast('Chưa có mã','error'); return; }
+  var fullHtml = '<!DOCTYPE html>\n<html lang="vi">\n<head>\n<meta charset="UTF-8">\n<title>Đề bài</title>\n</head>\n<body>\n' + out.value + '\n</body>\n</html>';
+  var blob = new Blob([fullHtml], {type:'text/html;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'de-da-ghep_' + new Date().toISOString().slice(0,10) + '.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('✅ Đã tải file .html', 'success');
+});
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+readFileToState($('qFile'), $('qFileInfo'), 'qHtml');
+readFileToState($('aFile'), $('aFileInfo'), 'aHtml');
+
+console.log('%c🔀 Ghép đề 3 phần ready', 'color:#8B5A2B;font-size:14px;font-weight:bold');
+})();
+</script>
+</body>
+</html>

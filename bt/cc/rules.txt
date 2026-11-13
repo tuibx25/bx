@@ -1,0 +1,200 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ══════════════════════════════════════════
+    // HÀM DÙNG CHUNG
+    // ══════════════════════════════════════════
+    function signedIn() { return request.auth != null; }
+
+    function userDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    // ⭐ Tối ưu: check email trước, không đọc DB nếu là GV chính
+    function isTeacher() {
+      return signedIn() && (
+        request.auth.token.email.lower() == 'trntui6@gmail.com' ||
+        ('role' in userDoc() && userDoc().role == 'teacher')
+      );
+    }
+    function isTeacherEmail() {
+      return signedIn() && request.auth.token.email.lower() == 'trntui6@gmail.com';
+    }
+
+    // ⭐ FIX: dùng 'emailVerified' in userDoc() để không throw khi field thiếu
+    function isVerified() {
+      return signedIn() && (
+        ('emailVerified' in userDoc() && userDoc().emailVerified == true) ||
+        request.auth.token.email_verified == true
+      );
+    }
+
+    // ══════════════════════════════════════════
+    // ⭐ v3.1: CHECK TÀI KHOẢN BỊ ẨN
+    //   FIX: bắt buộc check 'hidden' in userDoc() trước khi đọc
+    //        → tránh throw error khi HS chưa từng bị ẩn
+    // ══════════════════════════════════════════
+    function isHiddenUser() {
+      return signedIn()
+        && request.auth.token.email.lower() != 'trntui6@gmail.com'
+        && ('hidden' in userDoc())
+        && userDoc().hidden == true;
+    }
+
+    // ⭐ v3.1: HS đang hoạt động (đã login + không bị ẩn) HOẶC GV
+    function isActive() {
+      return signedIn() && !isHiddenUser();
+    }
+
+    function only(keys) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys);
+    }
+    function validClass(c) {
+      return c == '' || c.matches('^(10|11|12)(a([1-9]|[1-9][0-9]))?$');
+    }
+    function isNullOrMissing(data, key) {
+      return !data.keys().hasAny([key]) || data[key] == null;
+    }
+
+    // ══════════════════════════════════════════
+    // USERS
+    // ⭐ Hidden user VẪN được phép ĐỌC doc của mình
+    //   → để auth.js phát hiện `hidden: true` và chủ động signOut
+    // ══════════════════════════════════════════
+    match /users/{uid} {
+      allow get: if signedIn() && (request.auth.uid == uid || isTeacher());
+      allow list: if isTeacher();
+
+      allow create: if signedIn() && request.auth.uid == uid
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.role == (isTeacherEmail() ? 'teacher' : 'student')
+        && request.resource.data.emailVerified == request.auth.token.email_verified
+        && validClass(request.resource.data.class);
+
+      allow update: if isTeacher()
+        || (isActive() && request.auth.uid == uid
+            && only(['class', 'updatedAt', 'emailVerified', 'role'])
+            && (request.resource.data.emailVerified == true
+                || request.resource.data.emailVerified == resource.data.emailVerified)
+            && (request.resource.data.role == resource.data.role
+                || (isTeacherEmail() && request.resource.data.role == 'teacher'))
+            && (request.resource.data.class == resource.data.class
+                || (validClass(request.resource.data.class)
+                    && (isTeacher()
+                        || get(/databases/$(database)/documents/settings/system).data.allowChangeClass == true))));
+
+      allow delete: if isTeacher();
+    }
+
+    // ══════════════════════════════════════════
+    // SETTINGS
+    // ══════════════════════════════════════════
+    match /settings/{docId} {
+      allow read: if isActive();
+      allow write: if isTeacher();
+    }
+
+    // ══════════════════════════════════════════
+    // LESSONS
+    // ══════════════════════════════════════════
+    match /lessons/{id} {
+      allow read: if isActive();
+      allow write: if isTeacher();
+    }
+
+    // ══════════════════════════════════════════
+    // ASSIGNMENTS + ANSWERKEY
+    // ══════════════════════════════════════════
+    match /assignments/{id} {
+      allow read: if isActive();
+      allow write: if isTeacher();
+
+      match /answerKey/{keyId} {
+        allow read, write: if isTeacher();
+      }
+    }
+
+    // ══════════════════════════════════════════
+    // SUBMISSIONS
+    // ══════════════════════════════════════════
+    match /submissions/{id} {
+      allow get, list: if isTeacher() ||
+        (isActive() && resource.data.studentId == request.auth.uid);
+
+      allow create: if isActive() && isVerified()
+        && request.resource.data.studentId == request.auth.uid
+        && request.resource.data.status == 'in_progress'
+        && isNullOrMissing(request.resource.data, 'score')
+        && isNullOrMissing(request.resource.data, 'autoScore')
+        && isNullOrMissing(request.resource.data, 'details')
+        && request.resource.data.deadlineAt >= request.time.toMillis() + request.resource.data.duration * 60000 - 300000
+        && request.resource.data.deadlineAt <= request.time.toMillis() + request.resource.data.duration * 60000 + 300000;
+
+      allow update: if isTeacher()
+        || (isActive() && resource.data.studentId == request.auth.uid && (
+             (resource.data.status == 'in_progress'
+              && request.resource.data.status == 'in_progress'
+              && only(['draftAnswers', 'draftAt'])
+              && request.time.toMillis() < resource.data.deadlineAt + 60000)
+          || (resource.data.status == 'in_progress'
+              && (request.resource.data.status == 'submitted'
+                  || request.resource.data.status == 'abandoned')
+              && only(['status', 'answers', 'answer', 'submittedAt', 'submittedAtMs',
+                       'timeSpent', 'isLate', 'isTimeout', 'abandonedAt'])
+              && isNullOrMissing(request.resource.data, 'score')
+              && isNullOrMissing(request.resource.data, 'autoScore')
+              && request.time.toMillis() < resource.data.deadlineAt + 120000)
+          || (request.resource.data.status == resource.data.status
+              && only(['studentViewed'])
+              && request.resource.data.studentViewed == true)
+        ));
+
+      allow delete: if isTeacher();
+    }
+
+    // ══════════════════════════════════════════
+    // VIEWLOGS
+    // ══════════════════════════════════════════
+    match /viewLogs/{id} {
+      allow get, list: if isTeacher() ||
+        (isActive() && resource.data.studentId == request.auth.uid);
+
+      allow create: if isActive() && isVerified()
+        && request.resource.data.studentId == request.auth.uid;
+
+      allow update: if isTeacher()
+        || (isActive() && resource.data.studentId == request.auth.uid
+            && only(['durationSec', 'lastHeartbeat', 'closedAt']));
+
+      allow delete: if isTeacher()
+        || (isActive() && resource.data.studentId == request.auth.uid
+            && resource.data.durationSec == 0
+            && request.time.toMillis() - resource.data.startedAt < 30000);
+    }
+
+    // ══════════════════════════════════════════
+    // NOTIFICATIONS
+    // ══════════════════════════════════════════
+    match /notifications/{id} {
+      allow read: if isActive();
+      allow create, update, delete: if isTeacher();
+    }
+
+    // ══════════════════════════════════════════
+    // AUDITLOGS
+    // ══════════════════════════════════════════
+    match /auditLogs/{id} {
+      allow read, create: if isTeacher();
+      allow update, delete: if false;
+    }
+
+    // ══════════════════════════════════════════
+    // CHẶN TẤT CẢ CÒN LẠI
+    // ══════════════════════════════════════════
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
