@@ -6,36 +6,104 @@
 <title>Theo Dõi Đăng Nhập - Giáo Viên</title>
 <script type="module" src="/bx/firebase-init.js"></script>
 <style>
-  :root { --primary: #004488; --bg: #F5F5F5; --white: #FFF; --border: #D3D3D3; --brown: #8B4513; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 15px; color: #000; }
+  :root { 
+    --ink: #000000; 
+    --bg: #F5F5F5; 
+    --white: #FFFFFF; 
+    --border: #D3D3D3; 
+    --brown: #8B5A2B; 
+    --brown-d: #8B4513; 
+    --beige: #F5F5DC; 
+    --wheat: #F5DEB3; 
+    --blue: #0066CC; 
+    --blue-d: #004488; 
+  }
+  
+  body { 
+    font-family: 'Segoe UI', Arial, sans-serif; 
+    background: var(--bg); 
+    margin: 0; 
+    padding: 15px; 
+    color: var(--ink); 
+  }
+  
   .container { max-width: 1000px; margin: 0 auto; }
-  .header { display: flex; justify-content: space-between; align-items: center; background: var(--white); padding: 15px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 15px; }
-  .header h2 { margin: 0; color: var(--primary); font-size: 1.3em; }
-  .btn { background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; text-decoration: none; }
+  
+  .header { 
+    display: flex; justify-content: space-between; align-items: center; 
+    background: var(--white); padding: 15px; border-radius: 10px; 
+    border: 1px solid var(--border); margin-bottom: 15px; flex-wrap: wrap; gap: 10px;
+  }
+  .header h2 { margin: 0; color: var(--brown-d); font-size: 1.3em; }
+  
+  .btn { 
+    background: var(--blue-d); color: var(--white); 
+    border: 1.5px solid var(--blue-d); padding: 8px 15px; border-radius: 6px; 
+    cursor: pointer; font-weight: bold; text-decoration: none; transition: 0.2s;
+  }
+  .btn:hover { background: var(--blue); border-color: var(--blue); }
+  
+  .btn-outline { background: transparent; color: var(--blue-d); border: 1.5px solid var(--blue-d); }
+  .btn-outline:hover { background: var(--blue-d); color: var(--white); }
   
   .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
   @media (max-width: 600px) { .stats-grid { grid-template-columns: 1fr; } }
-  .stat-card { background: var(--white); padding: 20px; border-radius: 10px; border: 1px solid var(--border); text-align: center; }
-  .stat-card h3 { margin: 0 0 10px 0; font-size: 1em; color: #555; }
-  .stat-card .number { font-size: 2.5em; font-weight: bold; color: var(--brown); }
-
-  .table-container { background: var(--white); border-radius: 10px; border: 1px solid var(--border); overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; text-align: left; }
-  th, td { padding: 12px 15px; border-bottom: 1px solid var(--border); }
-  th { background: #f8f9fa; color: var(--primary); font-weight: bold; white-space: nowrap; }
-  tr:hover { background: #f1f1f1; }
-  .status-online { color: #28a745; font-weight: bold; }
-  .status-offline { color: #dc3545; }
   
-  .search-box { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+  .stat-card { 
+    background: var(--white); padding: 20px; border-radius: 10px; 
+    border: 1px solid var(--border); text-align: center; 
+  }
+  .stat-card h3 { margin: 0 0 10px 0; font-size: 1em; color: var(--ink); font-weight: 600; }
+  .stat-card .number { font-size: 2.5em; font-weight: bold; color: var(--blue-d); }
+  .stat-card .number.highlight { color: var(--blue); }
+
+  .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 10px; flex-wrap: wrap;}
+  .search-box { 
+    flex: 1; min-width: 250px; padding: 10px 15px; 
+    border: 1px solid var(--border); border-radius: 6px; 
+    box-sizing: border-box; font-size: 15px; color: var(--ink); outline: none; 
+  }
+  .search-box:focus { border-color: var(--blue); }
+  
+  /* CSS cho Accordion (Nhóm lớp) */
+  .class-group { 
+    margin-bottom: 15px; border: 1px solid var(--border); 
+    border-radius: 8px; overflow: hidden; background: var(--white); 
+  }
+  .class-header { 
+    background: var(--beige); padding: 15px; display: flex; justify-content: space-between; align-items: center; 
+    cursor: pointer; user-select: none; font-weight: bold; font-size: 1.1em; color: var(--brown-d);
+    border-bottom: 1px solid transparent; transition: 0.2s;
+  }
+  .class-header:hover { background: var(--wheat); }
+  .class-header.active { border-bottom-color: var(--border); }
+  .class-header .student-count { font-size: 0.85em; color: var(--brown); font-weight: normal; margin-left: 10px; }
+  .class-header .icon { font-size: 1.2em; transition: transform 0.3s; color: var(--brown-d); }
+  .class-header.active .icon { transform: rotate(180deg); }
+  
+  .class-content { display: none; }
+  .class-content.active { display: block; }
+  
+  .table-responsive { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95em; color: var(--ink);}
+  th, td { padding: 12px 15px; border-bottom: 1px solid var(--border); }
+  th { background: var(--white); color: var(--brown-d); font-weight: bold; white-space: nowrap; position: sticky; top: 0;}
+  tr:hover { background: var(--bg); }
+  tr:last-child td { border-bottom: none; }
+  
+  .status-online { color: var(--blue-d); font-weight: bold; }
+  .status-offline { color: var(--brown); font-style: italic; }
+  .text-email { color: var(--brown); font-size: 0.9em; }
 </style>
 </head>
 <body>
 
 <div class="container">
   <div class="header">
-    <h2>📊 Theo Dõi Đăng Nhập Học Sinh</h2>
-    <a href="gv.html" class="btn">⬅ Về Trang Quản Trị</a>
+    <h2>📊 Theo Dõi Đăng Nhập</h2>
+    <div style="display: flex; gap: 10px;">
+      <a href="gv.html" class="btn btn-outline">⬅ Về Quản Trị</a>
+    </div>
   </div>
 
   <div class="stats-grid">
@@ -45,32 +113,26 @@
     </div>
     <div class="stat-card">
       <h3>Đã Đăng Nhập Hôm Nay</h3>
-      <div class="number" id="todayLogins" style="color: #28a745;">0</div>
+      <div class="number highlight" id="todayLogins">0</div>
     </div>
   </div>
 
-  <input type="text" id="searchInput" class="search-box" placeholder="🔍 Tìm kiếm theo tên, email hoặc lớp...">
+  <div class="toolbar">
+    <input type="text" id="searchInput" class="search-box" placeholder="🔍 Tìm kiếm tên, email...">
+    <button class="btn btn-outline" id="btnToggleAll" onclick="toggleAll()">Mở rộng tất cả</button>
+  </div>
 
-  <div class="table-container">
-    <table id="loginTable">
-      <thead>
-        <tr>
-          <th>Tên Học Sinh</th>
-          <th>Lớp</th>
-          <th>Email</th>
-          <th>Lần Đăng Nhập Cuối</th>
-          <th>Số Lần ĐN</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody">
-        <tr><td colspan="5" style="text-align: center;">Đang tải dữ liệu...</td></tr>
-      </tbody>
-    </table>
+  <div id="listContainer">
+    <div style="text-align: center; padding: 30px; color: var(--brown);">Đang tải dữ liệu...</div>
   </div>
 </div>
 
 <script>
 let allUsers = [];
+let groupedUsers = {};
+let isAllExpanded = false;
+
+const esc = s => String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 window.addEventListener('load', () => {
   window.checkAuthState(async (isLoggedIn) => {
@@ -84,7 +146,7 @@ window.addEventListener('load', () => {
       import('/bx/firebase-init.js'),
       import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js')
     ]);
-    const { collection, getDocs, query, orderBy } = fsMod;
+    const { collection, getDocs } = fsMod;
 
     // CHỈ GIÁO VIÊN MỚI ĐƯỢC VÀO
     if (auth.currentUser.email !== 'trntui6@gmail.com') {
@@ -94,87 +156,174 @@ window.addEventListener('load', () => {
     }
 
     try {
-      // Lấy toàn bộ users
       const usersSnap = await getDocs(collection(db, "users"));
       allUsers = [];
       usersSnap.forEach(doc => {
         const data = doc.data();
-        if (data.role === 'student' || !data.role) { // Chỉ lấy học sinh
+        if (data.role === 'student' || !data.role) {
           allUsers.push(data);
         }
       });
 
-      processAndRenderData();
+      processData();
+      renderUI();
     } catch (error) {
       console.error("Lỗi tải dữ liệu:", error);
-      document.getElementById('tableBody').innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Lỗi tải dữ liệu: ${error.message}</td></tr>`;
+      document.getElementById('listContainer').innerHTML = `<div style="color:var(--brown-d); text-align:center; padding:20px;">Lỗi tải dữ liệu: ${error.message}</div>`;
     }
   });
 });
 
-function processAndRenderData() {
+function processData() {
   const now = new Date();
   const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-  
   let todayCount = 0;
 
-  // Sắp xếp theo thời gian đăng nhập gần nhất (người mới nhất lên đầu)
-  allUsers.sort((a, b) => {
-    const timeA = a.lastLogin ? a.lastLogin.toMillis() : 0;
-    const timeB = b.lastLogin ? b.lastLogin.toMillis() : 0;
-    return timeB - timeA;
-  });
-
-  document.getElementById('totalStudents').textContent = allUsers.length;
-
+  // Đếm số lượng đăng nhập hôm nay
   allUsers.forEach(user => {
-    if (user.lastLogin) {
-      const loginTime = user.lastLogin.toMillis();
-      if (loginTime >= startOfToday) todayCount++;
+    if (user.lastLogin && user.lastLogin.toMillis() >= startOfToday) {
+      todayCount++;
     }
   });
+  
+  document.getElementById('totalStudents').textContent = allUsers.length;
   document.getElementById('todayLogins').textContent = todayCount;
 
-  renderTable(allUsers);
+  // Nhóm theo lớp
+  groupedUsers = {};
+  allUsers.forEach(user => {
+    const cls = (user.class || 'Chưa xếp lớp').toUpperCase();
+    if (!groupedUsers[cls]) groupedUsers[cls] = [];
+    groupedUsers[cls].push(user);
+  });
+
+  // Sắp xếp tên lớp (A-Z)
+  const sortedClasses = Object.keys(groupedUsers).sort();
+  const newGrouped = {};
+  sortedClasses.forEach(cls => {
+    // Sắp xếp học sinh trong lớp theo thời gian đăng nhập (mới nhất lên đầu)
+    groupedUsers[cls].sort((a, b) => {
+      const timeA = a.lastLogin ? a.lastLogin.toMillis() : 0;
+      const timeB = b.lastLogin ? b.lastLogin.toMillis() : 0;
+      return timeB - timeA;
+    });
+    newGrouped[cls] = groupedUsers[cls];
+  });
+  groupedUsers = newGrouped;
 }
 
-function renderTable(users) {
-  const tbody = document.getElementById('tableBody');
-  if (users.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Không có dữ liệu học sinh.</td></tr>';
-    return;
-  }
+function renderUI(keyword = '') {
+  const container = document.getElementById('listContainer');
+  container.innerHTML = '';
+  
+  let hasResult = false;
+  let classIndex = 0;
 
-  let html = '';
-  users.forEach(user => {
-    let lastLoginStr = '<span style="color:#888; font-style:italic;">Chưa từng ĐN</span>';
-    if (user.lastLogin) {
-      const date = user.lastLogin.toDate();
-      lastLoginStr = date.toLocaleString('vi-VN'); // Hiển thị dạng: 14:30:00 13/11/2026
+  for (const cls in groupedUsers) {
+    let students = groupedUsers[cls];
+    
+    // Lọc theo từ khóa tìm kiếm
+    if (keyword) {
+      students = students.filter(s => 
+        (s.name || '').toLowerCase().includes(keyword) || 
+        (s.email || '').toLowerCase().includes(keyword) ||
+        cls.toLowerCase().includes(keyword)
+      );
     }
+    
+    if (students.length === 0) continue; // Không có học sinh nào khớp thì bỏ qua lớp này
+    hasResult = true;
+    classIndex++;
+
+    const classId = `class-box-${classIndex}`;
+    
+    // Nếu đang tìm kiếm, mặc định mở rộng các lớp có kết quả
+    const isExpanded = keyword ? true : isAllExpanded;
+    const activeClass = isExpanded ? 'active' : '';
+
+    let html = `
+      <div class="class-group">
+        <div class="class-header ${activeClass}" onclick="toggleClass('${classId}', this)">
+          <div>
+            Lớp ${esc(cls)} 
+            <span class="student-count">(${students.length} học sinh)</span>
+          </div>
+          <span class="icon">▼</span>
+        </div>
+        <div id="${classId}" class="class-content ${activeClass}">
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tên Học Sinh</th>
+                  <th>Email</th>
+                  <th>Lần Đăng Nhập Cuối</th>
+                  <th style="text-align: center;">Số Lần</th>
+                </tr>
+              </thead>
+              <tbody>
+    `;
+
+    students.forEach(user => {
+      let lastLoginStr = '<span class="status-offline">Chưa từng ĐN</span>';
+      if (user.lastLogin) {
+        const date = user.lastLogin.toDate();
+        lastLoginStr = date.toLocaleString('vi-VN');
+      }
+
+      html += `
+        <tr>
+          <td><b>${esc(user.name || 'Chưa cập nhật')}</b></td>
+          <td class="text-email">${esc(user.email || '')}</td>
+          <td>${lastLoginStr}</td>
+          <td style="text-align: center;"><b>${user.loginCount || 0}</b></td>
+        </tr>
+      `;
+    });
 
     html += `
-      <tr>
-        <td><b>${user.name || 'Chưa cập nhật'}</b></td>
-        <td>${(user.class || '').toUpperCase()}</td>
-        <td style="color: #666; font-size: 0.9em;">${user.email || ''}</td>
-        <td>${lastLoginStr}</td>
-        <td style="text-align: center;"><b>${user.loginCount || 0}</b></td>
-      </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     `;
-  });
-  tbody.innerHTML = html;
+    
+    container.innerHTML += html;
+  }
+
+  if (!hasResult) {
+    container.innerHTML = '<div style="text-align: center; padding: 30px; color: var(--brown);">Không tìm thấy học sinh nào phù hợp.</div>';
+  }
+}
+
+function toggleClass(id, headerEl) {
+  const content = document.getElementById(id);
+  if (content.classList.contains('active')) {
+    content.classList.remove('active');
+    headerEl.classList.remove('active');
+  } else {
+    content.classList.add('active');
+    headerEl.classList.add('active');
+  }
+}
+
+function toggleAll() {
+  isAllExpanded = !isAllExpanded;
+  const btn = document.getElementById('btnToggleAll');
+  btn.textContent = isAllExpanded ? 'Thu gọn tất cả' : 'Mở rộng tất cả';
+  
+  const headers = document.querySelectorAll('.class-header');
+  const contents = document.querySelectorAll('.class-content');
+  
+  headers.forEach(h => h.classList.toggle('active', isAllExpanded));
+  contents.forEach(c => c.classList.toggle('active', isAllExpanded));
 }
 
 // Chức năng tìm kiếm
 document.getElementById('searchInput').addEventListener('input', (e) => {
   const keyword = e.target.value.toLowerCase().trim();
-  const filtered = allUsers.filter(user => 
-    (user.name || '').toLowerCase().includes(keyword) ||
-    (user.email || '').toLowerCase().includes(keyword) ||
-    (user.class || '').toLowerCase().includes(keyword)
-  );
-  renderTable(filtered);
+  renderUI(keyword);
 });
 </script>
 
