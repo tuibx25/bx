@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theo Dõi Đăng Nhập - Giáo Viên</title>
+<script type="module" src="/bx/firebase-init.js"></script>
+<style>
+  :root { --primary: #004488; --bg: #F5F5F5; --white: #FFF; --border: #D3D3D3; --brown: #8B4513; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 15px; color: #000; }
+  .container { max-width: 1000px; margin: 0 auto; }
+  .header { display: flex; justify-content: space-between; align-items: center; background: var(--white); padding: 15px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 15px; }
+  .header h2 { margin: 0; color: var(--primary); font-size: 1.3em; }
+  .btn { background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; text-decoration: none; }
+  
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+  @media (max-width: 600px) { .stats-grid { grid-template-columns: 1fr; } }
+  .stat-card { background: var(--white); padding: 20px; border-radius: 10px; border: 1px solid var(--border); text-align: center; }
+  .stat-card h3 { margin: 0 0 10px 0; font-size: 1em; color: #555; }
+  .stat-card .number { font-size: 2.5em; font-weight: bold; color: var(--brown); }
+
+  .table-container { background: var(--white); border-radius: 10px; border: 1px solid var(--border); overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; text-align: left; }
+  th, td { padding: 12px 15px; border-bottom: 1px solid var(--border); }
+  th { background: #f8f9fa; color: var(--primary); font-weight: bold; white-space: nowrap; }
+  tr:hover { background: #f1f1f1; }
+  .status-online { color: #28a745; font-weight: bold; }
+  .status-offline { color: #dc3545; }
+  
+  .search-box { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h2>📊 Theo Dõi Đăng Nhập Học Sinh</h2>
+    <a href="gv.html" class="btn">⬅ Về Trang Quản Trị</a>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h3>Tổng Số Học Sinh</h3>
+      <div class="number" id="totalStudents">0</div>
+    </div>
+    <div class="stat-card">
+      <h3>Đã Đăng Nhập Hôm Nay</h3>
+      <div class="number" id="todayLogins" style="color: #28a745;">0</div>
+    </div>
+  </div>
+
+  <input type="text" id="searchInput" class="search-box" placeholder="🔍 Tìm kiếm theo tên, email hoặc lớp...">
+
+  <div class="table-container">
+    <table id="loginTable">
+      <thead>
+        <tr>
+          <th>Tên Học Sinh</th>
+          <th>Lớp</th>
+          <th>Email</th>
+          <th>Lần Đăng Nhập Cuối</th>
+          <th>Số Lần ĐN</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr><td colspan="5" style="text-align: center;">Đang tải dữ liệu...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+let allUsers = [];
+
+window.addEventListener('load', () => {
+  window.checkAuthState(async (isLoggedIn) => {
+    if (!isLoggedIn) {
+      alert("Bạn chưa đăng nhập!");
+      window.location.href = "../";
+      return;
+    }
+    
+    const [{ auth, db }, fsMod] = await Promise.all([
+      import('/bx/firebase-init.js'),
+      import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js')
+    ]);
+    const { collection, getDocs, query, orderBy } = fsMod;
+
+    // CHỈ GIÁO VIÊN MỚI ĐƯỢC VÀO
+    if (auth.currentUser.email !== 'trntui6@gmail.com') {
+      alert("⛔ Bạn không có quyền truy cập trang này!");
+      window.location.href = "../";
+      return;
+    }
+
+    try {
+      // Lấy toàn bộ users
+      const usersSnap = await getDocs(collection(db, "users"));
+      allUsers = [];
+      usersSnap.forEach(doc => {
+        const data = doc.data();
+        if (data.role === 'student' || !data.role) { // Chỉ lấy học sinh
+          allUsers.push(data);
+        }
+      });
+
+      processAndRenderData();
+    } catch (error) {
+      console.error("Lỗi tải dữ liệu:", error);
+      document.getElementById('tableBody').innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Lỗi tải dữ liệu: ${error.message}</td></tr>`;
+    }
+  });
+});
+
+function processAndRenderData() {
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  
+  let todayCount = 0;
+
+  // Sắp xếp theo thời gian đăng nhập gần nhất (người mới nhất lên đầu)
+  allUsers.sort((a, b) => {
+    const timeA = a.lastLogin ? a.lastLogin.toMillis() : 0;
+    const timeB = b.lastLogin ? b.lastLogin.toMillis() : 0;
+    return timeB - timeA;
+  });
+
+  document.getElementById('totalStudents').textContent = allUsers.length;
+
+  allUsers.forEach(user => {
+    if (user.lastLogin) {
+      const loginTime = user.lastLogin.toMillis();
+      if (loginTime >= startOfToday) todayCount++;
+    }
+  });
+  document.getElementById('todayLogins').textContent = todayCount;
+
+  renderTable(allUsers);
+}
+
+function renderTable(users) {
+  const tbody = document.getElementById('tableBody');
+  if (users.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Không có dữ liệu học sinh.</td></tr>';
+    return;
+  }
+
+  let html = '';
+  users.forEach(user => {
+    let lastLoginStr = '<span style="color:#888; font-style:italic;">Chưa từng ĐN</span>';
+    if (user.lastLogin) {
+      const date = user.lastLogin.toDate();
+      lastLoginStr = date.toLocaleString('vi-VN'); // Hiển thị dạng: 14:30:00 13/11/2026
+    }
+
+    html += `
+      <tr>
+        <td><b>${user.name || 'Chưa cập nhật'}</b></td>
+        <td>${(user.class || '').toUpperCase()}</td>
+        <td style="color: #666; font-size: 0.9em;">${user.email || ''}</td>
+        <td>${lastLoginStr}</td>
+        <td style="text-align: center;"><b>${user.loginCount || 0}</b></td>
+      </tr>
+    `;
+  });
+  tbody.innerHTML = html;
+}
+
+// Chức năng tìm kiếm
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  const keyword = e.target.value.toLowerCase().trim();
+  const filtered = allUsers.filter(user => 
+    (user.name || '').toLowerCase().includes(keyword) ||
+    (user.email || '').toLowerCase().includes(keyword) ||
+    (user.class || '').toLowerCase().includes(keyword)
+  );
+  renderTable(filtered);
+});
+</script>
+
+</body>
+</html>
