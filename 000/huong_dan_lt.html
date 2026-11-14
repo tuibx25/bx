@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hướng Dẫn Sử Dụng - Luyện Tập Trắc Nghiệm</title>
+<style>
+  :root { 
+    --ink: #000000; 
+    --bg: #F5F5F5; 
+    --white: #FFFFFF; 
+    --border: #D3D3D3; 
+    --brown: #8B5A2B; 
+    --brown-d: #8B4513; 
+    --beige: #F5F5DC; 
+    --wheat: #F5DEB3; 
+    --blue: #0066CC; 
+    --blue-d: #004488; 
+    --red: #d9534f;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body { 
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif; 
+    background: var(--bg); 
+    color: var(--ink); 
+    line-height: 1.6; 
+    padding-bottom: 40px;
+  }
+  
+  header {
+    background: var(--white);
+    border-bottom: 2px solid var(--brown-d);
+    padding: 20px 15px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  
+  header h1 {
+    color: var(--brown-d);
+    font-size: 1.3em;
+    margin-bottom: 5px;
+  }
+  
+  header p {
+    color: var(--blue-d);
+    font-weight: 600;
+    font-size: 0.9em;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 15px;
+  }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+  }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px dashed var(--wheat);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+  }
+
+  .step-number {
+    background: var(--blue-d);
+    color: var(--white);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1em;
+    flex-shrink: 0;
+  }
+
+  .step-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--brown-d);
+  }
+
+  ul {
+    list-style-position: inside;
+    margin-left: 10px;
+  }
+
+  li {
+    margin-bottom: 10px;
+  }
+
+  li b {
+    color: var(--blue-d);
+  }
+
+  .highlight-box {
+    background: var(--beige);
+    border-left: 4px solid var(--brown-d);
+    padding: 12px 15px;
+    border-radius: 0 8px 8px 0;
+    margin: 15px 0;
+    font-size: 0.95em;
+  }
+
+  .highlight-box strong {
+    color: var(--brown-d);
+  }
+
+  .warning-box {
+    background: #FFF3CD;
+    border-left: 4px solid var(--red);
+    padding: 12px 15px;
+    border-radius: 0 8px 8px 0;
+    margin: 15px 0;
+    font-size: 0.95em;
+    color: #856404;
+  }
+  
+  .warning-box strong {
+    color: var(--red);
+  }
+
+  .table-guide {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 0.95em;
+  }
+
+  .table-guide th, .table-guide td {
+    border: 1px solid var(--border);
+    padding: 10px;
+    text-align: left;
+  }
+
+  .table-guide th {
+    background: var(--beige);
+    color: var(--brown-d);
+  }
+
+  /* CSS cho phần so sánh 2 nút */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 10px;
+  }
+  @media (max-width: 600px) {
+    .compare-grid { grid-template-columns: 1fr; }
+  }
+  .compare-box {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 15px;
+    background: var(--white);
+  }
+  .compare-box h4 {
+    color: var(--white);
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 10px;
+    font-size: 0.95em;
+  }
+  .compare-box.redo h4 { background: var(--brown-d); }
+  .compare-box.new h4 { background: var(--blue-d); }
+  .compare-box p { font-size: 0.9em; margin-bottom: 5px; }
+
+  .back-link {
+    text-align: center;
+    margin-top: 30px;
+  }
+  
+  .back-link a {
+    color: var(--blue-d);
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1.1em;
+  }
+  .back-link a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 600px) {
+    .card { padding: 15px; }
+    header h1 { font-size: 1.1em; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📖 HƯỚNG DẪN SỬ DỤNG</h1>
+  <p>Hệ thống Luyện tập Trắc nghiệm Vật lý 10</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <div class="step-header">
+      <div class="step-number">1</div>
+      <div class="step-title">Tạo Đề Luyện Tập</div>
+    </div>
+    <p>Khi mới vào trang, bạn sẽ thấy màn hình chào mừng. Để bắt đầu làm bài, bạn hãy bấm vào nút <b>⚙️ Chọn</b> ở góc trên bên phải màn hình.</p>
+    
+    <ul>
+      <li><b>Chọn Bài / Nhóm bài:</b> Bấm vào thanh "Chọn Bài" để mở danh sách. Bạn có thể tick chọn một hoặc nhiều bài. Có thanh tìm kiếm giúp tìm nhanh số bài (VD: gõ "9").</li>
+      <li><b>Biểu điểm:</b> Hệ thống đã cài sẵn thang điểm chuẩn (Phần I: 0.25đ, Phần II chia đều, Phần III: 0.5đ).</li>
+      <li><b>Cấu trúc đề (Tab thứ 2):</b> Bạn có thể chọn tổng số câu cho mỗi phần, hoặc chọn chi tiết theo <b>mức độ</b> (Dễ, Vừa, Khó, Rất Khó).</li>
+    </ul>
+    
+    <p>Sau khi cấu hình xong, bấm nút <b>🚀 Tạo Trắc Nghiệm</b> màu xanh để hệ thống sinh đề.</p>
+
+    <div class="warning-box">
+      <strong>⚠️ LƯU Ý:</strong> Mỗi lần bạn bấm nút <b>Tạo Trắc Nghiệm</b> (hoặc nút <b>Bốc câu mới</b>), hệ thống sẽ lấy một bộ câu hỏi hoàn toàn mới. Nếu đang làm bài dở mà bấm nút này, bài làm hiện tại sẽ bị xóa!
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step-header">
+      <div class="step-number">2</div>
+      <div class="step-title">Phân biệt nút "Làm lại" và "Tạo đề mới"</div>
+    </div>
+    <p>Hệ thống có 2 nút chức năng dễ gây nhầm lẫn. Bạn hãy xem kỹ sự khác biệt dưới đây:</p>
+    
+    <div class="compare-grid">
+      <div class="compare-box redo">
+        <h4>🔄 LÀM LẠI (Nút màu nâu)</h4>
+        <p><b>Vị trí:</b> Nằm trên thanh công cụ, hiện ra sau khi bạn đã nộp bài.</p>
+        <p><b>Tác dụng:</b> Giữ nguyên bộ câu hỏi cũ, nhưng <b>xáo trộn lại thứ tự câu hỏi</b> và <b>thứ tự đáp án A, B, C, D</b>.</p>
+        <p><b>Mục đích:</b> Làm lại chính đề đó để nhớ bài lâu hơn, tránh học vẹt vị trí đáp án.</p>
+      </div>
+      
+      <div class="compare-box new">
+        <h4>🚀 TẠO TRẮC NGHIỆM (Nút màu xanh)</h4>
+        <p><b>Vị trí:</b> Nằm trong bảng Cài đặt (⚙️ Chọn) hoặc nút Bốc câu mới.</p>
+        <p><b>Tác dụng:</b> Bốc các câu hỏi khác trong ngân hàng đề. Tạo ra <b>một đề hoàn toàn mới</b>.</p>
+        <p><b>Mục đích:</b> Đổi gió, làm một đề khác có cùng cấu trúc mức độ (Dễ, Vừa, Khó).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step-header">
+      <div class="step-number">3</div>
+      <div class="step-title">Làm Bài & Nộp Bài</div>
+    </div>
+    <table class="table-guide">
+      <tr>
+        <th>Phần thi</th>
+        <th>Cách trả lời</th>
+      </tr>
+      <tr>
+        <td><b>Phần I</b><br>Trắc nghiệm A, B, C, D</td>
+        <td>Bấm chọn vào ô đáp án bạn cho là đúng nhất.</td>
+      </tr>
+      <tr>
+        <td><b>Phần II</b><br>Đúng / Sai</td>
+        <td>Với mỗi ý a, b, c, d, bấm chọn nút <b>Đ</b> (Đúng) hoặc <b>S</b> (Sai).</td>
+      </tr>
+      <tr>
+        <td><b>Phần III</b><br>Trả lời ngắn</td>
+        <td>Gõ kết quả vào ô trống. Chỉ nhập số (tối đa 4 ký tự), dùng dấu phẩy (,) cho số thập phân (VD: 2,5).</td>
+      </tr>
+    </table>
+
+    <div class="highlight-box">
+      <strong>⏱️ Đồng hồ & Cỡ chữ:</strong> Ở góc trên, bạn có thể bấm <b>▶ Bắt đầu</b> để chạy đồng hồ đếm ngược. Nếu chữ quá nhỏ, bấm nút <b>A+</b> để phóng to.
+    </div>
+
+    <ul>
+      <li>Khi làm xong, bấm nút <b>📝 Nộp bài</b> trên góc phải. Hệ thống sẽ tự động chấm điểm ngay lập tức.</li>
+      <li>Chuyển sang tab <b>🎯 Kết quả</b> để xem số điểm và số câu đúng của mình.</li>
+    </ul>
+  </div>
+
+</div>
+
+</body>
+</html>
