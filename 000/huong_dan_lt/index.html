@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hướng Dẫn Sử Dụng - Luyện Tập Trắc Nghiệm</title>
+<style>
+  :root { 
+    --ink: #000000; 
+    --bg: #F5F5F5; 
+    --white: #FFFFFF; 
+    --border: #D3D3D3; 
+    --brown: #8B5A2B; 
+    --brown-d: #8B4513; 
+    --beige: #F5F5DC; 
+    --wheat: #F5DEB3; 
+    --blue: #0066CC; 
+    --blue-d: #004488; 
+    --red: #d9534f;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body { 
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif; 
+    background: var(--bg); 
+    color: var(--ink); 
+    line-height: 1.6; 
+    padding-bottom: 40px;
+  }
+  
+  header {
+    background: var(--white);
+    border-bottom: 2px solid var(--brown-d);
+    padding: 20px 15px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  
+  header h1 {
+    color: var(--brown-d);
+    font-size: 1.3em;
+    margin-bottom: 5px;
+  }
+  
+  header p {
+    color: var(--blue-d);
+    font-weight: 600;
+    font-size: 0.9em;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 15px;
+  }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+  }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px dashed var(--wheat);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+  }
+
+  .step-number {
+    background: var(--blue-d);
+    color: var(--white);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1em;
+    flex-shrink: 0;
+  }
+
+  .step-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--brown-d);
+  }
+
+  /* CSS CHO ẢNH MINH HỌA */
+  .img-container {
+    text-align: center;
+    margin: 15px 0;
+  }
+  .guide-img {
+    max-width: 80%; 
+    max-height: 350px; 
+    object-fit: contain;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: zoom-in; 
+    transition: transform 0.2s;
+  }
+  .guide-img:hover {
+    transform: scale(1.02);
+    border-color: var(--blue);
+  }
+  .img-caption {
+    font-size: 0.85em;
+    color: var(--brown);
+    font-style: italic;
+    margin-top: 8px;
+  }
+
+  @media (max-width: 600px) {
+    .guide-img { max-width: 85%; max-height: 250px; }
+  }
+
+  ul {
+    list-style-position: inside;
+    margin-left: 10px;
+  }
+
+  li {
+    margin-bottom: 10px;
+  }
+
+  li b {
+    color: var(--blue-d);
+  }
+
+  .highlight-box {
+    background: var(--beige);
+    border-left: 4px solid var(--brown-d);
+    padding: 12px 15px;
+    border-radius: 0 8px 8px 0;
+    margin: 15px 0;
+    font-size: 0.95em;
+  }
+
+  .highlight-box strong {
+    color: var(--brown-d);
+  }
+
+  .warning-box {
+    background: #FFF3CD;
+    border-left: 4px solid var(--red);
+    padding: 12px 15px;
+    border-radius: 0 8px 8px 0;
+    margin: 15px 0;
+    font-size: 0.95em;
+    color: #856404;
+  }
+  
+  .warning-box strong {
+    color: var(--red);
+  }
+
+  .table-guide {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 0.95em;
+  }
+
+  .table-guide th, .table-guide td {
+    border: 1px solid var(--border);
+    padding: 10px;
+    text-align: left;
+  }
+
+  .table-guide th {
+    background: var(--beige);
+    color: var(--brown-d);
+  }
+
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 10px;
+  }
+  @media (max-width: 600px) {
+    .compare-grid { grid-template-columns: 1fr; }
+  }
+  .compare-box {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 15px;
+    background: var(--white);
+  }
+  .compare-box h4 {
+    color: var(--white);
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 10px;
+    font-size: 0.95em;
+  }
+  .compare-box.redo h4 { background: var(--brown-d); }
+  .compare-box.new h4 { background: var(--blue-d); }
+  .compare-box p { font-size: 0.9em; margin-bottom: 5px; }
+
+  .back-link {
+    text-align: center;
+    margin-top: 30px;
+  }
+  
+  .back-link a {
+    color: var(--blue-d);
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1.1em;
+  }
+  .back-link a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 600px) {
+    .card { padding: 15px; }
+    header h1 { font-size: 1.1em; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📖 HƯỚNG DẪN SỬ DỤNG</h1>
+  <p>Hệ thống Luyện tập Trắc nghiệm</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <div class="step-header">
+      <div class="step-number">1</div>
+      <div class="step-title">Chọn Bài & Tạo Đề Luyện Tập</div>
+    </div>
+    <p>Khi mới vào trang, bạn sẽ thấy màn hình chào mừng. Để bắt đầu, hãy bấm vào nút <b>⚙️ Chọn</b> ở góc trên bên phải màn hình.</p>
+    
+    <ul>
+      <li><b>Chọn Bài / Nhóm bài:</b> Bấm vào thanh "Chọn Bài" để mở danh sách. Bạn có thể tick chọn một hoặc nhiều bài. Có thanh tìm kiếm giúp tìm nhanh số bài.</li>
+    </ul>
+    
+    <!-- ẢNH 0 -->
+    <div class="img-container">
+      <a href="0.png" target="_blank">
+        <img src="0.png" alt="Hướng dẫn chọn bài" class="guide-img">
+      </a>
+      <div class="img-caption">Giao diện chọn Bài / Nhóm bài (Bấm vào ảnh để phóng to)</div>
+    </div>
+
+    <ul>
+      <li><b>Biểu điểm:</b> Hệ thống đã cài sẵn thang điểm chuẩn (Phần I: 0.25đ, Phần II chia đều, Phần III: 0.5đ). Bạn có thể tùy chỉnh lại nếu muốn.</li>
+    </ul>
+
+    <!-- ẢNH 1 -->
+    <div class="img-container">
+      <a href="1.png" target="_blank">
+        <img src="1.png" alt="Hướng dẫn cài đặt biểu điểm" class="guide-img">
+      </a>
+      <div class="img-caption">Giao diện cài đặt Biểu điểm chi tiết</div>
+    </div>
+
+    <p>Sau khi cấu hình xong, bấm nút <b>🚀 Tạo Trắc Nghiệm</b> màu xanh để hệ thống sinh đề.</p>
+
+    <div class="warning-box">
+      <strong>⚠️ LƯU Ý:</strong> Mỗi lần bạn bấm nút <b>Tạo Trắc Nghiệm</b> (hoặc nút <b>Bốc câu mới</b>), hệ thống sẽ lấy một bộ câu hỏi hoàn toàn mới. Nếu đang làm bài dở mà bấm nút này, bài làm hiện tại sẽ bị xóa!
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step-header">
+      <div class="step-number">2</div>
+      <div class="step-title">Hướng dẫn Cài đặt Cấu trúc đề</div>
+    </div>
+    <p>Chuyển sang tab <b>Cấu trúc đề</b>, bạn sẽ thấy giao diện chia ô để chọn số lượng câu hỏi. Dưới đây là các cách cài đặt phổ biến:</p>
+    
+    <ul>
+      <li><b>Chế độ "Chọn tất cả" (Các số hiện mờ):</b> Nếu bạn để trống tất cả các ô vuông (chỉ thấy các con số mờ in sẵn bên trong), hệ thống sẽ tự động hiểu là bạn muốn lấy <b>toàn bộ câu hỏi</b> hiện có trong ngân hàng của các bài đã chọn.</li>
+    </ul>
+
+    <!-- ẢNH 2 -->
+    <div class="img-container">
+      <a href="2.png" target="_blank">
+        <img src="2.png" alt="Cấu trúc chọn tất cả" class="guide-img">
+      </a>
+      <div class="img-caption">Để mờ các ô = Lấy toàn bộ câu hỏi của ngân hàng</div>
+    </div>
+
+    <ul>
+      <li><b>Chế độ Cấu trúc thực tế (VD: Đề 7 điểm trắc nghiệm):</b> Nếu bài kiểm tra của bạn có 7 điểm trắc nghiệm và 3 điểm tự luận (làm ra giấy), bạn chỉ cần điền số câu sao cho tổng điểm phần trắc nghiệm đúng bằng 7. Hệ thống sẽ chỉ bốc đúng số lượng đó.</li>
+    </ul>
+
+    <!-- ẢNH 3 -->
+    <div class="img-container">
+      <a href="3.png" target="_blank">
+        <img src="3.png" alt="Cấu trúc đề thực tế 7 điểm" class="guide-img">
+      </a>
+      <div class="img-caption">Cấu hình đề 7 điểm trắc nghiệm (3 điểm còn lại là tự luận)</div>
+    </div>
+
+    <ul>
+      <li><b>Một cách chọn cấu trúc đề 10 điểm:</b> Để tạo một đề 10 điểm hoàn chỉnh, bạn có thể tham khảo cách chọn sau:
+        <br>+ Phần I: 8 Dễ, 8 Vừa, 2 Khó, 2 Rất Khó (Tổng 20 câu = 5.0 điểm).
+        <br>+ Phần II: 1 Dễ, 1 Vừa, 1 Khó, 1 Rất Khó (Tổng 4 câu = 4.0 điểm).
+        <br>+ Phần III: 1 Dễ, 1 Vừa, 1 Khó, 1 Rất Khó (Tổng 4 câu = 1.0 điểm).
+        <br>👉 <i>Tổng cộng: 5 + 4 + 1 = 10.0 điểm.</i></li>
+    </ul>
+
+    <!-- ẢNH 4 -->
+    <div class="img-container">
+      <a href="4.png" target="_blank">
+        <img src="4.png" alt="Cấu trúc đề 10 điểm" class="guide-img">
+      </a>
+      <div class="img-caption">Một cách chọn cấu trúc đề 10 điểm (Tham khảo)</div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <div class="step-header">
+      <div class="step-number">3</div>
+      <div class="step-title">Phân biệt nút "Làm lại" và "Tạo đề mới"</div>
+    </div>
+    <p>Hệ thống có 2 nút chức năng dễ gây nhầm lẫn. Bạn hãy xem kỹ sự khác biệt dưới đây:</p>
+    
+    <div class="compare-grid">
+      <div class="compare-box redo">
+        <h4>🔄 LÀM LẠI (Nút màu nâu)</h4>
+        <p><b>Vị trí:</b> Nằm trên thanh công cụ, hiện ra sau khi bạn đã nộp bài.</p>
+        <p><b>Tác dụng:</b> Giữ nguyên bộ câu hỏi cũ, nhưng <b>xáo trộn lại thứ tự câu hỏi</b> và <b>thứ tự đáp án A, B, C, D</b>.</p>
+        <p><b>Mục đích:</b> Làm lại chính đề đó để nhớ bài lâu hơn, tránh học vẹt vị trí đáp án.</p>
+      </div>
+      
+      <div class="compare-box new">
+        <h4>🚀 TẠO TRẮC NGHIỆM (Nút màu xanh)</h4>
+        <p><b>Vị trí:</b> Nằm trong bảng Cài đặt (⚙️ Chọn) hoặc nút Bốc câu mới.</p>
+        <p><b>Tác dụng:</b> Bốc các câu hỏi khác trong ngân hàng đề. Tạo ra <b>một đề hoàn toàn mới</b>.</p>
+        <p><b>Mục đích:</b> Đổi gió, làm một đề khác có cùng cấu trúc mức độ (Dễ, Vừa, Khó).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step-header">
+      <div class="step-number">4</div>
+      <div class="step-title">Làm Bài & Nộp Bài</div>
+    </div>
+    <table class="table-guide">
+      <tr>
+        <th>Phần thi</th>
+        <th>Cách trả lời</th>
+      </tr>
+      <tr>
+        <td><b>Phần I</b><br>Trắc nghiệm A, B, C, D</td>
+        <td>Bấm chọn vào ô đáp án bạn cho là đúng nhất.</td>
+      </tr>
+      <tr>
+        <td><b>Phần II</b><br>Đúng / Sai</td>
+        <td>Với mỗi ý a, b, c, d, bấm chọn nút <b>Đ</b> (Đúng) hoặc <b>S</b> (Sai).</td>
+      </tr>
+      <tr>
+        <td><b>Phần III</b><br>Trả lời ngắn</td>
+        <td>Gõ kết quả vào ô trống. Chỉ nhập số (tối đa 4 ký tự). <br>
+        <b>Đối với số thập phân:</b> Học sinh có thể dùng dấu phẩy (VD: 2,5) hoặc dấu chấm (VD: 2.5) - <i>Hệ thống đều hiểu và chấm điểm chính xác như nhau.</i></td>
+      </tr>
+    </table>
+
+    <div class="highlight-box">
+      <strong>⏱️ Đồng hồ & Cỡ chữ:</strong> Ở góc trên, bạn có thể bấm <b>▶ Bắt đầu</b> để chạy đồng hồ đếm ngược. Nếu chữ quá nhỏ, bấm nút <b>A+</b> để phóng to.
+    </div>
+
+    <ul>
+      <li>Khi làm xong, bấm nút <b>📝 Nộp bài</b> trên góc phải. Hệ thống sẽ tự động chấm điểm ngay lập tức.</li>
+      <li>Chuyển sang tab <b>🎯 Kết quả</b> để xem số điểm và số câu đúng của mình.</li>
+    </ul>
+  </div>
+
+</div>
+
+</body>
+</html>
